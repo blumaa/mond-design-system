@@ -1,0 +1,30 @@
+{
+  "name": "@comp-lib-proto/storybook",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build",
+    "storybook": "storybook dev -p 6006"
+  },
+  "dependencies": {
+    "@comp-lib-proto/tokens": "*",
+    "@comp-lib-proto/ui": "*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.6.7",
+    "@storybook/addon-interactions": "^8.6.7",
+    "@storybook/addon-links": "^8.6.7",
+    "@storybook/blocks": "^8.6.7",
+    "@storybook/react": "^8.6.7",
+    "@storybook/react-vite": "^8.6.7",
+    "@storybook/test": "^8.6.7",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "storybook": "^8.6.7",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8"
+  }
+}
