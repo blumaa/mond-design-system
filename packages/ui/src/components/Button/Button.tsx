@@ -23,60 +23,78 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   children: React.ReactNode;
   
   /**
+   * Click event handler
+   */
+  onClick: (evt: React.MouseEvent<HTMLButtonElement>) => void;
+
+  /**
    * Is button disabled
    * @default false
    */
   disabled?: boolean;
+
+  /**
+   * Dark mode
+   * @default false
+   */
+  isDarkMode?: boolean;
 }
 
-const getVariantStyles = (variant: ButtonVariant) => {
+const getVariantStyles = (variant: ButtonVariant, isDarkMode: boolean = false) => {
+  const themeColors = {
+    primary: isDarkMode ? colors.primary[400] : colors.primary[50],
+    text: isDarkMode ? colors.primary[700] : colors.primary[300],
+    hover: isDarkMode ? colors.primary[500] : colors.primary[100],
+    active: isDarkMode ? colors.primary[600] : colors.primary[200],
+  };
+
   switch (variant) {
     case 'primary':
       return {
-        backgroundColor: colors.primary[500],
-        color: 'white',
+        backgroundColor: themeColors.primary,
+        color: themeColors.text,
         border: 'none',
         '&:hover': {
-          backgroundColor: colors.primary[600],
+          backgroundColor: themeColors.hover,
         },
         '&:active': {
-          backgroundColor: colors.primary[700],
+          backgroundColor: themeColors.active,
         },
       };
     case 'secondary':
       return {
-        backgroundColor: colors.neutral[200],
-        color: colors.neutral[800],
-        border: 'none',
+        backgroundColor: 'transparent',
+        color: themeColors.text,
+        border: `1px solid ${themeColors.text}`,
         '&:hover': {
-          backgroundColor: colors.neutral[300],
+          backgroundColor: `${themeColors.text}1A`, // 10% opacity
         },
         '&:active': {
-          backgroundColor: colors.neutral[400],
+          backgroundColor: `${themeColors.text}33`, // 20% opacity
         },
       };
     case 'outline':
       return {
         backgroundColor: 'transparent',
-        color: colors.primary[500],
-        border: `1px solid ${colors.primary[500]}`,
+        color: themeColors.text,
+        border: `1px solid ${themeColors.text}`,
         '&:hover': {
-          backgroundColor: colors.primary[50],
+          backgroundColor: `${themeColors.text}1A`, // 10% opacity
         },
         '&:active': {
-          backgroundColor: colors.primary[100],
+          backgroundColor: `${themeColors.text}33`, // 20% opacity
         },
       };
     case 'ghost':
       return {
         backgroundColor: 'transparent',
-        color: colors.primary[500],
+        color: themeColors.text,
         border: 'none',
         '&:hover': {
-          backgroundColor: colors.primary[50],
+          backgroundColor: `${themeColors.text}1A`, // 10% opacity
         },
         '&:active': {
-          backgroundColor: colors.primary[100],
+          backgroundColor: `${themeColors.text}33`, // 20% opacity
         },
       };
     default:
@@ -107,8 +125,8 @@ const getSizeStyles = (size: ButtonSize) => {
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'primary', size = 'md', children, disabled = false, ...props }, ref) => {
-    const variantStyles = getVariantStyles(variant);
+  ({ variant = 'primary', size = 'md', children, disabled = false, isDarkMode = false, ...props }, ref) => {
+    const variantStyles = getVariantStyles(variant, isDarkMode);
     const sizeStyles = getSizeStyles(size);
 
     const buttonStyles = {
@@ -125,7 +143,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     // Convert styles object to inline style for simplicity
-    // In a real implementation, you'd use a styling solution like styled-components, emotion, etc.
     const inlineStyles: React.CSSProperties = {};
     Object.entries(buttonStyles).forEach(([key, value]) => {
       if (typeof value === 'string' || typeof value === 'number') {

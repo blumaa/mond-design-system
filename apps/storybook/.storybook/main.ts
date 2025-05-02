@@ -8,6 +8,7 @@ const config: StorybookConfig = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
+    "@storybook/addon-themes",
   ],
   framework: {
     name: "@storybook/react-vite",
@@ -15,6 +16,13 @@ const config: StorybookConfig = {
   },
   docs: {
     autodocs: "tag",
+  },
+  core: {
+    builder: "@storybook/builder-vite",
+  },
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
+    check: false,
   },
 };
 

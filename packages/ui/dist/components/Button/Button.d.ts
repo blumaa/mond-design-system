@@ -17,9 +17,18 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
      */
     children: React.ReactNode;
     /**
+     * Click event handler
+     */
+    onClick: (evt: React.MouseEvent<HTMLButtonElement>) => void;
+    /**
      * Is button disabled
      * @default false
      */
     disabled?: boolean;
+    /**
+     * Dark mode
+     * @default false
+     */
+    isDarkMode?: boolean;
 }
 export declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;

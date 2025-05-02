@@ -1,6 +1,7 @@
 {
   "name": "@comp-lib-proto/web",
   "version": "0.0.0",
+  "license": "UNLICENSED",
   "private": true,
   "scripts": {
     "dev": "next dev",
