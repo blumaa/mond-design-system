@@ -1,6 +1,7 @@
 {
   "name": "@comp-lib-proto/tokens",
   "version": "0.0.0",
+  "license": "UNLICENSED",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -53,4 +53,3 @@ fs.writeFileSync(tokensPath, tokenContent);
 const indexPath = path.join(outputDir, 'index.ts');
 fs.writeFileSync(indexPath, 'export * from "./tokens";');
 console.log('✅ Design tokens built successfully!');
-console.log('✅ Design tokens built successfully!');

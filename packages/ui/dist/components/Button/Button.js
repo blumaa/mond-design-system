@@ -1,54 +1,60 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import React from 'react';
 import { colors, radii, spacing, fontSizes, fontWeights } from '@comp-lib-proto/tokens';
-const getVariantStyles = (variant) => {
+const getVariantStyles = (variant, isDarkMode = false) => {
+    const themeColors = {
+        primary: isDarkMode ? colors.primary[400] : colors.primary[50],
+        text: isDarkMode ? colors.primary[700] : colors.primary[300],
+        hover: isDarkMode ? colors.primary[500] : colors.primary[100],
+        active: isDarkMode ? colors.primary[600] : colors.primary[200],
+    };
     switch (variant) {
         case 'primary':
             return {
-                backgroundColor: colors.primary[500],
-                color: 'white',
+                backgroundColor: themeColors.primary,
+                color: themeColors.text,
                 border: 'none',
                 '&:hover': {
-                    backgroundColor: colors.primary[600],
+                    backgroundColor: themeColors.hover,
                 },
                 '&:active': {
-                    backgroundColor: colors.primary[700],
+                    backgroundColor: themeColors.active,
                 },
             };
         case 'secondary':
             return {
-                backgroundColor: colors.neutral[200],
-                color: colors.neutral[800],
-                border: 'none',
+                backgroundColor: 'transparent',
+                color: themeColors.text,
+                border: `1px solid ${themeColors.text}`,
                 '&:hover': {
-                    backgroundColor: colors.neutral[300],
+                    backgroundColor: `${themeColors.text}1A`, // 10% opacity
                 },
                 '&:active': {
-                    backgroundColor: colors.neutral[400],
+                    backgroundColor: `${themeColors.text}33`, // 20% opacity
                 },
             };
         case 'outline':
             return {
                 backgroundColor: 'transparent',
-                color: colors.primary[500],
-                border: `1px solid ${colors.primary[500]}`,
+                color: themeColors.text,
+                border: `1px solid ${themeColors.text}`,
                 '&:hover': {
-                    backgroundColor: colors.primary[50],
+                    backgroundColor: `${themeColors.text}1A`, // 10% opacity
                 },
                 '&:active': {
-                    backgroundColor: colors.primary[100],
+                    backgroundColor: `${themeColors.text}33`, // 20% opacity
                 },
             };
         case 'ghost':
             return {
                 backgroundColor: 'transparent',
-                color: colors.primary[500],
+                color: themeColors.text,
                 border: 'none',
                 '&:hover': {
-                    backgroundColor: colors.primary[50],
+                    backgroundColor: `${themeColors.text}1A`, // 10% opacity
                 },
                 '&:active': {
-                    backgroundColor: colors.primary[100],
+                    backgroundColor: `${themeColors.text}33`, // 20% opacity
                 },
             };
         default:
@@ -76,8 +82,8 @@ const getSizeStyles = (size) => {
             return {};
     }
 };
-export const Button = React.forwardRef(({ variant = 'primary', size = 'md', children, disabled = false, ...props }, ref) => {
-    const variantStyles = getVariantStyles(variant);
+export const Button = React.forwardRef(({ variant = 'primary', size = 'md', children, disabled = false, isDarkMode = false, ...props }, ref) => {
+    const variantStyles = getVariantStyles(variant, isDarkMode);
     const sizeStyles = getSizeStyles(size);
     const buttonStyles = {
         display: 'inline-flex',
@@ -92,7 +98,6 @@ export const Button = React.forwardRef(({ variant = 'primary', size = 'md', chil
         ...sizeStyles,
     };
     // Convert styles object to inline style for simplicity
-    // In a real implementation, you'd use a styling solution like styled-components, emotion, etc.
     const inlineStyles = {};
     Object.entries(buttonStyles).forEach(([key, value]) => {
         if (typeof value === 'string' || typeof value === 'number') {
