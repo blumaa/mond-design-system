@@ -1,4 +1,5 @@
-import React from 'react';
+import { ThemeProvider } from './context/ThemeContext';
+import './globals.css';
 
 export const metadata = {
   title: 'Component Library Demo',
@@ -12,7 +13,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

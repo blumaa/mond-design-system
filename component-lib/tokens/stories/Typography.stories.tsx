@@ -12,7 +12,7 @@ const SampleText = "The quick brown fox jumps over the lazy dog";
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div style={{ marginBottom: '3rem' }}>
-    <h2 style={{ marginBottom: '1rem' }}>{title}</h2>
+    <h2 style={{ marginBottom: '1rem', fontFamily: fontFamilies.sans }}>{title}</h2>
     {children}
   </div>
 );
@@ -30,7 +30,7 @@ const FontFamilyExample = ({ name, family }: { name: string; family: string }) =
 
 const FontSizeExample = ({ name, size }: { name: string; size: string }) => (
   <div style={{ marginBottom: '1rem' }}>
-    <div style={{ fontSize: size, marginBottom: '0.5rem' }}>
+    <div style={{ fontSize: size, fontFamily: fontFamilies.sans, marginBottom: '0.5rem' }}>
       {SampleText}
     </div>
     <div style={{ fontFamily: 'monospace', color: '#666' }}>
@@ -41,7 +41,7 @@ const FontSizeExample = ({ name, size }: { name: string; size: string }) => (
 
 const FontWeightExample = ({ name, weight }: { name: string; weight: string }) => (
   <div style={{ marginBottom: '1rem' }}>
-    <div style={{ fontWeight: weight, fontSize: '1.25rem', marginBottom: '0.5rem' }}>
+    <div style={{ fontWeight: weight, fontSize: '1.25rem', fontFamily: fontFamilies.sans, marginBottom: '0.5rem' }}>
       {SampleText}
     </div>
     <div style={{ fontFamily: 'monospace', color: '#666' }}>
@@ -56,6 +56,7 @@ const LineHeightExample = ({ name, height }: { name: string; height: string }) =
       style={{ 
         lineHeight: height, 
         fontSize: '1.25rem', 
+        fontFamily: fontFamilies.sans,
         marginBottom: '0.5rem',
         backgroundColor: '#f0f0f0',
         padding: '1rem',
@@ -71,7 +72,7 @@ const LineHeightExample = ({ name, height }: { name: string; height: string }) =
 
 const LetterSpacingExample = ({ name, spacing }: { name: string; spacing: string }) => (
   <div style={{ marginBottom: '1rem' }}>
-    <div style={{ letterSpacing: spacing, fontSize: '1.25rem', marginBottom: '0.5rem' }}>
+    <div style={{ letterSpacing: spacing, fontSize: '1.25rem', fontFamily: fontFamilies.sans, marginBottom: '0.5rem' }}>
       {SampleText}
     </div>
     <div style={{ fontFamily: 'monospace', color: '#666' }}>
@@ -82,7 +83,7 @@ const LetterSpacingExample = ({ name, spacing }: { name: string; spacing: string
 
 export const All = () => (
   <div style={{ padding: '2rem' }}>
-    <h1 style={{ marginBottom: '2rem' }}>Typography Tokens</h1>
+    <h1 style={{ marginBottom: '2rem', fontFamily: fontFamilies.sans }}>Typography Tokens</h1>
 
     <Section title="Font Families">
       {Object.entries(fontFamilies).map(([name, family]) => (

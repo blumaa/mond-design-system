@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import { shadows } from '../index';
+import { shadows, fontFamilies } from '../index';
 
 const meta: Meta = {
   title: 'Tokens/Shadows',
@@ -21,15 +21,15 @@ const ShadowExample = ({ name, shadow }: { name: string; shadow: string }) => (
       }}
     />
     <div style={{ fontFamily: 'monospace' }}>
-      <div>{name}</div>
-      <div style={{ color: '#666' }}>{shadow}</div>
+      <div style={{ fontFamily: fontFamilies.sans }}>{name}</div>
+      <div style={{ color: '#666', fontFamily: fontFamilies.sans }}>{shadow}</div>
     </div>
   </div>
 );
 
 export const All = () => (
   <div style={{ padding: '2rem', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
-    <h1 style={{ marginBottom: '2rem' }}>Shadow Tokens</h1>
+    <h1 style={{ marginBottom: '2rem', fontFamily: fontFamilies.sans }}>Shadow Tokens</h1>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '2rem' }}>
       {Object.entries(shadows).map(([name, shadow]) => (
         <ShadowExample key={name} name={name} shadow={shadow} />

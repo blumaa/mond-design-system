@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { useGlobals } from '@storybook/preview-api';
 import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
@@ -12,24 +13,40 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'outline', 'ghost'],
+      options: ['primary', 'outline', 'ghost'],
     },
     size: {
       control: { type: 'select' },
       options: ['sm', 'md', 'lg'],
     },
+    corners: {
+      control: { type: 'select' },
+      options: ['default', 'rounded'],
+    },
+    iconOnly: {
+      control: { type: 'boolean' },
+      description: 'Icon-only button with no text',
+    },
     disabled: {
       control: { type: 'boolean' },
     },
-    isDarkMode: {
-      control: { type: 'boolean' },
-      description: 'Toggle between dark and light mode',
+    children: {
+      control: { type: 'text' },
+      description: 'Button content (text or icon)',
     },
     onClick: { action: 'clicked' },
   },
   decorators: [
     (Story, context) => {
-      const isDark = context.args.isDarkMode;
+      const [globals] = useGlobals();
+      const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
+      
+      // Override the isDarkMode prop based on Storybook theme
+      const storyArgs = {
+        ...context.args,
+        isDarkMode: isDark,
+      };
+      
       return (
         <div
           style={{
@@ -38,7 +55,7 @@ const meta: Meta<typeof Button> = {
             borderRadius: '8px',
           }}
         >
-          <Story />
+          <Story args={storyArgs} />
         </div>
       );
     },
@@ -48,110 +65,13 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof Button>;
 
-const Template: Story = {
-  render: (args) => <Button {...args} />,
-};
-
-export const Primary: Story = {
-  ...Template,
+export const Default: Story = {
   args: {
     variant: 'primary',
-    children: 'Primary Button',
-    isDarkMode: false,
-  },
-};
-
-export const PrimaryDark: Story = {
-  ...Template,
-  args: {
-    ...Primary.args,
-    isDarkMode: true,
-  },
-};
-
-export const Secondary: Story = {
-  ...Template,
-  args: {
-    variant: 'secondary',
-    children: 'Secondary Button',
-    isDarkMode: false,
-  },
-};
-
-export const SecondaryDark: Story = {
-  ...Template,
-  args: {
-    ...Secondary.args,
-    isDarkMode: true,
-  },
-};
-
-export const Outline: Story = {
-  ...Template,
-  args: {
-    variant: 'outline',
-    children: 'Outline Button',
-    isDarkMode: false,
-  },
-};
-
-export const OutlineDark: Story = {
-  ...Template,
-  args: {
-    ...Outline.args,
-    isDarkMode: true,
-  },
-};
-
-export const Ghost: Story = {
-  ...Template,
-  args: {
-    variant: 'ghost',
-    children: 'Ghost Button',
-    isDarkMode: false,
-  },
-};
-
-export const GhostDark: Story = {
-  ...Template,
-  args: {
-    ...Ghost.args,
-    isDarkMode: true,
-  },
-};
-
-export const Small: Story = {
-  ...Template,
-  args: {
-    size: 'sm',
-    children: 'Small Button',
-    isDarkMode: false,
-  },
-};
-
-export const Medium: Story = {
-  ...Template,
-  args: {
     size: 'md',
-    children: 'Medium Button',
-    isDarkMode: false,
-  },
-};
-
-export const Large: Story = {
-  ...Template,
-  args: {
-    size: 'lg',
-    children: 'Large Button',
-    isDarkMode: false,
-  },
-};
-
-export const Disabled: Story = {
-  ...Template,
-  args: {
-    disabled: true,
-    children: 'Disabled Button',
-    isDarkMode: false,
+    corners: 'default',
+    children: 'Button',
+    iconOnly: false,
+    disabled: false,
   },
 };

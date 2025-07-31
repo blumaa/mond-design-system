@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import { radii } from '../index';
+import { radii, fontFamilies } from '../index';
 
 const meta: Meta = {
   title: 'Tokens/Radii',
@@ -20,15 +20,15 @@ const RadiusExample = ({ name, radius }: { name: string; radius: string }) => (
       }}
     />
     <div style={{ fontFamily: 'monospace' }}>
-      <div>{name}</div>
-      <div style={{ color: '#666' }}>{radius}</div>
+      <div style={{ fontFamily: fontFamilies.sans }}>{name}</div>
+      <div style={{ color: '#666', fontFamily: fontFamilies.sans }}>{radius}</div>
     </div>
   </div>
 );
 
 export const All = () => (
   <div style={{ padding: '2rem' }}>
-    <h1 style={{ marginBottom: '2rem' }}>Border Radius Tokens</h1>
+    <h1 style={{ marginBottom: '2rem', fontFamily: fontFamilies.sans }}>Border Radius Tokens</h1>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '2rem' }}>
       {Object.entries(radii).map(([name, radius]) => (
         <RadiusExample key={name} name={name} radius={radius} />
