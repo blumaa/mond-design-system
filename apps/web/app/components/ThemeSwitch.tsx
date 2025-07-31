@@ -2,7 +2,7 @@
 
 import { useTheme } from '../context/ThemeContext';
 import { LightBulbIcon } from './LightBulbIcon';
-import { Button, colors } from '@mond-design-system/component-lib';
+import { Button, colors } from '@mond-design-system/theme';
 
 export const ThemeSwitch = () => {
   const { isDarkMode, toggleTheme, mounted } = useTheme();

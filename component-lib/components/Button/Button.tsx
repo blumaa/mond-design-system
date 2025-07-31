@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { colors, radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
 
@@ -306,3 +307,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
+
+// Also export as default for better compatibility
+export default Button;

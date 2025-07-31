@@ -62,6 +62,6 @@ fs.writeFileSync(tokensPath, tokenContent);
 
 // Write the index file that re-exports everything
 const indexPath = path.join(outputDir, 'index.ts');
-fs.writeFileSync(indexPath, 'export * from "./tokens";');
+fs.writeFileSync(indexPath, 'export * from "../tokens.js";');
 
 console.log('✅ Design tokens built successfully!');

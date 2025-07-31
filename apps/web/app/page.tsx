@@ -1,5 +1,5 @@
 "use client";
-import { Button, colors, fontFamilies, fontSizes, fontWeights } from "@mond-design-system/component-lib";
+import { Button, colors, fontFamilies, fontSizes, fontWeights } from "@mond-design-system/theme";
 import { useTheme } from "./context/ThemeContext";
 import { ThemeSwitch } from "./components/ThemeSwitch";
 
