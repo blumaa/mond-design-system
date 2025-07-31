@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Button } from '@comp-lib-proto/ui';
+import { Button } from '@mond-design-system/component-lib';
 
 export default function Home() {
   return (

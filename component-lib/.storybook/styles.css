@@ -1,0 +1,49 @@
+/* Light theme variables */
+.light {
+  --background-color: #F2F3F4;
+  --text-color: #1B2430;
+  --surface-color: #FFFFFF;
+  --border-color: #E5E7EB;
+}
+
+/* Dark theme variables */
+.dark {
+  --background-color: #27374D;
+  --text-color: #F2F3F4;
+  --surface-color: #1B2430;
+  --border-color: #374151;
+}
+
+/* Apply theme to Storybook UI */
+.sb-show-main {
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
+  transition: all 0.2s;
+}
+
+/* Style the preview iframe */
+#storybook-preview-iframe {
+  background-color: var(--background-color);
+  transition: all 0.2s;
+}
+
+/* Style the docs page */
+.docs-story {
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
+}
+
+.docblock-source {
+  background-color: var(--surface-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Style the controls panel */
+.docblock-argstable-body {
+  background-color: var(--surface-color) !important;
+  color: var(--text-color) !important;
+}
+
+.docblock-argstable-head th {
+  color: var(--text-color) !important;
+}

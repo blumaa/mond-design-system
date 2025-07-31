@@ -1,6 +1,4 @@
-console.log("Component Library Prototype");
+console.log("Mond Design System");
 console.log("Available packages:");
-console.log("- @comp-lib-proto/tokens: Design tokens");
-console.log("- @comp-lib-proto/ui: UI components");
-console.log("- @comp-lib-proto/storybook: Storybook documentation");
-console.log("- @comp-lib-proto/web: Next.js example app");
+console.log("- @mond-design-system/component-lib: Design tokens and UI components");
+console.log("- @mond-design-system/web: Next.js example app");

@@ -38,5 +38,30 @@ yarn-error.log*
 # storybook
 storybook-static
 
+# build outputs
+dist/
+component-lib/*/dist/
+
 # bun
 bun.lockb
+
+# Logs
+logs
+*.log
+dev-debug.log
+# Dependency directories
+node_modules/
+# Environment variables
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/ 

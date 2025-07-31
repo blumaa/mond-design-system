@@ -1,14 +1,16 @@
 {
-  "name": "comp-lib-proto",
+  "name": "mond-design-system",
   "version": "0.0.0",
   "license": "UNLICENSED",
   "private": true,
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "component-lib"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "clean:build": "rm -rf component-lib/dist apps/web/.next component-lib/storybook-static",
+    "build": "yarn clean:build && turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

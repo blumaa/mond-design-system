@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@comp-lib-proto/ui", "@comp-lib-proto/tokens"],
+  transpilePackages: ["@mond-design-system/component-lib"],
 };
 
 module.exports = nextConfig;

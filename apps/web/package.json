@@ -1,5 +1,5 @@
 {
-  "name": "@comp-lib-proto/web",
+  "name": "@mond-design-system/web",
   "version": "0.0.0",
   "license": "UNLICENSED",
   "private": true,
@@ -10,8 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@comp-lib-proto/tokens": "*",
-    "@comp-lib-proto/ui": "*",
+    "@mond-design-system/component-lib": "*",
     "next": "14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
