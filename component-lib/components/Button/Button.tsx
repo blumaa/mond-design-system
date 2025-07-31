@@ -56,43 +56,43 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const getVariantStyles = (variant: ButtonVariant, isDarkMode: boolean = false) => {
   const themeColors = {
     bg: isDarkMode ? colors.background.dark : colors.background.light,
-    text: isDarkMode ? colors.primary[900] : colors.foreground.light,
+    text: isDarkMode ? colors.primary[100] : colors.primary[700],
   };
 
   return {
     primary: {
-      // Portfolio-2023 style: bg-sky-700, text-[#DDE6ED], border-[#DDE6ED]
-      backgroundColor: colors.sky[700],
+      // Portfolio-2023 style: bg-primary-700, text-[#DDE6ED], border-[#DDE6ED]
+      backgroundColor: colors.primary[700],
       color: colors.foreground.dark, // #DDE6ED
       border: `1px solid ${colors.foreground.dark}`,
       hoverStyles: {
-        backgroundColor: colors.sky[800],
+        backgroundColor: colors.primary[800],
       },
       activeStyles: {
-        backgroundColor: colors.sky[900],
+        backgroundColor: colors.primary[900],
       },
       focusStyles: {
-        outline: `2px solid ${colors.sky[300]}`,
+        outline: `2px solid ${colors.primary[300]}`,
         outlineOffset: '2px',
       },
     },
     outline: {
-      // Portfolio-2023 style: border-sky-500, transparent background, hover effects
+      // Portfolio-2023 style: border-primary-500, transparent background, hover effects
       backgroundColor: 'transparent',
-      color: colors.sky[500],
-      border: `1px solid ${colors.sky[500]}`,
+      color: colors.primary[500],
+      border: `1px solid ${colors.primary[500]}`,
       hoverStyles: {
-        backgroundColor: colors.sky[700],
+        backgroundColor: colors.primary[700],
         color: colors.foreground.dark,
         borderColor: colors.foreground.dark,
       },
       activeStyles: {
-        backgroundColor: colors.sky[800],
+        backgroundColor: colors.primary[800],
         color: colors.foreground.dark,
         borderColor: colors.foreground.dark,
       },
       focusStyles: {
-        outline: `2px solid ${colors.sky[300]}`,
+        outline: `2px solid ${colors.primary[300]}`,
         outlineOffset: '2px',
       },
     },
