@@ -5,6 +5,7 @@ import { colors, radii, spacing, fontSizes, fontWeights, fontFamilies } from '..
 export type ButtonVariant = 'primary' | 'outline' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonCorners = 'default' | 'rounded';
+export type ButtonAlignContent = 'left' | 'center' | 'right';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
@@ -24,6 +25,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    * @default 'default'
    */
   corners?: ButtonCorners;
+  
+  /**
+   * Content alignment within the button
+   * @default 'center'
+   */
+  alignContent?: ButtonAlignContent;
   
   /**
    * Button content - optional for icon-only buttons
@@ -179,11 +186,30 @@ const getCornerStyles = (corners: ButtonCorners) => {
   }
 };
 
+const getAlignmentStyles = (alignContent: ButtonAlignContent) => {
+  switch (alignContent) {
+    case 'left':
+      return {
+        justifyContent: 'flex-start',
+      };
+    case 'right':
+      return {
+        justifyContent: 'flex-end',
+      };
+    case 'center':
+    default:
+      return {
+        justifyContent: 'center',
+      };
+  }
+};
+
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ 
     variant = 'primary', 
     size = 'md', 
     corners = 'default',
+    alignContent = 'center',
     children, 
     iconOnly = false,
     disabled = false, 
@@ -193,20 +219,28 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const variantStyles = getVariantStyles(variant, isDarkMode);
     const sizeStyles = getSizeStyles(size, iconOnly);
     const cornerStyles = getCornerStyles(corners);
+    const alignmentStyles = getAlignmentStyles(alignContent);
 
     const baseStyles = {
+      // Layout
       display: 'inline-flex',
       alignItems: 'center',
-      justifyContent: 'center',
+      boxSizing: 'border-box',
+      whiteSpace: 'nowrap' as const,
+      minWidth: 'fit-content',
+      // Typography  
       fontFamily: fontFamilies.sans,
       fontWeight: fontWeights.medium,
+      // State
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.6 : 1,
       transition: 'all 150ms ease',
       outline: 'none',
+      // Component styles
       ...variantStyles,
-      ...sizeStyles,
       ...cornerStyles,
+      ...alignmentStyles,
+      ...sizeStyles,  // Size styles LAST to ensure padding is applied
     };
 
     // Convert styles object to inline style for simplicity
@@ -217,6 +251,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         inlineStyles[key] = value;
       }
     });
+
+    // Merge props.style with component styles, component styles take precedence
+    const { style: propsStyle, ...otherProps } = props;
+    const finalStyles = {
+      ...propsStyle,
+      ...inlineStyles,
+    };
 
     // Handle hover, active, and focus states
     const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -290,17 +331,18 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled}
-        style={inlineStyles}
+        style={finalStyles}
         data-mond-button
+        data-align-content={alignContent}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        {...props}
+        {...otherProps}
       >
-        {children}
+{children}
       </button>
     );
   }

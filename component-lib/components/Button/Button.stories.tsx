@@ -23,6 +23,10 @@ const meta: Meta<typeof Button> = {
       control: { type: 'select' },
       options: ['default', 'rounded'],
     },
+    alignContent: {
+      control: { type: 'select' },
+      options: ['left', 'center', 'right'],
+    },
     iconOnly: {
       control: { type: 'boolean' },
       description: 'Icon-only button with no text',
@@ -70,8 +74,103 @@ export const Default: Story = {
     variant: 'primary',
     size: 'md',
     corners: 'default',
-    children: 'Button',
+    alignContent: 'center',
+    children: <span>Button</span>,
     iconOnly: false,
     disabled: false,
+  },
+};
+
+
+export const WithIcon: Story = {
+  args: {
+    variant: 'primary',
+    size: 'md',
+    corners: 'default',
+    alignContent: 'center',
+    children: (
+      <>
+        <svg 
+          width="16" 
+          height="16" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="2" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
+          style={{ marginRight: '8px' }}
+        >
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+        </svg>
+        Button with Icon
+      </>
+    ),
+    iconOnly: false,
+    disabled: false,
+  },
+};
+
+export const IconOnly: Story = {
+  args: {
+    variant: 'primary',
+    size: 'md',
+    corners: 'default',
+    alignContent: 'center',
+    children: (
+      <svg 
+        width="16" 
+        height="16" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      >
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+      </svg>
+    ),
+    iconOnly: true,
+    disabled: false,
+  },
+};
+
+export const AlignmentDemo: Story = {
+  args: {
+    variant: 'primary',
+    size: 'md',
+    corners: 'default',
+    alignContent: 'left',
+    children: <span>Left Aligned</span>,
+    iconOnly: false,
+    disabled: false,
+    style: { width: '300px', minWidth: '300px' },
+  },
+};
+
+export const AlignmentCenter: Story = {
+  args: {
+    variant: 'primary',
+    size: 'md',
+    corners: 'default',
+    alignContent: 'center',
+    children: <span>Center Aligned</span>,
+    iconOnly: false,
+    disabled: false,
+    style: { width: '300px', minWidth: '300px' },
+  },
+};
+
+export const AlignmentRight: Story = {
+  args: {
+    variant: 'primary',
+    size: 'md',
+    corners: 'default',
+    alignContent: 'right',
+    children: <span>Right Aligned</span>,
+    iconOnly: false,
+    disabled: false,
+    style: { width: '300px', minWidth: '300px' },
   },
 };
