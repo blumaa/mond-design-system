@@ -75,11 +75,12 @@ export const Default: Story = {
     size: 'md',
     corners: 'default',
     alignContent: 'center',
-    children: 'Button',
+    children: <span>Button</span>,
     iconOnly: false,
     disabled: false,
   },
 };
+
 
 export const WithIcon: Story = {
   args: {
@@ -141,10 +142,23 @@ export const AlignmentDemo: Story = {
     size: 'md',
     corners: 'default',
     alignContent: 'left',
-    children: 'Left Aligned',
+    children: <span>Left Aligned</span>,
     iconOnly: false,
     disabled: false,
-    style: { width: '200px', minWidth: '200px' },
+    style: { width: '300px', minWidth: '300px' },
+  },
+};
+
+export const AlignmentCenter: Story = {
+  args: {
+    variant: 'primary',
+    size: 'md',
+    corners: 'default',
+    alignContent: 'center',
+    children: <span>Center Aligned</span>,
+    iconOnly: false,
+    disabled: false,
+    style: { width: '300px', minWidth: '300px' },
   },
 };
 
@@ -154,9 +168,9 @@ export const AlignmentRight: Story = {
     size: 'md',
     corners: 'default',
     alignContent: 'right',
-    children: 'Right Aligned',
+    children: <span>Right Aligned</span>,
     iconOnly: false,
     disabled: false,
-    style: { width: '200px', minWidth: '200px' },
+    style: { width: '300px', minWidth: '300px' },
   },
 };

@@ -222,19 +222,25 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const alignmentStyles = getAlignmentStyles(alignContent);
 
     const baseStyles = {
-      display: 'flex',
+      // Layout
+      display: 'inline-flex',
       alignItems: 'center',
-      justifyContent: 'center',
+      boxSizing: 'border-box',
+      whiteSpace: 'nowrap' as const,
+      minWidth: 'fit-content',
+      // Typography  
       fontFamily: fontFamilies.sans,
       fontWeight: fontWeights.medium,
+      // State
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.6 : 1,
       transition: 'all 150ms ease',
       outline: 'none',
+      // Component styles
       ...variantStyles,
-      ...sizeStyles,
       ...cornerStyles,
       ...alignmentStyles,
+      ...sizeStyles,  // Size styles LAST to ensure padding is applied
     };
 
     // Convert styles object to inline style for simplicity
@@ -245,6 +251,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         inlineStyles[key] = value;
       }
     });
+
+    // Merge props.style with component styles, component styles take precedence
+    const { style: propsStyle, ...otherProps } = props;
+    const finalStyles = {
+      ...propsStyle,
+      ...inlineStyles,
+    };
 
     // Handle hover, active, and focus states
     const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -318,7 +331,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled}
-        style={{...inlineStyles, border: '2px solid blue', justifyContent: alignContent === 'left' ? 'flex-start' : alignContent === 'right' ? 'flex-end' : 'center', width: '300px', minWidth: '300px'}}
+        style={finalStyles}
         data-mond-button
         data-align-content={alignContent}
         onMouseEnter={handleMouseEnter}
@@ -327,11 +340,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         onMouseUp={handleMouseUp}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        {...props}
+        {...otherProps}
       >
-        <span style={{ border: '1px solid red' }}>
-          {children} (align: {alignContent})
-        </span>
+{children}
       </button>
     );
   }
