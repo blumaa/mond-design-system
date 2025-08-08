@@ -5,6 +5,7 @@ import { colors, radii, spacing, fontSizes, fontWeights, fontFamilies } from '..
 export type ButtonVariant = 'primary' | 'outline' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonCorners = 'default' | 'rounded';
+export type ButtonAlignContent = 'left' | 'center' | 'right';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
@@ -24,6 +25,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    * @default 'default'
    */
   corners?: ButtonCorners;
+  
+  /**
+   * Content alignment within the button
+   * @default 'center'
+   */
+  alignContent?: ButtonAlignContent;
   
   /**
    * Button content - optional for icon-only buttons
@@ -179,11 +186,30 @@ const getCornerStyles = (corners: ButtonCorners) => {
   }
 };
 
+const getAlignmentStyles = (alignContent: ButtonAlignContent) => {
+  switch (alignContent) {
+    case 'left':
+      return {
+        justifyContent: 'flex-start',
+      };
+    case 'right':
+      return {
+        justifyContent: 'flex-end',
+      };
+    case 'center':
+    default:
+      return {
+        justifyContent: 'center',
+      };
+  }
+};
+
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ 
     variant = 'primary', 
     size = 'md', 
     corners = 'default',
+    alignContent = 'center',
     children, 
     iconOnly = false,
     disabled = false, 
@@ -193,9 +219,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const variantStyles = getVariantStyles(variant, isDarkMode);
     const sizeStyles = getSizeStyles(size, iconOnly);
     const cornerStyles = getCornerStyles(corners);
+    const alignmentStyles = getAlignmentStyles(alignContent);
 
     const baseStyles = {
-      display: 'inline-flex',
+      display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       fontFamily: fontFamilies.sans,
@@ -207,6 +234,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ...variantStyles,
       ...sizeStyles,
       ...cornerStyles,
+      ...alignmentStyles,
     };
 
     // Convert styles object to inline style for simplicity
@@ -290,8 +318,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled}
-        style={inlineStyles}
+        style={{...inlineStyles, border: '2px solid blue', justifyContent: alignContent === 'left' ? 'flex-start' : alignContent === 'right' ? 'flex-end' : 'center', width: '300px', minWidth: '300px'}}
         data-mond-button
+        data-align-content={alignContent}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}
@@ -300,7 +329,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         onBlur={handleBlur}
         {...props}
       >
-        {children}
+        <span style={{ border: '1px solid red' }}>
+          {children} (align: {alignContent})
+        </span>
       </button>
     );
   }
