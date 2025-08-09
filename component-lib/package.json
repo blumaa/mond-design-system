@@ -1,6 +1,6 @@
 {
   "name": "@mond-design-system/theme",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "A modern design system with React components and design tokens",
   "license": "MIT",
   "main": "dist/index.js",
