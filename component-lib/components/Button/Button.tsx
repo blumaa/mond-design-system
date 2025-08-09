@@ -109,7 +109,7 @@ const getVariantStyles = (variant: ButtonVariant, isDarkMode: boolean = false) =
       color: themeColors.text,
       border: 'none',
       hoverStyles: {
-        backgroundColor: isDarkMode ? colors.neutral[800] : colors.neutral[100],
+        backgroundColor: isDarkMode ? colors.neutral[800] : colors.neutral[200],
       },
       activeStyles: {
         backgroundColor: isDarkMode ? colors.neutral[700] : colors.neutral[200],
