@@ -3,21 +3,21 @@ import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
 
-export type InputSize = 'sm' | 'md' | 'lg';
-export type InputVariant = 'default' | 'error' | 'success';
+export type TextareaSize = 'sm' | 'md' | 'lg';
+export type TextareaVariant = 'default' | 'error' | 'success';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   /**
-   * Input visual size variant
+   * Textarea visual size variant
    * @default 'md'
    */
-  inputSize?: InputSize;
+  textareaSize?: TextareaSize;
   
   /**
-   * Input variant
+   * Textarea variant
    * @default 'default'
    */
-  variant?: InputVariant;
+  variant?: TextareaVariant;
   
   /**
    * Dark mode
@@ -26,7 +26,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   isDarkMode?: boolean;
   
   /**
-   * Label for the input
+   * Label for the textarea
    */
   label?: string;
   
@@ -44,34 +44,40 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
    * Helper text
    */
   helperText?: string;
+
+  /**
+   * Number of visible text lines
+   * @default 4
+   */
+  rows?: number;
 }
 
-const getSizeStyles = (size: InputSize) => {
+const getSizeStyles = (size: TextareaSize) => {
   switch (size) {
     case 'sm':
       return {
-        padding: `${spacing[1]} ${spacing[2]}`,
+        padding: `${spacing[2]} ${spacing[3]}`,
         fontSize: fontSizes.sm,
-        height: '32px',
+        minHeight: '80px',
       };
     case 'md':
       return {
-        padding: `${spacing[2]} ${spacing[3]}`,
+        padding: `${spacing[3]} ${spacing[4]}`,
         fontSize: fontSizes.base,
-        height: '40px',
+        minHeight: '100px',
       };
     case 'lg':
       return {
-        padding: `${spacing[3]} ${spacing[4]}`,
+        padding: `${spacing[4]} ${spacing[5]}`,
         fontSize: fontSizes.lg,
-        height: '48px',
+        minHeight: '120px',
       };
     default:
       return {};
   }
 };
 
-const getVariantStyles = (variant: InputVariant, theme: ReturnType<typeof useTheme>) => {
+const getVariantStyles = (variant: TextareaVariant, theme: ReturnType<typeof useTheme>) => {
   const baseColors = {
     background: theme('surface.input'),
     border: theme('border.default'),
@@ -104,9 +110,9 @@ const getVariantStyles = (variant: InputVariant, theme: ReturnType<typeof useThe
   }
 };
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ 
-    inputSize = 'md', 
+    textareaSize = 'md', 
     variant = 'default',
     isDarkMode = false,
     label,
@@ -114,18 +120,20 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     success,
     helperText,
     className,
+    rows = 4,
     ...props 
   }, ref) => {
     const theme = useTheme(isDarkMode);
-    const sizeStyles = getSizeStyles(inputSize);
+    const sizeStyles = getSizeStyles(textareaSize);
     const variantStyles = getVariantStyles(variant, theme);
-    const inputId = props.id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const textareaId = props.id || `textarea-${Math.random().toString(36).substr(2, 9)}`;
 
-    const inputStyles = {
+    const textareaStyles = {
       // Layout
       display: 'block',
       width: '100%',
       boxSizing: 'border-box' as const,
+      resize: 'vertical' as const,
       
       // Typography
       fontFamily: fontFamilies.sans,
@@ -143,11 +151,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       // States
       outline: 'none',
       transition: 'all 150ms ease',
-      
-      // Placeholder
-      '::placeholder': {
-        color: variantStyles.placeholder,
-      },
     };
 
     const labelStyles = {
@@ -165,13 +168,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       color: error ? theme('text.error') : success ? theme('text.success') : theme('text.secondary'),
     };
 
-    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
       e.target.style.borderColor = variantStyles.focusBorder;
       e.target.style.boxShadow = `0 0 0 3px ${variantStyles.focusRing}`;
       props.onFocus?.(e);
     };
 
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
       e.target.style.borderColor = variantStyles.border;
       e.target.style.boxShadow = 'none';
       props.onBlur?.(e);
@@ -180,14 +183,15 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={className}>
         {label && (
-          <label htmlFor={inputId} style={labelStyles}>
+          <label htmlFor={textareaId} style={labelStyles}>
             {label}
           </label>
         )}
-        <input
+        <textarea
           ref={ref}
-          id={inputId}
-          style={inputStyles}
+          id={textareaId}
+          rows={rows}
+          style={textareaStyles}
           onFocus={handleFocus}
           onBlur={handleBlur}
           {...props}
@@ -202,6 +206,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = 'Input';
+Textarea.displayName = 'Textarea';
 
-export default Input;
+export default Textarea;

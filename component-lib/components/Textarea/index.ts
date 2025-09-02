@@ -1,0 +1,1 @@
+export { Textarea, type TextareaProps, type TextareaSize, type TextareaVariant } from './Textarea';

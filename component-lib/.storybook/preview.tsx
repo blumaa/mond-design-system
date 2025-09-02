@@ -47,6 +47,7 @@ const preview: Preview = {
             padding: '3rem',
             backgroundColor: 'var(--background-color)',
             color: 'var(--text-color)',
+            fontFamily: "'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
             minHeight: '100vh',
             transition: 'all 0.2s',
           }}
