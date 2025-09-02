@@ -12,7 +12,7 @@ const ColorSwatch = ({ color, name }: { color: string; name: string }) => (
   <div style={{ marginBottom: '1rem' }}>
     <div
       style={{
-        width: '200px',
+        width: '100%',
         height: '100px',
         backgroundColor: color,
         borderRadius: '4px',
@@ -42,7 +42,7 @@ const ColorGroup = ({ name, colors }: { name: string; colors: Record<string, any
   return (
     <div style={{ marginBottom: '2rem' }}>
       <h2 style={{ marginBottom: '1rem', fontFamily: fontFamilies.sans }}>{name}</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ display: 'flex', flexDirection:'column'}}>
         {Object.entries(colors).flatMap(([key, value]) => renderColorValue(key, value))}
       </div>
     </div>
