@@ -2,6 +2,7 @@
 import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
+import { Box } from '../Box/Box';
 
 export type TextareaSize = 'sm' | 'md' | 'lg';
 export type TextareaVariant = 'default' | 'error' | 'success';
@@ -181,11 +182,11 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     };
 
     return (
-      <div className={className}>
+      <Box className={className}>
         {label && (
-          <label htmlFor={textareaId} style={labelStyles}>
+          <Box as="label" style={labelStyles} {...({ htmlFor: textareaId } as any)}>
             {label}
-          </label>
+          </Box>
         )}
         <textarea
           ref={ref}
@@ -201,7 +202,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             {error || success || helperText}
           </span>
         )}
-      </div>
+      </Box>
     );
   }
 );

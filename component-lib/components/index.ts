@@ -15,3 +15,5 @@ export * from './Avatar';
 export * from './Tooltip';
 export * from './Tabs';
 export * from './Modal';
+export * from './FormField';
+export * from './FormGroup';

@@ -2,6 +2,7 @@
 import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
+import { Box } from '../Box/Box';
 
 export type CheckboxSize = 'sm' | 'md' | 'lg';
 
@@ -161,9 +162,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     };
 
     return (
-      <div className={className} data-testid={dataTestId}>
-        <label style={containerStyles}>
-          <div style={{ position: 'relative' }}>
+      <Box className={className} data-testid={dataTestId}>
+        <Box as="label" display="flex" alignItems="flex-start" gap={2}>
+          <Box position="relative" style={{ flexShrink: 0 }}>
             <input
               ref={inputRef}
               type="checkbox"
@@ -181,24 +182,55 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               onBlur={handleBlur}
               {...props}
             />
-            <div data-checkbox style={checkboxStyles}>
-              <span style={checkmarkStyles}>
+            <Box data-checkbox style={checkboxStyles}>
+              <Box
+                as="span"
+                position="absolute"
+                top="50%"
+                left="50%"
+                style={{
+                  transform: 'translate(-50%, -50%)',
+                  color: theme('interactive.primary.text'),
+                  fontSize: size === 'sm' ? '10px' : size === 'md' ? '12px' : '14px',
+                  lineHeight: 1,
+                  opacity: checked || indeterminate ? 1 : 0,
+                  transition: 'opacity 150ms ease',
+                }}
+              >
                 {indeterminate ? '−' : checked ? '✓' : ''}
-              </span>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
           {label && (
-            <div>
-              <span style={labelStyles}>{label}</span>
+            <Box>
+              <Box
+                as="span"
+                fontSize={sizeStyles.fontSize}
+                fontWeight="normal"
+                color={props.disabled ? theme('text.disabled') : theme('text.primary')}
+                style={{
+                  fontFamily: fontFamilies.sans,
+                  cursor: props.disabled ? 'not-allowed' : 'pointer',
+                  userSelect: 'none',
+                }}
+              >
+                {label}
+              </Box>
               {(error || helperText) && (
-                <span style={messageStyles}>
+                <Box
+                  as="span"
+                  display="block"
+                  mt={1}
+                  fontSize={12}
+                  color={error ? theme('text.error') : theme('text.secondary')}
+                >
                   {error || helperText}
-                </span>
+                </Box>
               )}
-            </div>
+            </Box>
           )}
-        </label>
-      </div>
+        </Box>
+      </Box>
     );
   }
 );

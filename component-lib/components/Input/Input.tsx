@@ -2,6 +2,7 @@
 import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
+import { Box } from '../Box/Box';
 
 export type InputSize = 'sm' | 'md' | 'lg';
 export type InputVariant = 'default' | 'error' | 'success';
@@ -178,11 +179,20 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className={className}>
+      <Box className={className}>
         {label && (
-          <label htmlFor={inputId} style={labelStyles}>
+          <Box
+            as="label"
+            display="block"
+            mb={1}
+            fontSize={14}
+            fontWeight="medium"
+            color={variantStyles.text}
+            style={{ cursor: 'pointer' }}
+            {...({ htmlFor: inputId } as any)}
+          >
             {label}
-          </label>
+          </Box>
         )}
         <input
           ref={ref}
@@ -193,11 +203,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {(error || success || helperText) && (
-          <span style={messageStyles}>
+          <Box
+            display="block"
+            mt={1}
+            fontSize={12}
+            color={error ? theme('text.error') : success ? theme('text.success') : theme('text.secondary')}
+          >
             {error || success || helperText}
-          </span>
+          </Box>
         )}
-      </div>
+      </Box>
     );
   }
 );

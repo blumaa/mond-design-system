@@ -2,6 +2,7 @@
 import React, { useState, createContext, useContext } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
+import { Box } from '../Box/Box';
 
 export interface TabItem {
   id: string;
@@ -123,9 +124,9 @@ export const TabsList: React.FC<{ children: React.ReactNode; className?: string 
   };
 
   return (
-    <div className={className} style={listStyles} role="tablist">
+    <Box className={className} style={listStyles} role="tablist">
       {children}
-    </div>
+    </Box>
   );
 };
 
@@ -213,7 +214,7 @@ export const TabsTrigger: React.FC<{
       data-state={isActive ? 'active' : 'inactive'}
     >
       {children}
-      {variant === 'line' && <div style={indicatorStyles} />}
+      {variant === 'line' && <Box style={indicatorStyles} />}
     </button>
   );
 };
@@ -234,7 +235,7 @@ export const TabsContent: React.FC<{
   };
 
   return (
-    <div
+    <Box
       className={className}
       style={contentStyles}
       role="tabpanel"
@@ -242,7 +243,7 @@ export const TabsContent: React.FC<{
       tabIndex={0}
     >
       {children}
-    </div>
+    </Box>
   );
 };
 
@@ -285,7 +286,7 @@ export const Tabs: React.FC<TabsProps> = ({
 
   return (
     <TabsContext.Provider value={contextValue}>
-      <div className={className} style={containerStyles} data-testid={dataTestId}>
+      <Box className={className} style={containerStyles} data-testid={dataTestId}>
         <TabsList>
           {tabs.map((tab) => (
             <TabsTrigger key={tab.id} value={tab.id} disabled={tab.disabled}>
@@ -299,7 +300,7 @@ export const Tabs: React.FC<TabsProps> = ({
             {tab.content}
           </TabsContent>
         ))}
-      </div>
+      </Box>
     </TabsContext.Provider>
   );
 };

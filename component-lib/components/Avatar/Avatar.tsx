@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
+import { Box } from '../Box/Box';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
@@ -159,11 +160,13 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
     const fallbackContent = children || (fallback ? getInitials(fallback) : '?');
 
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
         data-testid={dataTestId}
-        style={containerStyles}
+        style={{
+          ...containerStyles,
+        }}
         {...props}
       >
         {src && (
@@ -176,11 +179,14 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
           />
         )}
         {showFallback && (
-          <div style={fallbackStyles} data-testid={`${dataTestId || 'avatar'}-fallback`}>
+          <Box
+            style={fallbackStyles}
+            data-testid={`${dataTestId || 'avatar'}-fallback`}
+          >
             {fallbackContent}
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     );
   }
 );

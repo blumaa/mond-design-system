@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../tokens';
 import { useTheme } from '../../utils/theme';
+import { Box } from '../Box/Box';
 
 export type SelectSize = 'sm' | 'md' | 'lg';
 export type SelectVariant = 'default' | 'error' | 'success';
@@ -344,13 +345,13 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     };
 
     return (
-      <div className={className}>
+      <Box className={className}>
         {label && (
-          <label htmlFor={selectId} style={labelStyles}>
+          <Box as="label" style={labelStyles} {...({ htmlFor: selectId } as any)}>
             {label}
-          </label>
+          </Box>
         )}
-        <div ref={containerRef} style={selectStyles}>
+        <Box ref={containerRef} style={selectStyles}>
           <button
             ref={triggerRef}
             id={selectId}
@@ -373,7 +374,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           </button>
           
           {isOpen && (
-            <div ref={optionsRef} style={dropdownStyles} role="listbox">
+            <Box ref={optionsRef} style={dropdownStyles} role="listbox">
               {options.map((option, index) => (
                 <button
                   key={option.value}
@@ -386,15 +387,15 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                   {option.label}
                 </button>
               ))}
-            </div>
+            </Box>
           )}
-        </div>
+        </Box>
         {(error || success || helperText) && (
           <span style={messageStyles}>
             {error || success || helperText}
           </span>
         )}
-      </div>
+      </Box>
     );
   }
 );

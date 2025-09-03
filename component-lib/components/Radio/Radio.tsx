@@ -2,6 +2,7 @@
 import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
+import { Box } from '../Box/Box';
 
 export type RadioSize = 'sm' | 'md' | 'lg';
 
@@ -149,9 +150,9 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
     };
 
     return (
-      <div className={className} data-testid={dataTestId}>
-        <label style={containerStyles}>
-          <div style={{ position: 'relative' }}>
+      <Box className={className} data-testid={dataTestId}>
+        <Box as="label" style={containerStyles}>
+          <Box position="relative" style={{ flexShrink: 0 }}>
             <input
               ref={ref}
               type="radio"
@@ -169,22 +170,22 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
               onBlur={handleBlur}
               {...props}
             />
-            <div data-radio style={radioStyles}>
-              <div style={dotStyles} />
-            </div>
-          </div>
+            <Box data-radio style={radioStyles}>
+              <Box style={dotStyles} />
+            </Box>
+          </Box>
           {label && (
-            <div>
-              <span style={labelStyles}>{label}</span>
+            <Box>
+              <Box as="span" style={labelStyles}>{label}</Box>
               {(error || helperText) && (
-                <span style={messageStyles}>
+                <Box as="span" style={messageStyles}>
                   {error || helperText}
-                </span>
+                </Box>
               )}
-            </div>
+            </Box>
           )}
-        </label>
-      </div>
+        </Box>
+      </Box>
     );
   }
 );

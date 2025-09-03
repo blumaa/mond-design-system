@@ -40,7 +40,7 @@ type Story = StoryObj<typeof meta>;
 const GridItem = ({ children, bg = '#e3f2fd', height }: { 
   children: React.ReactNode; 
   bg?: string;
-  height?: number;
+  height?: string | number;
 }) => (
   <Box 
     p={16} 
@@ -113,8 +113,8 @@ export const CustomTemplate: Story = {
       
       <Box fontSize={18} fontWeight="600" mb={16}>Sidebar Layout</Box>
       <Grid templateColumns="250px 1fr" gap={20} height={300}>
-        <GridItem bg="#e1bee7" height="100%">Sidebar</GridItem>
-        <GridItem bg="#f3e5f5" height="100%">Main Content</GridItem>
+        <Box bg="#e1bee7" height="100%">Sidebar</Box>
+        <Box bg="#f3e5f5" height="100%">Main Content</Box>
       </Grid>
     </Box>
   ),

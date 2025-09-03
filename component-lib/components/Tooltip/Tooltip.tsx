@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../tokens';
 import { useTheme } from '../../utils/theme';
+import { Box } from '../Box/Box';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 export type TooltipTrigger = 'hover' | 'focus' | 'click';
@@ -305,23 +306,44 @@ export const Tooltip: React.FC<TooltipProps> = ({
   });
 
   return (
-    <div 
+    <Box 
       ref={containerRef}
       className={className}
-      style={containerStyles}
+      position="relative"
+      display="inline-block"
       data-testid={dataTestId}
     >
       {childElement}
-      <div
-        style={tooltipStyles}
+      <Box
+        style={{
+          position: 'absolute',
+          zIndex: 1000,
+          padding: `${spacing[2]} ${spacing[3]}`,
+          backgroundColor: theme('surface.elevated'),
+          color: theme('text.primary'),
+          border: `1px solid ${theme('border.default')}`,
+          borderRadius: radii.md,
+          fontSize: fontSizes.sm,
+          fontWeight: fontWeights.normal,
+          fontFamily: fontFamilies.sans,
+          maxWidth: '200px',
+          ...getPlacementStyles(placement),
+          lineHeight: '1.4',
+          wordWrap: 'break-word',
+          boxShadow: shadows.md,
+          opacity: isVisible ? 1 : 0,
+          visibility: (isVisible ? 'visible' : 'hidden') as React.CSSProperties['visibility'],
+          transition: 'opacity 150ms ease, visibility 150ms ease',
+          pointerEvents: 'none',
+        }}
         data-testid={`${dataTestId || 'tooltip'}-content`}
         role="tooltip"
         aria-hidden={!isVisible}
       >
         {content}
-        <div style={arrowStyles} data-testid={`${dataTestId || 'tooltip'}-arrow`} />
-      </div>
-    </div>
+        <Box style={arrowStyles} data-testid={`${dataTestId || 'tooltip'}-arrow`} />
+      </Box>
+    </Box>
   );
 };
 

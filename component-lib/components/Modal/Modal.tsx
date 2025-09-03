@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../tokens';
 import { useTheme } from '../../utils/theme';
+import { Box } from '../Box/Box';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
@@ -132,8 +133,8 @@ export const ModalHeader: React.FC<{
   };
 
   return (
-    <div className={className} style={headerStyles}>
-      <div>{children}</div>
+    <Box className={className} style={headerStyles}>
+      <Box>{children}</Box>
       {showCloseButton && onClose && (
         <button
           style={closeButtonStyles}
@@ -144,7 +145,7 @@ export const ModalHeader: React.FC<{
           ×
         </button>
       )}
-    </div>
+    </Box>
   );
 };
 
@@ -162,9 +163,9 @@ export const ModalBody: React.FC<{
   };
 
   return (
-    <div className={className} style={bodyStyles}>
+    <Box className={className} style={bodyStyles}>
       {children}
-    </div>
+    </Box>
   );
 };
 
@@ -182,9 +183,9 @@ export const ModalFooter: React.FC<{
   };
 
   return (
-    <div className={className} style={footerStyles}>
+    <Box className={className} style={footerStyles}>
       {children}
-    </div>
+    </Box>
   );
 };
 
@@ -317,7 +318,7 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div
+    <Box
       style={overlayStyles}
       onClick={handleOverlayClick}
       data-testid={`${dataTestId || 'modal'}-overlay`}
@@ -325,7 +326,7 @@ export const Modal: React.FC<ModalProps> = ({
       aria-modal="true"
       aria-labelledby={title ? `${dataTestId || 'modal'}-title` : undefined}
     >
-      <div
+      <Box
         ref={modalRef}
         className={className}
         style={modalStyles}
@@ -334,7 +335,7 @@ export const Modal: React.FC<ModalProps> = ({
       >
         {title && (
           <ModalHeader onClose={onClose}>
-            <div id={`${dataTestId || 'modal'}-title`}>{title}</div>
+            <Box id={`${dataTestId || 'modal'}-title`}>{title}</Box>
           </ModalHeader>
         )}
         
@@ -343,8 +344,8 @@ export const Modal: React.FC<ModalProps> = ({
         ) : (
           children
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
