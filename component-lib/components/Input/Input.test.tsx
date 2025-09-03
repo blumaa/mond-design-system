@@ -132,7 +132,7 @@ describe('Input Component', () => {
       const inputElement = screen.getByTestId('success-input');
       const successMessage = screen.getByText(/success message/i);
       
-      expect(inputElement).toHaveStyle('border: 1px solid #10b981');
+      expect(inputElement).toHaveStyle('border: 1px solid #22c55e');
       expect(successMessage).toBeInTheDocument();
     });
   });
@@ -142,16 +142,16 @@ describe('Input Component', () => {
       render(<Input isDarkMode={true} data-testid="dark-input" />);
       const inputElement = screen.getByTestId('dark-input');
       
-      // Check for dark background color
-      expect(inputElement).toHaveStyle('background-color: #1e293b');
+      // Check for dark background color (semantic: surface.input in dark mode -> black.100)
+      expect(inputElement).toHaveStyle('background-color: #171717');
     });
 
     it('applies light mode styling by default', () => {
       render(<Input data-testid="light-input" />);
       const inputElement = screen.getByTestId('light-input');
       
-      // Check for light background color
-      expect(inputElement).toHaveStyle('background-color: #f8fafc');
+      // Check for light background color (semantic: surface.input in light mode -> white.50) 
+      expect(inputElement).toHaveStyle('background-color: #ffffff');
     });
   });
 });

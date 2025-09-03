@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
-import { colors, radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
+import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
+import { useTheme } from '../../utils/theme';
 
 export type LinkSize = 'small' | 'medium' | 'large';
 
@@ -80,22 +81,22 @@ const getSizeStyles = (size: LinkSize, iconOnly: boolean = false) => {
   }
 };
 
-const getLinkStyles = (isDarkMode: boolean = false) => {
+const getLinkStyles = (theme: ReturnType<typeof useTheme>) => {
   return {
     color: 'inherit',
     textDecoration: 'underline',
-    textDecorationColor: colors.primary[500],
+    textDecorationColor: theme('text.link'),
     textUnderlineOffset: '1px',
     hoverStyles: {
       textDecoration: 'none',
-      textDecorationColor: colors.primary[500],
+      textDecorationColor: theme('text.link'),
     },
     activeStyles: {
       textDecoration: 'underline',
-      textDecorationColor: colors.primary[500],
+      textDecorationColor: theme('text.link'),
     },
     focusStyles: {
-      outline: `2px solid ${colors.primary[300]}`,
+      outline: `2px solid ${theme('border.focused')}`,
       outlineOffset: '2px',
       borderRadius: radii.sm,
     },
@@ -113,8 +114,9 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     style = {},
     ...props
   }, ref) => {
+    const theme = useTheme(isDarkMode);
     const sizeStyles = getSizeStyles(size, iconOnly);
-    const linkStyles = getLinkStyles(isDarkMode);
+    const linkStyles = getLinkStyles(theme);
 
     const baseStyles: React.CSSProperties = {
       display: 'inline-flex',
@@ -122,7 +124,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       cursor: 'pointer',
       fontFamily: fontFamilies.sans,
       textDecoration: 'underline',
-      textDecorationColor: colors.primary[500],
+      textDecorationColor: theme('text.link'),
       textUnderlineOffset: '1px',
       color: 'inherit',
       ...sizeStyles,

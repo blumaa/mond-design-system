@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
-import { colors, radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
+import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
+import { useTheme } from '../../utils/theme';
 
 export type ButtonVariant = 'primary' | 'outline' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -61,61 +62,54 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   isDarkMode?: boolean;
 }
 
-const getVariantStyles = (variant: ButtonVariant, isDarkMode: boolean = false) => {
-  const themeColors = {
-    bg: isDarkMode ? colors.background.dark : colors.background.light,
-    text: isDarkMode ? colors.primary[100] : colors.primary[700],
-  };
-
+const getVariantStyles = (variant: ButtonVariant, theme: ReturnType<typeof useTheme>) => {
   return {
     primary: {
-      // Portfolio-2023 style: bg-primary-700, text-[#DDE6ED], border-[#DDE6ED]
-      backgroundColor: colors.primary[700],
-      color: colors.foreground.dark, // #DDE6ED
-      border: `1px solid ${colors.foreground.dark}`,
+      backgroundColor: theme('interactive.primary.background'),
+      color: theme('interactive.primary.text'),
+      border: `1px solid ${theme('interactive.primary.background')}`,
       hoverStyles: {
-        backgroundColor: colors.primary[800],
+        backgroundColor: theme('interactive.primary.backgroundHover'),
       },
       activeStyles: {
-        backgroundColor: colors.primary[900],
+        backgroundColor: theme('interactive.primary.backgroundPressed'),
       },
       focusStyles: {
-        outline: `2px solid ${colors.primary[300]}`,
+        outline: `2px solid ${theme('border.focused')}`,
         outlineOffset: '2px',
       },
     },
     outline: {
-      // Portfolio-2023 style: border-primary-500, transparent background, hover effects
       backgroundColor: 'transparent',
-      color: colors.primary[500],
-      border: `1px solid ${colors.primary[500]}`,
+      color: theme('interactive.primary.background'),
+      border: `1px solid ${theme('interactive.primary.background')}`,
       hoverStyles: {
-        backgroundColor: colors.primary[700],
-        color: colors.foreground.dark,
-        borderColor: colors.foreground.dark,
+        backgroundColor: theme('interactive.primary.background'),
+        color: theme('interactive.primary.text'),
+        borderColor: theme('interactive.primary.background'),
       },
       activeStyles: {
-        backgroundColor: colors.primary[800],
-        color: colors.foreground.dark,
-        borderColor: colors.foreground.dark,
+        backgroundColor: theme('interactive.primary.backgroundHover'),
+        color: theme('interactive.primary.text'),
+        borderColor: theme('interactive.primary.backgroundHover'),
       },
       focusStyles: {
-        outline: `2px solid ${colors.primary[300]}`,
+        outline: `2px solid ${theme('border.focused')}`,
         outlineOffset: '2px',
       },
     },
     ghost: {
       backgroundColor: 'transparent',
-      color: themeColors.text,
+      color: theme('interactive.ghost.text'),
       border: 'none',
       hoverStyles: {
-        backgroundColor: isDarkMode ? colors.neutral[800] : colors.neutral[200],
+        backgroundColor: theme('interactive.ghost.backgroundHover'),
       },
       activeStyles: {
-        backgroundColor: isDarkMode ? colors.neutral[700] : colors.neutral[200],
+        backgroundColor: theme('interactive.ghost.backgroundPressed'),
       },
       focusStyles: {
-        outline: `2px solid ${isDarkMode ? colors.neutral[600] : colors.neutral[400]}`,
+        outline: `2px solid ${theme('border.default')}`,
         outlineOffset: '2px',
       },
     },
@@ -216,7 +210,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     isDarkMode = false, 
     ...props 
   }, ref) => {
-    const variantStyles = getVariantStyles(variant, isDarkMode);
+    const theme = useTheme(isDarkMode);
+    const variantStyles = getVariantStyles(variant, theme);
     const sizeStyles = getSizeStyles(size, iconOnly);
     const cornerStyles = getCornerStyles(corners);
     const alignmentStyles = getAlignmentStyles(alignContent);

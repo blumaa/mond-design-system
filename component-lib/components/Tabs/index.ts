@@ -1,0 +1,1 @@
+export { Tabs, TabsList, TabsTrigger, TabsContent, type TabsProps, type TabItem, type TabsVariant, type TabsSize } from './Tabs';

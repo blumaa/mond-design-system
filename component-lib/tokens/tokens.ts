@@ -1,7 +1,7 @@
 // This file is auto-generated. Do not edit manually.
 export const tokens = {
   "colors": {
-    "primary": {
+    "blue": {
       "50": "#f0f9ff",
       "100": "#e0f2fe",
       "200": "#bae6fd",
@@ -13,7 +13,7 @@ export const tokens = {
       "800": "#075985",
       "900": "#0c4a6e"
     },
-    "neutral": {
+    "gray": {
       "50": "#f8fafc",
       "100": "#f1f5f9",
       "200": "#e2e8f0",
@@ -25,35 +25,65 @@ export const tokens = {
       "800": "#1e293b",
       "900": "#0f172a"
     },
-    "background": {
-      "light": "#F2F3F4",
-      "dark": "#27374D"
+    "red": {
+      "50": "#fef2f2",
+      "100": "#fee2e2",
+      "200": "#fecaca",
+      "300": "#fca5a5",
+      "400": "#f87171",
+      "500": "#ef4444",
+      "600": "#dc2626",
+      "700": "#b91c1c",
+      "800": "#991b1b",
+      "900": "#7f1d1d"
     },
-    "foreground": {
-      "light": "#414A4C",
-      "dark": "#DDE6ED"
+    "green": {
+      "50": "#f0fdf4",
+      "100": "#dcfce7",
+      "200": "#bbf7d0",
+      "300": "#86efac",
+      "400": "#4ade80",
+      "500": "#22c55e",
+      "600": "#16a34a",
+      "700": "#15803d",
+      "800": "#166534",
+      "900": "#14532d"
     },
-    "accent": {
-      "yellow": "#eab308",
-      "gray": {
-        "light": "#e5e7eb",
-        "dark": "#374151"
-      }
-    },
-    "success": {
-      "50": "#ecfdf5",
-      "500": "#10b981",
-      "900": "#064e3b"
-    },
-    "warning": {
+    "amber": {
       "50": "#fffbeb",
+      "100": "#fef3c7",
+      "200": "#fde68a",
+      "300": "#fcd34d",
+      "400": "#fbbf24",
       "500": "#f59e0b",
+      "600": "#d97706",
+      "700": "#b45309",
+      "800": "#92400e",
       "900": "#78350f"
     },
-    "error": {
-      "50": "#fef2f2",
-      "500": "#ef4444",
-      "900": "#7f1d1d"
+    "white": {
+      "50": "#ffffff",
+      "100": "#fefefe",
+      "200": "#fdfdfd",
+      "300": "#fcfcfc",
+      "400": "#fbfbfb",
+      "500": "#fafafa",
+      "600": "#f9f9f9",
+      "700": "#f8f8f8",
+      "800": "#f7f7f7",
+      "900": "#f5f5f5"
+    },
+    "black": {
+      "50": "#1a1a1a",
+      "100": "#171717",
+      "200": "#141414",
+      "300": "#111111",
+      "400": "#0f0f0f",
+      "500": "#0d0d0d",
+      "600": "#0b0b0b",
+      "700": "#080808",
+      "800": "#050505",
+      "900": "#000000"
     }
   },
   "radii": {
@@ -65,6 +95,232 @@ export const tokens = {
     "2xl": "1rem",
     "3xl": "1.5rem",
     "full": "9999px"
+  },
+  "semantic": {
+    "text": {
+      "primary": {
+        "light": "gray.900",
+        "dark": "gray.100"
+      },
+      "secondary": {
+        "light": "gray.600",
+        "dark": "gray.400"
+      },
+      "tertiary": {
+        "light": "gray.500",
+        "dark": "gray.500"
+      },
+      "disabled": {
+        "light": "gray.400",
+        "dark": "gray.600"
+      },
+      "inverse": {
+        "light": "white.50",
+        "dark": "black.900"
+      },
+      "link": {
+        "light": "blue.600",
+        "dark": "blue.400"
+      },
+      "success": {
+        "light": "green.600",
+        "dark": "green.400"
+      },
+      "warning": {
+        "light": "amber.600",
+        "dark": "amber.400"
+      },
+      "error": {
+        "light": "red.600",
+        "dark": "red.400"
+      }
+    },
+    "surface": {
+      "background": {
+        "light": "white.50",
+        "dark": "black.200"
+      },
+      "elevated": {
+        "light": "white.50",
+        "dark": "black.100"
+      },
+      "overlay": {
+        "light": "white.100",
+        "dark": "black.50"
+      },
+      "card": {
+        "light": "white.50",
+        "dark": "black.100"
+      },
+      "input": {
+        "light": "white.50",
+        "dark": "black.100"
+      },
+      "disabled": {
+        "light": "gray.100",
+        "dark": "gray.800"
+      }
+    },
+    "border": {
+      "default": {
+        "light": "gray.300",
+        "dark": "gray.600"
+      },
+      "subtle": {
+        "light": "gray.200",
+        "dark": "gray.700"
+      },
+      "strong": {
+        "light": "gray.400",
+        "dark": "gray.500"
+      },
+      "focused": {
+        "light": "blue.500",
+        "dark": "blue.400"
+      },
+      "success": {
+        "light": "green.500",
+        "dark": "green.400"
+      },
+      "warning": {
+        "light": "amber.500",
+        "dark": "amber.400"
+      },
+      "error": {
+        "light": "red.500",
+        "dark": "red.400"
+      }
+    },
+    "interactive": {
+      "primary": {
+        "background": {
+          "light": "blue.600",
+          "dark": "blue.500"
+        },
+        "backgroundHover": {
+          "light": "blue.700",
+          "dark": "blue.600"
+        },
+        "backgroundPressed": {
+          "light": "blue.800",
+          "dark": "blue.700"
+        },
+        "backgroundDisabled": {
+          "light": "gray.300",
+          "dark": "gray.600"
+        },
+        "text": {
+          "light": "white.50",
+          "dark": "white.50"
+        },
+        "textDisabled": {
+          "light": "gray.500",
+          "dark": "gray.400"
+        }
+      },
+      "secondary": {
+        "background": {
+          "light": "white.50",
+          "dark": "black.200"
+        },
+        "backgroundHover": {
+          "light": "gray.100",
+          "dark": "black.100"
+        },
+        "backgroundPressed": {
+          "light": "gray.200",
+          "dark": "black.50"
+        },
+        "border": {
+          "light": "gray.300",
+          "dark": "gray.600"
+        },
+        "borderHover": {
+          "light": "gray.400",
+          "dark": "gray.500"
+        },
+        "text": {
+          "light": "gray.900",
+          "dark": "gray.100"
+        }
+      },
+      "ghost": {
+        "background": {
+          "light": "white.50",
+          "dark": "black.200"
+        },
+        "backgroundHover": {
+          "light": "gray.100",
+          "dark": "black.100"
+        },
+        "backgroundPressed": {
+          "light": "gray.200",
+          "dark": "black.50"
+        },
+        "text": {
+          "light": "gray.700",
+          "dark": "gray.300"
+        }
+      }
+    },
+    "feedback": {
+      "success": {
+        "background": {
+          "light": "green.50",
+          "dark": "green.900"
+        },
+        "border": {
+          "light": "green.200",
+          "dark": "green.700"
+        },
+        "text": {
+          "light": "green.800",
+          "dark": "green.200"
+        }
+      },
+      "warning": {
+        "background": {
+          "light": "amber.50",
+          "dark": "amber.900"
+        },
+        "border": {
+          "light": "amber.200",
+          "dark": "amber.700"
+        },
+        "text": {
+          "light": "amber.800",
+          "dark": "amber.200"
+        }
+      },
+      "error": {
+        "background": {
+          "light": "red.50",
+          "dark": "red.900"
+        },
+        "border": {
+          "light": "red.200",
+          "dark": "red.700"
+        },
+        "text": {
+          "light": "red.800",
+          "dark": "red.200"
+        }
+      },
+      "info": {
+        "background": {
+          "light": "blue.50",
+          "dark": "blue.900"
+        },
+        "border": {
+          "light": "blue.200",
+          "dark": "blue.700"
+        },
+        "text": {
+          "light": "blue.800",
+          "dark": "blue.200"
+        }
+      }
+    }
   },
   "shadows": {
     "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
@@ -96,9 +352,7 @@ export const tokens = {
     "64": "16rem"
   },
   "fontFamilies": {
-    "sans": "'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-    "serif": "ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif",
-    "mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+    "sans": "'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
   },
   "fontSizes": {
     "xs": "0.75rem",
