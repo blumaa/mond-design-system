@@ -83,6 +83,9 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   textAlign?: React.CSSProperties['textAlign'];
   textTransform?: React.CSSProperties['textTransform'];
   textDecoration?: React.CSSProperties['textDecoration'];
+  textOverflow?: React.CSSProperties['textOverflow'];
+  whiteSpace?: React.CSSProperties['whiteSpace'];
+  fontFamily?: React.CSSProperties['fontFamily'];
   
   // Effects
   boxShadow?: React.CSSProperties['boxShadow'];
@@ -149,6 +152,7 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   
   // Typography props
   fontSize, fontWeight, fontStyle, lineHeight, letterSpacing, textAlign, textTransform, textDecoration,
+  textOverflow, whiteSpace, fontFamily,
   
   // Effect props
   boxShadow, opacity, cursor, overflow, overflowX, overflowY, transition,
@@ -252,6 +256,9 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     ...(textAlign && { textAlign }),
     ...(textTransform && { textTransform }),
     ...(textDecoration && { textDecoration }),
+    ...(textOverflow && { textOverflow }),
+    ...(whiteSpace && { whiteSpace }),
+    ...(fontFamily && { fontFamily }),
     
     // Effects
     ...(boxShadow && { boxShadow }),

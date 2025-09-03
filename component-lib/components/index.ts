@@ -17,3 +17,6 @@ export * from './Tabs';
 export * from './Modal';
 export * from './FormField';
 export * from './FormGroup';
+export * from './Icon';
+export * from './Text';
+export * from './Heading';
