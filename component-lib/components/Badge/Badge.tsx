@@ -7,6 +7,7 @@ export type BadgeVariant = 'default' | 'primary' | 'secondary' | 'success' | 'wa
 export type BadgeSize = 'sm' | 'md' | 'lg';
 
 export interface BadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'size'> {
+  'data-testid'?: string;
   /**
    * Badge variant
    * @default 'default'

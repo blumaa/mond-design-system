@@ -6,6 +6,7 @@ import { useTheme } from '../../utils/theme';
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size'> {
+  'data-testid'?: string;
   /**
    * Avatar size
    * @default 'md'

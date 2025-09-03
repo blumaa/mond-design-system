@@ -6,6 +6,7 @@ import { useTheme } from '../../utils/theme';
 export type RadioSize = 'sm' | 'md' | 'lg';
 
 export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  'data-testid'?: string;
   /**
    * Radio size
    * @default 'md'

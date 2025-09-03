@@ -262,7 +262,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     wordWrap: 'break-word' as const,
     boxShadow: shadows.md,
     opacity: isVisible ? 1 : 0,
-    visibility: (isVisible ? 'visible' : 'hidden') as const,
+    visibility: (isVisible ? 'visible' : 'hidden') as React.CSSProperties['visibility'],
     transition: 'opacity 150ms ease, visibility 150ms ease',
     pointerEvents: 'none' as const,
     ...getPlacementStyles(placement),

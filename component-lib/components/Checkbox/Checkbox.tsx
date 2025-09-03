@@ -6,6 +6,7 @@ import { useTheme } from '../../utils/theme';
 export type CheckboxSize = 'sm' | 'md' | 'lg';
 
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  'data-testid'?: string;
   /**
    * Checkbox size
    * @default 'md'

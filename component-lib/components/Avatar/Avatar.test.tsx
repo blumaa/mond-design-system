@@ -88,7 +88,7 @@ describe('Avatar Component', () => {
         />
       );
 
-      const imageElement = screen.getByAltText('Avatar');
+      const imageElement = screen.getByAltText('John Doe');
       
       // Simulate image error
       fireEvent.error(imageElement);

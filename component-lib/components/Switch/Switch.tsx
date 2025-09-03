@@ -6,6 +6,7 @@ import { useTheme } from '../../utils/theme';
 export type SwitchSize = 'sm' | 'md' | 'lg';
 
 export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  'data-testid'?: string;
   /**
    * Switch size
    * @default 'md'
