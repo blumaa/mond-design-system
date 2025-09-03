@@ -1,0 +1,147 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+# Mond Design System
+
+[![npm version](https://badge.fury.io/js/@mond-design-system%2Ftheme.svg)](https://www.npmjs.com/package/@mond-design-system/theme)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+A modern, accessible design system built with React, TypeScript, and design tokens following Atomic Design principles. Built for scale, consistency, and developer experience.
+
+## ✨ Features
+
+- **🎨 Design Tokens** - Semantic color system with light/dark theme support
+- **⚛️ React Components** - Type-safe, accessible components with consistent API
+- **🎯 TypeScript First** - Full type safety and IntelliSense support  
+- **📖 Storybook Documentation** - Interactive component playground (you're here!)
+- **♿ Accessibility** - WCAG 2.1 AA compliant components
+- **🌙 Theme Support** - Built-in light and dark mode
+- **🔧 Developer Experience** - Simple APIs with sensible defaults
+
+## 📦 Installation
+
+```bash
+npm install @mond-design-system/theme
+# or
+yarn add @mond-design-system/theme
+# or
+pnpm add @mond-design-system/theme
+```
+
+## 🚀 Quick Start
+
+```tsx
+import { Text, Heading, Icon, Button } from '@mond-design-system/theme';
+
+function App() {
+  return (
+    <div>
+      <Heading level={1}>Welcome to Mond Design System</Heading>
+      <Text variant="body-lg" semantic="secondary">
+        A modern design system for building consistent user interfaces.
+      </Text>
+      <Button variant="primary">Get Started</Button>
+    </div>
+  );
+}
+```
+
+## 🧱 Component Categories
+
+### Typography
+The foundation of readable, scannable content with semantic meaning.
+- **Heading** - Semantic heading elements (h1-h6) with flexible sizing
+- **Text** - Flexible text component with semantic variants and styling options
+
+### Icons & Graphics  
+Consistent iconography with accessibility built-in.
+- **Icon** - SVG icon wrapper with consistent sizing and accessibility features
+
+### Layout & Containers
+Building blocks for organizing content and creating structure.
+- **Box** - Foundational layout primitive with design system props
+- **Stack** - Vertical layout container for consistent spacing
+- **Grid** - CSS Grid layout wrapper with responsive features
+- **Card** - Content container with elevation and padding
+
+### Form Controls
+Interactive elements for user input with validation and accessibility.
+- **Button** - Primary, secondary, and ghost variants
+- **Input** - Text input with validation states and icons
+- **Textarea** - Multi-line text input with resizing options
+- **Checkbox** - Custom styled checkboxes with labels
+- **Radio** - Radio button input with consistent styling
+- **Select** - Dropdown selection with custom styling
+- **Switch** - Toggle switch control for boolean states
+- **FormField** - Form field wrapper with labels and validation
+- **FormGroup** - Form section grouping
+
+### Interactive Components
+Rich interactive elements that enhance user experience.
+- **Badge** - Status indicators and labels with semantic colors
+- **Avatar** - User profile images with fallbacks and sizing
+- **Tooltip** - Contextual information overlays
+- **Modal** - Dialog overlays with backdrop and focus management
+- **Tabs** - Tab navigation interface with keyboard support
+- **Link** - Styled anchor elements with hover states
+
+## 🎨 Design Tokens
+
+### Semantic Colors
+Colors that automatically adapt to light and dark themes:
+```tsx
+color="text.primary"           // Main text color
+color="text.secondary"         // Supporting text
+color="surface.background"     // Background surfaces
+color="interactive.primary.background" // Primary buttons
+```
+
+### Typography Scale
+Consistent typography with design tokens:
+```tsx
+fontSize="lg"          // 1.125rem
+fontWeight="semibold"  // 600
+lineHeight="relaxed"   // 1.625
+fontFamily="sans"      // DM Sans font stack
+```
+
+### Spacing System
+Uniform spacing for consistent layouts:
+```tsx
+padding="4"    // 1rem
+margin="8"     // 2rem
+gap="2"        // 0.5rem
+```
+
+## 🌙 Theme Support
+
+All components support light and dark themes through the `isDarkMode` prop:
+
+```tsx
+<Text isDarkMode={true} semantic="primary">
+  Dark theme text
+</Text>
+
+<Heading isDarkMode={darkMode} semantic="secondary">
+  Responsive theme heading
+</Heading>
+```
+
+## 🏗️ Explore the Components
+
+Use the sidebar to browse all available components. Each component includes:
+- **Interactive examples** with customizable controls
+- **Code snippets** you can copy and use
+- **Design specifications** and usage guidelines
+- **Accessibility information** and best practices
+
+## 🔗 Links
+
+- **NPM Package**: [@mond-design-system/theme](https://www.npmjs.com/package/@mond-design-system/theme)
+- **GitHub Repository**: [mond-design-system](https://github.com/yourusername/mond-design-system)
+- **Documentation**: This Storybook instance
+
+---
+
+*Built with ❤️ using React, TypeScript, and Storybook*

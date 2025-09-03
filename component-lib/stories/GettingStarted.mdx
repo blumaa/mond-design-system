@@ -1,0 +1,284 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Getting Started" />
+
+# Getting Started
+
+This guide will help you start using the Mond Design System in your React application.
+
+## Installation
+
+Install the package using your preferred package manager:
+
+```bash
+npm install @mond-design-system/theme
+# or
+yarn add @mond-design-system/theme
+# or
+pnpm add @mond-design-system/theme
+```
+
+## Basic Usage
+
+### 1. Import Components
+
+Import the components you need from the main package:
+
+```tsx
+import { 
+  Heading, 
+  Text, 
+  Icon, 
+  Button, 
+  Box, 
+  Stack 
+} from '@mond-design-system/theme';
+```
+
+### 2. Typography Hierarchy
+
+Create proper content hierarchy with semantic headings and text:
+
+```tsx
+function Article() {
+  return (
+    <Box maxWidth="600px" m="auto" p="6">
+      <Heading level={1} size="4xl" mb="2">
+        Main Article Title
+      </Heading>
+      
+      <Text variant="body-lg" semantic="secondary" mb="4">
+        Published on March 15, 2024
+      </Text>
+      
+      <Heading level={2} size="2xl" mb="3">
+        Section Heading
+      </Heading>
+      
+      <Text variant="body-md" mb="4">
+        This is the main content of your article. The Text component 
+        provides consistent typography with semantic meaning.
+      </Text>
+      
+      <Text variant="caption" semantic="tertiary">
+        Caption or helper text using smaller variant
+      </Text>
+    </Box>
+  );
+}
+```
+
+### 3. Layout with Stack and Box
+
+Use layout components to organize content:
+
+```tsx
+function UserProfile() {
+  return (
+    <Card p="6">
+      <Stack spacing="4">
+        <Box display="flex" alignItems="center" gap="3">
+          <Avatar size="lg" src="/user.jpg" name="John Doe" />
+          <Stack spacing="1">
+            <Heading level={3} size="lg">John Doe</Heading>
+            <Text semantic="secondary">Software Engineer</Text>
+          </Stack>
+        </Box>
+        
+        <Text variant="body-md">
+          Building amazing user interfaces with modern web technologies.
+        </Text>
+        
+        <Box display="flex" gap="2">
+          <Button variant="primary" size="sm">Follow</Button>
+          <Button variant="secondary" size="sm">Message</Button>
+        </Box>
+      </Stack>
+    </Card>
+  );
+}
+```
+
+### 4. Icons with Accessibility
+
+Use icons with proper accessibility:
+
+```tsx
+function ActionButtons() {
+  return (
+    <Box display="flex" gap="2">
+      {/* Icon with label for screen readers */}
+      <Button variant="ghost" size="sm">
+        <Icon size="sm" label="Edit item">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" 
+                stroke="currentColor" strokeWidth="2" fill="none"/>
+        </Icon>
+      </Button>
+      
+      {/* Decorative icon (meaning conveyed by button text) */}
+      <Button variant="primary" size="sm">
+        <Icon size="sm" decorative>
+          <path d="M5 12h14M12 5l7 7-7 7" 
+                stroke="currentColor" strokeWidth="2" fill="none"/>
+        </Icon>
+        Next
+      </Button>
+    </Box>
+  );
+}
+```
+
+### 5. Theme Support
+
+Handle light and dark themes:
+
+```tsx
+function ThemedComponent({ isDarkMode }) {
+  return (
+    <Box 
+      bg="surface.background"
+      color="text.primary"
+      p="4"
+      borderRadius="md"
+      isDarkMode={isDarkMode}
+    >
+      <Heading 
+        level={2} 
+        semantic="primary"
+        isDarkMode={isDarkMode}
+      >
+        Themed Content
+      </Heading>
+      
+      <Text 
+        semantic="secondary"
+        isDarkMode={isDarkMode}
+      >
+        This content automatically adapts to light and dark themes.
+      </Text>
+    </Box>
+  );
+}
+```
+
+## Design Tokens Usage
+
+### Colors
+
+Use semantic colors that adapt to themes:
+
+```tsx
+// Semantic colors (recommended)
+<Text color="text.primary">Main text</Text>
+<Text color="text.secondary">Supporting text</Text>
+<Box bg="surface.card">Card background</Box>
+
+// Direct color tokens
+<Text color="blue.600">Blue text</Text>
+<Box bg="gray.100">Gray background</Box>
+```
+
+### Spacing
+
+Use the spacing scale for consistent layouts:
+
+```tsx
+<Box 
+  p="4"        // padding: 1rem
+  m="2"        // margin: 0.5rem
+  mb="6"       // margin-bottom: 1.5rem
+  gap="3"      // gap: 0.75rem
+>
+  Content
+</Box>
+```
+
+### Typography
+
+Control typography with design tokens:
+
+```tsx
+<Text 
+  fontSize="lg"           // 1.125rem
+  fontWeight="semibold"   // 600
+  lineHeight="relaxed"    // 1.625
+>
+  Custom typography
+</Text>
+```
+
+## Form Examples
+
+### Basic Form
+
+```tsx
+function ContactForm() {
+  return (
+    <Box maxWidth="400px" m="auto">
+      <Stack spacing="4">
+        <Heading level={2} mb="2">Contact Us</Heading>
+        
+        <FormField label="Name" required>
+          <Input placeholder="Your full name" />
+        </FormField>
+        
+        <FormField label="Email" required>
+          <Input type="email" placeholder="your@email.com" />
+        </FormField>
+        
+        <FormField label="Message" required>
+          <Textarea 
+            placeholder="Tell us how we can help..."
+            rows={4}
+          />
+        </FormField>
+        
+        <Box display="flex" gap="2" justifyContent="flex-end">
+          <Button variant="secondary">Cancel</Button>
+          <Button variant="primary">Send Message</Button>
+        </Box>
+      </Stack>
+    </Box>
+  );
+}
+```
+
+## Next Steps
+
+1. **Explore Components**: Browse the component library in the sidebar
+2. **Check Examples**: Each component has multiple usage examples
+3. **Copy Code**: Use the "Show code" feature to copy examples
+4. **Customize**: Adapt the examples to your specific needs
+5. **Test Themes**: Try components in both light and dark modes
+
+## TypeScript Support
+
+The design system includes full TypeScript definitions:
+
+```tsx
+import type { HeadingProps, TextProps, ButtonProps } from '@mond-design-system/theme';
+
+// Type your component props
+interface ArticleHeaderProps {
+  title: string;
+  subtitle?: string;
+  headingProps?: Partial<HeadingProps>;
+}
+
+function ArticleHeader({ title, subtitle, headingProps }: ArticleHeaderProps) {
+  return (
+    <Box>
+      <Heading level={1} {...headingProps}>
+        {title}
+      </Heading>
+      {subtitle && (
+        <Text variant="body-lg" semantic="secondary">
+          {subtitle}
+        </Text>
+      )}
+    </Box>
+  );
+}
+```
+
+Happy building! 🚀
