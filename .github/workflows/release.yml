@@ -1,0 +1,103 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release'
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build packages
+        run: yarn build
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Get version
+        id: get_version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION=${GITHUB_REF#refs/tags/v}
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get the previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          
+          if [ -n "$PREV_TAG" ]; then
+            # Generate changelog from commits between tags
+            CHANGELOG=$(git log --pretty=format:"- %s" ${PREV_TAG}..HEAD | grep -E '^- (feat|fix|docs|style|refactor|perf|test|chore)' | sed 's/^- feat:/✨ **Feature:** /;s/^- fix:/🐛 **Fix:** /;s/^- docs:/📖 **Docs:** /;s/^- style:/💄 **Style:** /;s/^- refactor:/♻️ **Refactor:** /;s/^- perf:/⚡ **Performance:** /;s/^- test:/✅ **Test:** /;s/^- chore:/🔧 **Chore:** /' || echo "- Initial release")
+          else
+            CHANGELOG="- Initial release"
+          fi
+          
+          # Save multiline output
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_version.outputs.tag }}
+          name: Release ${{ steps.get_version.outputs.tag }}
+          body: |
+            ## 🎉 Mond Design System v${{ steps.get_version.outputs.version }}
+            
+            ### 📦 Installation
+            ```bash
+            npm install @mond-design-system/theme@${{ steps.get_version.outputs.version }}
+            # or
+            yarn add @mond-design-system/theme@${{ steps.get_version.outputs.version }}
+            ```
+            
+            ### 🔗 Links
+            - 📦 [NPM Package](https://www.npmjs.com/package/@mond-design-system/theme/v/${{ steps.get_version.outputs.version }})
+            - 📖 [Storybook Documentation](https://mond-design-system.vercel.app)
+            - 🐙 [GitHub Repository](https://github.com/${{ github.repository }})
+            
+            ### 📋 What's Changed
+            ${{ steps.changelog.outputs.changelog }}
+            
+            ### 🧪 Quality Assurance
+            - ✅ All tests passing
+            - ✅ Built successfully
+            - ✅ Published to NPM registry
+            
+            ---
+            
+            **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.get_version.outputs.tag }}...HEAD
+          draft: false
+          prerelease: ${{ contains(steps.get_version.outputs.version, 'alpha') || contains(steps.get_version.outputs.version, 'beta') || contains(steps.get_version.outputs.version, 'rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

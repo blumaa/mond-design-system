@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint code
+        run: yarn lint
+        working-directory: component-lib
+
+      - name: Type check
+        run: yarn typecheck
+        working-directory: component-lib
+
+      - name: Run tests
+        run: yarn test
+        working-directory: component-lib
+
+      - name: Build tokens
+        run: yarn build:tokens
+        working-directory: component-lib
+
+      - name: Build library
+        run: yarn build
+        working-directory: component-lib
+
+      - name: Build Storybook
+        run: yarn build-storybook
+        working-directory: component-lib
+
+  quality:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Generate test coverage
+        run: yarn test --coverage --watchAll=false
+        working-directory: component-lib
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          directory: component-lib/coverage
+          fail_ci_if_error: true

@@ -20,3 +20,8 @@ export * from './FormGroup';
 export * from './Icon';
 export * from './Text';
 export * from './Heading';
+export * from './Spinner';
+export * from './Divider';
+export * from './Label';
+export * from './Image';
+export * from './Tag';
