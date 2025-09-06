@@ -268,7 +268,7 @@ export const RealWorldExample: Story = {
   render: () => (
     <div style={{ maxWidth: '600px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <Text variant="overline" semantic="tertiary">ARTICLE</Text>
-      <Text as="h2" variant="body-lg" weight="bold" semantic="primary">
+      <Text as="div" variant="body-lg" weight="bold" semantic="primary">
         Design System Best Practices
       </Text>
       <Text semantic="secondary" style={{ marginBottom: '16px' }}>
