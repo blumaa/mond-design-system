@@ -151,20 +151,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       },
     };
 
-    const labelStyles = {
-      display: 'block',
-      marginBottom: spacing[1],
-      fontSize: fontSizes.sm,
-      fontWeight: fontWeights.medium,
-      color: variantStyles.text,
-    };
-
-    const messageStyles = {
-      display: 'block',
-      marginTop: spacing[1],
-      fontSize: fontSizes.sm,
-      color: error ? theme('text.error') : success ? theme('text.success') : theme('text.secondary'),
-    };
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
       e.target.style.borderColor = variantStyles.focusBorder;
@@ -189,7 +175,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             fontWeight="medium"
             color={variantStyles.text}
             style={{ cursor: 'pointer' }}
-            {...({ htmlFor: inputId } as any)}
+            {...(inputId && { htmlFor: inputId })}
           >
             {label}
           </Box>

@@ -184,7 +184,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <Box className={className}>
         {label && (
-          <Box as="label" style={labelStyles} {...({ htmlFor: textareaId } as any)}>
+          <Box as="label" style={labelStyles} {...(textareaId && { htmlFor: textareaId })}>
             {label}
           </Box>
         )}

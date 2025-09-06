@@ -26,8 +26,8 @@ const ColorSwatch = ({ color, name }: { color: string; name: string }) => (
   </div>
 );
 
-const ColorGroup = ({ name, colors }: { name: string; colors: Record<string, any> }) => {
-  const renderColorValue = (key: string, value: any, parentKey?: string): React.ReactNode[] => {
+const ColorGroup = ({ name, colors }: { name: string; colors: Record<string, unknown> }) => {
+  const renderColorValue = (key: string, value: unknown, parentKey?: string): React.ReactNode[] => {
     if (typeof value === 'string') {
       const displayName = parentKey ? `${parentKey}-${key}` : `${name}-${key}`;
       return [<ColorSwatch key={displayName} color={value} name={displayName} />];
@@ -53,7 +53,7 @@ export const All = () => (
   <div style={{ padding: '2rem' }}>
     <h1 style={{ marginBottom: '2rem', fontFamily: fontFamilies.sans }}>Color Tokens</h1>
     {Object.entries(colors).map(([name, shades]) => (
-      <ColorGroup key={name} name={name} colors={shades as Record<string, any>} />
+      <ColorGroup key={name} name={name} colors={shades as Record<string, unknown>} />
     ))}
   </div>
 );

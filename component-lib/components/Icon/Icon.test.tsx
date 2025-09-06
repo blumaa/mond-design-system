@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Icon } from './Icon';
+import { Icon, IconSize } from './Icon';
 
 const TestPath = () => (
   <path 
@@ -49,7 +49,7 @@ describe('Icon', () => {
 
     Object.entries(sizes).forEach(([size, expectedSize]) => {
       const { unmount } = render(
-        <Icon size={size as any}>
+        <Icon size={size as IconSize}>
           <TestPath />
         </Icon>
       );

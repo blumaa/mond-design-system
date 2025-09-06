@@ -50,15 +50,11 @@ export const Divider = forwardRef<HTMLElement, DividerProps>(({
   
   const isHorizontal = orientation === 'horizontal';
   
-  // Default margins
-  const defaultMargin = isHorizontal 
-    ? { my: my || m || '4', mx: mx || m || '0' }
-    : { mx: mx || m || '4', my: my || m || '0' };
-  
+  // Default margins - horizontal dividers get vertical margins, vertical dividers get horizontal margins
   const margins = {
     m,
-    my: my || defaultMargin.my,
-    mx: mx || defaultMargin.mx,
+    my: my !== undefined ? my : (m !== undefined ? m : (isHorizontal ? '4' : '0')),
+    mx: mx !== undefined ? mx : (m !== undefined ? m : (isHorizontal ? '0' : '4')),
     mt,
     mb,
     ml,

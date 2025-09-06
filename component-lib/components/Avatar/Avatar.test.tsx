@@ -11,7 +11,7 @@ const mockImage = {
 
 beforeAll(() => {
   // Mock Image constructor
-  global.Image = class {
+  global.Image = class implements Partial<HTMLImageElement> {
     onload: (() => void) | null = null;
     onerror: (() => void) | null = null;
     src: string = '';
@@ -22,9 +22,9 @@ beforeAll(() => {
           this.onload();
         }
       }, 100);
-      return mockImage;
+      return mockImage as unknown as HTMLImageElement;
     }
-  } as any;
+  } as typeof Image;
 });
 
 describe('Avatar Component', () => {

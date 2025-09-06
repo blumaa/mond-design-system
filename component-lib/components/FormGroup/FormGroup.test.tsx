@@ -209,7 +209,7 @@ describe('FormGroup Component', () => {
     });
 
     it('does not render header when no title or description', () => {
-      const { container } = render(
+      render(
         <FormGroup data-testid="form-group">
           <FormField label="Field">
             <Input placeholder="Test input" />

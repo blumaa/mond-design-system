@@ -242,7 +242,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const inlineStyles: React.CSSProperties = {};
     Object.entries(baseStyles).forEach(([key, value]) => {
       if (typeof value === 'string' || typeof value === 'number') {
-        // @ts-ignore - dynamic styles
+        // @ts-expect-error - dynamic styles
         inlineStyles[key] = value;
       }
     });
@@ -258,7 +258,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
       if (!disabled && variantStyles.hoverStyles) {
         Object.entries(variantStyles.hoverStyles).forEach(([key, value]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           e.currentTarget.style[key] = value;
         });
       }
@@ -268,10 +268,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       if (!disabled && variantStyles.hoverStyles) {
         // Reset to base styles
         Object.entries(variantStyles.hoverStyles).forEach(([key]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           const originalValue = baseStyles[key];
           if (originalValue !== undefined) {
-            // @ts-ignore - dynamic styles
+            // @ts-expect-error - dynamic styles
             e.currentTarget.style[key] = originalValue;
           }
         });
@@ -281,7 +281,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const handleMouseDown = (e: React.MouseEvent<HTMLButtonElement>) => {
       if (!disabled && variantStyles.activeStyles) {
         Object.entries(variantStyles.activeStyles).forEach(([key, value]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           e.currentTarget.style[key] = value;
         });
       }
@@ -294,10 +294,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         const stylesToApply = isHovering && variantStyles.hoverStyles ? variantStyles.hoverStyles : baseStyles;
         
         Object.entries(variantStyles.activeStyles).forEach(([key]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           const resetValue = stylesToApply[key];
           if (resetValue !== undefined) {
-            // @ts-ignore - dynamic styles
+            // @ts-expect-error - dynamic styles
             e.currentTarget.style[key] = resetValue;
           }
         });
@@ -307,7 +307,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const handleFocus = (e: React.FocusEvent<HTMLButtonElement>) => {
       if (!disabled && variantStyles.focusStyles) {
         Object.entries(variantStyles.focusStyles).forEach(([key, value]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           e.currentTarget.style[key] = value;
         });
       }
@@ -316,7 +316,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const handleBlur = (e: React.FocusEvent<HTMLButtonElement>) => {
       if (!disabled && variantStyles.focusStyles) {
         Object.entries(variantStyles.focusStyles).forEach(([key]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           e.currentTarget.style[key] = '';
         });
       }

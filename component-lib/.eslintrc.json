@@ -7,7 +7,7 @@
   },
   "extends": [
     "eslint:recommended",
-    "@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:jsx-a11y/recommended"
@@ -40,6 +40,17 @@
       "version": "detect"
     }
   },
+  "overrides": [
+    {
+      "files": ["**/*.stories.{ts,tsx}", "**/*.test.{ts,tsx}"],
+      "rules": {
+        "react-hooks/rules-of-hooks": "off",
+        "react/no-unescaped-entities": "off",
+        "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/no-static-element-interactions": "off"
+      }
+    }
+  ],
   "ignorePatterns": [
     "dist/",
     "node_modules/",

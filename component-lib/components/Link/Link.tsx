@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
+import { radii, spacing, fontSizes, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
 
 export type LinkSize = 'small' | 'medium' | 'large';
@@ -135,7 +135,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
       if (linkStyles.hoverStyles) {
         Object.entries(linkStyles.hoverStyles).forEach(([key, value]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           e.currentTarget.style[key] = value;
         });
       }
@@ -145,10 +145,9 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       if (linkStyles.hoverStyles) {
         // Reset to base styles
         Object.entries(linkStyles.hoverStyles).forEach(([key]) => {
-          // @ts-ignore - dynamic styles
           const originalValue = baseStyles[key as keyof React.CSSProperties];
           if (originalValue !== undefined) {
-            // @ts-ignore - dynamic styles
+            // @ts-expect-error - dynamic styles
             e.currentTarget.style[key] = originalValue;
           }
         });
@@ -158,7 +157,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     const handleMouseDown = (e: React.MouseEvent<HTMLAnchorElement>) => {
       if (linkStyles.activeStyles) {
         Object.entries(linkStyles.activeStyles).forEach(([key, value]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           e.currentTarget.style[key] = value;
         });
       }
@@ -171,10 +170,10 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         const stylesToApply = isHovering && linkStyles.hoverStyles ? linkStyles.hoverStyles : baseStyles;
         
         Object.entries(linkStyles.activeStyles).forEach(([key]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           const resetValue = stylesToApply[key as keyof React.CSSProperties];
           if (resetValue !== undefined) {
-            // @ts-ignore - dynamic styles
+            // @ts-expect-error - dynamic styles
             e.currentTarget.style[key] = resetValue;
           }
         });
@@ -184,7 +183,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     const handleFocus = (e: React.FocusEvent<HTMLAnchorElement>) => {
       if (linkStyles.focusStyles) {
         Object.entries(linkStyles.focusStyles).forEach(([key, value]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           e.currentTarget.style[key] = value;
         });
       }
@@ -193,7 +192,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     const handleBlur = (e: React.FocusEvent<HTMLAnchorElement>) => {
       if (linkStyles.focusStyles) {
         Object.entries(linkStyles.focusStyles).forEach(([key]) => {
-          // @ts-ignore - dynamic styles
+          // @ts-expect-error - dynamic styles
           e.currentTarget.style[key] = '';
         });
       }

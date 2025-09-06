@@ -39,9 +39,9 @@ describe('Heading', () => {
       6: 'md'
     };
 
-    Object.entries(defaultSizes).forEach(([level, expectedSize]) => {
+    Object.entries(defaultSizes).forEach(([level, _expectedSize]) => {
       const { unmount } = render(
-        <Heading level={parseInt(level) as any} data-testid={`heading-level-${level}`}>
+        <Heading level={parseInt(level) as 1 | 2 | 3 | 4 | 5 | 6} data-testid={`heading-level-${level}`}>
           Level {level}
         </Heading>
       );

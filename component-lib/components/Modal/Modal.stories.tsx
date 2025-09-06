@@ -253,10 +253,11 @@ export const FormModal: Story = {
             <ModalBody>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
+                  <label htmlFor="fullname" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
                     Full Name
                   </label>
                   <input 
+                    id="fullname"
                     type="text" 
                     required
                     style={{
@@ -270,10 +271,11 @@ export const FormModal: Story = {
                 </div>
                 
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
+                  <label htmlFor="email" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
                     Email Address
                   </label>
                   <input 
+                    id="email"
                     type="email" 
                     required
                     style={{
@@ -287,10 +289,11 @@ export const FormModal: Story = {
                 </div>
                 
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
+                  <label htmlFor="role" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
                     Role
                   </label>
                   <select 
+                    id="role" 
                     style={{
                       width: '100%',
                       padding: '8px 12px',

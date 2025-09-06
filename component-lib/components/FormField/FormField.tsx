@@ -69,7 +69,7 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
           id: fieldId,
           'aria-invalid': error ? 'true' : 'false',
           'aria-describedby': [errorId, helpId].filter(Boolean).join(' ') || undefined,
-        } as any);
+        } as React.HTMLAttributes<HTMLElement>);
       }
       return child;
     });
@@ -93,7 +93,7 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
               alignItems="center"
               gap={4}
               style={{ cursor: 'pointer' }}
-              {...({ htmlFor: fieldId } as any)}
+              {...(fieldId && { htmlFor: fieldId })}
             >
               {label}
               {required && (

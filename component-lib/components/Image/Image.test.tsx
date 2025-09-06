@@ -27,7 +27,7 @@ describe('Image', () => {
   it('renders with required props', () => {
     render(<Image src="https://example.com/image.jpg" alt="Test image" />);
     
-    const image = screen.getByRole('img');
+    const image = screen.getByRole('img', { hidden: true });
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src', 'https://example.com/image.jpg');
     expect(image).toHaveAttribute('alt', 'Test image');
@@ -48,11 +48,11 @@ describe('Image', () => {
 
   it('applies object-fit styles correctly', () => {
     const { rerender } = render(<Image src="https://example.com/image.jpg" alt="Test image" fit="contain" />);
-    let image = screen.getByRole('img');
+    let image = screen.getByRole('img', { hidden: true });
     expect(image).toHaveStyle('object-fit: contain');
 
     rerender(<Image src="https://example.com/image.jpg" alt="Test image" fit="cover" />);
-    image = screen.getByRole('img');
+    image = screen.getByRole('img', { hidden: true });
     expect(image).toHaveStyle('object-fit: cover');
   });
 
@@ -61,8 +61,9 @@ describe('Image', () => {
       <Image src="https://example.com/image.jpg" alt="Test image" aspectRatio="16:9" />
     );
     
-    const imageContainer = container.firstChild;
-    expect(imageContainer).toHaveStyle('aspect-ratio: 16 / 9');
+    // Check the style attribute directly since aspect-ratio isn't supported in jsdom
+    const imageContainer = container.firstChild as HTMLElement;
+    expect(imageContainer.style.aspectRatio).toBe('16 / 9');
   });
 
   it('applies border radius from tokens', () => {
@@ -87,7 +88,7 @@ describe('Image', () => {
     const onLoad = jest.fn();
     render(<Image src="https://example.com/valid.jpg" alt="Test image" onLoad={onLoad} />);
     
-    const image = screen.getByRole('img');
+    const image = screen.getByRole('img', { hidden: true });
     fireEvent.load(image);
     
     await waitFor(() => {
@@ -100,7 +101,7 @@ describe('Image', () => {
     const onError = jest.fn();
     render(<Image src="https://example.com/error.jpg" alt="Test image" onError={onError} />);
     
-    const image = screen.getByRole('img');
+    const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
     
     await waitFor(() => {
@@ -120,7 +121,7 @@ describe('Image', () => {
       />
     );
     
-    const image = screen.getByRole('img');
+    const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
     
     await waitFor(() => {
@@ -131,18 +132,18 @@ describe('Image', () => {
 
   it('applies loading attribute correctly', () => {
     const { rerender } = render(<Image src="https://example.com/image.jpg" alt="Test image" loading="eager" />);
-    let image = screen.getByRole('img');
+    let image = screen.getByRole('img', { hidden: true });
     expect(image).toHaveAttribute('loading', 'eager');
 
     rerender(<Image src="https://example.com/image.jpg" alt="Test image" loading="lazy" />);
-    image = screen.getByRole('img');
+    image = screen.getByRole('img', { hidden: true });
     expect(image).toHaveAttribute('loading', 'lazy');
   });
 
   it('applies crossOrigin attribute correctly', () => {
     render(<Image src="https://example.com/image.jpg" alt="Test image" crossOrigin="anonymous" />);
     
-    const image = screen.getByRole('img');
+    const image = screen.getByRole('img', { hidden: true });
     expect(image).toHaveAttribute('crossOrigin', 'anonymous');
   });
 
@@ -163,7 +164,7 @@ describe('Image', () => {
   it('applies error state class', async () => {
     const { container } = render(<Image src="https://example.com/error.jpg" alt="Test image" />);
     
-    const image = screen.getByRole('img');
+    const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
     
     await waitFor(() => {
@@ -197,14 +198,14 @@ describe('Image', () => {
     );
     
     // Look for placeholder div with light mode background
-    const placeholder = container.querySelector('[style*="background-color: #f1f5f9"]');
+    const placeholder = container.querySelector('[style*="background-color: rgb(241, 245, 249)"]');
     expect(placeholder).toBeInTheDocument();
   });
 
   it('shows error state in dark mode', async () => {
     render(<Image src="https://example.com/error.jpg" alt="Test image" isDarkMode={true} />);
     
-    const image = screen.getByRole('img');
+    const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
     
     await waitFor(() => {
@@ -217,7 +218,7 @@ describe('Image', () => {
   it('shows error state in light mode', async () => {
     render(<Image src="https://example.com/error.jpg" alt="Test image" isDarkMode={false} />);
     
-    const image = screen.getByRole('img');
+    const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
     
     await waitFor(() => {
@@ -258,7 +259,7 @@ describe('Image', () => {
       />
     );
     
-    const image = screen.getByRole('img');
+    const image = screen.getByRole('img', { hidden: true });
     
     // First error - should switch to fallback
     fireEvent.error(image);

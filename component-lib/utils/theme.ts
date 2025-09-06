@@ -6,8 +6,10 @@ export type Theme = 'light' | 'dark';
  * Gets a nested property value from an object using dot notation
  * Example: getNestedValue(colors, 'blue.500') returns colors.blue[500]
  */
-function getNestedValue(obj: any, path: string): string {
-  return path.split('.').reduce((current, key) => current?.[key], obj);
+function getNestedValue(obj: Record<string, unknown>, path: string): string {
+  return path.split('.').reduce((current: Record<string, unknown>, key) => {
+    return (current?.[key] as Record<string, unknown>) ?? {};
+  }, obj) as unknown as string;
 }
 
 /**

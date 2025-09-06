@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
+import { radii, fontSizes, fontWeights, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
 import { Box } from '../Box/Box';
 

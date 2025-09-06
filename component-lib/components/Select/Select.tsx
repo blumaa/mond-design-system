@@ -162,7 +162,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     disabled = false,
     className,
     id
-  }, ref) => {
+  }, _ref) => {
     const theme = useTheme(isDarkMode);
     const sizeStyles = getSizeStyles(size);
     const variantStyles = getVariantStyles(variant, theme);
@@ -347,7 +347,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     return (
       <Box className={className}>
         {label && (
-          <Box as="label" style={labelStyles} {...({ htmlFor: selectId } as any)}>
+          <Box as="label" style={labelStyles} {...(selectId && { htmlFor: selectId })}>
             {label}
           </Box>
         )}

@@ -84,9 +84,9 @@ export const Label = forwardRef<HTMLLabelElement, LabelProps>(({
     <Box
       ref={ref}
       as="label"
-      htmlFor={htmlFor}
       className={`mond-label mond-label--${size} ${disabled ? 'mond-label--disabled' : ''} ${className}`}
       style={labelStyle}
+      {...(htmlFor && { htmlFor })}
       {...props}
     >
       {children}

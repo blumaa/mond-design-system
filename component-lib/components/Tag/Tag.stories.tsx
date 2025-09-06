@@ -110,7 +110,7 @@ export const AllCombinations: Story = {
           </h4>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             {['default', 'primary', 'success', 'warning', 'error', 'info'].map(semantic => (
-              <Tag key={semantic} variant={variant as any} semantic={semantic as any}>
+              <Tag key={semantic} variant={variant as 'filled' | 'outlined' | 'ghost'} semantic={semantic as 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info'}>
                 {semantic}
               </Tag>
             ))}

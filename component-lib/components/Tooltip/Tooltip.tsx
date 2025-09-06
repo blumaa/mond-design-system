@@ -242,32 +242,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
     }
   };
 
-  const containerStyles = {
-    position: 'relative' as const,
-    display: 'inline-block',
-  };
-
-  const tooltipStyles = {
-    position: 'absolute' as const,
-    zIndex: 1000,
-    padding: `${spacing[2]} ${spacing[3]}`,
-    backgroundColor: theme('surface.elevated'),
-    color: theme('text.primary'),
-    border: `1px solid ${theme('border.default')}`,
-    borderRadius: radii.md,
-    fontSize: fontSizes.sm,
-    fontFamily: fontFamilies.sans,
-    fontWeight: fontWeights.normal,
-    lineHeight: '1.4',
-    maxWidth: '200px',
-    wordWrap: 'break-word' as const,
-    boxShadow: shadows.md,
-    opacity: isVisible ? 1 : 0,
-    visibility: (isVisible ? 'visible' : 'hidden') as React.CSSProperties['visibility'],
-    transition: 'opacity 150ms ease, visibility 150ms ease',
-    pointerEvents: 'none' as const,
-    ...getPlacementStyles(placement),
-  };
 
   const arrowStyles = getArrowStyles(placement, theme);
 

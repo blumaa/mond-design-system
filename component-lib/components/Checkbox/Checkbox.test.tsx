@@ -142,7 +142,7 @@ describe('Checkbox Component', () => {
   describe('accessibility', () => {
     it('associates label with checkbox using htmlFor and id', () => {
       render(<Checkbox label="Accessible checkbox" id="accessible-cb" />);
-      const labelElement = screen.getByText(/accessible checkbox/i).closest('label');
+      screen.getByText(/accessible checkbox/i).closest('label');
       const checkboxElement = screen.getByRole('checkbox');
       
       expect(checkboxElement).toHaveAttribute('id', 'accessible-cb');

@@ -1,4 +1,4 @@
-import { forwardRef, useState, ImgHTMLAttributes } from 'react';
+import { forwardRef, useState } from 'react';
 import { Box, BoxProps } from '../Box/Box';
 import { Spinner } from '../Spinner/Spinner';
 import { tokens } from '../../tokens/tokens';
