@@ -8,8 +8,7 @@ const config: StorybookConfig = {
   ],
   addons: [
     "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
+    "@storybook/addon-docs",
     "@storybook/addon-themes",
   ],
   framework: {
@@ -20,11 +19,7 @@ const config: StorybookConfig = {
       },
     },
   },
-  docs: {
-    autodocs: "tag",
-  },
   core: {
-    builder: "@storybook/builder-vite",
     disableTelemetry: true,
   },
   typescript: {

@@ -63,17 +63,10 @@
     "@semantic-release/github": "^11.0.0",
     "@semantic-release/npm": "^12.0.1",
     "@semantic-release/release-notes-generator": "^14.0.1",
-    "@storybook/addon-essentials": "^8.6.7",
-    "@storybook/addon-interactions": "^8.6.7",
-    "@storybook/addon-links": "^8.6.7",
-    "@storybook/addon-themes": "^8.6.12",
-    "@storybook/addons": "^7.6.17",
-    "@storybook/blocks": "^8.6.7",
-    "@storybook/manager-api": "^8.6.14",
-    "@storybook/react": "^8.6.7",
-    "@storybook/react-vite": "^8.6.7",
-    "@storybook/test": "^8.6.7",
-    "@storybook/theming": "^8.6.14",
+    "@storybook/addon-links": "^9.1.5",
+    "@storybook/addon-themes": "^9.1.5",
+    "@storybook/react": "^9.1.5",
+    "@storybook/react-vite": "^9.1.5",
     "@testing-library/jest-dom": "^5.0.0",
     "@testing-library/react": "^13.0.0",
     "@types/react": "^18.2.0",
@@ -84,16 +77,16 @@
     "concurrently": "^8.2.2",
     "conventional-changelog-conventionalcommits": "^8.0.0",
     "eslint": "^8.0.0",
+    "eslint-plugin-jsx-a11y": "^6.7.0",
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-jsx-a11y": "^6.7.0",
     "jest": "^29.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "nodemon": "^3.1.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "semantic-release": "^24.0.0",
-    "storybook": "^8.6.7",
+    "storybook": "^9.1.5",
     "terser": "^5.40.0",
     "ts-jest": "^29.0.0",
     "ts-node": "^10.9.2",
@@ -129,5 +122,8 @@
         "statements": 80
       }
     }
+  },
+  "dependencies": {
+    "@storybook/addon-docs": "^9.1.5"
   }
 }

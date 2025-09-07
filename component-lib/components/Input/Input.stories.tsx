@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { useGlobals } from '@storybook/preview-api';
+import { useGlobals } from 'storybook/internal/preview-api';
 import { Input } from './Input';
 
 const meta: Meta<typeof Input> = {

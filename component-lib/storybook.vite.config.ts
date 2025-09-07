@@ -18,8 +18,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
-          'vendor-docs': ['@storybook/blocks', '@storybook/addon-docs'],
-          'vendor-storybook': ['@storybook/react', '@storybook/preview-api'],
+          'vendor-storybook': ['@storybook/react', 'storybook/internal/preview-api'],
         },
       },
     },

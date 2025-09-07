@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Preview } from "@storybook/react";
 import { withThemeByClassName } from '@storybook/addon-themes';
-import { themes } from '@storybook/theming';
 import './styles.css';
 
 const preview: Preview = {
@@ -26,9 +25,6 @@ const preview: Preview = {
         disable: true
       }
     },
-    docs: {
-      theme: themes.light,
-    }
   },
   decorators: [
     withThemeByClassName({
