@@ -1,13 +1,14 @@
 "use client";
-import { Button, colors, fontFamilies, fontSizes, fontWeights } from "@mond-design-system/theme";
+import { Button, resolveSemanticToken, fontFamilies, fontSizes, fontWeights } from "@mond-design-system/theme";
 import { useTheme } from "./context/ThemeContext";
 import { ThemeSwitch } from "./components/ThemeSwitch";
 
 export default function Home() {
   const { isDarkMode, mounted } = useTheme();
 
-  const backgroundColor = isDarkMode ? colors.background.dark : colors.background.light;
-  const textColor = isDarkMode ? colors.foreground.dark : colors.foreground.light;
+  const theme = isDarkMode ? 'dark' : 'light';
+  const backgroundColor = resolveSemanticToken('surface.background', theme);
+  const textColor = resolveSemanticToken('text.primary', theme);
 
   // Show loading state until mounted to prevent hydration issues
   if (!mounted) {
