@@ -70,8 +70,3 @@ jobs:
         run: yarn test --coverage --watchAll=false
         working-directory: component-lib
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          directory: component-lib/coverage
-          fail_ci_if_error: true
