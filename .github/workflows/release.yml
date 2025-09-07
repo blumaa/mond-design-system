@@ -56,10 +56,9 @@ jobs:
 
       - name: Semantic Release
         id: semantic
-        uses: cycjimmy/semantic-release-action@v4
-        with:
-          semantic_version: 24
-          working_directory: ./component-lib
+        run: |
+          cd component-lib
+          npx semantic-release --debug
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
