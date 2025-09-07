@@ -108,6 +108,8 @@
       "tokens/**/*.{ts,tsx}",
       "!**/*.stories.{ts,tsx}",
       "!**/*.test.{ts,tsx}",
+      "!**/index.{ts,tsx}",
+      "!**/scripts/**",
       "!**/dist/**",
       "!**/node_modules/**"
     ],
