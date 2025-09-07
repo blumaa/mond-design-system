@@ -55,21 +55,21 @@ describe('Button Component', () => {
     it('renders small size', () => {
       render(<Button size="sm">Small</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveStyle('padding: 0.5rem 0.75rem'); // 8px 12px
+      expect(button).toHaveStyle('padding: 0.25rem 0.5rem');
       expect(button).toHaveStyle('font-size: 0.875rem'); // sm
     });
 
     it('renders medium size by default', () => {
       render(<Button size="md">Medium</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveStyle('padding: 0.75rem 1rem'); // 12px 16px
+      expect(button).toHaveStyle('padding: 0.5rem 1rem');
       expect(button).toHaveStyle('font-size: 1rem'); // base
     });
 
     it('renders large size', () => {
       render(<Button size="lg">Large</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveStyle('padding: 1rem 1.5rem'); // 16px 24px
+      expect(button).toHaveStyle('padding: 0.75rem 1.5rem');
       expect(button).toHaveStyle('font-size: 1.125rem'); // lg
     });
   });

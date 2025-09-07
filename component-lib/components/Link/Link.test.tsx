@@ -39,7 +39,6 @@ describe('Link Component', () => {
     const TestIcon = <svg data-testid="test-icon"><path /></svg>;
     render(<Link href="/test" iconOnly icon={TestIcon}>Hidden Text</Link>);
     
-    const link = screen.getByRole('link');
     const icon = screen.getByTestId('test-icon');
     
     expect(icon).toBeInTheDocument();
