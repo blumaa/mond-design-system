@@ -2,102 +2,60 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release'
-        required: true
-        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    outputs:
+      released: ${{ steps.semantic.outputs.new_release_published }}
+      version: ${{ steps.semantic.outputs.new_release_version }}
       
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Build packages
         run: yarn build
 
       - name: Run tests
         run: yarn test
+        working-directory: component-lib
 
-      - name: Get version
-        id: get_version
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            VERSION="${{ github.event.inputs.version }}"
-          else
-            VERSION=${GITHUB_REF#refs/tags/v}
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+      - name: Run lint
+        run: yarn lint
+        working-directory: component-lib
 
-      - name: Generate changelog
-        id: changelog
-        run: |
-          # Get the previous tag
-          PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
-          
-          if [ -n "$PREV_TAG" ]; then
-            # Generate changelog from commits between tags
-            CHANGELOG=$(git log --pretty=format:"- %s" ${PREV_TAG}..HEAD | grep -E '^- (feat|fix|docs|style|refactor|perf|test|chore)' | sed 's/^- feat:/✨ **Feature:** /;s/^- fix:/🐛 **Fix:** /;s/^- docs:/📖 **Docs:** /;s/^- style:/💄 **Style:** /;s/^- refactor:/♻️ **Refactor:** /;s/^- perf:/⚡ **Performance:** /;s/^- test:/✅ **Test:** /;s/^- chore:/🔧 **Chore:** /' || echo "- Initial release")
-          else
-            CHANGELOG="- Initial release"
-          fi
-          
-          # Save multiline output
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$CHANGELOG" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Type check
+        run: yarn typecheck
+        working-directory: component-lib
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v4
         with:
-          tag_name: ${{ steps.get_version.outputs.tag }}
-          name: Release ${{ steps.get_version.outputs.tag }}
-          body: |
-            ## 🎉 Mond Design System v${{ steps.get_version.outputs.version }}
-            
-            ### 📦 Installation
-            ```bash
-            npm install @mond-design-system/theme@${{ steps.get_version.outputs.version }}
-            # or
-            yarn add @mond-design-system/theme@${{ steps.get_version.outputs.version }}
-            ```
-            
-            ### 🔗 Links
-            - 📦 [NPM Package](https://www.npmjs.com/package/@mond-design-system/theme/v/${{ steps.get_version.outputs.version }})
-            - 📖 [Storybook Documentation](https://mond-design-system.vercel.app)
-            - 🐙 [GitHub Repository](https://github.com/${{ github.repository }})
-            
-            ### 📋 What's Changed
-            ${{ steps.changelog.outputs.changelog }}
-            
-            ### 🧪 Quality Assurance
-            - ✅ All tests passing
-            - ✅ Built successfully
-            - ✅ Published to NPM registry
-            
-            ---
-            
-            **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.get_version.outputs.tag }}...HEAD
-          draft: false
-          prerelease: ${{ contains(steps.get_version.outputs.version, 'alpha') || contains(steps.get_version.outputs.version, 'beta') || contains(steps.get_version.outputs.version, 'rc') }}
+          semantic_version: 24
+          working_directory: ./component-lib
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true

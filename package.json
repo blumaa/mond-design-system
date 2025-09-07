@@ -14,10 +14,15 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "storybook": "turbo run storybook"
+    "storybook": "turbo run storybook",
+    "prepare": "husky install",
+    "postinstall": "husky install"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0",
     "eslint": "^8.56.0",
+    "husky": "^9.0.0",
     "prettier": "^3.1.1",
     "turbo": "latest"
   },

@@ -1,0 +1,71 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          { "type": "feat", "release": "minor" },
+          { "type": "fix", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          { "type": "revert", "release": "patch" },
+          { "type": "docs", "release": false },
+          { "type": "style", "release": false },
+          { "type": "chore", "release": false },
+          { "type": "refactor", "release": "patch" },
+          { "type": "test", "release": false },
+          { "type": "build", "release": false },
+          { "type": "ci", "release": false },
+          { "scope": "no-release", "release": false },
+          { "breaking": true, "release": "major" }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            { "type": "feat", "section": "✨ Features" },
+            { "type": "fix", "section": "🐛 Bug Fixes" },
+            { "type": "perf", "section": "⚡ Performance Improvements" },
+            { "type": "revert", "section": "⏪ Reverts" },
+            { "type": "refactor", "section": "♻️ Code Refactoring" },
+            { "type": "docs", "hidden": true },
+            { "type": "style", "hidden": true },
+            { "type": "chore", "hidden": true },
+            { "type": "test", "hidden": true },
+            { "type": "build", "hidden": true },
+            { "type": "ci", "hidden": true }
+          ]
+        }
+      }
+    ],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    "@semantic-release/npm",
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          { "path": "dist/**", "label": "Distribution files" },
+          { "path": "CHANGELOG.md", "label": "Changelog" }
+        ],
+        "releaseBodyTemplate": "## 🎉 Mond Design System v{{version}}\n\n### 📦 Installation\n```bash\nnpm install @mond-design-system/theme@{{version}}\n# or\nyarn add @mond-design-system/theme@{{version}}\n```\n\n### 🔗 Links\n- 📦 [NPM Package](https://www.npmjs.com/package/@mond-design-system/theme/v/{{version}})\n- 📖 [Storybook Documentation](https://mond-design-system.vercel.app)\n- 🐙 [GitHub Repository]({{repositoryUrl}})\n\n### 📋 What's Changed\n{{notes}}\n\n### 🧪 Quality Assurance\n- ✅ All tests passing\n- ✅ Built successfully\n- ✅ Published to NPM registry\n\n---\n\n**Full Changelog**: {{repositoryUrl}}/compare/{{lastRelease.gitTag}}...{{gitTag}}"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["package.json", "CHANGELOG.md"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ]
+  ]
+}
