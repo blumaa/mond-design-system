@@ -169,7 +169,7 @@ export const WithUserProfile: Story = {
             padding: '4px 8px',
             borderRadius: '8px',
             cursor: 'pointer',
-            ':hover': { backgroundColor: '#f3f4f6' }
+            backgroundColor: 'transparent'
           }}>
             <div style={{
               width: '28px',

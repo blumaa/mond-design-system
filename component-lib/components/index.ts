@@ -30,5 +30,6 @@ export * from './Label';
 export * from './Image';
 export * from './Tag';
 export * from './Alert';
+export * from './Breadcrumb';
 export * from './Dropdown';
 export * from './Header';

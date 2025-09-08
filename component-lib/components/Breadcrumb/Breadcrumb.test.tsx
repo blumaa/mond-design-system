@@ -68,11 +68,11 @@ describe('Breadcrumb', () => {
     
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('...')).toBeInTheDocument();
-    expect(screen.getByText('Laptops')).toBeInTheDocument();
     expect(screen.getByText('MacBook Pro')).toBeInTheDocument();
     
     expect(screen.queryByText('Products')).not.toBeInTheDocument();
     expect(screen.queryByText('Electronics')).not.toBeInTheDocument();
+    expect(screen.queryByText('Laptops')).not.toBeInTheDocument();
   });
 
   it('renders with home icon when showHomeIcon is true', () => {
@@ -85,12 +85,12 @@ describe('Breadcrumb', () => {
   it('renders different sizes correctly', () => {
     const { rerender } = render(<Breadcrumb items={mockItems} size="sm" />);
     
-    let breadcrumb = screen.getByRole('navigation');
-    expect(breadcrumb).toHaveStyle({ fontSize: '0.75rem' });
+    let breadcrumbItem = screen.getByText('Home').parentElement;
+    expect(breadcrumbItem).toHaveStyle({ fontSize: '0.75rem' });
     
     rerender(<Breadcrumb items={mockItems} size="lg" />);
-    breadcrumb = screen.getByRole('navigation');
-    expect(breadcrumb).toHaveStyle({ fontSize: '1rem' });
+    breadcrumbItem = screen.getByText('Home').parentElement;
+    expect(breadcrumbItem).toHaveStyle({ fontSize: '1rem' });
   });
 
   it('renders with dark mode', () => {

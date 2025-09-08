@@ -195,7 +195,7 @@ export const DarkMode: Story = {
 };
 
 export const InteractiveExample: Story = {
-  render: (args) => (
+  render: (_args) => (
     <Box style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <Box>
         <h4>E-commerce Navigation</h4>
@@ -242,5 +242,7 @@ export const InteractiveExample: Story = {
       </Box>
     </Box>
   ),
-  args: {},
+  args: {
+    items: []
+  },
 };

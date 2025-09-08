@@ -248,11 +248,11 @@ describe('Dropdown Component', () => {
     
     // Arrow down should focus first option
     await user.keyboard('{ArrowDown}');
-    expect(screen.getByText('Option 1')).toHaveFocus();
+    expect(screen.getByText('Option 1').closest('[role="menuitem"]')).toHaveFocus();
     
     // Arrow down should focus second option
     await user.keyboard('{ArrowDown}');
-    expect(screen.getByText('Option 2')).toHaveFocus();
+    expect(screen.getByText('Option 2').closest('[role="menuitem"]')).toHaveFocus();
   });
 
   it('closes dropdown on Escape key', async () => {

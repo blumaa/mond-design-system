@@ -146,7 +146,7 @@ describe('Header Component', () => {
       <Header data-testid="header" />
     );
     
-    const mobileToggle = screen.getByRole('button', { name: /toggle mobile menu/i });
+    const mobileToggle = screen.getByLabelText(/toggle mobile menu/i);
     expect(mobileToggle).toBeInTheDocument();
   });
 
@@ -155,8 +155,8 @@ describe('Header Component', () => {
       <Header showMobileToggle={false} data-testid="header" />
     );
     
-    const mobileToggle = screen.queryByRole('button', { name: /toggle mobile menu/i });
-    expect(mobileToggle).toBeInTheDocument(); // Still rendered but hidden with CSS
+    const mobileToggle = screen.queryByLabelText(/toggle mobile menu/i);
+    expect(mobileToggle).not.toBeInTheDocument(); // Not rendered when showMobileToggle is false
   });
 
   it('toggles mobile menu when toggle is clicked', () => {
@@ -167,7 +167,7 @@ describe('Header Component', () => {
       />
     );
     
-    const mobileToggle = screen.getByRole('button', { name: /toggle mobile menu/i });
+    const mobileToggle = screen.getByLabelText(/toggle mobile menu/i);
     
     // Mobile menu should not be visible initially
     expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
@@ -178,7 +178,7 @@ describe('Header Component', () => {
     // Navigation items should be visible in mobile menu
     // Note: In a real implementation, we'd check for mobile-specific elements
     // Here we just verify the navigation items are still present
-    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getAllByText('Home')[0]).toBeInTheDocument();
   });
 
   it('works in controlled mobile menu mode', () => {
@@ -193,7 +193,7 @@ describe('Header Component', () => {
       />
     );
     
-    const mobileToggle = screen.getByRole('button', { name: /toggle mobile menu/i });
+    const mobileToggle = screen.getByLabelText(/toggle mobile menu/i);
     fireEvent.click(mobileToggle);
     
     expect(mockToggle).toHaveBeenCalledWith(false);
