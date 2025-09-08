@@ -88,7 +88,8 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
       backgroundColor: theme('surface.input'),
       cursor: props.disabled ? 'not-allowed' : 'pointer',
       outline: 'none',
-      transition: 'all 150ms ease',
+      transition: 'background-color 150ms ease, border-color 150ms ease',
+      contain: 'layout style',
       position: 'relative' as const,
       flexShrink: 0,
       display: 'flex',
@@ -107,7 +108,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
 
     const containerStyles = {
       display: 'flex',
-      alignItems: 'flex-start',
+      alignItems: 'center',
       gap: spacing[2],
     };
 
@@ -128,31 +129,26 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
     };
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-      if (e.target.parentElement) {
-        const radio = e.target.parentElement.querySelector('[data-radio]') as HTMLElement;
-        if (radio) {
-          radio.style.boxShadow = `0 0 0 3px ${theme('feedback.info.background')}`;
-          radio.style.borderColor = theme('border.focused');
-        }
-      }
       props.onFocus?.(e);
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      if (e.target.parentElement) {
-        const radio = e.target.parentElement.querySelector('[data-radio]') as HTMLElement;
-        if (radio) {
-          radio.style.boxShadow = 'none';
-          radio.style.borderColor = error ? theme('border.error') : theme('border.default');
-        }
-      }
       props.onBlur?.(e);
     };
 
     return (
-      <Box className={className} data-testid={dataTestId}>
+      <Box className={className} data-testid={dataTestId} style={{ contain: 'layout' }}>
         <Box as="label" style={containerStyles}>
-          <Box position="relative" style={{ flexShrink: 0 }}>
+          <Box 
+            position="relative" 
+            style={{ 
+              flexShrink: 0,
+              width: sizeStyles.width,
+              height: sizeStyles.height,
+              minWidth: sizeStyles.width,
+              minHeight: sizeStyles.height
+            }}
+          >
             <input
               ref={ref}
               type="radio"
