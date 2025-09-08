@@ -1,3 +1,8 @@
+## 1.5.0 (2025-09-08)
+
+* docs: update plan with Phase 4 progress ([bcca7d0](https://github.com/blumaa/mond-design-system/commit/bcca7d0))
+* feat: add Progress Stepper and Toast Container organisms with comprehensive testing and Storybook in ([be1f212](https://github.com/blumaa/mond-design-system/commit/be1f212))
+
 ## 1.4.0 (2025-09-08)
 
 * feat: complete Phase 3 core organisms (Alert, Breadcrumb, Dropdown, Header) ([a87d61d](https://github.com/blumaa/mond-design-system/commit/a87d61d))
