@@ -102,35 +102,33 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       backgroundColor: checked || indeterminate ? theme('interactive.primary.background') : theme('surface.input'),
       cursor: props.disabled ? 'not-allowed' : 'pointer',
       outline: 'none',
-      transition: 'all 150ms ease',
+      transition: 'background-color 150ms ease, border-color 150ms ease',
+      contain: 'layout style',
       position: 'relative' as const,
       flexShrink: 0,
     };
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-      if (e.target.parentElement) {
-        const checkbox = e.target.parentElement.querySelector('[data-checkbox]') as HTMLElement;
-        if (checkbox) {
-          checkbox.style.boxShadow = `0 0 0 3px ${theme('feedback.info.background')}`;
-        }
-      }
       props.onFocus?.(e);
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      if (e.target.parentElement) {
-        const checkbox = e.target.parentElement.querySelector('[data-checkbox]') as HTMLElement;
-        if (checkbox) {
-          checkbox.style.boxShadow = 'none';
-        }
-      }
       props.onBlur?.(e);
     };
 
     return (
-      <Box className={className} data-testid={dataTestId}>
-        <Box as="label" display="flex" alignItems="flex-start" gap={2}>
-          <Box position="relative" style={{ flexShrink: 0 }}>
+      <Box className={className} data-testid={dataTestId} style={{ contain: 'layout' }}>
+        <Box as="label" display="flex" alignItems="center">
+          <Box 
+            position="relative" 
+            style={{ 
+              flexShrink: 0,
+              width: sizeStyles.width,
+              height: sizeStyles.height,
+              minWidth: sizeStyles.width,
+              minHeight: sizeStyles.height
+            }}
+          >
             <input
               ref={inputRef}
               type="checkbox"
@@ -149,6 +147,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               {...props}
             />
             <Box data-checkbox style={checkboxStyles}>
+              {/* Always render both icons to prevent layout shift */}
               <Box
                 as="span"
                 position="absolute"
@@ -159,16 +158,32 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
                   color: theme('interactive.primary.text'),
                   fontSize: size === 'sm' ? '10px' : size === 'md' ? '12px' : '14px',
                   lineHeight: 1,
-                  opacity: checked || indeterminate ? 1 : 0,
+                  opacity: checked && !indeterminate ? 1 : 0,
                   transition: 'opacity 150ms ease',
                 }}
               >
-                {indeterminate ? '−' : checked ? '✓' : ''}
+                ✓
+              </Box>
+              <Box
+                as="span"
+                position="absolute"
+                top="50%"
+                left="50%"
+                style={{
+                  transform: 'translate(-50%, -50%)',
+                  color: theme('interactive.primary.text'),
+                  fontSize: size === 'sm' ? '10px' : size === 'md' ? '12px' : '14px',
+                  lineHeight: 1,
+                  opacity: indeterminate ? 1 : 0,
+                  transition: 'opacity 150ms ease',
+                }}
+              >
+                −
               </Box>
             </Box>
           </Box>
           {label && (
-            <Box>
+            <Box ml={2}>
               <Box
                 as="span"
                 fontSize={sizeStyles.fontSize}

@@ -33,8 +33,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    label: 'Accept terms and conditions',
+  render: () => {
+    const [checked, setChecked] = useState(false);
+    return (
+      <Checkbox 
+        label="Accept terms and conditions"
+        checked={checked}
+        onChange={(e) => setChecked(e.target.checked)}
+      />
+    );
   },
 };
 
@@ -115,23 +122,45 @@ export const States: Story = {
 };
 
 export const WithError: Story = {
-  args: {
-    label: 'You must agree to continue',
-    error: 'This field is required',
+  render: () => {
+    const [checked, setChecked] = useState(false);
+    return (
+      <Checkbox 
+        label="You must agree to continue"
+        error="This field is required"
+        checked={checked}
+        onChange={(e) => setChecked(e.target.checked)}
+      />
+    );
   },
 };
 
 export const WithHelperText: Story = {
-  args: {
-    label: 'Subscribe to newsletter',
-    helperText: 'Get weekly updates about new features',
+  render: () => {
+    const [checked, setChecked] = useState(false);
+    return (
+      <Checkbox 
+        label="Subscribe to newsletter"
+        helperText="Get weekly updates about new features"
+        checked={checked}
+        onChange={(e) => setChecked(e.target.checked)}
+      />
+    );
   },
 };
 
 export const DarkMode: Story = {
-  args: {
-    label: 'Dark mode checkbox',
-    helperText: 'This is how it looks in dark mode',
+  render: () => {
+    const [checked, setChecked] = useState(false);
+    return (
+      <Checkbox 
+        label="Dark mode checkbox"
+        helperText="This is how it looks in dark mode"
+        isDarkMode
+        checked={checked}
+        onChange={(e) => setChecked(e.target.checked)}
+      />
+    );
   },
   parameters: {
     theme: 'dark',
