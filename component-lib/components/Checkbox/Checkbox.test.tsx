@@ -30,7 +30,8 @@ describe('Checkbox Component', () => {
   });
 
   it('renders in checked state', () => {
-    render(<Checkbox label="Checked checkbox" checked />);
+    const handleChange = jest.fn();
+    render(<Checkbox label="Checked checkbox" checked onChange={handleChange} />);
     const checkboxElement = screen.getByRole('checkbox');
     expect(checkboxElement).toBeChecked();
   });

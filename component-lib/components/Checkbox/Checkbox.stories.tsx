@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { Checkbox } from './Checkbox';
 
 const meta: Meta<typeof Checkbox> = {
@@ -38,39 +39,79 @@ export const Default: Story = {
 };
 
 export const Checked: Story = {
-  args: {
-    label: 'This is checked',
-    checked: true,
+  render: () => {
+    const [checked, setChecked] = useState(true);
+    return (
+      <Checkbox 
+        label="This is checked" 
+        checked={checked}
+        onChange={(e) => setChecked(e.target.checked)}
+      />
+    );
   },
 };
 
 export const Indeterminate: Story = {
-  args: {
-    label: 'Partially selected',
-    indeterminate: true,
+  render: () => {
+    const [checked, setChecked] = useState(false);
+    const [indeterminate, setIndeterminate] = useState(true);
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setChecked(e.target.checked);
+      setIndeterminate(false);
+    };
+    
+    return (
+      <Checkbox 
+        label="Partially selected" 
+        checked={checked}
+        indeterminate={indeterminate}
+        onChange={handleChange}
+      />
+    );
   },
 };
 
 export const Sizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <Checkbox size="sm" label="Small checkbox" />
-      <Checkbox size="md" label="Medium checkbox" />
-      <Checkbox size="lg" label="Large checkbox" />
-    </div>
-  ),
+  render: () => {
+    const [states, setStates] = useState({ sm: false, md: false, lg: false });
+    
+    const handleChange = (size: 'sm' | 'md' | 'lg') => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setStates(prev => ({ ...prev, [size]: e.target.checked }));
+    };
+    
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <Checkbox size="sm" label="Small checkbox" checked={states.sm} onChange={handleChange('sm')} />
+        <Checkbox size="md" label="Medium checkbox" checked={states.md} onChange={handleChange('md')} />
+        <Checkbox size="lg" label="Large checkbox" checked={states.lg} onChange={handleChange('lg')} />
+      </div>
+    );
+  },
 };
 
 export const States: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <Checkbox label="Unchecked" />
-      <Checkbox label="Checked" checked />
-      <Checkbox label="Indeterminate" indeterminate />
-      <Checkbox label="Disabled" disabled />
-      <Checkbox label="Disabled checked" disabled checked />
-    </div>
-  ),
+  render: () => {
+    const [states, setStates] = useState({
+      unchecked: false,
+      checked: true,
+      indeterminate: false,
+    });
+    
+    const handleChange = (key: keyof typeof states) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setStates(prev => ({ ...prev, [key]: e.target.checked }));
+    };
+    
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <Checkbox label="Unchecked" checked={states.unchecked} onChange={handleChange('unchecked')} />
+        <Checkbox label="Checked" checked={states.checked} onChange={handleChange('checked')} />
+        <Checkbox label="Indeterminate" checked={states.indeterminate} indeterminate onChange={handleChange('indeterminate')} />
+        <Checkbox label="Disabled" disabled />
+        <Checkbox label="Disabled checked" disabled checked readOnly />
+      </div>
+    );
+  },
 };
 
 export const WithError: Story = {
@@ -98,14 +139,28 @@ export const DarkMode: Story = {
 };
 
 export const Group: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-      <div style={{ fontWeight: 600, marginBottom: '0.5rem' }}>Select your interests:</div>
-      <Checkbox label="Technology" />
-      <Checkbox label="Design" checked />
-      <Checkbox label="Business" />
-      <Checkbox label="Science" indeterminate />
-      <Checkbox label="Sports" />
-    </div>
-  ),
+  render: () => {
+    const [interests, setInterests] = useState({
+      technology: false,
+      design: true,
+      business: false,
+      science: false,
+      sports: false,
+    });
+    
+    const handleChange = (key: keyof typeof interests) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInterests(prev => ({ ...prev, [key]: e.target.checked }));
+    };
+    
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div style={{ fontWeight: 600, marginBottom: '0.5rem' }}>Select your interests:</div>
+        <Checkbox label="Technology" checked={interests.technology} onChange={handleChange('technology')} />
+        <Checkbox label="Design" checked={interests.design} onChange={handleChange('design')} />
+        <Checkbox label="Business" checked={interests.business} onChange={handleChange('business')} />
+        <Checkbox label="Science" checked={interests.science} onChange={handleChange('science')} />
+        <Checkbox label="Sports" checked={interests.sports} onChange={handleChange('sports')} />
+      </div>
+    );
+  },
 };
