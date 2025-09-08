@@ -11,6 +11,7 @@ permissions:
   issues: write
   pull-requests: write
   id-token: write
+  packages: write
 
 jobs:
   ci:
@@ -54,6 +55,14 @@ jobs:
         run: yarn typecheck
         working-directory: component-lib
 
+      - name: Test npm authentication
+        run: |
+          echo "Testing npm whoami with provided token..."
+          cd component-lib
+          npm whoami || echo "npm whoami failed"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
       - name: Semantic Release
         id: semantic
         run: |
