@@ -1,3 +1,7 @@
+## <small>1.2.2 (2025-09-08)</small>
+
+* fix: checkbox storybook ([40dfe4d](https://github.com/blumaa/mond-design-system/commit/40dfe4d))
+
 ## <small>1.2.1 (2025-09-08)</small>
 
 * fix: add environment and debugging for npm publishing ([fae2022](https://github.com/blumaa/mond-design-system/commit/fae2022))
