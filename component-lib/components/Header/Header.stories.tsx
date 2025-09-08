@@ -5,7 +5,7 @@ import { Button } from '../Button/Button';
 import { Dropdown } from '../Dropdown/Dropdown';
 
 const meta: Meta<typeof Header> = {
-  title: 'Components/Header',
+  title: 'Organisms/Header',
   component: Header,
   parameters: {
     layout: 'fullscreen',

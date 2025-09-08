@@ -33,3 +33,8 @@ export * from './Alert';
 export * from './Breadcrumb';
 export * from './Dropdown';
 export * from './Header';
+export * from './Pagination';
+export * from './Accordion';
+export * from './FormContainer';
+export * from './ProgressStepper';
+export * from './ToastContainer';

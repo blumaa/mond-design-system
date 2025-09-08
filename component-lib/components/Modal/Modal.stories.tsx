@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from './Modal';
 import { useState } from 'react';
 
 const meta: Meta<typeof Modal> = {
-  title: 'Components/Modal',
+  title: 'Organisms/Modal',
   component: Modal,
   parameters: {
     layout: 'centered',

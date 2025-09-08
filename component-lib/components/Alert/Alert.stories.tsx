@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Alert } from './Alert';
 
 const meta: Meta<typeof Alert> = {
-  title: 'Components/Alert',
+  title: 'Organisms/Alert',
   component: Alert,
   parameters: {
     layout: 'padded',
