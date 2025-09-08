@@ -53,7 +53,6 @@
       "@semantic-release/github",
       {
         "assets": [
-          { "path": "dist/**", "label": "Distribution files" },
           { "path": "CHANGELOG.md", "label": "Changelog" }
         ],
         "releaseBodyTemplate": "## 🎉 Mond Design System v{{version}}\n\n### 📦 Installation\n```bash\nnpm install @mond-design-system/theme@{{version}}\n# or\nyarn add @mond-design-system/theme@{{version}}\n```\n\n### 🔗 Links\n- 📦 [NPM Package](https://www.npmjs.com/package/@mond-design-system/theme/v/{{version}})\n- 📖 [Storybook Documentation](https://mond-design-system.vercel.app)\n- 🐙 [GitHub Repository]({{repositoryUrl}})\n\n### 📋 What's Changed\n{{notes}}\n\n### 🧪 Quality Assurance\n- ✅ All tests passing\n- ✅ Built successfully\n- ✅ Published to NPM registry\n\n---\n\n**Full Changelog**: {{repositoryUrl}}/compare/{{lastRelease.gitTag}}...{{gitTag}}"
