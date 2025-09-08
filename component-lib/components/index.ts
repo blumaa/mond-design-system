@@ -29,3 +29,6 @@ export * from './Divider';
 export * from './Label';
 export * from './Image';
 export * from './Tag';
+export * from './Alert';
+export * from './Dropdown';
+export * from './Header';
