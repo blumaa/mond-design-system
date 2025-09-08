@@ -1,8 +1,9 @@
 'use client';
 import React, { useState } from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
+import { radii, fontFamilies } from '../../tokens';
 import { useTheme } from '../../utils/theme';
 import { Box } from '../Box/Box';
+import { AccordionItem } from '../AccordionItem/AccordionItem';
 
 export type AccordionMode = 'single' | 'multiple';
 export type AccordionVariant = 'default' | 'bordered' | 'filled';
@@ -111,42 +112,6 @@ export interface AccordionProps {
   className?: string;
 }
 
-const getSizeStyles = (size: AccordionSize) => {
-  switch (size) {
-    case 'sm':
-      return {
-        headerPadding: `${spacing[2]} ${spacing[3]}`,
-        contentPadding: `${spacing[2]} ${spacing[3]}`,
-        fontSize: fontSizes.sm,
-        iconSize: 16,
-        minHeight: '40px',
-      };
-    case 'md':
-      return {
-        headerPadding: `${spacing[3]} ${spacing[4]}`,
-        contentPadding: `${spacing[3]} ${spacing[4]}`,
-        fontSize: fontSizes.base,
-        iconSize: 20,
-        minHeight: '48px',
-      };
-    case 'lg':
-      return {
-        headerPadding: `${spacing[4]} ${spacing[6]}`,
-        contentPadding: `${spacing[4]} ${spacing[6]}`,
-        fontSize: fontSizes.lg,
-        iconSize: 24,
-        minHeight: '56px',
-      };
-    default:
-      return {
-        headerPadding: `${spacing[3]} ${spacing[4]}`,
-        contentPadding: `${spacing[3]} ${spacing[4]}`,
-        fontSize: fontSizes.base,
-        iconSize: 20,
-        minHeight: '48px',
-      };
-  }
-};
 
 const getVariantStyles = (variant: AccordionVariant, theme: ReturnType<typeof useTheme>) => {
   switch (variant) {
@@ -184,12 +149,6 @@ const getVariantStyles = (variant: AccordionVariant, theme: ReturnType<typeof us
   }
 };
 
-// Default chevron down icon
-const ChevronDownIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
 
 export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
   ({
@@ -200,7 +159,6 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
     allowToggleOff = true,
     variant = 'default',
     size = 'md',
-    animated = true,
     icon,
     iconPosition = 'right',
     isDarkMode = false,
@@ -208,7 +166,6 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
     ...props
   }, ref) => {
     const theme = useTheme(isDarkMode);
-    const sizeStyles = getSizeStyles(size);
     const variantStyles = getVariantStyles(variant, theme);
     const isControlled = expandedIds !== undefined && onExpandedChange !== undefined;
     
@@ -253,18 +210,26 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
       }
     };
     
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, itemId: string, disabled?: boolean) => {
-      if (disabled) return;
+    const containerStyles: React.CSSProperties = {
+      fontFamily: fontFamilies.sans,
+      border: variantStyles.containerBorder,
+      borderRadius: variantStyles.containerBorderRadius,
+      overflow: 'hidden',
+    };
+    
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const currentTarget = event.target as HTMLElement;
+      const currentButton = currentTarget.closest('button[data-accordion-header]') as HTMLButtonElement;
       
-      const currentIndex = items.findIndex(item => item.id === itemId);
+      if (!currentButton) return;
+      
+      const currentId = currentButton.getAttribute('data-accordion-header');
+      if (!currentId) return;
+      
+      const currentIndex = items.findIndex(item => item.id === currentId);
       let targetIndex = currentIndex;
       
       switch (event.key) {
-        case 'Enter':
-        case ' ':
-          event.preventDefault();
-          handleToggle(itemId, disabled);
-          break;
         case 'ArrowDown':
           event.preventDefault();
           // Find next non-disabled item
@@ -307,14 +272,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
         targetButton?.focus();
       }
     };
-    
-    const containerStyles: React.CSSProperties = {
-      fontFamily: fontFamilies.sans,
-      border: variantStyles.containerBorder,
-      borderRadius: variantStyles.containerBorderRadius,
-      overflow: 'hidden',
-    };
-    
+
     return (
       <Box
         ref={ref}
@@ -323,6 +281,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
         role="region"
         aria-label="Accordion"
         data-mond-accordion
+        onKeyDown={handleKeyDown}
         {...props}
       >
         {items.map((item, index) => {
@@ -334,123 +293,29 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
             borderBottom: isLast ? 'none' : variantStyles.itemBorderBottom,
           };
           
-          const headerStyles: React.CSSProperties = {
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: sizeStyles.headerPadding,
-            backgroundColor: variantStyles.headerBackground,
-            border: 'none',
-            fontSize: sizeStyles.fontSize,
-            fontWeight: fontWeights.medium,
-            fontFamily: fontFamilies.sans,
-            color: theme('text.primary'),
-            cursor: item.disabled ? 'not-allowed' : 'pointer',
-            opacity: item.disabled ? 0.6 : 1,
-            minHeight: sizeStyles.minHeight,
-            textAlign: 'left' as const,
-            transition: animated ? 'all 150ms ease' : 'none',
-            outline: 'none',
-          };
-          
-          const iconStyles: React.CSSProperties = {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: theme('text.secondary'),
-            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-            transition: animated ? 'transform 200ms ease' : 'none',
-          };
-          
-          const contentWrapperStyles: React.CSSProperties = {
-            overflow: 'hidden',
-            maxHeight: isExpanded ? '1000px' : '0',
-            transition: animated ? 'max-height 200ms ease' : 'none',
-          };
-          
-          const contentStyles: React.CSSProperties = {
-            padding: sizeStyles.contentPadding,
-            backgroundColor: variantStyles.contentBackground,
-            borderTop: isExpanded ? `1px solid ${theme('border.default')}` : 'none',
-          };
-          
-          const displayIcon = item.icon || icon || <ChevronDownIcon />;
-          
-          const handleHeaderMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-            if (!item.disabled) {
-              e.currentTarget.style.backgroundColor = variantStyles.headerBackgroundHover;
-            }
-          };
-          
-          const handleHeaderMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-            if (!item.disabled) {
-              e.currentTarget.style.backgroundColor = variantStyles.headerBackground;
-            }
-          };
-          
-          const handleHeaderFocus = (e: React.FocusEvent<HTMLButtonElement>) => {
-            if (!item.disabled) {
-              e.currentTarget.style.outline = `2px solid ${theme('border.focused')}`;
-              e.currentTarget.style.outlineOffset = '2px';
-            }
-          };
-          
-          const handleHeaderBlur = (e: React.FocusEvent<HTMLButtonElement>) => {
-            if (!item.disabled) {
-              e.currentTarget.style.outline = 'none';
-            }
-          };
+          const displayIcon = item.icon || icon;
           
           return (
             <Box key={item.id} style={itemStyles}>
-              {/* Header Button */}
-              <button
-                id={`accordion-header-${item.id}`}
-                data-accordion-header={item.id}
-                style={headerStyles}
-                onClick={() => handleToggle(item.id, item.disabled)}
-                onKeyDown={(e) => handleKeyDown(e, item.id, item.disabled)}
-                onMouseEnter={handleHeaderMouseEnter}
-                onMouseLeave={handleHeaderMouseLeave}
-                onFocus={handleHeaderFocus}
-                onBlur={handleHeaderBlur}
-                aria-expanded={isExpanded}
-                aria-controls={`accordion-content-${item.id}`}
-                aria-disabled={item.disabled}
+              <AccordionItem
+                title={item.title}
+                expanded={isExpanded}
+                onExpandedChange={() => handleToggle(item.id, item.disabled)}
                 disabled={item.disabled}
-                type="button"
+                size={size}
+                variant={variant}
+                icon={displayIcon}
+                iconPosition={iconPosition}
+                isDarkMode={isDarkMode}
+                itemId={item.id}
+                style={{
+                  border: 'none',
+                  borderRadius: 0,
+                  overflow: 'visible'
+                }}
               >
-                {/* Content with icon positioning */}
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  width="100%"
-                  justifyContent={iconPosition === 'left' ? 'space-between' : 'flex-start'}
-                  flexDirection={iconPosition === 'left' ? 'row-reverse' : 'row'}
-                  gap={spacing[2]}
-                >
-                  <Box display="flex" alignItems="center" flex="1">
-                    {item.title}
-                  </Box>
-                  
-                  <Box style={iconStyles}>
-                    {displayIcon}
-                  </Box>
-                </Box>
-              </button>
-              
-              {/* Content Panel */}
-              <Box style={contentWrapperStyles}>
-                <Box
-                  id={`accordion-content-${item.id}`}
-                  role="region"
-                  aria-labelledby={`accordion-header-${item.id}`}
-                  style={contentStyles}
-                >
-                  {item.content}
-                </Box>
-              </Box>
+                {item.content}
+              </AccordionItem>
             </Box>
           );
         })}

@@ -9,7 +9,7 @@
 - Feedback: Button ✅, Badge ✅, Avatar ✅, Tooltip ✅, Modal ✅
 - Typography: Icon ✅, Text ✅, Heading ✅, Spinner ✅, Divider ✅, Label ✅, Image ✅, Tag ✅
 
-**📦 Published to NPM:** `@mond-design-system/theme@1.1.0`
+**📦 Published to NPM:** `@mond-design-system/theme@1.4.0`
 **📖 Documentation:** Complete README with examples and usage patterns
 
 ---
@@ -35,10 +35,10 @@
 - [x] **Button Group** - Multiple related buttons ✅
 - [x] **Checkbox Group** - Multiple checkboxes with shared label ✅
 - [x] **Radio Group** - Multiple radio buttons with shared label ✅
-- [ ] **Search Form** - Input + Search Button + Clear
-- [ ] **Avatar Group** - Multiple overlapping avatars
-- [ ] **Tag List** - Collection of removable tags
-- [ ] **Breadcrumb Item** - Single breadcrumb element
+- [x] **Search Form** - Input + Search Button + Clear ✅
+- [x] **Avatar Group** - Multiple overlapping avatars ✅
+- [x] **Tag List** - Collection of removable tags ✅
+- [x] **Breadcrumb Item** - Single breadcrumb element ✅
 
 ---
 
@@ -132,15 +132,96 @@ For each component:
 **Phase 3 Completed:** Alert ✅, Dropdown ✅, Header ✅, Breadcrumb ✅, Data Table ✅, Form Container ✅, Pagination ✅, Accordion ✅
 **Phase 4 Progress:** Progress Stepper ✅, Toast Container ✅
 **Next Components:** Carousel, Sidebar, Bottom Sheet, Search Results
-**Components Completed:** 41/75+ total planned (55% complete)
-**NPM Package:** Published `@mond-design-system/theme@1.1.0` 📦
+**Components Completed:** 45/75+ total planned (60% complete)
+**NPM Package:** Published `@mond-design-system/theme@1.4.0` 📦
 **Major Milestones:**
 - ✅ Phase 0: Box Component Standardization
 - ✅ Phase 1: Foundation Atoms (8/8 complete)
-- ✅ Phase 2: Essential Molecules (4/8 core molecules complete)  
+- ✅ Phase 2: Essential Molecules (8/8 molecules complete - COMPLETED)  
 - ✅ Phase 3: Core Organisms (8/8 organisms complete - Alert, Dropdown, Header, Breadcrumb, Data Table, Form Container, Pagination, Accordion)
 - 🔄 Phase 4: Advanced Components (2/6 complete - Progress Stepper, Toast Container)
 - 📦 NPM Publication with comprehensive documentation
 - 🚀 Continuing Phase 4: Advanced Components (Carousel, Sidebar, Bottom Sheet, Search Results)
 
 This plan provides a systematic roadmap for building out the complete Mond Design System using Atomic Design principles, with clear checkboxes to track progress and resume development at any point.
+
+---
+
+## Component Architecture Cleanup & Atomic Design Standardization
+
+### 🔍 **Component Structure Analysis** (September 2025)
+
+**✅ Proper Composition Patterns** (Component + ComponentItem):
+- **Accordion/AccordionItem** - ✅ CORRECT
+  - `Accordion.tsx` (Organism) uses `AccordionItem.tsx` (Molecule) internally
+  - Storybook: Accordion = "Organisms/", AccordionItem = "Molecules/"
+
+- **Breadcrumb/BreadcrumbItem** - ✅ CORRECT  
+  - `Breadcrumb.tsx` (Organism) uses `BreadcrumbItem.tsx` (Molecule) internally
+  - Storybook: Breadcrumb = "Organisms/", BreadcrumbItem = "Components/" (needs fix)
+
+- **ToastContainer/Toast** - ✅ CORRECT
+  - `ToastContainer.tsx` (Organism) uses `Toast.tsx` (Molecule) internally
+  - Storybook: ToastContainer = "Organisms/"
+
+**❌ Missing Composition Patterns** (Should have ComponentItem):
+
+- **Dropdown** - ❌ MISSING DropdownItem
+  - Currently: `Dropdown.tsx` renders options inline
+  - Should have: `DropdownItem.tsx` for individual dropdown options
+  - Current Storybook: "Organisms/Dropdown"
+
+- **Tabs** - ❌ INCONSISTENT COMPOSITION  
+  - Has internal: `TabsList`, `TabsTrigger`, `TabsContent` components
+  - BUT: They're all in the same file, not separate ComponentItem pattern
+  - Current Storybook: "Components/Tabs" (wrong level - should be Organisms)
+
+### 📊 **Storybook Organization Issues:**
+
+**Current Issues:**
+- Many components under "Components/" instead of proper atomic levels
+- Inconsistent classification between Atoms/Molecules/Organisms
+- BreadcrumbItem in "Components/" should be "Molecules/"
+- Tabs in "Components/" should be "Organisms/"
+
+### 🛠 **Action Plan:**
+
+#### **Phase 1: Fix Missing Composition Patterns**
+- [ ] **Create DropdownItem Component**
+  - Extract dropdown option rendering logic into `DropdownItem.tsx`
+  - Refactor `Dropdown.tsx` to use `DropdownItem` internally
+  - Create comprehensive tests and Storybook stories
+  - Maintain all existing Dropdown functionality
+
+- [ ] **Refactor Tabs Composition**
+  - Extract `TabsList`, `TabsTrigger`, `TabsContent` into separate files
+  - Create proper compositional API like Accordion/AccordionItem pattern
+  - Maintain backward compatibility with current `tabs` prop API
+  - Add new compositional API alongside existing interface
+
+#### **Phase 2: Storybook Organization Cleanup**
+- [ ] **Establish Clear Atomic Design Hierarchy**
+  - **Atoms/**: Box, Text, Heading, Button, Input, etc.
+  - **Molecules/**: AccordionItem, BreadcrumbItem, DropdownItem, FormField, etc.
+  - **Organisms/**: Accordion, Breadcrumb, Dropdown, Header, Modal, Pagination, etc.
+
+- [ ] **Specific Moves Needed:**
+  - Move BreadcrumbItem: "Components/" → "Molecules/"
+  - Move Tabs: "Components/" → "Organisms/"
+  - Classify remaining "Components/" to appropriate atomic levels
+
+#### **Phase 3: Documentation**
+- [ ] **Component Guidelines Document**
+  - When to use Component.tsx vs ComponentItem.tsx pattern
+  - Atomic Design classification criteria  
+  - Storybook organization standards
+  - Composition vs inheritance patterns
+
+### ✅ **Success Criteria:**
+- All compound components use proper ComponentItem patterns
+- Storybook follows consistent Atomic Design hierarchy
+- Clear guidelines for future component development
+- Backward compatibility maintained
+- All tests pass, build succeeds
+
+---

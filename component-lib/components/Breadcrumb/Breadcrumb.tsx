@@ -1,12 +1,10 @@
 'use client';
 import React from 'react';
-import { spacing, fontSizes, fontFamilies } from '../../tokens';
-import { useTheme } from '../../utils/theme';
+import { spacing, fontSizes } from '../../tokens';
 import { Box } from '../Box/Box';
-import { Link } from '../Link/Link';
-import { Icon } from '../Icon/Icon';
+import { BreadcrumbItem } from '../BreadcrumbItem/BreadcrumbItem';
 
-export interface BreadcrumbItem {
+export interface BreadcrumbItemData {
   label: string;
   href?: string;
   onClick?: () => void;
@@ -18,7 +16,7 @@ export interface BreadcrumbProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Breadcrumb items
    */
-  items: BreadcrumbItem[];
+  items: BreadcrumbItemData[];
   
   /**
    * Custom separator between items
@@ -68,7 +66,6 @@ export const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
     className,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
 
     const getSizeStyles = () => {
       switch (size) {
@@ -108,83 +105,11 @@ export const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
 
     const displayItems = processItems();
 
-    const renderItem = (item: BreadcrumbItem, index: number, isLast: boolean) => {
-      const isEllipsis = item.label === '...';
-      
-      const itemContent = (
-        <Box
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: spacing[1],
-            color: isLast 
-              ? theme('text.primary') 
-              : item.disabled 
-                ? theme('text.disabled') 
-                : theme('text.secondary'),
-            fontFamily: fontFamilies.sans,
-            fontSize: sizeStyles.fontSize,
-            fontWeight: isLast ? 'medium' : 'normal',
-            textDecoration: 'none',
-            cursor: item.disabled ? 'default' : (item.href || item.onClick) ? 'pointer' : 'default',
-            transition: 'color 150ms ease',
-          }}
-          onClick={item.disabled ? undefined : item.onClick}
-          onMouseEnter={(e) => {
-            if (!item.disabled && !isLast && (item.href || item.onClick)) {
-              (e.target as HTMLElement).style.color = theme('text.accent');
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!item.disabled && !isLast) {
-              (e.target as HTMLElement).style.color = theme('text.secondary');
-            }
-          }}
-        >
-          {showHomeIcon && index === 0 && (
-            <Icon size="sm" decorative>
-              {/* Home icon SVG */}
-              <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </Icon>
-          )}
-          {item.icon && (
-            <Box style={{ flexShrink: 0 }}>
-              {item.icon}
-            </Box>
-          )}
-          <span>{item.label}</span>
-        </Box>
-      );
-
-      if (item.href && !item.disabled && !isLast && !isEllipsis) {
-        return (
-          <Link key={index} href={item.href} style={{ textDecoration: 'none' }}>
-            {itemContent}
-          </Link>
-        );
-      }
-
-      return (
-        <Box key={index} as={item.onClick && !item.disabled ? 'button' : 'span'}>
-          {itemContent}
-        </Box>
-      );
-    };
-
-    const renderSeparator = (index: number) => (
-      <Box
-        key={`separator-${index}`}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          color: theme('text.disabled'),
-          fontSize: sizeStyles.fontSize,
-          margin: `0 ${spacing[2]}`,
-        }}
-        aria-hidden="true"
-      >
-        {separator}
-      </Box>
+    // Home icon for showHomeIcon prop
+    const homeIcon = (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
     );
 
     return (
@@ -202,12 +127,27 @@ export const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
         }}
         {...props}
       >
-        {displayItems.map((item, index) => (
-          <React.Fragment key={index}>
-            {renderItem(item, index, index === displayItems.length - 1)}
-            {index < displayItems.length - 1 && renderSeparator(index)}
-          </React.Fragment>
-        ))}
+        {displayItems.map((item, index) => {
+          const isLast = index === displayItems.length - 1;
+          const isFirst = index === 0;
+          
+          return (
+            <BreadcrumbItem
+              key={index}
+              href={item.href}
+              onClick={item.onClick}
+              disabled={item.disabled}
+              current={isLast}
+              size={size}
+              isDarkMode={isDarkMode}
+              icon={isFirst && showHomeIcon ? homeIcon : item.icon}
+              showSeparator={!isLast}
+              separator={separator}
+            >
+              {item.label}
+            </BreadcrumbItem>
+          );
+        })}
       </Box>
     );
   }
@@ -216,3 +156,6 @@ export const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
 Breadcrumb.displayName = 'Breadcrumb';
 
 export default Breadcrumb;
+
+// Re-export the component for backward compatibility with the old interface name
+export type { BreadcrumbItemData as BreadcrumbItem };
