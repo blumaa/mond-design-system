@@ -59,14 +59,21 @@ jobs:
       - name: Test npm authentication
         run: |
           echo "Testing npm whoami with provided token..."
+          echo "Setting up .npmrc with NPM_TOKEN..."
+          echo "Token length: ${#NPM_TOKEN}"
+          echo "Token starts with: ${NPM_TOKEN:0:10}..."
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
           cd component-lib
           npm whoami || echo "npm whoami failed"
+          rm ~/.npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           
       - name: Semantic Release
         id: semantic
         run: |
+          echo "Setting up npm authentication for semantic-release..."
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
           cd component-lib
           npx semantic-release --debug
         env:
