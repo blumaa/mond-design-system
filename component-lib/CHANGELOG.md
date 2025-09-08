@@ -1,3 +1,12 @@
+## <small>1.2.1 (2025-09-08)</small>
+
+* fix: add environment and debugging for npm publishing ([fae2022](https://github.com/blumaa/mond-design-system/commit/fae2022))
+* fix: add npm authentication debugging to identify token issues ([afecb9f](https://github.com/blumaa/mond-design-system/commit/afecb9f))
+* fix: correct npmrc token interpolation and add debugging ([7db1477](https://github.com/blumaa/mond-design-system/commit/7db1477))
+* fix: remove dist assets from GitHub release to prevent duplicate uploads ([dcd526e](https://github.com/blumaa/mond-design-system/commit/dcd526e))
+* fix: test npm publishing with granular access token ([18b1f0e](https://github.com/blumaa/mond-design-system/commit/18b1f0e))
+* fix: use correct npmrc file location in GitHub Actions ([b270150](https://github.com/blumaa/mond-design-system/commit/b270150))
+
 ## 1.2.0 (2025-09-08)
 
 * fix: add NPM_TOKEN environment variable to release workflow ([f65cb1e](https://github.com/blumaa/mond-design-system/commit/f65cb1e))
