@@ -1,3 +1,7 @@
+## 1.3.0 (2025-09-08)
+
+* feat: add groups ([1ebac75](https://github.com/blumaa/mond-design-system/commit/1ebac75))
+
 ## <small>1.2.3 (2025-09-08)</small>
 
 * fix: checkbox storybook 2 ([1a65def](https://github.com/blumaa/mond-design-system/commit/1a65def))
