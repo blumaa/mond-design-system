@@ -1,3 +1,8 @@
+## 1.4.0 (2025-09-08)
+
+* feat: complete Phase 3 core organisms (Alert, Breadcrumb, Dropdown, Header) ([a87d61d](https://github.com/blumaa/mond-design-system/commit/a87d61d))
+* add alert breadcrumb dropdown header ([803be48](https://github.com/blumaa/mond-design-system/commit/803be48))
+
 ## 1.3.0 (2025-09-08)
 
 * feat: add groups ([1ebac75](https://github.com/blumaa/mond-design-system/commit/1ebac75))
