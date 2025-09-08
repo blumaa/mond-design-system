@@ -1,3 +1,7 @@
+## <small>1.2.3 (2025-09-08)</small>
+
+* fix: checkbox storybook 2 ([1a65def](https://github.com/blumaa/mond-design-system/commit/1a65def))
+
 ## <small>1.2.2 (2025-09-08)</small>
 
 * fix: checkbox storybook ([40dfe4d](https://github.com/blumaa/mond-design-system/commit/40dfe4d))
