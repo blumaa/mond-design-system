@@ -12,10 +12,52 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Card is a flexible content container with optional header, body, and footer sections. Built on top of the Box component with consistent styling.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Card, CardHeader, CardBody, CardFooter } from '@mond-design-system/theme';
+import { Button } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Card variant="elevated" maxWidth={400}>
+      <CardHeader>
+        <h2>Card Title</h2>
+        <p>Optional subtitle or description</p>
+      </CardHeader>
+      
+      <CardBody>
+        <p>
+          This is the main content area of the card. You can put any 
+          content here including text, images, forms, or other components.
+        </p>
+      </CardBody>
+      
+      <CardFooter>
+        <Button variant="ghost">Cancel</Button>
+        <Button variant="primary">Save</Button>
+      </CardFooter>
+    </Card>
+  );
+}
+\`\`\`
+
+Card is a flexible content container with optional header, body, and footer sections. Built on top of the Box component with consistent styling.
+
+**Key Features:**
+- 📦 Flexible content container with semantic sections
+- 🎨 Multiple variants (flat, outlined, elevated)
+- 🎯 Structured composition with CardHeader, CardBody, CardFooter
+- 📏 Customizable padding and sizing
+- 🌑 Dark mode compatibility
+- 🎭 Built on top of Box component for consistency
+- 💡 Perfect for content cards, forms, and dashboards
+- 📱 Responsive design patterns
+        `,
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: { type: 'select' },

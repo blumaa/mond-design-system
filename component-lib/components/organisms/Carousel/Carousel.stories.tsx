@@ -8,10 +8,59 @@ const meta: Meta<typeof Carousel> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A flexible carousel/slider component that supports single or multiple items, auto-play, keyboard navigation, and various customization options.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Carousel, CarouselItem } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const items: CarouselItem[] = [
+    {
+      id: '1',
+      content: <div style={{ padding: '40px', background: '#f0f0f0', textAlign: 'center' }}>Slide 1</div>
+    },
+    {
+      id: '2',
+      content: <div style={{ padding: '40px', background: '#e0e0e0', textAlign: 'center' }}>Slide 2</div>
+    },
+    {
+      id: '3',
+      content: <div style={{ padding: '40px', background: '#d0d0d0', textAlign: 'center' }}>Slide 3</div>
+    },
+  ];
+
+  return (
+    <Carousel
+      items={items}
+      showArrows={true}
+      showIndicators={true}
+      autoPlay={true}
+      autoPlayInterval={3000}
+      pauseOnHover={true}
+      infinite={true}
+      itemsToShow={1}
+      onSlideChange={(index) => console.log('Current slide:', index)}
+    />
+  );
+}
+\`\`\`
+
+A flexible carousel/slider component that supports single or multiple items, auto-play, keyboard navigation, and various customization options.
+
+**Key Features:**
+- 🔄 Auto-play with configurable intervals
+- 🖱️ Hover to pause functionality
+- 🔁 Infinite loop support
+- 📊 Multiple items display with gap control
+- 🎯 Navigation arrows and dot indicators
+- ⌨️ Keyboard navigation (arrow keys)
+- 🎨 Customizable arrow and indicator positions
+- 🌑 Dark mode compatibility
+        `,
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     items: {
       description: 'Array of carousel items to display',
@@ -71,6 +120,10 @@ const meta: Meta<typeof Carousel> = {
     initialSlide: {
       description: 'Initial slide index',
       control: 'number',
+    },
+    onSlideChange: {
+      description: 'Callback when slide changes',
+      action: 'slide-changed',
     },
   },
 };

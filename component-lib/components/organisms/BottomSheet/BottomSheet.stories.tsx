@@ -62,6 +62,7 @@ A mobile-friendly modal alternative that slides up from the bottom of the screen
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     isOpen: {
       description: 'Whether the bottom sheet is open',

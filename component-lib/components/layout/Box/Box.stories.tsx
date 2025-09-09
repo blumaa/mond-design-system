@@ -44,6 +44,7 @@ A flexible layout primitive that accepts style props and can render as any HTML 
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     as: {
       control: { type: 'select' },

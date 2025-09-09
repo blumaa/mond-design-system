@@ -8,7 +8,38 @@ const meta: Meta<typeof Image> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'An enhanced image component with loading states, error handling, fallback support, and aspect ratio controls. Provides a better user experience than the standard HTML img element.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Image } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Image
+      src="https://example.com/photo.jpg"
+      alt="Description of the image"
+      width="300px"
+      height="200px"
+      fit="cover"
+      aspectRatio="3:2"
+      showLoadingSpinner
+    />
+  );
+}
+\`\`\`
+
+An enhanced image component with loading states, error handling, fallback support, and aspect ratio controls. Provides a better user experience than the standard HTML img element.
+
+**Key Features:**
+- 🖼️ Enhanced image display with fallback support
+- ⏳ Built-in loading states with spinner option
+- 📐 Aspect ratio controls for consistent layouts
+- 🎨 Object-fit options (cover, contain, fill, etc.)
+- 🔄 Automatic fallback image on load errors
+- 🌐 Lazy loading support for performance
+- 🎯 Border radius options from design tokens
+- ♿ Full accessibility with proper alt text
+`,
       },
     },
   },

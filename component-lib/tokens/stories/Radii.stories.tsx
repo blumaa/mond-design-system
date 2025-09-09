@@ -4,6 +4,49 @@ import { radii, fontFamilies } from '../index';
 
 const meta: Meta = {
   title: 'Tokens/Radii',
+  parameters: {
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { radii } from '@mond-design-system/theme/tokens';
+
+function MyComponent() {
+  return (
+    <div
+      style={{
+        width: '100px',
+        height: '100px',
+        backgroundColor: '#4f46e5',
+        borderRadius: radii.lg,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+      }}
+    >
+      Rounded
+    </div>
+  );
+}
+\`\`\`
+
+Border radius design tokens provide consistent rounded corners and shape definitions throughout the design system.
+
+**Key Features:**
+- 🗔️ Consistent corner rounding system
+- 📏 Multiple radius sizes (none, xs, sm, md, lg, xl, full)
+- 🔸 Perfect circles with 'full' radius
+- 📱 Responsive radius scaling
+- 🎨 Visual hierarchy through radius variation
+- 🗺️ CSS-ready border-radius values
+- 🔧 Easy integration with components
+- 🎯 Semantic naming convention
+        `,
+      },
+    },
+  },
 };
 
 export default meta;

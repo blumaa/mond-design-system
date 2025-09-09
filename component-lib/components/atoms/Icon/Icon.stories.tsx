@@ -81,6 +81,7 @@ A flexible Icon component that renders SVG icons with consistent sizing and acce
       }
     }
   },
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',

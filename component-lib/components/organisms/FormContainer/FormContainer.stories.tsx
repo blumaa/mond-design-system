@@ -9,10 +9,81 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A comprehensive form container organism that orchestrates form atoms and molecules with built-in validation, state management, and submission handling.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { FormContainer, FormField } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const fields: FormField[] = [
+    {
+      name: 'name',
+      type: 'text',
+      label: 'Full Name',
+      placeholder: 'Enter your name',
+      required: true,
+      validation: [
+        { type: 'required', message: 'Name is required' },
+        { type: 'minLength', value: 2, message: 'Name must be at least 2 characters' },
+      ],
+    },
+    {
+      name: 'email',
+      type: 'email',
+      label: 'Email Address',
+      placeholder: 'your@email.com',
+      required: true,
+      validation: [
+        { type: 'required', message: 'Email is required' },
+        { type: 'email', message: 'Please enter a valid email' },
+      ],
+    },
+    {
+      name: 'message',
+      type: 'textarea',
+      label: 'Message',
+      placeholder: 'Your message...',
+      required: true,
+      validation: [
+        { type: 'required', message: 'Message is required' },
+      ],
+    },
+  ];
+
+  const handleSubmit = (values: any) => {
+    console.log('Form submitted:', values);
+  };
+
+  return (
+    <FormContainer
+      fields={fields}
+      title="Contact Us"
+      description="Send us a message and we'll get back to you"
+      onSubmit={handleSubmit}
+      validationMode="onChange"
+      layout="vertical"
+      variant="card"
+    />
+  );
+}
+\`\`\`
+
+A comprehensive form container organism that orchestrates form atoms and molecules with built-in validation, state management, and submission handling.
+
+**Key Features:**
+- 🏗️ Complete form orchestration with field management
+- ✅ Built-in validation with multiple validation types
+- 📱 Multiple layout options (vertical, horizontal, grid)
+- 🎨 Visual variants (default, bordered, card)
+- 📏 Size variants (sm, md, lg)
+- 🔄 Multiple validation modes (onChange, onBlur, onSubmit)
+- 🎯 Progress tracking for multi-step forms
+- 🌑 Dark mode compatibility
+        `,
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     fields: {
       description: 'Array of form field configurations',

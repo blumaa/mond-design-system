@@ -14,38 +14,50 @@ const meta: Meta<typeof ProgressStepper> = {
     docs: {
       description: {
         component: `
-**ProgressStepper** is an organism-level component in our atomic design system that displays progress through a multi-step process.
+### Quick Start
+\`\`\`tsx
+import { ProgressStepper, StepConfig } from '@mond-design-system/theme';
+import { useState } from 'react';
 
-## Features
+function MyComponent() {
+  const [currentStep, setCurrentStep] = useState(0);
+  
+  const steps: StepConfig[] = [
+    { label: 'Personal Info', description: 'Enter your basic details' },
+    { label: 'Account Setup', description: 'Create your credentials' },
+    { label: 'Preferences', description: 'Configure your settings' },
+    { label: 'Review', description: 'Confirm your information' },
+  ];
+  
+  return (
+    <ProgressStepper
+      steps={steps}
+      currentStep={currentStep}
+      orientation="horizontal"
+      size="medium"
+      allowStepNavigation={true}
+      onStepClick={setCurrentStep}
+    />
+  );
+}
+\`\`\`
 
-- **Multiple Orientations**: Horizontal and vertical layouts
-- **Flexible Sizing**: Small, medium, and large size variants
-- **Status Management**: Completed, active, disabled, and error states
-- **Interactive Navigation**: Optional step navigation with click handlers
-- **Custom Icons**: Support for custom step icons
-- **Accessibility**: Full ARIA support and keyboard navigation
-- **Responsive Design**: Adapts to different screen sizes
-- **Design Token Integration**: Uses semantic design tokens throughout
+ProgressStepper is an organism-level component that displays progress through a multi-step process with interactive navigation and status management.
 
-## Atomic Design Classification
-
-This component is classified as an **Organism** because it:
-- Combines multiple molecules (individual steps) and atoms (icons, text, connectors)
-- Forms a distinct interface section for multi-step processes
-- Provides complete functionality for progress indication
-- Can be reused across different templates and pages
-
-## Usage Guidelines
-
-- Use for multi-step forms, wizards, or sequential processes
-- Keep step labels concise and descriptive
-- Provide clear descriptions for complex steps
-- Consider using custom icons for better visual hierarchy
-- Test with actual content to ensure responsive behavior
+**Key Features:**
+- 📋 Multi-step process visualization
+- 🗄 Horizontal and vertical orientations  
+- 📏 Multiple size variants (small, medium, large)
+- ✅ Status management (completed, active, disabled, error)
+- 🔗 Interactive step navigation with click handlers
+- 🎨 Custom icon support for each step
+- ♿ Full accessibility with ARIA support
+- 📱 Responsive design for all screen sizes
         `,
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     steps: {
       description: 'Array of step configurations',

@@ -11,24 +11,47 @@ const meta: Meta<typeof SearchForm> = {
     docs: {
       description: {
         component: `
-SearchForm is a molecule component that combines Input and Button atoms into a functional search interface. 
-It provides built-in search and clear functionality with loading states and accessibility features.
+### Quick Start
+\`\`\`tsx
+import { SearchForm } from '@mond-design-system/theme';
+import { useState } from 'react';
 
-## Features
-- **Search Input**: Text input field with customizable placeholder
-- **Search Button**: Submit button with configurable icon and label
-- **Clear Button**: Optional clear button that appears when input has value
-- **Loading State**: Spinner icon and disabled state during search operations
-- **Keyboard Support**: Enter key triggers search
-- **Controlled/Uncontrolled**: Supports both controlled and uncontrolled usage patterns
-- **Accessibility**: Full ARIA support with proper roles and labels
-- **Responsive Design**: Adapts button text visibility based on screen size
+function MyComponent() {
+  const [searchValue, setSearchValue] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const handleSearch = async (query: string) => {
+    setLoading(true);
+    // Perform search operation
+    console.log('Searching for:', query);
+    // Simulate API call
+    setTimeout(() => setLoading(false), 1000);
+  };
+  
+  return (
+    <SearchForm
+      placeholder="Search for products..."
+      value={searchValue}
+      loading={loading}
+      onChange={setSearchValue}
+      onSearch={handleSearch}
+      onClear={() => setSearchValue('')}
+    />
+  );
+}
+\`\`\`
 
-## Atomic Design
-This molecule combines:
-- **Input** (atom) - Search text input
-- **Button** (atom) - Search and clear buttons  
-- **Icon** (atom) - Search, clear, and loading icons
+SearchForm is a molecule component that combines Input and Button atoms into a functional search interface. It provides built-in search and clear functionality with loading states and accessibility features.
+
+**Key Features:**
+- 🔍 Search Input with customizable placeholder
+- 🔘 Search Button with configurable icon and label
+- ❌ Clear Button that appears when input has value
+- ⏳ Loading State with spinner and disabled interactions
+- ⌨️ Keyboard Support (Enter key triggers search)
+- 🔧 Controlled/Uncontrolled usage patterns
+- ♿ Full ARIA support with proper roles and labels
+- 📱 Responsive design that adapts button text visibility
         `,
       },
     },

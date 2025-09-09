@@ -9,6 +9,54 @@ const meta: Meta<typeof Header> = {
   component: Header,
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Header } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const navigationItems = [
+    { label: 'Home', href: '/', active: true },
+    { label: 'Products', href: '/products' },
+    { label: 'Solutions', href: '/solutions' },
+    { label: 'About', href: '/about' },
+  ];
+  
+  const actions = [
+    { label: 'Sign In', onClick: () => {}, variant: 'ghost' as const },
+    { label: 'Get Started', onClick: () => {}, variant: 'primary' as const },
+  ];
+  
+  return (
+    <Header
+      logo="My Company"
+      logoHref="/"
+      navigationItems={navigationItems}
+      actions={actions}
+      sticky={true}
+      variant="solid"
+      showMobileToggle={true}
+    />
+  );
+}
+\`\`\`
+
+Header is an organism component that provides complete navigation functionality with logo, navigation links, actions, and mobile responsiveness.
+
+**Key Features:**
+- 🏢 Logo support (text or custom React component)
+- 🧷 Navigation menu with active state management
+- 📱 Mobile-responsive with hamburger menu
+- 🔗 Sticky positioning with blur effects
+- 🎨 Multiple variants (solid, transparent, blur)
+- 🎯 Action buttons for CTAs
+- 🗺️ Nested navigation with dropdown support
+- 🌑 Dark mode compatibility
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

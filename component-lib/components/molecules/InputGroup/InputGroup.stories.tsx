@@ -8,6 +8,39 @@ const meta: Meta<typeof InputGroup> = {
   component: InputGroup,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { InputGroup, Input, Button } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <InputGroup 
+      prefix="🔍"
+      suffix={<Button size="sm" variant="primary">Search</Button>}
+    >
+      <Input placeholder="Search for products..." />
+    </InputGroup>
+  );
+}
+\`\`\`
+
+InputGroup is a molecule component that wraps Input atoms with optional prefix and suffix elements. It provides a cohesive interface for enhanced input functionality with buttons, icons, or text addons.
+
+**Key Features:**
+- 🔤 Text or icon prefixes and suffixes
+- 🔘 Button integration for actions
+- 📏 Multiple size variants (sm, md, lg)
+- 🎨 Variant states (default, error, success)
+- 🌑 Dark mode compatibility
+- ⚡ Flexible content composition
+- 🎯 Seamless Input atom integration
+- 📱 Responsive design adaptation
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

@@ -8,7 +8,38 @@ const meta: Meta<typeof Tag> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A versatile tag/chip component for displaying labels, categories, status indicators, and removable items. Supports multiple variants, semantic colors, and interactive features.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Tag } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <div>
+      <Tag>Default Tag</Tag>
+      <Tag variant="outlined" semantic="primary">
+        Primary Tag
+      </Tag>
+      <Tag removable onRemove={() => console.log('removed')}>
+        Removable Tag
+      </Tag>
+    </div>
+  );
+}
+\`\`\`
+
+A versatile tag/chip component for displaying labels, categories, status indicators, and removable items. Supports multiple variants, semantic colors, and interactive features.
+
+**Key Features:**
+- 🎨 Three visual variants (filled, outlined, ghost)
+- 🌈 Six semantic colors (default, primary, success, warning, error, info)
+- 📏 Three sizes (sm, md, lg) for different contexts
+- ❌ Removable functionality with onRemove callback
+- 🎯 Icon support for enhanced meaning
+- 🚫 Disabled state handling
+- 🌙 Automatic dark mode adaptation
+- ♿ Full accessibility support
+`,
       },
     },
   },

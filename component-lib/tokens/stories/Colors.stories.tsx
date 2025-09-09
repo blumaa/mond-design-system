@@ -4,6 +4,47 @@ import { colors, fontFamilies } from '../index';
 
 const meta: Meta = {
   title: 'Tokens/Colors',
+  parameters: {
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { colors } from '@mond-design-system/theme/tokens';
+
+function MyComponent() {
+  return (
+    <div
+      style={{
+        backgroundColor: colors.primary[500],
+        color: colors.white,
+        padding: '16px',
+        borderRadius: '8px',
+        border: \`2px solid \${colors.primary[600]}\`,
+      }}
+    >
+      <h2 style={{ color: colors.primary[100] }}>Primary Card</h2>
+      <p style={{ color: colors.gray[300] }}>Using design system colors</p>
+    </div>
+  );
+}
+\`\`\`
+
+Color design tokens provide a comprehensive palette with semantic naming and consistent color relationships across the design system.
+
+**Key Features:**
+- 🎨 Comprehensive color palette with semantic naming
+- 🌈 Multiple color scales (50-900) for each color family
+- 🌑 Built-in dark mode support
+- 📈 Accessible color contrast ratios
+- 🎯 Primary, secondary, and semantic color groups
+- 🔄 Consistent color relationships and harmonies
+- 🗺️ CSS custom properties support
+- ♿ WCAG compliant color combinations
+        `,
+      },
+    },
+  },
 };
 
 export default meta;

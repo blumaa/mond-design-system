@@ -37,6 +37,7 @@ A flexible Heading component for creating semantic headings (h1-h6) with consist
       }
     }
   },
+  tags: ['autodocs'],
   argTypes: {
     level: {
       control: 'select',

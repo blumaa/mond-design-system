@@ -8,6 +8,51 @@ const meta: Meta<typeof Dropdown> = {
   component: Dropdown,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Dropdown, Button } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const options = [
+    { value: 'edit', label: 'Edit', icon: '✏️' },
+    { value: 'duplicate', label: 'Duplicate', icon: '📋' },
+    { value: 'archive', label: 'Archive', icon: '📦' },
+    { value: 'divider', label: '', divider: true },
+    { value: 'delete', label: 'Delete', icon: '🗑️' },
+  ];
+
+  const handleSelect = (value: string, option: any) => {
+    console.log('Selected:', value, option);
+  };
+
+  return (
+    <Dropdown
+      options={options}
+      trigger={<Button variant="outline">Actions</Button>}
+      onSelect={handleSelect}
+      placement="bottom-start"
+    />
+  );
+}
+\`\`\`
+
+Dropdown is an organism component that provides a customizable dropdown menu with support for icons, nested items, dividers, and various trigger elements. Built using DropdownItem atoms and supporting complex menu structures.
+
+**Key Features:**
+- 🎯 Flexible trigger element (buttons, text, custom components)
+- 📁 Nested menu support with sub-items
+- 🎨 Icons and custom content in menu items
+- ➖ Divider support for menu organization
+- 📐 Multiple placement options (top, bottom, start, end)
+- 🚫 Disabled items and conditional rendering
+- 🎭 Dark mode compatibility
+- ♿ Full accessibility with keyboard navigation
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

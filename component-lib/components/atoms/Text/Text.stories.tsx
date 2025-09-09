@@ -37,6 +37,7 @@ A flexible Text component for displaying text content with semantic variants, ty
       }
     }
   },
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',

@@ -4,6 +4,47 @@ import { shadows, fontFamilies } from '../index';
 
 const meta: Meta = {
   title: 'Tokens/Shadows',
+  parameters: {
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { shadows } from '@mond-design-system/theme/tokens';
+
+function MyComponent() {
+  return (
+    <div
+      style={{
+        width: '200px',
+        height: '100px',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        boxShadow: shadows.md,
+        padding: '16px',
+      }}
+    >
+      Card with shadow
+    </div>
+  );
+}
+\`\`\`
+
+Shadow design tokens provide consistent depth and elevation effects across the design system.
+
+**Key Features:**
+- 🎨 Consistent elevation system
+- 📐 Multiple depth levels (xs, sm, md, lg, xl, 2xl)
+- 🌑 Optimized for light and dark themes
+- 📱 Responsive shadow scaling
+- 🎯 Semantic shadow naming
+- 💡 CSS-ready box-shadow values
+- 🔧 Easy integration with styled-components
+- ⚡ Performance-optimized shadow definitions
+        `,
+      },
+    },
+  },
 };
 
 export default meta;

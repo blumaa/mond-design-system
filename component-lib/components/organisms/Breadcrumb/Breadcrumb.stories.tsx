@@ -9,7 +9,44 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A breadcrumb navigation component that shows the current page location within a navigational hierarchy.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Breadcrumb } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const items = [
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'Electronics', href: '/products/electronics' },
+    { label: 'Laptops', href: '/products/electronics/laptops' },
+    { label: 'MacBook Pro' }, // Current page (no href)
+  ];
+
+  return (
+    <Breadcrumb
+      items={items}
+      separator="/"
+      maxItems={4}
+      showHomeIcon={true}
+      size="md"
+    />
+  );
+}
+\`\`\`
+
+A breadcrumb navigation component that shows the current page location within a navigational hierarchy.
+
+**Key Features:**
+- 🗂️ Hierarchical navigation display
+- 🏠 Optional home icon for first item
+- 🎯 Customizable separators between items
+- 📐 Collapsible with max items limit
+- 🖱️ Click handlers for navigation
+- 🎨 Icon support for breadcrumb items
+- 🚫 Disabled state support
+- 🌑 Dark mode compatibility
+        `,
       },
     },
   },

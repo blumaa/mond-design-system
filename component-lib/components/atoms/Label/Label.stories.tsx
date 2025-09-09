@@ -8,7 +8,39 @@ const meta: Meta<typeof Label> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A form label component with support for required indicators, semantic variants, and accessibility features. Commonly used with form inputs and controls.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Label } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <>
+      <Label htmlFor="email" required>
+        Email Address
+      </Label>
+      <input 
+        id="email" 
+        type="email" 
+        placeholder="Enter your email" 
+      />
+    </>
+  );
+}
+\`\`\`
+
+A form label component with support for required indicators, semantic variants, and accessibility features. Commonly used with form inputs and controls.
+
+**Key Features:**
+- 📝 Semantic HTML label elements with proper association
+- ⭐ Required indicator support with customization
+- 📏 Three sizes (sm, md, lg) to match form controls
+- 🎨 Semantic variants (default, error, success)
+- 🔤 Font weight options (normal, medium, semibold)
+- ♿ Full accessibility with proper focus management
+- 🌙 Dark mode support
+- 🚫 Disabled state styling
+`,
       },
     },
   },

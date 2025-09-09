@@ -10,23 +10,41 @@ const meta: Meta<typeof AvatarGroup> = {
     docs: {
       description: {
         component: `
-AvatarGroup is a molecule component that displays multiple Avatar atoms in an overlapping layout. 
-It provides overflow management with a "+N more" indicator when the number of avatars exceeds the maximum display count.
+### Quick Start
+\`\`\`tsx
+import { AvatarGroup } from '@mond-design-system/theme';
 
-## Features
-- **Overlapping Layout**: Avatars stack with customizable spacing/overlap
-- **Overflow Management**: Shows "+N more" indicator when avatars exceed maxCount
-- **Interactive Avatars**: Optional click handlers for individual avatars and overflow indicator
-- **Flexible Sizing**: All avatars inherit the same size from the group
-- **Custom Excess Rendering**: Customizable "+N more" indicator
-- **Hover Effects**: Visual feedback on interactive avatars
-- **Accessibility**: Full ARIA support and keyboard navigation
-- **Performance Optimized**: Only renders visible avatars
+function MyComponent() {
+  const avatars = [
+    { id: '1', src: '/avatar1.jpg', alt: 'John Doe', fallback: 'JD' },
+    { id: '2', src: '/avatar2.jpg', alt: 'Jane Smith', fallback: 'JS' },
+    { id: '3', src: '/avatar3.jpg', alt: 'Mike Johnson', fallback: 'MJ' },
+    { id: '4', src: '/avatar4.jpg', alt: 'Sarah Wilson', fallback: 'SW' },
+    { id: '5', src: '/avatar5.jpg', alt: 'Tom Brown', fallback: 'TB' },
+  ];
+  
+  return (
+    <AvatarGroup
+      avatars={avatars}
+      maxCount={3}
+      onAvatarClick={(avatar) => console.log('Clicked:', avatar.alt)}
+      onExcessClick={(hiddenAvatars) => console.log('Show more:', hiddenAvatars)}
+    />
+  );
+}
+\`\`\`
 
-## Atomic Design
-This molecule combines:
-- **Avatar** (atom) - Individual user avatars
-- **Box** (atom) - Layout container and positioning
+AvatarGroup is a molecule component that displays multiple Avatar atoms in an overlapping layout. It provides overflow management with a "+N more" indicator when the number of avatars exceeds the maximum display count.
+
+**Key Features:**
+- 🔗 Overlapping Layout with customizable spacing
+- 📊 Overflow Management with "+N more" indicator
+- 🖱️ Interactive avatars with click handlers
+- 📏 Flexible sizing for all avatars in the group
+- 🎨 Custom excess rendering capabilities
+- ✨ Hover effects for interactive elements
+- ♿ Full ARIA support and keyboard navigation
+- ⚡ Performance optimized rendering
         `,
       },
     },

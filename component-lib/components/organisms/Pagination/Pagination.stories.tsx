@@ -10,7 +10,48 @@ const meta: Meta<typeof Pagination> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Pagination component for navigating through large datasets. Built following atomic design principles using Button, Select, and Text atoms.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Pagination } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  
+  return (
+    <Pagination
+      currentPage={currentPage}
+      totalItems={500}
+      itemsPerPage={itemsPerPage}
+      onPageChange={setCurrentPage}
+      onItemsPerPageChange={(items) => {
+        setItemsPerPage(items);
+        setCurrentPage(1); // Reset to first page
+      }}
+      itemsPerPageOptions={[10, 25, 50, 100]}
+      showItemsPerPage={true}
+      showTotalInfo={true}
+      maxVisiblePages={7}
+      size="md"
+    />
+  );
+}
+\`\`\`
+
+Pagination component for navigating through large datasets. Built following atomic design principles using Button, Select, and Text atoms.
+
+**Key Features:**
+- 🔢 Smart page number display with ellipsis for large datasets
+- 📊 Items per page selector with customizable options
+- 📈 Total items information display
+- ⌨️ Keyboard navigation support (arrow keys, home/end)
+- 📏 Multiple size variants (sm, md, lg)
+- 📱 Responsive behavior for mobile devices
+- 🌑 Dark mode compatibility
+- ♿ Full accessibility with ARIA labels and roles
+        `,
       },
     },
   },

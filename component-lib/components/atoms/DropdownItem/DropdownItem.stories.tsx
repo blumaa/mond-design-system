@@ -9,10 +9,58 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A single dropdown menu item component. Part of the atomic design system - used internally by the Dropdown component to render individual options.'
+        component: `
+### Quick Start
+\`\`\`tsx
+import { DropdownItem } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const handleSelect = (value: string) => {
+    console.log('Selected:', value);
+  };
+
+  return (
+    <div>
+      <DropdownItem
+        value="item-1"
+        label="Option 1"
+        icon={<span>📄</span>}
+        onSelect={handleSelect}
+      />
+      <DropdownItem
+        value="item-2"  
+        label="Option 2"
+        hasChildren={true}
+        onSelect={handleSelect}
+      />
+      <DropdownItem divider value="divider" label="" />
+      <DropdownItem
+        value="item-3"
+        label="Disabled Option"
+        disabled={true}
+        onSelect={handleSelect}
+      />
+    </div>
+  );
+}
+\`\`\`
+
+A single dropdown menu item component. Part of the atomic design system - used internally by the Dropdown component to render individual options.
+
+**Key Features:**
+- 🎯 Single menu item with click handling
+- 🏷️ Support for labels, icons, and custom content
+- 📁 Nested items with expansion indicators
+- 🚫 Disabled state support
+- 📐 Depth-based indentation for nesting
+- ➖ Divider variant for menu separation
+- 🎨 Dark mode compatibility
+- ♿ Full accessibility with focus management
+        `
       }
     }
   },
+  tags: ['autodocs'],
   argTypes: {
     value: {
       control: 'text',

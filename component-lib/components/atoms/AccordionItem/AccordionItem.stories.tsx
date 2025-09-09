@@ -9,10 +9,48 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A single accordion item that can be expanded and collapsed. Part of the atomic design system - used internally by the Accordion component.'
+        component: `
+### Quick Start
+\`\`\`tsx
+import { AccordionItem } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [expanded, setExpanded] = useState(false);
+  
+  return (
+    <div>
+      <AccordionItem
+        title="Expandable Section"
+        expanded={expanded}
+        onExpandedChange={setExpanded}
+        size="md"
+        variant="bordered"
+      >
+        This is the collapsible content that can contain any React elements,
+        including text, images, forms, or other components.
+      </AccordionItem>
+    </div>
+  );
+}
+\`\`\`
+
+A single accordion item that can be expanded and collapsed. Part of the atomic design system - used internally by the Accordion component.
+
+**Key Features:**
+- 📂 Expandable/collapsible content sections
+- 🎯 Controlled and uncontrolled modes
+- 🎨 Multiple variants (default, bordered, filled)
+- 📏 Multiple size options (sm, md, lg)
+- 🔄 Custom expansion icons
+- 👈👉 Configurable icon position (left/right)
+- 🚫 Disabled state support
+- 🌑 Dark mode compatibility
+        `
       }
     }
   },
+  tags: ['autodocs'],
   argTypes: {
     title: {
       control: 'text',

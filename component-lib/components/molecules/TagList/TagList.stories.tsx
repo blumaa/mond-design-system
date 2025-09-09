@@ -9,10 +9,57 @@ const meta: Meta<typeof TagList> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A collection of Tag components that can be managed as a group. Supports filtering, removal, and custom styling.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { TagList } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const tags = [
+    { id: '1', label: 'React', semantic: 'primary' },
+    { id: '2', label: 'TypeScript', semantic: 'info' },
+    { id: '3', label: 'JavaScript', semantic: 'success' },
+    { id: '4', label: 'Node.js', semantic: 'warning', removable: true },
+  ];
+  
+  const handleRemove = (tagId: string) => {
+    console.log('Removing tag:', tagId);
+    // Handle tag removal logic
+  };
+  
+  const handleTagClick = (tagId: string) => {
+    console.log('Clicked tag:', tagId);
+    // Handle tag click logic
+  };
+  
+  return (
+    <TagList
+      tags={tags}
+      onRemove={handleRemove}
+      onTagClick={handleTagClick}
+      variant="filled"
+      size="md"
+    />
+  );
+}
+\`\`\`
+
+A collection of Tag components that can be managed as a group. Supports filtering, removal, and custom styling with flexible layout options.
+
+**Key Features:**
+- 🏷️ Collection of Tag atoms in organized groups
+- 🎨 Multiple variants (filled, outlined, ghost)
+- 🌈 Semantic color options for categories
+- 📏 Multiple size variants (sm, md, lg)
+- ❌ Removable tags with click handlers
+- 📐 Flexible gap spacing between tags
+- 📊 Overflow management with row limits
+- 🔗 Individual tag click interactions
+        `,
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     tags: {
       description: 'Array of tag data to render',

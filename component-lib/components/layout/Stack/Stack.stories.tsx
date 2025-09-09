@@ -39,6 +39,7 @@ Stack is a layout component that arranges children in a vertical or horizontal l
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     direction: {
       control: { type: 'select' },

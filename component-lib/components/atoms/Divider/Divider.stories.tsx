@@ -8,7 +8,43 @@ const meta: Meta<typeof Divider> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A visual separator component that can be horizontal or vertical, with optional text content. Supports different visual variants and automatic theme adaptation.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Divider } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <div>
+      <p>Content above</p>
+      <Divider />
+      <p>Content below</p>
+      
+      {/* With text */}
+      <Divider>OR</Divider>
+      
+      {/* Vertical divider */}
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span>Left</span>
+        <Divider orientation="vertical" />
+        <span>Right</span>
+      </div>
+    </div>
+  );
+}
+\`\`\`
+
+A visual separator component that can be horizontal or vertical, with optional text content. Supports different visual variants and automatic theme adaptation.
+
+**Key Features:**
+- 📐 Horizontal and vertical orientations
+- 📝 Optional text content in the center
+- 🎨 Three visual variants (default, subtle, strong)
+- 📏 Three sizes (sm, md, lg) for different contexts
+- 🌙 Automatic dark mode adaptation
+- 🎯 Semantic separation for improved content organization
+- ♿ Proper ARIA attributes for accessibility
+`,
       },
     },
   },

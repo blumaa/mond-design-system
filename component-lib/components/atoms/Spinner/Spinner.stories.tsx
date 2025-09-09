@@ -8,7 +8,31 @@ const meta: Meta<typeof Spinner> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A loading indicator component with customizable size and color options. Provides accessible loading states with proper ARIA attributes.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Spinner } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Spinner 
+      size="md" 
+      label="Loading content..." 
+    />
+  );
+}
+\`\`\`
+
+A loading indicator component with customizable size and color options. Provides accessible loading states with proper ARIA attributes.
+
+**Key Features:**
+- 🎯 Five sizes (xs, sm, md, lg, xl) for different contexts
+- 🎨 Custom color support with theme-aware defaults
+- ♿ Built-in accessibility with screen reader labels
+- 🌙 Automatic dark mode support
+- ⚡ Smooth spinning animation
+- 🔄 Perfect for loading states and async operations
+`,
       },
     },
   },

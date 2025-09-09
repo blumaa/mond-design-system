@@ -8,10 +8,51 @@ const meta: Meta<typeof BreadcrumbItem> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A single breadcrumb navigation item that can be used independently or within breadcrumb trails. Supports links, buttons, icons, and various states.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { BreadcrumbItem } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <nav aria-label="Breadcrumb" style={{ display: 'flex', alignItems: 'center' }}>
+      <BreadcrumbItem 
+        href="/home" 
+        showSeparator
+        icon={<span>🏠</span>}
+      >
+        Home
+      </BreadcrumbItem>
+      <BreadcrumbItem 
+        href="/products" 
+        showSeparator
+      >
+        Products
+      </BreadcrumbItem>
+      <BreadcrumbItem current>
+        Current Page
+      </BreadcrumbItem>
+    </nav>
+  );
+}
+\`\`\`
+
+A single breadcrumb navigation item that can be used independently or within breadcrumb trails. Supports links, buttons, icons, and various states.
+
+**Key Features:**
+- 🔗 Link and button variants for navigation
+- 🏠 Icon support for enhanced visual context
+- 📍 Current/active state indication
+- 🚫 Disabled state support
+- ➡️ Customizable separators between items
+- 📏 Multiple size variants (sm, md, lg)
+- 🎨 Dark mode compatibility
+- ♿ Full accessibility with proper ARIA attributes
+        `,
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     children: {
       description: 'The text content of the breadcrumb item',

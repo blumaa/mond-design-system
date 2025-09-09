@@ -10,10 +10,51 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Grid is a CSS Grid layout component with helpful props for common patterns. Built on top of the Box component.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Grid, Box } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <div>
+      {/* Simple equal-width columns */}
+      <Grid columns={3} gap={16}>
+        <Box p={16} bg="#e3f2fd">Item 1</Box>
+        <Box p={16} bg="#e3f2fd">Item 2</Box>
+        <Box p={16} bg="#e3f2fd">Item 3</Box>
+        <Box p={16} bg="#e3f2fd">Item 4</Box>
+        <Box p={16} bg="#e3f2fd">Item 5</Box>
+        <Box p={16} bg="#e3f2fd">Item 6</Box>
+      </Grid>
+
+      {/* Custom template layout */}
+      <Grid templateColumns="200px 1fr 100px" gap={20}>
+        <Box p={16} bg="#ffecb3">Sidebar</Box>
+        <Box p={16} bg="#c8e6c9">Main Content</Box>
+        <Box p={16} bg="#ffcdd2">Actions</Box>
+      </Grid>
+    </div>
+  );
+}
+\`\`\`
+
+Grid is a CSS Grid layout component with helpful props for common patterns. Built on top of the Box component.
+
+**Key Features:**
+- 📊 CSS Grid layout with simplified API
+- 🔢 Easy equal-width columns with \`columns\` prop
+- 🎯 Custom grid templates with \`templateColumns\` and \`templateRows\`
+- 📐 Flexible gap spacing between items
+- 📱 Responsive layout patterns
+- 🎭 Built on Box component for styling consistency
+- 💡 Perfect for dashboards, photo grids, and complex layouts
+- 🔧 Full CSS Grid power with convenient props
+        `,
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     columns: {
       control: { type: 'number', min: 1, max: 12 },

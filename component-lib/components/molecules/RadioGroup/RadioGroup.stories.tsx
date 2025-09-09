@@ -7,6 +7,46 @@ const meta: Meta<typeof RadioGroup> = {
   component: RadioGroup,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { RadioGroup } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [selected, setSelected] = useState('');
+  
+  return (
+    <RadioGroup
+      label="Choose your preference"
+      options={[
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+        { value: 'option3', label: 'Option 3' },
+      ]}
+      value={selected}
+      onChange={setSelected}
+    />
+  );
+}
+\`\`\`
+
+RadioGroup is a molecule component that displays a group of radio button options, allowing users to select a single choice from multiple alternatives. It provides comprehensive state management, validation, and accessibility features.
+
+**Key Features:**
+- 🎯 Single selection from multiple options
+- 📏 Multiple size variants (sm, md, lg)
+- 🔄 Horizontal and vertical orientations
+- ✅ Built-in validation and error states
+- ♿ Full accessibility support with ARIA attributes
+- 🎨 Dark mode compatibility
+- 🔧 Controlled and uncontrolled modes
+- 💡 Helper text and error messaging
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

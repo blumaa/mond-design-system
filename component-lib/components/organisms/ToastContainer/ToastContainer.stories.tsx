@@ -13,28 +13,60 @@ const meta: Meta<typeof ToastContainer> = {
     docs: {
       description: {
         component: `
-A complete toast notification system that displays multiple toast messages with different types, positioning, and animations. 
+### Quick Start
+\`\`\`tsx
+import { ToastContainer, ToastData } from '@mond-design-system/theme';
+import { useState } from 'react';
 
-The ToastContainer follows atomic design principles:
-- **Toast** (molecule): Individual notification component with auto-dismissal, pause-on-hover, and actions
-- **ToastContainer** (organism): Complete notification system with queue management and positioning
+function MyComponent() {
+  const [toasts, setToasts] = useState<ToastData[]>([]);
+  
+  const addToast = (type: 'success' | 'error' | 'warning' | 'info') => {
+    const newToast: ToastData = {
+      id: Date.now().toString(),
+      type,
+      title: 'Notification',
+      message: 'This is a toast message',
+      duration: 5000,
+      dismissible: true,
+    };
+    setToasts(prev => [...prev, newToast]);
+  };
+  
+  const handleDismiss = (toastId: string) => {
+    setToasts(prev => prev.filter(toast => toast.id !== toastId));
+  };
+  
+  return (
+    <>
+      <button onClick={() => addToast('success')}>Show Success</button>
+      <ToastContainer
+        toasts={toasts}
+        position="top-right"
+        maxToasts={5}
+        onDismiss={handleDismiss}
+      />
+    </>
+  );
+}
+\`\`\`
 
-## Features
-- Multiple toast types (success, error, warning, info)
-- Configurable positioning (6 positions)
-- Auto-dismissal with pause on hover
-- Manual dismissal and keyboard navigation
-- Action buttons support
-- Queue management with limits
-- Smooth animations and transitions
-- Full accessibility compliance
+A complete toast notification system that displays multiple toast messages with different types, positioning, and animations.
 
-## Usage
-ToastContainer manages the display and lifecycle of multiple toast notifications.
+**Key Features:**
+- 🎯 Multiple toast types (success, error, warning, info)
+- 📍 Configurable positioning (6 screen positions)
+- ⏱️ Auto-dismissal with pause-on-hover
+- ❌ Manual dismissal and keyboard navigation
+- 📲 Action buttons support
+- 📑 Queue management with display limits
+- 🎨 Smooth enter/exit animations
+- ♿ Full accessibility compliance
         `,
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     position: {
       control: 'select',

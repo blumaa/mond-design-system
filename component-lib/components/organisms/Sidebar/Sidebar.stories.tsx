@@ -8,10 +8,73 @@ const meta: Meta<typeof Sidebar> = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'A flexible navigation sidebar with collapsible sections, mobile support, badges, sub-items, and various customization options.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Sidebar, SidebarSection } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [collapsed, setCollapsed] = useState(false);
+  
+  const sections: SidebarSection[] = [
+    {
+      id: 'main',
+      title: 'Navigation',
+      items: [
+        { 
+          id: 'dashboard', 
+          label: 'Dashboard', 
+          href: '/', 
+          active: true,
+          icon: <span>📊</span>
+        },
+        { 
+          id: 'projects', 
+          label: 'Projects', 
+          href: '/projects',
+          badge: '12',
+          icon: <span>📁</span>
+        },
+        { 
+          id: 'tasks', 
+          label: 'Tasks', 
+          href: '/tasks',
+          badge: '5',
+          icon: <span>✓</span>
+        },
+      ],
+    },
+  ];
+  
+  return (
+    <Sidebar
+      sections={sections}
+      collapsed={collapsed}
+      onCollapseChange={setCollapsed}
+      header={<div>My App</div>}
+      onItemClick={(item) => console.log('Clicked:', item.label)}
+    />
+  );
+}
+\`\`\`
+
+A flexible navigation sidebar with collapsible sections, mobile support, badges, sub-items, and various customization options.
+
+**Key Features:**
+- 📱 Mobile-responsive with overlay support
+- 🔄 Collapsible with smooth animations
+- 📍 Active state management
+- 🏷️ Badge support for notifications
+- 📂 Nested sub-items with indentation
+- 🎨 Dark mode compatibility
+- ⚙️ Customizable header and footer
+- ♿ Full accessibility with keyboard navigation
+        `,
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     sections: {
       description: 'Sidebar sections with navigation items',

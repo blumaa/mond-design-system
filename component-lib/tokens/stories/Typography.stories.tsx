@@ -4,6 +4,66 @@ import { fontFamilies, fontSizes, fontWeights, lineHeights, letterSpacings } fro
 
 const meta: Meta = {
   title: 'Tokens/Typography',
+  parameters: {
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { fontFamilies, fontSizes, fontWeights, lineHeights } from '@mond-design-system/theme/tokens';
+
+function MyComponent() {
+  return (
+    <div>
+      <h1
+        style={{
+          fontFamily: fontFamilies.sans,
+          fontSize: fontSizes['3xl'],
+          fontWeight: fontWeights.bold,
+          lineHeight: lineHeights.tight,
+          marginBottom: '16px',
+        }}
+      >
+        Design System Heading
+      </h1>
+      <p
+        style={{
+          fontFamily: fontFamilies.sans,
+          fontSize: fontSizes.md,
+          fontWeight: fontWeights.normal,
+          lineHeight: lineHeights.normal,
+        }}
+      >
+        This paragraph uses consistent typography tokens for readable, scalable text.
+      </p>
+      <code
+        style={{
+          fontFamily: fontFamilies.mono,
+          fontSize: fontSizes.sm,
+        }}
+      >
+        Code snippet with monospace font
+      </code>
+    </div>
+  );
+}
+\`\`\`
+
+Typography design tokens provide consistent text styling with font families, sizes, weights, line heights, and letter spacing throughout the design system.
+
+**Key Features:**
+- 🔤 Comprehensive type scale with semantic sizing
+- 📄 Font family system (sans, serif, mono)
+- ⚖️ Font weight variations (thin to black)
+- 📏 Line height system for optimal readability
+- 🔠 Letter spacing for improved legibility
+- 📱 Responsive typography scaling
+- 🎯 Semantic naming conventions
+- 🖨️ CSS-ready typography properties
+        `,
+      },
+    },
+  },
 };
 
 export default meta;

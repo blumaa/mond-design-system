@@ -7,6 +7,46 @@ const meta: Meta<typeof CheckboxGroup> = {
   component: CheckboxGroup,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { CheckboxGroup } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [selected, setSelected] = useState(['option1']);
+  
+  return (
+    <CheckboxGroup
+      label="Select your preferences"
+      options={[
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+        { value: 'option3', label: 'Option 3' },
+      ]}
+      value={selected}
+      onChange={setSelected}
+    />
+  );
+}
+\`\`\`
+
+CheckboxGroup is a molecule component that displays a group of checkbox options, allowing users to select multiple choices from a list of alternatives. It provides comprehensive state management, validation, and accessibility features.
+
+**Key Features:**
+- ☑️ Multiple selection from options list
+- 📏 Multiple size variants (sm, md, lg)
+- 🔄 Horizontal and vertical orientations
+- ✅ Built-in validation and error states
+- ♿ Full accessibility support with ARIA attributes
+- 🎨 Dark mode compatibility
+- 🔧 Controlled and uncontrolled modes
+- 💡 Helper text and error messaging
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
