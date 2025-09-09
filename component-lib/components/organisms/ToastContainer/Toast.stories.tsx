@@ -320,7 +320,13 @@ export const AnimationStates: Story = {
 
 export const InteractiveDemo: Story = {
   render: () => {
-    const [toasts, setToasts] = useState<any[]>([]);
+    const [toasts, setToasts] = useState<Array<{
+      id: string;
+      type: 'success' | 'error' | 'warning' | 'info';
+      title: string;
+      message: string;
+      animationState: 'entering' | 'visible' | 'exiting';
+    }>>([]);
     
     const addToast = (type: 'success' | 'error' | 'warning' | 'info') => {
       const messages = {
