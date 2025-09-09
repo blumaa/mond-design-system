@@ -3,6 +3,100 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useGlobals } from 'storybook/internal/preview-api';
 import { Accordion, AccordionItem } from './Accordion';
 
+const meta: Meta<typeof Accordion> = {
+  title: 'Organisms/Accordion',
+  component: Accordion,
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Accordion } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const items = [
+    {
+      id: 'faq1',
+      title: 'What is React?',
+      content: 'React is a JavaScript library for building user interfaces.'
+    },
+    {
+      id: 'faq2', 
+      title: 'How do I get started?',
+      content: 'Install React and start building components!'
+    }
+  ];
+  
+  return (
+    <Accordion 
+      items={items}
+      allowMultiple={false}
+      size="md"
+    />
+  );
+}
+\`\`\`
+
+A collapsible accordion component for organizing content in expandable sections. Perfect for FAQs, navigation menus, and content-heavy interfaces.
+
+**Key Features:**
+- 📋 Multiple expandable/collapsible sections
+- 🔄 Single or multiple sections open simultaneously
+- 📏 Three sizes (sm, md, lg) for different contexts
+- 📝 Rich content support (text, HTML, React components)
+- ⌨️ Full keyboard navigation (arrow keys, enter, space)
+- ♿ ARIA compliant with proper expansion semantics
+- 🌙 Dark mode support with proper contrast
+`,
+      },
+    },
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['default', 'bordered', 'filled'],
+    },
+    size: {
+      control: 'select', 
+      options: ['sm', 'md', 'lg'],
+    },
+    allowToggleOff: {
+      control: 'boolean',
+    },
+    isDarkMode: {
+      control: 'boolean',
+    },
+  },
+  decorators: [
+    (Story, context) => {
+      const [globals] = useGlobals();
+      const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
+      
+      const storyArgs = {
+        ...context.args,
+        isDarkMode: isDark,
+      };
+      
+      return (
+        <div style={{
+          padding: '2rem',
+          backgroundColor: isDark ? '#27374D' : '#F2F3F4', 
+          borderRadius: '8px',
+          minHeight: '400px',
+        }}>
+          <Story args={storyArgs} />
+        </div>
+      );
+    },
+  ],
+};
+
+export default meta;
+type Story = StoryObj<typeof Accordion>;
+
 // Sample data for stories
 const basicItems: AccordionItem[] = [
   {
@@ -115,83 +209,6 @@ const itemsWithDisabled: AccordionItem[] = [
   },
 ];
 
-const meta: Meta<typeof Accordion> = {
-  title: 'Organisms/Accordion',
-  component: Accordion,
-  parameters: {
-    layout: 'padded',
-  },
-  tags: ['autodocs'],
-  argTypes: {
-    items: {
-      control: false,
-      description: 'Array of accordion items to display',
-    },
-    mode: {
-      control: { type: 'select' },
-      options: ['single', 'multiple'],
-      description: 'Determines if only one or multiple items can be expanded',
-    },
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'bordered', 'filled'],
-      description: 'Visual styling variant',
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg'],
-      description: 'Size variant affecting padding and typography',
-    },
-    iconPosition: {
-      control: { type: 'select' },
-      options: ['left', 'right'],
-      description: 'Position of expand/collapse icon',
-    },
-    allowToggleOff: {
-      control: { type: 'boolean' },
-      description: 'Allow all sections to be closed in single mode',
-    },
-    animated: {
-      control: { type: 'boolean' },
-      description: 'Enable/disable expand/collapse animations',
-    },
-    expandedIds: {
-      control: false,
-      description: 'Controlled expanded state (array of item IDs)',
-    },
-    onExpandedChange: {
-      action: 'expanded-changed',
-      description: 'Handler for controlled mode',
-    },
-  },
-  decorators: [
-    (Story, context) => {
-      const [globals] = useGlobals();
-      const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
-      
-      const storyArgs = {
-        ...context.args,
-        isDarkMode: isDark,
-      };
-      
-      return (
-        <div
-          style={{
-            padding: '2rem',
-            backgroundColor: isDark ? '#1a1a1a' : '#ffffff',
-            minHeight: '400px',
-            borderRadius: '8px',
-          }}
-        >
-          <Story args={storyArgs} />
-        </div>
-      );
-    },
-  ],
-};
-
-export default meta;
-type Story = StoryObj<typeof Accordion>;
 
 // Basic Stories
 export const Default: Story = {

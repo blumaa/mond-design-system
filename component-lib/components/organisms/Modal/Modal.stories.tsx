@@ -7,6 +7,53 @@ const meta: Meta<typeof Modal> = {
   component: Modal,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Modal, ModalHeader, ModalBody, ModalFooter } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)}>
+        Open Modal
+      </button>
+      
+      <Modal 
+        isOpen={isOpen} 
+        onClose={() => setIsOpen(false)}
+        title="My Modal"
+        size="md"
+      >
+        <ModalBody>
+          <p>Your content here</p>
+        </ModalBody>
+        <ModalFooter>
+          <button onClick={() => setIsOpen(false)}>Close</button>
+        </ModalFooter>
+      </Modal>
+    </>
+  );
+}
+\`\`\`
+
+A flexible modal component for dialogs, confirmations, forms, and content overlays. Built with full accessibility support and smooth animations.
+
+**Key Features:**
+- 📏 Multiple sizes (sm, md, lg, xl, full)
+- 🎨 Customizable with ModalHeader, ModalBody, ModalFooter
+- ♿ Full keyboard navigation and focus management
+- 🚫 Configurable close behaviors (overlay click, escape key)
+- 🌙 Dark mode support
+- 📱 Responsive design with mobile optimization
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

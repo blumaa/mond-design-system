@@ -8,7 +8,32 @@ const meta: Meta<typeof Heading> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A flexible Heading component for creating semantic headings (h1-h6) with consistent typography hierarchy and styling options.'
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Heading } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Heading level={1} size="3xl">
+      Your Page Title
+    </Heading>
+  );
+}
+\`\`\`
+
+A flexible Heading component for creating semantic headings (h1-h6) with consistent typography hierarchy and styling options. Maintains proper HTML semantics while allowing visual customization.
+
+**Key Features:**
+- 🏷️ Six semantic levels (h1-h6) for proper document structure
+- 📏 Ten size variants (xs to 6xl) for visual hierarchy
+- 🎨 Semantic color variants (primary, secondary, tertiary, inverse)
+- 🔤 Complete font weight support (light to black)
+- 📐 Text alignment options (left, center, right)
+- ✂️ Text truncation with ellipsis
+- ♿ Full accessibility and screen reader support
+- 🌙 Dark mode support
+`
       }
     }
   },

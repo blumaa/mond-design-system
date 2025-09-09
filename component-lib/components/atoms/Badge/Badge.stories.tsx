@@ -6,6 +6,34 @@ const meta: Meta<typeof Badge> = {
   component: Badge,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Badge } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Badge variant="primary" size="md">
+      New
+    </Badge>
+  );
+}
+\`\`\`
+
+A versatile badge component for labels, status indicators, and notifications. Perfect for highlighting important information, showing counts, or indicating states.
+
+**Key Features:**
+- 🎨 Six variants (default, primary, secondary, success, warning, error)
+- 📏 Three sizes (sm, md, lg)
+- 🔢 Ideal for notification counts and status indicators
+- ✨ Icon support for enhanced visual meaning
+- ♿ Full accessibility support
+- 🌙 Dark mode support
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

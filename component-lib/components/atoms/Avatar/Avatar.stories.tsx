@@ -6,6 +6,37 @@ const meta: Meta<typeof Avatar> = {
   component: Avatar,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Avatar } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Avatar
+      src="https://example.com/profile.jpg"
+      alt="User profile"
+      fallback="John Doe"
+      size="md"
+    />
+  );
+}
+\`\`\`
+
+A flexible avatar component that displays user profile images with automatic fallback to initials when images fail to load. Perfect for user profiles, comment sections, and team member displays.
+
+**Key Features:**
+- 📏 Six sizes (xs, sm, md, lg, xl, 2xl)
+- 🖼️ Image support with automatic fallback handling
+- 🔤 Smart initial generation from names
+- 🎨 Custom fallback content support (emojis, icons)
+- ♿ Full accessibility with proper alt text
+- 🌙 Dark mode support
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

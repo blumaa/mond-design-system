@@ -6,6 +6,43 @@ const meta: Meta<typeof Textarea> = {
   component: Textarea,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Textarea } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [value, setValue] = useState('');
+  
+  return (
+    <Textarea
+      label="Message"
+      placeholder="Enter your message..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      rows={4}
+    />
+  );
+}
+\`\`\`
+
+A flexible textarea component for multi-line text input. Perfect for comments, descriptions, feedback forms, and any content that requires multiple lines.
+
+**Key Features:**
+- 📝 Multi-line text input with auto-resize capabilities
+- 📏 Three sizes (sm, md, lg) for different contexts
+- 📐 Customizable rows for height control
+- 📋 Built-in label, helper text, and placeholder support
+- ⚠️ Success and error state handling for validation
+- ♿ Full keyboard navigation and accessibility
+- 🎨 Consistent styling with other form components
+- 🌙 Dark mode support
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

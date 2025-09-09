@@ -7,6 +7,49 @@ const meta: Meta<typeof Select> = {
   component: Select,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Select } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [value, setValue] = useState('');
+  
+  const options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+  ];
+  
+  return (
+    <Select
+      label="Choose an option"
+      options={options}
+      value={value}
+      onChange={setValue}
+      placeholder="Select..."
+    />
+  );
+}
+\`\`\`
+
+A dropdown select component for choosing from predefined options. Perfect for forms, filters, and any interface requiring selection from a list of choices.
+
+**Key Features:**
+- 📋 Clean dropdown interface with search/filter capability
+- 📏 Three sizes (sm, md, lg) for different contexts
+- 📝 Built-in label, helper text, and placeholder support
+- ⚠️ Success and error state handling
+- 🚫 Individual option disable support
+- ♿ Full keyboard navigation and ARIA support
+- 🎨 Custom styling for options and states
+- 🌙 Dark mode support
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

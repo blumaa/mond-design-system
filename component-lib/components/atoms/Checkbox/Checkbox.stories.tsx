@@ -7,6 +7,39 @@ const meta: Meta<typeof Checkbox> = {
   component: Checkbox,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Checkbox } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [checked, setChecked] = useState(false);
+  
+  return (
+    <Checkbox
+      label="Accept terms and conditions"
+      checked={checked}
+      onChange={(e) => setChecked(e.target.checked)}
+    />
+  );
+}
+\`\`\`
+
+A versatile checkbox component with support for labels, helper text, error states, and indeterminate status. Perfect for forms, lists, and multi-select interfaces.
+
+**Key Features:**
+- 📏 Three sizes (sm, md, lg)
+- 📝 Built-in label and helper text support
+- ⚠️ Error state handling with validation messages
+- ➖ Indeterminate state for partial selections
+- ♿ Full keyboard navigation and ARIA support
+- 🌙 Dark mode support
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

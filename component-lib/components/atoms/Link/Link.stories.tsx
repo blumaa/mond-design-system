@@ -26,6 +26,35 @@ const meta: Meta<typeof Link> = {
   component: Link,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Link } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Link href="https://example.com" size="medium">
+      Visit our website
+    </Link>
+  );
+}
+\`\`\`
+
+A semantic link component that maintains consistent styling and accessibility across your application. Supports both internal and external links with proper focus management.
+
+**Key Features:**
+- 🔗 Semantic HTML anchor elements with proper attributes
+- 📏 Three sizes (small, medium, large) for different contexts
+- ✨ Icon support for enhanced visual meaning
+- 🎯 Icon-only variant for compact interfaces
+- ♿ Full keyboard navigation and accessibility
+- 🌙 Automatic color adaptation for dark mode
+- 🎨 Hover and focus state management
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

@@ -7,6 +7,35 @@ const meta: Meta<typeof Alert> = {
   component: Alert,
   parameters: {
     layout: 'padded',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Alert } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Alert variant="success" dismissible>
+      Your changes have been saved successfully!
+    </Alert>
+  );
+}
+\`\`\`
+
+A versatile alert component for displaying important messages, notifications, and system feedback. Essential for user communication and status updates.
+
+**Key Features:**
+- 🚨 Four variants (info, success, warning, error) for different message types
+- ❌ Optional dismissible functionality with close button
+- 🎨 Semantic colors and icons for instant recognition
+- 📝 Rich content support (text, links, buttons)
+- ♿ Full accessibility with ARIA live regions
+- 🌙 Dark mode support with proper contrast
+- 🎯 Auto-focus management for screen readers
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

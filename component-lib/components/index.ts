@@ -57,3 +57,4 @@ export * from './organisms/ProgressStepper';
 export * from './organisms/ToastContainer';
 export * from './organisms/Carousel';
 export * from './organisms/Sidebar';
+export * from './organisms/BottomSheet';

@@ -6,6 +6,35 @@ const meta: Meta<typeof Tooltip> = {
   component: Tooltip,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Tooltip } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Tooltip content="This explains what the button does" placement="top">
+      <button>Hover me</button>
+    </Tooltip>
+  );
+}
+\`\`\`
+
+A flexible tooltip component that provides contextual information on hover, focus, or click. Perfect for explaining UI elements, showing additional details, or providing helpful hints.
+
+**Key Features:**
+- 🎯 Four placement options (top, bottom, left, right)
+- 🖱️ Multiple triggers (hover, focus, click)
+- ⏱️ Configurable show/hide delays
+- 📝 Rich content support (text, HTML, React components)  
+- ♿ Full keyboard navigation and ARIA support
+- 🚫 Disable functionality when needed
+- 🌙 Dark mode support with proper contrast
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

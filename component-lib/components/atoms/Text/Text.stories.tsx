@@ -8,7 +8,32 @@ const meta: Meta<typeof Text> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A flexible Text component for displaying text content with semantic variants, typography options, and accessibility features.'
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Text } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Text variant="body-md" semantic="primary">
+      Your text content here
+    </Text>
+  );
+}
+\`\`\`
+
+A flexible Text component for displaying text content with semantic variants, typography options, and accessibility features. Perfect for body text, captions, labels, and any text-based content.
+
+**Key Features:**
+- 📝 Five text variants (body-lg, body-md, body-sm, caption, overline)
+- 🎨 Semantic color variants for consistent theming
+- 🔤 Complete font weight support (thin to black)
+- 📐 Text alignment options (left, center, right, justify)
+- ✂️ Text truncation with ellipsis
+- 🏷️ Flexible HTML element rendering (span, p, div, label, etc.)
+- ♿ Full accessibility support
+- 🌙 Dark mode support
+`
       }
     }
   },

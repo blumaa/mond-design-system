@@ -8,6 +8,36 @@ const meta: Meta<typeof Button> = {
   component: Button,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Button } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Button 
+      variant="primary" 
+      onClick={() => console.log('clicked')}
+    >
+      Click me
+    </Button>
+  );
+}
+\`\`\`
+
+A versatile button component with multiple variants, sizes, and styling options. Supports icons, loading states, and full accessibility.
+
+**Key Features:**
+- 🎨 Multiple variants (primary, outline, ghost)
+- 📏 Three sizes (sm, md, lg) 
+- 🔘 Rounded and default corner styles
+- ♿ Full keyboard navigation and ARIA support
+- ⚡ Click handlers and form integration
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

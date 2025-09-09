@@ -9,7 +9,38 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A flexible layout primitive that accepts style props and can render as any HTML element. Perfect for creating layouts without writing custom CSS.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Box } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Box 
+      p={16} 
+      bg="surface.primary" 
+      borderRadius={8}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <span>Hello, World!</span>
+    </Box>
+  );
+}
+\`\`\`
+
+A flexible layout primitive that accepts style props and can render as any HTML element. Perfect for creating layouts without writing custom CSS - the foundation of your design system.
+
+**Key Features:**
+- 🎨 Style props for all CSS properties (margin, padding, colors, typography)
+- 🏷️ Renders as any HTML element (div, section, article, span, etc.)
+- 📐 Full flexbox and grid layout support
+- 🎯 Positioning utilities (absolute, relative, fixed, sticky)
+- 🌙 Semantic color tokens with dark mode support
+- ♿ Maintains semantic HTML for accessibility
+- 🚀 Zero CSS files needed - all styling via props
+`,
       },
     },
   },

@@ -10,7 +10,32 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Stack is a layout component that arranges children in a vertical or horizontal line with consistent spacing. Built on top of the Box component.',
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Stack } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Stack direction="vertical" spacing={16}>
+      <div>Item 1</div>
+      <div>Item 2</div>
+      <div>Item 3</div>
+    </Stack>
+  );
+}
+\`\`\`
+
+Stack is a layout component that arranges children in a vertical or horizontal line with consistent spacing. Built on top of the Box component, it provides powerful alignment and justification options.
+
+**Key Features:**
+- 📐 Vertical and horizontal layout directions
+- 📏 Consistent spacing between items (pixel-based)
+- 🎯 Flexible alignment options (start, center, end, stretch)
+- ⚖️ Justification control (start, center, end, between, around, evenly)
+- 🔄 Perfect for responsive layouts
+- 🎨 Inherits all Box component styling capabilities
+`,
       },
     },
   },

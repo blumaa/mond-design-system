@@ -7,6 +7,40 @@ const meta: Meta<typeof Switch> = {
   component: Switch,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Switch } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [enabled, setEnabled] = useState(false);
+  
+  return (
+    <Switch
+      label="Enable notifications"
+      checked={enabled}
+      onChange={(e) => setEnabled(e.target.checked)}
+    />
+  );
+}
+\`\`\`
+
+A smooth toggle switch component for binary choices and settings. Perfect for enabling/disabling features, preferences, and boolean states.
+
+**Key Features:**
+- 🔄 Smooth toggle animation with visual feedback
+- 📏 Three sizes (sm, md, lg) for different contexts
+- 📝 Built-in label and helper text support
+- ⚠️ Error state handling for validation
+- ♿ Full keyboard navigation and ARIA support
+- 🎨 Accessible color contrast in all states
+- 🌙 Dark mode support
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

@@ -7,6 +7,43 @@ const meta: Meta<typeof Tabs> = {
   component: Tabs,
   parameters: {
     layout: 'padded',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Tabs } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const tabs = [
+    { id: 'tab1', label: 'Overview', content: <div>Overview content</div> },
+    { id: 'tab2', label: 'Details', content: <div>Details content</div> },
+  ];
+  
+  return (
+    <Tabs
+      tabs={tabs}
+      defaultValue="tab1"
+      variant="line"
+      size="md"
+    />
+  );
+}
+\`\`\`
+
+A flexible tabs component for organizing content into multiple panels. Perfect for dashboards, settings pages, and any interface requiring content segmentation.
+
+**Key Features:**
+- 📋 Multiple tab items with flexible content
+- 🎨 Two variants (line, card) for different visual styles
+- 📏 Three sizes (sm, md, lg) for different contexts
+- 📝 Rich content support (text, HTML, React components)
+- ⌨️ Full keyboard navigation (arrow keys, tab, enter)
+- ♿ ARIA compliant with proper tab semantics
+- 🌙 Dark mode support
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

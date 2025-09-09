@@ -52,7 +52,32 @@ const meta: Meta<typeof Icon> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A flexible Icon component that renders SVG icons with consistent sizing and accessibility features.'
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Icon } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <Icon size="md" label="Search" color="currentColor">
+      <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" />
+      <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
+    </Icon>
+  );
+}
+\`\`\`
+
+A flexible Icon component that renders SVG icons with consistent sizing and accessibility features. Perfect for buttons, navigation, status indicators, and decorative elements.
+
+**Key Features:**
+- 📐 Six sizes (xs, sm, md, lg, xl, 2xl) for perfect scaling
+- 🎨 Inherits text color by default, customizable with any color
+- ♿ Full accessibility with screen reader support
+- 🏷️ Decorative mode to hide from assistive technology
+- 📝 Flexible content - accepts any SVG paths or elements
+- 🎯 Proper ARIA labeling for semantic icons
+- 🌙 Works seamlessly in light and dark themes
+`
       }
     }
   },

@@ -8,6 +8,39 @@ const meta: Meta<typeof Input> = {
   component: Input,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Input } from '@mond-design-system/theme';
+
+function MyComponent() {
+  const [value, setValue] = useState('');
+  
+  return (
+    <Input
+      label="Email"
+      placeholder="Enter your email"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+}
+\`\`\`
+
+A flexible input component with built-in validation states, helper text, and full accessibility support. Perfect for forms, search fields, and data entry.
+
+**Key Features:**
+- 🎯 Multiple variants (default, error, success)
+- 📏 Three sizes (sm, md, lg)
+- 📝 Built-in label and helper text support
+- ⚠️ Error and success state handling
+- ♿ Full keyboard navigation and ARIA support
+- 🔒 Password field support with type="password"
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

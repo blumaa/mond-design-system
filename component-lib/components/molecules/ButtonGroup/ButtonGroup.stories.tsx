@@ -7,6 +7,37 @@ const meta: Meta<typeof ButtonGroup> = {
   component: ButtonGroup,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { ButtonGroup, Button } from '@mond-design-system/theme';
+
+function MyComponent() {
+  return (
+    <ButtonGroup variant="primary" size="md" orientation="horizontal">
+      <Button>First</Button>
+      <Button>Second</Button>
+      <Button>Third</Button>
+    </ButtonGroup>
+  );
+}
+\`\`\`
+
+A button group component for organizing related actions into a cohesive unit. Perfect for toolbar actions, pagination controls, and segmented controls.
+
+**Key Features:**
+- 📐 Horizontal and vertical orientation options
+- 🎨 Consistent styling across all variants (primary, outline, ghost)
+- 📏 Unified sizing (sm, md, lg) for all grouped buttons
+- 🔗 Seamless button connections with shared borders
+- ⚖️ Flexible alignment options (left, center, right)
+- ♿ Maintains individual button accessibility
+- 🌙 Dark mode support with proper contrast
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

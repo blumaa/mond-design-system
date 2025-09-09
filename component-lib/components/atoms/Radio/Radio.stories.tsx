@@ -7,6 +7,51 @@ const meta: Meta<typeof Radio> = {
   component: Radio,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+### Quick Start
+\`\`\`tsx
+import { Radio } from '@mond-design-system/theme';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [selected, setSelected] = useState('option1');
+  
+  return (
+    <div>
+      <Radio 
+        label="Option 1"
+        name="choice"
+        value="option1"
+        checked={selected === 'option1'}
+        onChange={(e) => setSelected(e.target.value)}
+      />
+      <Radio 
+        label="Option 2"
+        name="choice"
+        value="option2"
+        checked={selected === 'option2'}
+        onChange={(e) => setSelected(e.target.value)}
+      />
+    </div>
+  );
+}
+\`\`\`
+
+A radio button component for single-choice selections within a group. Essential for forms, surveys, and any interface requiring mutually exclusive options.
+
+**Key Features:**
+- ⚪ Classic radio button styling with smooth transitions
+- 📏 Three sizes (sm, md, lg) for different contexts
+- 📝 Built-in label and helper text support
+- ⚠️ Error state handling for validation
+- ♿ Full keyboard navigation and ARIA support
+- 👥 Proper grouping behavior with name attribute
+- 🌙 Dark mode support
+`,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
