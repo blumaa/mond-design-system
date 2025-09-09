@@ -1,3 +1,9 @@
+## 1.7.0 (2025-09-09)
+
+* fix tests ([84c3318](https://github.com/blumaa/mond-design-system/commit/84c3318))
+* feat: add BottomSheet component and enhance Storybook documentation with Quick Start code snippets ([0b07d19](https://github.com/blumaa/mond-design-system/commit/0b07d19))
+* feat: docs consistency and carousel ([694cee1](https://github.com/blumaa/mond-design-system/commit/694cee1))
+
 ## 1.6.0 (2025-09-09)
 
 * feat: add AccordionItem, BreadcrumbItem, AvatarGroup, SearchForm, TagList, Carousel, Sidebar compone ([dd85ed2](https://github.com/blumaa/mond-design-system/commit/dd85ed2))
