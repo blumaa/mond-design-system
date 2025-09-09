@@ -1,3 +1,8 @@
+## 1.6.0 (2025-09-09)
+
+* feat: add AccordionItem, BreadcrumbItem, AvatarGroup, SearchForm, TagList, Carousel, Sidebar compone ([dd85ed2](https://github.com/blumaa/mond-design-system/commit/dd85ed2))
+* feat: complete atomic design restructure with Storybook 9.x compatibility ([8f93c4b](https://github.com/blumaa/mond-design-system/commit/8f93c4b))
+
 ## 1.5.0 (2025-09-08)
 
 * docs: update plan with Phase 4 progress ([bcca7d0](https://github.com/blumaa/mond-design-system/commit/bcca7d0))
