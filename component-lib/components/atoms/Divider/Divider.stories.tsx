@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Divider } from './Divider';
+import { Button } from '../Button/Button';
 
 const meta: Meta<typeof Divider> = {
   title: 'Atoms/Divider',
@@ -259,17 +260,9 @@ export const VerticalInForms: Story = {
       maxWidth: '400px'
     }}>
       <div style={{ flex: 1, textAlign: 'center' }}>
-        <button style={{
-          width: '100%',
-          padding: '12px',
-          backgroundColor: '#3b82f6',
-          color: 'white',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: 'pointer'
-        }}>
+        <Button style={{ width: '100%' }}>
           Sign In
-        </button>
+        </Button>
       </div>
       
       <Divider 
@@ -279,17 +272,9 @@ export const VerticalInForms: Story = {
       />
       
       <div style={{ flex: 1, textAlign: 'center' }}>
-        <button style={{
-          width: '100%',
-          padding: '12px',
-          backgroundColor: 'transparent',
-          color: '#374151',
-          border: '1px solid #d1d5db',
-          borderRadius: '6px',
-          cursor: 'pointer'
-        }}>
+        <Button variant="outline" style={{ width: '100%' }}>
           Register
-        </button>
+        </Button>
       </div>
     </div>
   ),

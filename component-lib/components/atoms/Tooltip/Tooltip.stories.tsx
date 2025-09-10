@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tooltip } from './Tooltip';
+import { Button } from '../Button/Button';
 
 const meta: Meta<typeof Tooltip> = {
   title: 'Atoms/Tooltip',
@@ -11,12 +12,12 @@ const meta: Meta<typeof Tooltip> = {
         component: `
 ### Quick Start
 \`\`\`tsx
-import { Tooltip } from '@mond-design-system/theme';
+import { Tooltip, Button } from '@mond-design-system/theme';
 
 function MyComponent() {
   return (
     <Tooltip content="This explains what the button does" placement="top">
-      <button>Hover me</button>
+      <Button>Hover me</Button>
     </Tooltip>
   );
 }
@@ -67,7 +68,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     content: 'This is a tooltip',
-    children: <button style={{ padding: '8px 16px' }}>Hover me</button>,
+    children: <Button>Hover me</Button>,
   },
 };
 
@@ -83,21 +84,21 @@ export const Placements: Story = {
     }}>
       <div></div>
       <Tooltip content="Top tooltip" placement="top">
-        <button style={{ padding: '8px 16px' }}>Top</button>
+        <Button>Top</Button>
       </Tooltip>
       <div></div>
       
       <Tooltip content="Left tooltip" placement="left">
-        <button style={{ padding: '8px 16px' }}>Left</button>
+        <Button>Left</Button>
       </Tooltip>
       <div></div>
       <Tooltip content="Right tooltip" placement="right">
-        <button style={{ padding: '8px 16px' }}>Right</button>
+        <Button>Right</Button>
       </Tooltip>
       
       <div></div>
       <Tooltip content="Bottom tooltip" placement="bottom">
-        <button style={{ padding: '8px 16px' }}>Bottom</button>
+        <Button>Bottom</Button>
       </Tooltip>
       <div></div>
     </div>
@@ -108,15 +109,15 @@ export const Triggers: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', padding: '2rem' }}>
       <Tooltip content="Hover to see this tooltip" trigger="hover">
-        <button style={{ padding: '8px 16px' }}>Hover</button>
+        <Button>Hover</Button>
       </Tooltip>
       
       <Tooltip content="Focus to see this tooltip" trigger="focus">
-        <button style={{ padding: '8px 16px' }}>Focus</button>
+        <Button>Focus</Button>
       </Tooltip>
       
       <Tooltip content="Click to toggle this tooltip" trigger="click">
-        <button style={{ padding: '8px 16px' }}>Click</button>
+        <Button>Click</Button>
       </Tooltip>
     </div>
   ),
@@ -126,51 +127,21 @@ export const WithIcons: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '2rem' }}>
       <Tooltip content="This is helpful information">
-        <button style={{ 
-          width: '32px', 
-          height: '32px', 
-          borderRadius: '50%', 
-          border: '1px solid #cbd5e1',
-          backgroundColor: '#f8fafc',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer'
-        }}>
+        <Button variant="outline" size="sm" style={{ borderRadius: '50%', width: '32px', height: '32px', padding: '4px' }}>
           ℹ️
-        </button>
+        </Button>
       </Tooltip>
       
       <Tooltip content="Warning: This action cannot be undone">
-        <button style={{ 
-          width: '32px', 
-          height: '32px', 
-          borderRadius: '50%', 
-          border: '1px solid #fbbf24',
-          backgroundColor: '#fef3c7',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer'
-        }}>
+        <Button variant="outline" size="sm" style={{ borderRadius: '50%', width: '32px', height: '32px', padding: '4px' }}>
           ⚠️
-        </button>
+        </Button>
       </Tooltip>
       
       <Tooltip content="Error: Something went wrong">
-        <button style={{ 
-          width: '32px', 
-          height: '32px', 
-          borderRadius: '50%', 
-          border: '1px solid #f87171',
-          backgroundColor: '#fee2e2',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer'
-        }}>
+        <Button variant="outline" size="sm" style={{ borderRadius: '50%', width: '32px', height: '32px', padding: '4px' }}>
           ❌
-        </button>
+        </Button>
       </Tooltip>
     </div>
   ),
@@ -224,11 +195,11 @@ export const Disabled: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', padding: '2rem' }}>
       <Tooltip content="This tooltip works" disabled={false}>
-        <button style={{ padding: '8px 16px' }}>Enabled</button>
+        <Button>Enabled</Button>
       </Tooltip>
       
       <Tooltip content="This tooltip is disabled" disabled={true}>
-        <button style={{ padding: '8px 16px', opacity: 0.5 }}>Disabled</button>
+        <Button disabled>Disabled</Button>
       </Tooltip>
     </div>
   ),
@@ -238,15 +209,15 @@ export const DelayDemo: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', padding: '2rem' }}>
       <Tooltip content="No delay" delay={0}>
-        <button style={{ padding: '8px 16px' }}>No delay</button>
+        <Button>No delay</Button>
       </Tooltip>
       
       <Tooltip content="Short delay (300ms)" delay={300}>
-        <button style={{ padding: '8px 16px' }}>300ms delay</button>
+        <Button>300ms delay</Button>
       </Tooltip>
       
       <Tooltip content="Long delay (800ms)" delay={800}>
-        <button style={{ padding: '8px 16px' }}>800ms delay</button>
+        <Button>800ms delay</Button>
       </Tooltip>
     </div>
   ),
@@ -309,7 +280,7 @@ export const WithFormElements: Story = {
 export const DarkMode: Story = {
   args: {
     content: 'Dark mode tooltip',
-    children: <button style={{ padding: '8px 16px' }}>Hover me</button>,
+    children: <Button>Hover me</Button>,
   },
   parameters: {
     theme: 'dark',

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs, TabItem, TabsList, TabsTrigger, TabsContent } from './Tabs';
+import { Checkbox } from '../../atoms/Checkbox/Checkbox';
+import { Button } from '../../atoms/Button/Button';
 import { useState } from 'react';
 
 const meta: Meta<typeof Tabs> = {
@@ -101,14 +103,8 @@ const basicTabs: TabItem[] = [
         <h3>Settings</h3>
         <p>Configure your preferences and account settings.</p>
         <div style={{ marginTop: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            <input type="checkbox" style={{ marginRight: '0.5rem' }} />
-            Enable notifications
-          </label>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            <input type="checkbox" style={{ marginRight: '0.5rem' }} defaultChecked />
-            Auto-save changes
-          </label>
+          <Checkbox label="Enable notifications" style={{ marginBottom: '0.5rem' }} />
+          <Checkbox label="Auto-save changes" defaultChecked style={{ marginBottom: '0.5rem' }} />
         </div>
       </div>
     ),
@@ -287,24 +283,27 @@ export const ControlledTabs: Story = {
     return (
       <div>
         <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
-          <button 
+          <Button 
+            size="sm"
+            variant="outline"
             onClick={() => setActiveTab('tab1')}
-            style={{ padding: '4px 8px', fontSize: '0.875rem' }}
           >
             External: Set Tab 1
-          </button>
-          <button 
+          </Button>
+          <Button 
+            size="sm"
+            variant="outline"
             onClick={() => setActiveTab('tab2')}
-            style={{ padding: '4px 8px', fontSize: '0.875rem' }}
           >
             External: Set Tab 2
-          </button>
-          <button 
+          </Button>
+          <Button 
+            size="sm"
+            variant="outline"
             onClick={() => setActiveTab('tab3')}
-            style={{ padding: '4px 8px', fontSize: '0.875rem' }}
           >
             External: Set Tab 3
-          </button>
+          </Button>
         </div>
         
         <Tabs 

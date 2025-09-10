@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Sidebar, SidebarSection } from './Sidebar';
+import { Button } from '../../atoms/Button/Button';
 
 const meta: Meta<typeof Sidebar> = {
   title: 'Organisms/Sidebar',
@@ -308,9 +309,9 @@ export const WithAdvancedFeatures: Story = {
     footer: (
       <div style={{ textAlign: 'center' }}>
         <div style={{ fontSize: '12px', opacity: 0.7, marginBottom: '8px' }}>Version 1.4.0</div>
-        <button style={{ fontSize: '12px', padding: '4px 8px', border: '1px solid #ddd', borderRadius: '4px', background: 'transparent' }}>
+        <Button variant="outline" size="sm">
           Sign Out
-        </button>
+        </Button>
       </div>
     ),
   },

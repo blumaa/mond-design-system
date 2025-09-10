@@ -58,3 +58,7 @@ export * from './organisms/ToastContainer';
 export * from './organisms/Carousel';
 export * from './organisms/Sidebar';
 export * from './organisms/BottomSheet';
+export * from './organisms/SearchResults';
+
+// Templates
+export * from './templates/Dashboard';

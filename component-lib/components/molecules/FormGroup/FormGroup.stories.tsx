@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { FormGroup } from './FormGroup';
 import { FormField } from '../FormField/FormField';
+import { Input } from '../../atoms/Input/Input';
+import { Select } from '../../atoms/Select/Select';
+import { Textarea } from '../../atoms/Textarea/Textarea';
 import { useState } from 'react';
 
 const meta: Meta<typeof FormGroup> = {
@@ -13,7 +16,7 @@ const meta: Meta<typeof FormGroup> = {
         component: `
 ### Quick Start
 \`\`\`tsx
-import { FormGroup, FormField } from '@mond-design-system/theme';
+import { FormGroup, FormField, Input } from '@mond-design-system/theme';
 
 function MyComponent() {
   return (
@@ -22,15 +25,15 @@ function MyComponent() {
       description="Please provide your basic contact details"
     >
       <FormField label="First Name" required>
-        <input type="text" placeholder="Enter first name" />
+        <Input type="text" placeholder="Enter first name" />
       </FormField>
       
       <FormField label="Last Name" required>
-        <input type="text" placeholder="Enter last name" />
+        <Input type="text" placeholder="Enter last name" />
       </FormField>
       
       <FormField label="Email" required>
-        <input type="email" placeholder="Enter email" />
+        <Input type="email" placeholder="Enter email" />
       </FormField>
     </FormGroup>
   );
@@ -80,34 +83,21 @@ A form organization component that groups related form fields together with opti
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const sampleInputStyle = {
-  width: '100%',
-  padding: '8px 12px',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '14px',
-};
-
-const sampleSelectStyle = {
-  ...sampleInputStyle,
-  backgroundColor: 'white',
-};
-
 export const Default: Story = {
   args: {
     title: 'Personal Information',
     children: (
       <>
         <FormField label="First Name" required>
-          <input type="text" placeholder="Enter first name" style={sampleInputStyle} />
+          <Input type="text" placeholder="Enter first name" />
         </FormField>
         
         <FormField label="Last Name" required>
-          <input type="text" placeholder="Enter last name" style={sampleInputStyle} />
+          <Input type="text" placeholder="Enter last name" />
         </FormField>
         
         <FormField label="Email" required>
-          <input type="email" placeholder="Enter email" style={sampleInputStyle} />
+          <Input type="email" placeholder="Enter email" />
         </FormField>
       </>
     ),
@@ -121,15 +111,15 @@ export const WithDescription: Story = {
     children: (
       <>
         <FormField label="Username" required helpText="Must be unique and at least 3 characters">
-          <input type="text" placeholder="Choose username" style={sampleInputStyle} />
+          <Input type="text" placeholder="Choose username" />
         </FormField>
         
         <FormField label="Password" required helpText="Must be at least 8 characters">
-          <input type="password" placeholder="Create password" style={sampleInputStyle} />
+          <Input type="password" placeholder="Create password" />
         </FormField>
         
         <FormField label="Confirm Password" required>
-          <input type="password" placeholder="Confirm password" style={sampleInputStyle} />
+          <Input type="password" placeholder="Confirm password" />
         </FormField>
       </>
     ),
@@ -144,15 +134,15 @@ export const CustomSpacing: Story = {
     children: (
       <>
         <FormField label="Name">
-          <input type="text" placeholder="Enter name" style={sampleInputStyle} />
+          <Input type="text" placeholder="Enter name" />
         </FormField>
         
         <FormField label="Email">
-          <input type="email" placeholder="Enter email" style={sampleInputStyle} />
+          <Input type="email" placeholder="Enter email" />
         </FormField>
         
         <FormField label="Phone">
-          <input type="tel" placeholder="Enter phone" style={sampleInputStyle} />
+          <Input type="tel" placeholder="Enter phone" />
         </FormField>
       </>
     ),
@@ -164,20 +154,23 @@ export const WithoutTitle: Story = {
     children: (
       <>
         <FormField label="Search Query">
-          <input type="search" placeholder="Search..." style={sampleInputStyle} />
+          <Input type="search" placeholder="Search..." />
         </FormField>
         
         <FormField label="Category">
-          <select style={sampleSelectStyle}>
-            <option value="">All Categories</option>
-            <option value="tech">Technology</option>
-            <option value="design">Design</option>
-            <option value="business">Business</option>
-          </select>
+          <Select
+            placeholder="All Categories"
+            options={[
+              { value: '', label: 'All Categories' },
+              { value: 'tech', label: 'Technology' },
+              { value: 'design', label: 'Design' },
+              { value: 'business', label: 'Business' },
+            ]}
+          />
         </FormField>
         
         <FormField label="Date Range">
-          <input type="date" style={sampleInputStyle} />
+          <Input type="date" />
         </FormField>
       </>
     ),
@@ -192,15 +185,15 @@ export const MultipleGroups: Story = {
         description="Basic details about yourself"
       >
         <FormField label="First Name" required>
-          <input type="text" placeholder="Enter first name" style={sampleInputStyle} />
+          <Input type="text" placeholder="Enter first name" />
         </FormField>
         
         <FormField label="Last Name" required>
-          <input type="text" placeholder="Enter last name" style={sampleInputStyle} />
+          <Input type="text" placeholder="Enter last name" />
         </FormField>
         
         <FormField label="Date of Birth">
-          <input type="date" style={sampleInputStyle} />
+          <Input type="date" />
         </FormField>
       </FormGroup>
       
@@ -209,22 +202,17 @@ export const MultipleGroups: Story = {
         description="How can we reach you?"
       >
         <FormField label="Email Address" required>
-          <input type="email" placeholder="Enter email" style={sampleInputStyle} />
+          <Input type="email" placeholder="Enter email" />
         </FormField>
         
         <FormField label="Phone Number">
-          <input type="tel" placeholder="Enter phone" style={sampleInputStyle} />
+          <Input type="tel" placeholder="Enter phone" />
         </FormField>
         
         <FormField label="Address">
-          <textarea 
+          <Textarea 
             placeholder="Enter address" 
             rows={3}
-            style={{
-              ...sampleInputStyle,
-              resize: 'vertical',
-              fontFamily: 'inherit',
-            }}
           />
         </FormField>
       </FormGroup>
@@ -234,19 +222,23 @@ export const MultipleGroups: Story = {
         description="Customize your experience"
       >
         <FormField label="Language">
-          <select style={sampleSelectStyle}>
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-          </select>
+          <Select
+            options={[
+              { value: 'en', label: 'English' },
+              { value: 'es', label: 'Spanish' },
+              { value: 'fr', label: 'French' },
+            ]}
+          />
         </FormField>
         
         <FormField label="Timezone">
-          <select style={sampleSelectStyle}>
-            <option value="est">Eastern Time</option>
-            <option value="pst">Pacific Time</option>
-            <option value="cst">Central Time</option>
-          </select>
+          <Select
+            options={[
+              { value: 'est', label: 'Eastern Time' },
+              { value: 'pst', label: 'Pacific Time' },
+              { value: 'cst', label: 'Central Time' },
+            ]}
+          />
         </FormField>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
@@ -312,17 +304,12 @@ export const WithValidation: Story = {
             error={errors.company}
             helpText={!errors.company ? "Official name of your company" : undefined}
           >
-            <input
+            <Input
               type="text"
               value={formData.company}
               onChange={(e) => handleChange('company', e.target.value)}
               onBlur={(e) => validateField('company', e.target.value)}
               placeholder="Enter company name"
-              style={{
-                ...sampleInputStyle,
-                border: errors.company ? '2px solid #ef4444' : '1px solid #d1d5db',
-                backgroundColor: errors.company ? '#fef2f2' : 'white',
-              }}
             />
           </FormField>
           
@@ -331,17 +318,12 @@ export const WithValidation: Story = {
             error={errors.website}
             helpText={!errors.website ? "Your company's website URL" : undefined}
           >
-            <input
+            <Input
               type="url"
               value={formData.website}
               onChange={(e) => handleChange('website', e.target.value)}
               onBlur={(e) => validateField('website', e.target.value)}
               placeholder="https://example.com"
-              style={{
-                ...sampleInputStyle,
-                border: errors.website ? '2px solid #ef4444' : '1px solid #d1d5db',
-                backgroundColor: errors.website ? '#fef2f2' : 'white',
-              }}
             />
           </FormField>
           
@@ -350,17 +332,12 @@ export const WithValidation: Story = {
             required 
             error={errors.employees}
           >
-            <input
+            <Input
               type="number"
               value={formData.employees}
               onChange={(e) => handleChange('employees', e.target.value)}
               onBlur={(e) => validateField('employees', e.target.value)}
               placeholder="Enter number"
-              style={{
-                ...sampleInputStyle,
-                border: errors.employees ? '2px solid #ef4444' : '1px solid #d1d5db',
-                backgroundColor: errors.employees ? '#fef2f2' : 'white',
-              }}
             />
           </FormField>
           
@@ -369,24 +346,23 @@ export const WithValidation: Story = {
             required 
             error={errors.industry}
           >
-            <select
+            <Select
               value={formData.industry}
-              onChange={(e) => handleChange('industry', e.target.value)}
-              onBlur={(e) => validateField('industry', e.target.value)}
-              style={{
-                ...sampleSelectStyle,
-                border: errors.industry ? '2px solid #ef4444' : '1px solid #d1d5db',
-                backgroundColor: errors.industry ? '#fef2f2' : 'white',
+              onChange={(value) => {
+                handleChange('industry', value);
+                validateField('industry', value);
               }}
-            >
-              <option value="">Select industry</option>
-              <option value="tech">Technology</option>
-              <option value="finance">Finance</option>
-              <option value="healthcare">Healthcare</option>
-              <option value="education">Education</option>
-              <option value="retail">Retail</option>
-              <option value="other">Other</option>
-            </select>
+              placeholder="Select industry"
+              options={[
+                { value: '', label: 'Select industry' },
+                { value: 'tech', label: 'Technology' },
+                { value: 'finance', label: 'Finance' },
+                { value: 'healthcare', label: 'Healthcare' },
+                { value: 'education', label: 'Education' },
+                { value: 'retail', label: 'Retail' },
+                { value: 'other', label: 'Other' },
+              ]}
+            />
           </FormField>
         </FormGroup>
       </div>
@@ -409,45 +385,32 @@ export const DarkMode: Story = {
     children: (
       <>
         <FormField label="Username" required isDarkMode>
-          <input 
+          <Input 
             type="text" 
             placeholder="Enter username" 
-            style={{
-              ...sampleInputStyle,
-              backgroundColor: '#1f2937',
-              border: '1px solid #4b5563',
-              color: '#f9fafb',
-            }} 
+            isDarkMode
           />
         </FormField>
         
         <FormField label="Email" required isDarkMode>
-          <input 
+          <Input 
             type="email" 
             placeholder="Enter email" 
-            style={{
-              ...sampleInputStyle,
-              backgroundColor: '#1f2937',
-              border: '1px solid #4b5563',
-              color: '#f9fafb',
-            }} 
+            isDarkMode
           />
         </FormField>
         
         <FormField label="Role" isDarkMode>
-          <select 
-            style={{
-              ...sampleSelectStyle,
-              backgroundColor: '#1f2937',
-              border: '1px solid #4b5563',
-              color: '#f9fafb',
-            }}
-          >
-            <option value="">Select role</option>
-            <option value="admin">Administrator</option>
-            <option value="user">User</option>
-            <option value="guest">Guest</option>
-          </select>
+          <Select 
+            placeholder="Select role"
+            isDarkMode
+            options={[
+              { value: '', label: 'Select role' },
+              { value: 'admin', label: 'Administrator' },
+              { value: 'user', label: 'User' },
+              { value: 'guest', label: 'Guest' },
+            ]}
+          />
         </FormField>
       </>
     ),
@@ -466,19 +429,22 @@ export const Playground: Story = {
     children: (
       <>
         <FormField label="Field 1" required>
-          <input type="text" placeholder="Enter value" style={sampleInputStyle} />
+          <Input type="text" placeholder="Enter value" />
         </FormField>
         
         <FormField label="Field 2" helpText="This is help text">
-          <input type="text" placeholder="Enter value" style={sampleInputStyle} />
+          <Input type="text" placeholder="Enter value" />
         </FormField>
         
         <FormField label="Field 3">
-          <select style={sampleSelectStyle}>
-            <option value="">Select option</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-          </select>
+          <Select
+            placeholder="Select option"
+            options={[
+              { value: '', label: 'Select option' },
+              { value: '1', label: 'Option 1' },
+              { value: '2', label: 'Option 2' },
+            ]}
+          />
         </FormField>
       </>
     ),

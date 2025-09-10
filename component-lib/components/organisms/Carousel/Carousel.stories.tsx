@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Carousel, CarouselItem } from './Carousel';
+import { Button } from '../../atoms/Button/Button';
 
 const meta: Meta<typeof Carousel> = {
   title: 'Organisms/Carousel',
@@ -241,9 +242,9 @@ const cardItems: CarouselItem[] = [
       }}>
         <h3 style={{ margin: '0 0 10px 0' }}>Product 1</h3>
         <p style={{ margin: '0 0 15px 0', flex: 1 }}>This is a great product with amazing features.</p>
-        <button style={{ padding: '8px 16px', border: 'none', borderRadius: '4px', backgroundColor: '#007bff', color: 'white' }}>
+        <Button>
           Learn More
-        </button>
+        </Button>
       </div>
     )
   },
@@ -262,9 +263,9 @@ const cardItems: CarouselItem[] = [
       }}>
         <h3 style={{ margin: '0 0 10px 0' }}>Product 2</h3>
         <p style={{ margin: '0 0 15px 0', flex: 1 }}>Another excellent product you'll love.</p>
-        <button style={{ padding: '8px 16px', border: 'none', borderRadius: '4px', backgroundColor: '#007bff', color: 'white' }}>
+        <Button>
           Learn More
-        </button>
+        </Button>
       </div>
     )
   },
@@ -283,9 +284,9 @@ const cardItems: CarouselItem[] = [
       }}>
         <h3 style={{ margin: '0 0 10px 0' }}>Product 3</h3>
         <p style={{ margin: '0 0 15px 0', flex: 1 }}>The best product in our lineup.</p>
-        <button style={{ padding: '8px 16px', border: 'none', borderRadius: '4px', backgroundColor: '#007bff', color: 'white' }}>
+        <Button>
           Learn More
-        </button>
+        </Button>
       </div>
     )
   },
@@ -304,9 +305,9 @@ const cardItems: CarouselItem[] = [
       }}>
         <h3 style={{ margin: '0 0 10px 0' }}>Product 4</h3>
         <p style={{ margin: '0 0 15px 0', flex: 1 }}>A premium product with advanced features.</p>
-        <button style={{ padding: '8px 16px', border: 'none', borderRadius: '4px', backgroundColor: '#007bff', color: 'white' }}>
+        <Button>
           Learn More
-        </button>
+        </Button>
       </div>
     )
   },
