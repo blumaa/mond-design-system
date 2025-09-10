@@ -1,3 +1,8 @@
+## 1.8.0 (2025-09-10)
+
+* feat: add dashboard ([d807006](https://github.com/blumaa/mond-design-system/commit/d807006))
+* feat: fix tokens ([3375039](https://github.com/blumaa/mond-design-system/commit/3375039))
+
 ## 1.7.0 (2025-09-09)
 
 * fix tests ([84c3318](https://github.com/blumaa/mond-design-system/commit/84c3318))
