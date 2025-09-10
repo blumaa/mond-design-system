@@ -576,7 +576,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   Welcome back{currentUser ? `, ${currentUser.name.split(' ')[0]}` : ''}! 👋
                 </Heading>
                 <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
-                  Here&apos;s what&apos;s happening with your projects today.
+                  Here's what's happening with your projects today.
                 </Text>
               </Box>
 

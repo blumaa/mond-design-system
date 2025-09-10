@@ -133,6 +133,10 @@ export const tokens = {
       "error": {
         "light": "red.600",
         "dark": "red.400"
+      },
+      "accent": {
+        "light": "blue.600",
+        "dark": "blue.400"
       }
     },
     "surface": {
@@ -159,6 +163,14 @@ export const tokens = {
       "disabled": {
         "light": "gray.100",
         "dark": "gray.800"
+      },
+      "primary": {
+        "light": "white.50",
+        "dark": "black.200"
+      },
+      "secondary": {
+        "light": "gray.50",
+        "dark": "black.100"
       }
     },
     "border": {
@@ -189,6 +201,18 @@ export const tokens = {
       "error": {
         "light": "red.500",
         "dark": "red.400"
+      },
+      "primary": {
+        "light": "gray.400",
+        "dark": "gray.500"
+      },
+      "secondary": {
+        "light": "gray.300",
+        "dark": "gray.600"
+      },
+      "accent": {
+        "light": "blue.400",
+        "dark": "blue.500"
       }
     },
     "interactive": {

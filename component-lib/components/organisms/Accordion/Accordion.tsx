@@ -159,6 +159,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
     allowToggleOff = true,
     variant = 'default',
     size = 'md',
+    animated = true,
     icon,
     iconPosition = 'right',
     isDarkMode = false,
@@ -304,6 +305,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
                 disabled={item.disabled}
                 size={size}
                 variant={variant}
+                animated={animated}
                 icon={displayIcon}
                 iconPosition={iconPosition}
                 isDarkMode={isDarkMode}

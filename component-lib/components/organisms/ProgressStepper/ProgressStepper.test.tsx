@@ -363,6 +363,9 @@ describe('ProgressStepper Component', () => {
 
   describe('error handling', () => {
     it('returns null when no steps provided', () => {
+      // Suppress console.warn for this test since we're intentionally testing error case
+      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      
       render(
         <ProgressStepper
           steps={[]}
@@ -372,6 +375,10 @@ describe('ProgressStepper Component', () => {
       );
       
       expect(screen.queryByTestId('progress-stepper')).not.toBeInTheDocument();
+      
+      // Verify the warning was called and restore console.warn
+      expect(consoleSpy).toHaveBeenCalledWith('ProgressStepper: No steps provided');
+      consoleSpy.mockRestore();
     });
 
     it('provides default labels for steps without labels', () => {

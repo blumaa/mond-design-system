@@ -52,6 +52,12 @@ export interface AccordionItemProps extends Omit<BoxProps, 'children' | 'title'>
   iconPosition?: 'left' | 'right';
   
   /**
+   * Enable/disable animations
+   * @default true
+   */
+  animated?: boolean;
+  
+  /**
    * Dark mode styling
    * @default false
    */
@@ -157,6 +163,7 @@ export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps
   variant = 'default',
   icon,
   iconPosition = 'right',
+  animated = true,
   isDarkMode = false,
   defaultExpanded = false,
   onExpandedChange,
@@ -197,7 +204,7 @@ export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps
       stroke="currentColor"
       style={{
         transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-        transition: 'transform 0.2s ease',
+        transition: animated ? 'transform 0.2s ease' : 'none',
       }}
     >
       <polyline points="6,9 12,15 18,9"/>
@@ -223,13 +230,13 @@ export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps
     cursor: disabled ? 'not-allowed' : 'pointer',
     textAlign: 'left' as const,
     minHeight: sizeStyles.minHeight,
-    transition: 'background-color 0.2s ease',
+    transition: animated ? 'background-color 0.2s ease' : 'none',
     opacity: disabled ? 0.5 : 1,
   };
   
   const contentStyle = {
     overflow: 'hidden',
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    transition: animated ? 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
     maxHeight: isExpanded ? '1000px' : '0px',
     opacity: isExpanded ? 1 : 0,
   };

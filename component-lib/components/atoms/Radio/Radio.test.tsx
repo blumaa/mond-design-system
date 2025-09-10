@@ -31,7 +31,7 @@ describe('Radio Component', () => {
   });
 
   it('renders in checked state', () => {
-    render(<Radio label="Checked radio" name="test" checked />);
+    render(<Radio label="Checked radio" name="test" checked readOnly />);
     const radioElement = screen.getByRole('radio');
     expect(radioElement).toBeChecked();
   });
@@ -229,7 +229,7 @@ describe('Radio Component', () => {
 
   describe('visual indicator', () => {
     it('shows dot when checked', () => {
-      render(<Radio label="Checked" name="test" checked data-testid="checked-radio" />);
+      render(<Radio label="Checked" name="test" checked readOnly data-testid="checked-radio" />);
       const container = screen.getByTestId('checked-radio');
       const dot = container.querySelector('[data-radio] > div') as HTMLElement;
       expect(dot).toHaveStyle('opacity: 1');

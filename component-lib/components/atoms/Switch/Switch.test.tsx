@@ -30,7 +30,7 @@ describe('Switch Component', () => {
   });
 
   it('renders in checked state', () => {
-    render(<Switch label="Checked switch" checked />);
+    render(<Switch label="Checked switch" checked readOnly />);
     const switchElement = screen.getByRole('checkbox');
     expect(switchElement).toBeChecked();
   });
@@ -78,7 +78,7 @@ describe('Switch Component', () => {
 
   describe('visual states', () => {
     it('shows correct background color when checked', () => {
-      render(<Switch label="Checked" checked data-testid="checked-switch" />);
+      render(<Switch label="Checked" checked readOnly data-testid="checked-switch" />);
       const container = screen.getByTestId('checked-switch');
       const track = container.querySelector('[data-switch-track]') as HTMLElement;
       expect(track).not.toBeNull();
@@ -98,7 +98,7 @@ describe('Switch Component', () => {
     });
 
     it('moves thumb to correct position when checked', () => {
-      render(<Switch label="Checked" checked data-testid="checked-switch" />);
+      render(<Switch label="Checked" checked readOnly data-testid="checked-switch" />);
       const container = screen.getByTestId('checked-switch');
       const thumb = container.querySelector('[data-switch-track] > div') as HTMLElement;
       

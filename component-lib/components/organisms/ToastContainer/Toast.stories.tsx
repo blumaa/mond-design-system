@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Toast } from './Toast';
+import { Button } from '../../atoms/Button/Button';
 import { useState } from 'react';
 
 const meta: Meta<typeof Toast> = {
@@ -33,7 +34,7 @@ function MyComponent() {
 
   return (
     <div>
-      <button onClick={showToast}>Show Toast</button>
+      <Button onClick={showToast}>Show Toast</Button>
       {toasts.map(toast => (
         <Toast
           key={toast.id}
@@ -256,45 +257,27 @@ export const AnimationStates: Story = {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-          <button 
+          <Button 
             onClick={() => setAnimationState('entering')}
-            style={{ 
-              padding: '8px 16px', 
-              backgroundColor: animationState === 'entering' ? '#3b82f6' : '#e5e7eb',
-              color: animationState === 'entering' ? 'white' : '#374151',
-              border: 'none', 
-              borderRadius: '6px',
-              cursor: 'pointer'
-            }}
+            variant={animationState === 'entering' ? 'primary' : 'outline'}
+            size="sm"
           >
             Entering
-          </button>
-          <button 
+          </Button>
+          <Button 
             onClick={() => setAnimationState('visible')}
-            style={{ 
-              padding: '8px 16px', 
-              backgroundColor: animationState === 'visible' ? '#3b82f6' : '#e5e7eb',
-              color: animationState === 'visible' ? 'white' : '#374151',
-              border: 'none', 
-              borderRadius: '6px',
-              cursor: 'pointer'
-            }}
+            variant={animationState === 'visible' ? 'primary' : 'outline'}
+            size="sm"
           >
             Visible
-          </button>
-          <button 
+          </Button>
+          <Button 
             onClick={() => setAnimationState('exiting')}
-            style={{ 
-              padding: '8px 16px', 
-              backgroundColor: animationState === 'exiting' ? '#3b82f6' : '#e5e7eb',
-              color: animationState === 'exiting' ? 'white' : '#374151',
-              border: 'none', 
-              borderRadius: '6px',
-              cursor: 'pointer'
-            }}
+            variant={animationState === 'exiting' ? 'primary' : 'outline'}
+            size="sm"
           >
             Exiting
-          </button>
+          </Button>
         </div>
         
         <Toast
@@ -368,36 +351,41 @@ export const InteractiveDemo: Story = {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
-          <button 
+          <Button 
             onClick={() => addToast('success')}
-            style={{ padding: '8px 16px', backgroundColor: '#22c55e', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+            variant="primary"
+            size="sm"
           >
             Add Success
-          </button>
-          <button 
+          </Button>
+          <Button 
             onClick={() => addToast('error')}
-            style={{ padding: '8px 16px', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+            variant="primary"
+            size="sm"
           >
             Add Error
-          </button>
-          <button 
+          </Button>
+          <Button 
             onClick={() => addToast('warning')}
-            style={{ padding: '8px 16px', backgroundColor: '#f59e0b', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+            variant="primary"
+            size="sm"
           >
             Add Warning
-          </button>
-          <button 
+          </Button>
+          <Button 
             onClick={() => addToast('info')}
-            style={{ padding: '8px 16px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+            variant="primary"
+            size="sm"
           >
             Add Info
-          </button>
-          <button 
+          </Button>
+          <Button 
             onClick={() => setToasts([])}
-            style={{ padding: '8px 16px', backgroundColor: '#6b7280', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+            variant="outline"
+            size="sm"
           >
             Clear All
-          </button>
+          </Button>
         </div>
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '400px', overflowY: 'auto' }}>
