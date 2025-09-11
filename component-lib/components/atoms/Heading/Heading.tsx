@@ -146,7 +146,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
   ...props
 }, ref) => {
   const theme = useTheme(isDarkMode);
-  const headingElement = `h${level}` as keyof JSX.IntrinsicElements;
+  const headingElement = `h${level}` as keyof React.JSX.IntrinsicElements;
   const effectiveSize = size || getDefaultSizeForLevel(level);
   const sizeStyles = getSizeStyles(effectiveSize);
   const semanticColor = getSemanticColor(semantic, theme);

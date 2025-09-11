@@ -1,12 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@mond/design-system/components/atoms/Button';
-import { Card } from '@mond/design-system/components/layout/Card';
-import { Stack } from '@mond/design-system/components/layout/Stack';
-import { Box } from '@mond/design-system/components/layout/Box';
-import { Text } from '@mond/design-system/components/atoms/Text';
-import { Badge } from '@mond/design-system/components/atoms/Badge';
+import { Button, Card, Stack, Box, Text, Badge, Heading } from '@mond-design-system/theme';
 
 // Mock data for cyberpunk interface
 const systemStats = {
@@ -64,8 +59,9 @@ export default function CypherDashboard() {
           paddingBottom: '1rem',
         }}>
           <Box>
-            <Text 
-              size="xl" 
+            <Heading 
+              level={1}
+              size="2xl" 
               weight="bold" 
               style={{ 
                 color: '#00ff41', 
@@ -74,8 +70,8 @@ export default function CypherDashboard() {
               }}
             >
               CYPHER.SYS v2.1.7
-            </Text>
-            <Text size="sm" style={{ color: '#00d4ff', marginTop: '0.25rem' }}>
+            </Heading>
+            <Text variant="body-sm" style={{ color: '#00d4ff', marginTop: '0.25rem' }}>
               NEURAL INTERFACE ACTIVE // UTC: {currentTime}
             </Text>
           </Box>
@@ -157,12 +153,12 @@ export default function CypherDashboard() {
                   border: session.status === 'critical' ? '1px solid #ff0055' : '1px solid rgba(0, 255, 65, 0.2)',
                 }}>
                   <Box>
-                    <Text size="sm" style={{ color: '#00d4ff' }}>{session.id}</Text>
-                    <Text size="xs" style={{ color: '#ffffff' }}>{session.user}</Text>
-                    <Text size="xs" style={{ color: '#888' }}>{session.location}</Text>
+                    <Text variant="body-sm" style={{ color: '#00d4ff' }}>{session.id}</Text>
+                    <Text variant="caption" style={{ color: '#ffffff' }}>{session.user}</Text>
+                    <Text variant="caption" style={{ color: '#888' }}>{session.location}</Text>
                   </Box>
                   <Badge 
-                    variant={session.status === 'critical' ? 'error' : session.status === 'active' ? 'success' : 'neutral'}
+                    variant={session.status === 'critical' ? 'error' : session.status === 'active' ? 'success' : 'default'}
                     style={{
                       backgroundColor: session.status === 'critical' ? '#ff0055' : session.status === 'active' ? '#00ff41' : '#666',
                       color: '#0a0a0a'
@@ -202,7 +198,7 @@ export default function CypherDashboard() {
                 {isScanning ? 'SCANNING...' : 'RUN SECURITY SCAN'}
               </Button>
               <Button 
-                variant="secondary"
+                variant="outline"
                 style={{
                   backgroundColor: 'transparent',
                   color: '#00d4ff',
@@ -212,7 +208,7 @@ export default function CypherDashboard() {
                 FIREWALL CONFIG
               </Button>
               <Button 
-                variant="secondary"
+                variant="outline"
                 style={{
                   backgroundColor: 'transparent',
                   color: '#ff0055',

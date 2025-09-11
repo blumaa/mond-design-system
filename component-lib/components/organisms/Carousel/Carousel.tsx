@@ -142,7 +142,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
   const [currentIndex, setCurrentIndex] = useState(initialSlide);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const autoPlayRef = useRef<NodeJS.Timeout>();
+  const autoPlayRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const totalItems = items.length;
   const maxIndex = Math.max(0, totalItems - itemsToShow);

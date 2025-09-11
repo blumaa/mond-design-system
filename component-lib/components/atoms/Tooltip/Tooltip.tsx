@@ -161,7 +161,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
   
   const theme = useTheme(isDarkMode);
@@ -246,34 +246,44 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const arrowStyles = getArrowStyles(placement, theme);
 
   // Clone child element to add event handlers
-  const childElement = React.cloneElement(children, {
+  const childElement = React.cloneElement(children as React.ReactElement<any>, {
     onMouseEnter: (e: React.MouseEvent) => {
       handleMouseEnter();
+      // @ts-expect-error React 19 children props typing
       if (children.props.onMouseEnter) {
+        // @ts-expect-error React 19 children props typing
         children.props.onMouseEnter(e);
       }
     },
     onMouseLeave: (e: React.MouseEvent) => {
       handleMouseLeave();
+      // @ts-expect-error React 19 children props typing
       if (children.props.onMouseLeave) {
+        // @ts-expect-error React 19 children props typing
         children.props.onMouseLeave(e);
       }
     },
     onFocus: (e: React.FocusEvent) => {
       handleFocus();
+      // @ts-expect-error React 19 children props typing
       if (children.props.onFocus) {
+        // @ts-expect-error React 19 children props typing
         children.props.onFocus(e);
       }
     },
     onBlur: (e: React.FocusEvent) => {
       handleBlur();
+      // @ts-expect-error React 19 children props typing
       if (children.props.onBlur) {
+        // @ts-expect-error React 19 children props typing
         children.props.onBlur(e);
       }
     },
     onClick: (e: React.MouseEvent) => {
       handleClick();
+      // @ts-expect-error React 19 children props typing
       if (children.props.onClick) {
+        // @ts-expect-error React 19 children props typing
         children.props.onClick(e);
       }
     },

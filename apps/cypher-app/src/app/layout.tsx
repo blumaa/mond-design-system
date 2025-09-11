@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@mond/design-system/components/providers/ThemeProvider";
-import { cypherTheme } from "@mond/design-system/themes";
+import { ThemeProvider } from "@mond-design-system/theme";
+import { cypherTheme } from "@mond-design-system/theme";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",

@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { useTheme } from '../../providers/ThemeProvider';
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
   
   /**
    * Force dark mode styling (overrides provider colorScheme)
