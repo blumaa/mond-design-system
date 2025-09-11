@@ -1,6 +1,8 @@
 import React from 'react';
 import type { Preview } from "@storybook/react";
 import { withThemeByClassName } from '@storybook/addon-themes';
+import { ThemeProvider } from '../components/providers/ThemeProvider';
+import { mondTheme, cypherTheme, fluxTheme } from '../themes';
 import './styles.css';
 
 const preview: Preview = {
@@ -26,6 +28,22 @@ const preview: Preview = {
       }
     },
   },
+  globalTypes: {
+    brand: {
+      description: 'Brand theme',
+      defaultValue: 'mond',
+      toolbar: {
+        title: 'Brand',
+        icon: 'paintbrush',
+        items: [
+          { value: 'mond', title: 'MOND (Professional)', left: '🏢' },
+          { value: 'cypher', title: 'CYPHER (Cyberpunk)', left: '🔋' },
+          { value: 'flux', title: 'FLUX (Festival)', left: '🎉' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
   decorators: [
     withThemeByClassName({
       themes: {
@@ -36,20 +54,32 @@ const preview: Preview = {
     }),
     (Story: any, context: any) => {
       const isDark = context.globals.theme === 'dark';
+      const selectedBrandId = context.globals.brand || 'mond';
+      
+      // Map brand IDs to brand theme objects
+      const brandThemes = {
+        mond: mondTheme,
+        cypher: cypherTheme,
+        flux: fluxTheme,
+      };
+      
+      const brandTheme = brandThemes[selectedBrandId as keyof typeof brandThemes] || mondTheme;
+      
       return (
-        <div
-          className={isDark ? 'dark' : 'light'}
-          style={{
-            padding: '3rem',
-            backgroundColor: 'var(--background-color)',
-            color: 'var(--text-color)',
-            fontFamily: "'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-            minHeight: '100vh',
-            transition: 'all 0.2s',
-          }}
+        <ThemeProvider 
+          brandTheme={brandTheme}
+          colorScheme={isDark ? 'dark' : 'light'}
         >
-          <Story args={{ ...context.args, isDarkMode: isDark }} />
-        </div>
+          <div
+            style={{
+              padding: '3rem',
+              minHeight: '100vh',
+              transition: 'all 0.3s ease-in-out',
+            }}
+          >
+            <Story args={{ ...context.args, isDarkMode: isDark }} />
+          </div>
+        </ThemeProvider>
       );
     },
   ],

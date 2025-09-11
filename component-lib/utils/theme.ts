@@ -38,7 +38,7 @@ export function resolveSemanticToken(semanticTokenPath: string, theme: Theme = '
   }
   
   // Get the color reference for the current theme
-  const colorReference = semanticToken[theme];
+  const colorReference = (semanticToken as Record<string, string>)[theme];
   
   if (!colorReference) {
     console.warn(`Theme '${theme}' not found for semantic token: ${semanticTokenPath}`);

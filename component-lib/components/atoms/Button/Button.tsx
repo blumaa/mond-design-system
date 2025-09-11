@@ -207,7 +207,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     children, 
     iconOnly = false,
     disabled = false, 
-    isDarkMode = false, 
+    isDarkMode = false,
     ...props 
   }, ref) => {
     const theme = useTheme(isDarkMode);

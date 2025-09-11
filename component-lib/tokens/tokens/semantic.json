@@ -22,24 +22,24 @@
         "dark": "black.900"
       },
       "link": {
-        "light": "blue.600",
-        "dark": "blue.400"
+        "light": "brand.primary.600",
+        "dark": "brand.primary.400"
       },
       "success": {
-        "light": "green.600",
-        "dark": "green.400"
+        "light": "brand.success.600",
+        "dark": "brand.success.400"
       },
       "warning": {
-        "light": "amber.600", 
-        "dark": "amber.400"
+        "light": "brand.warning.600", 
+        "dark": "brand.warning.400"
       },
       "error": {
-        "light": "red.600",
-        "dark": "red.400"
+        "light": "brand.error.600",
+        "dark": "brand.error.400"
       },
       "accent": {
-        "light": "blue.600",
-        "dark": "blue.400"
+        "light": "brand.primary.600",
+        "dark": "brand.primary.400"
       }
     },
     "surface": {
@@ -90,8 +90,8 @@
         "dark": "gray.500"
       },
       "focused": {
-        "light": "blue.500",
-        "dark": "blue.400"
+        "light": "brand.primary.500",
+        "dark": "brand.primary.400"
       },
       "success": {
         "light": "green.500",
@@ -121,16 +121,16 @@
     "interactive": {
       "primary": {
         "background": {
-          "light": "blue.600",
-          "dark": "blue.500"
+          "light": "brand.primary.600",
+          "dark": "brand.primary.500"
         },
         "backgroundHover": {
-          "light": "blue.700", 
-          "dark": "blue.600"
+          "light": "brand.primary.700", 
+          "dark": "brand.primary.600"
         },
         "backgroundPressed": {
-          "light": "blue.800",
-          "dark": "blue.700"
+          "light": "brand.primary.800",
+          "dark": "brand.primary.700"
         },
         "backgroundDisabled": {
           "light": "gray.300",
