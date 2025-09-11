@@ -10,6 +10,8 @@ const navigationItems = [
   { href: '/team', label: 'TEAM', icon: '👥' },
   { href: '/projects', label: 'PROJECTS', icon: '📂' },
   { href: '/monitor', label: 'MONITOR', icon: '📊' },
+  { href: '/analytics', label: 'ANALYTICS', icon: '📈' },
+  { href: '/settings', label: 'SETTINGS', icon: '⚙️' },
 ];
 
 export function Navigation() {

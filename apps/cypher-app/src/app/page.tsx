@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button, Card, Stack, Box, Text, Badge, Heading, Input, Select, Switch, Divider, Link, Avatar, Checkbox, Spinner, Tag } from '@mond-design-system/theme';
+import { MatrixRain } from '../components/MatrixRain';
 
 // Mock data for cyberpunk interface
 const systemStats = {
@@ -47,10 +48,18 @@ export default function CypherDashboard() {
         background: 'linear-gradient(135deg, #0a0a0b 0%, #1a1a1e 100%)',
         padding: '2rem',
         fontFamily: 'var(--font-jetbrains-mono)',
+        position: 'relative',
       }}
     >
+      {/* Matrix Rain Background Effect */}
+      <MatrixRain 
+        opacity={0.08}
+        speed={80}
+        fontSize={12}
+        style={{ zIndex: 0 }}
+      />
       {/* Terminal Header */}
-      <Stack gap={4}>
+      <Stack gap={4} style={{ position: 'relative', zIndex: 1 }}>
         <Box style={{
           display: 'flex',
           justifyContent: 'space-between',

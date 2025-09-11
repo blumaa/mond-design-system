@@ -246,6 +246,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const arrowStyles = getArrowStyles(placement, theme);
 
   // Clone child element to add event handlers
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const childElement = React.cloneElement(children as React.ReactElement<any>, {
     onMouseEnter: (e: React.MouseEvent) => {
       handleMouseEnter();
