@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
 import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
@@ -76,7 +76,7 @@ interface TabsContextValue {
   theme: (path: string) => string;
 }
 
-const TabsContext = createContext<TabsContextValue | null>(null);
+const TabsContext = React.createContext<TabsContextValue | null>(null);
 
 const useTabsContext = () => {
   const context = useContext(TabsContext);

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { createThemeResolver, type Theme } from '../../utils/themeResolver';
 
 /**
@@ -45,7 +45,7 @@ export interface ThemeContextValue {
   brandTheme: BrandTheme | null;
 }
 
-const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+const ThemeContext = React.createContext<ThemeContextValue | undefined>(undefined);
 
 /**
  * Props for the brand-agnostic ThemeProvider

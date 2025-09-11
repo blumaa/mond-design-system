@@ -65,7 +65,7 @@ export const Default: Story = {
 };
 
 export const Variants: Story = {
-  render: () => (
+  render: (args, context) => (
     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
       <Badge variant="default">Default</Badge>
       <Badge variant="primary">Primary</Badge>
@@ -78,7 +78,7 @@ export const Variants: Story = {
 };
 
 export const Sizes: Story = {
-  render: () => (
+  render: (args, context) => (
     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
       <Badge size="sm">Small</Badge>
       <Badge size="md">Medium</Badge>
@@ -88,7 +88,7 @@ export const Sizes: Story = {
 };
 
 export const WithNumbers: Story = {
-  render: () => (
+  render: (args, context) => (
     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
       <Badge variant="error" size="sm">9</Badge>
       <Badge variant="error" size="md">99</Badge>
@@ -99,7 +99,7 @@ export const WithNumbers: Story = {
 };
 
 export const WithIcons: Story = {
-  render: () => (
+  render: (args, context) => (
     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
       <Badge variant="success">
         <span style={{ marginRight: '4px' }}>✓</span>
@@ -122,7 +122,7 @@ export const WithIcons: Story = {
 };
 
 export const StatusIndicators: Story = {
-  render: () => (
+  render: (args, context) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
         <span>Online</span>
@@ -145,7 +145,7 @@ export const StatusIndicators: Story = {
 };
 
 export const Notification: Story = {
-  render: () => (
+  render: (args, context) => (
     <div style={{ position: 'relative', display: 'inline-block' }}>
       <button 
         style={{ 
@@ -185,7 +185,7 @@ export const DarkMode: Story = {
 };
 
 export const AllVariantsSizes: Story = {
-  render: () => (
+  render: (args, context) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       {(['default', 'primary', 'secondary', 'success', 'warning', 'error'] as const).map(variant => (
         <div key={variant} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
