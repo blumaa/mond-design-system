@@ -1,20 +1,20 @@
 import { forwardRef } from 'react';
 import { Box, BoxProps } from '../../layout/Box/Box';
 import { tokens } from '../../../tokens/tokens';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface DividerProps extends Omit<BoxProps, 'children'> {
   orientation?: 'horizontal' | 'vertical';
   variant?: 'default' | 'subtle' | 'strong';
   size?: 'sm' | 'md' | 'lg';
-  isDarkMode?: boolean;
   children?: string;
 }
 
-const getBorderColor = (variant: string, isDarkMode: boolean) => {
+const getBorderColor = (variant: string, isDark: boolean) => {
   const colorMap = {
-    default: isDarkMode ? tokens.colors.gray['600'] : tokens.colors.gray['300'],
-    subtle: isDarkMode ? tokens.colors.gray['700'] : tokens.colors.gray['200'],
-    strong: isDarkMode ? tokens.colors.gray['500'] : tokens.colors.gray['400'],
+    default: isDark ? tokens.colors.gray['600'] : tokens.colors.gray['300'],
+    subtle: isDark ? tokens.colors.gray['700'] : tokens.colors.gray['200'],
+    strong: isDark ? tokens.colors.gray['500'] : tokens.colors.gray['400'],
   };
   return colorMap[variant as keyof typeof colorMap];
 };
@@ -32,7 +32,7 @@ export const Divider = forwardRef<HTMLElement, DividerProps>(({
   orientation = 'horizontal',
   variant = 'default',
   size = 'md',
-  isDarkMode = false,
+  
   children,
   className = '',
   style,
@@ -45,7 +45,10 @@ export const Divider = forwardRef<HTMLElement, DividerProps>(({
   mr,
   ...props
 }, ref) => {
-  const borderColor = getBorderColor(variant, isDarkMode);
+  const { colorScheme } = useThemeContext();
+  const isDark = colorScheme === 'dark';
+  
+  const borderColor = getBorderColor(variant, isDark);
   const borderSize = getSizeValue(size);
   
   const isHorizontal = orientation === 'horizontal';
@@ -68,7 +71,7 @@ export const Divider = forwardRef<HTMLElement, DividerProps>(({
       alignItems: 'center',
       textAlign: 'center' as const,
       fontSize: tokens.fontSizes.sm,
-      color: isDarkMode ? tokens.colors.gray['400'] : tokens.colors.gray['600'],
+      color: isDark ? tokens.colors.gray['400'] : tokens.colors.gray['600'],
       fontWeight: tokens.fontWeights.medium,
     };
 

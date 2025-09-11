@@ -1,10 +1,10 @@
 // Example usage of semantic tokens and theme helper
 
-import { useTheme, resolveSemanticToken, getThemeValues } from './theme';
+import { useBasicTheme, resolveSemanticToken } from './themeResolver';
 
 // Example 1: Using the theme hook in a React component
 export function ExampleComponent({ isDarkMode }: { isDarkMode: boolean }) {
-  const theme = useTheme(isDarkMode);
+  const theme = useBasicTheme(isDarkMode);
   
   return {
     // Before: Direct color references
@@ -34,13 +34,25 @@ export function getButtonStyles(isDarkMode: boolean) {
   };
 }
 
-// Example 3: Getting both theme values at once
+// Example 3: Getting both theme values manually
 export function getTextColors() {
   return {
-    primary: getThemeValues('text.primary'),     // { light: '#0f172a', dark: '#f1f5f9' }
-    secondary: getThemeValues('text.secondary'), // { light: '#475569', dark: '#94a3b8' }
-    error: getThemeValues('text.error'),         // { light: '#dc2626', dark: '#f87171' }
-    success: getThemeValues('text.success'),     // { light: '#16a34a', dark: '#4ade80' }
+    primary: {
+      light: resolveSemanticToken('text.primary', 'light'),
+      dark: resolveSemanticToken('text.primary', 'dark')
+    },
+    secondary: {
+      light: resolveSemanticToken('text.secondary', 'light'),
+      dark: resolveSemanticToken('text.secondary', 'dark')
+    },
+    error: {
+      light: resolveSemanticToken('text.error', 'light'),
+      dark: resolveSemanticToken('text.error', 'dark')
+    },
+    success: {
+      light: resolveSemanticToken('text.success', 'light'),
+      dark: resolveSemanticToken('text.success', 'dark')
+    }
   };
 }
 

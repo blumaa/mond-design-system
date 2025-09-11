@@ -4,7 +4,7 @@ import { Box } from '../../layout/Box/Box';
 import { Input, InputSize } from '../../atoms/Input/Input';
 import { Button } from '../../atoms/Button/Button';
 import { Icon } from '../../atoms/Icon/Icon';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface SearchFormProps extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit' | 'onChange'> {
   /**
@@ -51,7 +51,6 @@ export interface SearchFormProps extends Omit<React.FormHTMLAttributes<HTMLFormE
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Search callback - called when search button is clicked or form is submitted
@@ -142,7 +141,7 @@ export const SearchForm = React.forwardRef<HTMLFormElement, SearchFormProps>(
     loading = false,
     disabled = false,
     showClearButton = true,
-    isDarkMode = false,
+    
     onSearch,
     onClear,
     onChange,
@@ -152,7 +151,7 @@ export const SearchForm = React.forwardRef<HTMLFormElement, SearchFormProps>(
     'data-testid': dataTestId,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     const [internalValue, setInternalValue] = useState(defaultValue || '');
     
     // Determine if this is controlled or uncontrolled
@@ -224,7 +223,7 @@ export const SearchForm = React.forwardRef<HTMLFormElement, SearchFormProps>(
             onKeyDown={handleKeyDown}
             inputSize={size}
             disabled={disabled}
-            isDarkMode={isDarkMode}
+            
             style={{
               border: 'none',
               borderRadius: '0',
@@ -251,7 +250,7 @@ export const SearchForm = React.forwardRef<HTMLFormElement, SearchFormProps>(
                 size={size}
                 iconOnly
                 disabled={disabled}
-                isDarkMode={isDarkMode}
+                
                 onClick={handleClearClick}
                 aria-label="Clear search"
                 data-testid={dataTestId ? `${dataTestId}-clear` : undefined}
@@ -263,7 +262,7 @@ export const SearchForm = React.forwardRef<HTMLFormElement, SearchFormProps>(
                   color: theme('text.secondary'),
                 }}
               >
-                <Icon size="sm" isDarkMode={isDarkMode}>
+                <Icon size="sm" >
                   {clearIcon}
                 </Icon>
               </Button>
@@ -277,7 +276,7 @@ export const SearchForm = React.forwardRef<HTMLFormElement, SearchFormProps>(
           variant="primary"
           size={size}
           disabled={disabled || loading || !currentValue}
-          isDarkMode={isDarkMode}
+          
           aria-label={searchButtonLabel}
           data-testid={dataTestId ? `${dataTestId}-button` : undefined}
           style={{
@@ -286,7 +285,7 @@ export const SearchForm = React.forwardRef<HTMLFormElement, SearchFormProps>(
             minWidth: size === 'sm' ? '32px' : size === 'lg' ? '48px' : '40px',
           }}
         >
-          <Icon size={size === 'sm' ? 'sm' : 'md'} isDarkMode={isDarkMode}>
+          <Icon size={size === 'sm' ? 'sm' : 'md'} >
             {loading ? spinnerIcon : searchIcon}
           </Icon>
           {!loading && size !== 'sm' && (

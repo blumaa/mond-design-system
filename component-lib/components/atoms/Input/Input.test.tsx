@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Input } from './Input';
 
@@ -138,8 +138,8 @@ describe('Input Component', () => {
   });
 
   describe('dark mode', () => {
-    it('applies dark mode styling when isDarkMode is true', () => {
-      render(<Input isDarkMode={true} data-testid="dark-input" />);
+    it('applies dark mode styling when is true', () => {
+      renderWithDarkMode(<Input  data-testid="dark-input" />);
       const inputElement = screen.getByTestId('dark-input');
       
       // Check for dark background color (semantic: surface.input in dark mode -> black.100)

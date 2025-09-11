@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { Box, BoxProps } from '../../layout/Box/Box';
 import { tokens } from '../../../tokens/tokens';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export interface LabelProps extends Omit<BoxProps, 'as' | 'children'> {
   children: React.ReactNode;
@@ -9,7 +10,6 @@ export interface LabelProps extends Omit<BoxProps, 'as' | 'children'> {
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
   weight?: 'normal' | 'medium' | 'semibold';
-  isDarkMode?: boolean;
   semantic?: 'default' | 'error' | 'success';
   requiredIndicator?: string;
 }
@@ -32,15 +32,15 @@ const getSizeStyles = (size: string) => {
   return sizeMap[size as keyof typeof sizeMap];
 };
 
-const getSemanticColor = (semantic: string, isDarkMode: boolean, disabled: boolean) => {
+const getSemanticColor = (semantic: string, theme: ReturnType<typeof useTheme>, disabled: boolean) => {
   if (disabled) {
-    return isDarkMode ? tokens.colors.gray['600'] : tokens.colors.gray['400'];
+    return theme('text.disabled');
   }
 
   const colorMap = {
-    default: isDarkMode ? tokens.colors.gray['200'] : tokens.colors.gray['700'],
-    error: isDarkMode ? tokens.colors.red['400'] : tokens.colors.red['600'],
-    success: isDarkMode ? tokens.colors.green['400'] : tokens.colors.green['600'],
+    default: theme('text.primary'),
+    error: theme('text.error'),
+    success: theme('text.success'),
   };
   return colorMap[semantic as keyof typeof colorMap];
 };
@@ -52,15 +52,15 @@ export const Label = forwardRef<HTMLLabelElement, LabelProps>(({
   disabled = false,
   size = 'md',
   weight = 'medium',
-  isDarkMode = false,
   semantic = 'default',
   requiredIndicator = '*',
   className = '',
   style,
   ...props
 }, ref) => {
+  const theme = useTheme();
   const sizeStyles = getSizeStyles(size);
-  const textColor = getSemanticColor(semantic, isDarkMode, disabled);
+  const textColor = getSemanticColor(semantic, theme, disabled);
   const fontWeight = tokens.fontWeights[weight as keyof typeof tokens.fontWeights];
 
   const labelStyle = {
@@ -75,7 +75,7 @@ export const Label = forwardRef<HTMLLabelElement, LabelProps>(({
   };
 
   const requiredStyle = {
-    color: isDarkMode ? tokens.colors.red['400'] : tokens.colors.red['500'],
+    color: theme('text.error'),
     marginLeft: tokens.spacing['1'], // 0.25rem
     fontSize: 'inherit',
   };

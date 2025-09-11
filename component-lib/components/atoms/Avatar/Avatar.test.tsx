@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Avatar } from './Avatar';
 
@@ -159,7 +159,7 @@ describe('Avatar Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
-      render(<Avatar isDarkMode fallback="Dark" data-testid="dark-avatar" />);
+      renderWithDarkMode(<Avatar fallback="Dark" data-testid="dark-avatar" />);
       const avatarElement = screen.getByTestId('dark-avatar');
       expect(avatarElement).toHaveStyle('background-color: #171717');
     });

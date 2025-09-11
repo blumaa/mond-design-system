@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { BottomSheet, BottomSheetHeader, BottomSheetBody, BottomSheetFooter } from './BottomSheet';
 
@@ -171,8 +171,8 @@ describe('BottomSheet Component', () => {
   });
 
   describe('Dark Mode', () => {
-    it('applies dark mode styles when isDarkMode is true', () => {
-      render(<BottomSheet {...defaultProps} isDarkMode />);
+    it('applies dark mode styles when is true', () => {
+      render(<BottomSheet {...defaultProps} />);
       const sheet = document.querySelector('.bottom-sheet');
       
       // The exact color will depend on theme implementation

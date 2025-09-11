@@ -1,8 +1,13 @@
 import React, { forwardRef } from 'react';
-import { resolveSemanticToken } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   as?: keyof JSX.IntrinsicElements;
+  
+  /**
+   * Force dark mode styling (overrides provider colorScheme)
+   */
+  isDarkMode?: boolean;
   
   // Spacing
   p?: string | number;
@@ -96,8 +101,6 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   overflowY?: React.CSSProperties['overflowY'];
   transition?: React.CSSProperties['transition'];
   
-  // Theme
-  isDarkMode?: boolean;
 }
 
 const convertToPixels = (value: string | number): string => {
@@ -123,7 +126,6 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   as = 'div',
   children,
   className = '',
-  isDarkMode = false,
   
   // Spacing props
   p, px, py, pt, pr, pb, pl,
@@ -157,9 +159,12 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   // Effect props
   boxShadow, opacity, cursor, overflow, overflowX, overflowY, transition,
   
+  // Theme props
+  isDarkMode,
+  
   ...rest
 }, ref) => {
-  const theme = (path: string) => resolveSemanticToken(path, isDarkMode ? 'dark' : 'light');
+  const theme = useTheme(isDarkMode);
   
   const Element = as as React.ElementType;
   

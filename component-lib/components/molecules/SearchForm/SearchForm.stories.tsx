@@ -308,9 +308,9 @@ export const DarkMode: Story = {
       gap: '16px',
       width: '400px'
     }}>
-      <SearchForm {...args} isDarkMode placeholder="Search in dark mode..." />
-      <SearchForm {...args} isDarkMode loading placeholder="Loading..." defaultValue="dark search" />
-      <SearchForm {...args} isDarkMode defaultValue="dark mode with value" />
+      <SearchForm {...args} placeholder="Search in dark mode..." />
+      <SearchForm {...args} loading placeholder="Loading..." defaultValue="dark search" />
+      <SearchForm {...args} defaultValue="dark mode with value" />
     </div>
   ),
   args: {

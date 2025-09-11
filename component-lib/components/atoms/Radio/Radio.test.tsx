@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, renderWithDarkMode } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Radio } from './Radio';
 
@@ -141,7 +141,7 @@ describe('Radio Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
-      render(<Radio isDarkMode label="Dark radio" name="test" data-testid="dark-radio" />);
+      renderWithDarkMode(<Radio label="Dark radio" name="test" data-testid="dark-radio" />);
       const container = screen.getByTestId('dark-radio');
       const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
       expect(radioDiv).toHaveStyle('background-color: #171717');

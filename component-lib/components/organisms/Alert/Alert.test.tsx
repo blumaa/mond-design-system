@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Alert } from './Alert';
 
@@ -151,7 +151,7 @@ describe('Alert Component', () => {
 
   it('applies dark mode', () => {
     render(
-      <Alert isDarkMode data-testid="dark-alert">
+      <Alert data-testid="dark-alert">
         Dark mode alert
       </Alert>
     );

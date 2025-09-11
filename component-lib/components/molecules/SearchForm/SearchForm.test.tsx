@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import userEvent from '@testing-library/user-event';
 import { SearchForm } from './SearchForm';
 
@@ -340,7 +340,7 @@ describe('SearchForm', () => {
 
   describe('Dark Mode', () => {
     it('renders in dark mode without errors', () => {
-      render(<SearchForm isDarkMode />);
+      render(<SearchForm />);
       
       expect(screen.getByRole('searchbox')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();

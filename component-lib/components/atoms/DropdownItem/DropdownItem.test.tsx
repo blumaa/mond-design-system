@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import { DropdownItem, type DropdownItemProps } from './DropdownItem';
 
 const defaultProps: DropdownItemProps = {

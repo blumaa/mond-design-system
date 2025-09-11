@@ -2,7 +2,7 @@
 import React from 'react';
 import { Stack } from '../../layout/Stack/Stack';
 import { Box } from '../../layout/Box/Box';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export interface FormFieldProps {
   'data-testid'?: string;
@@ -29,7 +29,7 @@ export interface FormFieldProps {
   helpText?: string;
   
   /**
-   * Dark mode
+   * Dark mode control for theme resolution
    * @default false
    */
   isDarkMode?: boolean;
@@ -51,7 +51,7 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
     required = false,
     error,
     helpText,
-    isDarkMode = false,
+    isDarkMode,
     children,
     className,
     'data-testid': dataTestId,

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback, ReactNode } from 'react';
 import { Box, BoxProps } from '../../layout/Box/Box';
 import { tokens } from '../../../tokens/tokens';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface CarouselItem {
   id: string;
@@ -90,7 +91,6 @@ export interface CarouselProps extends Omit<BoxProps, 'children'> {
    * Dark mode styling
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Callback when slide changes
@@ -129,13 +129,16 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
   prevArrowIcon,
   nextArrowIcon,
   indicatorPosition = 'bottom-center',
-  isDarkMode = false,
+  
   onSlideChange,
   initialSlide = 0,
   className = '',
   style,
   ...props
 }, ref) => {
+  const { colorScheme } = useThemeContext();
+  const isDark = colorScheme === 'dark';
+  
   const [currentIndex, setCurrentIndex] = useState(initialSlide);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -253,7 +256,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
     top: '50%',
     transform: 'translateY(-50%)',
     zIndex: 10,
-    backgroundColor: isDarkMode 
+    backgroundColor: isDark
       ? 'rgba(255, 255, 255, 0.9)' 
       : 'rgba(0, 0, 0, 0.7)',
     border: 'none',
@@ -264,7 +267,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
-    color: isDarkMode ? tokens.colors.gray['900'] : tokens.colors.white['50'],
+    color: isDark ? tokens.colors.gray['900'] : tokens.colors.white['50'],
     transition: 'all 0.2s ease',
     opacity: 0.8,
   };
@@ -305,8 +308,8 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
     cursor: 'pointer',
     transition: 'all 0.2s ease',
     backgroundColor: index === currentIndex 
-      ? (isDarkMode ? tokens.colors.white['50'] : tokens.colors.gray['900'])
-      : (isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.3)'),
+      ? (isDark ? tokens.colors.white['50'] : tokens.colors.gray['900'])
+      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.3)'),
   });
 
   const canGoPrev = currentIndex > 0 || infinite;
@@ -334,8 +337,8 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
           alignItems: 'center',
           justifyContent: 'center',
           height: '200px',
-          backgroundColor: isDarkMode ? tokens.colors.gray['800'] : tokens.colors.gray['100'],
-          color: isDarkMode ? tokens.colors.gray['400'] : tokens.colors.gray['500'],
+          backgroundColor: isDark ? tokens.colors.gray['800'] : tokens.colors.gray['100'],
+          color: isDark ? tokens.colors.gray['400'] : tokens.colors.gray['500'],
           borderRadius: tokens.radii.lg,
           ...style,
         }}

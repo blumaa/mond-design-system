@@ -356,7 +356,7 @@ export const Positions: Story = {
 
 // Dark mode example
 export const DarkMode: Story = {
-  render: (args) => <ToastDemo {...args} isDarkMode />,
+  render: (args) => <ToastDemo {...args} />,
   args: {
     position: 'top-right',
     maxToasts: 5,

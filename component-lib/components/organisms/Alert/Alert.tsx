@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { spacing, fontSizes, fontWeights, fontFamilies, radii } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 import { Button } from '../../atoms/Button/Button';
 
@@ -50,7 +50,6 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom data testid for testing
@@ -104,12 +103,12 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
     actions,
     dismissible = false,
     onDismiss,
-    isDarkMode = false,
+    
     'data-testid': dataTestId,
     className,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     const variantStyles = getVariantStyles(variant, theme);
 
     return (
@@ -193,7 +192,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
                   size="sm"
                   variant={action.variant || 'outline'}
                   onClick={action.onClick}
-                  isDarkMode={isDarkMode}
+                  
                 >
                   {action.label}
                 </Button>

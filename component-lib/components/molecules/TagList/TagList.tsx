@@ -2,6 +2,7 @@ import { forwardRef, ReactNode } from 'react';
 import { Box, BoxProps } from '../../layout/Box/Box';
 import { Tag, TagProps } from '../../atoms/Tag/Tag';
 import { tokens } from '../../../tokens/tokens';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface TagData {
   id: string;
@@ -48,7 +49,6 @@ export interface TagListProps extends Omit<BoxProps, 'children'> {
   /**
    * Dark mode
    */
-  isDarkMode?: boolean;
   
   /**
    * Maximum number of tags to show before wrapping
@@ -98,7 +98,7 @@ export const TagList = forwardRef<HTMLDivElement, TagListProps>(({
   size = 'md',
   removable = false,
   disabled = false,
-  isDarkMode = false,
+  
   maxRows,
   gap = 'sm',
   onRemove,
@@ -109,6 +109,9 @@ export const TagList = forwardRef<HTMLDivElement, TagListProps>(({
   style,
   ...props
 }, ref) => {
+  const { colorScheme } = useThemeContext();
+  const isDark = colorScheme === 'dark';
+  
   const gapSize = getGapSize(gap);
 
   const handleTagRemove = (tagId: string) => {
@@ -140,7 +143,7 @@ export const TagList = forwardRef<HTMLDivElement, TagListProps>(({
           alignItems: 'center',
           justifyContent: 'center',
           padding: tokens.spacing['4'],
-          color: isDarkMode ? tokens.colors.gray['400'] : tokens.colors.gray['500'],
+          color: isDark ? tokens.colors.gray['400'] : tokens.colors.gray['500'],
           fontStyle: 'italic',
           ...style,
         }}
@@ -169,7 +172,7 @@ export const TagList = forwardRef<HTMLDivElement, TagListProps>(({
           size={tag.size ?? size}
           removable={tag.removable ?? removable}
           disabled={tag.disabled ?? disabled}
-          isDarkMode={isDarkMode}
+          
           icon={tag.icon}
           onRemove={tag.removable !== false ? () => handleTagRemove(tag.id) : undefined}
           onClick={onTagClick && !tag.disabled ? () => handleTagClick(tag.id) : undefined}
@@ -187,7 +190,7 @@ export const TagList = forwardRef<HTMLDivElement, TagListProps>(({
           semantic="default"
           size={size}
           disabled={true}
-          isDarkMode={isDarkMode}
+          
         >
           +{hiddenCount} more
         </Tag>

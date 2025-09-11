@@ -2,7 +2,7 @@
 import React, { useMemo, forwardRef } from 'react';
 import { Box } from '../../layout/Box/Box';
 import { Text } from '../../atoms/Text/Text';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export interface StepConfig {
   /**
@@ -70,7 +70,6 @@ export interface ProgressStepperProps extends React.HTMLAttributes<HTMLDivElemen
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom data testid for testing
@@ -373,12 +372,12 @@ export const ProgressStepper = forwardRef<HTMLDivElement, ProgressStepperProps>(
     variant = 'default',
     onStepClick,
     allowStepNavigation = false,
-    isDarkMode = false,
+    
     className,
     'data-testid': dataTestId,
     ...props
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const theme = useTheme();
     
     // Validate props
     const validatedCurrentStep = Math.max(0, Math.min(currentStep, steps.length - 1));

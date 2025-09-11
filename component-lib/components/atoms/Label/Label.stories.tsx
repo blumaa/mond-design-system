@@ -330,10 +330,10 @@ export const ThemeVariants: Story = {
       }}>
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center' }}>Light Theme</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <Label isDarkMode={false}>Default Label</Label>
-          <Label isDarkMode={false} semantic="error" required>Error Label</Label>
-          <Label isDarkMode={false} semantic="success">Success Label</Label>
-          <Label isDarkMode={false} disabled>Disabled Label</Label>
+          <Label >Default Label</Label>
+          <Label  semantic="error" required>Error Label</Label>
+          <Label  semantic="success">Success Label</Label>
+          <Label  disabled>Disabled Label</Label>
         </div>
       </div>
       
@@ -346,10 +346,10 @@ export const ThemeVariants: Story = {
       }}>
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center', color: '#f9fafb' }}>Dark Theme</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <Label isDarkMode={true}>Default Label</Label>
-          <Label isDarkMode={true} semantic="error" required>Error Label</Label>
-          <Label isDarkMode={true} semantic="success">Success Label</Label>
-          <Label isDarkMode={true} disabled>Disabled Label</Label>
+          <Label >Default Label</Label>
+          <Label  semantic="error" required>Error Label</Label>
+          <Label  semantic="success">Success Label</Label>
+          <Label  disabled>Disabled Label</Label>
         </div>
       </div>
     </div>

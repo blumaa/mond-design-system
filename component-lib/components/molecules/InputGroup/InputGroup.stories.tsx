@@ -328,7 +328,7 @@ export const DarkMode: Story = {
           prefix="🔍"
           suffix={<Button size="sm" variant="primary" isDarkMode>Search</Button>}
         >
-          <Input placeholder="Search in dark mode..." isDarkMode />
+          <Input placeholder="Search in dark mode..." />
         </InputGroup>
       </div>
       
@@ -341,8 +341,8 @@ export const DarkMode: Story = {
         }}>
           Dark Mode Price
         </h3>
-        <InputGroup isDarkMode prefix="$" suffix=".00">
-          <Input placeholder="0" type="number" isDarkMode />
+        <InputGroup prefix="$" suffix=".00">
+          <Input placeholder="0" type="number" />
         </InputGroup>
       </div>
       
@@ -360,7 +360,7 @@ export const DarkMode: Story = {
           prefix="📧"
           suffix={<Button size="sm" variant="outline" isDarkMode>Send</Button>}
         >
-          <Input placeholder="email@example.com" type="email" isDarkMode />
+          <Input placeholder="email@example.com" type="email" />
         </InputGroup>
       </div>
     </div>

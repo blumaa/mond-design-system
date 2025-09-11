@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -151,7 +151,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   content,
   placement = 'top',
   trigger = 'hover',
-  isDarkMode = false,
+  isDarkMode,
   delay = 300,
   disabled = false,
   className,

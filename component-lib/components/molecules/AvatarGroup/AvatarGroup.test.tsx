@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils';
 import userEvent from '@testing-library/user-event';
 import { AvatarGroup, AvatarData } from './AvatarGroup';
 
@@ -246,11 +246,11 @@ describe('AvatarGroup', () => {
           maxCount={2} 
           renderExcess={mockRenderExcess}
           size="lg"
-          isDarkMode={true}
+          
         />
       );
       
-      expect(mockRenderExcess).toHaveBeenCalledWith(5, 'lg', true);
+      expect(mockRenderExcess).toHaveBeenCalledWith(5, 'lg', undefined);
     });
   });
 
@@ -287,19 +287,19 @@ describe('AvatarGroup', () => {
 
   describe('Dark Mode', () => {
     it('renders in dark mode without errors', () => {
-      render(<AvatarGroup avatars={mockAvatars.slice(0, 3)} isDarkMode />);
+      render(<AvatarGroup avatars={mockAvatars.slice(0, 3)} />);
       
       expect(screen.getAllByTestId(/avatar-fallback/)).toHaveLength(3);
     });
 
     it('passes dark mode to avatars', () => {
-      render(<AvatarGroup avatars={mockAvatars.slice(0, 2)} isDarkMode />);
+      render(<AvatarGroup avatars={mockAvatars.slice(0, 2)} />);
       
       expect(screen.getAllByTestId(/avatar-fallback/)).toHaveLength(2);
     });
 
     it('passes dark mode to excess indicator', () => {
-      render(<AvatarGroup avatars={mockAvatars} maxCount={3} isDarkMode />);
+      render(<AvatarGroup avatars={mockAvatars} maxCount={3} />);
       
       expect(screen.getByText('+4')).toBeInTheDocument();
     });

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, renderWithDarkMode } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Label } from './Label';
 
@@ -61,47 +61,47 @@ describe('Label', () => {
   });
 
   it('applies semantic colors in light mode', () => {
-    const { rerender } = render(<Label semantic="default" isDarkMode={false}>Username</Label>);
+    const { rerender } = render(<Label semantic="default" >Username</Label>);
     let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #334155'); // gray.700
+    expect(label).toHaveStyle('color: #0f172a'); // text.primary (gray.900)
 
-    rerender(<Label semantic="error" isDarkMode={false}>Username</Label>);
+    rerender(<Label semantic="error" >Username</Label>);
     label = screen.getByText('Username');
     expect(label).toHaveStyle('color: #dc2626'); // red.600
 
-    rerender(<Label semantic="success" isDarkMode={false}>Username</Label>);
+    rerender(<Label semantic="success" >Username</Label>);
     label = screen.getByText('Username');
     expect(label).toHaveStyle('color: #16a34a'); // green.600
   });
 
   it('applies semantic colors in dark mode', () => {
-    const { rerender } = render(<Label semantic="default" isDarkMode={true}>Username</Label>);
+    const { rerender } = renderWithDarkMode(<Label semantic="default" >Username</Label>);
     let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #e2e8f0'); // gray.200
+    expect(label).toHaveStyle('color: #f1f5f9'); // text.primary (gray.100)
 
-    rerender(<Label semantic="error" isDarkMode={true}>Username</Label>);
+    rerender(<Label semantic="error" >Username</Label>);
     label = screen.getByText('Username');
     expect(label).toHaveStyle('color: #f87171'); // red.400
 
-    rerender(<Label semantic="success" isDarkMode={true}>Username</Label>);
+    rerender(<Label semantic="success" >Username</Label>);
     label = screen.getByText('Username');
     expect(label).toHaveStyle('color: #4ade80'); // green.400
   });
 
   it('applies disabled state correctly', () => {
-    const { rerender } = render(<Label disabled isDarkMode={false}>Username</Label>);
+    const { rerender } = render(<Label disabled >Username</Label>);
     let label = screen.getByText('Username');
     expect(label).toHaveStyle('color: #94a3b8'); // gray.400
     expect(label).toHaveStyle('cursor: not-allowed');
     expect(label).toHaveClass('mond-label--disabled');
 
-    rerender(<Label disabled isDarkMode={true}>Username</Label>);
+    rerender(<Label disabled >Username</Label>);
     label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #475569'); // gray.600
+    expect(label).toHaveStyle('color: #94a3b8'); // text.disabled (gray.400)
   });
 
   it('disabled state overrides semantic colors', () => {
-    render(<Label disabled semantic="error" isDarkMode={false}>Username</Label>);
+    render(<Label disabled semantic="error" >Username</Label>);
     
     const label = screen.getByText('Username');
     expect(label).toHaveStyle('color: #94a3b8'); // gray.400, not red
@@ -161,15 +161,15 @@ describe('Label', () => {
   });
 
   it('required indicator has proper styling', () => {
-    render(<Label required isDarkMode={false}>Username</Label>);
+    render(<Label required >Username</Label>);
     
     const required = screen.getByText('*');
-    expect(required).toHaveStyle('color: #ef4444'); // red.500 in light mode
+    expect(required).toHaveStyle('color: #dc2626'); // text.error (red.600)
     expect(required).toHaveStyle('margin-left: 0.25rem');
   });
 
   it('required indicator adapts to dark mode', () => {
-    render(<Label required isDarkMode={true}>Username</Label>);
+    renderWithDarkMode(<Label required >Username</Label>);
     
     const required = screen.getByText('*');
     expect(required).toHaveStyle('color: #f87171'); // red.400 in dark mode

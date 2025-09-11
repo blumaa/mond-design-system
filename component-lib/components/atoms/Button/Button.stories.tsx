@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { useGlobals } from 'storybook/internal/preview-api';
 import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
@@ -71,25 +70,15 @@ A versatile button component with multiple variants, sizes, and styling options.
     onClick: { action: 'clicked' },
   },
   decorators: [
-    (Story, context) => {
-      const [globals] = useGlobals();
-      const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
-      
-      // Override the isDarkMode prop based on Storybook theme
-      const storyArgs = {
-        ...context.args,
-        isDarkMode: isDark,
-      };
-      
+    (Story) => {
       return (
         <div
           style={{
             padding: '3rem',
-            backgroundColor: isDark ? '#27374D' : '#F2F3F4',
             borderRadius: '8px',
           }}
         >
-          <Story args={storyArgs} />
+          <Story />
         </div>
       );
     },

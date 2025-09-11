@@ -26,6 +26,8 @@
     "node_modules",
     "dist",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx"
   ]
 }

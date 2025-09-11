@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '../../../test-utils';
 import userEvent from '@testing-library/user-event';
 import { DetailTemplate, type DetailAction, type DetailMetaItem, type DetailSection, type DetailTab, type RelatedItem } from './DetailTemplate';
 
@@ -362,7 +362,7 @@ describe('DetailTemplate', () => {
   });
 
   it('renders in dark mode', () => {
-    render(<DetailTemplate {...defaultProps} isDarkMode={true} />);
+    render(<DetailTemplate {...defaultProps}  />);
     
     expect(screen.getByText('Test Detail Page')).toBeInTheDocument();
   });

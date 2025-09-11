@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useCallback } from 'react';
 import { spacing, fontSizes, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 import { Radio, RadioSize } from '../../atoms/Radio/Radio';
 
@@ -70,7 +70,6 @@ export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLFieldSetE
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom data testid for testing
@@ -96,12 +95,12 @@ export const RadioGroup = React.forwardRef<HTMLFieldSetElement, RadioGroupProps>
     error,
     helperText,
     orientation = 'vertical',
-    isDarkMode = false,
+    
     'data-testid': dataTestId,
     disabled = false,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     
     // Internal state for uncontrolled mode
     const [internalValue, setInternalValue] = useState<string>(defaultValue || '');
@@ -170,7 +169,7 @@ export const RadioGroup = React.forwardRef<HTMLFieldSetElement, RadioGroupProps>
               checked={selectedValue === option.value}
               onChange={() => handleChange(option.value)}
               disabled={disabled || option.disabled}
-              isDarkMode={isDarkMode}
+              
             />
           ))}
         </Box>

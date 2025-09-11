@@ -216,11 +216,11 @@ export const ThemeVariants: Story = {
         minWidth: '200px'
       }}>
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center' }}>Light Theme</h4>
-        <Divider variant="subtle" isDarkMode={false} />
+        <Divider variant="subtle"  />
         <div style={{ margin: '16px 0' }}>
-          <Divider isDarkMode={false}>OR</Divider>
+          <Divider >OR</Divider>
         </div>
-        <Divider variant="strong" isDarkMode={false} />
+        <Divider variant="strong"  />
       </div>
       
       <div style={{ 
@@ -231,11 +231,11 @@ export const ThemeVariants: Story = {
         minWidth: '200px'
       }}>
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center', color: '#f9fafb' }}>Dark Theme</h4>
-        <Divider variant="subtle" isDarkMode={true} />
+        <Divider variant="subtle"  />
         <div style={{ margin: '16px 0' }}>
-          <Divider isDarkMode={true}>OR</Divider>
+          <Divider >OR</Divider>
         </div>
-        <Divider variant="strong" isDarkMode={true} />
+        <Divider variant="strong"  />
       </div>
     </div>
   ),

@@ -3,6 +3,7 @@ import { Box, BoxProps } from '../../layout/Box/Box';
 import { Link } from '../Link/Link';
 import { Icon } from '../Icon/Icon';
 import { tokens } from '../../../tokens/tokens';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface BreadcrumbItemProps extends Omit<BoxProps, 'children'> {
   /**
@@ -41,11 +42,6 @@ export interface BreadcrumbItemProps extends Omit<BoxProps, 'children'> {
   size?: 'sm' | 'md' | 'lg';
   
   /**
-   * Dark mode styling
-   */
-  isDarkMode?: boolean;
-  
-  /**
    * Custom separator after this item
    */
   separator?: ReactNode;
@@ -77,24 +73,24 @@ const getSizeStyles = (size: string) => {
   return sizeMap[size as keyof typeof sizeMap];
 };
 
-const getItemColors = (current: boolean, disabled: boolean, isDarkMode: boolean) => {
+const getItemColors = (current: boolean, disabled: boolean, isDark: boolean) => {
   if (disabled) {
     return {
-      color: isDarkMode ? tokens.colors.gray['600'] : tokens.colors.gray['400'],
+      color: isDark ? tokens.colors.gray['600'] : tokens.colors.gray['400'],
       cursor: 'not-allowed',
     };
   }
   
   if (current) {
     return {
-      color: isDarkMode ? tokens.colors.gray['200'] : tokens.colors.gray['900'],
+      color: isDark ? tokens.colors.gray['200'] : tokens.colors.gray['900'],
       fontWeight: tokens.fontWeights.medium,
       cursor: 'default',
     };
   }
   
   return {
-    color: isDarkMode ? tokens.colors.gray['400'] : tokens.colors.gray['600'],
+    color: isDark ? tokens.colors.gray['400'] : tokens.colors.gray['600'],
     cursor: 'pointer',
     transition: 'color 150ms ease',
   };
@@ -108,15 +104,18 @@ export const BreadcrumbItem = forwardRef<HTMLElement, BreadcrumbItemProps>(({
   current = false,
   icon,
   size = 'md',
-  isDarkMode = false,
+  
   separator = '/',
   showSeparator = false,
   className = '',
   style,
   ...props
 }, ref) => {
+  const { colorScheme } = useThemeContext();
+  const isDark = colorScheme === 'dark';
+  
   const sizeStyles = getSizeStyles(size);
-  const colors = getItemColors(current, disabled, isDarkMode);
+  const colors = getItemColors(current, disabled, isDark);
   const isInteractive = (href || onClick) && !disabled && !current;
 
   const itemStyle = {
@@ -135,7 +134,7 @@ export const BreadcrumbItem = forwardRef<HTMLElement, BreadcrumbItemProps>(({
   };
 
   const hoverStyle = isInteractive ? {
-    color: isDarkMode ? tokens.colors.blue['400'] : tokens.colors.blue['600'],
+    color: isDark ? tokens.colors.blue['400'] : tokens.colors.blue['600'],
   } : {};
 
   const ItemContent = () => (
@@ -154,7 +153,7 @@ export const BreadcrumbItem = forwardRef<HTMLElement, BreadcrumbItemProps>(({
       onClick={disabled ? undefined : onClick}
     >
       {icon && (
-        <Icon size={sizeStyles.iconSize} isDarkMode={isDarkMode}>
+        <Icon size={sizeStyles.iconSize} >
           {icon}
         </Icon>
       )}
@@ -201,7 +200,7 @@ export const BreadcrumbItem = forwardRef<HTMLElement, BreadcrumbItemProps>(({
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            color: isDarkMode ? tokens.colors.gray['600'] : tokens.colors.gray['400'],
+            color: isDark ? tokens.colors.gray['600'] : tokens.colors.gray['400'],
             fontSize: sizeStyles.fontSize,
             margin: `0 ${tokens.spacing['2']}`,
           }}

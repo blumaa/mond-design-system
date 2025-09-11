@@ -16,7 +16,7 @@ import { Divider } from '../../atoms/Divider/Divider';
 import { FormField } from '../../molecules/FormField/FormField';
 import { Input } from '../../atoms/Input/Input';
 import { Select } from '../../atoms/Select/Select';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface DashboardMetric {
   id: string;
@@ -88,7 +88,6 @@ export interface DashboardProps {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom navigation items
@@ -227,7 +226,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   teamMembers = defaultTeamMembers,
   showSidebar = true,
   sidebarCollapsed = false,
-  isDarkMode = false,
+  
   navigationItems = defaultNavigationItems,
   headerActions,
   children,
@@ -235,7 +234,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
   onSidebarToggle,
   className,
 }) => {
-  const theme = useTheme(isDarkMode);
+  const { theme, colorScheme } = useThemeContext();
+  const isDarkMode = colorScheme === 'dark';
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('7d');
@@ -274,10 +274,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </Heading>
             <Grid columns={4} gap={16}>
               {metrics.map((metric) => (
-                <Card key={metric.id} padding={20} isDarkMode={isDarkMode}>
+                <Card key={metric.id} padding={20} >
                   <Stack spacing={8}>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text variant="body-sm" semantic="secondary" isDarkMode={isDarkMode}>
+                      <Text variant="body-sm" semantic="secondary" >
                         {metric.title}
                       </Text>
                       {metric.icon && (
@@ -286,7 +286,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                         </Box>
                       )}
                     </Box>
-                    <Text variant="body-lg" semantic="primary" isDarkMode={isDarkMode} style={{ fontWeight: 'bold' }}>
+                    <Text variant="body-lg" semantic="primary"  style={{ fontWeight: 'bold' }}>
                       {metric.value}
                     </Text>
                     {metric.change && (
@@ -297,11 +297,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
                             metric.changeType === 'negative' ? 'error' : 'default'
                           }
                           size="sm"
-                          isDarkMode={isDarkMode}
+                          
                         >
                           {metric.change}
                         </Badge>
-                        <Text variant="caption" semantic="tertiary" isDarkMode={isDarkMode}>
+                        <Text variant="caption" semantic="tertiary" >
                           from last month
                         </Text>
                       </Box>
@@ -317,7 +317,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <Heading level={3} style={{ marginBottom: '16px' }}>
               Recent Activity
             </Heading>
-            <Card padding={0} isDarkMode={isDarkMode}>
+            <Card padding={0} >
               <Stack spacing={0}>
                 {activities.map((activity, index) => (
                   <Box key={activity.id}>
@@ -326,14 +326,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
                         alt={activity.user.name}
                         fallback={activity.user.name}
                         size="sm"
-                        isDarkMode={isDarkMode}
+                        
                         style={{ flexShrink: 0 }}
                       />
                       <Box style={{ flex: 1 }}>
-                        <Text variant="body-md" semantic="primary" isDarkMode={isDarkMode}>
+                        <Text variant="body-md" semantic="primary" >
                           <strong>{activity.user.name}</strong> {activity.description}
                         </Text>
-                        <Text variant="caption" semantic="tertiary" isDarkMode={isDarkMode}>
+                        <Text variant="caption" semantic="tertiary" >
                           {formatTimeAgo(activity.timestamp)}
                         </Text>
                       </Box>
@@ -347,7 +347,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                         }}
                       />
                     </Box>
-                    {index < activities.length - 1 && <Divider isDarkMode={isDarkMode} />}
+                    {index < activities.length - 1 && <Divider  />}
                   </Box>
                 ))}
               </Stack>
@@ -377,14 +377,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     { value: '30d', label: 'Last 30 Days' },
                     { value: '90d', label: 'Last 90 Days' },
                   ]}
-                  isDarkMode={isDarkMode}
+                  
                 />
               </FormField>
             </Box>
           </Box>
           
           <Grid columns={2} gap={20}>
-            <Card padding={24} isDarkMode={isDarkMode}>
+            <Card padding={24} >
               <Stack spacing={16}>
                 <Heading level={4}>User Growth</Heading>
                 <Box style={{ 
@@ -395,14 +395,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+                  <Text variant="body-lg" semantic="secondary" >
                     📈 Chart Placeholder
                   </Text>
                 </Box>
               </Stack>
             </Card>
             
-            <Card padding={24} isDarkMode={isDarkMode}>
+            <Card padding={24} >
               <Stack spacing={16}>
                 <Heading level={4}>Revenue Trends</Heading>
                 <Box style={{ 
@@ -413,7 +413,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+                  <Text variant="body-lg" semantic="secondary" >
                     💹 Chart Placeholder
                   </Text>
                 </Box>
@@ -432,21 +432,21 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <Heading level={3}>
               Team Members
             </Heading>
-            <Button isDarkMode={isDarkMode}>
+            <Button >
               Invite Member
             </Button>
           </Box>
           
           <Grid columns={3} gap={16}>
             {teamMembers.map((member) => (
-              <Card key={member.id} padding={20} isDarkMode={isDarkMode}>
+              <Card key={member.id} padding={20} >
                 <Stack spacing={12} align="center">
                   <Box style={{ position: 'relative' }}>
                     <Avatar
                       alt={member.name}
                       fallback={member.name}
                       size="lg"
-                      isDarkMode={isDarkMode}
+                      
                     />
                     <Box
                       style={{
@@ -462,21 +462,21 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     />
                   </Box>
                   <Stack spacing={4} align="center">
-                    <Text variant="body-lg" semantic="primary" isDarkMode={isDarkMode} style={{ fontWeight: 'semibold' }}>
+                    <Text variant="body-lg" semantic="primary"  style={{ fontWeight: 'semibold' }}>
                       {member.name}
                     </Text>
-                    <Text variant="body-sm" semantic="secondary" isDarkMode={isDarkMode}>
+                    <Text variant="body-sm" semantic="secondary" >
                       {member.role}
                     </Text>
                     <Badge 
                       variant={member.status === 'online' ? 'success' : member.status === 'away' ? 'warning' : 'default'}
                       size="sm"
-                      isDarkMode={isDarkMode}
+                      
                     >
                       {member.status}
                     </Badge>
                     {member.status === 'offline' && member.lastActive && (
-                      <Text variant="caption" semantic="tertiary" isDarkMode={isDarkMode}>
+                      <Text variant="caption" semantic="tertiary" >
                         Last active {member.lastActive}
                       </Text>
                     )}
@@ -513,7 +513,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   inputSize="sm"
-                  isDarkMode={isDarkMode}
+                  
                 />
               </FormField>
               {currentUser && (
@@ -521,13 +521,13 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   alt={currentUser.name}
                   fallback={currentUser.name}
                   size="sm"
-                  isDarkMode={isDarkMode}
+                  
                 />
               )}
             </Box>
           )
         }
-        isDarkMode={isDarkMode}
+        
         onMobileMenuToggle={onSidebarToggle}
       />
 
@@ -537,7 +537,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <Sidebar
             sections={navigationItems}
             collapsed={sidebarCollapsed}
-            isDarkMode={isDarkMode}
+            
             onItemClick={(item) => onNavigationClick?.(item.id)}
             footer={
               currentUser && (
@@ -546,13 +546,13 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     alt={currentUser.name}
                     fallback={currentUser.name}
                     size="md"
-                    isDarkMode={isDarkMode}
+                    
                     style={{ marginBottom: '8px' }}
                   />
-                  <Text variant="body-sm" semantic="primary" isDarkMode={isDarkMode} style={{ fontWeight: 'medium' }}>
+                  <Text variant="body-sm" semantic="primary"  style={{ fontWeight: 'medium' }}>
                     {currentUser.name}
                   </Text>
-                  <Text variant="caption" semantic="secondary" isDarkMode={isDarkMode}>
+                  <Text variant="caption" semantic="secondary" >
                     {currentUser.role}
                   </Text>
                 </Box>
@@ -575,7 +575,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <Heading level={2} style={{ marginBottom: '8px' }}>
                   Welcome back{currentUser ? `, ${currentUser.name.split(' ')[0]}` : ''}! 👋
                 </Heading>
-                <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+                <Text variant="body-lg" semantic="secondary" >
                   Here's what's happening with your projects today.
                 </Text>
               </Box>
@@ -584,7 +584,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 tabs={tabItems}
                 defaultActiveTab={activeTab}
                 onChange={setActiveTab}
-                isDarkMode={isDarkMode}
+                
               />
             </Stack>
           )}

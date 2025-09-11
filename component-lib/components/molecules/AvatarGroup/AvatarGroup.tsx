@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box } from '../../layout/Box/Box';
 import { Avatar, AvatarProps, AvatarSize } from '../../atoms/Avatar/Avatar';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { radii, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
 
 export interface AvatarData extends Omit<AvatarProps, 'size' | 'isDarkMode'> {
@@ -65,7 +65,7 @@ export interface AvatarGroupProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /**
    * Custom render function for the "+N more" indicator
    */
-  renderExcess?: (count: number, size: AvatarSize, isDarkMode: boolean) => React.ReactNode;
+  renderExcess?: (count: number, size: AvatarSize, isDarkMode?: boolean) => React.ReactNode;
   
   /**
    * Callback when an avatar is clicked
@@ -146,7 +146,7 @@ const getSpacingOffset = (spacing: 'sm' | 'md' | 'lg', size: AvatarSize) => {
 const DefaultExcessAvatar: React.FC<{
   count: number;
   size: AvatarSize;
-  isDarkMode: boolean;
+  isDarkMode?: boolean;
   onClick?: () => void;
 }> = ({ count, size, isDarkMode, onClick }) => {
   const theme = useTheme(isDarkMode);
@@ -194,7 +194,7 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
     size = 'md',
     maxCount = 5,
     spacing = 'md',
-    isDarkMode = false,
+    isDarkMode,
     renderExcess,
     onAvatarClick,
     onExcessClick,
@@ -261,6 +261,7 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
                 count={hiddenAvatars.length}
                 size={size}
                 isDarkMode={isDarkMode}
+                
                 onClick={onExcessClick ? handleExcessClick : undefined}
               />
             )}
@@ -300,7 +301,7 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
                 <Avatar
                   {...avatar}
                   size={size}
-                  isDarkMode={isDarkMode}
+                  
                   style={{
                     border: `2px solid ${theme('surface.background')}`,
                     ...avatar.style,

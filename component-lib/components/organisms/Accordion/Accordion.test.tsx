@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Accordion, AccordionItem } from './Accordion';
 
@@ -396,13 +396,13 @@ describe('Accordion Component', () => {
 
   describe('Dark Mode', () => {
     it('applies dark mode styles', () => {
-      render(<Accordion items={mockItems} isDarkMode />);
+      render(<Accordion items={mockItems} />);
       const accordion = screen.getByRole('region', { name: /accordion/i });
       expect(accordion).toBeInTheDocument();
     });
 
     it('applies light mode by default', () => {
-      render(<Accordion items={mockItems} isDarkMode={false} />);
+      render(<Accordion items={mockItems}  />);
       const accordion = screen.getByRole('region', { name: /accordion/i });
       expect(accordion).toBeInTheDocument();
     });

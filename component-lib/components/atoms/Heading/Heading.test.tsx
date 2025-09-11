@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Heading } from './Heading';
 
@@ -144,7 +144,7 @@ describe('Heading', () => {
 
   it('supports dark mode', () => {
     render(
-      <Heading isDarkMode data-testid="dark-mode-heading">
+      <Heading data-testid="dark-mode-heading">
         Dark Mode Heading
       </Heading>
     );

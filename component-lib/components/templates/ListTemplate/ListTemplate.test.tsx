@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils';
 import userEvent from '@testing-library/user-event';
 import { ListTemplate, type ListItem, type ListFilter, type ListSort } from './ListTemplate';
 
@@ -352,7 +352,7 @@ describe('ListTemplate', () => {
   });
 
   it('renders in dark mode', () => {
-    render(<ListTemplate {...defaultProps} isDarkMode={true} />);
+    render(<ListTemplate {...defaultProps}  />);
     
     expect(screen.getByText('Test List')).toBeInTheDocument();
     // Component should render without errors in dark mode

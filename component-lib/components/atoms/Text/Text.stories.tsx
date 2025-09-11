@@ -273,18 +273,18 @@ export const DarkMode: Story = {
       flexDirection: 'column',
       gap: '12px'
     }}>
-      <Text isDarkMode semantic="primary">Primary text in dark mode</Text>
-      <Text isDarkMode semantic="secondary">Secondary text in dark mode</Text>
-      <Text isDarkMode semantic="tertiary">Tertiary text in dark mode</Text>
-      <Text isDarkMode semantic="success">Success text in dark mode</Text>
-      <Text isDarkMode semantic="warning">Warning text in dark mode</Text>
-      <Text isDarkMode semantic="error">Error text in dark mode</Text>
+      <Text semantic="primary">Primary text in dark mode</Text>
+      <Text semantic="secondary">Secondary text in dark mode</Text>
+      <Text semantic="tertiary">Tertiary text in dark mode</Text>
+      <Text semantic="success">Success text in dark mode</Text>
+      <Text semantic="warning">Warning text in dark mode</Text>
+      <Text semantic="error">Error text in dark mode</Text>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Text automatically adapts its colors for dark mode when isDarkMode is true. Semantic colors are automatically adjusted for optimal contrast.'
+        story: 'Text automatically adapts its colors for dark mode when is true. Semantic colors are automatically adjusted for optimal contrast.'
       }
     }
   }

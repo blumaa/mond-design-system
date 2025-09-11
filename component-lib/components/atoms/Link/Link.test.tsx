@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, renderWithDarkMode, screen, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Link } from './Link';
 
@@ -155,7 +155,7 @@ describe('Link Component', () => {
   });
 
   it('renders with dark mode', () => {
-    render(<Link href="/test" isDarkMode>Dark Mode Link</Link>);
+    renderWithDarkMode(<Link href="/test">Dark Mode Link</Link>);
     
     const link = screen.getByRole('link');
     expect(link).toBeInTheDocument();

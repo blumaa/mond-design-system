@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, createContext, useContext } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 
 export interface TabItem {
@@ -56,7 +56,6 @@ export interface TabsProps {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom className
@@ -260,11 +259,11 @@ export const Tabs: React.FC<TabsProps> = ({
   onChange,
   variant = 'line',
   size = 'md',
-  isDarkMode = false,
+  
   className,
   'data-testid': dataTestId,
 }) => {
-  const theme = useTheme(isDarkMode);
+  const { theme } = useThemeContext();
   const [internalActiveTab, setInternalActiveTab] = useState(() => {
     return controlledActiveTab || defaultActiveTab || tabs?.[0]?.id || '';
   });

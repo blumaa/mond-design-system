@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 
 export type SwitchSize = 'sm' | 'md' | 'lg';
@@ -14,11 +14,6 @@ export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
    */
   size?: SwitchSize;
   
-  /**
-   * Dark mode
-   * @default false
-   */
-  isDarkMode?: boolean;
   
   /**
    * Label text
@@ -70,7 +65,6 @@ const getSizeStyles = (size: SwitchSize) => {
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
   ({ 
     size = 'md',
-    isDarkMode = false,
     label,
     helperText,
     error,
@@ -80,7 +74,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     'data-testid': dataTestId,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const theme = useTheme();
     const sizeStyles = getSizeStyles(size);
     const switchId = props.id || `switch-${Math.random().toString(36).substr(2, 9)}`;
 

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { radii, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 import { AccordionItem } from '../../atoms/AccordionItem/AccordionItem';
 
@@ -104,7 +104,6 @@ export interface AccordionProps {
    * Dark mode support
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom className
@@ -113,7 +112,7 @@ export interface AccordionProps {
 }
 
 
-const getVariantStyles = (variant: AccordionVariant, theme: ReturnType<typeof useTheme>) => {
+const getVariantStyles = (variant: AccordionVariant, theme: ReturnType<typeof useThemeContext>['theme']) => {
   switch (variant) {
     case 'bordered':
       return {
@@ -162,11 +161,11 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
     animated = true,
     icon,
     iconPosition = 'right',
-    isDarkMode = false,
+    
     className,
     ...props
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     const variantStyles = getVariantStyles(variant, theme);
     const isControlled = expandedIds !== undefined && onExpandedChange !== undefined;
     
@@ -308,7 +307,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
                 animated={animated}
                 icon={displayIcon}
                 iconPosition={iconPosition}
-                isDarkMode={isDarkMode}
+                
                 itemId={item.id}
                 style={{
                   border: 'none',

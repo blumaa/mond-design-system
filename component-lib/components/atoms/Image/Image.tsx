@@ -2,6 +2,7 @@ import { forwardRef, useState } from 'react';
 import { Box, BoxProps } from '../../layout/Box/Box';
 import { Spinner } from '../Spinner/Spinner';
 import { tokens } from '../../../tokens/tokens';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export interface ImageProps extends Omit<BoxProps, 'as' | 'children'> {
   src: string;
@@ -17,6 +18,10 @@ export interface ImageProps extends Omit<BoxProps, 'as' | 'children'> {
   onError?: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   loading?: 'eager' | 'lazy';
   crossOrigin?: 'anonymous' | 'use-credentials';
+  /**
+   * Dark mode
+   * @default undefined - falls back to provider colorScheme
+   */
   isDarkMode?: boolean;
 }
 
@@ -45,11 +50,13 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(({
   onError,
   loading = 'lazy',
   crossOrigin,
-  isDarkMode = false,
+  isDarkMode,
   className = '',
   style,
   ...props
 }, ref) => {
+  const theme = useTheme(isDarkMode);
+  
   const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>('loading');
   const [currentSrc, setCurrentSrc] = useState(src);
 
@@ -103,8 +110,8 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(({
     display: imageState === 'error' ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: isDarkMode ? tokens.colors.gray['800'] : tokens.colors.gray['100'],
-    color: isDarkMode ? tokens.colors.gray['400'] : tokens.colors.gray['500'],
+    backgroundColor: theme('surface.elevated'),
+    color: theme('text.tertiary'),
     fontSize: tokens.fontSizes.sm,
     textAlign: 'center' as const,
     padding: tokens.spacing['4'],
@@ -114,7 +121,7 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(({
     width: '100%',
     height: '100%',
     minHeight: height || '120px',
-    backgroundColor: isDarkMode ? tokens.colors.gray['800'] : tokens.colors.gray['100'],
+    backgroundColor: theme('surface.elevated'),
     display: imageState === 'loading' && !showLoadingSpinner ? 'block' : 'none',
   };
 

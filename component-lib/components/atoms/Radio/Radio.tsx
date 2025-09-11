@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 
 export type RadioSize = 'sm' | 'md' | 'lg';
@@ -14,11 +14,6 @@ export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
    */
   size?: RadioSize;
   
-  /**
-   * Dark mode
-   * @default false
-   */
-  isDarkMode?: boolean;
   
   /**
    * Label text
@@ -67,7 +62,6 @@ const getSizeStyles = (size: RadioSize) => {
 export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
   ({ 
     size = 'md',
-    isDarkMode = false,
     label,
     error,
     helperText,
@@ -76,7 +70,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
     'data-testid': dataTestId,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const theme = useTheme();
     const sizeStyles = getSizeStyles(size);
     const radioId = props.id || `radio-${Math.random().toString(36).substr(2, 9)}`;
 

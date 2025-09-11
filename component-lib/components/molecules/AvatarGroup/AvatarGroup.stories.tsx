@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
 import { AvatarGroup, AvatarData } from './AvatarGroup';
 // Actions simplified for Storybook 9.x compatibility
 
@@ -386,15 +387,15 @@ export const DarkMode: Story = {
     }}>
       <div style={{ marginBottom: '24px' }}>
         <h3 style={{ color: 'white', marginTop: 0, marginBottom: '16px' }}>Team Avatars (Dark Mode)</h3>
-        <AvatarGroup {...args} isDarkMode />
+        <AvatarGroup {...args} />
       </div>
       
       <div style={{ marginBottom: '24px' }}>
         <h4 style={{ color: 'white', marginTop: 0, marginBottom: '12px' }}>Different Sizes</h4>
         <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-          <AvatarGroup {...args} size="sm" maxCount={3} isDarkMode />
-          <AvatarGroup {...args} size="md" maxCount={3} isDarkMode />
-          <AvatarGroup {...args} size="lg" maxCount={3} isDarkMode />
+          <AvatarGroup {...args} size="sm" maxCount={3} />
+          <AvatarGroup {...args} size="md" maxCount={3} />
+          <AvatarGroup {...args} size="lg" maxCount={3} />
         </div>
       </div>
       

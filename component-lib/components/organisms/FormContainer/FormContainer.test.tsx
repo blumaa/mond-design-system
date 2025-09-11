@@ -1,11 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '../../../test-utils';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { FormContainer, FormField } from './FormContainer';
 
 // Mock the theme utility
-jest.mock('../../../utils/theme', () => {
+jest.mock('../../../utils/themeResolver', () => {
   const themes = {
     light: {
       'text.primary': '#000000',
@@ -747,7 +747,7 @@ describe('FormContainer', () => {
         <FormContainer
           fields={basicFields}
           onSubmit={mockOnSubmit}
-          isDarkMode={true}
+          
           title="Dark Form"
         />
       );

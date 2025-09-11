@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { radii, spacing, fontSizes, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export type LinkSize = 'small' | 'medium' | 'large';
 
@@ -28,11 +28,6 @@ export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>
    */
   children?: React.ReactNode;
   
-  /**
-   * Dark mode
-   * @default false
-   */
-  isDarkMode?: boolean;
   
   /**
    * Link href
@@ -109,12 +104,11 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     iconOnly = false,
     icon,
     children,
-    isDarkMode = false,
     href,
     style = {},
     ...props
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const theme = useTheme();
     const sizeStyles = getSizeStyles(size, iconOnly);
     const linkStyles = getLinkStyles(theme);
 

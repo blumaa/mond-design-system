@@ -88,7 +88,7 @@ A semantic link component that maintains consistent styling and accessibility ac
       const [globals] = useGlobals();
       const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
       
-      // Override the isDarkMode prop based on Storybook theme
+      // Override the prop based on Storybook theme
       const storyArgs = {
         ...context.args,
         isDarkMode: isDark,

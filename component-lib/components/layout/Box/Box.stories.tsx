@@ -248,7 +248,7 @@ export const SemanticTokens: Story = {
         border="1px solid"
         borderColor="border.default"
         borderRadius={4}
-        isDarkMode={false}
+        
       >
         Light Mode - Using semantic tokens
       </Box>
@@ -259,7 +259,7 @@ export const SemanticTokens: Story = {
         border="1px solid"
         borderColor="border.default"
         borderRadius={4}
-        isDarkMode={true}
+        
       >
         Dark Mode - Using semantic tokens
       </Box>

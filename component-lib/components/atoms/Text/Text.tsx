@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { Box, type BoxProps } from '../../layout/Box/Box';
 import { fontSizes, fontWeights, lineHeights, fontFamilies } from '../../../tokens';
-import { resolveSemanticToken } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export type TextVariant = 
   | 'body-lg' 
@@ -84,11 +84,6 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
    */
   children: React.ReactNode;
 
-  /**
-   * Dark mode
-   * @default false
-   */
-  isDarkMode?: boolean;
 }
 
 const getVariantStyles = (variant: TextVariant) => {
@@ -121,10 +116,7 @@ const getVariantStyles = (variant: TextVariant) => {
   return styles[variant] || styles['body-md'];
 };
 
-const getSemanticColor = (semantic: TextSemantic, isDarkMode: boolean): string => {
-  const mode = isDarkMode ? 'dark' : 'light';
-  const theme = (path: string) => resolveSemanticToken(path, mode);
-
+const getSemanticColor = (semantic: TextSemantic, theme: ReturnType<typeof useTheme>): string => {
   const semanticColors = {
     primary: theme('text.primary'),
     secondary: theme('text.secondary'),
@@ -151,12 +143,12 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
   truncate = false,
   as = 'span',
   children,
-  isDarkMode = false,
   color,
   ...props
 }, ref) => {
+  const theme = useTheme();
   const variantStyles = getVariantStyles(variant);
-  const semanticColor = getSemanticColor(semantic, isDarkMode);
+  const semanticColor = getSemanticColor(semantic, theme);
   
   // Use custom color if provided, otherwise use semantic color
   const textColor = color || semanticColor;
@@ -178,7 +170,6 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
       textAlign={align}
       textDecoration={textDecoration}
       color={textColor}
-      isDarkMode={isDarkMode}
       {...variantStyles}
       {...(truncate && {
         overflow: 'hidden',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Switch } from './Switch';
 
@@ -155,7 +155,7 @@ describe('Switch Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
-      render(<Switch isDarkMode label="Dark switch" data-testid="dark-switch" />);
+      renderWithDarkMode(<Switch label="Dark switch" data-testid="dark-switch" />);
       const container = screen.getByTestId('dark-switch');
       const track = container.querySelector('[data-switch-track]') as HTMLElement;
       expect(track).not.toBeNull();

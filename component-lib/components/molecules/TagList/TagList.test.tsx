@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import { TagList, TagData } from './TagList';
 
 const mockTags: TagData[] = [
@@ -158,7 +158,7 @@ describe('TagList', () => {
   });
 
   it('renders with dark mode', () => {
-    render(<TagList tags={[{ id: '1', label: 'Dark' }]} isDarkMode={true} />);
+    render(<TagList tags={[{ id: '1', label: 'Dark' }]}  />);
     
     expect(screen.getByText('Dark')).toBeInTheDocument();
   });

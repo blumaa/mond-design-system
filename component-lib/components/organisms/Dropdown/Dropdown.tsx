@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { spacing, radii } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 import { DropdownItem } from '../../atoms/DropdownItem/DropdownItem';
 
@@ -56,7 +56,6 @@ export interface DropdownProps extends Omit<React.HTMLAttributes<HTMLDivElement>
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom data testid for testing
@@ -73,12 +72,12 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     onOpenChange,
     placement = 'bottom-start',
     closeOnSelect = true,
-    isDarkMode = false,
+    
     'data-testid': dataTestId,
     className,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     const [internalIsOpen, setInternalIsOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -226,7 +225,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             hasChildren={hasChildren}
             depth={depth}
             focused={isFocused}
-            isDarkMode={isDarkMode}
+            
             onSelect={(value) => {
               const selectedOption = flatOptions.find(opt => opt.value === value);
               if (selectedOption) {

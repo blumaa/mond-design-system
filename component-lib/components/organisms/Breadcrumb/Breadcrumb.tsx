@@ -46,7 +46,6 @@ export interface BreadcrumbProps extends React.HTMLAttributes<HTMLDivElement> {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom data testid for testing
@@ -61,7 +60,7 @@ export const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
     maxItems,
     showHomeIcon = false,
     size = 'md',
-    isDarkMode = false,
+    
     'data-testid': dataTestId,
     className,
     ...props 
@@ -139,7 +138,7 @@ export const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
               disabled={item.disabled}
               current={isLast}
               size={size}
-              isDarkMode={isDarkMode}
+              
               icon={isFirst && showHomeIcon ? homeIcon : item.icon}
               showSeparator={!isLast}
               separator={separator}

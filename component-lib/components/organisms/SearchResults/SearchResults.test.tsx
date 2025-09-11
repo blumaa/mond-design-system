@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import { SearchResults, SearchResult, SearchFilter } from './SearchResults';
 
 const mockResults: SearchResult[] = [
@@ -337,7 +337,7 @@ describe('SearchResults Component', () => {
 
   describe('Dark Mode', () => {
     it('applies dark mode theme', () => {
-      render(<SearchResults {...defaultProps} isDarkMode={true} />);
+      render(<SearchResults {...defaultProps}  />);
       
       // Component should render without errors in dark mode
       expect(screen.getByText('First Result')).toBeInTheDocument();

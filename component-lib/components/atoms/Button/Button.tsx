@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export type ButtonVariant = 'primary' | 'outline' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -56,7 +56,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   disabled?: boolean;
 
   /**
-   * Dark mode
+   * Dark mode control for theme resolution
    * @default false
    */
   isDarkMode?: boolean;
@@ -206,8 +206,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     alignContent = 'center',
     children, 
     iconOnly = false,
-    disabled = false, 
-    isDarkMode = false,
+    disabled = false,
+    isDarkMode,
     ...props 
   }, ref) => {
     const theme = useTheme(isDarkMode);

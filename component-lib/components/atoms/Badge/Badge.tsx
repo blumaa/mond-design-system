@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export type BadgeVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
 export type BadgeSize = 'sm' | 'md' | 'lg';
@@ -20,11 +20,6 @@ export interface BadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
    */
   size?: BadgeSize;
   
-  /**
-   * Dark mode
-   * @default false
-   */
-  isDarkMode?: boolean;
   
   /**
    * Badge content
@@ -106,13 +101,12 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
   ({ 
     variant = 'default',
     size = 'md',
-    isDarkMode = false,
     className,
     children,
     'data-testid': dataTestId,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const theme = useTheme();
     const sizeStyles = getSizeStyles(size);
     const variantStyles = getVariantStyles(variant, theme);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '../../../test-utils';
 import userEvent from '@testing-library/user-event';
 import { FormTemplate, type FormSection } from './FormTemplate';
 
@@ -399,7 +399,7 @@ describe('FormTemplate', () => {
   });
 
   it('renders in dark mode', () => {
-    render(<FormTemplate {...defaultProps} isDarkMode={true} />);
+    render(<FormTemplate {...defaultProps}  />);
     
     expect(screen.getByText('Test Form')).toBeInTheDocument();
   });

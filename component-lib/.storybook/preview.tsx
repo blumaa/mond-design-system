@@ -2,7 +2,7 @@ import React from 'react';
 import type { Preview } from "@storybook/react";
 import { withThemeByClassName } from '@storybook/addon-themes';
 import { ThemeProvider } from '../components/providers/ThemeProvider';
-import { mondTheme, cypherTheme, fluxTheme } from '../themes';
+import { mondTheme, cypherTheme, fluxTheme } from '../brands';
 import './styles.css';
 
 const preview: Preview = {
@@ -36,9 +36,9 @@ const preview: Preview = {
         title: 'Brand',
         icon: 'paintbrush',
         items: [
-          { value: 'mond', title: 'MOND (Professional)', left: '🏢' },
-          { value: 'cypher', title: 'CYPHER (Cyberpunk)', left: '🔋' },
-          { value: 'flux', title: 'FLUX (Festival)', left: '🎉' },
+          { value: 'mond', title: 'MOND', left: '🏢' },
+          { value: 'cypher', title: 'CYPHER', left: '🔋' },
+          { value: 'flux', title: 'FLUX', left: '🎉' },
         ],
         dynamicTitle: true,
       },
@@ -77,7 +77,7 @@ const preview: Preview = {
               transition: 'all 0.3s ease-in-out',
             }}
           >
-            <Story args={{ ...context.args, isDarkMode: isDark }} />
+            <Story args={{ ...context.args }} />
           </div>
         </ThemeProvider>
       );

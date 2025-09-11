@@ -552,7 +552,7 @@ export const DarkMode: Story = {
           isOpen={isOpen} 
           onClose={() => setIsOpen(false)}
           title="🌙 Dark Mode Modal"
-          isDarkMode={true}
+          
         >
           <p>This modal is rendered in dark mode with appropriate theming.</p>
           <p>The background, text colors, and borders are all adjusted for the dark theme.</p>

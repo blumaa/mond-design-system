@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { radii, spacing } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 import { InputSize, InputVariant } from '../../atoms/Input/Input';
 
@@ -30,7 +30,6 @@ export interface InputGroupProps extends Omit<React.HTMLAttributes<HTMLDivElemen
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * The Input component to enhance with prefix/suffix
@@ -49,19 +48,19 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
     suffix,
     inputSize = 'md',
     variant = 'default',
-    isDarkMode = false,
+    
     children,
     'data-testid': dataTestId,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     
     // Clone the input child to inherit group properties
     const enhancedInput = React.isValidElement(children) 
       ? React.cloneElement(children, {
           inputSize: (children.props as Record<string, unknown>).inputSize || inputSize,
           variant: (children.props as Record<string, unknown>).variant || variant,
-          isDarkMode: (children.props as Record<string, unknown>).isDarkMode ?? isDarkMode,
+          isDarkMode: (children.props as Record<string, unknown>).isDarkMode,
           // Preserve existing className
           className: (children.props as Record<string, unknown>).className,
           // Remove border radius on appropriate sides when prefix/suffix are present

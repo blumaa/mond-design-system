@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import { createThemeResolver, type Theme } from '../../utils/theme';
+import { createThemeResolver, type Theme } from '../../utils/themeResolver';
 
 /**
  * Brand theme configuration interface
@@ -120,10 +120,9 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
   // Create theme resolver with brand awareness
   const themeResolver = useMemo(() => {
-    // TODO: In a complete implementation, we would merge the brandTheme colors
-    // with the base design system tokens and create a custom resolver.
-    // For now, we use the existing resolver as foundation.
-    return createThemeResolver(colorScheme);
+    // Create brand-aware theme resolver that merges brand colors
+    // with base design system tokens
+    return createThemeResolver(colorScheme, brandTheme);
   }, [colorScheme, brandTheme]);
 
   const contextValue: ThemeContextValue = {
@@ -190,4 +189,35 @@ export function useThemeContext(): ThemeContextValue {
 export function useThemeResolver() {
   const { theme } = useThemeContext();
   return theme;
+}
+
+/**
+ * Brand-aware theme hook that combines ThemeProvider brand context with isDarkMode prop
+ * This is the primary hook components should use for theme resolution
+ * 
+ * @param isDarkMode - Whether dark mode is active (component-level control)
+ *                    If undefined, uses provider's colorScheme
+ * @returns Theme resolver function with brand context and light/dark mode
+ * 
+ * @example
+ * function MyComponent({ isDarkMode }) {
+ *   const theme = useTheme(isDarkMode); // Falls back to provider colorScheme if undefined
+ *   
+ *   return (
+ *     <button style={{ 
+ *       backgroundColor: theme('interactive.primary.background'), 
+ *       color: theme('interactive.primary.text')
+ *     }}>
+ *       Smart Theme Button
+ *     </button>
+ *   );
+ * }
+ */
+export function useTheme(isDarkMode?: boolean) {
+  const { brandTheme, colorScheme } = useThemeContext();
+  // Use component prop if provided, otherwise fall back to provider colorScheme
+  const currentTheme: Theme = isDarkMode !== undefined 
+    ? (isDarkMode ? 'dark' : 'light')
+    : colorScheme;
+  return createThemeResolver(currentTheme, brandTheme || undefined);
 }

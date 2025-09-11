@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Icon, IconSize } from './Icon';
 
@@ -145,7 +145,7 @@ describe('Icon', () => {
 
   it('supports dark mode', () => {
     render(
-      <Icon isDarkMode data-testid="icon">
+      <Icon data-testid="icon">
         <TestPath />
       </Icon>
     );

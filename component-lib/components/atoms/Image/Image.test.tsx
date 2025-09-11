@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Image } from './Image';
 
@@ -193,38 +193,38 @@ describe('Image', () => {
         src="https://example.com/image.jpg" 
         alt="Test image" 
         showLoadingSpinner={false}
-        isDarkMode={false}
+        
       />
     );
     
     // Look for placeholder div with light mode background
-    const placeholder = container.querySelector('[style*="background-color: rgb(241, 245, 249)"]');
+    const placeholder = container.querySelector('[style*="background-color: rgb(255, 255, 255)"]'); // surface.elevated (light)
     expect(placeholder).toBeInTheDocument();
   });
 
   it('shows error state in dark mode', async () => {
-    render(<Image src="https://example.com/error.jpg" alt="Test image" isDarkMode={true} />);
+    renderWithDarkMode(<Image src="https://example.com/error.jpg" alt="Test image"  />);
     
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
     
     await waitFor(() => {
       const errorContainer = screen.getByText('Failed to load image').parentElement?.parentElement;
-      expect(errorContainer).toHaveStyle('background-color: #1e293b'); // gray.800
-      expect(errorContainer).toHaveStyle('color: #94a3b8'); // gray.400
+      expect(errorContainer).toHaveStyle('background-color: #171717'); // surface.elevated (dark)
+      expect(errorContainer).toHaveStyle('color: #64748b'); // text.tertiary (dark)
     });
   });
 
   it('shows error state in light mode', async () => {
-    render(<Image src="https://example.com/error.jpg" alt="Test image" isDarkMode={false} />);
+    render(<Image src="https://example.com/error.jpg" alt="Test image"  />);
     
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
     
     await waitFor(() => {
       const errorContainer = screen.getByText('Failed to load image').parentElement?.parentElement;
-      expect(errorContainer).toHaveStyle('background-color: #f1f5f9'); // gray.100
-      expect(errorContainer).toHaveStyle('color: #64748b'); // gray.500
+      expect(errorContainer).toHaveStyle('background-color: #ffffff'); // surface.elevated (light)
+      expect(errorContainer).toHaveStyle('color: #64748b'); // text.tertiary (light)
     });
   });
 
@@ -243,7 +243,7 @@ describe('Image', () => {
   });
 
   it('shows spinner in dark mode', () => {
-    render(<Image src="https://example.com/image.jpg" alt="Test image" isDarkMode={true} />);
+    render(<Image src="https://example.com/image.jpg" alt="Test image"  />);
     
     const spinner = screen.getByRole('status');
     // The spinner should be rendered with isDarkMode=true

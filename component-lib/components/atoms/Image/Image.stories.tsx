@@ -385,7 +385,7 @@ export const ThemeVariants: Story = {
               alt="Loading state light"
               aspectRatio="4:3"
               showLoadingSpinner={false}
-              isDarkMode={false}
+              
               borderRadius="md"
             />
             <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Loading</div>
@@ -396,7 +396,7 @@ export const ThemeVariants: Story = {
               src="https://nonexistent-url.com/image.jpg"
               alt="Error state light"
               aspectRatio="4:3"
-              isDarkMode={false}
+              
               borderRadius="md"
             />
             <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Error</div>
@@ -419,7 +419,7 @@ export const ThemeVariants: Story = {
               alt="Loading state dark"
               aspectRatio="4:3"
               showLoadingSpinner={false}
-              isDarkMode={true}
+              
               borderRadius="md"
             />
             <div style={{ marginTop: '8px', fontSize: '12px', color: '#9ca3af' }}>Loading</div>
@@ -430,7 +430,7 @@ export const ThemeVariants: Story = {
               src="https://nonexistent-url.com/image.jpg"
               alt="Error state dark"
               aspectRatio="4:3"
-              isDarkMode={true}
+              
               borderRadius="md"
             />
             <div style={{ marginTop: '8px', fontSize: '12px', color: '#9ca3af' }}>Error</div>

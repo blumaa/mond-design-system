@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 
 export type TextareaSize = 'sm' | 'md' | 'lg';
@@ -24,7 +24,6 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Label for the textarea
@@ -115,7 +114,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ 
     textareaSize = 'md', 
     variant = 'default',
-    isDarkMode = false,
+    
     label,
     error,
     success,
@@ -124,7 +123,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     rows = 4,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const theme = useTheme();
     const sizeStyles = getSizeStyles(textareaSize);
     const variantStyles = getVariantStyles(variant, theme);
     const textareaId = props.id || `textarea-${Math.random().toString(36).substr(2, 9)}`;

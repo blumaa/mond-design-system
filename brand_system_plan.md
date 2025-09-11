@@ -1,12 +1,16 @@
 # Brand System Architecture Extension Plan
 
 ## 🎯 **Objective**
-Extend the existing Mond Design System with a multi-brand token architecture that supports dramatically different visual identities while maintaining component consistency and atomic design principles.
+Create a brand-agnostic design system that supports multiple brand themes while maintaining full light/dark mode compatibility for each brand.
 
-**Phase**: 1 of 4  
-**Timeline**: Weeks 1-2  
-**Dependencies**: Completed MDS (56 components)  
-**Status**: ⏳ Not Started
+**Current Status**: 🔧 **Architecture Fix in Progress**  
+**Critical Issue Discovered**: Components must support BOTH `isDarkMode` prop AND brand context simultaneously  
+
+**Architecture Requirements**:
+- Components accept `isDarkMode` prop for light/dark control
+- ThemeProvider provides brand context (MOND/CYPHER/FLUX)
+- Theme resolver combines: `brand context + isDarkMode + semantic token`
+- Result: Each brand works in both light and dark modes
 
 ---
 
@@ -20,11 +24,32 @@ Extend the existing Mond Design System with a multi-brand token architecture tha
 - ✅ 1,279 passing tests, full TypeScript coverage
 
 ### **Target State**
-- 🎯 Multi-brand token architecture
-- 🎯 Brand-specific semantic token overrides
-- 🎯 Three brands: MOND (default), CYPHER (cyberpunk), FLUX (festival)
-- 🎯 Dynamic brand switching capability
+- ✅ Multi-brand token architecture (COMPLETED)
+- ✅ External brand theme system (COMPLETED) 
+- ✅ Three brands: MOND, CYPHER, FLUX (COMPLETED)
+- 🔧 **FIXING**: Component architecture for dual control (brand + light/dark)
+- 🔧 **FIXING**: Theme resolver integration
+- 🎯 Full brand switching with light/dark mode support
 - 🎯 Backward compatibility maintained
+
+### **Current Architecture Issues**
+❌ **Components removed `isDarkMode` props** - This was incorrect  
+❌ **Theme resolver doesn't combine brand + light/dark** - Missing integration  
+❌ **TypeScript errors from overly aggressive prop removal** - Needs cleanup  
+
+### **Correct Architecture Pattern**
+```typescript
+// ✅ CORRECT: Components accept both
+<Button variant="primary" isDarkMode={isDark}>Click me</Button>
+
+// ✅ CORRECT: ThemeProvider gives brand context  
+<ThemeProvider brandTheme={cypherTheme}>
+  {/* Components inside get CYPHER brand + individual light/dark control */}
+</ThemeProvider>
+
+// ✅ CORRECT: Theme resolver combines both
+const theme = useTheme(isDarkMode); // Gets brand from context + light/dark from prop
+```
 
 ---
 

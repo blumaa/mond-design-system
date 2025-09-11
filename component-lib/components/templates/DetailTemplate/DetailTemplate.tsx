@@ -14,7 +14,7 @@ import { Badge } from '../../atoms/Badge/Badge';
 import { Avatar } from '../../atoms/Avatar/Avatar';
 import { Image } from '../../atoms/Image/Image';
 import { Tabs, TabItem } from '../../organisms/Tabs/Tabs';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface DetailAction {
   id: string;
@@ -216,7 +216,6 @@ export interface DetailTemplateProps {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Callback when navigation item is clicked
@@ -260,12 +259,12 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
   error,
   sidebarContent,
   onRelatedItemClick,
-  isDarkMode = false,
+  
   onNavigationClick,
   onSidebarToggle,
   className,
 }) => {
-  const theme = useTheme(isDarkMode);
+  const { theme } = useThemeContext();
   const [activeTab, setActiveTab] = useState(tabs[0]?.id || '');
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
     new Set(sections.filter(s => s.defaultCollapsed).map(s => s.id))
@@ -325,7 +324,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
         <Header
           title="Loading..."
           rightContent={headerActions}
-          isDarkMode={isDarkMode}
+          
           onMobileMenuToggle={onSidebarToggle}
         />
         <Box
@@ -348,7 +347,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
                 animation: 'spin 1s linear infinite',
               }}
             />
-            <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+            <Text variant="body-lg" semantic="secondary" >
               Loading content...
             </Text>
           </Stack>
@@ -372,7 +371,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
         <Header
           title="Error"
           rightContent={headerActions}
-          isDarkMode={isDarkMode}
+          
           onMobileMenuToggle={onSidebarToggle}
         />
         <Box
@@ -388,7 +387,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
             <Text
               variant="body-lg"
               semantic="tertiary"
-              isDarkMode={isDarkMode}
+              
               style={{ fontSize: '48px' }}
             >
               ⚠️
@@ -400,14 +399,14 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
               <Text
                 variant="body-lg"
                 semantic="secondary"
-                isDarkMode={isDarkMode}
+                
                 style={{ textAlign: 'center', maxWidth: '400px' }}
               >
                 {error.message}
               </Text>
             </Stack>
             {error.action && (
-              <Button onClick={error.action.onClick} isDarkMode={isDarkMode}>
+              <Button onClick={error.action.onClick} >
                 {error.action.label}
               </Button>
             )}
@@ -431,7 +430,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
               objectFit: 'cover',
               borderRadius: '8px',
             }}
-            isDarkMode={isDarkMode}
+            
           />
         </Box>
       )}
@@ -441,12 +440,12 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
         {(status || category) && (
           <Box style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             {status && (
-              <Badge variant={status.variant} isDarkMode={isDarkMode}>
+              <Badge variant={status.variant} >
                 {status.label}
               </Badge>
             )}
             {category && (
-              <Badge variant="secondary" isDarkMode={isDarkMode}>
+              <Badge variant="secondary" >
                 {category}
               </Badge>
             )}
@@ -459,7 +458,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
             {title}
           </Heading>
           {subtitle && (
-            <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+            <Text variant="body-lg" semantic="secondary" >
               {subtitle}
             </Text>
           )}
@@ -475,15 +474,15 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
                     src={author.avatar}
                     alt={author.name}
                     size="sm"
-                    isDarkMode={isDarkMode}
+                    
                   />
                 )}
                 <Box>
-                  <Text variant="body-sm" semantic="primary" isDarkMode={isDarkMode} style={{ fontWeight: 'medium' }}>
+                  <Text variant="body-sm" semantic="primary"  style={{ fontWeight: 'medium' }}>
                     {author.name}
                   </Text>
                   {author.role && (
-                    <Text variant="caption" semantic="secondary" isDarkMode={isDarkMode}>
+                    <Text variant="caption" semantic="secondary" >
                       {author.role}
                     </Text>
                   )}
@@ -491,12 +490,12 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
               </Box>
             )}
             {date && (
-              <Text variant="body-sm" semantic="secondary" isDarkMode={isDarkMode}>
+              <Text variant="body-sm" semantic="secondary" >
                 {formatDate(date)}
               </Text>
             )}
             {lastUpdated && (
-              <Text variant="caption" semantic="tertiary" isDarkMode={isDarkMode}>
+              <Text variant="caption" semantic="tertiary" >
                 Updated {formatDate(lastUpdated)}
               </Text>
             )}
@@ -507,7 +506,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
         {tags.length > 0 && (
           <Box style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {tags.map(tag => (
-              <Badge key={tag} variant="secondary" size="sm" isDarkMode={isDarkMode}>
+              <Badge key={tag} variant="secondary" size="sm" >
                 {tag}
               </Badge>
             ))}
@@ -523,7 +522,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
                 variant={action.variant || 'primary'}
                 disabled={action.disabled}
                 onClick={action.onClick}
-                isDarkMode={isDarkMode}
+                
               >
                 {action.icon && <span style={{ marginRight: '8px' }}>{action.icon}</span>}
                 {action.label}
@@ -540,19 +539,19 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
     if (metadata.length === 0) return null;
 
     return (
-      <Card padding={24} isDarkMode={isDarkMode}>
+      <Card padding={24} >
         <Stack spacing={16}>
           <Heading level={4}>Details</Heading>
           <Stack spacing={12}>
             {metadata.map(item => (
               <Box key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text variant="body-sm" semantic="secondary" isDarkMode={isDarkMode}>
+                <Text variant="body-sm" semantic="secondary" >
                   {item.icon && <span style={{ marginRight: '8px' }}>{item.icon}</span>}
                   {item.label}
                 </Text>
                 <Box style={{ textAlign: 'right' }}>
                   {typeof item.value === 'string' ? (
-                    <Text variant="body-sm" semantic="primary" isDarkMode={isDarkMode}>
+                    <Text variant="body-sm" semantic="primary" >
                       {item.value}
                     </Text>
                   ) : (
@@ -590,7 +589,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
               >
                 <Heading level={3}>{section.title}</Heading>
                 {section.collapsible && (
-                  <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+                  <Text variant="body-lg" semantic="secondary" >
                     {isCollapsed ? '▶' : '▼'}
                   </Text>
                 )}
@@ -622,7 +621,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
         tabs={tabItems}
         defaultActiveTab={activeTab}
         onChange={setActiveTab}
-        isDarkMode={isDarkMode}
+        
       />
     );
   };
@@ -641,7 +640,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
             <Card
               key={item.id}
               padding={16}
-              isDarkMode={isDarkMode}
+              
               style={{
                 cursor: onRelatedItemClick ? 'pointer' : 'default',
                 transition: 'all 150ms ease',
@@ -659,14 +658,14 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
                       objectFit: 'cover',
                       borderRadius: '6px',
                     }}
-                    isDarkMode={isDarkMode}
+                    
                   />
                 )}
                 <Box>
                   <Text
                     variant="body-sm"
                     semantic="primary"
-                    isDarkMode={isDarkMode}
+                    
                     style={{ fontWeight: 'medium', lineHeight: 1.3 }}
                   >
                     {item.title}
@@ -675,7 +674,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
                     <Text
                       variant="caption"
                       semantic="secondary"
-                      isDarkMode={isDarkMode}
+                      
                       style={{ marginTop: '4px', lineHeight: 1.3 }}
                     >
                       {item.description}
@@ -685,12 +684,12 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
                 {(item.category || item.date) && (
                   <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     {item.category && (
-                      <Badge variant="secondary" size="sm" isDarkMode={isDarkMode}>
+                      <Badge variant="secondary" size="sm" >
                         {item.category}
                       </Badge>
                     )}
                     {item.date && (
-                      <Text variant="caption" semantic="tertiary" isDarkMode={isDarkMode}>
+                      <Text variant="caption" semantic="tertiary" >
                         {formatDate(item.date)}
                       </Text>
                     )}
@@ -718,7 +717,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
       <Header
         title={title}
         rightContent={headerActions}
-        isDarkMode={isDarkMode}
+        
         onMobileMenuToggle={onSidebarToggle}
       />
 
@@ -729,7 +728,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
           <Sidebar
             sections={navigationItems}
             collapsed={sidebarCollapsed}
-            isDarkMode={isDarkMode}
+            
             onItemClick={(item) => onNavigationClick?.(item.id)}
           />
         )}
@@ -742,7 +741,7 @@ export const DetailTemplate: React.FC<DetailTemplateProps> = ({
               {breadcrumbs.length > 0 && (
                 <Breadcrumb
                   items={breadcrumbs}
-                  isDarkMode={isDarkMode}
+                  
                 />
               )}
 
