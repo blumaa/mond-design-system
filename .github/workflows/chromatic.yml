@@ -1,0 +1,48 @@
+# .github/workflows/chromatic.yml
+
+# Workflow name
+name: 'Chromatic Visual Testing'
+
+# Event for the workflow
+on: 
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+# List of jobs
+jobs:
+  chromatic-deployment:
+    # Operating System
+    runs-on: ubuntu-latest
+    # Job steps
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 👈 Required to retrieve git history
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: |
+          cd component-lib
+          yarn install --frozen-lockfile
+
+      - name: Build tokens
+        run: |
+          cd component-lib
+          yarn build:tokens
+
+      - name: Publish to Chromatic
+        uses: chromaui/action@v11
+        with:
+          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: component-lib
+          # Don't fail the build on visual changes
+          exitZeroOnChanges: true

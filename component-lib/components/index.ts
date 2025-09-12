@@ -4,6 +4,7 @@ export * from './layout/Stack';
 export * from './layout/Grid';
 export * from './layout/Card';
 
+
 // Atoms
 export * from './atoms/Button';
 export * from './atoms/Input';
@@ -68,3 +69,6 @@ export * from './templates/DetailTemplate';
 
 // Providers
 export * from './providers';
+
+// Brands
+export * from '../brands';

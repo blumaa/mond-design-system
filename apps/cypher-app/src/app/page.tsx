@@ -84,14 +84,7 @@ export default function CypherDashboard() {
               NEURAL INTERFACE ACTIVE // UTC: {currentTime}
             </Text>
           </Box>
-          <Badge 
-            variant="success" 
-            style={{
-              backgroundColor: '#00ff41',
-              color: '#0a0a0a',
-              boxShadow: '0 0 15px rgba(0, 255, 65, 0.3)'
-            }}
-          >
+          <Badge variant="success">
             SYSTEM ONLINE
           </Badge>
         </Box>

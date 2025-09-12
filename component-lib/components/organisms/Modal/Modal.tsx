@@ -106,12 +106,14 @@ export const ModalHeader: React.FC<{
   showCloseButton = true, 
   className 
 }) => {
+  const theme = useTheme();
+  
   const headerStyles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: `${spacing[4]} ${spacing[6]}`,
-    borderBottom: '1px solid #e5e7eb',
+    borderBottom: `1px solid ${theme('border.subtle')}`,
     fontSize: fontSizes.lg,
     fontWeight: fontWeights.semibold,
     fontFamily: fontFamilies.sans,
@@ -128,7 +130,7 @@ export const ModalHeader: React.FC<{
     cursor: 'pointer',
     borderRadius: radii.sm,
     fontSize: fontSizes.lg,
-    color: '#6b7280',
+    color: theme('text.secondary'),
     transition: 'all 150ms ease',
   };
 
@@ -173,13 +175,15 @@ export const ModalFooter: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => {
+  const theme = useTheme();
+  
   const footerStyles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     gap: spacing[3],
     padding: `${spacing[4]} ${spacing[6]}`,
-    borderTop: '1px solid #e5e7eb',
+    borderTop: `1px solid ${theme('border.subtle')}`,
   };
 
   return (
@@ -288,7 +292,7 @@ export const Modal: React.FC<ModalProps> = ({
   const overlayStyles = {
     position: 'fixed' as const,
     inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: theme('surface.overlay'),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

@@ -102,7 +102,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       backgroundColor: checked 
         ? theme('interactive.primary.text')
         : theme('surface.background'),
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+      boxShadow: theme('effects.shadow.base'),
       transition: 'all 200ms ease',
       position: 'absolute' as const,
       top: '50%',

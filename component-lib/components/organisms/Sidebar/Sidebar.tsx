@@ -4,8 +4,8 @@ import { Box, BoxProps } from '../../layout/Box/Box';
 import { Button } from '../../atoms/Button/Button';
 import { Icon } from '../../atoms/Icon/Icon';
 import { Link } from '../../atoms/Link/Link';
-import { tokens } from '../../../tokens/tokens';
-import { useThemeContext } from '../../providers/ThemeProvider';
+import { radii, spacing, fontSizes, fontWeights } from '../../../tokens';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export interface SidebarSection {
   id: string;
@@ -133,8 +133,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
   style,
   ...props
 }, ref) => {
-  const { colorScheme } = useThemeContext();
-  const isDark = colorScheme === 'dark';
+  const theme = useTheme();
   
   const [internalCollapsed, setInternalCollapsed] = useState(collapsed);
   const [sectionStates, setSectionStates] = useState<Record<string, boolean>>(() => {
@@ -181,20 +180,21 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
     }
   };
 
+  // Using semantic tokens for brand-agnostic styling
   const sidebarColors = {
-    background: isDark ? tokens.colors.gray['900'] : tokens.colors.white['50'],
-    border: isDark ? tokens.colors.gray['800'] : tokens.colors.gray['200'],
+    background: theme('surface.secondary'),
+    border: theme('border.subtle'),
     text: {
-      primary: isDark ? tokens.colors.gray['100'] : tokens.colors.gray['900'],
-      secondary: isDark ? tokens.colors.gray['400'] : tokens.colors.gray['600'],
-      disabled: isDark ? tokens.colors.gray['600'] : tokens.colors.gray['400'],
+      primary: theme('text.primary'),
+      secondary: theme('text.secondary'),
+      disabled: theme('text.disabled'),
     },
     active: {
-      background: isDark ? tokens.colors.blue['900'] : tokens.colors.blue['50'],
-      text: isDark ? tokens.colors.blue['400'] : tokens.colors.blue['600'],
+      background: theme('brand.interactive.background'),
+      text: theme('brand.interactive.text'),
     },
     hover: {
-      background: isDark ? tokens.colors.gray['800'] : tokens.colors.gray['50'],
+      background: theme('interactive.secondary.backgroundHover'),
     }
   };
 
@@ -230,15 +230,15 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: theme('brand.surface.overlay'),
     zIndex: 999,
     display: mobileOpen ? 'block' : 'none',
   };
 
   const renderItem = (item: SidebarItem, level: number = 0) => {
     const hasSubItems = item.subItems && item.subItems.length > 0;
-    const itemPadding = tokens.spacing['3'];
-    const subItemPadding = `${tokens.spacing['2']} ${tokens.spacing['3']} ${tokens.spacing['2']} ${tokens.spacing['6']}`;
+    const itemPadding = spacing['3'];
+    const subItemPadding = `${spacing['2']} ${spacing['3']} ${spacing['2']} ${spacing['6']}`;
     
     const itemStyle = {
       display: 'flex',
@@ -254,11 +254,11 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
           : sidebarColors.text.primary,
       textDecoration: 'none',
       cursor: item.disabled ? 'not-allowed' : 'pointer',
-      fontSize: tokens.fontSizes.sm,
-      fontWeight: item.active ? tokens.fontWeights.medium : tokens.fontWeights.normal,
+      fontSize: fontSizes.sm,
+      fontWeight: item.active ? fontWeights.medium : fontWeights.normal,
       transition: 'all 0.2s ease',
       textAlign: 'left' as const,
-      gap: tokens.spacing['3'],
+      gap: spacing['3'],
       opacity: item.disabled ? 0.5 : 1,
     };
 
@@ -292,11 +292,11 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
             {item.badge && (
               <Box
                 style={{
-                  backgroundColor: isDark ? tokens.colors.red['600'] : tokens.colors.red['500'],
-                  color: tokens.colors.white['50'],
-                  fontSize: tokens.fontSizes.xs,
-                  padding: `${tokens.spacing['1']} ${tokens.spacing['2']}`,
-                  borderRadius: tokens.radii.full,
+                  backgroundColor: theme('feedback.error.background'),
+                  color: theme('feedback.error.text'),
+                  fontSize: fontSizes.xs,
+                  padding: `${spacing['1']} ${spacing['2']}`,
+                  borderRadius: radii.full,
                   minWidth: '20px',
                   height: '20px',
                   display: 'flex',
@@ -352,14 +352,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
             style={{
               display: 'flex',
               alignItems: 'center',
-              padding: `${tokens.spacing['4']} ${tokens.spacing['3']} ${tokens.spacing['2']}`,
-              fontSize: tokens.fontSizes.xs,
-              fontWeight: tokens.fontWeights.semibold,
+              padding: `${spacing['4']} ${spacing['3']} ${spacing['2']}`,
+              fontSize: fontSizes.xs,
+              fontWeight: fontWeights.semibold,
               color: sidebarColors.text.secondary,
               textTransform: 'uppercase' as const,
               letterSpacing: '0.05em',
               cursor: section.collapsible !== false ? 'pointer' : 'default',
-              gap: tokens.spacing['2'],
+              gap: spacing['2'],
             }}
             onClick={() => section.collapsible !== false && handleSectionToggle(section.id)}
           >
@@ -430,7 +430,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
         {...props}
       >
         {header && (
-          <Box style={{ padding: tokens.spacing['4'], borderBottom: `1px solid ${sidebarColors.border}` }}>
+          <Box style={{ padding: spacing['4'], borderBottom: `1px solid ${sidebarColors.border}` }}>
             {header}
           </Box>
         )}
@@ -440,7 +440,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
         </Box>
         
         {footer && (
-          <Box style={{ padding: tokens.spacing['4'], borderTop: `1px solid ${sidebarColors.border}` }}>
+          <Box style={{ padding: spacing['4'], borderTop: `1px solid ${sidebarColors.border}` }}>
             {footer}
           </Box>
         )}
@@ -458,7 +458,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
     >
       {header && (
         <Box style={{ 
-          padding: isCollapsed ? tokens.spacing['2'] : tokens.spacing['4'], 
+          padding: isCollapsed ? spacing['2'] : spacing['4'], 
           borderBottom: `1px solid ${sidebarColors.border}`,
           display: 'flex',
           alignItems: 'center',
@@ -474,7 +474,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
               onClick={handleToggleCollapse}
               style={{
                 color: sidebarColors.text.secondary,
-                marginLeft: isCollapsed ? 0 : tokens.spacing['2'],
+                marginLeft: isCollapsed ? 0 : spacing['2'],
               }}
             >
               <Icon size="sm" >
@@ -502,7 +502,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
       
       {footer && (
         <Box style={{ 
-          padding: isCollapsed ? tokens.spacing['2'] : tokens.spacing['4'], 
+          padding: isCollapsed ? spacing['2'] : spacing['4'], 
           borderTop: `1px solid ${sidebarColors.border}`,
           display: 'flex',
           justifyContent: 'center',

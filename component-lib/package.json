@@ -48,6 +48,8 @@
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
+    "chromatic:ci": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --exit-zero-on-changes",
     "release:patch": "npm version patch && yarn build && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && yarn build && npm publish && git push --follow-tags",
     "release:major": "npm version major && yarn build && npm publish && git push --follow-tags"
@@ -76,6 +78,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.5.0",
+    "chromatic": "^13.1.4",
     "concurrently": "^8.2.2",
     "conventional-changelog-conventionalcommits": "^8.0.0",
     "eslint": "^8.0.0",

@@ -282,7 +282,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
               backgroundColor: theme('surface.overlay'),
               border: `1px solid ${theme('border.default')}`,
               borderRadius: radii.md,
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              boxShadow: theme('effects.shadow.md'),
               padding: spacing[1],
               ...getPlacementStyles(),
             }}

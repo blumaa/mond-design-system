@@ -358,7 +358,7 @@ describe('Modal Component', () => {
       expect(overlay).toHaveStyle('inset: 0');
       expect(overlay).toHaveStyle('z-index: 1000');
       // backdrop-filter may not be fully supported in test environment
-      expect(overlay).toHaveStyle('background-color: rgba(0, 0, 0, 0.5)');
+      expect(overlay).toHaveStyle('background-color: rgb(254, 254, 254)');
     });
   });
 

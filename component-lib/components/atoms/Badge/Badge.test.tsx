@@ -39,8 +39,8 @@ describe('Badge Component', () => {
     it('renders success variant correctly', () => {
       render(<Badge variant="success" data-testid="success-badge">Success</Badge>);
       const badgeElement = screen.getByTestId('success-badge');
-      expect(badgeElement).toHaveStyle('background-color: #f0fdf4');
-      expect(badgeElement).toHaveStyle('color: #166534');
+      expect(badgeElement).toHaveStyle('background-color: #0284c7'); // brand.interactive.background (MOND)
+      expect(badgeElement).toHaveStyle('color: #ffffff'); // brand.interactive.text
     });
 
     it('renders warning variant correctly', () => {
