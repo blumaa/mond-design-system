@@ -1,4 +1,5 @@
 import { tokens } from '../tokens';
+import type { BrandTheme } from '../components/providers/ThemeProvider';
 
 export type Theme = 'light' | 'dark';
 
@@ -12,18 +13,25 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string {
   }, obj) as unknown as string;
 }
 
+
 /**
  * Resolves a semantic token to its actual color value based on the current theme
  * 
  * @param semanticTokenPath - Path to semantic token (e.g., 'text.primary')
  * @param theme - Current theme ('light' or 'dark')
+ * @param brandTheme - Optional brand theme for overrides
  * @returns Resolved hex color value
  * 
  * @example
  * resolveSemanticToken('text.primary', 'light') // returns '#0f172a' (gray.900)
  * resolveSemanticToken('interactive.primary.background', 'dark') // returns '#0ea5e9' (blue.500)
+ * resolveSemanticToken('interactive.primary.background', 'light', cypherTheme) // returns brand primary
  */
-export function resolveSemanticToken(semanticTokenPath: string, theme: Theme = 'light'): string {
+export function resolveSemanticToken(
+  semanticTokenPath: string, 
+  theme: Theme = 'light',
+  brandTheme?: BrandTheme
+): string {
   // Get the semantic token definition
   const semanticToken = getNestedValue(tokens.semantic, semanticTokenPath);
   
@@ -45,7 +53,22 @@ export function resolveSemanticToken(semanticTokenPath: string, theme: Theme = '
     return '#000000'; // Fallback to black
   }
   
-  // Resolve the color reference (e.g., 'gray.900' -> '#0f172a')
+  // Check if this is a brand color reference (e.g., 'brand.primary.600')
+  if (colorReference.startsWith('brand.') && brandTheme) {
+    const brandPath = colorReference.replace('brand.', '');
+    const [colorType, shade] = brandPath.split('.');
+    
+    if (colorType && shade && brandTheme.colors.brand[colorType as keyof typeof brandTheme.colors.brand]) {
+      const brandColorScale = brandTheme.colors.brand[colorType as keyof typeof brandTheme.colors.brand];
+      const brandColor = (brandColorScale as unknown as Record<string, string>)?.[shade];
+      
+      if (brandColor) {
+        return brandColor;
+      }
+    }
+  }
+  
+  // Resolve the color reference from base tokens (e.g., 'gray.900' -> '#0f172a')
   const resolvedColor = getNestedValue(tokens.colors, colorReference);
   
   if (!resolvedColor) {
@@ -60,65 +83,36 @@ export function resolveSemanticToken(semanticTokenPath: string, theme: Theme = '
  * Creates a theme resolver function that automatically uses the specified theme
  * 
  * @param theme - The theme to use for all resolutions
+ * @param brandTheme - Optional brand theme for color overrides
  * @returns Function that resolves semantic tokens for the specified theme
  * 
  * @example
  * const lightTheme = createThemeResolver('light');
  * const darkTheme = createThemeResolver('dark');
+ * const cypherTheme = createThemeResolver('light', cypherBrandTheme);
  * 
  * const textColor = lightTheme('text.primary'); // '#0f172a'
  * const darkTextColor = darkTheme('text.primary'); // '#f1f5f9'
+ * const brandedButton = cypherTheme('interactive.primary.background'); // '#00ff94'
  */
-export function createThemeResolver(theme: Theme) {
+export function createThemeResolver(theme: Theme, brandTheme?: BrandTheme) {
   return (semanticTokenPath: string): string => {
-    return resolveSemanticToken(semanticTokenPath, theme);
+    return resolveSemanticToken(semanticTokenPath, theme, brandTheme);
   };
 }
 
-/**
- * Gets both light and dark theme values for a semantic token
- * 
- * @param semanticTokenPath - Path to semantic token
- * @returns Object with light and dark theme values
- * 
- * @example
- * getThemeValues('text.primary') 
- * // returns { light: '#0f172a', dark: '#f1f5f9' }
- */
-export function getThemeValues(semanticTokenPath: string): { light: string; dark: string } {
-  return {
-    light: resolveSemanticToken(semanticTokenPath, 'light'),
-    dark: resolveSemanticToken(semanticTokenPath, 'dark'),
-  };
-}
 
 /**
- * React hook for using semantic tokens with theme awareness
+ * Basic theme hook without brand context (legacy/standalone usage)
+ * For new components, use useTheme from ThemeProvider instead
  * 
  * @param isDarkMode - Whether dark mode is active
- * @returns Theme resolver function for current theme
- * 
- * @example
- * function MyComponent({ isDarkMode }) {
- *   const theme = useTheme(isDarkMode);
- *   
- *   return (
- *     <div style={{ 
- *       color: theme('text.primary'),
- *       backgroundColor: theme('surface.background')
- *     }}>
- *       Content
- *     </div>
- *   );
- * }
+ * @returns Theme resolver function for current theme (no brand context)
+ * @deprecated Use useTheme from ThemeProvider for brand-aware components
  */
-export function useTheme(isDarkMode: boolean = false) {
+export function useBasicTheme(isDarkMode: boolean = false) {
   const currentTheme: Theme = isDarkMode ? 'dark' : 'light';
-  return createThemeResolver(currentTheme);
+  
+  // For components outside of ThemeProvider, use default (no brand)
+  return createThemeResolver(currentTheme, undefined);
 }
-
-// Export semantic tokens for direct access if needed
-export const semantic = tokens.semantic;
-
-// Export core colors for fallback scenarios  
-export const colors = tokens.colors;

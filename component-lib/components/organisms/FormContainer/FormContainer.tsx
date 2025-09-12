@@ -16,7 +16,7 @@ import { RadioGroup } from '../../molecules/RadioGroup/RadioGroup';
 // CheckboxGroup import removed - not used in current implementation
 import { Heading } from '../../atoms/Heading/Heading';
 import { Text } from '../../atoms/Text/Text';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface FormField {
   name: string;
@@ -149,7 +149,6 @@ export interface FormContainerProps {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Additional className
@@ -229,12 +228,12 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
     showProgress = false,
     currentStep,
     totalSteps,
-    isDarkMode = false,
+    
     className,
     'data-testid': dataTestId,
     ...props
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     
     // Initialize form state with default values
     const initialFormState: FormState = useMemo(() => ({
@@ -447,7 +446,7 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleFieldChange(field.name, e.target.value)}
               onBlur={() => handleFieldBlur(field.name)}
               placeholder={field.placeholder}
-              isDarkMode={isDarkMode}
+              
             />
           );
           break;
@@ -460,7 +459,7 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
               value={String(fieldValue || '')}
               options={field.options || []}
               placeholder={field.placeholder}
-              isDarkMode={isDarkMode}
+              
               onChange={(value) => {
                 handleFieldChange(field.name, value);
                 handleFieldBlur(field.name); // Handle blur on change for Select
@@ -478,7 +477,7 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
               checked={Boolean(fieldValue)}
               label={field.label}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFieldChange(field.name, e.target.checked)}
-              isDarkMode={isDarkMode}
+              
             />
           );
           break;
@@ -489,7 +488,7 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
               value={String(fieldValue || '')}
               onChange={(value) => handleFieldChange(field.name, value)}
               options={field.options || []}
-              isDarkMode={isDarkMode}
+              
             />
           );
           break;
@@ -505,7 +504,7 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
               type={field.type}
               placeholder={field.placeholder}
               inputSize={getInputSize(size)}
-              isDarkMode={isDarkMode}
+              
             />
           );
           break;
@@ -523,12 +522,12 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
           required={field.required}
           error={showError ? fieldError : undefined}
           helpText={field.description}
-          isDarkMode={isDarkMode}
+          
         >
           {control}
         </FormField>
       );
-    }, [formState, disabled, size, isDarkMode, handleFieldChange, handleFieldBlur, validationMode]);
+    }, [formState, disabled, size,  handleFieldChange, handleFieldBlur, validationMode]);
     
     // Render fields based on layout
     const renderFields = () => {
@@ -613,12 +612,12 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
         {(title || description) && (
           <Box mb={32}>
             {title && (
-              <Heading size="lg" mb={description ? 8 : 0} isDarkMode={isDarkMode}>
+              <Heading size="lg" mb={description ? 8 : 0} >
                 {title}
               </Heading>
             )}
             {description && (
-              <Text color={theme('text.secondary')} isDarkMode={isDarkMode}>
+              <Text color={theme('text.secondary')} >
                 {description}
               </Text>
             )}
@@ -668,7 +667,7 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
               size={size}
               onClick={handleReset}
               disabled={disabled || loading}
-              isDarkMode={isDarkMode}
+              
             >
               {resetText}
             </Button>
@@ -677,7 +676,7 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
             type="submit"
             size={size}
             disabled={disabled || formState.submissionState === 'submitting'}
-            isDarkMode={isDarkMode}
+            
           >
             {formState.submissionState === 'submitting' ? 'Submitting...' : submitText}
           </Button>
@@ -695,7 +694,7 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
         {...props}
       >
         {variant === 'card' ? (
-          <Card isDarkMode={isDarkMode} p={32}>
+          <Card  p={32}>
             {formContent}
           </Card>
         ) : variant === 'bordered' ? (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Header } from './Header';
 
@@ -274,7 +274,7 @@ describe('Header Component', () => {
 
   it('applies dark mode', () => {
     render(
-      <Header isDarkMode data-testid="header" />
+      <Header data-testid="header" />
     );
     
     const header = screen.getByTestId('header');

@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
@@ -196,7 +196,7 @@ export const Modal: React.FC<ModalProps> = ({
   size = 'md',
   closeOnOverlayClick = true,
   closeOnEscapeKey = true,
-  isDarkMode = false,
+  isDarkMode,
   className,
   children,
   'data-testid': dataTestId,

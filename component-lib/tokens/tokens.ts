@@ -406,6 +406,38 @@ export const tokens = {
           "dark": "blue.200"
         }
       }
+    },
+    "effects": {
+      "shadow": {
+        "none": {
+          "light": "none",
+          "dark": "none"
+        },
+        "sm": {
+          "light": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+          "dark": "0 1px 2px 0 rgb(0 0 0 / 0.3)"
+        },
+        "base": {
+          "light": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06)",
+          "dark": "0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px 0 rgb(0 0 0 / 0.24)"
+        },
+        "md": {
+          "light": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06)",
+          "dark": "0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -1px rgb(0 0 0 / 0.24)"
+        },
+        "lg": {
+          "light": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05)",
+          "dark": "0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -2px rgb(0 0 0 / 0.2)"
+        },
+        "xl": {
+          "light": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04)",
+          "dark": "0 20px 25px -5px rgb(0 0 0 / 0.4), 0 10px 10px -5px rgb(0 0 0 / 0.16)"
+        },
+        "2xl": {
+          "light": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+          "dark": "0 25px 50px -12px rgb(0 0 0 / 0.6)"
+        }
+      }
     }
   },
   "shadows": {

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Stack } from '../../layout/Stack/Stack';
 import { Box } from '../../layout/Box/Box';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface FormGroupProps {
   'data-testid'?: string;
@@ -27,7 +27,6 @@ export interface FormGroupProps {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Form fields to group together
@@ -45,13 +44,13 @@ export const FormGroup = React.forwardRef<HTMLDivElement, FormGroupProps>(
     title,
     description,
     spacing = 20,
-    isDarkMode = false,
+    
     children,
     className,
     'data-testid': dataTestId,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
 
     return (
       <Box

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, renderWithDarkMode, screen, fireEvent } from '../../../test-utils';
 import { BreadcrumbItem } from './BreadcrumbItem';
 
 describe('BreadcrumbItem', () => {
@@ -117,7 +117,7 @@ describe('BreadcrumbItem', () => {
   });
 
   it('renders with dark mode', () => {
-    render(<BreadcrumbItem isDarkMode>Dark Mode</BreadcrumbItem>);
+    renderWithDarkMode(<BreadcrumbItem>Dark Mode</BreadcrumbItem>);
     
     expect(screen.getByText('Dark Mode')).toBeInTheDocument();
   });

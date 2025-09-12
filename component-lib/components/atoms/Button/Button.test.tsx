@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, renderWithDarkMode, screen, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Button } from '../Button';
 
@@ -130,7 +130,7 @@ describe('Button Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styles', () => {
-      render(<Button isDarkMode>Dark Mode</Button>);
+      renderWithDarkMode(<Button>Dark Mode</Button>);
       const button = screen.getByRole('button');
       expect(button).toHaveStyle('background-color: #0ea5e9'); // blue.500 for dark mode
     });

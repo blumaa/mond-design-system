@@ -1,58 +1,16 @@
 "use client";
-import { Button, resolveSemanticToken, fontFamilies, fontSizes, fontWeights } from "@mond-design-system/theme";
-import { useTheme } from "./context/ThemeContext";
-import { ThemeSwitch } from "./components/ThemeSwitch";
+import { Box, Button, Divider, Heading } from "@mond-design-system/theme";
+import { DarkModeToggle } from "./components/DarkModeToggle";
+import { useTheme as useThemeContext } from "./components/ThemeWrapper";
+import { useTheme } from "@mond-design-system/theme";
 
 export default function Home() {
-  const { isDarkMode, mounted } = useTheme();
-
-  const theme = isDarkMode ? 'dark' : 'light';
-  const backgroundColor = resolveSemanticToken('surface.background', theme);
-  const textColor = resolveSemanticToken('text.primary', theme);
-
-  // Show loading state until mounted to prevent hydration issues
-  if (!mounted) {
-    return (
-      <>
-        <div
-          style={{
-            position: "fixed",
-            top: "1rem",
-            left: "1rem",
-            width: "40px",
-            height: "40px",
-          }}
-        />
-        <main
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: "100vh",
-            gap: "1rem",
-            backgroundColor,
-            color: textColor,
-            fontFamily: fontFamilies.sans,
-          }}
-        >
-          <h1
-            style={{
-              marginBottom: "2rem",
-              fontSize: fontSizes["4xl"],
-              fontWeight: fontWeights.bold,
-            }}
-          >
-            Mond Design System
-          </h1>
-        </main>
-      </>
-    );
-  }
+  const { isDarkMode } = useThemeContext();
+  const theme = useTheme(isDarkMode);
 
   return (
     <>
-      <ThemeSwitch />
+      <DarkModeToggle />
       <main
         style={{
           display: "flex",
@@ -61,72 +19,55 @@ export default function Home() {
           justifyContent: "center",
           minHeight: "100vh",
           gap: "1rem",
-          backgroundColor,
-          color: textColor,
-          fontFamily: fontFamilies.sans,
-          transition: "background-color 0.3s ease, color 0.3s ease",
+          padding: "2rem",
+          backgroundColor: theme("surface.background"),
+          color: theme("text.primary"),
+          transition: "all 0.3s ease",
         }}
       >
-        <h1
-          style={{ marginBottom: "2rem", fontSize: fontSizes["4xl"], fontWeight: fontWeights.bold }}
-        >
+        <Heading level={1} size="4xl" weight="bold" isDarkMode={isDarkMode}>
           Mond Design System
-        </h1>
+        </Heading>
+
+        <Box width="50%" mb="2rem">
+          <Divider size="sm" isDarkMode={isDarkMode} variant="subtle" />
+        </Box>
 
         <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>
-          <Button variant="primary" isDarkMode={isDarkMode}>
-            Primary Button
-          </Button>
-          <Button variant="outline" isDarkMode={isDarkMode}>
-            Outline Button
-          </Button>
-          <Button variant="ghost" isDarkMode={isDarkMode}>
-            Ghost Button
-          </Button>
+          <Button variant="primary">Primary Button</Button>
+          <Button variant="outline">Outline Button</Button>
+          <Button variant="ghost">Ghost Button</Button>
         </div>
 
         <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>
-          <Button size="sm" isDarkMode={isDarkMode}>
-            Small Button
-          </Button>
-          <Button size="md" isDarkMode={isDarkMode}>
-            Medium Button
-          </Button>
-          <Button size="lg" isDarkMode={isDarkMode}>
-            Large Button
-          </Button>
+          <Button size="sm">Small Button</Button>
+          <Button size="md">Medium Button</Button>
+          <Button size="lg">Large Button</Button>
         </div>
 
         <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>
-          <Button variant="primary" corners="rounded" isDarkMode={isDarkMode}>
+          <Button variant="primary" corners="rounded">
             Rounded
           </Button>
-          <Button variant="outline" corners="default" isDarkMode={isDarkMode}>
+          <Button variant="outline" corners="default">
             Default Corners
           </Button>
         </div>
 
         <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>
-          <Button variant="primary" iconOnly isDarkMode={isDarkMode}>
+          <Button variant="primary" iconOnly>
             ✓
           </Button>
-          <Button
-            variant="ghost"
-            iconOnly
-            corners="rounded"
-            isDarkMode={isDarkMode}
-          >
+          <Button variant="ghost" iconOnly corners="rounded">
             ♥
           </Button>
-          <Button variant="outline" iconOnly isDarkMode={isDarkMode}>
+          <Button variant="outline" iconOnly>
             ⚙
           </Button>
         </div>
 
         <div style={{ marginTop: "2rem" }}>
-          <Button disabled isDarkMode={isDarkMode}>
-            Disabled Button
-          </Button>
+          <Button disabled>Disabled Button</Button>
         </div>
       </main>
     </>

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useCallback } from 'react';
 import { spacing, fontSizes, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 import { Checkbox, CheckboxSize } from '../../atoms/Checkbox/Checkbox';
 
@@ -70,7 +70,6 @@ export interface CheckboxGroupProps extends Omit<React.HTMLAttributes<HTMLFieldS
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom data testid for testing
@@ -96,12 +95,12 @@ export const CheckboxGroup = React.forwardRef<HTMLFieldSetElement, CheckboxGroup
     error,
     helperText,
     orientation = 'vertical',
-    isDarkMode = false,
+    
     'data-testid': dataTestId,
     disabled = false,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     
     // Internal state for uncontrolled mode
     const [internalValue, setInternalValue] = useState<string[]>(defaultValue || []);
@@ -178,7 +177,7 @@ export const CheckboxGroup = React.forwardRef<HTMLFieldSetElement, CheckboxGroup
               checked={selectedValues.includes(option.value)}
               onChange={(e) => handleChange(option.value, e.target.checked)}
               disabled={disabled || option.disabled}
-              isDarkMode={isDarkMode}
+              
             />
           ))}
         </Box>

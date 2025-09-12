@@ -1,11 +1,11 @@
 import { forwardRef, useEffect } from 'react';
 import { Box, BoxProps } from '../../layout/Box/Box';
 import { tokens } from '../../../tokens/tokens';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface SpinnerProps extends Omit<BoxProps, 'children' | 'width' | 'height'> {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   color?: string;
-  isDarkMode?: boolean;
   label?: string;
 }
 
@@ -17,9 +17,9 @@ const sizeMap = {
   xl: tokens.spacing['10'], // 2.5rem
 };
 
-const getSpinnerColor = (color: string | undefined, isDarkMode: boolean) => {
+const getSpinnerColor = (color?: string, isDark?: boolean) => {
   if (color) return color;
-  return isDarkMode ? tokens.colors.blue['400'] : tokens.colors.blue['600'];
+  return isDark ? tokens.colors.blue['400'] : tokens.colors.blue['600'];
 };
 
 // Inject CSS animation keyframes into the document head
@@ -42,14 +42,17 @@ const injectSpinnerKeyframes = () => {
 export const Spinner = forwardRef<HTMLElement, SpinnerProps>(({
   size = 'md',
   color,
-  isDarkMode = false,
+  
   label = 'Loading...',
   className = '',
   style,
   ...props
 }, ref) => {
+  const { colorScheme } = useThemeContext();
+  const isDark = colorScheme === 'dark';
+  
   const spinnerSize = sizeMap[size];
-  const spinnerColor = getSpinnerColor(color, isDarkMode);
+  const spinnerColor = getSpinnerColor(color, isDark);
 
   useEffect(() => {
     injectSpinnerKeyframes();

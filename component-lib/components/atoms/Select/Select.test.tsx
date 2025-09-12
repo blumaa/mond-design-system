@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Select } from './Select';
 
@@ -224,7 +224,7 @@ describe('Select Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
-      render(<Select isDarkMode options={mockOptions} data-testid="dark-select" />);
+      renderWithDarkMode(<Select options={mockOptions} data-testid="dark-select" />);
       const selectButton = screen.getByRole('button');
       expect(selectButton).toHaveStyle('background-color: #171717');
     });

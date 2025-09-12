@@ -2,6 +2,7 @@ import { forwardRef, ReactNode } from 'react';
 import { Box, BoxProps } from '../../layout/Box/Box';
 import { Icon } from '../Icon/Icon';
 import { tokens } from '../../../tokens/tokens';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface TagProps extends Omit<BoxProps, 'children' | 'as'> {
   children: ReactNode;
@@ -45,12 +46,12 @@ const getSizeStyles = (size: string) => {
   return sizeMap[size as keyof typeof sizeMap];
 };
 
-const getSemanticColors = (semantic: string, variant: string, isDarkMode: boolean, disabled: boolean) => {
+const getTagColors = (variant: string, semantic: string, disabled: boolean, isDark: boolean) => {
   if (disabled) {
     const disabledColors = {
-      background: isDarkMode ? tokens.colors.gray['800'] : tokens.colors.gray['100'],
-      text: isDarkMode ? tokens.colors.gray['600'] : tokens.colors.gray['400'],
-      border: isDarkMode ? tokens.colors.gray['700'] : tokens.colors.gray['200'],
+      background: isDark ? tokens.colors.gray['800'] : tokens.colors.gray['100'],
+      text: isDark ? tokens.colors.gray['600'] : tokens.colors.gray['400'],
+      border: isDark ? tokens.colors.gray['700'] : tokens.colors.gray['200'],
     };
     return disabledColors;
   }
@@ -58,103 +59,103 @@ const getSemanticColors = (semantic: string, variant: string, isDarkMode: boolea
   const colorMap = {
     default: {
       filled: {
-        background: isDarkMode ? tokens.colors.gray['700'] : tokens.colors.gray['100'],
-        text: isDarkMode ? tokens.colors.gray['200'] : tokens.colors.gray['800'],
+        background: isDark ? tokens.colors.gray['700'] : tokens.colors.gray['100'],
+        text: isDark ? tokens.colors.gray['200'] : tokens.colors.gray['800'],
         border: 'transparent',
       },
       outlined: {
         background: 'transparent',
-        text: isDarkMode ? tokens.colors.gray['300'] : tokens.colors.gray['700'],
-        border: isDarkMode ? tokens.colors.gray['600'] : tokens.colors.gray['300'],
+        text: isDark ? tokens.colors.gray['300'] : tokens.colors.gray['700'],
+        border: isDark ? tokens.colors.gray['600'] : tokens.colors.gray['300'],
       },
       ghost: {
         background: 'transparent',
-        text: isDarkMode ? tokens.colors.gray['300'] : tokens.colors.gray['700'],
+        text: isDark ? tokens.colors.gray['300'] : tokens.colors.gray['700'],
         border: 'transparent',
       },
     },
     primary: {
       filled: {
-        background: isDarkMode ? tokens.colors.blue['600'] : tokens.colors.blue['500'],
+        background: isDark ? tokens.colors.blue['600'] : tokens.colors.blue['500'],
         text: tokens.colors.white['50'],
         border: 'transparent',
       },
       outlined: {
         background: 'transparent',
-        text: isDarkMode ? tokens.colors.blue['400'] : tokens.colors.blue['600'],
-        border: isDarkMode ? tokens.colors.blue['400'] : tokens.colors.blue['500'],
+        text: isDark ? tokens.colors.blue['400'] : tokens.colors.blue['600'],
+        border: isDark ? tokens.colors.blue['400'] : tokens.colors.blue['500'],
       },
       ghost: {
-        background: isDarkMode ? tokens.colors.blue['900'] : tokens.colors.blue['50'],
-        text: isDarkMode ? tokens.colors.blue['300'] : tokens.colors.blue['700'],
+        background: isDark ? tokens.colors.blue['900'] : tokens.colors.blue['50'],
+        text: isDark ? tokens.colors.blue['300'] : tokens.colors.blue['700'],
         border: 'transparent',
       },
     },
     success: {
       filled: {
-        background: isDarkMode ? tokens.colors.green['600'] : tokens.colors.green['500'],
+        background: isDark ? tokens.colors.green['600'] : tokens.colors.green['500'],
         text: tokens.colors.white['50'],
         border: 'transparent',
       },
       outlined: {
         background: 'transparent',
-        text: isDarkMode ? tokens.colors.green['400'] : tokens.colors.green['600'],
-        border: isDarkMode ? tokens.colors.green['400'] : tokens.colors.green['500'],
+        text: isDark ? tokens.colors.green['400'] : tokens.colors.green['600'],
+        border: isDark ? tokens.colors.green['400'] : tokens.colors.green['500'],
       },
       ghost: {
-        background: isDarkMode ? tokens.colors.green['900'] : tokens.colors.green['50'],
-        text: isDarkMode ? tokens.colors.green['300'] : tokens.colors.green['700'],
+        background: isDark ? tokens.colors.green['900'] : tokens.colors.green['50'],
+        text: isDark ? tokens.colors.green['300'] : tokens.colors.green['700'],
         border: 'transparent',
       },
     },
     warning: {
       filled: {
-        background: isDarkMode ? tokens.colors.amber['600'] : tokens.colors.amber['500'],
+        background: isDark ? tokens.colors.amber['600'] : tokens.colors.amber['500'],
         text: tokens.colors.white['50'],
         border: 'transparent',
       },
       outlined: {
         background: 'transparent',
-        text: isDarkMode ? tokens.colors.amber['400'] : tokens.colors.amber['600'],
-        border: isDarkMode ? tokens.colors.amber['400'] : tokens.colors.amber['500'],
+        text: isDark ? tokens.colors.amber['400'] : tokens.colors.amber['600'],
+        border: isDark ? tokens.colors.amber['400'] : tokens.colors.amber['500'],
       },
       ghost: {
-        background: isDarkMode ? tokens.colors.amber['900'] : tokens.colors.amber['50'],
-        text: isDarkMode ? tokens.colors.amber['300'] : tokens.colors.amber['700'],
+        background: isDark ? tokens.colors.amber['900'] : tokens.colors.amber['50'],
+        text: isDark ? tokens.colors.amber['300'] : tokens.colors.amber['700'],
         border: 'transparent',
       },
     },
     error: {
       filled: {
-        background: isDarkMode ? tokens.colors.red['600'] : tokens.colors.red['500'],
+        background: isDark ? tokens.colors.red['600'] : tokens.colors.red['500'],
         text: tokens.colors.white['50'],
         border: 'transparent',
       },
       outlined: {
         background: 'transparent',
-        text: isDarkMode ? tokens.colors.red['400'] : tokens.colors.red['600'],
-        border: isDarkMode ? tokens.colors.red['400'] : tokens.colors.red['500'],
+        text: isDark ? tokens.colors.red['400'] : tokens.colors.red['600'],
+        border: isDark ? tokens.colors.red['400'] : tokens.colors.red['500'],
       },
       ghost: {
-        background: isDarkMode ? tokens.colors.red['900'] : tokens.colors.red['50'],
-        text: isDarkMode ? tokens.colors.red['300'] : tokens.colors.red['700'],
+        background: isDark ? tokens.colors.red['900'] : tokens.colors.red['50'],
+        text: isDark ? tokens.colors.red['300'] : tokens.colors.red['700'],
         border: 'transparent',
       },
     },
     info: {
       filled: {
-        background: isDarkMode ? tokens.colors.blue['600'] : tokens.colors.blue['500'],
+        background: isDark ? tokens.colors.blue['600'] : tokens.colors.blue['500'],
         text: tokens.colors.white['50'],
         border: 'transparent',
       },
       outlined: {
         background: 'transparent',
-        text: isDarkMode ? tokens.colors.blue['400'] : tokens.colors.blue['600'],
-        border: isDarkMode ? tokens.colors.blue['400'] : tokens.colors.blue['500'],
+        text: isDark ? tokens.colors.blue['400'] : tokens.colors.blue['600'],
+        border: isDark ? tokens.colors.blue['400'] : tokens.colors.blue['500'],
       },
       ghost: {
-        background: isDarkMode ? tokens.colors.blue['900'] : tokens.colors.blue['50'],
-        text: isDarkMode ? tokens.colors.blue['300'] : tokens.colors.blue['700'],
+        background: isDark ? tokens.colors.blue['900'] : tokens.colors.blue['50'],
+        text: isDark ? tokens.colors.blue['300'] : tokens.colors.blue['700'],
         border: 'transparent',
       },
     },
@@ -170,15 +171,18 @@ export const Tag = forwardRef<HTMLElement, TagProps>(({
   size = 'md',
   removable = false,
   disabled = false,
-  isDarkMode = false,
+  
   icon,
   onRemove,
   className = '',
   style,
   ...props
 }, ref) => {
+  const { colorScheme } = useThemeContext();
+  const isDark = colorScheme === 'dark';
+  
   const sizeStyles = getSizeStyles(size);
-  const colors = getSemanticColors(semantic, variant, isDarkMode, disabled);
+  const colors = getTagColors(variant, semantic, disabled, isDark);
 
   const tagStyle = {
     display: 'inline-flex',
@@ -242,7 +246,7 @@ export const Tag = forwardRef<HTMLElement, TagProps>(({
       {...props}
     >
       {icon && (
-        <Icon size={sizeStyles.iconSize} isDarkMode={isDarkMode}>
+        <Icon size={sizeStyles.iconSize} >
           {icon}
         </Icon>
       )}
@@ -268,7 +272,7 @@ export const Tag = forwardRef<HTMLElement, TagProps>(({
           aria-label="Remove tag"
           tabIndex={disabled ? -1 : 0}
         >
-          <Icon size="xs" isDarkMode={isDarkMode}>
+          <Icon size="xs" >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path
                 d="M9 3L3 9M3 3L9 9"

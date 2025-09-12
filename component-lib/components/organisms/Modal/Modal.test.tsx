@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from './Modal';
 
@@ -187,8 +187,8 @@ describe('Modal Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
-      render(
-        <Modal isOpen={true} onClose={mockOnClose} isDarkMode data-testid="modal">
+      renderWithDarkMode(
+        <Modal isOpen={true} onClose={mockOnClose} data-testid="modal">
           Modal content
         </Modal>
       );

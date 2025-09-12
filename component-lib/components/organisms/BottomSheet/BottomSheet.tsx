@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState, forwardRef, useCallback } from 'react';
 import { Box } from '../../layout/Box/Box';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface BottomSheetProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -47,7 +47,6 @@ export interface BottomSheetProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Dark mode support
    */
-  isDarkMode?: boolean;
   
   /**
    * Content of the bottom sheet
@@ -85,14 +84,14 @@ export const BottomSheet = forwardRef<HTMLDivElement, BottomSheetProps>(
       enableDragToClose = true,
       closeOnOverlayClick = true,
       closeOnEscapeKey = true,
-      isDarkMode,
+      
       children,
       className = '',
       ...props
     },
     ref
   ) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
     const [dragY, setDragY] = useState(0);
@@ -311,12 +310,11 @@ BottomSheet.displayName = 'BottomSheet';
 // Sub-components for structured content
 export interface BottomSheetHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  isDarkMode?: boolean;
 }
 
 export const BottomSheetHeader = forwardRef<HTMLDivElement, BottomSheetHeaderProps>(
-  ({ children, isDarkMode = false, className = '', ...props }, ref) => {
-    const theme = useTheme(isDarkMode);
+  ({ children,  className = '', ...props }, ref) => {
+    const { theme } = useThemeContext();
     
     return (
       <Box
@@ -365,12 +363,11 @@ BottomSheetBody.displayName = 'BottomSheetBody';
 
 export interface BottomSheetFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  isDarkMode?: boolean;
 }
 
 export const BottomSheetFooter = forwardRef<HTMLDivElement, BottomSheetFooterProps>(
-  ({ children, isDarkMode = false, className = '', ...props }, ref) => {
-    const theme = useTheme(isDarkMode);
+  ({ children,  className = '', ...props }, ref) => {
+    const { theme } = useThemeContext();
     
     return (
       <Box

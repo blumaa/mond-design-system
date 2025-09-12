@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -151,7 +151,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   content,
   placement = 'top',
   trigger = 'hover',
-  isDarkMode = false,
+  isDarkMode,
   delay = 300,
   disabled = false,
   className,
@@ -161,7 +161,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
   
   const theme = useTheme(isDarkMode);
@@ -246,7 +246,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const arrowStyles = getArrowStyles(placement, theme);
 
   // Clone child element to add event handlers
-  const childElement = React.cloneElement(children, {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const childElement = React.cloneElement(children as React.ReactElement<any>, {
     onMouseEnter: (e: React.MouseEvent) => {
       handleMouseEnter();
       if (children.props.onMouseEnter) {

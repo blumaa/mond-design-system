@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, renderWithDarkMode } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Spinner } from './Spinner';
 
@@ -30,21 +30,21 @@ describe('Spinner', () => {
   });
 
   it('applies custom color in light mode', () => {
-    render(<Spinner color="#ff0000" isDarkMode={false} />);
+    render(<Spinner color="#ff0000"  />);
     
     const spinner = screen.getByRole('status');
     expect(spinner).toHaveStyle('border-top: 2px solid #ff0000');
   });
 
   it('applies theme-based color for light mode', () => {
-    render(<Spinner isDarkMode={false} />);
+    render(<Spinner  />);
     
     const spinner = screen.getByRole('status');
     expect(spinner).toHaveStyle('border-top: 2px solid #0284c7'); // blue.600
   });
 
   it('applies theme-based color for dark mode', () => {
-    render(<Spinner isDarkMode={true} />);
+    renderWithDarkMode(<Spinner  />);
     
     const spinner = screen.getByRole('status');
     expect(spinner).toHaveStyle('border-top: 2px solid #38bdf8'); // blue.400

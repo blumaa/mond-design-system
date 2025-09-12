@@ -1,7 +1,7 @@
 'use client';
 import React, { forwardRef } from 'react';
 import { spacing, fontSizes, fontWeights, fontFamilies, radii } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Box, BoxProps } from '../../layout/Box/Box';
 
 export interface DropdownItemProps extends Omit<BoxProps, 'onClick' | 'children' | 'onMouseEnter' | 'onFocus' | 'onSelect'> {
@@ -69,7 +69,6 @@ export interface DropdownItemProps extends Omit<BoxProps, 'onClick' | 'children'
    * Dark mode support
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom expansion indicator for items with children
@@ -90,13 +89,13 @@ export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(({
   onSelect,
   onMouseEnter,
   onFocus,
-  isDarkMode = false,
+  
   expansionIndicator = '▸',
   className = '',
   style,
   ...props
 }, ref) => {
-  const theme = useTheme(isDarkMode);
+  const theme = useTheme();
   
   // Render divider
   if (divider) {

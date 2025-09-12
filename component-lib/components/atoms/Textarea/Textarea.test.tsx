@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Textarea } from './Textarea';
 
@@ -88,8 +88,8 @@ describe('Textarea Component', () => {
   });
 
   describe('dark mode', () => {
-    it('applies dark mode styling when isDarkMode is true', () => {
-      render(<Textarea isDarkMode={true} data-testid="dark-textarea" />);
+    it('applies dark mode styling when is true', () => {
+      renderWithDarkMode(<Textarea  data-testid="dark-textarea" />);
       const textareaElement = screen.getByTestId('dark-textarea');
       
       expect(textareaElement).toHaveStyle('background-color: #171717');

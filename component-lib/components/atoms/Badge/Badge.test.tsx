@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, renderWithDarkMode } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Badge } from './Badge';
 
@@ -83,7 +83,7 @@ describe('Badge Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
-      render(<Badge isDarkMode data-testid="dark-badge">Dark</Badge>);
+      renderWithDarkMode(<Badge data-testid="dark-badge">Dark</Badge>);
       const badgeElement = screen.getByTestId('dark-badge');
       expect(badgeElement).toHaveStyle('background-color: #171717');
       expect(badgeElement).toHaveStyle('color: #94a3b8');

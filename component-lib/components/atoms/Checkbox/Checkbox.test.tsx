@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Checkbox } from './Checkbox';
 
@@ -108,7 +108,7 @@ describe('Checkbox Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
-      render(<Checkbox isDarkMode label="Dark checkbox" data-testid="dark-checkbox" />);
+      renderWithDarkMode(<Checkbox label="Dark checkbox" data-testid="dark-checkbox" />);
       const container = screen.getByTestId('dark-checkbox');
       const checkboxDiv = container.querySelector('[data-checkbox]') as HTMLElement;
       expect(checkboxDiv).toHaveStyle('background-color: #171717');

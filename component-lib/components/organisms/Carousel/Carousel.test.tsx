@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../../test-utils';
 import { act } from 'react';
 import { Carousel, CarouselItem } from './Carousel';
 
@@ -281,7 +281,7 @@ describe('Carousel', () => {
   });
 
   it('applies dark mode styling', () => {
-    render(<Carousel items={mockItems} isDarkMode={true} data-testid="carousel" />);
+    renderWithDarkMode(<Carousel items={mockItems}  data-testid="carousel" />);
     
     const carousel = screen.getByTestId('carousel');
     expect(carousel).toHaveClass('mond-carousel');

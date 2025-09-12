@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import React, { useState } from 'react';
 import { Dashboard, DashboardUser, DashboardMetric, DashboardActivity } from './Dashboard';
 import { SidebarSection } from '../../organisms/Sidebar/Sidebar';
 import { Button } from '../../atoms/Button/Button';
 import { Badge } from '../../atoms/Badge/Badge';
-import { useState } from 'react';
 
 const meta: Meta<typeof Dashboard> = {
   title: 'Templates/Dashboard',
@@ -371,14 +371,14 @@ export const Interactive: Story = {
                 size="sm"
                 onClick={() => setIsDarkMode(!isDarkMode)}
               >
-                {isDarkMode ? '☀️' : '🌙'}
+                {isDarkMode ? 'Light' : 'Dark'}
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
               >
-                {sidebarCollapsed ? '➡️' : '⬅️'}
+                {sidebarCollapsed ? 'Expand' : 'Collapse'}
               </Button>
               <Badge variant="primary" size="sm">
                 View: {currentView}

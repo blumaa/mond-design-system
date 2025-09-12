@@ -263,16 +263,16 @@ export const DarkMode: Story = {
       flexDirection: 'column',
       gap: '16px'
     }}>
-      <Heading isDarkMode level={1}>Primary Heading in Dark Mode</Heading>
-      <Heading isDarkMode level={2} semantic="secondary">Secondary Heading in Dark Mode</Heading>
-      <Heading isDarkMode level={3} semantic="tertiary">Tertiary Heading in Dark Mode</Heading>
-      <Heading isDarkMode level={4} semantic="inverse">Inverse Heading in Dark Mode</Heading>
+      <Heading level={1}>Primary Heading in Dark Mode</Heading>
+      <Heading level={2} semantic="secondary">Secondary Heading in Dark Mode</Heading>
+      <Heading level={3} semantic="tertiary">Tertiary Heading in Dark Mode</Heading>
+      <Heading level={4} semantic="inverse">Inverse Heading in Dark Mode</Heading>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Headings automatically adapt their colors for dark mode when isDarkMode is true. Semantic colors are adjusted for optimal contrast.'
+        story: 'Headings automatically adapt their colors for dark mode when is true. Semantic colors are adjusted for optimal contrast.'
       }
     }
   }

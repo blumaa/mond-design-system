@@ -43,7 +43,6 @@ export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
    * Dark mode applied to all buttons in the group
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Button components to group together
@@ -64,7 +63,7 @@ export const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
     size,
     corners,
     alignContent,
-    isDarkMode = false,
+    
     children,
     'data-testid': dataTestId,
     ...props 
@@ -87,7 +86,7 @@ export const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
             size: childProps.size || size,
             corners: childProps.corners || corners,
             alignContent: childProps.alignContent || alignContent,
-            isDarkMode: childProps.isDarkMode ?? isDarkMode,
+            isDarkMode: childProps.isDarkMode 
           } as Record<string, unknown>);
         }
       }

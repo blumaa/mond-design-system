@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { resolveSemanticToken } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
@@ -9,6 +9,11 @@ export interface IconProps extends React.SVGAttributes<SVGSVGElement> {
    * @default 'md'
    */
   size?: IconSize;
+  
+  /**
+   * Force dark mode styling (overrides provider colorScheme)
+   */
+  isDarkMode?: boolean;
   
   /**
    * SVG path data or React SVG element
@@ -30,7 +35,6 @@ export interface IconProps extends React.SVGAttributes<SVGSVGElement> {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
 }
 
 const getIconSize = (size: IconSize): string => {
@@ -51,13 +55,14 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(({
   label,
   decorative = false,
   color = 'currentColor',
-  isDarkMode = false,
+  isDarkMode,
+  
   className = '',
   style,
   ...props
 }, ref) => {
   const iconSize = getIconSize(size);
-  const theme = (path: string) => resolveSemanticToken(path, isDarkMode ? 'dark' : 'light');
+  const theme = useTheme(isDarkMode);
   
   // Resolve color if it contains semantic tokens
   const resolvedColor = typeof color === 'string' && color.includes('.') 

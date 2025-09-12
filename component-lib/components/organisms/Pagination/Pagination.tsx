@@ -69,7 +69,6 @@ export interface PaginationProps {
    * Dark mode support
    * @default false
    */
-  isDarkMode?: boolean;
 
   /**
    * Custom className
@@ -126,7 +125,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
     showItemsPerPage = true,
     showTotalInfo = true,
     size = 'md',
-    isDarkMode = false,
+    
     className,
   }, ref) => {
     // theme variable removed - not used in current implementation
@@ -250,7 +249,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                 <Text 
                   variant={sizeStyles.textVariant} 
                   semantic="secondary" 
-                  isDarkMode={isDarkMode}
+                  
                 >
                   Show
                 </Text>
@@ -262,12 +261,12 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                     value: option.toString(),
                     label: option.toString(),
                   }))}
-                  isDarkMode={isDarkMode}
+                  
                 />
                 <Text 
                   variant={sizeStyles.textVariant} 
                   semantic="secondary" 
-                  isDarkMode={isDarkMode}
+                  
                 >
                   items
                 </Text>
@@ -278,7 +277,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
               <Text 
                 variant={sizeStyles.textVariant} 
                 semantic="secondary" 
-                isDarkMode={isDarkMode}
+                
               >
                 {totalItems === 0 
                   ? 'No items'
@@ -299,7 +298,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
               disabled={currentPage <= 1}
               onClick={() => onPageChange(currentPage - 1)}
               aria-label="Go to previous page"
-              isDarkMode={isDarkMode}
+              
             >
               <Icon size="sm" decorative>
                 <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
@@ -313,7 +312,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
               disabled={currentPage <= 1}
               onClick={() => onPageChange(1)}
               aria-label="Go to first page"
-              isDarkMode={isDarkMode}
+              
             >
               <Icon size="sm" decorative>
                 <path d="M11 6L5 12L11 18M17 6L11 12L17 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
@@ -332,7 +331,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                     <Text 
                       variant={sizeStyles.textVariant} 
                       semantic="secondary" 
-                      isDarkMode={isDarkMode}
+                      
                     >
                       ...
                     </Text>
@@ -345,7 +344,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                     onClick={() => onPageChange(page)}
                     aria-label={`Go to page ${page}`}
                     aria-current={page === currentPage ? 'page' : undefined}
-                    isDarkMode={isDarkMode}
+                    
                   >
                     {page}
                   </Button>
@@ -360,7 +359,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
               disabled={currentPage >= totalPages}
               onClick={() => onPageChange(totalPages)}
               aria-label="Go to last page"
-              isDarkMode={isDarkMode}
+              
             >
               <Icon size="sm" decorative>
                 <path d="M13 6L19 12L13 18M7 6L13 12L7 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
@@ -374,7 +373,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
               disabled={currentPage >= totalPages}
               onClick={() => onPageChange(currentPage + 1)}
               aria-label="Go to next page"
-              isDarkMode={isDarkMode}
+              
             >
               <Icon size="sm" decorative>
                 <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>

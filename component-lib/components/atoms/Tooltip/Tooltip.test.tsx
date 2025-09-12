@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent, waitFor, act } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Tooltip } from './Tooltip';
 
@@ -268,8 +268,8 @@ describe('Tooltip Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
-      render(
-        <Tooltip content="Dark tooltip" isDarkMode data-testid="tooltip">
+      renderWithDarkMode(
+        <Tooltip content="Dark tooltip" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );

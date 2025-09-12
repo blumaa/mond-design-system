@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, renderWithDarkMode } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Divider } from './Divider';
 
@@ -23,29 +23,29 @@ describe('Divider', () => {
   });
 
   it('applies variant styles correctly', () => {
-    const { rerender } = render(<Divider variant="default" isDarkMode={false} />);
+    const { rerender } = render(<Divider variant="default"  />);
     let divider = screen.getByRole('separator');
     expect(divider).toHaveStyle('background-color: #cbd5e1'); // gray.300
 
-    rerender(<Divider variant="subtle" isDarkMode={false} />);
+    rerender(<Divider variant="subtle"  />);
     divider = screen.getByRole('separator');
     expect(divider).toHaveStyle('background-color: #e2e8f0'); // gray.200
 
-    rerender(<Divider variant="strong" isDarkMode={false} />);
+    rerender(<Divider variant="strong"  />);
     divider = screen.getByRole('separator');
     expect(divider).toHaveStyle('background-color: #94a3b8'); // gray.400
   });
 
   it('applies dark mode colors correctly', () => {
-    const { rerender } = render(<Divider variant="default" isDarkMode={true} />);
+    const { rerender } = renderWithDarkMode(<Divider variant="default"  />);
     let divider = screen.getByRole('separator');
     expect(divider).toHaveStyle('background-color: #475569'); // gray.600
 
-    rerender(<Divider variant="subtle" isDarkMode={true} />);
+    rerender(<Divider variant="subtle"  />);
     divider = screen.getByRole('separator');
     expect(divider).toHaveStyle('background-color: #334155'); // gray.700
 
-    rerender(<Divider variant="strong" isDarkMode={true} />);
+    rerender(<Divider variant="strong"  />);
     divider = screen.getByRole('separator');
     expect(divider).toHaveStyle('background-color: #64748b'); // gray.500
   });
@@ -124,7 +124,7 @@ describe('Divider', () => {
   });
 
   it('renders text divider with proper styling', () => {
-    render(<Divider isDarkMode={false}>Section</Divider>);
+    render(<Divider >Section</Divider>);
     
     const divider = screen.getByRole('separator');
     const text = screen.getByText('Section');
@@ -136,7 +136,7 @@ describe('Divider', () => {
   });
 
   it('renders text divider in dark mode with correct colors', () => {
-    render(<Divider isDarkMode={true}>Section</Divider>);
+    renderWithDarkMode(<Divider >Section</Divider>);
     
     const divider = screen.getByRole('separator');
     expect(divider).toHaveStyle('color: #94a3b8'); // gray.400 in dark mode

@@ -11,7 +11,7 @@ import { Button } from '../../atoms/Button/Button';
 import { Text } from '../../atoms/Text/Text';
 import { Heading } from '../../atoms/Heading/Heading';
 import { Alert } from '../../organisms/Alert/Alert';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 // Form value types
 export type FormValue = string | number | boolean | string[] | Date | null;
@@ -113,7 +113,6 @@ export interface FormTemplateProps {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Callback when navigation item is clicked
@@ -147,12 +146,13 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
   reviewMode = false,
   allowStepNavigation = true,
   variant = 'card',
-  isDarkMode = false,
+  
   onNavigationClick,
   onSidebarToggle,
   className,
 }) => {
-  const theme = useTheme(isDarkMode);
+  const { theme, colorScheme } = useThemeContext();
+  const isDarkMode = colorScheme === 'dark';
   const [currentSection, setCurrentSection] = useState(0);
   const [formValues, setFormValues] = useState<FormValues>(initialValues || {});
   const [sectionErrors, setSectionErrors] = useState<Record<number, Record<string, string>>>({});
@@ -315,7 +315,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
         currentStep={currentSection}
         onStepClick={handleStepClick}
         allowStepNavigation={allowStepNavigation}
-        isDarkMode={isDarkMode}
+        
       />
       
       {/* Success Message */}
@@ -323,7 +323,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
         <Alert
           variant="success"
           title="Form Submitted Successfully!"
-          isDarkMode={isDarkMode}
+          
         >
           Your form has been submitted and is being processed.
         </Alert>
@@ -334,7 +334,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
         <Alert
           variant="error"
           title="Submission Error"
-          isDarkMode={isDarkMode}
+          
           dismissible={true}
           onDismiss={() => setSubmitError(null)}
         >
@@ -357,7 +357,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
             submitText={isLastSection ? 'Submit' : 'Next'}
             loading={isSubmitting}
             variant="default"
-            isDarkMode={isDarkMode}
+            
           />
           
           {/* Navigation Buttons */}
@@ -367,7 +367,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
                 variant="outline"
                 onClick={handlePrevious}
                 disabled={isSubmitting}
-                isDarkMode={isDarkMode}
+                
               >
                 Previous
               </Button>
@@ -414,7 +414,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
       <Header
         title={title}
         rightContent={headerActions}
-        isDarkMode={isDarkMode}
+        
         onMobileMenuToggle={onSidebarToggle}
       />
 
@@ -425,7 +425,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
           <Sidebar
             sections={navigationItems}
             collapsed={sidebarCollapsed}
-            isDarkMode={isDarkMode}
+            
             onItemClick={(item) => onNavigationClick?.(item.id)}
           />
         )}
@@ -440,14 +440,14 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
                   {title}
                 </Heading>
                 {description && (
-                  <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+                  <Text variant="body-lg" semantic="secondary" >
                     {description}
                   </Text>
                 )}
               </Box>
 
               {variant === 'card' ? (
-                <Card padding={32} isDarkMode={isDarkMode}>
+                <Card padding={32} >
                   {formContent}
                 </Card>
               ) : (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { InputGroup } from './InputGroup';
 import { Input } from '../../atoms/Input/Input';
@@ -113,7 +113,7 @@ describe('InputGroup Component', () => {
 
   it('applies dark mode to input when specified', () => {
     render(
-      <InputGroup isDarkMode data-testid="input-group">
+      <InputGroup data-testid="input-group">
         <Input placeholder="Dark input" data-testid="input" />
       </InputGroup>
     );

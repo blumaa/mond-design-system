@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent } from '../../../test-utils';
 import { Sidebar, SidebarSection } from './Sidebar';
 
 // Mock window.innerWidth for responsive tests
@@ -196,7 +196,7 @@ describe('Sidebar', () => {
   });
 
   it('applies dark mode styling', () => {
-    render(<Sidebar sections={mockSections} isDarkMode={true} data-testid="sidebar" />);
+    renderWithDarkMode(<Sidebar sections={mockSections}  data-testid="sidebar" />);
     
     const sidebar = screen.getByTestId('sidebar');
     expect(sidebar).toHaveClass('mond-sidebar');

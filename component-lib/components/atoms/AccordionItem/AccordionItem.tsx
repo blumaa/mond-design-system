@@ -2,6 +2,7 @@
 import React, { useState, ReactNode } from 'react';
 import { Box, BoxProps } from '../../layout/Box/Box';
 import { tokens } from '../../../tokens/tokens';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export type AccordionItemSize = 'sm' | 'md' | 'lg';
 export type AccordionItemVariant = 'default' | 'bordered' | 'filled';
@@ -58,12 +59,6 @@ export interface AccordionItemProps extends Omit<BoxProps, 'children' | 'title'>
   animated?: boolean;
   
   /**
-   * Dark mode styling
-   * @default false
-   */
-  isDarkMode?: boolean;
-  
-  /**
    * Default expanded state for uncontrolled mode
    */
   defaultExpanded?: boolean;
@@ -106,7 +101,7 @@ const getSizeStyles = (size: AccordionItemSize) => {
   return sizeMap[size];
 };
 
-const getVariantStyles = (variant: AccordionItemVariant, isDarkMode: boolean) => {
+const getVariantStyles = (variant: AccordionItemVariant, isDark: boolean) => {
   const colors = {
     light: {
       background: tokens.colors.white['50'],
@@ -124,7 +119,7 @@ const getVariantStyles = (variant: AccordionItemVariant, isDarkMode: boolean) =>
     },
   };
   
-  const theme = isDarkMode ? colors.dark : colors.light;
+  const theme = isDark ? colors.dark : colors.light;
   
   const variants = {
     default: {
@@ -164,7 +159,7 @@ export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps
   icon,
   iconPosition = 'right',
   animated = true,
-  isDarkMode = false,
+  
   defaultExpanded = false,
   onExpandedChange,
   itemId,
@@ -172,11 +167,14 @@ export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps
   style,
   ...props
 }, ref) => {
+  const { colorScheme } = useThemeContext();
+  const isDark = colorScheme === 'dark';
+  
   const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
   const isExpanded = expanded !== undefined ? expanded : internalExpanded;
   
   const sizeStyles = getSizeStyles(size);
-  const variantStyles = getVariantStyles(variant, isDarkMode);
+  const variantStyles = getVariantStyles(variant, isDark);
   
   const handleToggle = () => {
     if (disabled) return;

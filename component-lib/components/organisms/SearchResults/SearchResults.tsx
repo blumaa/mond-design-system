@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useMemo } from 'react';
 import { spacing, fontSizes, fontWeights, fontFamilies, radii } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 import { Button } from '../../atoms/Button/Button';
 import { Input } from '../../atoms/Input/Input';
@@ -143,7 +143,6 @@ export interface SearchResultsProps extends Omit<React.HTMLAttributes<HTMLDivEle
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
 }
 
 export const SearchResults: React.FC<SearchResultsProps> = ({
@@ -171,11 +170,11 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   onPageChange,
   onViewModeChange,
   onResultClick,
-  isDarkMode = false,
+  
   className,
   ...props
 }) => {
-  const getColor = useTheme(isDarkMode);
+  const { theme: getColor } = useThemeContext();
   const [localQuery, setLocalQuery] = useState(query);
   const [activeFilters, setActiveFilters] = useState<Record<string, unknown>>({});
 
@@ -362,19 +361,19 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       
       <Box style={resultMetaStyles}>
         {result.category && (
-          <Badge variant="default" size="sm" isDarkMode={isDarkMode}>
+          <Badge variant="default" size="sm" >
             {result.category}
           </Badge>
         )}
         
         {result.author && (
-          <Text variant="caption" semantic="tertiary" isDarkMode={isDarkMode}>
+          <Text variant="caption" semantic="tertiary" >
             by {result.author}
           </Text>
         )}
         
         {result.date && (
-          <Text variant="caption" semantic="tertiary" isDarkMode={isDarkMode}>
+          <Text variant="caption" semantic="tertiary" >
             {result.date.toLocaleDateString()}
           </Text>
         )}
@@ -383,12 +382,12 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       {result.tags && result.tags.length > 0 && (
         <Box style={{ display: 'flex', gap: spacing[1], marginTop: spacing[2], flexWrap: 'wrap' }}>
           {result.tags.slice(0, 3).map((tag) => (
-            <Badge key={tag} variant="secondary" size="sm" isDarkMode={isDarkMode}>
+            <Badge key={tag} variant="secondary" size="sm" >
               {tag}
             </Badge>
           ))}
           {result.tags.length > 3 && (
-            <Badge variant="secondary" size="sm" isDarkMode={isDarkMode}>
+            <Badge variant="secondary" size="sm" >
               +{result.tags.length - 3}
             </Badge>
           )}
@@ -409,13 +408,13 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
               onKeyDown={(e) => e.key === 'Enter' && handleSearch(localQuery)}
               placeholder="Search..."
               style={{ flex: 1, minWidth: '300px' }}
-              isDarkMode={isDarkMode}
+              
             />
             <Button
               variant="primary"
               onClick={() => handleSearch(localQuery)}
               disabled={loading}
-              isDarkMode={isDarkMode}
+              
             >
               Search
             </Button>
@@ -425,14 +424,14 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
           <Box style={controlsStyles}>
             <Box style={leftControlsStyles}>
               {showResultCount && (
-                <Text variant="body-sm" semantic="secondary" isDarkMode={isDarkMode}>
+                <Text variant="body-sm" semantic="secondary" >
                   {loading ? 'Searching...' : `${effectiveTotal.toLocaleString()} results`}
                   {query && ` for "${query}"`}
                 </Text>
               )}
               
               {activeFilterCount > 0 && (
-                <Badge variant="primary" isDarkMode={isDarkMode}>
+                <Badge variant="primary" >
                   {activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''} active
                 </Badge>
               )}
@@ -446,7 +445,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                     value={sortBy}
                     onChange={(value) => onSortChange?.(value)}
                     options={sortOptions}
-                    isDarkMode={isDarkMode}
+                    
                   />
                 </Box>
               )}
@@ -456,7 +455,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                   variant={viewMode === 'list' ? 'primary' : 'outline'}
                   size="sm"
                   onClick={() => onViewModeChange?.('list')}
-                  isDarkMode={isDarkMode}
+                  
                 >
                   List
                 </Button>
@@ -464,7 +463,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                   variant={viewMode === 'grid' ? 'primary' : 'outline'}
                   size="sm"
                   onClick={() => onViewModeChange?.('grid')}
-                  isDarkMode={isDarkMode}
+                  
                 >
                   Grid
                 </Button>
@@ -478,7 +477,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         {/* Filters Sidebar */}
         {showFilters && filters.length > 0 && (
           <Box style={filtersStyles}>
-            <Text variant="body-lg" semantic="primary" isDarkMode={isDarkMode}>
+            <Text variant="body-lg" semantic="primary" >
               Filters
             </Text>
             
@@ -499,7 +498,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                         label: `${option.label}${option.count !== undefined ? ` (${option.count})` : ''}`,
                       }))
                     ]}
-                    isDarkMode={isDarkMode}
+                    
                   />
                 )}
               </Box>
@@ -511,16 +510,16 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         <Box style={resultsContainerStyles}>
           {loading ? (
             <Box style={loadingStyles}>
-              <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+              <Text variant="body-lg" semantic="secondary" >
                 Loading results...
               </Text>
             </Box>
           ) : results.length === 0 ? (
             <Box style={emptyStateStyles}>
-              <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+              <Text variant="body-lg" semantic="secondary" >
                 No results found
               </Text>
-              <Text variant="body-md" semantic="tertiary" isDarkMode={isDarkMode}>
+              <Text variant="body-md" semantic="tertiary" >
                 Try adjusting your search terms or filters
               </Text>
             </Box>
@@ -539,7 +538,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                   totalItems={effectiveTotal}
                   itemsPerPage={resultsPerPage}
                   onPageChange={onPageChange}
-                  isDarkMode={isDarkMode}
+                  
                 />
               )}
             </>

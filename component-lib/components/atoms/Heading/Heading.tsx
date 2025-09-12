@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { Box, type BoxProps } from '../../layout/Box/Box';
 import { fontSizes, fontWeights, lineHeights, fontFamilies } from '../../../tokens';
-import { resolveSemanticToken } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -56,7 +56,7 @@ export interface HeadingProps extends Omit<BoxProps, 'as'> {
   children: React.ReactNode;
 
   /**
-   * Dark mode
+   * Dark mode control for theme resolution
    * @default false
    */
   isDarkMode?: boolean;
@@ -122,10 +122,7 @@ const getSizeStyles = (size: HeadingSize) => {
   return sizeStyleMap[size];
 };
 
-const getSemanticColor = (semantic: HeadingSemantic, isDarkMode: boolean): string => {
-  const mode = isDarkMode ? 'dark' : 'light';
-  const theme = (path: string) => resolveSemanticToken(path, mode);
-
+const getSemanticColor = (semantic: HeadingSemantic, theme: ReturnType<typeof useTheme>): string => {
   const semanticColors = {
     primary: theme('text.primary'),
     secondary: theme('text.secondary'),
@@ -144,14 +141,15 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
   align,
   truncate = false,
   children,
-  isDarkMode = false,
   color,
+  isDarkMode,
   ...props
 }, ref) => {
-  const headingElement = `h${level}` as keyof JSX.IntrinsicElements;
+  const theme = useTheme(isDarkMode);
+  const headingElement = `h${level}` as keyof React.JSX.IntrinsicElements;
   const effectiveSize = size || getDefaultSizeForLevel(level);
   const sizeStyles = getSizeStyles(effectiveSize);
-  const semanticColor = getSemanticColor(semantic, isDarkMode);
+  const semanticColor = getSemanticColor(semantic, theme);
   
   // Use custom color if provided, otherwise use semantic color
   const headingColor = color || semanticColor;
@@ -164,7 +162,6 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
       fontWeight={fontWeights[weight]}
       textAlign={align}
       color={headingColor}
-      isDarkMode={isDarkMode}
       m="0" // Reset default heading margins
       {...sizeStyles}
       {...(truncate && {

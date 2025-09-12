@@ -217,21 +217,21 @@ export const DarkMode: Story = {
       flexDirection: 'column',
       gap: '1rem'
     }}>
-      <Alert variant="info" isDarkMode title="Dark Mode Info">
+      <Alert variant="info" title="Dark Mode Info">
         This is how alerts look in dark mode with info styling.
       </Alert>
       
-      <Alert variant="success" isDarkMode title="Success in Dark Mode">
+      <Alert variant="success" title="Success in Dark Mode">
         Your action completed successfully in dark theme.
       </Alert>
       
-      <Alert variant="warning" isDarkMode title="Dark Mode Warning">
+      <Alert variant="warning" title="Dark Mode Warning">
         This is a warning alert displayed in dark mode.
       </Alert>
       
       <Alert 
         variant="error" 
-        isDarkMode 
+        
         title="Error in Dark Mode"
         dismissible
         onDismiss={() => console.log('Dark mode alert dismissed')}

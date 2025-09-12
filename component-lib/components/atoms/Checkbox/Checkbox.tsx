@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { radii, fontSizes, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 
 export type CheckboxSize = 'sm' | 'md' | 'lg';
@@ -14,11 +14,6 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
    */
   size?: CheckboxSize;
   
-  /**
-   * Dark mode
-   * @default false
-   */
-  isDarkMode?: boolean;
   
   /**
    * Label text
@@ -70,7 +65,6 @@ const getSizeStyles = (size: CheckboxSize) => {
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ 
     size = 'md',
-    isDarkMode = false,
     label,
     error,
     helperText,
@@ -80,7 +74,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     'data-testid': dataTestId,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const theme = useTheme();
     const sizeStyles = getSizeStyles(size);
     const checkboxId = props.id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
 

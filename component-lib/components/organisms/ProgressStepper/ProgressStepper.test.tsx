@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { ProgressStepper, StepConfig } from './ProgressStepper';
 
@@ -406,7 +406,7 @@ describe('ProgressStepper Component', () => {
         <ProgressStepper
           steps={mockSteps}
           currentStep={1}
-          isDarkMode={true}
+          
           data-testid="progress-stepper"
         />
       );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Text } from './Text';
 
@@ -138,7 +138,7 @@ describe('Text', () => {
   });
 
   it('supports dark mode', () => {
-    render(<Text isDarkMode data-testid="dark-mode-text">Dark mode text</Text>);
+    render(<Text data-testid="dark-mode-text">Dark mode text</Text>);
     
     const text = screen.getByTestId('dark-mode-text');
     expect(text).toBeInTheDocument();

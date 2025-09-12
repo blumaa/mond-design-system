@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, renderWithDarkMode, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Box } from './Box';
 
@@ -284,7 +284,7 @@ describe('Box Component', () => {
         <Box 
           bg="surface.background"
           color="text.primary"
-          isDarkMode={false}
+          
           data-testid="semantic-light-box"
         >
           Content
@@ -297,11 +297,11 @@ describe('Box Component', () => {
     });
 
     it('resolves semantic tokens for colors in dark mode', () => {
-      render(
+      renderWithDarkMode(
         <Box 
           bg="surface.background"
           color="text.primary"
-          isDarkMode={true}
+          
           data-testid="semantic-dark-box"
         >
           Content

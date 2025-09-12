@@ -44,7 +44,6 @@ export interface ToastContainerProps extends React.HTMLAttributes<HTMLDivElement
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom data testid for testing
@@ -122,7 +121,7 @@ export const ToastContainer = React.forwardRef<HTMLDivElement, ToastContainerPro
     maxToasts = 5,
     toasts,
     onDismiss,
-    isDarkMode = false,
+    
     'data-testid': dataTestId,
     className,
     ...props
@@ -243,7 +242,7 @@ export const ToastContainer = React.forwardRef<HTMLDivElement, ToastContainerPro
             icon={toast.icon}
             animationState={toast.animationState}
             onDismiss={handleDismiss}
-            isDarkMode={isDarkMode}
+            
             data-testid={`${dataTestId || 'toast-container'}-toast-${toast.id}`}
           />
         ))}

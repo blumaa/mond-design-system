@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { spacing, fontSizes, fontWeights, fontFamilies, radii } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 import { Button } from '../../atoms/Button/Button';
 import { Link } from '../../atoms/Link/Link';
@@ -86,7 +86,6 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom data testid for testing
@@ -107,12 +106,13 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
     height = '64px',
     sticky = false,
     variant = 'solid',
-    isDarkMode = false,
+    
     'data-testid': dataTestId,
     className,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme, colorScheme } = useThemeContext();
+    const isDarkMode = colorScheme === 'dark';
     const [internalMobileMenuOpen, setInternalMobileMenuOpen] = useState(false);
     
     // Controlled vs uncontrolled mobile menu state
@@ -316,7 +316,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                   variant={action.variant || 'ghost'}
                   size="sm"
                   onClick={action.onClick}
-                  isDarkMode={isDarkMode}
+                  
                 >
                   {action.icon && (
                     <Box style={{ marginRight: action.label ? spacing[1] : 0 }}>
@@ -342,7 +342,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                   variant="ghost"
                   size="sm"
                   onClick={handleMobileToggle}
-                  isDarkMode={isDarkMode}
+                  
                   aria-label="Toggle mobile menu"
                 >
                   <Box
@@ -437,7 +437,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                         action.onClick();
                         setMobileMenuOpen(false);
                       }}
-                      isDarkMode={isDarkMode}
+                      
                       style={{ justifyContent: 'flex-start' }}
                     >
                       {action.icon && (

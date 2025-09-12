@@ -316,14 +316,14 @@ export const ThemeVariants: Story = {
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center' }}>Light Theme</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <Tag isDarkMode={false} semantic="default">Default</Tag>
-            <Tag isDarkMode={false} semantic="primary">Primary</Tag>
-            <Tag isDarkMode={false} semantic="success">Success</Tag>
+            <Tag  semantic="default">Default</Tag>
+            <Tag  semantic="primary">Primary</Tag>
+            <Tag  semantic="success">Success</Tag>
           </div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <Tag isDarkMode={false} variant="outlined" semantic="warning">Warning</Tag>
-            <Tag isDarkMode={false} variant="outlined" semantic="error">Error</Tag>
-            <Tag isDarkMode={false} variant="ghost" semantic="info">Info</Tag>
+            <Tag  variant="outlined" semantic="warning">Warning</Tag>
+            <Tag  variant="outlined" semantic="error">Error</Tag>
+            <Tag  variant="ghost" semantic="info">Info</Tag>
           </div>
         </div>
       </div>
@@ -338,14 +338,14 @@ export const ThemeVariants: Story = {
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center', color: '#f9fafb' }}>Dark Theme</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <Tag isDarkMode={true} semantic="default">Default</Tag>
-            <Tag isDarkMode={true} semantic="primary">Primary</Tag>
-            <Tag isDarkMode={true} semantic="success">Success</Tag>
+            <Tag  semantic="default">Default</Tag>
+            <Tag  semantic="primary">Primary</Tag>
+            <Tag  semantic="success">Success</Tag>
           </div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <Tag isDarkMode={true} variant="outlined" semantic="warning">Warning</Tag>
-            <Tag isDarkMode={true} variant="outlined" semantic="error">Error</Tag>
-            <Tag isDarkMode={true} variant="ghost" semantic="info">Info</Tag>
+            <Tag  variant="outlined" semantic="warning">Warning</Tag>
+            <Tag  variant="outlined" semantic="error">Error</Tag>
+            <Tag  variant="ghost" semantic="info">Info</Tag>
           </div>
         </div>
       </div>

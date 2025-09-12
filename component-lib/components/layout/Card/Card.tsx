@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, BoxProps } from '../Box/Box';
+import { useTheme } from '../../providers/ThemeProvider';
 
 export interface CardProps extends BoxProps {
   /**
@@ -19,7 +20,7 @@ export interface CardHeaderProps extends BoxProps {}
 export interface CardBodyProps extends BoxProps {}
 export interface CardFooterProps extends BoxProps {}
 
-const getCardStyles = (variant: CardProps['variant'], isDarkMode: boolean) => {
+const getCardStyles = (variant: CardProps['variant'], theme: ReturnType<typeof useTheme>) => {
   const baseStyles = {
     borderRadius: 8,
     transition: 'all 150ms ease',
@@ -29,23 +30,21 @@ const getCardStyles = (variant: CardProps['variant'], isDarkMode: boolean) => {
     case 'flat':
       return {
         ...baseStyles,
-        bg: isDarkMode ? 'surface.elevated' : 'surface.background',
+        bg: 'surface.elevated',
       };
     case 'outlined':
       return {
         ...baseStyles,
-        bg: isDarkMode ? 'surface.elevated' : 'surface.background', 
+        bg: 'surface.elevated',
         border: '1px solid',
-        borderColor: isDarkMode ? 'border.default' : 'border.default',
+        borderColor: 'border.default',
       };
     case 'elevated':
     default:
       return {
         ...baseStyles,
-        bg: isDarkMode ? 'surface.elevated' : 'surface.background',
-        boxShadow: isDarkMode 
-          ? '0 1px 3px rgba(0, 0, 0, 0.3)' 
-          : '0 1px 3px rgba(0, 0, 0, 0.1)',
+        bg: 'surface.elevated',
+        boxShadow: theme('effects.shadow.sm'),
       };
   }
 };
@@ -53,17 +52,17 @@ const getCardStyles = (variant: CardProps['variant'], isDarkMode: boolean) => {
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(({
   variant = 'elevated',
   padding = 24,
-  isDarkMode = false,
   children,
+  isDarkMode,
   ...props
 }, ref) => {
-  const styles = getCardStyles(variant, isDarkMode);
+  const theme = useTheme(isDarkMode);
+  const styles = getCardStyles(variant, theme);
   
   return (
     <Box
       ref={ref}
       p={padding}
-      isDarkMode={isDarkMode}
       {...styles}
       {...props}
     >

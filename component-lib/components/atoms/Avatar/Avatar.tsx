@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { radii, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
@@ -18,7 +18,6 @@ export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Image source URL
@@ -87,7 +86,7 @@ const getSizeStyles = (size: AvatarSize) => {
 export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
   ({ 
     size = 'md',
-    isDarkMode = false,
+    
     src,
     alt,
     fallback,
@@ -96,7 +95,7 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
     'data-testid': dataTestId,
     ...props 
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const theme = useTheme();
     const sizeStyles = getSizeStyles(size);
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);

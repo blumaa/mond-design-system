@@ -14,7 +14,7 @@ import { Heading } from '../../atoms/Heading/Heading';
 import { Badge } from '../../atoms/Badge/Badge';
 import { Select } from '../../atoms/Select/Select';
 import { Spinner } from '../../atoms/Spinner/Spinner';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface ListItem {
   id: string;
@@ -185,7 +185,6 @@ export interface ListTemplateProps {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Callback when navigation item is clicked
@@ -238,12 +237,13 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
   onPageChange,
   onPageSizeChange,
   onItemClick,
-  isDarkMode = false,
+  
   onNavigationClick,
   onSidebarToggle,
   className,
 }) => {
-  const theme = useTheme(isDarkMode);
+  const { theme, colorScheme } = useThemeContext();
+  const isDarkMode = colorScheme === 'dark';
   const [searchQuery, setSearchQuery] = useState('');
   const [activeView, setActiveView] = useState(viewOptions[0]?.id || 'grid');
   const [activeSort, setActiveSort] = useState(sortOptions[0]?.value || '');
@@ -323,7 +323,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
               <Text
                 variant={isListView ? 'body-sm' : 'body-md'}
                 semantic="secondary"
-                isDarkMode={isDarkMode}
+                
                 style={{
                   display: '-webkit-box',
                   WebkitLineClamp: isListView ? 2 : 3,
@@ -339,7 +339,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
           {/* Metadata */}
           <Box style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             {item.category && (
-              <Badge size="sm" variant="default" isDarkMode={isDarkMode}>
+              <Badge size="sm" variant="default" >
                 {item.category}
               </Badge>
             )}
@@ -352,18 +352,18 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
                   item.status === 'inactive' ? 'default' :
                   'default'
                 }
-                isDarkMode={isDarkMode}
+                
               >
                 {item.status}
               </Badge>
             )}
             {item.date && (
-              <Text variant="caption" semantic="tertiary" isDarkMode={isDarkMode}>
+              <Text variant="caption" semantic="tertiary" >
                 {formatDate(item.date)}
               </Text>
             )}
             {item.author && (
-              <Text variant="caption" semantic="secondary" isDarkMode={isDarkMode}>
+              <Text variant="caption" semantic="secondary" >
                 by {item.author}
               </Text>
             )}
@@ -373,12 +373,12 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
           {item.tags && item.tags.length > 0 && (
             <Box style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
               {item.tags.slice(0, isListView ? 2 : 4).map(tag => (
-                <Badge key={tag} size="sm" variant="secondary" isDarkMode={isDarkMode}>
+                <Badge key={tag} size="sm" variant="secondary" >
                   {tag}
                 </Badge>
               ))}
               {item.tags.length > (isListView ? 2 : 4) && (
-                <Badge size="sm" variant="secondary" isDarkMode={isDarkMode}>
+                <Badge size="sm" variant="secondary" >
                   +{item.tags.length - (isListView ? 2 : 4)}
                 </Badge>
               )}
@@ -392,7 +392,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
       <Card
         key={item.id}
         padding={isListView ? 16 : 20}
-        isDarkMode={isDarkMode}
+        
         style={{
           cursor: onItemClick ? 'pointer' : 'default',
           transition: 'all 150ms ease',
@@ -419,14 +419,14 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
         )}
       </Card>
     );
-  }, [isDarkMode, formatDate, onItemClick]);
+  }, [formatDate, onItemClick, isDarkMode]);
 
   // Render filters
   const renderFilters = () => {
     if (!filters.length) return null;
 
     return (
-      <Card padding={20} isDarkMode={isDarkMode}>
+      <Card padding={20} >
         <Stack spacing={16}>
           <Heading level={4}>Filters</Heading>
           {filters.map(filter => (
@@ -434,7 +434,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
               <Text
                 variant="body-sm"
                 semantic="primary"
-                isDarkMode={isDarkMode}
+                
                 style={{ fontWeight: 'medium', marginBottom: '8px' }}
               >
                 {filter.label}
@@ -450,7 +450,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
                       label: opt.count ? `${opt.label} (${opt.count})` : opt.label,
                     }))
                   ]}
-                  isDarkMode={isDarkMode}
+                  
                   placeholder="Select..."
                 />
               )}
@@ -480,7 +480,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
             onSearch={handleSearch}
             value={searchQuery}
             loading={loading}
-            isDarkMode={isDarkMode}
+            
           />
         )}
       </Box>
@@ -493,7 +493,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
             value={activeSort}
             onChange={handleSortChange}
             options={sortOptions}
-            isDarkMode={isDarkMode}
+            
             placeholder="Sort by..."
           />
         )}
@@ -507,7 +507,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
                 variant={activeView === view.id ? 'primary' : 'outline'}
                 size="sm"
                 onClick={() => handleViewChange(view.id)}
-                isDarkMode={isDarkMode}
+                
                 aria-label={view.label}
               >
                 {view.icon}
@@ -532,8 +532,8 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
           }}
         >
           <Stack spacing={16} align="center">
-            <Spinner size="lg" isDarkMode={isDarkMode} />
-            <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+            <Spinner size="lg"  />
+            <Text variant="body-lg" semantic="secondary" >
               Loading items...
             </Text>
           </Stack>
@@ -555,7 +555,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
             <Text
               variant="body-lg"
               semantic="tertiary"
-              isDarkMode={isDarkMode}
+              
               style={{ fontSize: '48px' }}
             >
               📭
@@ -567,7 +567,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
               <Text
                 variant="body-lg"
                 semantic="secondary"
-                isDarkMode={isDarkMode}
+                
                 style={{ textAlign: 'center', maxWidth: '400px' }}
               >
                 {emptyState.description}
@@ -576,7 +576,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
             {emptyState.action && (
               <Button
                 onClick={emptyState.action.onClick}
-                isDarkMode={isDarkMode}
+                
               >
                 {emptyState.action.label}
               </Button>
@@ -612,7 +612,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
       <Header
         title={title}
         rightContent={headerActions}
-        isDarkMode={isDarkMode}
+        
         onMobileMenuToggle={onSidebarToggle}
       />
 
@@ -623,7 +623,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
           <Sidebar
             sections={navigationItems}
             collapsed={sidebarCollapsed}
-            isDarkMode={isDarkMode}
+            
             onItemClick={(item) => onNavigationClick?.(item.id)}
           />
         )}
@@ -647,7 +647,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
                     {title}
                   </Heading>
                   {description && (
-                    <Text variant="body-lg" semantic="secondary" isDarkMode={isDarkMode}>
+                    <Text variant="body-lg" semantic="secondary" >
                       {description}
                     </Text>
                   )}
@@ -668,7 +668,7 @@ export const ListTemplate: React.FC<ListTemplateProps> = ({
                       itemsPerPage={pagination.itemsPerPage}
                       onPageChange={onPageChange || (() => {})}
                       onItemsPerPageChange={pagination.showPageSize ? onPageSizeChange : undefined}
-                      isDarkMode={isDarkMode}
+                      
                     />
                   </Box>
                 )}

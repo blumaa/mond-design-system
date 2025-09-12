@@ -5,6 +5,7 @@ import { Button } from '../../atoms/Button/Button';
 import { Icon } from '../../atoms/Icon/Icon';
 import { Link } from '../../atoms/Link/Link';
 import { tokens } from '../../../tokens/tokens';
+import { useThemeContext } from '../../providers/ThemeProvider';
 
 export interface SidebarSection {
   id: string;
@@ -79,7 +80,6 @@ export interface SidebarProps extends Omit<BoxProps, 'children' | 'position'> {
    * Dark mode styling
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom header content
@@ -122,7 +122,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
   position = 'left',
   showOverlay = true,
   mobileOpen = false,
-  isDarkMode = false,
+  
   header,
   footer,
   showToggle = true,
@@ -133,6 +133,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
   style,
   ...props
 }, ref) => {
+  const { colorScheme } = useThemeContext();
+  const isDark = colorScheme === 'dark';
+  
   const [internalCollapsed, setInternalCollapsed] = useState(collapsed);
   const [sectionStates, setSectionStates] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
@@ -179,19 +182,19 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
   };
 
   const sidebarColors = {
-    background: isDarkMode ? tokens.colors.gray['900'] : tokens.colors.white['50'],
-    border: isDarkMode ? tokens.colors.gray['800'] : tokens.colors.gray['200'],
+    background: isDark ? tokens.colors.gray['900'] : tokens.colors.white['50'],
+    border: isDark ? tokens.colors.gray['800'] : tokens.colors.gray['200'],
     text: {
-      primary: isDarkMode ? tokens.colors.gray['100'] : tokens.colors.gray['900'],
-      secondary: isDarkMode ? tokens.colors.gray['400'] : tokens.colors.gray['600'],
-      disabled: isDarkMode ? tokens.colors.gray['600'] : tokens.colors.gray['400'],
+      primary: isDark ? tokens.colors.gray['100'] : tokens.colors.gray['900'],
+      secondary: isDark ? tokens.colors.gray['400'] : tokens.colors.gray['600'],
+      disabled: isDark ? tokens.colors.gray['600'] : tokens.colors.gray['400'],
     },
     active: {
-      background: isDarkMode ? tokens.colors.blue['900'] : tokens.colors.blue['50'],
-      text: isDarkMode ? tokens.colors.blue['400'] : tokens.colors.blue['600'],
+      background: isDark ? tokens.colors.blue['900'] : tokens.colors.blue['50'],
+      text: isDark ? tokens.colors.blue['400'] : tokens.colors.blue['600'],
     },
     hover: {
-      background: isDarkMode ? tokens.colors.gray['800'] : tokens.colors.gray['50'],
+      background: isDark ? tokens.colors.gray['800'] : tokens.colors.gray['50'],
     }
   };
 
@@ -275,7 +278,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
         onClick={() => handleItemClick(item)}
       >
         {item.icon && !isCollapsed && (
-          <Icon size="sm" isDarkMode={isDarkMode}>
+          <Icon size="sm" >
             {item.icon}
           </Icon>
         )}
@@ -289,7 +292,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
             {item.badge && (
               <Box
                 style={{
-                  backgroundColor: isDarkMode ? tokens.colors.red['600'] : tokens.colors.red['500'],
+                  backgroundColor: isDark ? tokens.colors.red['600'] : tokens.colors.red['500'],
                   color: tokens.colors.white['50'],
                   fontSize: tokens.fontSizes.xs,
                   padding: `${tokens.spacing['1']} ${tokens.spacing['2']}`,
@@ -361,7 +364,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
             onClick={() => section.collapsible !== false && handleSectionToggle(section.id)}
           >
             {section.icon && (
-              <Icon size="xs" isDarkMode={isDarkMode}>
+              <Icon size="xs" >
                 {section.icon}
               </Icon>
             )}
@@ -369,7 +372,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
             <span style={{ flex: 1 }}>{section.title}</span>
             
             {section.collapsible !== false && (
-              <Icon size="xs" isDarkMode={isDarkMode}>
+              <Icon size="xs" >
                 <svg 
                   width="12" 
                   height="12" 
@@ -474,7 +477,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(({
                 marginLeft: isCollapsed ? 0 : tokens.spacing['2'],
               }}
             >
-              <Icon size="sm" isDarkMode={isDarkMode}>
+              <Icon size="sm" >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path 
                     d={position === 'left' 

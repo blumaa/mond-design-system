@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, renderWithDarkMode, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Tabs, TabItem } from './Tabs';
 
@@ -148,7 +148,7 @@ describe('Tabs Component', () => {
 
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
-      render(<Tabs tabs={mockTabs} isDarkMode data-testid="tabs" />);
+      renderWithDarkMode(<Tabs tabs={mockTabs} data-testid="tabs" />);
       
       const tabList = screen.getByRole('tablist');
       // Test that dark mode component exists rather than specific border color

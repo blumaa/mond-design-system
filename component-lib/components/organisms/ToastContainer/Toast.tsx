@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { spacing, fontSizes, fontWeights, fontFamilies, radii } from '../../../tokens';
-import { useTheme } from '../../../utils/theme';
+import { useThemeContext } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
 import { Button } from '../../atoms/Button/Button';
 
@@ -82,7 +82,6 @@ export interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
    * Dark mode
    * @default false
    */
-  isDarkMode?: boolean;
   
   /**
    * Custom data testid for testing
@@ -169,18 +168,18 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
     onDismiss,
     onPause,
     onResume,
-    isDarkMode = false,
+    
     'data-testid': dataTestId,
     className,
     ...props
   }, ref) => {
-    const theme = useTheme(isDarkMode);
+    const { theme } = useThemeContext();
     const variantStyles = getVariantStyles(type, theme);
     const animationStyles = getAnimationStyles(animationState);
     
     // timeRemaining could be used for dynamic updates, currently uses duration
     const [isPaused, setIsPaused] = useState(false);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const startTimeRef = useRef<number>(Date.now());
     const pausedTimeRef = useRef<number>(0);
 
@@ -355,7 +354,7 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
                   size="sm"
                   variant={action.variant || 'outline'}
                   onClick={action.onClick}
-                  isDarkMode={isDarkMode}
+                  
                 >
                   {action.label}
                 </Button>

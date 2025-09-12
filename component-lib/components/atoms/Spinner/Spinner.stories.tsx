@@ -138,7 +138,7 @@ export const ThemeVariants: Story = {
         borderRadius: '8px',
         textAlign: 'center'
       }}>
-        <Spinner isDarkMode={false} />
+        <Spinner  />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#374151' }}>
           Light Theme
         </div>
@@ -149,7 +149,7 @@ export const ThemeVariants: Story = {
         borderRadius: '8px',
         textAlign: 'center'
       }}>
-        <Spinner isDarkMode={true} />
+        <Spinner  />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#d1d5db' }}>
           Dark Theme
         </div>

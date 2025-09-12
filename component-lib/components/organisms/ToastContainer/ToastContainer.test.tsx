@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '../../../test-utils';
 import { ToastContainer } from './ToastContainer';
 import { Toast } from './Toast';
 import { ToastData } from './ToastContainer';
@@ -71,7 +71,7 @@ describe('ToastContainer', () => {
     });
 
     it('renders with dark mode', () => {
-      render(<ToastContainer {...defaultProps} isDarkMode />);
+      render(<ToastContainer {...defaultProps} />);
       
       expect(screen.getByRole('region')).toBeInTheDocument();
     });

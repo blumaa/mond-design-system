@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Breadcrumb } from './Breadcrumb';
 import type { BreadcrumbItem } from './Breadcrumb';
@@ -94,7 +94,7 @@ describe('Breadcrumb', () => {
   });
 
   it('renders with dark mode', () => {
-    render(<Breadcrumb items={mockItems} isDarkMode />);
+    render(<Breadcrumb items={mockItems} />);
     
     const breadcrumb = screen.getByRole('navigation');
     expect(breadcrumb).toBeInTheDocument();

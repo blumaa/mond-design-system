@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { ButtonGroup } from './ButtonGroup';
 import { Button } from '../../atoms/Button/Button';
@@ -113,13 +113,13 @@ describe('ButtonGroup Component', () => {
 
   it('applies dark mode to all buttons when specified', () => {
     render(
-      <ButtonGroup isDarkMode data-testid="button-group">
+      <ButtonGroup data-testid="button-group">
         <Button data-testid="button-1">First</Button>
         <Button data-testid="button-2">Second</Button>
       </ButtonGroup>
     );
     
-    // The buttons should receive the isDarkMode prop
+    // The buttons should receive the prop
     // This is tested through prop inheritance in the component logic
     const group = screen.getByTestId('button-group');
     expect(group).toBeInTheDocument();
