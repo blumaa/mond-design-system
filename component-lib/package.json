@@ -48,8 +48,8 @@
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=chpt_3a555ac943c38d1",
-    "chromatic:ci": "npx chromatic --project-token=chpt_3a555ac943c38d1 --exit-zero-on-changes",
+    "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
+    "chromatic:ci": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --exit-zero-on-changes",
     "release:patch": "npm version patch && yarn build && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && yarn build && npm publish && git push --follow-tags",
     "release:major": "npm version major && yarn build && npm publish && git push --follow-tags"
