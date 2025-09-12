@@ -128,7 +128,7 @@ export const ModalHeader: React.FC<{
     cursor: 'pointer',
     borderRadius: radii.sm,
     fontSize: fontSizes.lg,
-    color: '#6b7280',
+    color: theme('text.secondary'),
     transition: 'all 150ms ease',
   };
 
@@ -288,7 +288,7 @@ export const Modal: React.FC<ModalProps> = ({
   const overlayStyles = {
     position: 'fixed' as const,
     inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: theme('surface.overlay'),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
