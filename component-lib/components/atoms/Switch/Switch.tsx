@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useId } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
 import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
@@ -76,7 +76,8 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
   }, ref) => {
     const theme = useTheme();
     const sizeStyles = getSizeStyles(size);
-    const switchId = props.id || `switch-${Math.random().toString(36).substr(2, 9)}`;
+    const generatedId = useId();
+    const switchId = props.id || `switch-${generatedId}`;
 
     const trackStyles = {
       width: sizeStyles.width,

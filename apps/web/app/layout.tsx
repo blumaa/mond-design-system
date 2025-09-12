@@ -1,10 +1,16 @@
-import { ThemeProvider } from './context/ThemeContext';
+"use client";
+import { ThemeWrapper } from './components/ThemeWrapper';
 import './globals.css';
 
-export const metadata = {
-  title: 'Mond Design System',
-  description: 'A component library for building modern web applications',
-};
+function ThemedBody({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeWrapper>
+      <div style={{ minHeight: '100vh' }}>
+        {children}
+      </div>
+    </ThemeWrapper>
+  );
+}
 
 export default function RootLayout({
   children,
@@ -13,10 +19,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <ThemeProvider>
+      <body style={{ margin: 0, padding: 0 }}>
+        <ThemedBody>
           {children}
-        </ThemeProvider>
+        </ThemedBody>
       </body>
     </html>
   );

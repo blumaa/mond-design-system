@@ -1,49 +1,56 @@
-'use client';
-import React from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
-import { useTheme } from '../../providers/ThemeProvider';
+"use client";
+import React from "react";
+import {
+  radii,
+  spacing,
+  fontSizes,
+  fontWeights,
+  fontFamilies,
+} from "../../../tokens";
+import { useTheme } from "../../providers/ThemeProvider";
 
-export type ButtonVariant = 'primary' | 'outline' | 'ghost';
-export type ButtonSize = 'sm' | 'md' | 'lg';
-export type ButtonCorners = 'default' | 'rounded';
-export type ButtonAlignContent = 'left' | 'center' | 'right';
+export type ButtonVariant = "primary" | "outline" | "ghost";
+export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonCorners = "default" | "rounded";
+export type ButtonAlignContent = "left" | "center" | "right";
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Button variant
    * @default 'primary'
    */
   variant?: ButtonVariant;
-  
+
   /**
    * Button size
    * @default 'md'
    */
   size?: ButtonSize;
-  
+
   /**
    * Button corner style
    * @default 'default'
    */
   corners?: ButtonCorners;
-  
+
   /**
    * Content alignment within the button
    * @default 'center'
    */
   alignContent?: ButtonAlignContent;
-  
+
   /**
    * Button content - optional for icon-only buttons
    */
   children?: React.ReactNode;
-  
+
   /**
    * Icon-only button (no text content)
    * @default false
    */
   iconOnly?: boolean;
-  
+
   /**
    * Click event handler
    */
@@ -62,83 +69,88 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   isDarkMode?: boolean;
 }
 
-const getVariantStyles = (variant: ButtonVariant, theme: ReturnType<typeof useTheme>) => {
-  return {
-    primary: {
-      backgroundColor: theme('interactive.primary.background'),
-      color: theme('interactive.primary.text'),
-      border: `1px solid ${theme('interactive.primary.background')}`,
-      hoverStyles: {
-        backgroundColor: theme('interactive.primary.backgroundHover'),
+const getVariantStyles = (
+  variant: ButtonVariant,
+  theme: ReturnType<typeof useTheme>,
+) => {
+  return (
+    {
+      primary: {
+        backgroundColor: theme("interactive.primary.background"),
+        color: theme("interactive.primary.text"),
+        border: `1px solid ${theme("interactive.primary.background")}`,
+        hoverStyles: {
+          backgroundColor: theme("interactive.primary.backgroundHover"),
+        },
+        activeStyles: {
+          backgroundColor: theme("interactive.primary.backgroundPressed"),
+        },
+        focusStyles: {
+          outline: `2px solid ${theme("border.focused")}`,
+          outlineOffset: "2px",
+        },
       },
-      activeStyles: {
-        backgroundColor: theme('interactive.primary.backgroundPressed'),
+      outline: {
+        backgroundColor: "transparent",
+        color: theme("interactive.primary.background"),
+        border: `1px solid ${theme("interactive.primary.background")}`,
+        hoverStyles: {
+          backgroundColor: theme("interactive.primary.background"),
+          color: theme("interactive.primary.text"),
+          borderColor: theme("interactive.primary.background"),
+        },
+        activeStyles: {
+          backgroundColor: theme("interactive.primary.backgroundHover"),
+          color: theme("interactive.primary.text"),
+          borderColor: theme("interactive.primary.backgroundHover"),
+        },
+        focusStyles: {
+          outline: `2px solid ${theme("border.focused")}`,
+          outlineOffset: "2px",
+        },
       },
-      focusStyles: {
-        outline: `2px solid ${theme('border.focused')}`,
-        outlineOffset: '2px',
+      ghost: {
+        backgroundColor: "transparent",
+        color: theme("interactive.ghost.text"),
+        border: "none",
+        hoverStyles: {
+          backgroundColor: theme("interactive.ghost.backgroundHover"),
+        },
+        activeStyles: {
+          backgroundColor: theme("interactive.ghost.backgroundPressed"),
+        },
+        focusStyles: {
+          outline: `2px solid ${theme("border.default")}`,
+          outlineOffset: "2px",
+        },
       },
-    },
-    outline: {
-      backgroundColor: 'transparent',
-      color: theme('interactive.primary.background'),
-      border: `1px solid ${theme('interactive.primary.background')}`,
-      hoverStyles: {
-        backgroundColor: theme('interactive.primary.background'),
-        color: theme('interactive.primary.text'),
-        borderColor: theme('interactive.primary.background'),
-      },
-      activeStyles: {
-        backgroundColor: theme('interactive.primary.backgroundHover'),
-        color: theme('interactive.primary.text'),
-        borderColor: theme('interactive.primary.backgroundHover'),
-      },
-      focusStyles: {
-        outline: `2px solid ${theme('border.focused')}`,
-        outlineOffset: '2px',
-      },
-    },
-    ghost: {
-      backgroundColor: 'transparent',
-      color: theme('interactive.ghost.text'),
-      border: 'none',
-      hoverStyles: {
-        backgroundColor: theme('interactive.ghost.backgroundHover'),
-      },
-      activeStyles: {
-        backgroundColor: theme('interactive.ghost.backgroundPressed'),
-      },
-      focusStyles: {
-        outline: `2px solid ${theme('border.default')}`,
-        outlineOffset: '2px',
-      },
-    },
-  }[variant] || {};
+    }[variant] || {}
+  );
 };
 
 const getSizeStyles = (size: ButtonSize, iconOnly: boolean = false) => {
   if (iconOnly) {
     switch (size) {
-      case 'sm':
+      case "sm":
         return {
           padding: spacing[1],
           fontSize: fontSizes.sm,
-          width: '32px',
-          height: '32px',
+          width: "32px",
+          height: "32px",
         };
-      case 'md':
+      case "md":
         return {
           padding: spacing[2],
           fontSize: fontSizes.base,
-          width: '40px',
-          height: '40px',
+          width: "40px",
+          height: "40px",
         };
-      case 'lg':
+      case "lg":
         return {
           padding: spacing[3],
           fontSize: fontSizes.lg,
-          width: '48px',
-          height: '48px',
+          width: "48px",
+          height: "48px",
         };
       default:
         return {};
@@ -146,17 +158,17 @@ const getSizeStyles = (size: ButtonSize, iconOnly: boolean = false) => {
   }
 
   switch (size) {
-    case 'sm':
+    case "sm":
       return {
         padding: `${spacing[1]} ${spacing[2]}`,
         fontSize: fontSizes.sm,
       };
-    case 'md':
+    case "md":
       return {
         padding: `${spacing[2]} ${spacing[4]}`,
         fontSize: fontSizes.base,
       };
-    case 'lg':
+    case "lg":
       return {
         padding: `${spacing[3]} ${spacing[6]}`,
         fontSize: fontSizes.lg,
@@ -168,11 +180,11 @@ const getSizeStyles = (size: ButtonSize, iconOnly: boolean = false) => {
 
 const getCornerStyles = (corners: ButtonCorners) => {
   switch (corners) {
-    case 'rounded':
+    case "rounded":
       return {
         borderRadius: radii.full,
       };
-    case 'default':
+    case "default":
     default:
       return {
         borderRadius: radii.md,
@@ -182,34 +194,37 @@ const getCornerStyles = (corners: ButtonCorners) => {
 
 const getAlignmentStyles = (alignContent: ButtonAlignContent) => {
   switch (alignContent) {
-    case 'left':
+    case "left":
       return {
-        justifyContent: 'flex-start',
+        justifyContent: "flex-start",
       };
-    case 'right':
+    case "right":
       return {
-        justifyContent: 'flex-end',
+        justifyContent: "flex-end",
       };
-    case 'center':
+    case "center":
     default:
       return {
-        justifyContent: 'center',
+        justifyContent: "center",
       };
   }
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ 
-    variant = 'primary', 
-    size = 'md', 
-    corners = 'default',
-    alignContent = 'center',
-    children, 
-    iconOnly = false,
-    disabled = false,
-    isDarkMode,
-    ...props 
-  }, ref) => {
+  (
+    {
+      variant = "primary",
+      size = "md",
+      corners = "default",
+      alignContent = "center",
+      children,
+      iconOnly = false,
+      disabled = false,
+      isDarkMode,
+      ...props
+    },
+    ref,
+  ) => {
     const theme = useTheme(isDarkMode);
     const variantStyles = getVariantStyles(variant, theme);
     const sizeStyles = getSizeStyles(size, iconOnly);
@@ -218,30 +233,30 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const baseStyles = {
       // Layout
-      display: 'inline-flex',
-      alignItems: 'center',
-      boxSizing: 'border-box',
-      whiteSpace: 'nowrap' as const,
-      minWidth: 'fit-content',
-      // Typography  
+      display: "inline-flex",
+      alignItems: "center",
+      boxSizing: "border-box",
+      whiteSpace: "nowrap" as const,
+      minWidth: "fit-content",
+      // Typography
       fontFamily: fontFamilies.sans,
       fontWeight: fontWeights.medium,
       // State
-      cursor: disabled ? 'not-allowed' : 'pointer',
+      cursor: disabled ? "not-allowed" : "pointer",
       opacity: disabled ? 0.6 : 1,
-      transition: 'all 150ms ease',
-      outline: 'none',
+      transition: "all 150ms ease",
+      outline: "none",
       // Component styles
       ...variantStyles,
       ...cornerStyles,
       ...alignmentStyles,
-      ...sizeStyles,  // Size styles LAST to ensure padding is applied
+      ...sizeStyles, // Size styles LAST to ensure padding is applied
     };
 
     // Convert styles object to inline style for simplicity
     const inlineStyles: React.CSSProperties = {};
     Object.entries(baseStyles).forEach(([key, value]) => {
-      if (typeof value === 'string' || typeof value === 'number') {
+      if (typeof value === "string" || typeof value === "number") {
         // @ts-expect-error - dynamic styles
         inlineStyles[key] = value;
       }
@@ -290,9 +305,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const handleMouseUp = (e: React.MouseEvent<HTMLButtonElement>) => {
       if (!disabled && variantStyles.activeStyles) {
         // Reset to hover styles if still hovering, otherwise base styles
-        const isHovering = e.currentTarget.matches(':hover');
-        const stylesToApply = isHovering && variantStyles.hoverStyles ? variantStyles.hoverStyles : baseStyles;
-        
+        const isHovering = e.currentTarget.matches(":hover");
+        const stylesToApply =
+          isHovering && variantStyles.hoverStyles
+            ? variantStyles.hoverStyles
+            : baseStyles;
+
         Object.entries(variantStyles.activeStyles).forEach(([key]) => {
           // @ts-expect-error - dynamic styles
           const resetValue = stylesToApply[key];
@@ -317,7 +335,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       if (!disabled && variantStyles.focusStyles) {
         Object.entries(variantStyles.focusStyles).forEach(([key]) => {
           // @ts-expect-error - dynamic styles
-          e.currentTarget.style[key] = '';
+          e.currentTarget.style[key] = "";
         });
       }
     };
@@ -337,13 +355,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         onBlur={handleBlur}
         {...otherProps}
       >
-{children}
+        {children}
       </button>
     );
-  }
+  },
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";
 
 // Also export as default for better compatibility
 export default Button;

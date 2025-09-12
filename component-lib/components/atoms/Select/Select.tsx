@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useId } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../../tokens';
 import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
@@ -160,7 +160,8 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     const theme = useTheme();
     const sizeStyles = getSizeStyles(size);
     const variantStyles = getVariantStyles(variant, theme);
-    const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
+    const generatedId = useId();
+    const selectId = id || `select-${generatedId}`;
     
     const [isOpen, setIsOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);

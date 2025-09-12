@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Box, Text, Badge } from '@mond-design-system/theme';
@@ -16,6 +16,20 @@ const navigationItems = [
 
 export function Navigation() {
   const pathname = usePathname();
+  const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    const updateTime = () => {
+      setCurrentTime(new Date().toLocaleTimeString('en-US', { 
+        hour12: false, 
+        timeZone: 'UTC' 
+      }));
+    };
+    
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const navigationStyles = {
     position: 'fixed' as const,
@@ -138,10 +152,7 @@ export function Navigation() {
               fontSize: '0.75rem' 
             }}
           >
-            UTC: {new Date().toLocaleTimeString('en-US', { 
-              hour12: false, 
-              timeZone: 'UTC' 
-            })}
+            UTC: {currentTime}
           </Text>
           <Badge 
             variant="primary" 

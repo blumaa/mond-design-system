@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button, Card, Stack, Box, Text, Badge, Heading, Input, Select, Switch, Divider, Link, Avatar, Checkbox, Spinner, Tag, Grid } from '@mond-design-system/theme';
+import { Button, Card, Stack, Box, Text, Badge, Heading, Input, Select, Switch, Divider, Link, Avatar, Checkbox, Spinner, Tag } from '@mond-design-system/theme';
 
 // Mock data for code quality metrics
 const codeQualityMetrics = {
@@ -137,11 +137,6 @@ export default function AnalyticsPage() {
                 ]}
                 value={selectedTimeframe}
                 onChange={(value) => setSelectedTimeframe(value)}
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  border: '1px solid #00ff41',
-                  color: '#ffffff'
-                }}
               />
             </Box>
             <Button 
@@ -161,7 +156,11 @@ export default function AnalyticsPage() {
         </Box>
 
         {/* Metrics Overview Grid */}
-        <Grid columns={{ default: 1, md: 2, lg: 4 }} gap={4}>
+        <Box style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '1.5rem',
+        }}>
           {/* Code Quality Score */}
           <Card style={{
             backgroundColor: 'rgba(26, 26, 30, 0.8)',
@@ -257,10 +256,14 @@ export default function AnalyticsPage() {
               SLA: 99.9%
             </Text>
           </Card>
-        </Grid>
+        </Box>
 
         {/* Detailed Metrics Grid */}
-        <Grid columns={{ default: 1, lg: 2 }} gap={4}>
+        <Box style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+          gap: '1.5rem',
+        }}>
           {/* Code Quality Details */}
           <Card style={{
             backgroundColor: 'rgba(26, 26, 30, 0.8)',
@@ -370,10 +373,14 @@ export default function AnalyticsPage() {
               </Box>
             </Stack>
           </Card>
-        </Grid>
+        </Box>
 
         {/* Bug Tracking and Recent Deployments */}
-        <Grid columns={{ default: 1, lg: 2 }} gap={4}>
+        <Box style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+          gap: '1.5rem',
+        }}>
           {/* Bug Tracking */}
           <Card style={{
             backgroundColor: 'rgba(26, 26, 30, 0.8)',
@@ -493,7 +500,7 @@ export default function AnalyticsPage() {
               </Text>
             </Box>
           </Card>
-        </Grid>
+        </Box>
       </Stack>
 
       <style jsx>{`

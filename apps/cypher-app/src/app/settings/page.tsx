@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button, Card, Stack, Box, Text, Badge, Heading, Input, Select, Switch, Divider, Link, Avatar, Checkbox, Spinner, Tag, Grid, Accordion, Modal, Tabs } from '@mond-design-system/theme';
+import { Button, Card, Stack, Box, Text, Badge, Heading, Input, Select, Switch, Divider, Link, Avatar, Checkbox, Spinner, Tag, Accordion, Modal, Tabs } from '@mond-design-system/theme';
 
 // Mock data for settings
 const userProfile = {
@@ -134,18 +134,22 @@ export default function SettingsPage() {
         {/* Main Settings Content */}
         <Tabs
           tabs={[
-            { id: 'system', label: 'SYSTEM' },
-            { id: 'terminal', label: 'TERMINAL' },
-            { id: 'security', label: 'SECURITY' },
-            { id: 'notifications', label: 'NOTIFICATIONS' }
+            { id: 'system', label: 'SYSTEM', content: <div>System settings content</div> },
+            { id: 'terminal', label: 'TERMINAL', content: <div>Terminal settings content</div> },
+            { id: 'security', label: 'SECURITY', content: <div>Security settings content</div> },
+            { id: 'notifications', label: 'NOTIFICATIONS', content: <div>Notifications settings content</div> }
           ]}
           activeTab={activeTab}
-          onTabChange={setActiveTab}
+          onChange={setActiveTab}
         >
           {/* System Preferences Tab */}
           {activeTab === 'system' && (
             <Stack gap={4}>
-              <Grid columns={{ default: 1, lg: 2 }} gap={4}>
+              <Box style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '1.5rem'
+              }}>
                 {/* User Profile */}
                 <Card style={{
                   backgroundColor: 'rgba(26, 26, 30, 0.8)',
@@ -188,11 +192,6 @@ export default function SettingsPage() {
                         </Text>
                         <Input
                           value={userProfile.fullName}
-                          style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                            border: '1px solid #333',
-                            color: '#ffffff'
-                          }}
                         />
                       </Box>
                       <Box>
@@ -208,11 +207,6 @@ export default function SettingsPage() {
                             { value: '0', label: 'Never' }
                           ]}
                           value={userProfile.sessionTimeout.toString()}
-                          style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                            border: '1px solid #333',
-                            color: '#ffffff'
-                          }}
                         />
                       </Box>
                     </Stack>
@@ -243,11 +237,6 @@ export default function SettingsPage() {
                           { value: 'amber-glow', label: 'Amber Glow' }
                         ]}
                         value="matrix-green"
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          border: '1px solid #333',
-                          color: '#ffffff'
-                        }}
                       />
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -268,14 +257,18 @@ export default function SettingsPage() {
                     </Box>
                   </Stack>
                 </Card>
-              </Grid>
+              </Box>
             </Stack>
           )}
 
           {/* Terminal Preferences Tab */}
           {activeTab === 'terminal' && (
             <Stack gap={4}>
-              <Grid columns={{ default: 1, lg: 2 }} gap={4}>
+              <Box style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '1.5rem'
+              }}>
                 {/* Terminal Appearance */}
                 <Card style={{
                   backgroundColor: 'rgba(26, 26, 30, 0.8)',
@@ -302,11 +295,6 @@ export default function SettingsPage() {
                         ]}
                         value={localTerminalSettings.fontFamily}
                         onChange={(value) => setLocalTerminalSettings({...localTerminalSettings, fontFamily: value})}
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          border: '1px solid #333',
-                          color: '#ffffff'
-                        }}
                       />
                     </Box>
                     <Box>
@@ -323,11 +311,6 @@ export default function SettingsPage() {
                         ]}
                         value={localTerminalSettings.fontSize.toString()}
                         onChange={(value) => setLocalTerminalSettings({...localTerminalSettings, fontSize: parseInt(value)})}
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          border: '1px solid #333',
-                          color: '#ffffff'
-                        }}
                       />
                     </Box>
                     <Box>
@@ -342,11 +325,6 @@ export default function SettingsPage() {
                         ]}
                         value={localTerminalSettings.cursorStyle}
                         onChange={(value) => setLocalTerminalSettings({...localTerminalSettings, cursorStyle: value})}
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          border: '1px solid #333',
-                          color: '#ffffff'
-                        }}
                       />
                     </Box>
                   </Stack>
@@ -368,21 +346,21 @@ export default function SettingsPage() {
                       <Text style={{ color: '#ffffff' }}>Blinking Cursor:</Text>
                       <Switch 
                         checked={localTerminalSettings.blinkingCursor}
-                        onChange={(checked) => setLocalTerminalSettings({...localTerminalSettings, blinkingCursor: checked})}
+                        onChange={(e) => setLocalTerminalSettings({...localTerminalSettings, blinkingCursor: e.target.checked})}
                       />
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Text style={{ color: '#ffffff' }}>Sound Effects:</Text>
                       <Switch 
                         checked={localTerminalSettings.soundEnabled}
-                        onChange={(checked) => setLocalTerminalSettings({...localTerminalSettings, soundEnabled: checked})}
+                        onChange={(e) => setLocalTerminalSettings({...localTerminalSettings, soundEnabled: e.target.checked})}
                       />
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Text style={{ color: '#ffffff' }}>Auto-complete:</Text>
                       <Switch 
                         checked={localTerminalSettings.autoComplete}
-                        onChange={(checked) => setLocalTerminalSettings({...localTerminalSettings, autoComplete: checked})}
+                        onChange={(e) => setLocalTerminalSettings({...localTerminalSettings, autoComplete: e.target.checked})}
                       />
                     </Box>
                     <Box>
@@ -399,16 +377,11 @@ export default function SettingsPage() {
                         ]}
                         value={localTerminalSettings.historySize.toString()}
                         onChange={(value) => setLocalTerminalSettings({...localTerminalSettings, historySize: parseInt(value)})}
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          border: '1px solid #333',
-                          color: '#ffffff'
-                        }}
                       />
                     </Box>
                   </Stack>
                 </Card>
-              </Grid>
+              </Box>
 
               {/* Terminal Preview */}
               <Card style={{
@@ -453,7 +426,11 @@ export default function SettingsPage() {
           {/* Security Settings Tab */}
           {activeTab === 'security' && (
             <Stack gap={4}>
-              <Grid columns={{ default: 1, lg: 2 }} gap={4}>
+              <Box style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '1.5rem'
+              }}>
                 {/* Authentication */}
                 <Card style={{
                   backgroundColor: 'rgba(26, 26, 30, 0.8)',
@@ -493,11 +470,6 @@ export default function SettingsPage() {
                       <Input
                         type="password"
                         placeholder="Enter current password..."
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          border: '1px solid #333',
-                          color: '#ffffff'
-                        }}
                       />
                     </Box>
                     <Box>
@@ -507,11 +479,6 @@ export default function SettingsPage() {
                       <Input
                         type="password"
                         placeholder="Enter new password..."
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          border: '1px solid #333',
-                          color: '#ffffff'
-                        }}
                       />
                     </Box>
                     <Button 
@@ -572,7 +539,7 @@ export default function SettingsPage() {
                     </Button>
                   </Stack>
                 </Card>
-              </Grid>
+              </Box>
 
               {/* API Keys Management */}
               <Card style={{
@@ -670,7 +637,11 @@ export default function SettingsPage() {
           {/* Notifications Tab */}
           {activeTab === 'notifications' && (
             <Stack gap={4}>
-              <Grid columns={{ default: 1, lg: 2 }} gap={4}>
+              <Box style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '1.5rem'
+              }}>
                 {/* System Notifications */}
                 <Card style={{
                   backgroundColor: 'rgba(26, 26, 30, 0.8)',
@@ -687,28 +658,28 @@ export default function SettingsPage() {
                       <Text style={{ color: '#ffffff' }}>System Alerts:</Text>
                       <Switch 
                         checked={localNotificationSettings.systemAlerts}
-                        onChange={(checked) => setLocalNotificationSettings({...localNotificationSettings, systemAlerts: checked})}
+                        onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, systemAlerts: e.target.checked})}
                       />
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Text style={{ color: '#ffffff' }}>Deployment Notifications:</Text>
                       <Switch 
                         checked={localNotificationSettings.deploymentNotifications}
-                        onChange={(checked) => setLocalNotificationSettings({...localNotificationSettings, deploymentNotifications: checked})}
+                        onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, deploymentNotifications: e.target.checked})}
                       />
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Text style={{ color: '#ffffff' }}>Security Warnings:</Text>
                       <Switch 
                         checked={localNotificationSettings.securityWarnings}
-                        onChange={(checked) => setLocalNotificationSettings({...localNotificationSettings, securityWarnings: checked})}
+                        onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, securityWarnings: e.target.checked})}
                       />
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Text style={{ color: '#ffffff' }}>Performance Alerts:</Text>
                       <Switch 
                         checked={localNotificationSettings.performanceAlerts}
-                        onChange={(checked) => setLocalNotificationSettings({...localNotificationSettings, performanceAlerts: checked})}
+                        onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, performanceAlerts: e.target.checked})}
                       />
                     </Box>
                   </Stack>
@@ -730,21 +701,21 @@ export default function SettingsPage() {
                       <Text style={{ color: '#ffffff' }}>Email Notifications:</Text>
                       <Switch 
                         checked={localNotificationSettings.emailNotifications}
-                        onChange={(checked) => setLocalNotificationSettings({...localNotificationSettings, emailNotifications: checked})}
+                        onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, emailNotifications: e.target.checked})}
                       />
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Text style={{ color: '#ffffff' }}>Slack Integration:</Text>
                       <Switch 
                         checked={localNotificationSettings.slackIntegration}
-                        onChange={(checked) => setLocalNotificationSettings({...localNotificationSettings, slackIntegration: checked})}
+                        onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, slackIntegration: e.target.checked})}
                       />
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Text style={{ color: '#ffffff' }}>Push Notifications:</Text>
                       <Switch 
                         checked={localNotificationSettings.pushNotifications}
-                        onChange={(checked) => setLocalNotificationSettings({...localNotificationSettings, pushNotifications: checked})}
+                        onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, pushNotifications: e.target.checked})}
                       />
                     </Box>
                     <Divider style={{ borderColor: '#00ff41', opacity: 0.3 }} />
@@ -754,11 +725,6 @@ export default function SettingsPage() {
                       </Text>
                       <Input
                         value="admin@cypher.sys"
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          border: '1px solid #333',
-                          color: '#ffffff'
-                        }}
                       />
                     </Box>
                     <Box>
@@ -778,7 +744,7 @@ export default function SettingsPage() {
                     </Box>
                   </Stack>
                 </Card>
-              </Grid>
+              </Box>
 
               {/* Test Notifications */}
               <Card style={{

@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useId } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
 import { useTheme } from '../../providers/ThemeProvider';
 import { Box } from '../../layout/Box/Box';
@@ -121,7 +121,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const theme = useTheme(isDarkMode);
     const sizeStyles = getSizeStyles(inputSize);
     const variantStyles = getVariantStyles(variant, theme);
-    const inputId = props.id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const generatedId = useId();
+    const inputId = props.id || `input-${generatedId}`;
 
     const inputStyles = {
       // Layout
