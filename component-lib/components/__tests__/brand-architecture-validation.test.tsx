@@ -48,7 +48,7 @@ describe('Brand Architecture Validation - Phase 3', () => {
             'default', 'primary', 'secondary', 'success', 'warning', 'error'
           ];
 
-          const { container } = render(
+          render(
             <ThemeProvider brandTheme={theme} colorScheme={colorScheme}>
               <div data-testid="badge-container">
                 {variants.map(variant => (

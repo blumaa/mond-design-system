@@ -232,7 +232,7 @@ describe('Theme Switching Performance - Phase 3.1', () => {
 
   describe('Memory Efficiency', () => {
     it('should not cause memory leaks during repeated theme switches', () => {
-      const initialMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const initialMemory = (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0;
       
       // Perform many theme creation/destruction cycles
       for (let i = 0; i < 1000; i++) {
@@ -244,11 +244,12 @@ describe('Theme Switching Performance - Phase 3.1', () => {
       }
       
       // Force garbage collection if available
-      if ((global as any).gc) {
-        (global as any).gc();
+      const globalWithGc = global as unknown as { gc?: () => void };
+      if (globalWithGc.gc) {
+        globalWithGc.gc();
       }
       
-      const finalMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const finalMemory = (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0;
       
       if (initialMemory > 0) {
         const memoryIncrease = finalMemory - initialMemory;

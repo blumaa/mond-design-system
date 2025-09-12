@@ -4,9 +4,10 @@ import '@testing-library/jest-dom';
 import { Badge } from '../Badge';
 import { ThemeProvider } from '../../../providers/ThemeProvider';
 import { cypherTheme, fluxTheme, mondTheme } from '../../../../brands';
+import type { BrandTheme } from '../../../providers/ThemeProvider';
 
 // Helper to render Badge with brand context
-const renderWithBrand = (component: React.ReactElement, brandTheme: any, colorScheme: 'light' | 'dark' = 'dark') => {
+const renderWithBrand = (component: React.ReactElement, brandTheme: BrandTheme, colorScheme: 'light' | 'dark' = 'dark') => {
   return render(
     <ThemeProvider brandTheme={brandTheme} colorScheme={colorScheme}>
       {component}

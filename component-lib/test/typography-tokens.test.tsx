@@ -4,9 +4,10 @@ import '@testing-library/jest-dom';
 import { ThemeProvider } from '../components/providers/ThemeProvider';
 import { Text } from '../components';
 import { cypherTheme, fluxTheme, mondTheme } from '../brands';
+import type { BrandTheme } from '../components/providers/ThemeProvider';
 
 // Test helper to render with different brand themes
-const renderWithTheme = (component: React.ReactElement, brandTheme: any) => {
+const renderWithTheme = (component: React.ReactElement, brandTheme: BrandTheme) => {
   return render(
     <ThemeProvider brandTheme={brandTheme} colorScheme="dark">
       {component}
