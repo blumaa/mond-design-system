@@ -1,3 +1,13 @@
+## 1.9.0 (2025-09-12)
+
+* cypher app mvp achieved ([31d114f](https://github.com/blumaa/mond-design-system/commit/31d114f))
+* feat!: cypher web app mvp ([a633596](https://github.com/blumaa/mond-design-system/commit/a633596))
+* feat!: mond-design-system mvp ([d12c2e9](https://github.com/blumaa/mond-design-system/commit/d12c2e9))
+* Merge pull request #4 from blumaa/brand-app-implementation ([7058bc1](https://github.com/blumaa/mond-design-system/commit/7058bc1)), closes [#4](https://github.com/blumaa/mond-design-system/issues/4)
+* update cypher app ([5e419a5](https://github.com/blumaa/mond-design-system/commit/5e419a5))
+* fix: update react to 19 ([1f2d911](https://github.com/blumaa/mond-design-system/commit/1f2d911))
+* feat: brand and colorscheme mode init ([1b63abc](https://github.com/blumaa/mond-design-system/commit/1b63abc))
+
 ## 1.8.0 (2025-09-10)
 
 * feat: add dashboard ([d807006](https://github.com/blumaa/mond-design-system/commit/d807006))
