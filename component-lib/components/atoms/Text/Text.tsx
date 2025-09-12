@@ -1,16 +1,23 @@
 import React, { forwardRef } from 'react';
 import { Box, type BoxProps } from '../../layout/Box/Box';
-import { fontSizes, fontWeights, lineHeights, fontFamilies } from '../../../tokens';
+import { tokens } from '../../../tokens';
 import { useTheme } from '../../providers/ThemeProvider';
 
 export type TextVariant = 
-  | 'body-lg' 
-  | 'body-md' 
+  | 'display'
+  | 'headline' 
+  | 'title'
+  | 'subtitle'
+  | 'body'
   | 'body-sm' 
   | 'caption' 
-  | 'overline';
+  | 'overline'
+  | 'code'
+  // Legacy variants (for backward compatibility)
+  | 'body-lg' 
+  | 'body-md';
 
-export type TextWeight = keyof typeof fontWeights;
+export type TextWeight = keyof typeof tokens.fontWeights;
 
 export type TextAlign = 'left' | 'center' | 'right' | 'justify';
 
@@ -23,7 +30,8 @@ export type TextSemantic =
   | 'link' 
   | 'success' 
   | 'warning' 
-  | 'error';
+  | 'error'
+  | 'accent';
 
 export interface TextProps extends Omit<BoxProps, 'as'> {
   /**
@@ -87,33 +95,34 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
 }
 
 const getVariantStyles = (variant: TextVariant) => {
-  const styles = {
+  // Use semantic typography tokens for new variants
+  const typographyTokens = tokens.semantic.typography;
+  
+  if (typographyTokens[variant as keyof typeof typographyTokens]) {
+    const token = typographyTokens[variant as keyof typeof typographyTokens];
+    return {
+      fontSize: token.fontSize,
+      lineHeight: token.lineHeight,
+      fontWeight: token.fontWeight,
+      letterSpacing: token.letterSpacing,
+      textTransform: 'textTransform' in token ? token.textTransform : undefined,
+      fontFamily: 'fontFamily' in token ? token.fontFamily : undefined,
+    };
+  }
+  
+  // Fallback to legacy styles for backward compatibility
+  const legacyStyles = {
     'body-lg': {
-      fontSize: fontSizes.lg,
-      lineHeight: lineHeights.relaxed,
+      fontSize: '1.125rem',
+      lineHeight: '1.625',
     },
     'body-md': {
-      fontSize: fontSizes.base,
-      lineHeight: lineHeights.normal,
-    },
-    'body-sm': {
-      fontSize: fontSizes.sm,
-      lineHeight: lineHeights.normal,
-    },
-    'caption': {
-      fontSize: fontSizes.xs,
-      lineHeight: lineHeights.tight,
-    },
-    'overline': {
-      fontSize: fontSizes.xs,
-      lineHeight: lineHeights.tight,
-      textTransform: 'uppercase' as const,
-      letterSpacing: '0.1em',
-      fontWeight: fontWeights.medium,
+      fontSize: '1rem',
+      lineHeight: '1.5',
     },
   };
 
-  return styles[variant] || styles['body-md'];
+  return legacyStyles[variant as keyof typeof legacyStyles] || legacyStyles['body-md'];
 };
 
 const getSemanticColor = (semantic: TextSemantic, theme: ReturnType<typeof useTheme>): string => {
@@ -127,6 +136,7 @@ const getSemanticColor = (semantic: TextSemantic, theme: ReturnType<typeof useTh
     success: theme('text.success'),
     warning: theme('text.warning'),
     error: theme('text.error'),
+    accent: theme('text.accent'),
   };
 
   return semanticColors[semantic] || semanticColors.primary;
@@ -164,8 +174,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
     <Box
       as={as}
       ref={ref}
-      fontFamily={fontFamilies.sans}
-      fontWeight={fontWeights[weight]}
+      fontFamily={tokens.fontFamilies.sans}
+      fontWeight={tokens.fontWeights[weight]}
       fontStyle={italic ? 'italic' : 'normal'}
       textAlign={align}
       textDecoration={textDecoration}

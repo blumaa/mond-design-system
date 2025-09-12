@@ -71,9 +71,10 @@ const getVariantStyles = (variant: BadgeVariant, theme: (path: string) => string
       };
     case 'success':
       return {
-        backgroundColor: theme('feedback.success.background'),
-        color: theme('feedback.success.text'),
-        border: `1px solid ${theme('feedback.success.border')}`,
+        backgroundColor: theme('brand.interactive.background'),
+        color: theme('brand.interactive.text'),
+        border: `1px solid ${theme('brand.interactive.background')}`,
+        boxShadow: theme('effects.brand.glow.subtle'),
       };
     case 'warning':
       return {
