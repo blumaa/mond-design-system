@@ -338,13 +338,13 @@ export default function Monitor() {
               SYSTEM ALERTS
             </Text>
             <Box style={{ display: 'flex', gap: '1rem' }}>
-              <Badge variant="error" style={{ backgroundColor: '#ff0055', color: '#ffffff' }}>
+              <Badge variant="error">
                 {alerts.filter(a => a.level === 'critical' && !a.acknowledged).length} CRITICAL
               </Badge>
-              <Badge variant="warning" style={{ backgroundColor: '#ff9500', color: '#0a0a0a' }}>
+              <Badge variant="warning">
                 {alerts.filter(a => a.level === 'warning' && !a.acknowledged).length} WARNING
               </Badge>
-              <Badge variant="primary" style={{ backgroundColor: '#00d4ff', color: '#0a0a0a' }}>
+              <Badge variant="error">
                 {alerts.filter(a => a.level === 'error' && !a.acknowledged).length} ERROR
               </Badge>
             </Box>
@@ -441,25 +441,25 @@ export default function Monitor() {
             <Stack gap={2}>
               <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ color: '#ffffff', fontSize: '0.875rem' }}>Neural Interface</Text>
-                <Badge variant="success" style={{ backgroundColor: '#00ff41', color: '#0a0a0a', fontSize: '0.75rem' }}>
+                <Badge variant="success" size="sm">
                   ONLINE
                 </Badge>
               </Box>
               <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ color: '#ffffff', fontSize: '0.875rem' }}>Security Core</Text>
-                <Badge variant="success" style={{ backgroundColor: '#00ff41', color: '#0a0a0a', fontSize: '0.75rem' }}>
+                <Badge variant="success" size="sm">
                   ONLINE
                 </Badge>
               </Box>
               <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ color: '#ffffff', fontSize: '0.875rem' }}>Data Mining</Text>
-                <Badge variant="warning" style={{ backgroundColor: '#ff9500', color: '#0a0a0a', fontSize: '0.75rem' }}>
+                <Badge variant="warning" size="sm">
                   DEGRADED
                 </Badge>
               </Box>
               <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ color: '#ffffff', fontSize: '0.875rem' }}>CDN Network</Text>
-                <Badge variant="error" style={{ backgroundColor: '#ff0055', color: '#ffffff', fontSize: '0.75rem' }}>
+                <Badge variant="error" size="sm">
                   DOWN
                 </Badge>
               </Box>
