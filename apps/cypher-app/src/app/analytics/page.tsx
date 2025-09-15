@@ -1,413 +1,294 @@
-'use client';
+import {
+  Card,
+  Stack,
+  Box,
+  Text,
+  Badge,
+  Heading,
+  Grid,
+  Divider,
+} from "@mond-design-system/theme";
+import { InteractiveChartFilters } from "../../components/InteractiveChartFilters";
+import { MatrixRain } from "../../components/MatrixRain";
 
-import { useState, useEffect } from 'react';
-import { Button, Card, Stack, Box, Text, Badge, Heading, Select, Divider, Checkbox } from '@mond-design-system/theme';
-
-// Mock data for code quality metrics
-const codeQualityMetrics = {
-  overallScore: 87.3,
-  technicalDebt: 23.5, // hours
-  testCoverage: 78.9,
-  codeComplexity: 6.2,
-  vulnerabilities: 3,
-  duplicatedLines: 4.7, // percentage
-  maintainabilityIndex: 82.1,
-  lastAnalysis: '2024-01-15 23:42:18'
-};
-
+// Static analytics data (server-side)
 const deploymentStats = {
-  deploymentsToday: 12,
-  successRate: 94.7, // percentage
-  avgDeployTime: 8.3, // minutes
-  rollbackRate: 2.1, // percentage
-  failureCount: 1,
-  lastDeployment: '47 minutes ago',
-  nextScheduled: 'Tomorrow 02:00 UTC'
+  total: 247,
+  successful: 231,
+  failed: 16,
+  successRate: 93.5,
+  avgDuration: "3.2min"
 };
 
-const performanceMetrics = {
-  responseTime: 187, // ms
-  throughput: 2847, // requests/min
-  errorRate: 0.12, // percentage
-  uptime: 99.97,
-  memoryUsage: 67.3, // percentage
-  cpuUtilization: 34.8 // percentage
-};
+const codeQualityMetrics = [
+  { name: "Code Coverage", value: 89.2, unit: "%", status: "good" },
+  { name: "Technical Debt", value: 2.3, unit: "hours", status: "excellent" },
+  { name: "Cyclomatic Complexity", value: 4.1, unit: "avg", status: "good" },
+  { name: "Maintainability Index", value: 82.7, unit: "/100", status: "good" },
+  { name: "Duplication", value: 1.8, unit: "%", status: "excellent" },
+  { name: "Security Vulnerabilities", value: 0, unit: "critical", status: "excellent" }
+];
 
-const bugTrackingData = [
-  { id: 'BUG-001', severity: 'critical', title: 'Memory leak in user session handler', assigned: 'sarah.chen@cypher.dev', status: 'in-progress' },
-  { id: 'BUG-002', severity: 'high', title: 'API rate limiting not working correctly', assigned: 'alex.rodriguez@cypher.dev', status: 'open' },
-  { id: 'BUG-003', severity: 'medium', title: 'UI glitch on mobile dashboard', assigned: 'jamie.kim@cypher.dev', status: 'resolved' },
-  { id: 'BUG-004', severity: 'low', title: 'Terminal cursor position offset', assigned: 'morgan.silva@cypher.dev', status: 'open' },
+const performanceData = [
+  { metric: "Response Time", current: "127ms", target: "< 200ms", trend: "improving" },
+  { metric: "Throughput", current: "1,247 req/s", target: "> 1,000 req/s", trend: "stable" },
+  { metric: "Error Rate", current: "0.03%", target: "< 0.1%", trend: "improving" },
+  { metric: "CPU Usage", current: "23.4%", target: "< 80%", trend: "stable" },
+  { metric: "Memory Usage", current: "45.8%", target: "< 85%", trend: "stable" },
+  { metric: "Disk I/O", current: "156 MB/s", target: "< 500 MB/s", trend: "stable" }
+];
+
+const securityInsights = [
+  { category: "Authentication", score: 95, issues: 0, status: "secure" },
+  { category: "Authorization", score: 92, issues: 1, status: "secure" },
+  { category: "Data Encryption", score: 98, issues: 0, status: "secure" },
+  { category: "Input Validation", score: 87, issues: 3, status: "review" },
+  { category: "Session Management", score: 94, issues: 0, status: "secure" },
+  { category: "Error Handling", score: 89, issues: 2, status: "review" }
 ];
 
 const recentDeployments = [
-  { id: 'DEPLOY-4783', version: 'v2.1.7', status: 'success', duration: '6m 23s', timestamp: '23:42:18', deployer: 'auto-deploy' },
-  { id: 'DEPLOY-4782', version: 'v2.1.6', status: 'success', duration: '8m 11s', timestamp: '22:15:42', deployer: 'sarah.chen' },
-  { id: 'DEPLOY-4781', version: 'v2.1.5', status: 'failed', duration: '3m 07s', timestamp: '21:33:29', deployer: 'alex.rodriguez' },
-  { id: 'DEPLOY-4780', version: 'v2.1.4', status: 'success', duration: '7m 45s', timestamp: '20:18:56', deployer: 'auto-deploy' },
+  { id: "D-247", timestamp: "2024-01-15 23:45:12", status: "success", duration: "2.8min", environment: "production" },
+  { id: "D-246", timestamp: "2024-01-15 22:13:45", status: "success", duration: "3.1min", environment: "staging" },
+  { id: "D-245", timestamp: "2024-01-15 20:07:23", status: "failed", duration: "1.2min", environment: "production" },
+  { id: "D-244", timestamp: "2024-01-15 18:34:56", status: "success", duration: "3.7min", environment: "staging" },
+  { id: "D-243", timestamp: "2024-01-15 16:22:11", status: "success", duration: "2.9min", environment: "production" }
 ];
 
-export default function AnalyticsPage() {
-  const [currentTime, setCurrentTime] = useState('');
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedTimeframe, setSelectedTimeframe] = useState('24h');
-
-  useEffect(() => {
-    const updateTime = () => {
-      setCurrentTime(new Date().toLocaleTimeString('en-US', { 
-        hour12: false,
-        timeZone: 'UTC'
-      }));
-    };
-    
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const refreshData = () => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 2000);
-  };
-
-  const getSeverityVariant = (severity: string) => {
-    switch (severity) {
-      case 'critical': return 'error';
-      case 'high': return 'warning';
-      case 'medium': return 'default';
-      case 'low': return 'success';
-      default: return 'default';
-    }
-  };
-
-  const getStatusVariant = (status: string) => {
+export default function Analytics() {
+  const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'success': return 'success';
-      case 'failed': return 'error';
-      case 'in-progress': return 'default';
-      case 'resolved': return 'success';
-      default: return 'default';
+      case 'excellent': return { variant: 'success' as const, text: 'EXCELLENT' };
+      case 'good': return { variant: 'primary' as const, text: 'GOOD' };
+      case 'review': return { variant: 'warning' as const, text: 'REVIEW' };
+      case 'secure': return { variant: 'success' as const, text: 'SECURE' };
+      case 'success': return { variant: 'success' as const, text: 'SUCCESS' };
+      case 'failed': return { variant: 'error' as const, text: 'FAILED' };
+      case 'improving': return { variant: 'success' as const, text: '↗ IMPROVING' };
+      case 'stable': return { variant: 'primary' as const, text: '→ STABLE' };
+      default: return { variant: 'secondary' as const, text: status.toUpperCase() };
     }
   };
 
   return (
-    <Box
-      bg="surface.background"
-      p="2xl"
-      fontFamily="mono"
-      maxWidth="1280px"
-      mx="auto"
-    >
-      <Stack gap="xl">
-        {/* Header */}
-        <Stack direction="horizontal" justify="between" align="center" borderBottom="1px solid" borderColor="brand.interactive.background" pb="lg">
-          <Stack gap="xs">
-            <Heading 
-              level={1}
-              size="2xl" 
-              weight="bold" 
-              color="brand.interactive.background"
-              fontFamily="mono"
-            >
-              ANALYTICS DASHBOARD
-            </Heading>
-            <Text variant="body-sm" color="text.accent">
-              SYSTEM PERFORMANCE & CODE QUALITY METRICS // UTC: {currentTime}
-            </Text>
-          </Stack>
-          <Stack direction="horizontal" align="center" gap="lg">
-            <Box minWidth="150px">
-              <Select 
-                options={[
-                  { value: '1h', label: 'Last Hour' },
-                  { value: '24h', label: 'Last 24 Hours' },
-                  { value: '7d', label: 'Last 7 Days' },
-                  { value: '30d', label: 'Last 30 Days' }
-                ]}
-                value={selectedTimeframe}
-                onChange={(value) => setSelectedTimeframe(value)}
-              />
-            </Box>
-            <Button 
-              variant="primary"
-              onClick={refreshData}
-              disabled={isRefreshing}
-            >
-              {isRefreshing ? 'REFRESHING...' : 'REFRESH DATA'}
-            </Button>
-          </Stack>
+    <Box bg="surface.background" p="2xl" position="relative">
+      <MatrixRain />
+
+      <Stack spacing="xl">
+        <Stack spacing="md">
+          <Heading size="4xl" semantic="primary">
+            SYSTEM ANALYTICS
+          </Heading>
+          <Text variant="body-lg" semantic="secondary">
+            Neural network performance insights • Quantum data analysis
+          </Text>
         </Stack>
 
-        {/* Metrics Overview Grid */}
-        <Box 
-          display="grid"
-          gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
-          gap="xl"
-        >
-          {/* Code Quality Score */}
-          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
-            <Text weight="bold" color="brand.interactive.background" mb="sm">
-              CODE QUALITY SCORE
-            </Text>
-            <Heading 
-              level={2} 
-              size="3xl" 
-              weight="bold" 
-color="text.primary" mb="sm"
-            >
-              {codeQualityMetrics.overallScore}
-            </Heading>
-            <Text variant="caption" color="text.accent">
-              +2.3 from last week
-            </Text>
-          </Card>
+        {/* Interactive Chart Filters - Client Island */}
+        <InteractiveChartFilters />
 
-          {/* Deployment Success Rate */}
-          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
-            <Text weight="bold" color="brand.interactive.background" mb="sm">
-              DEPLOYMENT SUCCESS
-            </Text>
-            <Heading 
-              level={2} 
-              size="3xl" 
-              weight="bold" 
-color="text.primary" mb="sm"
-            >
-              {deploymentStats.successRate}%
+        {/* Deployment Overview */}
+        <Card variant="elevated" padding="xl">
+          <Stack spacing="lg">
+            <Heading size="lg" semantic="primary">
+              DEPLOYMENT OVERVIEW
             </Heading>
-            <Text variant="caption" color="text.accent">
-              {deploymentStats.deploymentsToday} deployments today
-            </Text>
-          </Card>
+            <Divider />
 
-          {/* Test Coverage */}
-          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
-            <Text weight="bold" color="brand.interactive.background" mb="sm">
-              TEST COVERAGE
-            </Text>
-            <Heading 
-              level={2} 
-              size="3xl" 
-              weight="bold" 
-color="text.primary" mb="sm"
-            >
-              {codeQualityMetrics.testCoverage}%
-            </Heading>
-            <Text variant="caption" color="text.warning">
-              Target: 85%
-            </Text>
-          </Card>
+            <Grid columns={5} gap="lg">
+              <Stack spacing="sm" align="center">
+                <Text variant="title" semantic="primary">
+                  {deploymentStats.total}
+                </Text>
+                <Text variant="caption" semantic="secondary">Total Deployments</Text>
+              </Stack>
 
-          {/* System Uptime */}
-          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
-            <Text weight="bold" color="brand.interactive.background" mb="sm">
-              SYSTEM UPTIME
-            </Text>
-            <Heading 
-              level={2} 
-              size="3xl" 
-              weight="bold" 
-color="text.primary" mb="sm"
-            >
-              {performanceMetrics.uptime}%
-            </Heading>
-            <Text variant="caption" color="text.accent">
-              SLA: 99.9%
-            </Text>
-          </Card>
-        </Box>
+              <Stack spacing="sm" align="center">
+                <Text variant="title" color="feedback.success.text">
+                  {deploymentStats.successful}
+                </Text>
+                <Text variant="caption" semantic="secondary">Successful</Text>
+              </Stack>
 
-        {/* Detailed Metrics Grid */}
-        <Box 
-          display="grid"
-          gridTemplateColumns="repeat(auto-fit, minmax(400px, 1fr))"
-          gap="xl"
-        >
-          {/* Code Quality Details */}
-          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
-            <Text weight="bold" color="brand.interactive.background" mb="lg">
-              CODE QUALITY BREAKDOWN
-            </Text>
-            <Stack gap="lg">
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">Technical Debt:</Text>
-                <Badge 
-                  variant="warning" 
-                >
-                  {codeQualityMetrics.technicalDebt}h
-                </Badge>
+              <Stack spacing="sm" align="center">
+                <Text variant="title" color="feedback.error.text">
+                  {deploymentStats.failed}
+                </Text>
+                <Text variant="caption" semantic="secondary">Failed</Text>
               </Stack>
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">Code Complexity:</Text>
-                <Text color="text.accent">{codeQualityMetrics.codeComplexity}/10</Text>
+
+              <Stack spacing="sm" align="center">
+                <Text variant="title" semantic="primary">
+                  {deploymentStats.successRate}%
+                </Text>
+                <Text variant="caption" semantic="secondary">Success Rate</Text>
               </Stack>
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">Vulnerabilities:</Text>
-                <Badge 
-                  variant="error" 
-                >
-                  {codeQualityMetrics.vulnerabilities}
-                </Badge>
+
+              <Stack spacing="sm" align="center">
+                <Text variant="title" semantic="primary">
+                  {deploymentStats.avgDuration}
+                </Text>
+                <Text variant="caption" semantic="secondary">Avg Duration</Text>
               </Stack>
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">Duplicated Lines:</Text>
-                <Text color="text.accent">{codeQualityMetrics.duplicatedLines}%</Text>
+            </Grid>
+          </Stack>
+        </Card>
+
+        {/* Main Analytics Grid */}
+        <Grid columns={2} gap="xl">
+
+          {/* Code Quality Metrics */}
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
+                CODE QUALITY METRICS
+              </Heading>
+              <Divider />
+
+              <Stack spacing="md">
+                {codeQualityMetrics.map((metric) => {
+                  const statusBadge = getStatusBadge(metric.status);
+                  return (
+                    <Stack key={metric.name} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-sm">{metric.name}</Text>
+                        <Badge variant={statusBadge.variant} size="sm">
+                          {statusBadge.text}
+                        </Badge>
+                      </Stack>
+
+                      <Stack direction="horizontal" justify="between" align="end">
+                        <Text variant="body-lg" semantic="primary">
+                          {metric.value}
+                        </Text>
+                        <Text variant="caption" semantic="secondary">
+                          {metric.unit}
+                        </Text>
+                      </Stack>
+                      <Divider />
+                    </Stack>
+                  );
+                })}
               </Stack>
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">Maintainability:</Text>
-                <Badge 
-                  variant="success" 
-                >
-                  {codeQualityMetrics.maintainabilityIndex}/100
-                </Badge>
-              </Stack>
-              <Divider borderColor="brand.interactive.background" opacity="0.3" />
-              <Text variant="caption" color="text.secondary">
-                Last analysis: {codeQualityMetrics.lastAnalysis}
-              </Text>
             </Stack>
           </Card>
 
           {/* Performance Metrics */}
-          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
-            <Text weight="bold" color="brand.interactive.background" mb="lg">
-              PERFORMANCE METRICS
-            </Text>
-            <Stack gap="lg">
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">Avg Response Time:</Text>
-                <Badge 
-                  variant="success" 
-                >
-                  {performanceMetrics.responseTime}ms
-                </Badge>
-              </Stack>
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">Throughput:</Text>
-                <Text color="text.accent">{performanceMetrics.throughput} req/min</Text>
-              </Stack>
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">Error Rate:</Text>
-                <Badge 
-                  variant="success" 
-                >
-                  {performanceMetrics.errorRate}%
-                </Badge>
-              </Stack>
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">Memory Usage:</Text>
-                <Text color="text.accent">{performanceMetrics.memoryUsage}%</Text>
-              </Stack>
-              <Stack direction="horizontal" justify="between" align="center">
-                <Text color="text.primary">CPU Utilization:</Text>
-                <Text color="text.accent">{performanceMetrics.cpuUtilization}%</Text>
-              </Stack>
-              <Divider borderColor="brand.interactive.background" opacity="0.3" />
-              <Stack direction="horizontal" align="center" gap="sm">
-                <Checkbox 
-                  id="auto-scaling"
-                />
-                <Text variant="caption" color="text.secondary">Auto-scaling enabled</Text>
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
+                PERFORMANCE METRICS
+              </Heading>
+              <Divider />
+
+              <Stack spacing="md">
+                {performanceData.map((item) => {
+                  const trendBadge = getStatusBadge(item.trend);
+                  return (
+                    <Stack key={item.metric} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-sm">{item.metric}</Text>
+                        <Badge variant={trendBadge.variant} size="sm">
+                          {trendBadge.text}
+                        </Badge>
+                      </Stack>
+
+                      <Stack direction="horizontal" justify="between">
+                        <Text variant="body-md" semantic="primary">
+                          {item.current}
+                        </Text>
+                        <Text variant="caption" semantic="secondary">
+                          Target: {item.target}
+                        </Text>
+                      </Stack>
+                      <Divider />
+                    </Stack>
+                  );
+                })}
               </Stack>
             </Stack>
           </Card>
-        </Box>
 
-        {/* Bug Tracking and Recent Deployments */}
-        <Box 
-          display="grid"
-          gridTemplateColumns="repeat(auto-fit, minmax(400px, 1fr))"
-          gap="xl"
-        >
-          {/* Bug Tracking */}
-          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
-            <Text weight="bold" color="brand.interactive.background" mb="lg">
-              BUG TRACKING SUMMARY
-            </Text>
-            <Stack gap="lg">
-              {bugTrackingData.map((bug) => (
-                <Card key={bug.id} p="lg" bg="surface.secondary">
-                  <Stack direction="horizontal" justify="between" align="start" mb="sm">
-                    <Text variant="body-sm" color="text.accent" weight="bold">
-                      {bug.id}
-                    </Text>
-                    <Stack direction="horizontal" gap="sm">
-                      <Badge 
-                        variant={getSeverityVariant(bug.severity)}
-                      >
-                        {bug.severity.toUpperCase()}
-                      </Badge>
-                      <Badge 
-                        variant={getStatusVariant(bug.status)}
-                      >
-                        {bug.status.toUpperCase()}
-                      </Badge>
+          {/* Security Analysis */}
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
+                SECURITY ANALYSIS
+              </Heading>
+              <Divider />
+
+              <Stack spacing="md">
+                {securityInsights.map((item) => {
+                  const statusBadge = getStatusBadge(item.status);
+                  return (
+                    <Stack key={item.category} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-sm">{item.category}</Text>
+                        <Badge variant={statusBadge.variant} size="sm">
+                          {statusBadge.text}
+                        </Badge>
+                      </Stack>
+
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-lg" semantic="primary">
+                          {item.score}/100
+                        </Text>
+                        <Text variant="caption" color={item.issues > 0 ? "feedback.warning.text" : "text.secondary"}>
+                          {item.issues} issues
+                        </Text>
+                      </Stack>
+                      <Divider />
                     </Stack>
-                  </Stack>
-                  <Text variant="body-sm" color="text.primary" mb="sm">
-                    {bug.title}
-                  </Text>
-                  <Text variant="caption" color="text.secondary">
-                    Assigned: {bug.assigned}
-                  </Text>
-                </Card>
-              ))}
+                  );
+                })}
+              </Stack>
             </Stack>
           </Card>
 
           {/* Recent Deployments */}
-          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
-            <Stack direction="horizontal" justify="between" align="center" mb="lg">
-              <Text weight="bold" color="brand.interactive.background">
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
                 RECENT DEPLOYMENTS
-              </Text>
-              <Text variant="caption" color="text.accent">
-                Next: {deploymentStats.nextScheduled}
-              </Text>
-            </Stack>
-            <Stack gap="lg">
-              {recentDeployments.map((deployment) => (
-                <Card key={deployment.id} bg="surface.secondary" p="lg">
-                  <Stack direction="horizontal" justify="between" align="start" mb="sm">
-                    <Box>
-                      <Text variant="body-sm" color="text.accent" weight="bold">
-                        {deployment.version}
+              </Heading>
+              <Divider />
+
+              <Stack spacing="md" maxHeight="300px" overflow="auto">
+                {recentDeployments.map((deployment) => {
+                  const statusBadge = getStatusBadge(deployment.status);
+                  return (
+                    <Stack key={deployment.id} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-sm" weight="bold">
+                          {deployment.id}
+                        </Text>
+                        <Badge variant={statusBadge.variant} size="sm">
+                          {statusBadge.text}
+                        </Badge>
+                      </Stack>
+
+                      <Stack direction="horizontal" justify="between">
+                        <Text variant="caption" semantic="secondary">
+                          {deployment.timestamp}
+                        </Text>
+                        <Text variant="caption" semantic="primary">
+                          {deployment.duration}
+                        </Text>
+                      </Stack>
+
+                      <Text variant="caption" semantic="secondary">
+                        Environment: {deployment.environment}
                       </Text>
-                      <Text variant="caption" color="text.secondary">
-                        {deployment.id}
-                      </Text>
-                    </Box>
-                    <Badge 
-                      variant={getStatusVariant(deployment.status)}
-                    >
-                      {deployment.status.toUpperCase()}
-                    </Badge>
-                  </Stack>
-                  <Stack direction="horizontal" justify="between" align="center">
-                    <Text variant="caption" color="text.primary">
-                      Duration: {deployment.duration}
-                    </Text>
-                    <Text variant="caption" color="text.secondary">
-                      By: {deployment.deployer} at {deployment.timestamp}
-                    </Text>
-                  </Stack>
-                </Card>
-              ))}
-            </Stack>
-            <Divider borderColor="brand.interactive.background" opacity="0.3" m="lg" />
-            <Stack direction="horizontal" justify="between" align="center">
-              <Text variant="caption" color="text.secondary">
-                Avg Deploy Time: {deploymentStats.avgDeployTime}m
-              </Text>
-              <Text variant="caption" color="text.secondary">
-                Rollback Rate: {deploymentStats.rollbackRate}%
-              </Text>
+                      <Divider />
+                    </Stack>
+                  );
+                })}
+              </Stack>
             </Stack>
           </Card>
-        </Box>
-      </Stack>
 
+        </Grid>
+      </Stack>
     </Box>
   );
 }

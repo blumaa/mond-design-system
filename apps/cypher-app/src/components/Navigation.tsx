@@ -7,11 +7,8 @@ import { Box, Text, Badge, Stack } from '@mond-design-system/theme';
 const navigationItems = [
   { href: '/', label: 'DASHBOARD', icon: '⚡' },
   { href: '/terminal', label: 'TERMINAL', icon: '💻' },
-  { href: '/team', label: 'TEAM', icon: '👥' },
-  { href: '/projects', label: 'PROJECTS', icon: '📂' },
   { href: '/monitor', label: 'MONITOR', icon: '📊' },
   { href: '/analytics', label: 'ANALYTICS', icon: '📈' },
-  { href: '/settings', label: 'SETTINGS', icon: '⚙️' },
 ];
 
 export function Navigation() {
@@ -20,40 +17,39 @@ export function Navigation() {
 
   useEffect(() => {
     const updateTime = () => {
-      setCurrentTime(new Date().toLocaleTimeString('en-US', { 
-        hour12: false, 
-        timeZone: 'UTC' 
+      setCurrentTime(new Date().toLocaleTimeString('en-US', {
+        hour12: false,
+        timeZone: 'UTC'
       }));
     };
-    
+
     updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <Box 
+    <Box
       as="nav"
       bg="surface.overlay"
       p="lg"
     >
-      {/* Main container */}
       <Stack direction="horizontal" justify="between" align="center">
-        
+
         {/* Brand section */}
-        <Stack direction="horizontal" align="center" gap="md">
-          <Text 
-            variant="body-md" 
+        <Stack direction="horizontal" align="center" spacing="md">
+          <Text
+            variant="body-md"
             weight="bold"
-            color="text.accent"
+            semantic="primary"
           >
             CYPHER.SYS
           </Text>
-          <Text 
+          <Text
             variant="caption"
-            color="text.accent"
+            semantic="primary"
           >
-            v2.1.7
+            v3.0.0
           </Text>
           <Badge variant="success" size="sm">
             ONLINE
@@ -61,15 +57,15 @@ export function Navigation() {
         </Stack>
 
         {/* Navigation Links */}
-        <Stack direction="horizontal" align="center" gap="xl">
+        <Stack direction="horizontal" align="center" spacing="xl">
           {navigationItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link key={item.href} href={item.href}>
-                <Stack 
-                  direction="horizontal" 
-                  align="center" 
-                  gap="sm"
+                <Stack
+                  direction="horizontal"
+                  align="center"
+                  spacing="sm"
                   p="sm"
                 >
                   <Text variant="body-sm">{item.icon}</Text>
@@ -83,10 +79,10 @@ export function Navigation() {
         </Stack>
 
         {/* Status section */}
-        <Stack direction="horizontal" align="center" gap="md">
-          <Text 
+        <Stack direction="horizontal" align="center" spacing="md">
+          <Text
             variant="caption"
-            color="text.accent"
+            semantic="primary"
           >
             UTC: {currentTime}
           </Text>
@@ -94,7 +90,7 @@ export function Navigation() {
             SECURE
           </Badge>
         </Stack>
-        
+
       </Stack>
     </Box>
   );

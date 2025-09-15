@@ -1,23 +1,8 @@
 'use client';
-
 import React, { useEffect, useRef } from 'react';
 import { Box } from '@mond-design-system/theme';
 
-interface MatrixRainProps {
-  opacity?: number;
-  speed?: number;
-  fontSize?: number;
-  columns?: number;
-  characters?: string;
-}
-
-export function MatrixRain({
-  opacity = 0.1,
-  speed = 50,
-  fontSize = 14,
-  columns = 80,
-  characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?',
-}: MatrixRainProps) {
+export function MatrixRain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -27,150 +12,81 @@ export function MatrixRain({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let lastFrameTime = 0;
-    let animationId = 0;
-
-    // Matrix rain variables
-    const matrix = characters;
-    const drops: number[] = [];
-    const columnWidth = fontSize * 0.6;
-    let actualColumns = Math.floor(canvas.width / columnWidth);
-
-    // Initialize drops function
-    const initializeDrops = () => {
-      actualColumns = Math.floor(canvas.width / columnWidth);
-      drops.length = 0; // Clear existing drops
-      for (let x = 0; x < actualColumns; x++) {
-        drops[x] = Math.floor(Math.random() * canvas.height / fontSize);
-      }
+    // Set canvas size
+    const setCanvasSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
+    setCanvasSize();
 
-    // Set canvas size to match container
-    const resizeCanvas = () => {
-      const container = canvas.parentElement;
-      if (!container) return;
+    // Matrix characters
+    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const charArray = chars.split('');
 
-      canvas.width = container.clientWidth;
-      canvas.height = container.clientHeight;
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops: number[] = Array(Math.floor(columns)).fill(1);
 
-      // Reinitialize drops after resize
-      initializeDrops();
-    };
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    // Optimized animation function with fps throttling
-    function draw(currentTime: number) {
-      if (!ctx || !canvas) return;
-
-      // Throttle to target FPS based on speed (higher speed = lower FPS)
-      const targetFPS = Math.max(15, 60 - speed);
-      const frameDelay = 1000 / targetFPS;
-
-      if (currentTime - lastFrameTime < frameDelay) {
-        animationId = requestAnimationFrame(draw);
-        return;
-      }
-
-      lastFrameTime = currentTime;
-
-      // Black background with slight transparency for trailing effect
-      ctx.fillStyle = `rgba(10, 10, 11, ${0.1 + (speed / 1000)})`;
+    const draw = () => {
+      // Black background with slight transparency for trail effect
+      ctx.fillStyle = 'rgba(10, 10, 11, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Matrix green text with brand color
+      // Matrix green text
+      ctx.fillStyle = '#00ff41';
       ctx.font = `${fontSize}px monospace`;
 
-      // Loop through drops
+      // Draw characters
       for (let i = 0; i < drops.length; i++) {
-        // Pre-calculate random values to reduce per-frame calculations
-        const text = matrix[Math.floor(Math.random() * matrix.length)];
-        const x = i * columnWidth;
-        const y = drops[i] * fontSize;
+        const text = charArray[Math.floor(Math.random() * charArray.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-        // Optimized opacity calculation
-        const alpha = (Math.random() * 0.3 + 0.7) * opacity;
-        ctx.fillStyle = `rgba(0, 255, 0, ${alpha})`;
-        ctx.fillText(text, x, y);
-
-        // Reset drop if it reaches bottom with less random calculation
-        if (y > canvas.height && Math.random() > 0.98) {
+        // Reset drop to top randomly
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
-
-        // Move drop down
         drops[i]++;
       }
+    };
 
-      animationId = requestAnimationFrame(draw);
-    }
+    const interval = setInterval(draw, 50);
 
-    // Start single animation loop
-    animationId = requestAnimationFrame(draw);
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      if (animationId) {
-        cancelAnimationFrame(animationId);
+    // Handle resize
+    const handleResize = () => {
+      setCanvasSize();
+      drops.length = Math.floor(canvas.width / fontSize);
+      for (let i = 0; i < drops.length; i++) {
+        if (drops[i] === undefined) drops[i] = 1;
       }
     };
-  }, [opacity, speed, fontSize, columns, characters]);
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <Box
-      position="absolute"
+      position="fixed"
       top="0"
       left="0"
-      right="0"
-      bottom="0"
-      zIndex="0"
+      width="100vw"
+      height="100vh"
+      zIndex="-1"
+      opacity="0.6"
     >
       <canvas
         ref={canvasRef}
         style={{
+          display: 'block',
           width: '100%',
           height: '100%',
-          display: 'block',
-          pointerEvents: 'none',
+          pointerEvents: 'none'
         }}
       />
-    </Box>
-  );
-}
-
-// Simpler CSS-only matrix rain effect as fallback
-export function CSSMatrixRain() {
-  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?';
-
-  // Generate random character columns
-  const generateColumns = (count: number) => {
-    const cols = [];
-    for (let i = 0; i < count; i++) {
-      const columnChars = [];
-      const charCount = Math.floor(Math.random() * 20) + 5;
-
-      for (let j = 0; j < charCount; j++) {
-        columnChars.push(characters[Math.floor(Math.random() * characters.length)]);
-      }
-
-      cols.push({
-        chars: columnChars,
-        delay: Math.random() * 5,
-        duration: Math.random() * 3 + 2,
-        left: `${Math.random() * 100}%`,
-      });
-    }
-    return cols;
-  };
-
-  generateColumns(50);
-
-  return (
-    <Box>
-      {/* Note: This simplified version will need custom CSS for animations */}
-      {/* In a real implementation, this would require a more complex solution */}
-      {/* or acceptance of minimal inline styles for complex animations */}
     </Box>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Text, Card, Input, Button, Badge, Stack } from '@mond-design-system/theme';
+import { Box, Text, Card, Input, Stack, Badge, Heading, Divider, Button } from '@mond-design-system/theme';
+import { MatrixRain } from '../../components/MatrixRain';
 
 interface TerminalLine {
   id: string;
@@ -10,12 +11,13 @@ interface TerminalLine {
 }
 
 const mockCommands = [
-  { cmd: 'help', response: 'Available commands: status, scan, users, deploy, logs, clear' },
+  { cmd: 'help', response: 'Available commands: status, scan, users, deploy, logs, clear, hack' },
   { cmd: 'status', response: 'System Status: ONLINE | CPU: 73.2% | RAM: 45.8% | Network: 892.1 KB/s' },
-  { cmd: 'scan', response: 'Security scan initiated... 3 vulnerabilities found. Check /var/log/security.log' },
-  { cmd: 'users', response: 'Active users: admin@cypher.sys, dev@localhost, root@matrix.net' },
-  { cmd: 'deploy', response: 'Deployment pipeline started. Build #247 queued for production.' },
-  { cmd: 'logs', response: 'Tailing system logs...\n[INFO] Authentication successful\n[WARN] High CPU usage detected\n[ERROR] Connection timeout to cdn.neural.io' },
+  { cmd: 'scan', response: 'Security scan initiated...\n[SCANNING] Neural pathways: 247 found\n[FOUND] 3 vulnerabilities in firewall matrix\n[REPORT] Check /var/log/security.log for details' },
+  { cmd: 'users', response: 'Active users: admin@cypher.sys, dev@localhost, root@matrix.net\nTotal sessions: 3 | Authentication: BIOMETRIC' },
+  { cmd: 'deploy', response: 'Deployment pipeline started...\n[INFO] Build #247 queued for production\n[INFO] Estimated deployment time: 2.3 minutes\n[SUCCESS] All systems ready for deployment' },
+  { cmd: 'logs', response: 'Tailing system logs...\n[23:47:15] [INFO] Authentication successful\n[23:47:12] [WARN] High CPU usage detected on Node-7\n[23:47:08] [ERROR] Connection timeout to neural.io\n[23:47:05] [INFO] Data backup completed successfully' },
+  { cmd: 'hack', response: '[INITIATING] Neural network breach protocol...\n[ACCESSING] Quantum encryption matrix...\n[DECRYPTING] Firewall signatures...\n[SUCCESS] Access granted to mainframe\n[WARNING] This action has been logged' }
 ];
 
 export default function Terminal() {
@@ -24,32 +26,25 @@ export default function Terminal() {
       id: '1',
       timestamp: new Date().toISOString(),
       type: 'system',
-      content: 'CYPHER Terminal v2.1.7 initialized'
+      content: 'CYPHER Terminal v3.0.0 initialized'
     },
     {
       id: '2',
       timestamp: new Date().toISOString(),
       type: 'system',
-      content: 'Neural interface connected. Type "help" for available commands.'
+      content: 'Neural network connection established'
+    },
+    {
+      id: '3',
+      timestamp: new Date().toISOString(),
+      type: 'system',
+      content: 'Type "help" for available commands'
     }
   ]);
-  
-  const [currentInput, setCurrentInput] = useState('');
+
+  const [input, setInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const terminalRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // Auto-scroll to bottom when new lines are added
-  useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
-  }, [lines]);
-
-  // Focus input on mount and click
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+  const terminalEndRef = useRef<HTMLDivElement>(null);
 
   const addLine = (type: TerminalLine['type'], content: string) => {
     const newLine: TerminalLine = {
@@ -61,30 +56,30 @@ export default function Terminal() {
     setLines(prev => [...prev, newLine]);
   };
 
-  const executeCommand = async (command: string) => {
-    if (!command.trim()) return;
+  const processCommand = async (command: string) => {
+    const cmd = command.toLowerCase().trim();
 
-    // Add command line
-    addLine('command', `cypher@matrix:~$ ${command}`);
+    // Add the command line
+    addLine('command', `> ${command}`);
+
     setIsProcessing(true);
 
     // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500));
+    await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
 
-    const cmd = command.toLowerCase().trim();
-    
     if (cmd === 'clear') {
       setLines([]);
       setIsProcessing(false);
       return;
     }
 
-    const mockCommand = mockCommands.find(c => c.cmd === cmd);
-    
-    if (mockCommand) {
-      addLine('output', mockCommand.response);
-    } else if (cmd.startsWith('echo ')) {
-      addLine('output', command.slice(5));
+    // Find matching command
+    const matchedCommand = mockCommands.find(c => c.cmd === cmd);
+
+    if (matchedCommand) {
+      addLine('output', matchedCommand.response);
+    } else if (cmd === '') {
+      // Empty command, do nothing
     } else {
       addLine('error', `Command not found: ${command}. Type "help" for available commands.`);
     }
@@ -94,168 +89,121 @@ export default function Terminal() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (currentInput.trim() && !isProcessing) {
-      executeCommand(currentInput);
-      setCurrentInput('');
+    if (input.trim() && !isProcessing) {
+      processCommand(input);
+      setInput('');
     }
   };
 
-  const getLineColorToken = (type: TerminalLine['type']) => {
+  // Auto-scroll to bottom
+  useEffect(() => {
+    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [lines]);
+
+  const getLineColor = (type: TerminalLine['type']) => {
     switch (type) {
-      case 'command': return 'brand.interactive.background';
-      case 'output': return 'text.primary';
-      case 'error': return 'text.error';
-      case 'system': return 'text.accent';
+      case 'command': return 'text.accent';
+      case 'error': return 'feedback.error.text';
+      case 'system': return 'text.secondary';
       default: return 'text.primary';
     }
   };
 
-  const getLinePrefix = (type: TerminalLine['type']) => {
-    switch (type) {
-      case 'system': return '[SYS]';
-      case 'error': return '[ERR]';
-      case 'output': return '';
-      case 'command': return '';
-      default: return '';
-    }
-  };
-
   return (
-    <Box
-      bg="surface.background"
-      p="2xl"
-      maxWidth="1280px"
-      mx="auto"
-    >
-      <Stack gap="xl">
-        {/* Terminal Header */}
-        <Stack direction="horizontal" justify="between" align="center" mb="2xl">
-          <Stack gap="xs">
-            <Text 
-              variant="body-lg" 
-              weight="bold" 
-              color="brand.interactive.background"
-              fontFamily="mono"
-            >
-              NEURAL TERMINAL INTERFACE
-            </Text>
-            <Text variant="body-sm" color="text.accent">
-              Direct system access • Elevated privileges • Encrypted session
-            </Text>
-          </Stack>
-          <Stack direction="horizontal" gap="lg">
-            <Badge variant="success">
-              CONNECTED
-            </Badge>
-            <Badge variant="primary">
-              ROOT ACCESS
-            </Badge>
-          </Stack>
+    <Box bg="surface.background" p="2xl" position="relative">
+      <MatrixRain />
+
+      <Stack spacing="xl">
+        <Stack spacing="md">
+          <Heading size="4xl" semantic="primary">
+            CYPHER TERMINAL
+          </Heading>
+          <Text variant="body-lg" semantic="secondary">
+            Neural network command interface • Quantum encryption enabled
+          </Text>
         </Stack>
 
-        {/* Terminal Window */}
-        <Card bg="surface.overlay" borderColor="brand.interactive.background" p="none" overflow="hidden">
-          {/* Terminal Header Bar */}
-          <Stack direction="horizontal" align="center" justify="between" p="lg" bg="surface.secondary" borderBottom="1px solid" borderColor="brand.interactive.background">
-            <Stack direction="horizontal" gap="sm">
-              <Box width="12px" height="12px" borderRadius="50%" bg="text.error" />
-              <Box width="12px" height="12px" borderRadius="50%" bg="text.warning" />
-              <Box width="12px" height="12px" borderRadius="50%" bg="brand.interactive.background" />
-            </Stack>
-            <Text variant="caption" color="text.accent" fontFamily="mono">
-              terminal.cypher.sys
-            </Text>
-            <Stack direction="horizontal" gap="sm">
-              <Button 
-                size="sm" 
-                 
-                onClick={() => setLines([])}
-              >
-                CLEAR
-              </Button>
-            </Stack>
-          </Stack>
+        <Card variant="elevated" padding="xl" bg="surface.primary" minHeight="600px">
+          <Stack spacing="lg" height="100%">
 
-          {/* Terminal Content */}
-          <Box 
-            ref={terminalRef}
-            height="500px"
-            p="xl"
-            fontFamily="mono"
-            fontSize="sm"
-            lineHeight="1.5"
-            overflowY="auto"
-            bg="surface.background"
-          >
-            {/* Terminal Lines */}
-            {lines.map((line) => (
-              <Box key={line.id} mb="xs">
-                <Text color={getLineColorToken(line.type)}>
-                  {getLinePrefix(line.type) && (
-                    <Box as="span" mr="sm" opacity="0.7">
-                      {getLinePrefix(line.type)}
-                    </Box>
-                  )}
-                  {line.content}
+            {/* Terminal Header */}
+            <Stack direction="horizontal" justify="between" align="center">
+              <Stack direction="horizontal" spacing="md" align="center">
+                <Badge variant="success" size="sm">CONNECTED</Badge>
+                <Text variant="caption" semantic="secondary">
+                  Session: admin@cypher.sys
                 </Text>
-              </Box>
-            ))}
-            
-            {/* Processing indicator */}
-            {isProcessing && (
-              <Box mb="xs">
-                <Text color="text.accent">
-                  Processing...
-                  <Box as="span" ml="sm">█</Box>
-                </Text>
-              </Box>
-            )}
-
-            {/* Current Input Line */}
-            <Stack direction="horizontal" align="center" mt="sm">
-              <Text color="brand.interactive.background" mr="sm">
-                cypher@matrix:~$
-              </Text>
-              <Box as="form" onSubmit={handleSubmit} flex="1">
-                <Input
-                  ref={inputRef}
-                  value={currentInput}
-                  onChange={(e) => setCurrentInput(e.target.value)}
-                  disabled={isProcessing}
-                  
-                  placeholder={isProcessing ? "Processing..." : "Enter command..."}
-                />
-              </Box>
-              <Text color="brand.interactive.background" ml="xs">
-                █
-              </Text>
-            </Stack>
-          </Box>
-        </Card>
-
-        {/* Command Help */}
-        <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
-          <Text weight="bold" color="brand.interactive.background" mb="lg">
-            AVAILABLE COMMANDS
-          </Text>
-          <Box 
-            display="grid"
-            gridTemplateColumns="repeat(auto-fit, minmax(200px, 1fr))"
-            gap="lg"
-            fontSize="sm"
-            fontFamily="mono"
-          >
-            {mockCommands.map((cmd, index) => (
-              <Stack key={index} direction="horizontal" gap="sm">
-                <Text color="text.accent" minWidth="60px">{cmd.cmd}</Text>
-                <Text color="text.secondary">{cmd.response.split('.')[0]}...</Text>
               </Stack>
-            ))}
-            <Stack direction="horizontal" gap="sm">
-              <Text color="text.accent" minWidth="60px">clear</Text>
-              <Text color="text.secondary">Clear terminal output</Text>
+              <Stack direction="horizontal" spacing="md" align="center">
+                <Text variant="caption" semantic="secondary">
+                  Encryption: QUANTUM
+                </Text>
+                <Badge variant="primary" size="sm">SECURE</Badge>
+              </Stack>
             </Stack>
-          </Box>
+
+            <Divider />
+
+            {/* Terminal Output */}
+            <Box
+              flex="1"
+              overflow="auto"
+              p="md"
+              bg="surface.background"
+              borderRadius="md"
+              maxHeight="400px"
+            >
+              <Stack spacing="xs">
+                {lines.map((line) => (
+                  <Text
+                    key={line.id}
+                    variant="body-sm"
+                    color={getLineColor(line.type)}
+                    whiteSpace="pre-wrap"
+                  >
+                    {line.content}
+                  </Text>
+                ))}
+
+                {isProcessing && (
+                  <Stack direction="horizontal" spacing="sm" align="center">
+                    <Text variant="body-sm" semantic="primary">
+                      Processing...
+                    </Text>
+                    <Badge variant="warning" size="sm">WORKING</Badge>
+                  </Stack>
+                )}
+
+                <div ref={terminalEndRef} />
+              </Stack>
+            </Box>
+
+            {/* Input Area */}
+            <form onSubmit={handleSubmit}>
+              <Stack direction="horizontal" spacing="sm" align="center">
+                <Text variant="body-sm" semantic="primary">
+                  cypher@neural:~$
+                </Text>
+                <Box flex="1">
+                  <Input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Enter command..."
+                    disabled={isProcessing}
+                    autoComplete="off"
+                  />
+                </Box>
+                {isProcessing && (
+                  <Badge variant="warning" size="sm">PROCESSING</Badge>
+                )}
+              </Stack>
+            </form>
+
+            {/* Command Help */}
+            <Text variant="caption" semantic="secondary">
+              Available commands: help, status, scan, users, deploy, logs, clear, hack
+            </Text>
+          </Stack>
         </Card>
       </Stack>
     </Box>
