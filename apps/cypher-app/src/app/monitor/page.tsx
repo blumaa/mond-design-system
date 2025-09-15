@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Card, Stack, Badge, Button, Tag, Divider, Spinner, Switch, Grid } from '@mond-design-system/theme';
+import { Box, Text, Card, Stack, Badge, Button, Tag, Spinner, Switch, Grid } from '@mond-design-system/theme';
 
 interface MetricData {
   id: string;
@@ -178,13 +178,17 @@ export default function Monitor() {
   };
 
   return (
-    <Box minHeight="100vh" bg="surface.terminal" p="spacing.lg">
-      <Box maxWidth="1200px" mx="auto">
-        <Stack spacing="spacing.lg">
+    <Box
+      bg="surface.background"
+      p="2xl"
+      maxWidth="1280px"
+      mx="auto"
+    >
+        <Stack spacing="lg">
           
           {/* Header */}
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb="spacing.lg">
-            <Box gap={30} display="flex">
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb="lg">
+            <Box gap="2xl" display="flex">
               <Text 
                 variant="title" 
                 weight="bold" 
@@ -193,13 +197,13 @@ export default function Monitor() {
               >
                 SYSTEM MONITOR
               </Text>
-              <Text variant="caption" semantic="secondary" mt="spacing.xs">
+              <Text variant="caption" semantic="secondary" mt="xs">
                 Real-time metrics • Performance analysis • Alert management • UTC: {currentTime}
               </Text>
             </Box>
             
-            <Box display="flex" alignItems="center" gap={16}>
-              <Box display="flex" alignItems="center" gap={8}>
+            <Box display="flex" alignItems="center" gap="lg">
+              <Box display="flex" alignItems="center" gap="sm">
                 <Switch 
                   checked={isLiveMode}
                   onChange={(e) => setIsLiveMode((e.target as HTMLInputElement).checked)}
@@ -214,10 +218,10 @@ export default function Monitor() {
           </Box>
 
           {/* Metrics Grid */}
-          <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={24} mb="spacing.lg">
+          <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="xl" mb="lg">
             {metrics.map((metric) => (
-              <Card key={metric.id} p="spacing.lg">
-                <Box display="flex" justifyContent="space-between" alignItems="start" mb="spacing.md">
+              <Card key={metric.id} p="lg">
+                <Box display="flex" justifyContent="space-between" alignItems="start" mb="md">
                   <Box>
                     <Text variant="overline" semantic="tertiary">
                       {metric.label}
@@ -229,7 +233,7 @@ export default function Monitor() {
                       fontFamily="monospace"
                     >
                       {typeof metric.value === 'number' ? metric.value.toFixed(1) : metric.value}
-                      <Text as="span" variant="body" semantic="tertiary" ml="spacing.sm">
+                      <Text as="span" variant="body" semantic="tertiary" ml="sm">
                         {metric.unit}
                       </Text>
                     </Text>
@@ -241,7 +245,7 @@ export default function Monitor() {
                   </Badge>
                 </Box>
                 
-                <Box mb="spacing.sm">
+                <Box mb="sm">
                   <Text variant="overline" semantic="tertiary">
                     Trend (Last 7 Intervals)
                   </Text>
@@ -254,12 +258,12 @@ export default function Monitor() {
           </Grid>
 
           {/* Alerts Section */}
-          <Card p="spacing.lg">
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb="spacing.lg">
+          <Card p="lg">
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb="lg">
               <Text variant="subtitle" weight="bold" semantic="error">
                 SYSTEM ALERTS
               </Text>
-              <Box display="flex" gap={16}>
+              <Box display="flex" gap="lg">
                 <Badge variant="error">
                   {alerts.filter(a => a.level === 'critical' && !a.acknowledged).length} CRITICAL
                 </Badge>
@@ -278,21 +282,21 @@ export default function Monitor() {
                   key={alert.id}
                   display="flex"
                   alignItems="center"
-                  p="spacing.md"
+                  p="md"
                   opacity={alert.acknowledged ? 0.6 : 1}
                 >
-                  <Text variant="title" mr="spacing.md">
+                  <Text variant="title" mr="md">
                     {getAlertIcon(alert.level)}
                   </Text>
                   <Box flex={1}>
-                    <Box display="flex" alignItems="center" gap={16} mb="spacing.xs">
+                    <Box display="flex" alignItems="center" gap="lg" mb="xs">
                       <Text variant="code" semantic="link">
                         [{alert.timestamp}]
                       </Text>
                       <Tag>
                         {alert.system}
                       </Tag>
-                      <Tag variant="filled">
+                      <Tag >
                         {alert.level.toUpperCase()}
                       </Tag>
                     </Box>
@@ -303,14 +307,14 @@ export default function Monitor() {
                   {!alert.acknowledged && (
                     <Button
                       size="sm"
-                      variant="outline"
+                      
                       onClick={() => acknowledgeAlert(alert.id)}
                     >
                       ACK
                     </Button>
                   )}
                   {alert.acknowledged && (
-                    <Text variant="overline" semantic="tertiary" ml="spacing.md">
+                    <Text variant="overline" semantic="tertiary" ml="md">
                       Acknowledged
                     </Text>
                   )}
@@ -320,9 +324,9 @@ export default function Monitor() {
           </Card>
 
           {/* System Status Overview */}
-          <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={16}>
-            <Card p="spacing.md">
-              <Text variant="subtitle" weight="bold" semantic="success" mb="spacing.sm">
+          <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="lg">
+            <Card p="md">
+              <Text variant="subtitle" weight="bold" semantic="success" mb="sm">
                 SERVICES STATUS
               </Text>
               <Stack spacing={16}>
@@ -345,21 +349,21 @@ export default function Monitor() {
               </Stack>
             </Card>
 
-            <Card p="spacing.md">
-              <Text variant="subtitle" weight="bold" semantic="link" mb="spacing.sm">
+            <Card p="md">
+              <Text variant="subtitle" weight="bold" semantic="link" mb="sm">
                 QUICK ACTIONS
               </Text>
               <Stack spacing={16}>
-                <Button size="sm" variant="outline">
+                <Button variant="outline">
                   🔄 RESTART SERVICES
                 </Button>
-                <Button size="sm" variant="outline">
+                <Button variant="outline">
                   🚨 EMERGENCY MODE
                 </Button>
-                <Button size="sm" variant="outline">
+                <Button variant="outline">
                   📊 GENERATE REPORT
                 </Button>
-                <Button size="sm" variant="outline">
+                <Button variant="outline">
                   🔒 LOCKDOWN SYSTEM
                 </Button>
               </Stack>
@@ -367,7 +371,6 @@ export default function Monitor() {
           </Grid>
           
         </Stack>
-      </Box>
     </Box>
   );
 }

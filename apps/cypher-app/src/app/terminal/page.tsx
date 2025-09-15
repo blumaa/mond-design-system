@@ -100,13 +100,13 @@ export default function Terminal() {
     }
   };
 
-  const getLineColor = (type: TerminalLine['type']) => {
+  const getLineColorToken = (type: TerminalLine['type']) => {
     switch (type) {
-      case 'command': return '#00ff41';
-      case 'output': return '#ffffff';
-      case 'error': return '#ff0055';
-      case 'system': return '#00d4ff';
-      default: return '#ffffff';
+      case 'command': return 'brand.interactive.background';
+      case 'output': return 'text.primary';
+      case 'error': return 'text.error';
+      case 'system': return 'text.accent';
+      default: return 'text.primary';
     }
   };
 
@@ -121,113 +121,80 @@ export default function Terminal() {
   };
 
   return (
-    <Box 
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0a0a0b 0%, #1a1a1e 100%)',
-        padding: '2rem',
-      }}
+    <Box
+      bg="surface.background"
+      p="2xl"
+      maxWidth="1280px"
+      mx="auto"
     >
-      <Stack gap={4}>
+      <Stack gap="xl">
         {/* Terminal Header */}
-        <Box style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '2rem',
-        }}>
-          <Box>
+        <Stack direction="horizontal" justify="between" align="center" mb="2xl">
+          <Stack gap="xs">
             <Text 
               variant="body-lg" 
               weight="bold" 
-              style={{ 
-                color: '#00ff41',
-                fontFamily: 'monospace',
-                textShadow: '0 0 10px rgba(0, 255, 65, 0.5)',
-                fontSize: '1.5rem'
-              }}
+              color="brand.interactive.background"
+              fontFamily="mono"
             >
               NEURAL TERMINAL INTERFACE
             </Text>
-            <Text variant="body-sm" style={{ color: '#00d4ff', marginTop: '0.25rem' }}>
+            <Text variant="body-sm" color="text.accent">
               Direct system access • Elevated privileges • Encrypted session
             </Text>
-          </Box>
-          <Box style={{ display: 'flex', gap: '1rem' }}>
-            <Badge 
-              variant="success" 
-              style={{ backgroundColor: '#00ff41', color: '#0a0a0a' }}
-            >
+          </Stack>
+          <Stack direction="horizontal" gap="lg">
+            <Badge variant="success">
               CONNECTED
             </Badge>
-            <Badge 
-              variant="primary" 
-              style={{ backgroundColor: '#00d4ff', color: '#0a0a0a' }}
-            >
+            <Badge variant="primary">
               ROOT ACCESS
             </Badge>
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
 
         {/* Terminal Window */}
-        <Card style={{
-          backgroundColor: 'rgba(10, 10, 11, 0.95)',
-          border: '1px solid #00ff41',
-          borderRadius: '8px',
-          padding: 0,
-          boxShadow: '0 0 30px rgba(0, 255, 65, 0.15)',
-          overflow: 'hidden',
-        }}>
+        <Card bg="surface.overlay" borderColor="brand.interactive.background" p="none" overflow="hidden">
           {/* Terminal Header Bar */}
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '0.75rem 1.5rem',
-            backgroundColor: 'rgba(0, 255, 65, 0.1)',
-            borderBottom: '1px solid #00ff41',
-          }}>
-            <Box style={{ display: 'flex', gap: '0.5rem' }}>
-              <Box style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff0055' }} />
-              <Box style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff9500' }} />
-              <Box style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#00ff41' }} />
-            </Box>
-            <Text variant="caption" style={{ color: '#00d4ff', fontFamily: 'monospace' }}>
+          <Stack direction="horizontal" align="center" justify="between" p="lg" bg="surface.secondary" borderBottom="1px solid" borderColor="brand.interactive.background">
+            <Stack direction="horizontal" gap="sm">
+              <Box width="12px" height="12px" borderRadius="50%" bg="text.error" />
+              <Box width="12px" height="12px" borderRadius="50%" bg="text.warning" />
+              <Box width="12px" height="12px" borderRadius="50%" bg="brand.interactive.background" />
+            </Stack>
+            <Text variant="caption" color="text.accent" fontFamily="mono">
               terminal.cypher.sys
             </Text>
-            <Box style={{ display: 'flex', gap: '0.5rem' }}>
+            <Stack direction="horizontal" gap="sm">
               <Button 
                 size="sm" 
-                variant="ghost" 
-                style={{ color: '#888', fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                 
                 onClick={() => setLines([])}
               >
                 CLEAR
               </Button>
-            </Box>
-          </Box>
+            </Stack>
+          </Stack>
 
           {/* Terminal Content */}
           <Box 
             ref={terminalRef}
-            style={{
-              height: '500px',
-              padding: '1.5rem',
-              fontFamily: 'monospace',
-              fontSize: '0.875rem',
-              lineHeight: '1.5',
-              overflowY: 'auto',
-              backgroundColor: '#0a0a0b',
-            }}
+            height="500px"
+            p="xl"
+            fontFamily="mono"
+            fontSize="sm"
+            lineHeight="1.5"
+            overflowY="auto"
+            bg="surface.background"
           >
             {/* Terminal Lines */}
             {lines.map((line) => (
-              <Box key={line.id} style={{ marginBottom: '0.25rem' }}>
-                <Text style={{ color: getLineColor(line.type) }}>
+              <Box key={line.id} mb="xs">
+                <Text color={getLineColorToken(line.type)}>
                   {getLinePrefix(line.type) && (
-                    <span style={{ marginRight: '0.5rem', opacity: 0.7 }}>
+                    <Box as="span" mr="sm" opacity="0.7">
                       {getLinePrefix(line.type)}
-                    </span>
+                    </Box>
                   )}
                   {line.content}
                 </Text>
@@ -236,76 +203,58 @@ export default function Terminal() {
             
             {/* Processing indicator */}
             {isProcessing && (
-              <Box style={{ marginBottom: '0.25rem' }}>
-                <Text style={{ color: '#00d4ff' }}>
+              <Box mb="xs">
+                <Text color="text.accent">
                   Processing...
-                  <span style={{ animation: 'blink 1s infinite', marginLeft: '0.5rem' }}>█</span>
+                  <Box as="span" ml="sm">█</Box>
                 </Text>
               </Box>
             )}
 
             {/* Current Input Line */}
-            <Box style={{ display: 'flex', alignItems: 'center', marginTop: '0.5rem' }}>
-              <Text style={{ color: '#00ff41', marginRight: '0.5rem' }}>
+            <Stack direction="horizontal" align="center" mt="sm">
+              <Text color="brand.interactive.background" mr="sm">
                 cypher@matrix:~$
               </Text>
-              <form onSubmit={handleSubmit} style={{ flex: 1 }}>
+              <Box as="form" onSubmit={handleSubmit} flex="1">
                 <Input
                   ref={inputRef}
                   value={currentInput}
                   onChange={(e) => setCurrentInput(e.target.value)}
                   disabled={isProcessing}
-                  style={{
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    color: '#ffffff',
-                    fontFamily: 'monospace',
-                    fontSize: '0.875rem',
-                    padding: 0,
-                    outline: 'none',
-                  }}
+                  
                   placeholder={isProcessing ? "Processing..." : "Enter command..."}
                 />
-              </form>
-              <Text style={{ 
-                color: '#00ff41', 
-                animation: 'blink 1s infinite',
-                marginLeft: '0.25rem'
-              }}>
+              </Box>
+              <Text color="brand.interactive.background" ml="xs">
                 █
               </Text>
-            </Box>
+            </Stack>
           </Box>
         </Card>
 
         {/* Command Help */}
-        <Card style={{
-          backgroundColor: 'rgba(26, 26, 30, 0.8)',
-          border: '1px solid #00ff41',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-        }}>
-          <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+        <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+          <Text weight="bold" color="brand.interactive.background" mb="lg">
             AVAILABLE COMMANDS
           </Text>
-          <Box style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
-            fontSize: '0.875rem',
-            fontFamily: 'monospace',
-          }}>
+          <Box 
+            display="grid"
+            gridTemplateColumns="repeat(auto-fit, minmax(200px, 1fr))"
+            gap="lg"
+            fontSize="sm"
+            fontFamily="mono"
+          >
             {mockCommands.map((cmd, index) => (
-              <Box key={index} style={{ display: 'flex', gap: '0.5rem' }}>
-                <Text style={{ color: '#00d4ff', minWidth: '60px' }}>{cmd.cmd}</Text>
-                <Text style={{ color: '#888' }}>{cmd.response.split('.')[0]}...</Text>
-              </Box>
+              <Stack key={index} direction="horizontal" gap="sm">
+                <Text color="text.accent" minWidth="60px">{cmd.cmd}</Text>
+                <Text color="text.secondary">{cmd.response.split('.')[0]}...</Text>
+              </Stack>
             ))}
-            <Box style={{ display: 'flex', gap: '0.5rem' }}>
-              <Text style={{ color: '#00d4ff', minWidth: '60px' }}>clear</Text>
-              <Text style={{ color: '#888' }}>Clear terminal output</Text>
-            </Box>
+            <Stack direction="horizontal" gap="sm">
+              <Text color="text.accent" minWidth="60px">clear</Text>
+              <Text color="text.secondary">Clear terminal output</Text>
+            </Stack>
           </Box>
         </Card>
       </Stack>

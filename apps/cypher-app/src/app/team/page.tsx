@@ -82,23 +82,23 @@ export default function Team() {
     return matchesSearch && matchesStatus && matchesOffline;
   });
 
-  const getStatusColor = (status: TeamMember['status']) => {
+  const getStatusVariant = (status: TeamMember['status']) => {
     switch (status) {
-      case 'online': return '#00ff41';
-      case 'away': return '#ff9500';
-      case 'critical': return '#ff0055';
-      case 'offline': return '#666';
-      default: return '#666';
+      case 'online': return 'success';
+      case 'away': return 'warning';
+      case 'critical': return 'error';
+      case 'offline': return 'default';
+      default: return 'default';
     }
   };
 
-  const getAccessLevelColor = (level: TeamMember['accessLevel']) => {
+  const getAccessLevelVariant = (level: TeamMember['accessLevel']) => {
     switch (level) {
-      case 'admin': return '#ff0055';
-      case 'developer': return '#00ff41';
-      case 'operator': return '#00d4ff';
-      case 'guest': return '#888';
-      default: return '#888';
+      case 'admin': return 'error';
+      case 'developer': return 'success';
+      case 'operator': return 'default';
+      case 'guest': return 'default';
+      default: return 'default';
     }
   };
 
@@ -113,90 +113,72 @@ export default function Team() {
   };
 
   return (
-    <Box 
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0a0a0b 0%, #1a1a1e 100%)',
-        padding: '2rem',
-      }}
+    <Box
+      bg="surface.background"
+      p="2xl"
+      maxWidth="1280px"
+      mx="auto"
     >
-      <Stack gap={4}>
+      <Stack spacing="xl">
         {/* Header */}
-        <Box style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
+        <Stack direction="horizontal" justify="between" align="center">
           <Box>
             <Text 
               variant="body-lg" 
               weight="bold" 
-              style={{ 
-                color: '#00ff41',
-                fontFamily: 'monospace',
-                textShadow: '0 0 10px rgba(0, 255, 65, 0.5)',
-                fontSize: '1.5rem'
-              }}
+              color="brand.interactive.background"
+              fontFamily="mono"
             >
               TEAM MANAGEMENT
             </Text>
-            <Text variant="body-sm" style={{ color: '#00d4ff', marginTop: '0.25rem' }}>
+            <Text variant="body-sm" color="text.accent">
               Neural network operatives • Access control • Status monitoring
             </Text>
           </Box>
-          <Box style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Stack direction="horizontal" spacing="lg" align="center">
             <Badge 
-              variant="success" 
-              style={{ backgroundColor: '#00ff41', color: '#0a0a0a' }}
+              variant="success"
             >
               {filteredMembers.filter(m => m.status === 'online').length} ONLINE
             </Badge>
             <Badge 
-              variant="warning" 
-              style={{ backgroundColor: '#ff9500', color: '#0a0a0a' }}
+              variant="warning"
             >
               {filteredMembers.filter(m => m.status === 'away').length} AWAY
             </Badge>
             <Badge 
-              variant="error" 
-              style={{ backgroundColor: '#ff0055', color: '#ffffff' }}
+              variant="error"
             >
               {filteredMembers.filter(m => m.status === 'critical').length} CRITICAL
             </Badge>
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
 
         {/* Filters */}
-        <Card style={{
-          backgroundColor: 'rgba(26, 26, 30, 0.8)',
-          border: '1px solid #00ff41',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-        }}>
-          <Box style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
-            alignItems: 'end',
-          }}>
+        <Card 
+          bg="surface.elevated"
+          borderColor="brand.interactive.background"
+          p="xl"
+        >
+          <Box 
+            display="grid"
+            gridTemplateColumns="repeat(auto-fit, minmax(200px, 1fr))"
+            gap="lg"
+            alignItems="end"
+          >
             <Box>
-              <Text variant="body-sm" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
+              <Text variant="body-sm" color="brand.interactive.background" mb="sm">
                 SEARCH OPERATIVES
               </Text>
               <Input
                 placeholder="Name, handle, or role..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  border: '1px solid #00ff41',
-                  color: '#ffffff'
-                }}
+                
               />
             </Box>
             <Box>
-              <Text variant="body-sm" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
+              <Text variant="body-sm" color="brand.interactive.background" mb="sm">
                 STATUS FILTER
               </Text>
               <Select
@@ -212,176 +194,134 @@ export default function Team() {
                 placeholder="Select status..."
               />
             </Box>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Stack direction="horizontal" align="center" gap="sm">
               <Switch 
                 checked={showOffline}
                 onChange={(e) => setShowOffline((e.target as HTMLInputElement).checked)}
               />
-              <Text variant="body-sm" style={{ color: '#ffffff' }}>
+              <Text variant="body-sm" color="text.primary">
                 Show offline operatives
               </Text>
-            </Box>
+            </Stack>
           </Box>
         </Card>
 
         {/* Team Grid */}
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
-          gap: '1.5rem',
-        }}>
+        <Box 
+          display="grid"
+          gridTemplateColumns="repeat(auto-fill, minmax(400px, 1fr))"
+          gap="xl"
+        >
           {filteredMembers.map((member) => (
-            <Card key={member.id} style={{
-              backgroundColor: 'rgba(26, 26, 30, 0.8)',
-              border: `1px solid ${getStatusColor(member.status)}`,
-              borderRadius: '8px',
-              padding: '1.5rem',
-              boxShadow: `0 0 20px ${getStatusColor(member.status)}20`,
-              transition: 'all 150ms ease',
-            }}>
+            <Card 
+              key={member.id} 
+              bg="surface.elevated"
+              p="xl"
+            >
               <Stack gap={3}>
                 {/* Member Header */}
-                <Box style={{ display: 'flex', alignItems: 'start', gap: '1rem' }}>
+                <Stack direction="horizontal" align="start" gap="lg">
                   <Avatar 
                     src="" 
                     alt={member.name} 
-                    size="md" 
-                    style={{ 
-                      backgroundColor: getStatusColor(member.status),
-                      color: member.status === 'offline' ? '#fff' : '#0a0a0a',
-                      position: 'relative'
-                    }} 
+                    size="md"
                   />
-                  <Box style={{ flex: 1 }}>
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                      <Text variant="body-lg" weight="bold" style={{ color: '#ffffff' }}>
+                  <Box flex="1">
+                    <Stack direction="horizontal" align="center" gap="sm" mb="xs">
+                      <Text variant="body-lg" weight="bold" color="text.primary">
                         {member.name}
                       </Text>
-                      <span style={{ fontSize: '0.875rem' }}>{getStatusIcon(member.status)}</span>
-                    </Box>
-                    <Text variant="body-sm" style={{ color: '#00d4ff', fontFamily: 'monospace' }}>
+                      <Text fontSize="sm">{getStatusIcon(member.status)}</Text>
+                    </Stack>
+                    <Text variant="body-sm" color="text.accent" fontFamily="mono">
                       {member.handle}
                     </Text>
-                    <Text variant="caption" style={{ color: '#888' }}>
+                    <Text variant="caption" color="text.secondary">
                       {member.role} • {member.location}
                     </Text>
                   </Box>
                   <Badge 
-                    style={{
-                      backgroundColor: getAccessLevelColor(member.accessLevel),
-                      color: member.accessLevel === 'guest' ? '#ffffff' : '#0a0a0a',
-                      fontSize: '0.75rem',
-                    }}
+                    variant={getAccessLevelVariant(member.accessLevel)}
                   >
                     {member.accessLevel.toUpperCase()}
                   </Badge>
-                </Box>
+                </Stack>
 
-                <Divider style={{ borderColor: getStatusColor(member.status), opacity: 0.3 }} />
+                <Divider />
 
                 {/* Status & Last Seen */}
-                <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Stack direction="horizontal" justify="between" align="center">
                   <Box>
-                    <Text variant="caption" style={{ color: '#888' }}>STATUS</Text>
-                    <Text variant="body-sm" weight="bold" style={{ color: getStatusColor(member.status) }}>
+                    <Text variant="caption" color="text.secondary">STATUS</Text>
+                    <Badge variant={getStatusVariant(member.status)}>
                       {member.status.toUpperCase()}
-                    </Text>
+                    </Badge>
                   </Box>
                   <Box>
-                    <Text variant="caption" style={{ color: '#888' }}>LAST SEEN</Text>
-                    <Text variant="body-sm" style={{ color: '#ffffff' }}>
+                    <Text variant="caption" color="text.secondary">LAST SEEN</Text>
+                    <Text variant="body-sm" color="text.primary">
                       {member.lastSeen}
                     </Text>
                   </Box>
-                </Box>
+                </Stack>
 
                 {/* Projects */}
                 <Box>
-                  <Text variant="caption" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                  <Text variant="caption" color="text.secondary" mb="sm">
                     ACTIVE PROJECTS
                   </Text>
-                  <Box style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <Stack direction="horizontal" gap="sm">
                     {member.projects.map((project, index) => (
                       <Tag 
                         key={index}
-                        variant="filled" 
+                         
                         semantic="info"
-                        style={{ 
-                          backgroundColor: 'rgba(0, 212, 255, 0.2)',
-                          color: '#00d4ff',
-                          fontSize: '0.75rem',
-                          border: '1px solid rgba(0, 212, 255, 0.3)'
-                        }}
                       >
                         {project}
                       </Tag>
                     ))}
-                  </Box>
+                  </Stack>
                 </Box>
 
                 {/* Skills */}
                 <Box>
-                  <Text variant="caption" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                  <Text variant="caption" color="text.secondary" mb="sm">
                     SKILLS
                   </Text>
-                  <Box style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <Stack direction="horizontal" gap="sm">
                     {member.skills.map((skill, index) => (
                       <Tag 
                         key={index}
-                        variant="filled" 
+                         
                         semantic="success"
-                        style={{ 
-                          backgroundColor: 'rgba(0, 255, 65, 0.1)',
-                          color: '#00ff41',
-                          fontSize: '0.75rem',
-                          border: '1px solid rgba(0, 255, 65, 0.3)'
-                        }}
                       >
                         {skill}
                       </Tag>
                     ))}
-                  </Box>
+                  </Stack>
                 </Box>
 
                 {/* Actions */}
-                <Box style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                <Stack direction="horizontal" gap="sm" mt="sm">
                   <Button 
                     size="sm" 
-                    variant="outline"
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: '#00d4ff',
-                      border: '1px solid #00d4ff',
-                      fontSize: '0.75rem'
-                    }}
+                    
                   >
                     MESSAGE
                   </Button>
                   <Button 
                     size="sm" 
-                    variant="outline"
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: '#00ff41',
-                      border: '1px solid #00ff41',
-                      fontSize: '0.75rem'
-                    }}
+                    
                   >
                     PERMISSIONS
                   </Button>
                   <Button 
                     size="sm" 
-                    variant="outline"
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: '#ff9500',
-                      border: '1px solid #ff9500',
-                      fontSize: '0.75rem'
-                    }}
+                    
                   >
                     TRACK
                   </Button>
-                </Box>
+                </Stack>
               </Stack>
             </Card>
           ))}
@@ -389,17 +329,16 @@ export default function Team() {
 
         {/* No results */}
         {filteredMembers.length === 0 && (
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #ff0055',
-            borderRadius: '8px',
-            padding: '3rem',
-            textAlign: 'center',
-          }}>
-            <Text variant="body-lg" style={{ color: '#ff0055', marginBottom: '0.5rem' }}>
+          <Card 
+            bg="surface.elevated"
+            borderColor="border.error"
+            p="3xl"
+            textAlign="center"
+          >
+            <Text variant="body-lg" color="text.error" mb="sm">
               NO OPERATIVES FOUND
             </Text>
-            <Text variant="body-sm" style={{ color: '#888' }}>
+            <Text variant="body-sm" color="text.secondary">
               Adjust your search criteria or status filters to find team members.
             </Text>
           </Card>

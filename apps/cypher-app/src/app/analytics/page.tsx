@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button, Card, Stack, Box, Text, Badge, Heading, Input, Select, Switch, Divider, Link, Avatar, Checkbox, Spinner, Tag } from '@mond-design-system/theme';
+import { Button, Card, Stack, Box, Text, Badge, Heading, Select, Divider, Checkbox } from '@mond-design-system/theme';
 
 // Mock data for code quality metrics
 const codeQualityMetrics = {
@@ -71,63 +71,53 @@ export default function AnalyticsPage() {
     setTimeout(() => setIsRefreshing(false), 2000);
   };
 
-  const getSeverityColor = (severity: string) => {
+  const getSeverityVariant = (severity: string) => {
     switch (severity) {
-      case 'critical': return '#ff0055';
-      case 'high': return '#ff9500';
-      case 'medium': return '#00d4ff';
-      case 'low': return '#00ff41';
-      default: return '#666';
+      case 'critical': return 'error';
+      case 'high': return 'warning';
+      case 'medium': return 'default';
+      case 'low': return 'success';
+      default: return 'default';
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusVariant = (status: string) => {
     switch (status) {
-      case 'success': return '#00ff41';
-      case 'failed': return '#ff0055';
-      case 'in-progress': return '#00d4ff';
-      case 'resolved': return '#00ff41';
-      default: return '#666';
+      case 'success': return 'success';
+      case 'failed': return 'error';
+      case 'in-progress': return 'default';
+      case 'resolved': return 'success';
+      default: return 'default';
     }
   };
 
   return (
-    <Box 
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0a0a0b 0%, #1a1a1e 100%)',
-        padding: '2rem',
-        fontFamily: 'var(--font-jetbrains-mono)',
-      }}
+    <Box
+      bg="surface.background"
+      p="2xl"
+      fontFamily="mono"
+      maxWidth="1280px"
+      mx="auto"
     >
-      <Stack gap={4}>
+      <Stack gap="xl">
         {/* Header */}
-        <Box style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid #00ff41',
-          paddingBottom: '1rem',
-        }}>
-          <Box>
+        <Stack direction="horizontal" justify="between" align="center" borderBottom="1px solid" borderColor="brand.interactive.background" pb="lg">
+          <Stack gap="xs">
             <Heading 
               level={1}
               size="2xl" 
               weight="bold" 
-              style={{ 
-                color: '#00ff41', 
-                fontFamily: 'monospace',
-                textShadow: '0 0 10px rgba(0, 255, 65, 0.5)'
-              }}
+              color="brand.interactive.background"
+              fontFamily="mono"
             >
               ANALYTICS DASHBOARD
             </Heading>
-            <Text variant="body-sm" style={{ color: '#00d4ff', marginTop: '0.25rem' }}>
+            <Text variant="body-sm" color="text.accent">
               SYSTEM PERFORMANCE & CODE QUALITY METRICS // UTC: {currentTime}
             </Text>
-          </Box>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <Box style={{ minWidth: '150px' }}>
+          </Stack>
+          <Stack direction="horizontal" align="center" gap="lg">
+            <Box minWidth="150px">
               <Select 
                 options={[
                   { value: '1h', label: 'Last Hour' },
@@ -143,378 +133,281 @@ export default function AnalyticsPage() {
               variant="primary"
               onClick={refreshData}
               disabled={isRefreshing}
-              style={{
-                backgroundColor: '#00ff41',
-                color: '#0a0a0a',
-                border: 'none',
-                boxShadow: isRefreshing ? '0 0 25px rgba(0, 255, 65, 0.6)' : '0 0 15px rgba(0, 255, 65, 0.3)',
-              }}
             >
               {isRefreshing ? 'REFRESHING...' : 'REFRESH DATA'}
             </Button>
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
 
         {/* Metrics Overview Grid */}
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '1.5rem',
-        }}>
+        <Box 
+          display="grid"
+          gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+          gap="xl"
+        >
           {/* Code Quality Score */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
+          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
+            <Text weight="bold" color="brand.interactive.background" mb="sm">
               CODE QUALITY SCORE
             </Text>
             <Heading 
               level={2} 
               size="3xl" 
               weight="bold" 
-              style={{ color: '#ffffff', marginBottom: '0.5rem' }}
+color="text.primary" mb="sm"
             >
               {codeQualityMetrics.overallScore}
             </Heading>
-            <Text variant="caption" style={{ color: '#00d4ff' }}>
+            <Text variant="caption" color="text.accent">
               +2.3 from last week
             </Text>
           </Card>
 
           {/* Deployment Success Rate */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
+          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
+            <Text weight="bold" color="brand.interactive.background" mb="sm">
               DEPLOYMENT SUCCESS
             </Text>
             <Heading 
               level={2} 
               size="3xl" 
               weight="bold" 
-              style={{ color: '#ffffff', marginBottom: '0.5rem' }}
+color="text.primary" mb="sm"
             >
               {deploymentStats.successRate}%
             </Heading>
-            <Text variant="caption" style={{ color: '#00d4ff' }}>
+            <Text variant="caption" color="text.accent">
               {deploymentStats.deploymentsToday} deployments today
             </Text>
           </Card>
 
           {/* Test Coverage */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
+          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
+            <Text weight="bold" color="brand.interactive.background" mb="sm">
               TEST COVERAGE
             </Text>
             <Heading 
               level={2} 
               size="3xl" 
               weight="bold" 
-              style={{ color: '#ffffff', marginBottom: '0.5rem' }}
+color="text.primary" mb="sm"
             >
               {codeQualityMetrics.testCoverage}%
             </Heading>
-            <Text variant="caption" style={{ color: '#ff9500' }}>
+            <Text variant="caption" color="text.warning">
               Target: 85%
             </Text>
           </Card>
 
           {/* System Uptime */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
+          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
+            <Text weight="bold" color="brand.interactive.background" mb="sm">
               SYSTEM UPTIME
             </Text>
             <Heading 
               level={2} 
               size="3xl" 
               weight="bold" 
-              style={{ color: '#ffffff', marginBottom: '0.5rem' }}
+color="text.primary" mb="sm"
             >
               {performanceMetrics.uptime}%
             </Heading>
-            <Text variant="caption" style={{ color: '#00d4ff' }}>
+            <Text variant="caption" color="text.accent">
               SLA: 99.9%
             </Text>
           </Card>
         </Box>
 
         {/* Detailed Metrics Grid */}
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-          gap: '1.5rem',
-        }}>
+        <Box 
+          display="grid"
+          gridTemplateColumns="repeat(auto-fit, minmax(400px, 1fr))"
+          gap="xl"
+        >
           {/* Code Quality Details */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
+            <Text weight="bold" color="brand.interactive.background" mb="lg">
               CODE QUALITY BREAKDOWN
             </Text>
-            <Stack gap={3}>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Technical Debt:</Text>
+            <Stack gap="lg">
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">Technical Debt:</Text>
                 <Badge 
                   variant="warning" 
-                  style={{ backgroundColor: '#ff9500', color: '#0a0a0a' }}
                 >
                   {codeQualityMetrics.technicalDebt}h
                 </Badge>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Code Complexity:</Text>
-                <Text style={{ color: '#00d4ff' }}>{codeQualityMetrics.codeComplexity}/10</Text>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Vulnerabilities:</Text>
+              </Stack>
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">Code Complexity:</Text>
+                <Text color="text.accent">{codeQualityMetrics.codeComplexity}/10</Text>
+              </Stack>
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">Vulnerabilities:</Text>
                 <Badge 
                   variant="error" 
-                  style={{ backgroundColor: '#ff0055', color: '#ffffff' }}
                 >
                   {codeQualityMetrics.vulnerabilities}
                 </Badge>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Duplicated Lines:</Text>
-                <Text style={{ color: '#00d4ff' }}>{codeQualityMetrics.duplicatedLines}%</Text>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Maintainability:</Text>
+              </Stack>
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">Duplicated Lines:</Text>
+                <Text color="text.accent">{codeQualityMetrics.duplicatedLines}%</Text>
+              </Stack>
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">Maintainability:</Text>
                 <Badge 
                   variant="success" 
-                  style={{ backgroundColor: '#00ff41', color: '#0a0a0a' }}
                 >
                   {codeQualityMetrics.maintainabilityIndex}/100
                 </Badge>
-              </Box>
-              <Divider style={{ borderColor: '#00ff41', opacity: 0.3 }} />
-              <Text variant="caption" style={{ color: '#888' }}>
+              </Stack>
+              <Divider borderColor="brand.interactive.background" opacity="0.3" />
+              <Text variant="caption" color="text.secondary">
                 Last analysis: {codeQualityMetrics.lastAnalysis}
               </Text>
             </Stack>
           </Card>
 
           {/* Performance Metrics */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
+            <Text weight="bold" color="brand.interactive.background" mb="lg">
               PERFORMANCE METRICS
             </Text>
-            <Stack gap={3}>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Avg Response Time:</Text>
+            <Stack gap="lg">
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">Avg Response Time:</Text>
                 <Badge 
                   variant="success" 
-                  style={{ backgroundColor: '#00ff41', color: '#0a0a0a' }}
                 >
                   {performanceMetrics.responseTime}ms
                 </Badge>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Throughput:</Text>
-                <Text style={{ color: '#00d4ff' }}>{performanceMetrics.throughput} req/min</Text>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Error Rate:</Text>
+              </Stack>
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">Throughput:</Text>
+                <Text color="text.accent">{performanceMetrics.throughput} req/min</Text>
+              </Stack>
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">Error Rate:</Text>
                 <Badge 
                   variant="success" 
-                  style={{ backgroundColor: '#00ff41', color: '#0a0a0a' }}
                 >
                   {performanceMetrics.errorRate}%
                 </Badge>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Memory Usage:</Text>
-                <Text style={{ color: '#00d4ff' }}>{performanceMetrics.memoryUsage}%</Text>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>CPU Utilization:</Text>
-                <Text style={{ color: '#00d4ff' }}>{performanceMetrics.cpuUtilization}%</Text>
-              </Box>
-              <Divider style={{ borderColor: '#00ff41', opacity: 0.3 }} />
-              <Box style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              </Stack>
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">Memory Usage:</Text>
+                <Text color="text.accent">{performanceMetrics.memoryUsage}%</Text>
+              </Stack>
+              <Stack direction="horizontal" justify="between" align="center">
+                <Text color="text.primary">CPU Utilization:</Text>
+                <Text color="text.accent">{performanceMetrics.cpuUtilization}%</Text>
+              </Stack>
+              <Divider borderColor="brand.interactive.background" opacity="0.3" />
+              <Stack direction="horizontal" align="center" gap="sm">
                 <Checkbox 
-                  id="auto-scaling" 
-                  style={{ 
-                    accentColor: '#00ff41',
-                    transform: 'scale(0.9)'
-                  }} 
+                  id="auto-scaling"
                 />
-                <Text variant="caption" style={{ color: '#888' }}>Auto-scaling enabled</Text>
-              </Box>
+                <Text variant="caption" color="text.secondary">Auto-scaling enabled</Text>
+              </Stack>
             </Stack>
           </Card>
         </Box>
 
         {/* Bug Tracking and Recent Deployments */}
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-          gap: '1.5rem',
-        }}>
+        <Box 
+          display="grid"
+          gridTemplateColumns="repeat(auto-fit, minmax(400px, 1fr))"
+          gap="xl"
+        >
           {/* Bug Tracking */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
+            <Text weight="bold" color="brand.interactive.background" mb="lg">
               BUG TRACKING SUMMARY
             </Text>
-            <Stack gap={3}>
+            <Stack gap="lg">
               {bugTrackingData.map((bug) => (
-                <Box key={bug.id} style={{
-                  padding: '1rem',
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: '4px',
-                  border: `1px solid ${getSeverityColor(bug.severity)}`,
-                }}>
-                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                    <Text variant="body-sm" style={{ color: '#00d4ff', fontWeight: 'bold' }}>
+                <Card key={bug.id} p="lg" bg="surface.secondary">
+                  <Stack direction="horizontal" justify="between" align="start" mb="sm">
+                    <Text variant="body-sm" color="text.accent" weight="bold">
                       {bug.id}
                     </Text>
-                    <Box style={{ display: 'flex', gap: '0.5rem' }}>
+                    <Stack direction="horizontal" gap="sm">
                       <Badge 
-                        style={{ 
-                          backgroundColor: getSeverityColor(bug.severity), 
-                          color: '#ffffff',
-                          fontSize: '0.75rem'
-                        }}
+                        variant={getSeverityVariant(bug.severity)}
                       >
                         {bug.severity.toUpperCase()}
                       </Badge>
                       <Badge 
-                        style={{ 
-                          backgroundColor: getStatusColor(bug.status), 
-                          color: '#0a0a0a',
-                          fontSize: '0.75rem'
-                        }}
+                        variant={getStatusVariant(bug.status)}
                       >
                         {bug.status.toUpperCase()}
                       </Badge>
-                    </Box>
-                  </Box>
-                  <Text variant="body-sm" style={{ color: '#ffffff', marginBottom: '0.5rem' }}>
+                    </Stack>
+                  </Stack>
+                  <Text variant="body-sm" color="text.primary" mb="sm">
                     {bug.title}
                   </Text>
-                  <Text variant="caption" style={{ color: '#888' }}>
+                  <Text variant="caption" color="text.secondary">
                     Assigned: {bug.assigned}
                   </Text>
-                </Box>
+                </Card>
               ))}
             </Stack>
           </Card>
 
           {/* Recent Deployments */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <Text weight="bold" style={{ color: '#00ff41' }}>
+          <Card bg="surface.elevated" borderColor="brand.interactive.background" p="xl">
+            <Stack direction="horizontal" justify="between" align="center" mb="lg">
+              <Text weight="bold" color="brand.interactive.background">
                 RECENT DEPLOYMENTS
               </Text>
-              <Text variant="caption" style={{ color: '#00d4ff' }}>
+              <Text variant="caption" color="text.accent">
                 Next: {deploymentStats.nextScheduled}
               </Text>
-            </Box>
-            <Stack gap={3}>
+            </Stack>
+            <Stack gap="lg">
               {recentDeployments.map((deployment) => (
-                <Box key={deployment.id} style={{
-                  padding: '1rem',
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: '4px',
-                  border: `1px solid ${getStatusColor(deployment.status)}`,
-                }}>
-                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                <Card key={deployment.id} bg="surface.secondary" p="lg">
+                  <Stack direction="horizontal" justify="between" align="start" mb="sm">
                     <Box>
-                      <Text variant="body-sm" style={{ color: '#00d4ff', fontWeight: 'bold' }}>
+                      <Text variant="body-sm" color="text.accent" weight="bold">
                         {deployment.version}
                       </Text>
-                      <Text variant="caption" style={{ color: '#888' }}>
+                      <Text variant="caption" color="text.secondary">
                         {deployment.id}
                       </Text>
                     </Box>
                     <Badge 
-                      style={{ 
-                        backgroundColor: getStatusColor(deployment.status), 
-                        color: deployment.status === 'failed' ? '#ffffff' : '#0a0a0a',
-                        fontSize: '0.75rem'
-                      }}
+                      variant={getStatusVariant(deployment.status)}
                     >
                       {deployment.status.toUpperCase()}
                     </Badge>
-                  </Box>
-                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text variant="caption" style={{ color: '#ffffff' }}>
+                  </Stack>
+                  <Stack direction="horizontal" justify="between" align="center">
+                    <Text variant="caption" color="text.primary">
                       Duration: {deployment.duration}
                     </Text>
-                    <Text variant="caption" style={{ color: '#888' }}>
+                    <Text variant="caption" color="text.secondary">
                       By: {deployment.deployer} at {deployment.timestamp}
                     </Text>
-                  </Box>
-                </Box>
+                  </Stack>
+                </Card>
               ))}
             </Stack>
-            <Divider style={{ borderColor: '#00ff41', opacity: 0.3, margin: '1rem 0' }} />
-            <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text variant="caption" style={{ color: '#888' }}>
+            <Divider borderColor="brand.interactive.background" opacity="0.3" m="lg" />
+            <Stack direction="horizontal" justify="between" align="center">
+              <Text variant="caption" color="text.secondary">
                 Avg Deploy Time: {deploymentStats.avgDeployTime}m
               </Text>
-              <Text variant="caption" style={{ color: '#888' }}>
+              <Text variant="caption" color="text.secondary">
                 Rollback Rate: {deploymentStats.rollbackRate}%
               </Text>
-            </Box>
+            </Stack>
           </Card>
         </Box>
       </Stack>
 
-      <style jsx>{`
-        @keyframes blink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
-        }
-        
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.02); }
-          100% { transform: scale(1); }
-        }
-      `}</style>
     </Box>
   );
 }

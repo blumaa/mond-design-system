@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button, Card, Stack, Box, Text, Badge, Heading, Input, Select, Switch, Divider, Link, Avatar, Checkbox, Spinner, Tag, Accordion, Modal, Tabs } from '@mond-design-system/theme';
+import { Button, Card, Stack, Box, Text, Badge, Heading, Input, Select, Switch, Divider, Avatar, Checkbox, Tag, Modal, Tabs, Grid } from '@mond-design-system/theme';
 
 // Mock data for settings
 const userProfile = {
@@ -49,6 +49,14 @@ export default function SettingsPage() {
   const [localNotificationSettings, setLocalNotificationSettings] = useState(notificationSettings);
   const [activeTab, setActiveTab] = useState('system');
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'brand.interactive.background';
+      case 'inactive': return 'text.secondary';
+      default: return 'text.primary';
+    }
+  };
+
   useEffect(() => {
     const updateTime = () => {
       setCurrentTime(new Date().toLocaleTimeString('en-US', { 
@@ -73,63 +81,47 @@ export default function SettingsPage() {
     console.log('Generating new API key...');
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusVariant = (status: string) => {
     switch (status) {
-      case 'active': return '#00ff41';
-      case 'inactive': return '#666';
-      default: return '#666';
+      case 'active': return 'success';
+      case 'inactive': return 'default';
+      default: return 'default';
     }
   };
 
   return (
-    <Box 
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0a0a0b 0%, #1a1a1e 100%)',
-        padding: '2rem',
-        fontFamily: 'var(--font-jetbrains-mono)',
-      }}
+    <Box
+      bg="surface.background"
+      p="2xl"
+      fontFamily="mono"
+      maxWidth="1280px"
+      mx="auto"
     >
-      <Stack gap={4}>
+      <Stack spacing="xl">
         {/* Header */}
-        <Box style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid #00ff41',
-          paddingBottom: '1rem',
-        }}>
-          <Box>
+        <Stack direction="horizontal" justify="between" align="center" borderBottom="1px solid" borderColor="brand.interactive.background" pb="lg">
+          <Stack spacing="xs">
             <Heading 
               level={1}
               size="2xl" 
               weight="bold" 
-              style={{ 
-                color: '#00ff41', 
-                fontFamily: 'monospace',
-                textShadow: '0 0 10px rgba(0, 255, 65, 0.5)'
-              }}
+              color="brand.interactive.background"
+              fontFamily="mono"
             >
               SYSTEM CONFIGURATION
             </Heading>
-            <Text variant="body-sm" style={{ color: '#00d4ff', marginTop: '0.25rem' }}>
+            <Text variant="body-sm" color="text.accent">
               USER PREFERENCES & SECURITY SETTINGS // UTC: {currentTime}
             </Text>
-          </Box>
+          </Stack>
           <Button 
             variant="primary"
             onClick={saveSettings}
             disabled={isSaving}
-            style={{
-              backgroundColor: '#00ff41',
-              color: '#0a0a0a',
-              border: 'none',
-              boxShadow: isSaving ? '0 0 25px rgba(0, 255, 65, 0.6)' : '0 0 15px rgba(0, 255, 65, 0.3)',
-            }}
           >
             {isSaving ? 'SAVING...' : 'SAVE CHANGES'}
           </Button>
-        </Box>
+        </Stack>
 
         {/* Main Settings Content */}
         <Tabs
@@ -144,58 +136,48 @@ export default function SettingsPage() {
         >
           {/* System Preferences Tab */}
           {activeTab === 'system' && (
-            <Stack gap={4}>
-              <Box style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '1.5rem'
-              }}>
+            <Stack spacing="xl">
+              <Grid 
+                templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+                gap="xl"
+                
+              >
                 {/* User Profile */}
-                <Card style={{
-                  backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                  border: '1px solid #00ff41',
-                  borderRadius: '8px',
-                  padding: '1.5rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-                }}>
-                  <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+                <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                  <Text weight="bold" color="brand.interactive.background" mb="lg">
                     USER PROFILE
                   </Text>
-                  <Stack gap={3}>
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <Avatar 
-                        src="" 
-                        alt="User Avatar" 
-                        size="lg" 
-                        style={{ backgroundColor: '#00ff41' }} 
+                  <Stack spacing="lg">
+                    <Stack direction="horizontal" align="center" spacing="lg">
+                      <Avatar
+                        src=""
+                        alt="User Avatar"
+                        size="lg"
                       />
-                      <Box style={{ flex: 1 }}>
-                        <Text weight="bold" style={{ color: '#ffffff' }}>
+                      <Stack spacing="xs" flex="1">
+                        <Text weight="bold" color="text.primary">
                           {userProfile.fullName}
                         </Text>
-                        <Text variant="body-sm" style={{ color: '#00d4ff' }}>
+                        <Text variant="body-sm" color="text.accent">
                           {userProfile.username}
                         </Text>
-                        <Badge 
-                          variant="success" 
-                          style={{ backgroundColor: '#00ff41', color: '#0a0a0a', marginTop: '0.25rem' }}
-                        >
+                        <Badge variant="success">
                           {userProfile.role}
                         </Badge>
-                      </Box>
-                    </Box>
-                    <Divider style={{ borderColor: '#00ff41', opacity: 0.3 }} />
-                    <Stack gap={2}>
-                      <Box>
-                        <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                      </Stack>
+                    </Stack>
+                    <Divider borderColor="brand.interactive.background" opacity="0.3" />
+                    <Stack spacing="md">
+                      <Stack spacing="sm">
+                        <Text variant="body-sm" color="text.secondary">
                           Full Name
                         </Text>
                         <Input
                           value={userProfile.fullName}
                         />
-                      </Box>
-                      <Box>
-                        <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                      </Stack>
+                      <Stack spacing="sm">
+                        <Text variant="body-sm" color="text.secondary">
                           Session Timeout (minutes)
                         </Text>
                         <Select 
@@ -208,25 +190,19 @@ export default function SettingsPage() {
                           ]}
                           value={userProfile.sessionTimeout.toString()}
                         />
-                      </Box>
+                      </Stack>
                     </Stack>
                   </Stack>
                 </Card>
 
                 {/* Theme & Display */}
-                <Card style={{
-                  backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                  border: '1px solid #00ff41',
-                  borderRadius: '8px',
-                  padding: '1.5rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-                }}>
-                  <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+                <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                  <Text weight="bold" color="brand.interactive.background" mb="lg">
                     THEME & DISPLAY
                   </Text>
-                  <Stack gap={3}>
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                  <Stack spacing="lg">
+                    <Stack spacing="sm">
+                      <Text variant="body-sm" color="text.secondary">
                         Color Scheme
                       </Text>
                       <Select 
@@ -238,51 +214,45 @@ export default function SettingsPage() {
                         ]}
                         value="matrix-green"
                       />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Scan Line Effects:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Scan Line Effects:</Text>
                       <Switch defaultChecked />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Glow Effects:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Glow Effects:</Text>
                       <Switch defaultChecked />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Matrix Rain Background:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Matrix Rain Background:</Text>
                       <Switch />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Reduced Motion:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Reduced Motion:</Text>
                       <Switch />
-                    </Box>
+                    </Stack>
                   </Stack>
                 </Card>
-              </Box>
+              </Grid>
             </Stack>
           )}
 
           {/* Terminal Preferences Tab */}
           {activeTab === 'terminal' && (
-            <Stack gap={4}>
-              <Box style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '1.5rem'
-              }}>
+            <Stack spacing="xl">
+              <Grid 
+                templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+                gap="xl"
+                
+              >
                 {/* Terminal Appearance */}
-                <Card style={{
-                  backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                  border: '1px solid #00ff41',
-                  borderRadius: '8px',
-                  padding: '1.5rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-                }}>
-                  <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+                <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                  <Text weight="bold" color="brand.interactive.background" mb="lg">
                     TERMINAL APPEARANCE
                   </Text>
-                  <Stack gap={3}>
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                  <Stack spacing="lg">
+                    <Grid>
+                      <Text variant="body-sm" color="text.secondary">
                         Font Family
                       </Text>
                       <Select 
@@ -296,9 +266,9 @@ export default function SettingsPage() {
                         value={localTerminalSettings.fontFamily}
                         onChange={(value) => setLocalTerminalSettings({...localTerminalSettings, fontFamily: value})}
                       />
-                    </Box>
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                    </Grid>
+                    <Grid>
+                      <Text variant="body-sm" color="text.secondary">
                         Font Size
                       </Text>
                       <Select 
@@ -312,9 +282,9 @@ export default function SettingsPage() {
                         value={localTerminalSettings.fontSize.toString()}
                         onChange={(value) => setLocalTerminalSettings({...localTerminalSettings, fontSize: parseInt(value)})}
                       />
-                    </Box>
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                    </Grid>
+                    <Grid>
+                      <Text variant="body-sm" color="text.secondary">
                         Cursor Style
                       </Text>
                       <Select 
@@ -326,45 +296,39 @@ export default function SettingsPage() {
                         value={localTerminalSettings.cursorStyle}
                         onChange={(value) => setLocalTerminalSettings({...localTerminalSettings, cursorStyle: value})}
                       />
-                    </Box>
+                    </Grid>
                   </Stack>
                 </Card>
 
                 {/* Terminal Behavior */}
-                <Card style={{
-                  backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                  border: '1px solid #00ff41',
-                  borderRadius: '8px',
-                  padding: '1.5rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-                }}>
-                  <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+                <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                  <Text weight="bold" color="brand.interactive.background" mb="lg">
                     TERMINAL BEHAVIOR
                   </Text>
-                  <Stack gap={3}>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Blinking Cursor:</Text>
+                  <Stack spacing="lg">
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Blinking Cursor:</Text>
                       <Switch 
                         checked={localTerminalSettings.blinkingCursor}
                         onChange={(e) => setLocalTerminalSettings({...localTerminalSettings, blinkingCursor: e.target.checked})}
                       />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Sound Effects:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Sound Effects:</Text>
                       <Switch 
                         checked={localTerminalSettings.soundEnabled}
                         onChange={(e) => setLocalTerminalSettings({...localTerminalSettings, soundEnabled: e.target.checked})}
                       />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Auto-complete:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Auto-complete:</Text>
                       <Switch 
                         checked={localTerminalSettings.autoComplete}
                         onChange={(e) => setLocalTerminalSettings({...localTerminalSettings, autoComplete: e.target.checked})}
                       />
-                    </Box>
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                    </Stack>
+                    <Grid>
+                      <Text variant="body-sm" color="text.secondary">
                         Command History Size
                       </Text>
                       <Select 
@@ -378,256 +342,187 @@ export default function SettingsPage() {
                         value={localTerminalSettings.historySize.toString()}
                         onChange={(value) => setLocalTerminalSettings({...localTerminalSettings, historySize: parseInt(value)})}
                       />
-                    </Box>
+                    </Grid>
                   </Stack>
                 </Card>
-              </Box>
+              </Grid>
 
               {/* Terminal Preview */}
-              <Card style={{
-                backgroundColor: 'rgba(10, 10, 11, 0.95)',
-                border: '1px solid #00ff41',
-                borderRadius: '8px',
-                padding: '1.5rem',
-                boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-              }}>
-                <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+              <Card bg="surface.overlay" borderColor="brand.interactive.background" p="xl">
+                <Text weight="bold" color="brand.interactive.background" mb="lg">
                   TERMINAL PREVIEW
                 </Text>
-                <Box style={{
-                  fontFamily: localTerminalSettings.fontFamily,
-                  fontSize: `${localTerminalSettings.fontSize}px`,
-                  lineHeight: '1.4',
-                  color: '#00d4ff',
-                  whiteSpace: 'pre-wrap',
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  padding: '1rem',
-                  borderRadius: '4px',
-                  border: '1px solid #333',
-                }}>
-                  <Text style={{ color: '#00ff41' }}>cypher@matrix:~$ </Text>
-                  <Text style={{ color: '#ffffff' }}>system-status --verbose</Text>
+                <Grid 
+                  fontFamily={localTerminalSettings.fontFamily}
+                  fontSize={`${localTerminalSettings.fontSize}px`}
+                  lineHeight="1.4"
+                  color="text.accent"
+                  whiteSpace="pre-wrap"
+                  bg="surface.secondary"
+                  p="lg"
+                  borderRadius="4px"
+                  border="1px solid"
+                  borderColor="border.default"
+                >
+                  <Text color="brand.interactive.background">cypher@matrix:~$ </Text>
+                  <Text color="text.primary">system-status --verbose</Text>
                   {'\n'}
-                  <Text style={{ color: '#888' }}>[2024-01-15 23:47:32] </Text>
-                  <Text style={{ color: '#00d4ff' }}>Checking system configuration...</Text>
+                  <Text color="text.secondary">[2024-01-15 23:47:32] </Text>
+                  <Text color="text.accent">Checking system configuration...</Text>
                   {'\n'}
-                  <Text style={{ color: '#888' }}>[2024-01-15 23:47:33] </Text>
-                  <Text style={{ color: '#00ff41' }}>Terminal settings applied successfully</Text>
+                  <Text color="text.secondary">[2024-01-15 23:47:33] </Text>
+                  <Text color="brand.interactive.background">Terminal settings applied successfully</Text>
                   {'\n'}
-                  <Text style={{ color: '#00ff41', animation: localTerminalSettings.blinkingCursor ? 'blink 1s infinite' : 'none' }}>
+                  <Text color="brand.interactive.background">
                     {localTerminalSettings.cursorStyle === 'block' ? '█' : 
                      localTerminalSettings.cursorStyle === 'underline' ? '_' : '|'}
                   </Text>
-                </Box>
+                </Grid>
               </Card>
             </Stack>
           )}
 
           {/* Security Settings Tab */}
           {activeTab === 'security' && (
-            <Stack gap={4}>
-              <Box style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '1.5rem'
-              }}>
+            <Stack spacing="xl">
+              <Grid 
+                templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+                gap="xl"
+                
+              >
                 {/* Authentication */}
-                <Card style={{
-                  backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                  border: '1px solid #00ff41',
-                  borderRadius: '8px',
-                  padding: '1.5rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-                }}>
-                  <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+                <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                  <Text weight="bold" color="brand.interactive.background" mb="lg">
                     AUTHENTICATION
                   </Text>
-                  <Stack gap={3}>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Two-Factor Authentication:</Text>
-                      <Badge 
-                        variant="success" 
-                        style={{ backgroundColor: '#00ff41', color: '#0a0a0a' }}
-                      >
+                  <Stack spacing="lg">
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Two-Factor Authentication:</Text>
+                      <Badge variant="success">
                         ENABLED
                       </Badge>
-                    </Box>
-                    <Button 
-                      variant="outline"
-                      style={{
-                        backgroundColor: 'transparent',
-                        color: '#00d4ff',
-                        border: '1px solid #00d4ff',
-                      }}
-                    >
+                    </Stack>
+                    <Button variant="outline">
                       REGENERATE BACKUP CODES
                     </Button>
-                    <Divider style={{ borderColor: '#00ff41', opacity: 0.3 }} />
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                    <Divider borderColor="brand.interactive.background" opacity="0.3" />
+                    <Grid>
+                      <Text variant="body-sm" color="text.secondary">
                         Current Password
                       </Text>
                       <Input
                         type="password"
                         placeholder="Enter current password..."
                       />
-                    </Box>
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                    </Grid>
+                    <Grid>
+                      <Text variant="body-sm" color="text.secondary">
                         New Password
                       </Text>
                       <Input
                         type="password"
                         placeholder="Enter new password..."
                       />
-                    </Box>
-                    <Button 
-                      variant="primary"
-                      style={{
-                        backgroundColor: '#ff9500',
-                        color: '#0a0a0a',
-                        border: 'none',
-                      }}
-                    >
+                    </Grid>
+                    <Button variant="outline">
                       UPDATE PASSWORD
                     </Button>
                   </Stack>
                 </Card>
 
                 {/* Access Control */}
-                <Card style={{
-                  backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                  border: '1px solid #00ff41',
-                  borderRadius: '8px',
-                  padding: '1.5rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-                }}>
-                  <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+                <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                  <Text weight="bold" color="brand.interactive.background" mb="lg">
                     ACCESS CONTROL
                   </Text>
-                  <Stack gap={3}>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Require VPN:</Text>
+                  <Stack spacing="lg">
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Require VPN:</Text>
                       <Switch defaultChecked />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>IP Whitelist:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">IP Whitelist:</Text>
                       <Switch />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Auto-logout on Idle:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Auto-logout on Idle:</Text>
                       <Switch defaultChecked />
-                    </Box>
-                    <Divider style={{ borderColor: '#00ff41', opacity: 0.3 }} />
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#ffffff', marginBottom: '0.5rem' }}>
+                    </Stack>
+                    <Divider borderColor="brand.interactive.background" opacity="0.3" />
+                    <Grid>
+                      <Text variant="body-sm" color="text.primary">
                         Last Login: {userProfile.lastLogin}
                       </Text>
-                      <Text variant="caption" style={{ color: '#888' }}>
+                      <Text variant="caption" color="text.secondary">
                         From: 192.168.1.100 (Trusted Network)
                       </Text>
-                    </Box>
-                    <Button 
-                      variant="outline"
-                      style={{
-                        backgroundColor: 'transparent',
-                        color: '#ff0055',
-                        border: '1px solid #ff0055',
-                      }}
-                    >
+                    </Grid>
+                    <Button variant="outline">
                       VIEW AUDIT LOGS
                     </Button>
                   </Stack>
                 </Card>
-              </Box>
+              </Grid>
 
               {/* API Keys Management */}
-              <Card style={{
-                backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                border: '1px solid #00ff41',
-                borderRadius: '8px',
-                padding: '1.5rem',
-                boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-              }}>
-                <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                  <Text weight="bold" style={{ color: '#00ff41' }}>
+              <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                <Stack direction="horizontal" justify="between" align="center" mb="lg">
+                  <Text weight="bold" color="brand.interactive.background">
                     API KEYS MANAGEMENT
                   </Text>
                   <Button 
                     variant="primary"
                     onClick={() => setShowApiKeyModal(true)}
-                    style={{
-                      backgroundColor: '#00ff41',
-                      color: '#0a0a0a',
-                      border: 'none',
-                    }}
                   >
                     GENERATE NEW KEY
                   </Button>
-                </Box>
-                <Stack gap={3}>
+                </Stack>
+                <Stack spacing="lg">
                   {apiKeys.map((key) => (
-                    <Box key={key.id} style={{
-                      padding: '1rem',
-                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                      borderRadius: '4px',
-                      border: `1px solid ${getStatusColor(key.status)}`,
-                    }}>
-                      <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                        <Box style={{ flex: 1 }}>
-                          <Text weight="bold" style={{ color: '#ffffff', marginBottom: '0.25rem' }}>
+                    <Grid key={key.id} p="lg" bg="surface.secondary" borderRadius="4px" border="1px solid" borderColor={getStatusColor(key.status)}>
+                      <Stack direction="horizontal" justify="between" align="start" mb="sm">
+                        <Stack spacing="xs" flex="1">
+                          <Text weight="bold" color="text.primary">
                             {key.name}
                           </Text>
-                          <Text variant="caption" style={{ color: '#00d4ff' }}>
+                          <Text variant="caption" color="text.accent">
                             {key.id}
                           </Text>
-                        </Box>
-                        <Box style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                        </Stack>
+                        <Stack direction="horizontal" spacing="sm" align="center">
                           <Badge 
-                            style={{ 
-                              backgroundColor: getStatusColor(key.status), 
-                              color: key.status === 'active' ? '#0a0a0a' : '#ffffff',
-                              fontSize: '0.75rem'
-                            }}
+                            variant={getStatusVariant(key.status)}
                           >
                             {key.status.toUpperCase()}
                           </Badge>
                           <Button 
-                            variant="outline" 
+                             
                             size="sm"
-                            style={{
-                              backgroundColor: 'transparent',
-                              color: '#ff0055',
-                              border: '1px solid #ff0055',
-                              padding: '0.25rem 0.5rem',
-                              fontSize: '0.75rem'
-                            }}
                           >
                             REVOKE
                           </Button>
-                        </Box>
-                      </Box>
-                      <Box style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                        </Stack>
+                      </Stack>
+                      <Stack direction="horizontal" spacing="sm" mb="sm">
                         {key.permissions.map((permission) => (
-                          <Tag 
+                          <Tag
                             key={permission}
-                            variant="filled" 
-                            semantic="info" 
-                            style={{ backgroundColor: '#00d4ff', color: '#0a0a0a', fontSize: '0.75rem' }}
-                          >
+                            
+                            semantic="info"
+                                                      >
                             {permission.toUpperCase()}
                           </Tag>
                         ))}
-                      </Box>
-                      <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text variant="caption" style={{ color: '#888' }}>
+                      </Stack>
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="caption" color="text.secondary">
                           Created: {key.created}
                         </Text>
-                        <Text variant="caption" style={{ color: '#888' }}>
+                        <Text variant="caption" color="text.secondary">
                           Last used: {key.lastUsed}
                         </Text>
-                      </Box>
-                    </Box>
+                      </Stack>
+                    </Grid>
                   ))}
                 </Stack>
               </Card>
@@ -636,161 +531,122 @@ export default function SettingsPage() {
 
           {/* Notifications Tab */}
           {activeTab === 'notifications' && (
-            <Stack gap={4}>
-              <Box style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '1.5rem'
-              }}>
+            <Stack spacing="xl">
+              <Grid 
+                templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+                gap="xl"
+                
+              >
                 {/* System Notifications */}
-                <Card style={{
-                  backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                  border: '1px solid #00ff41',
-                  borderRadius: '8px',
-                  padding: '1.5rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-                }}>
-                  <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+                <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                  <Text weight="bold" color="brand.interactive.background" mb="lg">
                     SYSTEM NOTIFICATIONS
                   </Text>
-                  <Stack gap={3}>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>System Alerts:</Text>
-                      <Switch 
+                  <Stack spacing="lg">
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">System Alerts:</Text>
+                      <Switch
                         checked={localNotificationSettings.systemAlerts}
                         onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, systemAlerts: e.target.checked})}
                       />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Deployment Notifications:</Text>
-                      <Switch 
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Deployment Notifications:</Text>
+                      <Switch
                         checked={localNotificationSettings.deploymentNotifications}
                         onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, deploymentNotifications: e.target.checked})}
                       />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Security Warnings:</Text>
-                      <Switch 
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Security Warnings:</Text>
+                      <Switch
                         checked={localNotificationSettings.securityWarnings}
                         onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, securityWarnings: e.target.checked})}
                       />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Performance Alerts:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Performance Alerts:</Text>
                       <Switch 
                         checked={localNotificationSettings.performanceAlerts}
                         onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, performanceAlerts: e.target.checked})}
                       />
-                    </Box>
+                    </Stack>
                   </Stack>
                 </Card>
 
                 {/* Delivery Methods */}
-                <Card style={{
-                  backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                  border: '1px solid #00ff41',
-                  borderRadius: '8px',
-                  padding: '1.5rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-                }}>
-                  <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+                <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                  <Text weight="bold" color="brand.interactive.background" mb="lg">
                     DELIVERY METHODS
                   </Text>
-                  <Stack gap={3}>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Email Notifications:</Text>
+                  <Stack spacing="lg">
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Email Notifications:</Text>
                       <Switch 
                         checked={localNotificationSettings.emailNotifications}
                         onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, emailNotifications: e.target.checked})}
                       />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Slack Integration:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Slack Integration:</Text>
                       <Switch 
                         checked={localNotificationSettings.slackIntegration}
                         onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, slackIntegration: e.target.checked})}
                       />
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#ffffff' }}>Push Notifications:</Text>
+                    </Stack>
+                    <Stack direction="horizontal" align="center" justify="between">
+                      <Text color="text.primary">Push Notifications:</Text>
                       <Switch 
                         checked={localNotificationSettings.pushNotifications}
                         onChange={(e) => setLocalNotificationSettings({...localNotificationSettings, pushNotifications: e.target.checked})}
                       />
-                    </Box>
-                    <Divider style={{ borderColor: '#00ff41', opacity: 0.3 }} />
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                    </Stack>
+                    <Divider borderColor="brand.interactive.background" opacity="0.3" />
+                    <Grid>
+                      <Text variant="body-sm" color="text.secondary">
                         Email Address
                       </Text>
                       <Input
                         value="admin@cypher.sys"
                       />
-                    </Box>
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+                    </Grid>
+                    <Grid>
+                      <Text variant="body-sm" color="text.secondary">
                         Slack Webhook URL
                       </Text>
                       <Input
                         placeholder="https://hooks.slack.com/services/..."
                         disabled={!localNotificationSettings.slackIntegration}
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          border: '1px solid #333',
-                          color: '#ffffff',
-                          opacity: localNotificationSettings.slackIntegration ? 1 : 0.5
-                        }}
+                        
                       />
-                    </Box>
+                    </Grid>
                   </Stack>
                 </Card>
-              </Box>
+              </Grid>
 
               {/* Test Notifications */}
-              <Card style={{
-                backgroundColor: 'rgba(26, 26, 30, 0.8)',
-                border: '1px solid #00ff41',
-                borderRadius: '8px',
-                padding: '1.5rem',
-                boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-              }}>
-                <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
+              <Card bg="surface.secondary" borderColor="brand.interactive.background" p="xl">
+                <Text weight="bold" color="brand.interactive.background" mb="lg">
                   TEST NOTIFICATIONS
                 </Text>
-                <Box style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                  <Button 
-                    variant="outline"
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: '#00d4ff',
-                      border: '1px solid #00d4ff',
-                    }}
+                <Stack direction="horizontal" spacing="lg">
+                  <Button
+                    
                   >
                     SEND TEST EMAIL
                   </Button>
-                  <Button 
-                    variant="outline"
+                  <Button
+                    
                     disabled={!localNotificationSettings.slackIntegration}
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: '#00d4ff',
-                      border: '1px solid #00d4ff',
-                      opacity: localNotificationSettings.slackIntegration ? 1 : 0.5
-                    }}
                   >
                     SEND TEST SLACK MESSAGE
                   </Button>
-                  <Button 
-                    variant="outline"
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: '#00d4ff',
-                      border: '1px solid #00d4ff',
-                    }}
+                  <Button
+                    
                   >
                     TRIGGER PUSH NOTIFICATION
                   </Button>
-                </Box>
+                </Stack>
               </Card>
             </Stack>
           )}
@@ -806,76 +662,50 @@ export default function SettingsPage() {
       >
         <Stack gap={3}>
           <Box>
-            <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+            <Text variant="body-sm" color="text.secondary" mb="sm">
               Key Name
             </Text>
             <Input
               placeholder="Enter a descriptive name..."
-              style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                border: '1px solid #333',
-                color: '#ffffff'
-              }}
+              
             />
           </Box>
           <Box>
-            <Text variant="body-sm" style={{ color: '#888', marginBottom: '0.5rem' }}>
+            <Text variant="body-sm" color="text.secondary" mb="sm">
               Permissions
             </Text>
-            <Stack gap={2}>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Checkbox id="perm-read" style={{ accentColor: '#00ff41' }} />
-                <Text style={{ color: '#ffffff' }}>Read Access</Text>
-              </Box>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Checkbox id="perm-write" style={{ accentColor: '#00ff41' }} />
-                <Text style={{ color: '#ffffff' }}>Write Access</Text>
-              </Box>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Checkbox id="perm-deploy" style={{ accentColor: '#00ff41' }} />
-                <Text style={{ color: '#ffffff' }}>Deploy Access</Text>
-              </Box>
+            <Stack spacing="sm">
+              <Stack direction="horizontal" align="center" spacing="sm">
+                <Checkbox id="perm-read" />
+                <Text color="text.primary">Read Access</Text>
+              </Stack>
+              <Stack direction="horizontal" align="center" spacing="sm">
+                <Checkbox id="perm-write" />
+                <Text color="text.primary">Write Access</Text>
+              </Stack>
+              <Stack direction="horizontal" align="center" spacing="sm">
+                <Checkbox id="perm-deploy" />
+                <Text color="text.primary">Deploy Access</Text>
+              </Stack>
             </Stack>
           </Box>
-          <Box style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
-            <Button 
-              variant="outline"
+          <Stack direction="horizontal" spacing="lg" justify="end" mt="lg">
+            <Button
+              
               onClick={() => setShowApiKeyModal(false)}
-              style={{
-                backgroundColor: 'transparent',
-                color: '#666',
-                border: '1px solid #666',
-              }}
             >
               CANCEL
             </Button>
-            <Button 
+            <Button
               variant="primary"
               onClick={generateApiKey}
-              style={{
-                backgroundColor: '#00ff41',
-                color: '#0a0a0a',
-                border: 'none',
-              }}
             >
               GENERATE KEY
             </Button>
-          </Box>
+          </Stack>
         </Stack>
       </Modal>
 
-      <style jsx>{`
-        @keyframes blink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
-        }
-        
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.02); }
-          100% { transform: scale(1); }
-        }
-      `}</style>
     </Box>
   );
 }

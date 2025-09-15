@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Box, Text, Card, Stack, Badge, Button, Input, Tag, Divider } from '@mond-design-system/theme';
+import { Box, Text, Card, Stack, Badge, Button, Input } from '@mond-design-system/theme';
 
 interface FileNode {
   id: string;
@@ -100,15 +100,6 @@ export default function Projects() {
     }));
   };
 
-  const getStatusColor = (status: FileNode['status']) => {
-    switch (status) {
-      case 'modified': return '#ff9500';
-      case 'staged': return '#00ff41';
-      case 'committed': return '#00d4ff';
-      case 'conflict': return '#ff0055';
-      default: return '#666';
-    }
-  };
 
   const getFileIcon = (node: FileNode) => {
     if (node.type === 'folder') {
@@ -128,18 +119,16 @@ export default function Projects() {
   const renderFileTree = (nodes: FileNode[], depth = 0) => {
     return nodes.map(node => (
       <Box key={node.id}>
-        <Box
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0.375rem 0.75rem',
-            paddingLeft: `${0.75 + depth * 1.5}rem`,
-            cursor: 'pointer',
-            backgroundColor: selectedFile?.id === node.id ? 'rgba(0, 255, 65, 0.1)' : 'transparent',
-            borderLeft: selectedFile?.id === node.id ? '3px solid #00ff41' : '3px solid transparent',
-            transition: 'all 150ms ease',
-            fontSize: '0.875rem',
-          }}
+        <Stack
+          direction="horizontal"
+          align="center"
+          p="sm"
+          pl={`${0.75 + depth * 1.5}rem`}
+          cursor="pointer"
+          bg={selectedFile?.id === node.id ? 'surface.secondary' : 'transparent'}
+          borderLeft={selectedFile?.id === node.id ? '3px solid' : '3px solid transparent'}
+          borderColor={selectedFile?.id === node.id ? 'brand.interactive.background' : 'transparent'}
+          fontSize="sm"
           onClick={() => {
             if (node.type === 'folder') {
               toggleFolder(node.id);
@@ -148,384 +137,303 @@ export default function Projects() {
             }
           }}
         >
-          <Text style={{ marginRight: '0.5rem' }}>
+          <Text mr="sm">
             {getFileIcon(node)}
           </Text>
-          <Text style={{ color: '#ffffff', flex: 1 }}>
+          <Text color="text.primary" flex="1">
             {node.name}
           </Text>
           {node.size && (
-            <Text variant="caption" style={{ color: '#888', marginRight: '0.5rem' }}>
+            <Text variant="caption" color="text.secondary" mr="sm">
               {node.size}
             </Text>
           )}
           <Box
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: getStatusColor(node.status),
-            }}
+            width="8px"
+            height="8px"
+            borderRadius="50%"
+            bg="text.secondary"
           />
-        </Box>
+        </Stack>
         {node.isExpanded && node.children && renderFileTree(node.children, depth + 1)}
       </Box>
     ));
   };
 
   return (
-    <Box 
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0a0a0b 0%, #1a1a1e 100%)',
-        padding: '2rem',
-      }}
+    <Box
+      bg="surface.background"
+      p="2xl"
+      maxWidth="1280px"
+      mx="auto"
     >
-      <Stack gap={4}>
+      <Stack gap="xl">
         {/* Header */}
-        <Box style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-          <Box>
+        <Stack direction="horizontal" justify="between" align="center">
+          <Stack gap="xs">
             <Text 
               variant="body-lg" 
               weight="bold" 
-              style={{ 
-                color: '#00ff41',
-                fontFamily: 'monospace',
-                textShadow: '0 0 10px rgba(0, 255, 65, 0.5)',
-                fontSize: '1.5rem'
-              }}
+              color="brand.interactive.background"
+              fontFamily="mono"
             >
               PROJECT REPOSITORY
             </Text>
-            <Text variant="body-sm" style={{ color: '#00d4ff', marginTop: '0.25rem' }}>
+            <Text variant="body-sm" color="text.accent">
               Source code management • Version control • File system access
             </Text>
-          </Box>
-          <Box style={{ display: 'flex', gap: '1rem' }}>
-            <Button 
-              variant="outline"
-              style={{
-                backgroundColor: 'transparent',
-                color: '#00d4ff',
-                border: '1px solid #00d4ff',
-              }}
-            >
+          </Stack>
+          <Stack direction="horizontal" gap="lg">
+            <Button variant="outline">
               CLONE REPO
             </Button>
-            <Button 
-              style={{
-                backgroundColor: '#00ff41',
-                color: '#0a0a0a',
-                border: 'none',
-              }}
-            >
+            <Button variant="primary">
               COMMIT CHANGES
             </Button>
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
 
         {/* Project Selector */}
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '1rem',
-        }}>
+        <Box 
+          display="grid"
+          gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+          gap="lg"
+        >
           {mockProjects.map((project) => (
             <Card 
               key={project.id}
-              style={{
-                backgroundColor: selectedProject.id === project.id 
-                  ? 'rgba(0, 255, 65, 0.1)' 
-                  : 'rgba(26, 26, 30, 0.8)',
-                border: selectedProject.id === project.id 
-                  ? '1px solid #00ff41' 
-                  : '1px solid #333',
-                borderRadius: '8px',
-                padding: '1rem',
-                cursor: 'pointer',
-                transition: 'all 150ms ease',
-              }}
+              bg={selectedProject.id === project.id ? 'surface.secondary' : 'surface.secondary'}
+              borderColor={selectedProject.id === project.id ? 'brand.interactive.background' : 'border.default'}
+              p="lg"
+              cursor="pointer"
               onClick={() => setSelectedProject(project)}
             >
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
-                <Text weight="bold" style={{ color: '#ffffff', fontFamily: 'monospace' }}>
+              <Stack direction="horizontal" justify="between" align="start" mb="sm">
+                <Text weight="bold" color="text.primary" fontFamily="mono">
                   {project.name}
                 </Text>
                 <Badge 
-                  style={{
-                    backgroundColor: project.status === 'active' ? '#00ff41' :
-                                    project.status === 'critical' ? '#ff0055' : '#666',
-                    color: project.status === 'archived' ? '#ffffff' : '#0a0a0a',
-                  }}
+                  variant={project.status === 'active' ? 'success' : 
+                          project.status === 'critical' ? 'error' : 'default'}
                 >
                   {project.status.toUpperCase()}
                 </Badge>
-              </Box>
-              <Text variant="body-sm" style={{ color: '#888', marginBottom: '1rem' }}>
+              </Stack>
+              <Text variant="body-sm" color="text.secondary" mb="lg">
                 {project.description}
               </Text>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Box>
-                  <Text variant="caption" style={{ color: '#00d4ff' }}>
+              <Stack direction="horizontal" justify="between" align="center">
+                <Stack direction="horizontal" gap="sm">
+                  <Text variant="caption" color="text.accent">
                     {project.branch}
                   </Text>
-                  <Text variant="caption" style={{ color: '#888', marginLeft: '0.5rem' }}>
+                  <Text variant="caption" color="text.secondary">
                     • {project.contributors} contributors
                   </Text>
-                </Box>
-                <Text variant="caption" style={{ color: '#888' }}>
+                </Stack>
+                <Text variant="caption" color="text.secondary">
                   {project.lastCommit}
                 </Text>
-              </Box>
+              </Stack>
             </Card>
           ))}
         </Box>
 
         {/* Main Content */}
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 2fr',
-          gap: '2rem',
-          height: '600px',
-        }}>
+        <Box 
+          display="grid"
+          gridTemplateColumns="1fr 2fr"
+          gap="2xl"
+          height="600px"
+        >
           {/* File Tree */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: 0,
-            overflow: 'hidden',
-          }}>
+          <Card bg="surface.secondary" borderColor="brand.interactive.background" p="none" overflow="hidden">
             {/* File Tree Header */}
-            <Box style={{
-              padding: '1rem 1.5rem',
-              borderBottom: '1px solid #00ff41',
-              backgroundColor: 'rgba(0, 255, 65, 0.05)',
-            }}>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <Text weight="bold" style={{ color: '#00ff41' }}>
+            <Box p="xl" borderBottom="1px solid" borderColor="brand.interactive.background" bg="surface.secondary">
+              <Stack direction="horizontal" justify="between" align="center" mb="lg">
+                <Text weight="bold" color="brand.interactive.background">
                   FILE EXPLORER
                 </Text>
-                <Text variant="caption" style={{ color: '#888', fontFamily: 'monospace' }}>
+                <Text variant="caption" color="text.secondary" fontFamily="mono">
                   {selectedProject.name}
                 </Text>
-              </Box>
+              </Stack>
               <Input
                 placeholder="Search files..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  border: '1px solid #333',
-                  color: '#ffffff',
-                  fontSize: '0.875rem',
-                }}
+                
               />
             </Box>
 
             {/* File Tree Content */}
-            <Box style={{
-              height: '450px',
-              overflowY: 'auto',
-              fontFamily: 'monospace',
-            }}>
+            <Box 
+              height="450px"
+              overflowY="auto"
+              fontFamily="mono"
+            >
               {renderFileTree(selectedProject.files)}
             </Box>
           </Card>
 
           {/* File Content */}
-          <Card style={{
-            backgroundColor: 'rgba(10, 10, 11, 0.95)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: 0,
-            overflow: 'hidden',
-          }}>
+          <Card bg="surface.overlay" borderColor="brand.interactive.background" p="none" overflow="hidden">
             {/* File Header */}
-            <Box style={{
-              padding: '1rem 1.5rem',
-              borderBottom: '1px solid #00ff41',
-              backgroundColor: 'rgba(0, 255, 65, 0.05)',
-            }}>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Box>
-                  <Text weight="bold" style={{ color: '#00ff41' }}>
+            <Box p="xl" borderBottom="1px solid" borderColor="brand.interactive.background" bg="surface.secondary">
+              <Stack direction="horizontal" justify="between" align="center">
+                <Stack gap="sm">
+                  <Text weight="bold" color="brand.interactive.background">
                     {selectedFile ? selectedFile.name : 'No file selected'}
                   </Text>
                   {selectedFile && (
-                    <Box style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                      <Text variant="caption" style={{ color: '#888' }}>
+                    <Stack direction="horizontal" gap="lg">
+                      <Text variant="caption" color="text.secondary">
                         {selectedFile.size} • Modified {selectedFile.modified}
                       </Text>
                       <Badge 
-                        style={{
-                          backgroundColor: getStatusColor(selectedFile.status),
-                          color: selectedFile.status === 'conflict' ? '#ffffff' : '#0a0a0a',
-                          fontSize: '0.75rem',
-                        }}
+                        variant={selectedFile.status === 'conflict' ? 'error' : 
+                                selectedFile.status === 'staged' ? 'success' :
+                                selectedFile.status === 'modified' ? 'warning' : 'default'}
                       >
                         {selectedFile.status.toUpperCase()}
                       </Badge>
-                    </Box>
+                    </Stack>
                   )}
-                </Box>
+                </Stack>
                 {selectedFile && (
-                  <Box style={{ display: 'flex', gap: '0.5rem' }}>
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      style={{
-                        backgroundColor: 'transparent',
-                        color: '#00d4ff',
-                        border: '1px solid #00d4ff',
-                        fontSize: '0.75rem'
-                      }}
-                    >
+                  <Stack direction="horizontal" gap="sm">
+                    <Button variant="outline">
                       EDIT
                     </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      style={{
-                        backgroundColor: 'transparent',
-                        color: '#00ff41',
-                        border: '1px solid #00ff41',
-                        fontSize: '0.75rem'
-                      }}
-                    >
+                    <Button variant="outline">
                       STAGE
                     </Button>
-                  </Box>
+                  </Stack>
                 )}
-              </Box>
+              </Stack>
             </Box>
 
             {/* File Content */}
-            <Box style={{
-              height: '450px',
-              padding: '1.5rem',
-              fontFamily: 'monospace',
-              fontSize: '0.875rem',
-              lineHeight: '1.5',
-              overflowY: 'auto',
-              backgroundColor: '#0a0a0b',
-            }}>
+            <Box 
+              height="450px"
+              p="xl"
+              fontFamily="mono"
+              fontSize="sm"
+              lineHeight="1.5"
+              overflowY="auto"
+              bg="surface.background"
+            >
               {selectedFile ? (
                 <Box>
                   {selectedFile.name.endsWith('.ts') ? (
                     <>
-                      <Text style={{ color: '#ff0055' }}>import</Text>
-                      <Text style={{ color: '#ffffff' }}> {"{"} useState, useEffect {"}"} </Text>
-                      <Text style={{ color: '#ff0055' }}>from</Text>
-                      <Text style={{ color: '#00ff41' }}> 'react'</Text>
-                      <Text style={{ color: '#ffffff' }}>;</Text>
+                      <Text color="text.error">import</Text>
+                      <Text color="text.primary"> {"{"} useState, useEffect {"}"} </Text>
+                      <Text color="text.error">from</Text>
+                      <Text color="brand.interactive.background"> 'react'</Text>
+                      <Text color="text.primary">;</Text>
                       <br /><br />
-                      <Text style={{ color: '#ff0055' }}>interface</Text>
-                      <Text style={{ color: '#00d4ff' }}> NeuralConnection </Text>
-                      <Text style={{ color: '#ffffff' }}>{"{"}</Text>
+                      <Text color="text.error">interface</Text>
+                      <Text color="text.accent"> NeuralConnection </Text>
+                      <Text color="text.primary">{"{"}</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>  id: </Text>
-                      <Text style={{ color: '#ff0055' }}>string</Text>
-                      <Text style={{ color: '#ffffff' }}>;</Text>
+                      <Text color="text.primary">  id: </Text>
+                      <Text color="text.error">string</Text>
+                      <Text color="text.primary">;</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>  status: </Text>
-                      <Text style={{ color: '#00ff41' }}>'connected'</Text>
-                      <Text style={{ color: '#ffffff' }}> | </Text>
-                      <Text style={{ color: '#00ff41' }}>'disconnected'</Text>
-                      <Text style={{ color: '#ffffff' }}>;</Text>
+                      <Text color="text.primary">  status: </Text>
+                      <Text color="brand.interactive.background">'connected'</Text>
+                      <Text color="text.primary"> | </Text>
+                      <Text color="brand.interactive.background">'disconnected'</Text>
+                      <Text color="text.primary">;</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>{"}"}</Text>
+                      <Text color="text.primary">{"}"}</Text>
                       <br /><br />
-                      <Text style={{ color: '#ff0055' }}>export</Text>
-                      <Text style={{ color: '#ffffff' }}> </Text>
-                      <Text style={{ color: '#ff0055' }}>function</Text>
-                      <Text style={{ color: '#00d4ff' }}> initializeNeural</Text>
-                      <Text style={{ color: '#ffffff' }}>(</Text>
-                      <Text style={{ color: '#ff9500' }}>config</Text>
-                      <Text style={{ color: '#ffffff' }}>: </Text>
-                      <Text style={{ color: '#00d4ff' }}>NeuralConfig</Text>
-                      <Text style={{ color: '#ffffff' }}>) {"{"}</Text>
+                      <Text color="text.error">export</Text>
+                      <Text color="text.primary"> </Text>
+                      <Text color="text.error">function</Text>
+                      <Text color="text.accent"> initializeNeural</Text>
+                      <Text color="text.primary">(</Text>
+                      <Text color="text.warning">config</Text>
+                      <Text color="text.primary">: </Text>
+                      <Text color="text.accent">NeuralConfig</Text>
+                      <Text color="text.primary">) {"{"}</Text>
                       <br />
-                      <Text style={{ color: '#888' }}>  // Neural interface initialization</Text>
+                      <Text color="text.secondary">  {`// Neural interface initialization`}</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>  console.log(</Text>
-                      <Text style={{ color: '#00ff41' }}>'Initializing neural connection...'</Text>
-                      <Text style={{ color: '#ffffff' }}>);</Text>
+                      <Text color="text.primary">  console.log(</Text>
+                      <Text color="brand.interactive.background">'Initializing neural connection...'</Text>
+                      <Text color="text.primary">);</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>{"}"}</Text>
+                      <Text color="text.primary">{"}"}</Text>
                     </>
                   ) : selectedFile.name.endsWith('.json') ? (
                     <>
-                      <Text style={{ color: '#ffffff' }}>{"{"}</Text>
+                      <Text color="text.primary">{"{"}</Text>
                       <br />
-                      <Text style={{ color: '#00d4ff' }}>  "name"</Text>
-                      <Text style={{ color: '#ffffff' }}>: </Text>
-                      <Text style={{ color: '#00ff41' }}>"neural-interface"</Text>
-                      <Text style={{ color: '#ffffff' }}>,</Text>
+                      <Text color="text.accent">  "name"</Text>
+                      <Text color="text.primary">: </Text>
+                      <Text color="brand.interactive.background">"neural-interface"</Text>
+                      <Text color="text.primary">,</Text>
                       <br />
-                      <Text style={{ color: '#00d4ff' }}>  "version"</Text>
-                      <Text style={{ color: '#ffffff' }}>: </Text>
-                      <Text style={{ color: '#00ff41' }}>"2.1.7"</Text>
-                      <Text style={{ color: '#ffffff' }}>,</Text>
+                      <Text color="text.accent">  "version"</Text>
+                      <Text color="text.primary">: </Text>
+                      <Text color="brand.interactive.background">"2.1.7"</Text>
+                      <Text color="text.primary">,</Text>
                       <br />
-                      <Text style={{ color: '#00d4ff' }}>  "neural_config"</Text>
-                      <Text style={{ color: '#ffffff' }}>: {"{"}</Text>
+                      <Text color="text.accent">  "neural_config"</Text>
+                      <Text color="text.primary">: {"{"}</Text>
                       <br />
-                      <Text style={{ color: '#00d4ff' }}>    "security_level"</Text>
-                      <Text style={{ color: '#ffffff' }}>: </Text>
-                      <Text style={{ color: '#ff9500' }}>9</Text>
-                      <Text style={{ color: '#ffffff' }}>,</Text>
+                      <Text color="text.accent">    "security_level"</Text>
+                      <Text color="text.primary">: </Text>
+                      <Text color="text.warning">9</Text>
+                      <Text color="text.primary">,</Text>
                       <br />
-                      <Text style={{ color: '#00d4ff' }}>    "encryption"</Text>
-                      <Text style={{ color: '#ffffff' }}>: </Text>
-                      <Text style={{ color: '#00ff41' }}>"quantum"</Text>
+                      <Text color="text.accent">    "encryption"</Text>
+                      <Text color="text.primary">: </Text>
+                      <Text color="brand.interactive.background">"quantum"</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>  {"}"}</Text>
+                      <Text color="text.primary">  {"}"}</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>{"}"}</Text>
+                      <Text color="text.primary">{"}"}</Text>
                     </>
                   ) : (
                     <>
-                      <Text style={{ color: '#00ff41' }}># Neural Interface</Text>
+                      <Text color="brand.interactive.background"># Neural Interface</Text>
                       <br /><br />
-                      <Text style={{ color: '#ffffff' }}>Advanced neural network interface for cyberpunk system control.</Text>
+                      <Text color="text.primary">Advanced neural network interface for cyberpunk system control.</Text>
                       <br /><br />
-                      <Text style={{ color: '#00d4ff' }}>## Features</Text>
+                      <Text color="text.accent">## Features</Text>
                       <br /><br />
-                      <Text style={{ color: '#ffffff' }}>- Real-time neural connection monitoring</Text>
+                      <Text color="text.primary">- Real-time neural connection monitoring</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>- Quantum encryption protocols</Text>
+                      <Text color="text.primary">- Quantum encryption protocols</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>- Matrix integration capabilities</Text>
+                      <Text color="text.primary">- Matrix integration capabilities</Text>
                       <br />
-                      <Text style={{ color: '#ffffff' }}>- AI-powered threat detection</Text>
+                      <Text color="text.primary">- AI-powered threat detection</Text>
                     </>
                   )}
                 </Box>
               ) : (
-                <Box style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center',
-                  height: '100%',
-                  textAlign: 'center'
-                }}>
-                  <Box>
-                    <Text style={{ color: '#888', fontSize: '3rem', marginBottom: '1rem' }}>
+                <Stack 
+                  align="center" 
+                  justify="center"
+                  height="100%"
+                  textAlign="center"
+                >
+                  <Stack gap="lg">
+                    <Text color="text.secondary" fontSize="3rem">
                       📄
                     </Text>
-                    <Text variant="body-lg" style={{ color: '#888' }}>
+                    <Text variant="body-lg" color="text.secondary">
                       Select a file to view its contents
                     </Text>
-                    <Text variant="body-sm" style={{ color: '#666', marginTop: '0.5rem' }}>
+                    <Text variant="body-sm" color="text.tertiary">
                       Click on any file in the explorer to open it
                     </Text>
-                  </Box>
-                </Box>
+                  </Stack>
+                </Stack>
               )}
             </Box>
           </Card>

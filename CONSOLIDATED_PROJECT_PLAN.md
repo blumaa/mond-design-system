@@ -37,12 +37,14 @@
 <Badge variant="success">  // Gets CYPHER green automatically! 
 ```
 
-### **🔮 CYPHER App Architecture** ⏳ **95% COMPLETE** 
-- ✅ **Next.js 14 Setup**: Full app structure with TypeScript
+### **🔮 CYPHER App Architecture** ⚠️ **CRITICAL ISSUES IDENTIFIED**
+- ✅ **Next.js 15 Setup**: Full app structure with TypeScript
 - ✅ **Brand Integration**: CYPHER theme working across all pages
-- ✅ **Core Pages**: Monitor dashboard with cyberpunk styling
+- ✅ **Core Pages**: All 7 pages implemented with cyberpunk styling
 - ✅ **Component Showcase**: Design system components in cyberpunk context
-- ❌ **Semantic Migration**: Still has hardcoded styles that need token migration
+- ❌ **Performance Issues**: Excessive 'use client' causing slow page loads
+- ❌ **Architecture Problems**: SSR disabled, defeating Next.js purpose
+- ❌ **Layout Issues**: Poor spacing/styling from removed style props
 
 ---
 
@@ -63,11 +65,80 @@
 - [x] **Three-Brand Testing**: Validated Badge, Modal, and all core components across MOND/CYPHER/FLUX
 - [x] **Brand Switching Validation**: All 559 snapshots tested across 3 brands in Chromatic
 
-#### **Phase 3.3: Developer Experience & Documentation** ⏳ **IN PROGRESS**  
+#### **Phase 3.3: Developer Experience & Documentation** ⏳ **IN PROGRESS**
 - [x] **Component Usage Examples**: Storybook showcases all components across 3 brands (559 stories)
 - [ ] **Brand Theme Creation Guide**: Documentation for adding new brands
-- [ ] **Error Handling**: Clear messages for missing tokens or invalid brand configurations  
+- [ ] **Error Handling**: Clear messages for missing tokens or invalid brand configurations
 - [x] **Performance Optimization**: Token resolution optimized (0.0003ms average - exceeds requirements)
+
+#### **Phase 3.4: CYPHER App Comprehensive Redesign** 🚨 **CRITICAL PRIORITY**
+
+**Problem**: The CYPHER app has critical architectural and performance issues that need immediate attention:
+- Every component uses `'use client'` defeating Next.js SSR benefits
+- Poor layout/styling after style props removal
+- Slow page load times from forced client-side rendering
+
+**Goal**: Transform CYPHER app into a properly architected Next.js application with optimal performance and clean design system usage.
+
+##### **Phase 1: Fix Next.js Architecture (Performance Critical)**
+- [ ] **Remove unnecessary 'use client' directives**
+  - Keep only on components that actually use client features (useState, useEffect, event handlers)
+  - Layout should be server-side rendered
+  - Pages with only static content should be server-side rendered
+  - Only interactive components need client-side rendering
+
+- [ ] **Optimize component architecture**
+  - Split pages into server components (layout/content) and client components (interactive parts)
+  - Move state management to leaf components where needed
+  - Enable proper SSR for faster initial page loads
+
+##### **Phase 2: Redesign Layout & Styling System**
+- [ ] **Replace hardcoded styling with semantic design tokens**
+  - Use semantic spacing tokens (xs, sm, md, lg, xl, 2xl) instead of hardcoded values
+  - Replace all color values with semantic tokens (text.primary, surface.background, etc.)
+  - Use proper typography variants (body-lg, body-sm, caption) instead of custom fontSize
+
+- [ ] **Implement proper layout composition**
+  - Replace excessive Box usage with semantic Stack components for linear layouts
+  - Use Grid components for complex multi-column layouts
+  - Use Card components properly for content containers
+  - Follow MDS layout patterns and spacing conventions
+
+- [ ] **Redesign each page with proper responsive layout**
+  - Dashboard: Grid-based metrics layout with Cards
+  - Team: Responsive grid with proper filtering UI
+  - Projects: Proper file tree layout with split-pane design
+  - Terminal: Console-style layout with proper spacing
+  - Settings: Form-based layout with semantic grouping
+  - Analytics: Chart/metrics dashboard layout
+  - Monitor: Real-time dashboard layout
+
+##### **Phase 3: Component Optimization**
+- [ ] **Standardize component patterns**
+  - Consistent spacing using semantic tokens throughout
+  - Proper use of Stack for consistent element spacing
+  - Card components for content grouping with elevation
+  - Semantic Text variants for typography hierarchy
+
+- [ ] **Performance optimizations**
+  - Remove unnecessary re-renders through proper component splitting
+  - Optimize Matrix Rain background component performance
+  - Proper loading states and transitions
+
+##### **Phase 4: Visual Polish**
+- [ ] **Enhance cyberpunk aesthetic**
+  - Proper use of brand theme colors and semantic tokens
+  - Consistent spacing and typography scale
+  - Improved visual hierarchy using MDS design patterns
+  - Enhanced responsive design for all screen sizes
+
+**Expected Outcomes**:
+- **Major performance improvement** from proper SSR usage
+- **Consistent visual design** following MDS patterns
+- **Faster page transitions** from optimized architecture
+- **Better responsive behavior** across devices
+- **Maintainable codebase** following design system conventions
+- **No more style/className props** - everything through semantic component props
 
 ---
 
@@ -146,13 +217,6 @@ Create unified portfolio presentation demonstrating design system versatility ac
 
 ## 🔧 **Cleanup Tasks** ⏳ **LOW PRIORITY**
 
-### **CYPHER App Semantic Migration** 
-Complete migration from hardcoded styles to semantic tokens in CYPHER app:
-
-- [ ] **Spacing Migration**: Replace hardcoded margins/padding with semantic spacing tokens
-- [ ] **Visual Effects**: Create semantic tokens for cyberpunk glows and shadows  
-- [ ] **Chart Components**: Develop semantic patterns for data visualization
-- [ ] **Component Overrides**: Remove remaining hardcoded font properties
 
 ### **Plan Maintenance**
 - [ ] **Archive Completed Plans**: Move `brand_agnostic_architecture_plan.md` and `cypher_app_plan.md` to `/docs/completed/`
@@ -186,17 +250,17 @@ Complete migration from hardcoded styles to semantic tokens in CYPHER app:
 ## 📅 **Timeline & Next Actions**
 
 ### **Immediate Actions (Next 2 weeks)**
-1. **Complete Phase 3.1: Cross-Brand Component Testing** - Document and test all components across brands
-2. **Create FLUX Brand Theme** - Third brand for comprehensive multi-brand validation
-3. **Validate Brand Architecture** - Ensure system works flawlessly with three brands
+1. **🚨 CYPHER App Comprehensive Redesign (Phase 3.4)** - Fix critical performance and architectural issues
+2. **Complete Developer Experience & Documentation (Phase 3.3)** - Finish brand creation guides and error handling
+3. **Validate CYPHER App Performance** - Ensure SSR working and fast page loads
 
 ### **Critical Path**
 ```
-Phase 3: Brand Architecture Testing (2 weeks) → Phase 4: FLUX App (2 weeks) → Portfolio Integration (1 week)
+Phase 3.4: CYPHER App Redesign (1 week) → Phase 4: FLUX App (2 weeks) → Portfolio Integration (1 week)
 ```
 
 ### **Success Milestone**
-**Goal**: Have working FLUX app with portfolio showcase deployed within 4 weeks, demonstrating complete multi-brand design system mastery.
+**Goal**: Have properly architected CYPHER app with optimal performance (1 week), then working FLUX app with portfolio showcase deployed within 4 weeks total, demonstrating complete multi-brand design system mastery.
 
 ---
 
