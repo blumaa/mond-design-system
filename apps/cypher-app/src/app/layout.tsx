@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode } from "react";
 import { JetBrains_Mono } from "next/font/google";
 import { ThemeProvider, Box } from "@mond-design-system/theme";
@@ -9,10 +11,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: 'CYPHER.SYS - Neural Network Interface',
-  description: 'Secure quantum-encrypted neural network command center',
-};
+// Note: metadata moved to separate metadata.ts file for client component compatibility
 
 export default function RootLayout({
   children,
