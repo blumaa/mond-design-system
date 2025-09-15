@@ -3,49 +3,45 @@
 ## 🎯 Purpose
 This document provides essential guidelines for using design system components consistently throughout the codebase. Following these guidelines ensures visual consistency, accessibility compliance, and maintainability.
 
-## ⚠️ Critical Rule: Always Use Design System Components
+## ⚠️ Critical Rules: Semantic Components Only
 
-**NEVER use native HTML form elements with inline styling. ALWAYS use the design system components.**
+**NEVER use native HTML elements, style props, or className. ALWAYS use design system components with semantic props.**
+
+### 🚫 Forbidden Patterns
+1. **Native HTML elements** with styling
+2. **`style` props** on any component  
+3. **`className` props** on design system components
+4. **Hardcoded values** instead of semantic tokens
 
 ### ❌ Incorrect Usage
 
 ```tsx
-// DON'T DO THIS
+// DON'T DO THIS - Native elements with style props
 <input type="text" placeholder="Enter name" style={{ 
   width: '100%',
   padding: '8px 12px',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '14px'
+  border: '1px solid #d1d5db'
 }} />
 
-<select style={{ 
-  minWidth: '140px',
-  padding: spacing[2],
-  border: `1px solid ${getColor('border.primary')}`,
-  borderRadius: radii.md,
-  backgroundColor: getColor('surface.primary')
-}}>
-  <option value="option1">Option 1</option>
-  <option value="option2">Option 2</option>
-</select>
+// DON'T DO THIS - Design system components with style props  
+<Box style={{ backgroundColor: '#000', padding: '16px' }}>
+  Content
+</Box>
 
-<button style={{ 
-  padding: '8px 16px', 
-  border: 'none', 
-  borderRadius: '4px', 
-  backgroundColor: '#007bff', 
-  color: 'white' 
-}}>
-  Click me
-</button>
+// DON'T DO THIS - Design system components with className
+<Box className="custom-styles">
+  Content  
+</Box>
+
+// DON'T DO THIS - Hardcoded colors
+<Text color="#00ff41">Matrix Green Text</Text>
 ```
 
-### ✅ Correct Usage
+### ✅ Correct Usage - Semantic Props Only
 
 ```tsx
-// DO THIS INSTEAD
-import { Input, Select, Button } from '@mond-design-system/theme';
+// DO THIS INSTEAD - Only semantic props
+import { Input, Select, Button, Box, Text } from '@mond-design-system/theme';
 
 <Input 
   type="text" 
@@ -59,9 +55,16 @@ import { Input, Select, Button } from '@mond-design-system/theme';
   ]}
 />
 
-<Button>
+<Button variant="primary">
   Click me
 </Button>
+
+// Spacing and layout with semantic props
+<Box bg="surface.primary" p="lg" m="md">
+  <Text variant="heading" color="text.primary">
+    Matrix Green Text
+  </Text>
+</Box>
 ```
 
 ## 📋 Component Conversion Reference

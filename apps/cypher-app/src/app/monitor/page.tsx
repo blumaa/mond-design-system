@@ -1,373 +1,273 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Card, Stack, Badge, Button, Tag, Divider, Spinner, Switch, Grid } from '@mond-design-system/theme';
+import { Box, Text, Card, Stack, Badge, Heading, Divider, Grid } from '@mond-design-system/theme';
+import { MatrixRain } from '../../components/MatrixRain';
 
-interface MetricData {
+interface SystemMetric {
   id: string;
-  label: string;
+  name: string;
   value: number;
   unit: string;
   status: 'normal' | 'warning' | 'critical';
   history: number[];
 }
 
+interface NetworkConnection {
+  id: string;
+  source: string;
+  destination: string;
+  protocol: string;
+  status: 'active' | 'idle' | 'blocked';
+  bandwidth: number;
+}
+
 interface SystemAlert {
   id: string;
   timestamp: string;
-  level: 'info' | 'warning' | 'error' | 'critical';
-  system: string;
+  level: 'info' | 'warning' | 'critical';
   message: string;
-  acknowledged: boolean;
+  source: string;
 }
 
 export default function Monitor() {
-  const [currentTime, setCurrentTime] = useState('');
-  const [isLiveMode, setIsLiveMode] = useState(true);
+  const [metrics, setMetrics] = useState<SystemMetric[]>([
+    { id: '1', name: 'CPU Usage', value: 73.2, unit: '%', status: 'warning', history: [65, 67, 70, 72, 73] },
+    { id: '2', name: 'Memory Usage', value: 45.8, unit: '%', status: 'normal', history: [42, 44, 45, 46, 45] },
+    { id: '3', name: 'Network I/O', value: 892.1, unit: 'KB/s', status: 'normal', history: [800, 850, 870, 890, 892] },
+    { id: '4', name: 'Disk Usage', value: 67.4, unit: '%', status: 'normal', history: [65, 66, 67, 67, 67] },
+    { id: '5', name: 'Temperature', value: 68.2, unit: '°C', status: 'normal', history: [66, 67, 68, 69, 68] },
+    { id: '6', name: 'Power Draw', value: 245.7, unit: 'W', status: 'normal', history: [240, 242, 244, 246, 245] }
+  ]);
+
+  const [connections, setConnections] = useState<NetworkConnection[]>([
+    { id: '1', source: 'Node-7', destination: 'neural.io', protocol: 'HTTPS', status: 'active', bandwidth: 156.7 },
+    { id: '2', source: 'Terminal-3', destination: 'matrix.net', protocol: 'SSH', status: 'active', bandwidth: 23.4 },
+    { id: '3', source: 'Core-9', destination: 'cypher.sys', protocol: 'TCP', status: 'idle', bandwidth: 0 },
+    { id: '4', source: 'Gateway-1', destination: 'unknown', protocol: 'UDP', status: 'blocked', bandwidth: 0 }
+  ]);
+
   const [alerts, setAlerts] = useState<SystemAlert[]>([
-    {
-      id: '1',
-      timestamp: '23:47:32',
-      level: 'critical',
-      system: 'SECURITY',
-      message: 'Unauthorized access attempt detected from IP 192.168.1.100',
-      acknowledged: false
-    },
-    {
-      id: '2',
-      timestamp: '23:46:15',
-      level: 'warning',
-      system: 'PERFORMANCE',
-      message: 'CPU usage above 85% for extended period',
-      acknowledged: false
-    },
-    {
-      id: '3',
-      timestamp: '23:45:01',
-      level: 'error',
-      system: 'NETWORK',
-      message: 'Connection timeout to cdn.neural.io',
-      acknowledged: true
-    },
-    {
-      id: '4',
-      timestamp: '23:44:22',
-      level: 'info',
-      system: 'SYSTEM',
-      message: 'Scheduled backup completed successfully',
-      acknowledged: true
-    },
-    {
-      id: '5',
-      timestamp: '23:43:45',
-      level: 'warning',
-      system: 'DATABASE',
-      message: 'Connection pool nearing capacity limit',
-      acknowledged: false
-    }
+    { id: '1', timestamp: '23:47:15', level: 'warning', message: 'High CPU usage detected', source: 'Node-7' },
+    { id: '2', timestamp: '23:47:08', level: 'info', message: 'Authentication successful', source: 'Gateway-1' },
+    { id: '3', timestamp: '23:46:55', level: 'critical', message: 'Connection timeout detected', source: 'neural.io' },
+    { id: '4', timestamp: '23:46:42', level: 'info', message: 'System backup completed', source: 'Core-9' }
   ]);
 
-  const [metrics, setMetrics] = useState<MetricData[]>([
-    {
-      id: 'cpu',
-      label: 'CPU Usage',
-      value: 73.2,
-      unit: '%',
-      status: 'normal',
-      history: [65, 70, 68, 73, 75, 78, 73]
-    },
-    {
-      id: 'memory',
-      label: 'Memory',
-      value: 45.8,
-      unit: '%',
-      status: 'normal',
-      history: [42, 44, 46, 45, 47, 46, 45]
-    },
-    {
-      id: 'network',
-      label: 'Network I/O',
-      value: 892.1,
-      unit: 'KB/s',
-      status: 'normal',
-      history: [800, 850, 920, 880, 890, 875, 892]
-    },
-    {
-      id: 'disk',
-      label: 'Disk Usage',
-      value: 67.4,
-      unit: '%',
-      status: 'warning',
-      history: [60, 62, 64, 65, 66, 67, 67]
-    },
-    {
-      id: 'connections',
-      label: 'Active Connections',
-      value: 247,
-      unit: '',
-      status: 'normal',
-      history: [220, 235, 240, 245, 250, 248, 247]
-    },
-    {
-      id: 'response',
-      label: 'Response Time',
-      value: 12.3,
-      unit: 'ms',
-      status: 'normal',
-      history: [15, 13, 14, 12, 11, 13, 12]
-    }
-  ]);
+  const [lastUpdate, setLastUpdate] = useState(new Date());
 
   useEffect(() => {
-    const updateTime = () => {
-      setCurrentTime(new Date().toLocaleTimeString('en-US', { 
-        hour12: false,
-        timeZone: 'UTC'
-      }));
-    };
-    
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Simulate real-time data updates
-  useEffect(() => {
-    if (!isLiveMode) return;
-
     const interval = setInterval(() => {
+      // Update metrics with some randomness
       setMetrics(prev => prev.map(metric => {
-        const variation = (Math.random() - 0.5) * 0.1;
-        const newValue = Math.max(0, metric.value + metric.value * variation);
-        const newHistory = [...metric.history.slice(-6), newValue];
-        
-        let newStatus: MetricData['status'] = 'normal';
-        if (metric.id === 'cpu' && newValue > 80) newStatus = 'warning';
-        if (metric.id === 'cpu' && newValue > 90) newStatus = 'critical';
-        if (metric.id === 'memory' && newValue > 75) newStatus = 'warning';
-        if (metric.id === 'memory' && newValue > 85) newStatus = 'critical';
-        if (metric.id === 'disk' && newValue > 80) newStatus = 'critical';
-        if (metric.id === 'response' && newValue > 20) newStatus = 'warning';
-        if (metric.id === 'response' && newValue > 30) newStatus = 'critical';
+        const change = (Math.random() - 0.5) * 10; // Random change between -5 and +5
+        const newValue = Math.max(0, Math.min(100, metric.value + change));
+        const newHistory = [...metric.history.slice(-4), newValue];
+
+        let status: 'normal' | 'warning' | 'critical' = 'normal';
+        if (metric.name === 'CPU Usage' || metric.name === 'Memory Usage') {
+          if (newValue > 80) status = 'critical';
+          else if (newValue > 70) status = 'warning';
+        } else if (metric.name === 'Temperature') {
+          if (newValue > 75) status = 'critical';
+          else if (newValue > 70) status = 'warning';
+        }
 
         return {
           ...metric,
-          value: newValue,
-          status: newStatus,
+          value: Math.round(newValue * 10) / 10,
+          status,
           history: newHistory
         };
       }));
-    }, 3000);
+
+      // Occasionally add new alerts
+      if (Math.random() > 0.8) {
+        const alertMessages = [
+          'Network traffic spike detected',
+          'Authentication request from unknown source',
+          'System performance optimal',
+          'Firewall rule updated',
+          'Data synchronization completed'
+        ];
+
+        const newAlert: SystemAlert = {
+          id: Date.now().toString(),
+          timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
+          level: Math.random() > 0.7 ? 'warning' : 'info',
+          message: alertMessages[Math.floor(Math.random() * alertMessages.length)],
+          source: `Node-${Math.floor(Math.random() * 10) + 1}`
+        };
+
+        setAlerts(prev => [newAlert, ...prev.slice(0, 9)]); // Keep last 10 alerts
+      }
+
+      setLastUpdate(new Date());
+    }, 2000);
 
     return () => clearInterval(interval);
-  }, [isLiveMode]);
+  }, []);
 
-  const acknowledgeAlert = (id: string) => {
-    setAlerts(prev => prev.map(alert => 
-      alert.id === id ? { ...alert, acknowledged: true } : alert
-    ));
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'critical': return { variant: 'error' as const, text: 'CRITICAL' };
+      case 'warning': return { variant: 'warning' as const, text: 'WARNING' };
+      case 'active': return { variant: 'success' as const, text: 'ACTIVE' };
+      case 'blocked': return { variant: 'error' as const, text: 'BLOCKED' };
+      case 'idle': return { variant: 'secondary' as const, text: 'IDLE' };
+      default: return { variant: 'success' as const, text: 'NORMAL' };
+    }
   };
 
-  const getAlertIcon = (level: string) => {
+  const getAlertBadge = (level: string) => {
     switch (level) {
-      case 'critical': return '🚨';
-      case 'error': return '❌';
-      case 'warning': return '⚠️';
-      case 'info': return 'ℹ️';
-      default: return '📊';
+      case 'critical': return { variant: 'error' as const, text: 'CRITICAL' };
+      case 'warning': return { variant: 'warning' as const, text: 'WARNING' };
+      default: return { variant: 'primary' as const, text: 'INFO' };
     }
   };
 
   return (
-    <Box minHeight="100vh" bg="surface.terminal" p="spacing.lg">
-      <Box maxWidth="1200px" mx="auto">
-        <Stack spacing="spacing.lg">
-          
-          {/* Header */}
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb="spacing.lg">
-            <Box gap={30} display="flex">
-              <Text 
-                variant="title" 
-                weight="bold" 
-                semantic="accent"
-                fontFamily="monospace"
-              >
-                SYSTEM MONITOR
-              </Text>
-              <Text variant="caption" semantic="secondary" mt="spacing.xs">
-                Real-time metrics • Performance analysis • Alert management • UTC: {currentTime}
-              </Text>
-            </Box>
-            
-            <Box display="flex" alignItems="center" gap={16}>
-              <Box display="flex" alignItems="center" gap={8}>
-                <Switch 
-                  checked={isLiveMode}
-                  onChange={(e) => setIsLiveMode((e.target as HTMLInputElement).checked)}
-                />
-                <Text variant="body-sm" semantic="inverse">Live Mode</Text>
-                {isLiveMode && <Spinner size="sm" />}
-              </Box>
-              <Badge variant="success">
-                {isLiveMode ? 'MONITORING' : 'PAUSED'}
-              </Badge>
-            </Box>
-          </Box>
+    <Box bg="surface.background" p="2xl" position="relative">
+      <MatrixRain />
 
-          {/* Metrics Grid */}
-          <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={24} mb="spacing.lg">
-            {metrics.map((metric) => (
-              <Card key={metric.id} p="spacing.lg">
-                <Box display="flex" justifyContent="space-between" alignItems="start" mb="spacing.md">
-                  <Box>
-                    <Text variant="overline" semantic="tertiary">
-                      {metric.label}
+      <Stack spacing="xl">
+        <Stack spacing="md">
+          <Stack direction="horizontal" justify="between" align="center">
+            <Heading size="4xl" semantic="primary">
+              SYSTEM MONITOR
+            </Heading>
+            <Stack direction="horizontal" spacing="md" align="center">
+              <Text variant="caption" semantic="secondary">
+                Last Update: {lastUpdate.toLocaleTimeString()}
+              </Text>
+              <Badge variant="success" size="sm">LIVE</Badge>
+            </Stack>
+          </Stack>
+          <Text variant="body-lg" semantic="secondary">
+            Real-time neural network monitoring • Quantum sensors active
+          </Text>
+        </Stack>
+
+        {/* System Metrics Grid */}
+        <Grid columns={3} gap="lg">
+          {metrics.map((metric) => {
+            const statusBadge = getStatusBadge(metric.status);
+            return (
+              <Card key={metric.id} variant="elevated" padding="lg">
+                <Stack spacing="md">
+                  <Stack direction="horizontal" justify="between" align="center">
+                    <Text variant="body-md" weight="bold">{metric.name}</Text>
+                    <Badge variant={statusBadge.variant} size="sm">
+                      {statusBadge.text}
+                    </Badge>
+                  </Stack>
+
+                  <Stack direction="horizontal" align="end" spacing="sm">
+                    <Text variant="title" semantic="primary">
+                      {metric.value}
                     </Text>
-                    <Text 
-                      variant="headline" 
-                      weight="bold" 
-                      semantic="primary"
-                      fontFamily="monospace"
-                    >
-                      {typeof metric.value === 'number' ? metric.value.toFixed(1) : metric.value}
-                      <Text as="span" variant="body" semantic="tertiary" ml="spacing.sm">
-                        {metric.unit}
-                      </Text>
+                    <Text variant="body-sm" semantic="secondary">
+                      {metric.unit}
                     </Text>
-                  </Box>
-                  <Badge 
-                    variant={metric.status === 'critical' ? 'error' : metric.status === 'warning' ? 'warning' : 'success'}
-                  >
-                    {metric.status.toUpperCase()}
-                  </Badge>
-                </Box>
-                
-                <Box mb="spacing.sm">
-                  <Text variant="overline" semantic="tertiary">
-                    Trend (Last 7 Intervals)
-                  </Text>
-                  <Text variant="caption" semantic="tertiary">
-                    Chart visualization would be here
-                  </Text>
-                </Box>
+                  </Stack>
+
+                  <Stack spacing="xs">
+                    <Text variant="caption" semantic="secondary">History (last 5 readings)</Text>
+                    <Stack direction="horizontal" spacing="xs">
+                      {metric.history.map((value, index) => (
+                        <Box
+                          key={index}
+                          bg="brand.interactive.background"
+                          height={`${(value / 100) * 40 + 10}px`}
+                          width="8px"
+                          borderRadius="sm"
+                          opacity={index === metric.history.length - 1 ? 1 : 0.6}
+                        />
+                      ))}
+                    </Stack>
+                  </Stack>
+                </Stack>
               </Card>
-            ))}
-          </Grid>
+            );
+          })}
+        </Grid>
 
-          {/* Alerts Section */}
-          <Card p="spacing.lg">
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb="spacing.lg">
-              <Text variant="subtitle" weight="bold" semantic="error">
-                SYSTEM ALERTS
-              </Text>
-              <Box display="flex" gap={16}>
-                <Badge variant="error">
-                  {alerts.filter(a => a.level === 'critical' && !a.acknowledged).length} CRITICAL
-                </Badge>
-                <Badge variant="warning">
-                  {alerts.filter(a => a.level === 'warning' && !a.acknowledged).length} WARNING
-                </Badge>
-                <Badge variant="error">
-                  {alerts.filter(a => a.level === 'error' && !a.acknowledged).length} ERROR
-                </Badge>
-              </Box>
-            </Box>
+        {/* Network Connections and Alerts */}
+        <Grid columns={2} gap="xl">
 
-            <Stack spacing={16}>
-              {alerts.map((alert) => (
-                <Box
-                  key={alert.id}
-                  display="flex"
-                  alignItems="center"
-                  p="spacing.md"
-                  opacity={alert.acknowledged ? 0.6 : 1}
-                >
-                  <Text variant="title" mr="spacing.md">
-                    {getAlertIcon(alert.level)}
-                  </Text>
-                  <Box flex={1}>
-                    <Box display="flex" alignItems="center" gap={16} mb="spacing.xs">
-                      <Text variant="code" semantic="link">
-                        [{alert.timestamp}]
-                      </Text>
-                      <Tag>
-                        {alert.system}
-                      </Tag>
-                      <Tag variant="filled">
-                        {alert.level.toUpperCase()}
-                      </Tag>
-                    </Box>
-                    <Text variant="body-sm" semantic={alert.acknowledged ? "tertiary" : "inverse"}>
-                      {alert.message}
-                    </Text>
-                  </Box>
-                  {!alert.acknowledged && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => acknowledgeAlert(alert.id)}
-                    >
-                      ACK
-                    </Button>
-                  )}
-                  {alert.acknowledged && (
-                    <Text variant="overline" semantic="tertiary" ml="spacing.md">
-                      Acknowledged
-                    </Text>
-                  )}
-                </Box>
-              ))}
+          {/* Network Connections */}
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
+                NETWORK CONNECTIONS
+              </Heading>
+              <Divider />
+
+              <Stack spacing="md">
+                {connections.map((connection) => {
+                  const statusBadge = getStatusBadge(connection.status);
+                  return (
+                    <Stack key={connection.id} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-sm" weight="bold">
+                          {connection.source} → {connection.destination}
+                        </Text>
+                        <Badge variant={statusBadge.variant} size="sm">
+                          {statusBadge.text}
+                        </Badge>
+                      </Stack>
+
+                      <Stack direction="horizontal" justify="between">
+                        <Text variant="caption" semantic="secondary">
+                          Protocol: {connection.protocol}
+                        </Text>
+                        <Text variant="caption" semantic="primary">
+                          {connection.bandwidth.toFixed(1)} KB/s
+                        </Text>
+                      </Stack>
+                      <Divider />
+                    </Stack>
+                  );
+                })}
+              </Stack>
             </Stack>
           </Card>
 
-          {/* System Status Overview */}
-          <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={16}>
-            <Card p="spacing.md">
-              <Text variant="subtitle" weight="bold" semantic="success" mb="spacing.sm">
-                SERVICES STATUS
-              </Text>
-              <Stack spacing={16}>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                  <Text variant="body-sm" semantic="inverse">Neural Interface</Text>
-                  <Badge variant="success" size="sm">ONLINE</Badge>
-                </Box>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                  <Text variant="body-sm" semantic="inverse">Security Core</Text>
-                  <Badge variant="success" size="sm">ONLINE</Badge>
-                </Box>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                  <Text variant="body-sm" semantic="inverse">Data Mining</Text>
-                  <Badge variant="warning" size="sm">DEGRADED</Badge>
-                </Box>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                  <Text variant="body-sm" semantic="inverse">CDN Network</Text>
-                  <Badge variant="error" size="sm">DOWN</Badge>
-                </Box>
-              </Stack>
-            </Card>
+          {/* System Alerts */}
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
+                SYSTEM ALERTS
+              </Heading>
+              <Divider />
 
-            <Card p="spacing.md">
-              <Text variant="subtitle" weight="bold" semantic="link" mb="spacing.sm">
-                QUICK ACTIONS
-              </Text>
-              <Stack spacing={16}>
-                <Button size="sm" variant="outline">
-                  🔄 RESTART SERVICES
-                </Button>
-                <Button size="sm" variant="outline">
-                  🚨 EMERGENCY MODE
-                </Button>
-                <Button size="sm" variant="outline">
-                  📊 GENERATE REPORT
-                </Button>
-                <Button size="sm" variant="outline">
-                  🔒 LOCKDOWN SYSTEM
-                </Button>
+              <Stack spacing="md" maxHeight="300px" overflow="auto">
+                {alerts.map((alert) => {
+                  const alertBadge = getAlertBadge(alert.level);
+                  return (
+                    <Stack key={alert.id} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Badge variant={alertBadge.variant} size="sm">
+                          {alertBadge.text}
+                        </Badge>
+                        <Text variant="caption" semantic="secondary">
+                          {alert.timestamp}
+                        </Text>
+                      </Stack>
+
+                      <Text variant="body-sm">{alert.message}</Text>
+                      <Text variant="caption" semantic="secondary">
+                        Source: {alert.source}
+                      </Text>
+                      <Divider />
+                    </Stack>
+                  );
+                })}
               </Stack>
-            </Card>
-          </Grid>
-          
-        </Stack>
-      </Box>
+            </Stack>
+          </Card>
+        </Grid>
+      </Stack>
     </Box>
   );
 }

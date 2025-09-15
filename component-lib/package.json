@@ -3,6 +3,7 @@
   "version": "1.9.0",
   "description": "A modern, accessible React component library with TypeScript support, design tokens, and built-in light/dark themes",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,7 +34,7 @@
   ],
   "scripts": {
     "build": "yarn clean && yarn build:tokens && yarn build:lib",
-    "build:tokens": "tsx tokens/scripts/build.ts",
+    "build:tokens": "node --import tsx tokens/scripts/build.ts",
     "build:lib": "tsc --project tsconfig.build.json",
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn build",

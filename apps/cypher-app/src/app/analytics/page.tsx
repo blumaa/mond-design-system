@@ -1,520 +1,296 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Button, Card, Stack, Box, Text, Badge, Heading, Input, Select, Switch, Divider, Link, Avatar, Checkbox, Spinner, Tag } from '@mond-design-system/theme';
+import {
+  Card,
+  Stack,
+  Box,
+  Text,
+  Badge,
+  Heading,
+  Grid,
+  Divider,
+} from "@mond-design-system/theme";
+import { InteractiveChartFilters } from "../../components/InteractiveChartFilters";
+import { MatrixRain } from "../../components/MatrixRain";
 
-// Mock data for code quality metrics
-const codeQualityMetrics = {
-  overallScore: 87.3,
-  technicalDebt: 23.5, // hours
-  testCoverage: 78.9,
-  codeComplexity: 6.2,
-  vulnerabilities: 3,
-  duplicatedLines: 4.7, // percentage
-  maintainabilityIndex: 82.1,
-  lastAnalysis: '2024-01-15 23:42:18'
-};
-
+// Static analytics data (server-side)
 const deploymentStats = {
-  deploymentsToday: 12,
-  successRate: 94.7, // percentage
-  avgDeployTime: 8.3, // minutes
-  rollbackRate: 2.1, // percentage
-  failureCount: 1,
-  lastDeployment: '47 minutes ago',
-  nextScheduled: 'Tomorrow 02:00 UTC'
+  total: 247,
+  successful: 231,
+  failed: 16,
+  successRate: 93.5,
+  avgDuration: "3.2min"
 };
 
-const performanceMetrics = {
-  responseTime: 187, // ms
-  throughput: 2847, // requests/min
-  errorRate: 0.12, // percentage
-  uptime: 99.97,
-  memoryUsage: 67.3, // percentage
-  cpuUtilization: 34.8 // percentage
-};
+const codeQualityMetrics = [
+  { name: "Code Coverage", value: 89.2, unit: "%", status: "good" },
+  { name: "Technical Debt", value: 2.3, unit: "hours", status: "excellent" },
+  { name: "Cyclomatic Complexity", value: 4.1, unit: "avg", status: "good" },
+  { name: "Maintainability Index", value: 82.7, unit: "/100", status: "good" },
+  { name: "Duplication", value: 1.8, unit: "%", status: "excellent" },
+  { name: "Security Vulnerabilities", value: 0, unit: "critical", status: "excellent" }
+];
 
-const bugTrackingData = [
-  { id: 'BUG-001', severity: 'critical', title: 'Memory leak in user session handler', assigned: 'sarah.chen@cypher.dev', status: 'in-progress' },
-  { id: 'BUG-002', severity: 'high', title: 'API rate limiting not working correctly', assigned: 'alex.rodriguez@cypher.dev', status: 'open' },
-  { id: 'BUG-003', severity: 'medium', title: 'UI glitch on mobile dashboard', assigned: 'jamie.kim@cypher.dev', status: 'resolved' },
-  { id: 'BUG-004', severity: 'low', title: 'Terminal cursor position offset', assigned: 'morgan.silva@cypher.dev', status: 'open' },
+const performanceData = [
+  { metric: "Response Time", current: "127ms", target: "< 200ms", trend: "improving" },
+  { metric: "Throughput", current: "1,247 req/s", target: "> 1,000 req/s", trend: "stable" },
+  { metric: "Error Rate", current: "0.03%", target: "< 0.1%", trend: "improving" },
+  { metric: "CPU Usage", current: "23.4%", target: "< 80%", trend: "stable" },
+  { metric: "Memory Usage", current: "45.8%", target: "< 85%", trend: "stable" },
+  { metric: "Disk I/O", current: "156 MB/s", target: "< 500 MB/s", trend: "stable" }
+];
+
+const securityInsights = [
+  { category: "Authentication", score: 95, issues: 0, status: "secure" },
+  { category: "Authorization", score: 92, issues: 1, status: "secure" },
+  { category: "Data Encryption", score: 98, issues: 0, status: "secure" },
+  { category: "Input Validation", score: 87, issues: 3, status: "review" },
+  { category: "Session Management", score: 94, issues: 0, status: "secure" },
+  { category: "Error Handling", score: 89, issues: 2, status: "review" }
 ];
 
 const recentDeployments = [
-  { id: 'DEPLOY-4783', version: 'v2.1.7', status: 'success', duration: '6m 23s', timestamp: '23:42:18', deployer: 'auto-deploy' },
-  { id: 'DEPLOY-4782', version: 'v2.1.6', status: 'success', duration: '8m 11s', timestamp: '22:15:42', deployer: 'sarah.chen' },
-  { id: 'DEPLOY-4781', version: 'v2.1.5', status: 'failed', duration: '3m 07s', timestamp: '21:33:29', deployer: 'alex.rodriguez' },
-  { id: 'DEPLOY-4780', version: 'v2.1.4', status: 'success', duration: '7m 45s', timestamp: '20:18:56', deployer: 'auto-deploy' },
+  { id: "D-247", timestamp: "2024-01-15 23:45:12", status: "success", duration: "2.8min", environment: "production" },
+  { id: "D-246", timestamp: "2024-01-15 22:13:45", status: "success", duration: "3.1min", environment: "staging" },
+  { id: "D-245", timestamp: "2024-01-15 20:07:23", status: "failed", duration: "1.2min", environment: "production" },
+  { id: "D-244", timestamp: "2024-01-15 18:34:56", status: "success", duration: "3.7min", environment: "staging" },
+  { id: "D-243", timestamp: "2024-01-15 16:22:11", status: "success", duration: "2.9min", environment: "production" }
 ];
 
-export default function AnalyticsPage() {
-  const [currentTime, setCurrentTime] = useState('');
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedTimeframe, setSelectedTimeframe] = useState('24h');
-
-  useEffect(() => {
-    const updateTime = () => {
-      setCurrentTime(new Date().toLocaleTimeString('en-US', { 
-        hour12: false,
-        timeZone: 'UTC'
-      }));
-    };
-    
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const refreshData = () => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 2000);
-  };
-
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'critical': return '#ff0055';
-      case 'high': return '#ff9500';
-      case 'medium': return '#00d4ff';
-      case 'low': return '#00ff41';
-      default: return '#666';
-    }
-  };
-
-  const getStatusColor = (status: string) => {
+export default function Analytics() {
+  const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'success': return '#00ff41';
-      case 'failed': return '#ff0055';
-      case 'in-progress': return '#00d4ff';
-      case 'resolved': return '#00ff41';
-      default: return '#666';
+      case 'excellent': return { variant: 'success' as const, text: 'EXCELLENT' };
+      case 'good': return { variant: 'primary' as const, text: 'GOOD' };
+      case 'review': return { variant: 'warning' as const, text: 'REVIEW' };
+      case 'secure': return { variant: 'success' as const, text: 'SECURE' };
+      case 'success': return { variant: 'success' as const, text: 'SUCCESS' };
+      case 'failed': return { variant: 'error' as const, text: 'FAILED' };
+      case 'improving': return { variant: 'success' as const, text: '↗ IMPROVING' };
+      case 'stable': return { variant: 'primary' as const, text: '→ STABLE' };
+      default: return { variant: 'secondary' as const, text: status.toUpperCase() };
     }
   };
 
   return (
-    <Box 
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0a0a0b 0%, #1a1a1e 100%)',
-        padding: '2rem',
-        fontFamily: 'var(--font-jetbrains-mono)',
-      }}
-    >
-      <Stack gap={4}>
-        {/* Header */}
-        <Box style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid #00ff41',
-          paddingBottom: '1rem',
-        }}>
-          <Box>
-            <Heading 
-              level={1}
-              size="2xl" 
-              weight="bold" 
-              style={{ 
-                color: '#00ff41', 
-                fontFamily: 'monospace',
-                textShadow: '0 0 10px rgba(0, 255, 65, 0.5)'
-              }}
-            >
-              ANALYTICS DASHBOARD
-            </Heading>
-            <Text variant="body-sm" style={{ color: '#00d4ff', marginTop: '0.25rem' }}>
-              SYSTEM PERFORMANCE & CODE QUALITY METRICS // UTC: {currentTime}
-            </Text>
-          </Box>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <Box style={{ minWidth: '150px' }}>
-              <Select 
-                options={[
-                  { value: '1h', label: 'Last Hour' },
-                  { value: '24h', label: 'Last 24 Hours' },
-                  { value: '7d', label: 'Last 7 Days' },
-                  { value: '30d', label: 'Last 30 Days' }
-                ]}
-                value={selectedTimeframe}
-                onChange={(value) => setSelectedTimeframe(value)}
-              />
-            </Box>
-            <Button 
-              variant="primary"
-              onClick={refreshData}
-              disabled={isRefreshing}
-              style={{
-                backgroundColor: '#00ff41',
-                color: '#0a0a0a',
-                border: 'none',
-                boxShadow: isRefreshing ? '0 0 25px rgba(0, 255, 65, 0.6)' : '0 0 15px rgba(0, 255, 65, 0.3)',
-              }}
-            >
-              {isRefreshing ? 'REFRESHING...' : 'REFRESH DATA'}
-            </Button>
-          </Box>
-        </Box>
+    <Box bg="surface.background" p="2xl" position="relative">
+      <MatrixRain />
 
-        {/* Metrics Overview Grid */}
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '1.5rem',
-        }}>
-          {/* Code Quality Score */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
-              CODE QUALITY SCORE
-            </Text>
-            <Heading 
-              level={2} 
-              size="3xl" 
-              weight="bold" 
-              style={{ color: '#ffffff', marginBottom: '0.5rem' }}
-            >
-              {codeQualityMetrics.overallScore}
-            </Heading>
-            <Text variant="caption" style={{ color: '#00d4ff' }}>
-              +2.3 from last week
-            </Text>
-          </Card>
+      <Stack spacing="xl">
+        <Stack spacing="md">
+          <Heading size="4xl" semantic="primary">
+            SYSTEM ANALYTICS
+          </Heading>
+          <Text variant="body-lg" semantic="secondary">
+            Neural network performance insights • Quantum data analysis
+          </Text>
+        </Stack>
 
-          {/* Deployment Success Rate */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
-              DEPLOYMENT SUCCESS
-            </Text>
-            <Heading 
-              level={2} 
-              size="3xl" 
-              weight="bold" 
-              style={{ color: '#ffffff', marginBottom: '0.5rem' }}
-            >
-              {deploymentStats.successRate}%
-            </Heading>
-            <Text variant="caption" style={{ color: '#00d4ff' }}>
-              {deploymentStats.deploymentsToday} deployments today
-            </Text>
-          </Card>
+        {/* Interactive Chart Filters - Client Island */}
+        <InteractiveChartFilters />
 
-          {/* Test Coverage */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
-              TEST COVERAGE
-            </Text>
-            <Heading 
-              level={2} 
-              size="3xl" 
-              weight="bold" 
-              style={{ color: '#ffffff', marginBottom: '0.5rem' }}
-            >
-              {codeQualityMetrics.testCoverage}%
+        {/* Deployment Overview */}
+        <Card variant="elevated" padding="xl">
+          <Stack spacing="lg">
+            <Heading size="lg" semantic="primary">
+              DEPLOYMENT OVERVIEW
             </Heading>
-            <Text variant="caption" style={{ color: '#ff9500' }}>
-              Target: 85%
-            </Text>
-          </Card>
+            <Divider />
 
-          {/* System Uptime */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
-              SYSTEM UPTIME
-            </Text>
-            <Heading 
-              level={2} 
-              size="3xl" 
-              weight="bold" 
-              style={{ color: '#ffffff', marginBottom: '0.5rem' }}
-            >
-              {performanceMetrics.uptime}%
-            </Heading>
-            <Text variant="caption" style={{ color: '#00d4ff' }}>
-              SLA: 99.9%
-            </Text>
-          </Card>
-        </Box>
+            <Grid columns={5} gap="lg">
+              <Stack spacing="sm" align="center">
+                <Text variant="title" semantic="primary">
+                  {deploymentStats.total}
+                </Text>
+                <Text variant="caption" semantic="secondary">Total Deployments</Text>
+              </Stack>
 
-        {/* Detailed Metrics Grid */}
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-          gap: '1.5rem',
-        }}>
-          {/* Code Quality Details */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
-              CODE QUALITY BREAKDOWN
-            </Text>
-            <Stack gap={3}>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Technical Debt:</Text>
-                <Badge 
-                  variant="warning" 
-                  style={{ backgroundColor: '#ff9500', color: '#0a0a0a' }}
-                >
-                  {codeQualityMetrics.technicalDebt}h
-                </Badge>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Code Complexity:</Text>
-                <Text style={{ color: '#00d4ff' }}>{codeQualityMetrics.codeComplexity}/10</Text>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Vulnerabilities:</Text>
-                <Badge 
-                  variant="error" 
-                  style={{ backgroundColor: '#ff0055', color: '#ffffff' }}
-                >
-                  {codeQualityMetrics.vulnerabilities}
-                </Badge>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Duplicated Lines:</Text>
-                <Text style={{ color: '#00d4ff' }}>{codeQualityMetrics.duplicatedLines}%</Text>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Maintainability:</Text>
-                <Badge 
-                  variant="success" 
-                  style={{ backgroundColor: '#00ff41', color: '#0a0a0a' }}
-                >
-                  {codeQualityMetrics.maintainabilityIndex}/100
-                </Badge>
-              </Box>
-              <Divider style={{ borderColor: '#00ff41', opacity: 0.3 }} />
-              <Text variant="caption" style={{ color: '#888' }}>
-                Last analysis: {codeQualityMetrics.lastAnalysis}
-              </Text>
+              <Stack spacing="sm" align="center">
+                <Text variant="title" color="feedback.success.text">
+                  {deploymentStats.successful}
+                </Text>
+                <Text variant="caption" semantic="secondary">Successful</Text>
+              </Stack>
+
+              <Stack spacing="sm" align="center">
+                <Text variant="title" color="feedback.error.text">
+                  {deploymentStats.failed}
+                </Text>
+                <Text variant="caption" semantic="secondary">Failed</Text>
+              </Stack>
+
+              <Stack spacing="sm" align="center">
+                <Text variant="title" semantic="primary">
+                  {deploymentStats.successRate}%
+                </Text>
+                <Text variant="caption" semantic="secondary">Success Rate</Text>
+              </Stack>
+
+              <Stack spacing="sm" align="center">
+                <Text variant="title" semantic="primary">
+                  {deploymentStats.avgDuration}
+                </Text>
+                <Text variant="caption" semantic="secondary">Avg Duration</Text>
+              </Stack>
+            </Grid>
+          </Stack>
+        </Card>
+
+        {/* Main Analytics Grid */}
+        <Grid columns={2} gap="xl">
+
+          {/* Code Quality Metrics */}
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
+                CODE QUALITY METRICS
+              </Heading>
+              <Divider />
+
+              <Stack spacing="md">
+                {codeQualityMetrics.map((metric) => {
+                  const statusBadge = getStatusBadge(metric.status);
+                  return (
+                    <Stack key={metric.name} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-sm">{metric.name}</Text>
+                        <Badge variant={statusBadge.variant} size="sm">
+                          {statusBadge.text}
+                        </Badge>
+                      </Stack>
+
+                      <Stack direction="horizontal" justify="between" align="end">
+                        <Text variant="body-lg" semantic="primary">
+                          {metric.value}
+                        </Text>
+                        <Text variant="caption" semantic="secondary">
+                          {metric.unit}
+                        </Text>
+                      </Stack>
+                      <Divider />
+                    </Stack>
+                  );
+                })}
+              </Stack>
             </Stack>
           </Card>
 
           {/* Performance Metrics */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
-              PERFORMANCE METRICS
-            </Text>
-            <Stack gap={3}>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Avg Response Time:</Text>
-                <Badge 
-                  variant="success" 
-                  style={{ backgroundColor: '#00ff41', color: '#0a0a0a' }}
-                >
-                  {performanceMetrics.responseTime}ms
-                </Badge>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Throughput:</Text>
-                <Text style={{ color: '#00d4ff' }}>{performanceMetrics.throughput} req/min</Text>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Error Rate:</Text>
-                <Badge 
-                  variant="success" 
-                  style={{ backgroundColor: '#00ff41', color: '#0a0a0a' }}
-                >
-                  {performanceMetrics.errorRate}%
-                </Badge>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>Memory Usage:</Text>
-                <Text style={{ color: '#00d4ff' }}>{performanceMetrics.memoryUsage}%</Text>
-              </Box>
-              <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#ffffff' }}>CPU Utilization:</Text>
-                <Text style={{ color: '#00d4ff' }}>{performanceMetrics.cpuUtilization}%</Text>
-              </Box>
-              <Divider style={{ borderColor: '#00ff41', opacity: 0.3 }} />
-              <Box style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Checkbox 
-                  id="auto-scaling" 
-                  style={{ 
-                    accentColor: '#00ff41',
-                    transform: 'scale(0.9)'
-                  }} 
-                />
-                <Text variant="caption" style={{ color: '#888' }}>Auto-scaling enabled</Text>
-              </Box>
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
+                PERFORMANCE METRICS
+              </Heading>
+              <Divider />
+
+              <Stack spacing="md">
+                {performanceData.map((item) => {
+                  const trendBadge = getStatusBadge(item.trend);
+                  return (
+                    <Stack key={item.metric} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-sm">{item.metric}</Text>
+                        <Badge variant={trendBadge.variant} size="sm">
+                          {trendBadge.text}
+                        </Badge>
+                      </Stack>
+
+                      <Stack direction="horizontal" justify="between">
+                        <Text variant="body-md" semantic="primary">
+                          {item.current}
+                        </Text>
+                        <Text variant="caption" semantic="secondary">
+                          Target: {item.target}
+                        </Text>
+                      </Stack>
+                      <Divider />
+                    </Stack>
+                  );
+                })}
+              </Stack>
             </Stack>
           </Card>
-        </Box>
 
-        {/* Bug Tracking and Recent Deployments */}
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-          gap: '1.5rem',
-        }}>
-          {/* Bug Tracking */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Text weight="bold" style={{ color: '#00ff41', marginBottom: '1rem' }}>
-              BUG TRACKING SUMMARY
-            </Text>
-            <Stack gap={3}>
-              {bugTrackingData.map((bug) => (
-                <Box key={bug.id} style={{
-                  padding: '1rem',
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: '4px',
-                  border: `1px solid ${getSeverityColor(bug.severity)}`,
-                }}>
-                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                    <Text variant="body-sm" style={{ color: '#00d4ff', fontWeight: 'bold' }}>
-                      {bug.id}
-                    </Text>
-                    <Box style={{ display: 'flex', gap: '0.5rem' }}>
-                      <Badge 
-                        style={{ 
-                          backgroundColor: getSeverityColor(bug.severity), 
-                          color: '#ffffff',
-                          fontSize: '0.75rem'
-                        }}
-                      >
-                        {bug.severity.toUpperCase()}
-                      </Badge>
-                      <Badge 
-                        style={{ 
-                          backgroundColor: getStatusColor(bug.status), 
-                          color: '#0a0a0a',
-                          fontSize: '0.75rem'
-                        }}
-                      >
-                        {bug.status.toUpperCase()}
-                      </Badge>
-                    </Box>
-                  </Box>
-                  <Text variant="body-sm" style={{ color: '#ffffff', marginBottom: '0.5rem' }}>
-                    {bug.title}
-                  </Text>
-                  <Text variant="caption" style={{ color: '#888' }}>
-                    Assigned: {bug.assigned}
-                  </Text>
-                </Box>
-              ))}
+          {/* Security Analysis */}
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
+                SECURITY ANALYSIS
+              </Heading>
+              <Divider />
+
+              <Stack spacing="md">
+                {securityInsights.map((item) => {
+                  const statusBadge = getStatusBadge(item.status);
+                  return (
+                    <Stack key={item.category} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-sm">{item.category}</Text>
+                        <Badge variant={statusBadge.variant} size="sm">
+                          {statusBadge.text}
+                        </Badge>
+                      </Stack>
+
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-lg" semantic="primary">
+                          {item.score}/100
+                        </Text>
+                        <Text variant="caption" color={item.issues > 0 ? "feedback.warning.text" : "text.secondary"}>
+                          {item.issues} issues
+                        </Text>
+                      </Stack>
+                      <Divider />
+                    </Stack>
+                  );
+                })}
+              </Stack>
             </Stack>
           </Card>
 
           {/* Recent Deployments */}
-          <Card style={{
-            backgroundColor: 'rgba(26, 26, 30, 0.8)',
-            border: '1px solid #00ff41',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 0 20px rgba(0, 255, 65, 0.1)',
-          }}>
-            <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <Text weight="bold" style={{ color: '#00ff41' }}>
+          <Card variant="elevated" padding="xl">
+            <Stack spacing="lg">
+              <Heading size="lg" semantic="primary">
                 RECENT DEPLOYMENTS
-              </Text>
-              <Text variant="caption" style={{ color: '#00d4ff' }}>
-                Next: {deploymentStats.nextScheduled}
-              </Text>
-            </Box>
-            <Stack gap={3}>
-              {recentDeployments.map((deployment) => (
-                <Box key={deployment.id} style={{
-                  padding: '1rem',
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: '4px',
-                  border: `1px solid ${getStatusColor(deployment.status)}`,
-                }}>
-                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                    <Box>
-                      <Text variant="body-sm" style={{ color: '#00d4ff', fontWeight: 'bold' }}>
-                        {deployment.version}
-                      </Text>
-                      <Text variant="caption" style={{ color: '#888' }}>
-                        {deployment.id}
-                      </Text>
-                    </Box>
-                    <Badge 
-                      style={{ 
-                        backgroundColor: getStatusColor(deployment.status), 
-                        color: deployment.status === 'failed' ? '#ffffff' : '#0a0a0a',
-                        fontSize: '0.75rem'
-                      }}
-                    >
-                      {deployment.status.toUpperCase()}
-                    </Badge>
-                  </Box>
-                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text variant="caption" style={{ color: '#ffffff' }}>
-                      Duration: {deployment.duration}
-                    </Text>
-                    <Text variant="caption" style={{ color: '#888' }}>
-                      By: {deployment.deployer} at {deployment.timestamp}
-                    </Text>
-                  </Box>
-                </Box>
-              ))}
-            </Stack>
-            <Divider style={{ borderColor: '#00ff41', opacity: 0.3, margin: '1rem 0' }} />
-            <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text variant="caption" style={{ color: '#888' }}>
-                Avg Deploy Time: {deploymentStats.avgDeployTime}m
-              </Text>
-              <Text variant="caption" style={{ color: '#888' }}>
-                Rollback Rate: {deploymentStats.rollbackRate}%
-              </Text>
-            </Box>
-          </Card>
-        </Box>
-      </Stack>
+              </Heading>
+              <Divider />
 
-      <style jsx>{`
-        @keyframes blink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
-        }
-        
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.02); }
-          100% { transform: scale(1); }
-        }
-      `}</style>
+              <Stack spacing="md" maxHeight="300px" overflow="auto">
+                {recentDeployments.map((deployment) => {
+                  const statusBadge = getStatusBadge(deployment.status);
+                  return (
+                    <Stack key={deployment.id} spacing="sm">
+                      <Stack direction="horizontal" justify="between" align="center">
+                        <Text variant="body-sm" weight="bold">
+                          {deployment.id}
+                        </Text>
+                        <Badge variant={statusBadge.variant} size="sm">
+                          {statusBadge.text}
+                        </Badge>
+                      </Stack>
+
+                      <Stack direction="horizontal" justify="between">
+                        <Text variant="caption" semantic="secondary">
+                          {deployment.timestamp}
+                        </Text>
+                        <Text variant="caption" semantic="primary">
+                          {deployment.duration}
+                        </Text>
+                      </Stack>
+
+                      <Text variant="caption" semantic="secondary">
+                        Environment: {deployment.environment}
+                      </Text>
+                      <Divider />
+                    </Stack>
+                  );
+                })}
+              </Stack>
+            </Stack>
+          </Card>
+
+        </Grid>
+      </Stack>
     </Box>
   );
 }

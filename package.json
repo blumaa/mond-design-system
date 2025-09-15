@@ -16,8 +16,7 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "storybook": "turbo run storybook",
-    "prepare": "husky install",
-    "postinstall": "husky install"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.0.0",
