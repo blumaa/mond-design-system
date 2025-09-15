@@ -1,3 +1,18 @@
+## 1.10.0 (2025-09-15)
+
+* feat: from blumaa/fix-style-prop-in-cypher-app ([8bae5b5](https://github.com/blumaa/mond-design-system/commit/8bae5b5))
+* add chromatic and performance testing ([77536c2](https://github.com/blumaa/mond-design-system/commit/77536c2))
+* badge component agnostic ([f68c255](https://github.com/blumaa/mond-design-system/commit/f68c255))
+* complete rebuild of cypher-app ([618a134](https://github.com/blumaa/mond-design-system/commit/618a134))
+* fix linting and tests ([67cbb7e](https://github.com/blumaa/mond-design-system/commit/67cbb7e))
+* fix node version ([0c2fa91](https://github.com/blumaa/mond-design-system/commit/0c2fa91))
+* fix secret exposure ([5b90165](https://github.com/blumaa/mond-design-system/commit/5b90165))
+* fixed the cypher app ([fb735f6](https://github.com/blumaa/mond-design-system/commit/fb735f6))
+* Merge pull request #5 from blumaa/fix-brand-logic ([e8a75ec](https://github.com/blumaa/mond-design-system/commit/e8a75ec)), closes [#5](https://github.com/blumaa/mond-design-system/issues/5)
+* start brand system architecture refactor ([0ca5395](https://github.com/blumaa/mond-design-system/commit/0ca5395))
+* update cypher app ([ba406d7](https://github.com/blumaa/mond-design-system/commit/ba406d7))
+* update plans ([441a141](https://github.com/blumaa/mond-design-system/commit/441a141))
+
 ## 1.9.0 (2025-09-12)
 
 * cypher app mvp achieved ([31d114f](https://github.com/blumaa/mond-design-system/commit/31d114f))
