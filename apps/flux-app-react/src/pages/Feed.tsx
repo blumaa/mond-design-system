@@ -1,26 +1,14 @@
-'use client';
-
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Card,
   Stack,
-  Box,
   Text,
   Badge,
   Heading,
   Divider,
   Button,
-  ButtonGroup,
-  Input,
-  Textarea,
-  Switch,
-  Checkbox,
-  Modal,
-  Alert,
-  Pagination,
-} from "@mond-design-system/theme";
-import { PulseAnimation } from "../../components/PulseAnimation";
-import { ModernIcon } from "../../components/ModernIcon";
+} from '@mond-design-system/theme';
+import { ModernIcon } from '../components/ModernIcon';
 
 // Mock social feed data
 const feedPosts = [
@@ -114,11 +102,9 @@ const trendingTopics = [
   { tag: "#Underground", posts: "67.3K" },
 ];
 
-export default function SocialFeed() {
+export default function Feed() {
   const [posts, setPosts] = useState(feedPosts);
   const [newPost, setNewPost] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [filterVerified, setFilterVerified] = useState(false);
   const [sortBy, setSortBy] = useState('recent');
 
@@ -146,155 +132,122 @@ export default function SocialFeed() {
   };
 
   return (
-    <Box bg="surface.background" position="relative">
-      <PulseAnimation />
-
-      {/* Header */}
-      <Box py="32" px="16">
-        <Stack spacing="4" align="center" maxWidth="1400px" mx="auto">
-          <Heading size="4xl" semantic="primary">
+    <div className="page-container">
+      <Stack spacing="6">
+        {/* Header */}
+        <div className="hero-section">
+          <Heading size="4xl" weight="bold" semantic="primary">
             FESTIVAL FEED
           </Heading>
           <Text variant="body-lg" semantic="secondary">
             Discover the latest beats, events, and community vibes
           </Text>
-        </Stack>
-      </Box>
+        </div>
 
-      {/* Responsive Layout */}
-      <div className="responsive-main-layout">
-        {/* Main Feed */}
-        <Box>
-          <Stack spacing="24">
-            <Text variant="body-lg" semantic="secondary">
-              Connect with artists • Share your vibes • Discover new music
-            </Text>
+        {/* Main Content Layout */}
+        <div className="responsive-grid feed-layout">
+          {/* Main Feed */}
+          <div className="feed-main">
+            <Stack spacing="6">
+              {/* Post Creation */}
+              <Card variant="elevated" padding="24">
+                <Stack spacing="4">
+                  <div className="responsive-grid post-creator">
+                    <div className="post-avatar">
+                      <ModernIcon type="crown" size="lg" />
+                    </div>
+                    <Stack spacing="3" className="post-input">
+                      <textarea
+                        className="post-textarea"
+                        placeholder="Share your festival vibes, new tracks, or upcoming shows..."
+                        value={newPost}
+                        onChange={(e) => setNewPost(e.target.value)}
+                        rows={4}
+                      />
+                    </Stack>
+                  </div>
 
-            {/* Post Creation */}
-            <Card variant="elevated" padding="24">
-              <Stack spacing="20">
-                <Stack direction="horizontal" spacing="4" align="start">
-                  <Box
-                    width="48px"
-                    height="48px"
-                    borderRadius="full"
-                    bg="gradient.primary"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <ModernIcon type="crown" size="md" />
-                  </Box>
-                  <Stack flex="1" spacing="3">
-                    <Textarea
-                      placeholder="Share your festival vibes, new tracks, or upcoming shows..."
-                      value={newPost}
-                      onChange={(e) => setNewPost(e.target.value)}
-                      rows={4}
-                    />
-                  </Stack>
-                </Stack>
-
-                <Stack direction="horizontal" justify="between" align="center" spacing="3">
-                  <Stack direction="horizontal" spacing="3">
-                    <Button variant="ghost" size="md">
-                      <ModernIcon type="music" size="sm" /> Track
-                    </Button>
-                    <Button variant="ghost" size="md">
-                      <ModernIcon type="star" size="sm" /> Photo
-                    </Button>
-                    <Button variant="ghost" size="md">
-                      <ModernIcon type="wave" size="sm" /> Video
-                    </Button>
-                    <Button variant="ghost" size="md">
-                      <ModernIcon type="diamond" size="sm" /> Event
-                    </Button>
-                  </Stack>
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    disabled={!newPost.trim()}
-                  >
-                    <ModernIcon type="rocket" size="sm" />
-                    POST TO FEED
-                  </Button>
-                </Stack>
-              </Stack>
-            </Card>
-
-            {/* Feed Filters */}
-            <Card variant="elevated" padding="20">
-              <Stack direction="horizontal" justify="between" align="center" spacing="4">
-                <Stack direction="horizontal" spacing="6" align="center">
-                  <Stack direction="horizontal" spacing="3" align="center">
-                    <ModernIcon type="crown" size="sm" />
-                    <Switch
-                      checked={filterVerified}
-                      onChange={(e) => setFilterVerified(e.target.checked)}
-                      label="Verified Artists"
-                      size="md"
-                    />
-                  </Stack>
-
-                  <Stack direction="horizontal" spacing="3" align="center">
-                    <Text variant="body-sm" weight="medium" semantic="secondary">
-                      Sort by:
-                    </Text>
-                    <ButtonGroup gap="2">
-                      <Button
-                        variant={sortBy === 'recent' ? 'primary' : 'outline'}
-                        size="sm"
-                        onClick={() => setSortBy('recent')}
-                      >
-                        <ModernIcon type="lightning" size="sm" /> Recent
+                  <div className="responsive-grid post-actions">
+                    <Stack direction="horizontal" spacing="2" className="media-buttons">
+                      <Button variant="ghost" size="sm">
+                        <ModernIcon type="music" size="sm" />
                       </Button>
-                      <Button
-                        variant={sortBy === 'popular' ? 'primary' : 'outline'}
-                        size="sm"
-                        onClick={() => setSortBy('popular')}
-                      >
-                        <ModernIcon type="star" size="sm" /> Popular
+                      <Button variant="ghost" size="sm">
+                        <ModernIcon type="star" size="sm" />
                       </Button>
-                      <Button
-                        variant={sortBy === 'trending' ? 'primary' : 'outline'}
-                        size="sm"
-                        onClick={() => setSortBy('trending')}
-                      >
-                        <ModernIcon type="rocket" size="sm" /> Trending
+                      <Button variant="ghost" size="sm">
+                        <ModernIcon type="wave" size="sm" />
                       </Button>
-                    </ButtonGroup>
-                  </Stack>
+                      <Button variant="ghost" size="sm">
+                        <ModernIcon type="diamond" size="sm" />
+                      </Button>
+                    </Stack>
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      disabled={!newPost.trim()}
+                    >
+                      POST TO FEED
+                    </Button>
+                  </div>
                 </Stack>
+              </Card>
 
-                <Badge variant="success" size="sm">
-                  LIVE FEED
-                </Badge>
-              </Stack>
-            </Card>
+              {/* Feed Filters */}
+              <Card variant="elevated" padding="20">
+                <div className="responsive-grid feed-filters">
+                  <Stack direction="horizontal" spacing="4" align="center">
+                    <label className="filter-switch">
+                      <input
+                        type="checkbox"
+                        checked={filterVerified}
+                        onChange={(e) => setFilterVerified(e.target.checked)}
+                      />
+                      <span>Verified Artists</span>
+                    </label>
+                  </Stack>
 
-            {/* Feed Posts */}
-            <Stack spacing="16">
-              {posts.map((post) => (
-                <Card
-                  key={post.id}
-                  variant="elevated"
-                  padding="24"
-                >
-                    <Stack spacing="20">
+                  <Stack direction="horizontal" spacing="2" className="sort-buttons">
+                    <Button
+                      variant={sortBy === 'recent' ? 'primary' : 'outline'}
+                      size="sm"
+                      onClick={() => setSortBy('recent')}
+                    >
+                      Recent
+                    </Button>
+                    <Button
+                      variant={sortBy === 'popular' ? 'primary' : 'outline'}
+                      size="sm"
+                      onClick={() => setSortBy('popular')}
+                    >
+                      Popular
+                    </Button>
+                    <Button
+                      variant={sortBy === 'trending' ? 'primary' : 'outline'}
+                      size="sm"
+                      onClick={() => setSortBy('trending')}
+                    >
+                      Trending
+                    </Button>
+                  </Stack>
+
+                  <Badge variant="success" size="sm" className="live-badge">
+                    LIVE FEED
+                  </Badge>
+                </div>
+              </Card>
+
+              {/* Feed Posts */}
+              <Stack spacing="4">
+                {posts.map((post) => (
+                  <Card key={post.id} variant="elevated" padding="24">
+                    <Stack spacing="4">
                       {/* Post Header */}
-                      <Stack direction="horizontal" justify="between" align="start">
-                        <Stack direction="horizontal" spacing="4" align="center">
-                          <Box
-                            width="48px"
-                            height="48px"
-                            borderRadius="full"
-                            bg="gradient.primary"
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                          >
-                            <ModernIcon type={post.user.icon} size="md" />
-                          </Box>
+                      <div className="responsive-grid post-header">
+                        <Stack direction="horizontal" spacing="3" align="center">
+                          <div className="user-avatar">
+                            <ModernIcon type={post.user.icon} size="lg" />
+                          </div>
                           <Stack spacing="1">
                             <Stack direction="horizontal" spacing="2" align="center">
                               <Text variant="body-md" weight="bold" semantic="primary">
@@ -302,7 +255,7 @@ export default function SocialFeed() {
                               </Text>
                               {post.user.verified && (
                                 <Badge variant="success" size="sm">
-                                  <ModernIcon type="crown" size="sm" /> VERIFIED
+                                  VERIFIED
                                 </Badge>
                               )}
                               <Text variant="caption" semantic="secondary">
@@ -318,7 +271,7 @@ export default function SocialFeed() {
                         <Button variant="ghost" size="sm">
                           <ModernIcon type="diamond" size="sm" />
                         </Button>
-                      </Stack>
+                      </div>
 
                       {/* Post Content */}
                       <Text variant="body-lg" semantic="primary">
@@ -327,18 +280,10 @@ export default function SocialFeed() {
 
                       {/* Post Media */}
                       <Card variant="outlined" padding="20">
-                        <Stack spacing="4" align="center">
-                          <Box
-                            width="64px"
-                            height="64px"
-                            borderRadius="full"
-                            bg="gradient.primary"
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                          >
+                        <Stack spacing="3" align="center">
+                          <div className="media-icon">
                             <ModernIcon type={post.mediaIcon} size="xl" />
-                          </Box>
+                          </div>
                           <Stack spacing="1" align="center">
                             <Text variant="body-sm" weight="bold" semantic="primary">
                               {post.mediaType.toUpperCase()} CONTENT
@@ -351,24 +296,20 @@ export default function SocialFeed() {
                       </Card>
 
                       {/* Post Tags */}
-                      <Stack direction="horizontal" spacing="2" align="center">
+                      <Stack direction="horizontal" spacing="2" align="center" className="post-tags">
                         {post.tags.map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant="secondary"
-                            size="md"
-                          >
+                          <Badge key={tag} variant="secondary" size="sm">
                             {tag}
                           </Badge>
                         ))}
                       </Stack>
 
                       {/* Post Actions */}
-                      <Stack direction="horizontal" justify="between" align="center" py="4" spacing="3">
-                        <Stack direction="horizontal" spacing="4" align="center">
+                      <div className="responsive-grid post-interactions">
+                        <Stack direction="horizontal" spacing="3" align="center">
                           <Button
                             variant={post.liked ? 'primary' : 'ghost'}
-                            size="md"
+                            size="sm"
                             onClick={() => handleLike(post.id)}
                           >
                             <ModernIcon type="star" size="sm" />
@@ -376,59 +317,43 @@ export default function SocialFeed() {
                           </Button>
                           <Button
                             variant={post.reposted ? 'primary' : 'ghost'}
-                            size="md"
+                            size="sm"
                             onClick={() => handleRepost(post.id)}
                           >
                             <ModernIcon type="wave" size="sm" />
                             {formatNumber(post.reposts)}
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="md"
-                          >
+                          <Button variant="ghost" size="sm">
                             <ModernIcon type="diamond" size="sm" />
                             {formatNumber(post.comments)}
                           </Button>
                         </Stack>
 
-                        <Button
-                          variant="outline"
-                          size="md"
-                        >
+                        <Button variant="outline" size="sm">
                           <ModernIcon type="rocket" size="sm" />
                           Share
                         </Button>
-                      </Stack>
+                      </div>
                     </Stack>
                   </Card>
-              ))}
-
-              {/* Pagination */}
-              <Box>
-                <Pagination
-                  currentPage={currentPage}
-                  totalItems={100}
-                  itemsPerPage={10}
-                  onPageChange={setCurrentPage}
-                />
-              </Box>
+                ))}
               </Stack>
             </Stack>
-          </Box>
+          </div>
 
           {/* Sidebar */}
-          <div className="desktop-sidebar">
+          <div className="feed-sidebar">
             <Stack spacing="6">
               {/* Trending Topics */}
-              <Card variant="elevated" padding="lg">
+              <Card variant="elevated" padding="20">
                 <Stack spacing="4">
                   <Heading size="lg" semantic="primary">
                     TRENDING TOPICS
                   </Heading>
                   <Divider />
-                  <Stack spacing="2">
+                  <Stack spacing="3">
                     {trendingTopics.map((topic, index) => (
-                      <Stack key={topic.tag} direction="horizontal" justify="between" align="center">
+                      <div key={topic.tag} className="responsive-grid trending-item">
                         <Stack spacing="1">
                           <Text variant="body-sm" weight="bold" semantic="primary">
                             {topic.tag}
@@ -440,21 +365,21 @@ export default function SocialFeed() {
                         <Badge variant="primary" size="sm">
                           #{index + 1}
                         </Badge>
-                      </Stack>
+                      </div>
                     ))}
                   </Stack>
                 </Stack>
               </Card>
 
               {/* Quick Actions */}
-              <Card variant="elevated" padding="lg">
+              <Card variant="elevated" padding="20">
                 <Stack spacing="4">
                   <Heading size="md" semantic="primary">
                     QUICK ACTIONS
                   </Heading>
                   <Divider />
                   <Stack spacing="2">
-                    <Button variant="outline" size="sm" onClick={() => setShowModal(true)}>
+                    <Button variant="outline" size="sm">
                       <ModernIcon type="music" size="sm" /> Share New Track
                     </Button>
                     <Button variant="outline" size="sm">
@@ -470,64 +395,33 @@ export default function SocialFeed() {
                 </Stack>
               </Card>
 
-              {/* Festival Alerts */}
-              <Alert variant="info" title="Festival Updates">
-                <Text variant="body-sm">
-                  Electric Dreams 2024 lineup announcement in 2 days!
-                  Turn on notifications to be the first to know.
-                </Text>
-              </Alert>
-
               {/* Community Stats */}
-              <Card variant="elevated" padding="lg">
+              <Card variant="elevated" padding="20">
                 <Stack spacing="4">
                   <Heading size="md" semantic="primary">
                     COMMUNITY PULSE
                   </Heading>
                   <Divider />
                   <Stack spacing="2">
-                    <Stack direction="horizontal" justify="between">
+                    <div className="responsive-grid stat-item">
                       <Text variant="caption" semantic="secondary">Active Users</Text>
                       <Text variant="caption" semantic="primary">234K online</Text>
-                    </Stack>
-                    <Stack direction="horizontal" justify="between">
+                    </div>
+                    <div className="responsive-grid stat-item">
                       <Text variant="caption" semantic="secondary">Posts Today</Text>
                       <Text variant="caption" semantic="primary">89.2K posts</Text>
-                    </Stack>
-                    <Stack direction="horizontal" justify="between">
+                    </div>
+                    <div className="responsive-grid stat-item">
                       <Text variant="caption" semantic="secondary">New Tracks</Text>
                       <Text variant="caption" semantic="primary">1.2K releases</Text>
-                    </Stack>
+                    </div>
                   </Stack>
                 </Stack>
               </Card>
             </Stack>
           </div>
         </div>
-
-      {/* Share Track Modal */}
-      {showModal && (
-        <Modal
-          title="Share New Track"
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-        >
-          <Stack spacing="4">
-            <Input placeholder="Track title" />
-            <Textarea placeholder="Tell your fans about this track..." rows={4} />
-            <Stack direction="horizontal" spacing="2">
-              <Checkbox label="Available on Spotify" />
-              <Checkbox label="Available on SoundCloud" />
-            </Stack>
-            <ButtonGroup>
-              <Button variant="primary">Share Track</Button>
-              <Button variant="ghost" onClick={() => setShowModal(false)}>
-                Cancel
-              </Button>
-            </ButtonGroup>
-          </Stack>
-        </Modal>
-      )}
-    </Box>
+      </Stack>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Text, Card, Input, Stack, Badge, Heading, Divider, Button } from '@mond-design-system/theme';
+import { Box, Text, Card, Input, Stack, Badge, Heading, Divider } from '@mond-design-system/theme';
 import { MatrixRain } from '../../components/MatrixRain';
 
 interface TerminalLine {

@@ -1,20 +1,15 @@
-'use client';
-
 import {
   Card,
   Stack,
-  Box,
   Text,
   Badge,
   Heading,
-  Grid,
   Divider,
   Button,
   TagList,
   SearchForm,
-} from "@mond-design-system/theme";
-import { PulseAnimation } from "../components/PulseAnimation";
-import { ModernIcon } from "../components/ModernIcon";
+} from '@mond-design-system/theme';
+import { ModernIcon } from '../components/ModernIcon';
 
 // Static festival data
 const featuredFestivals = [
@@ -68,7 +63,7 @@ const trendingArtists = [
   { id: "6", name: "Neon Prophet", icon: "diamond" as const, followers: "850K", genre: "Techno" },
 ];
 
-export default function FestivalDiscovery() {
+export default function Home() {
   const handleSearch = (_query: string) => {
     // Handle search functionality
   };
@@ -82,32 +77,33 @@ export default function FestivalDiscovery() {
   };
 
   return (
-    <Box bg="surface.background" p="32" maxWidth="1400px" mx="auto" position="relative">
-      {/* Pulse Animation Background */}
-      <PulseAnimation />
-
-      <Stack spacing="24">
+    <div className="page-container">
+      <Stack spacing="6">
         {/* Hero Section */}
-        <Stack spacing="20" align="center">
+        <div className="hero-section">
           <Stack spacing="4" align="center">
-            <Heading size="4xl" weight="bold" semantic="primary">
-              DISCOVER ELECTRIC FESTIVALS
-            </Heading>
-            <Text variant="body-lg" semantic="primary" align="center">
-              Underground music • Immersive art • Electric vibes • Festival communities
-            </Text>
+            <div className="hero-title">
+              <Heading size="4xl" weight="bold" semantic="primary">
+                DISCOVER ELECTRIC FESTIVALS
+              </Heading>
+            </div>
+            <div className="hero-subtitle">
+              <Text variant="body-lg" semantic="primary" align="center">
+                Underground music • Immersive art • Electric vibes • Festival communities
+              </Text>
+            </div>
           </Stack>
 
           {/* Search */}
-          <Box width="100%" maxWidth="500px">
+          <div className="search-container">
             <SearchForm
               placeholder="Search festivals, artists, genres..."
               onSearch={handleSearch}
               size="lg"
             />
-          </Box>
+          </div>
 
-          <Stack direction="horizontal" spacing="4" align="center">
+          <Stack direction="horizontal" spacing="4" align="center" justify="center">
             <Badge variant="primary" size="lg">
               45 FESTIVALS LIVE
             </Badge>
@@ -115,7 +111,7 @@ export default function FestivalDiscovery() {
               2.1M RAVERS CONNECTED
             </Badge>
           </Stack>
-        </Stack>
+        </div>
 
         {/* Featured Festivals Grid */}
         <Stack spacing="6">
@@ -123,7 +119,7 @@ export default function FestivalDiscovery() {
             FEATURED FESTIVALS
           </Heading>
 
-          <Grid columns={3} gap="24">
+          <div className="responsive-grid festivals">
             {featuredFestivals.map((festival) => {
               const statusBadge = getStatusBadge(festival.status);
               return (
@@ -199,7 +195,7 @@ export default function FestivalDiscovery() {
                 </Card>
               );
             })}
-          </Grid>
+          </div>
         </Stack>
 
         {/* Trending Artists */}
@@ -208,7 +204,7 @@ export default function FestivalDiscovery() {
             TRENDING ARTISTS
           </Heading>
 
-          <Grid columns={6} gap="16">
+          <div className="responsive-grid artists">
             {trendingArtists.map((artist) => (
               <Card key={artist.id} variant="glass" padding="20">
                 <Stack spacing="4" align="center">
@@ -230,7 +226,7 @@ export default function FestivalDiscovery() {
                 </Stack>
               </Card>
             ))}
-          </Grid>
+          </div>
         </Stack>
 
         {/* Stats Section */}
@@ -240,7 +236,7 @@ export default function FestivalDiscovery() {
               FLUX COMMUNITY STATS
             </Heading>
 
-            <Grid columns={4} gap="6">
+            <div className="responsive-grid stats">
               <Stack align="center" spacing="2">
                 <Text variant="display" weight="bold" semantic="accent">2.1M</Text>
                 <Text variant="body-md" weight="medium" semantic="primary">Active Ravers</Text>
@@ -257,11 +253,11 @@ export default function FestivalDiscovery() {
                 <Text variant="display" weight="bold" semantic="accent">95%</Text>
                 <Text variant="body-md" weight="medium" semantic="primary">Satisfaction Rate</Text>
               </Stack>
-            </Grid>
+            </div>
           </Stack>
         </Card>
 
       </Stack>
-    </Box>
+    </div>
   );
 }

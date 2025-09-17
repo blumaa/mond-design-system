@@ -88,25 +88,16 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(({
   const theme = useTheme(isDarkMode);
   const styles = getCardStyles(variant, theme);
 
-  // Separate CSS properties from React props
-  const stylesAny = styles as any;
-  const backdropFilter = stylesAny.backdropFilter;
-  const hoverStyles = stylesAny['&:hover'];
-
-  // Remove problematic properties and create clean boxProps
-  const { backdropFilter: _, '&:hover': __, ...boxProps } = stylesAny;
-
-  // Create proper CSS style object
-  const cssStyles: React.CSSProperties = {
-    ...(backdropFilter && { backdropFilter }),
-  };
-
   return (
     <Box
       ref={ref}
       p={padding}
-      style={cssStyles}
-      {...boxProps}
+      bg={styles.bg}
+      borderRadius={styles.borderRadius}
+      boxShadow={'boxShadow' in styles ? styles.boxShadow : undefined}
+      border={'border' in styles ? styles.border : undefined}
+      borderColor={'borderColor' in styles ? styles.borderColor : undefined}
+      transition={styles.transition}
       {...props}
     >
       {children}

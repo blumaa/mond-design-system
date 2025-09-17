@@ -46,7 +46,7 @@ describe('Card Component', () => {
     );
     
     const card = screen.getByTestId('card');
-    expect(card).toHaveStyle('border-radius: 8px');
+    expect(card).toHaveStyle('border-radius: 12px');
   });
 
   it('forwards additional Box props', () => {

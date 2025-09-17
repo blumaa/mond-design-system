@@ -1,5 +1,3 @@
-'use client';
-import React from 'react';
 import { Box } from '@mond-design-system/theme';
 
 interface ModernIconProps {
@@ -196,90 +194,6 @@ export function ModernIcon({
                   fill="url(#diamondGrad)"
                   style={{ filter: 'drop-shadow(0 4px 8px rgba(59,130,246,0.4))' }} />
             <path d="M35 20L50 40L65 20L50 30Z" fill="white" opacity="0.3" />
-          </svg>
-        );
-
-      case 'butterfly':
-        return (
-          <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none">
-            <defs>
-              <linearGradient id="butterflyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#e542ff" />
-                <stop offset="50%" stopColor="#f97316" />
-                <stop offset="100%" stopColor="#ffdd33" />
-              </linearGradient>
-            </defs>
-            <ellipse cx="35" cy="35" rx="15" ry="20" fill="url(#butterflyGrad)" style={{ filter: 'drop-shadow(0 2px 4px rgba(229,66,255,0.4))' }} />
-            <ellipse cx="65" cy="35" rx="15" ry="20" fill="url(#butterflyGrad)" style={{ filter: 'drop-shadow(0 2px 4px rgba(229,66,255,0.4))' }} />
-            <ellipse cx="35" cy="65" rx="12" ry="15" fill="url(#butterflyGrad)" opacity="0.8" />
-            <ellipse cx="65" cy="65" rx="12" ry="15" fill="url(#butterflyGrad)" opacity="0.8" />
-            <rect x="48" y="20" width="4" height="60" fill="#4a4a4a" rx="2" />
-            <circle cx="50" cy="15" r="3" fill="#4a4a4a" />
-          </svg>
-        );
-
-      case 'search':
-        return (
-          <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none">
-            <defs>
-              <linearGradient id="searchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#3b82f6" />
-                <stop offset="100%" stopColor="#06b6d4" />
-              </linearGradient>
-            </defs>
-            <circle cx="40" cy="40" r="25" fill="none" stroke="url(#searchGrad)" strokeWidth="6" style={{ filter: 'drop-shadow(0 2px 4px rgba(59,130,246,0.4))' }} />
-            <path d="M60 60L80 80" stroke="url(#searchGrad)" strokeWidth="6" strokeLinecap="round" style={{ filter: 'drop-shadow(0 2px 4px rgba(59,130,246,0.4))' }} />
-          </svg>
-        );
-
-      case 'trophy':
-        return (
-          <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none">
-            <defs>
-              <linearGradient id="trophyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ffdd33" />
-                <stop offset="100%" stopColor="#f59e0b" />
-              </linearGradient>
-            </defs>
-            <rect x="35" y="75" width="30" height="8" fill="url(#trophyGrad)" />
-            <rect x="45" y="60" width="10" height="15" fill="url(#trophyGrad)" />
-            <ellipse cx="50" cy="40" rx="20" ry="25" fill="url(#trophyGrad)" style={{ filter: 'drop-shadow(0 4px 8px rgba(245,158,11,0.4))' }} />
-            <path d="M25 35C25 30 30 25 35 25V45C30 45 25 40 25 35Z" fill="url(#trophyGrad)" opacity="0.8" />
-            <path d="M75 35C75 30 70 25 65 25V45C70 45 75 40 75 35Z" fill="url(#trophyGrad)" opacity="0.8" />
-          </svg>
-        );
-
-      case 'sparkle':
-        return (
-          <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none">
-            <defs>
-              <linearGradient id="sparkleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ffdd33" />
-                <stop offset="100%" stopColor="#ff6b35" />
-              </linearGradient>
-            </defs>
-            <path d="M50 10L52 25L67 22L55 35L70 45L52 40L50 55L48 40L30 45L45 35L33 22L48 25Z" fill="url(#sparkleGrad)" style={{ filter: 'drop-shadow(0 2px 6px rgba(255,107,53,0.4))' }} />
-            <circle cx="75" cy="25" r="3" fill="url(#sparkleGrad)" />
-            <circle cx="25" cy="75" r="2" fill="url(#sparkleGrad)" opacity="0.8" />
-            <circle cx="80" cy="70" r="2" fill="url(#sparkleGrad)" opacity="0.6" />
-          </svg>
-        );
-
-      case 'spaceship':
-        return (
-          <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none">
-            <defs>
-              <linearGradient id="spaceshipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#8b5cf6" />
-                <stop offset="50%" stopColor="#3b82f6" />
-                <stop offset="100%" stopColor="#06b6d4" />
-              </linearGradient>
-            </defs>
-            <ellipse cx="50" cy="35" rx="12" ry="20" fill="url(#spaceshipGrad)" style={{ filter: 'drop-shadow(0 4px 8px rgba(139,92,246,0.4))' }} />
-            <path d="M38 55L50 70L62 55L50 50Z" fill="url(#spaceshipGrad)" opacity="0.8" />
-            <circle cx="50" cy="30" r="4" fill="white" opacity="0.9" />
-            <rect x="30" y="45" width="8" height="15" rx="4" fill="url(#spaceshipGrad)" opacity="0.6" />
-            <rect x="62" y="45" width="8" height="15" rx="4" fill="url(#spaceshipGrad)" opacity="0.6" />
           </svg>
         );
 

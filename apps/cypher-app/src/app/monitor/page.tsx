@@ -39,7 +39,7 @@ export default function Monitor() {
     { id: '6', name: 'Power Draw', value: 245.7, unit: 'W', status: 'normal', history: [240, 242, 244, 246, 245] }
   ]);
 
-  const [connections, setConnections] = useState<NetworkConnection[]>([
+  const [connections, _setConnections] = useState<NetworkConnection[]>([
     { id: '1', source: 'Node-7', destination: 'neural.io', protocol: 'HTTPS', status: 'active', bandwidth: 156.7 },
     { id: '2', source: 'Terminal-3', destination: 'matrix.net', protocol: 'SSH', status: 'active', bandwidth: 23.4 },
     { id: '3', source: 'Core-9', destination: 'cypher.sys', protocol: 'TCP', status: 'idle', bandwidth: 0 },

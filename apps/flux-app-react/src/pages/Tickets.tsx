@@ -1,25 +1,14 @@
-'use client';
-
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Card,
   Stack,
-  Box,
   Text,
   Badge,
   Heading,
   Divider,
   Button,
-  Input,
-  Select,
-  RadioGroup,
-  Checkbox,
-  ProgressStepper,
-  Alert,
-  Switch,
-} from "@mond-design-system/theme";
-import { PulseAnimation } from "../../components/PulseAnimation";
-import { ModernIcon } from "../../components/ModernIcon";
+} from '@mond-design-system/theme';
+import { ModernIcon } from '../components/ModernIcon';
 
 // Mock ticket data
 const festivals = [
@@ -57,7 +46,7 @@ const addOns = [
   { id: "food", name: "Meal Plan", price: 120, description: "All-you-can-eat for 3 days" }
 ];
 
-export default function TicketBooking() {
+export default function Tickets() {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedFestival, setSelectedFestival] = useState(festivals[0]);
   const [selectedTicketType, setSelectedTicketType] = useState('general');
@@ -120,7 +109,7 @@ export default function TicketBooking() {
   const isStepValid = () => {
     switch (currentStep) {
       case 0: return selectedTicket && quantity > 0;
-      case 1: return true; // Add-ons are optional
+      case 1: return true;
       case 2: return guestInfo.firstName && guestInfo.lastName && guestInfo.email;
       case 3: return paymentInfo.cardNumber && paymentInfo.expiryDate && paymentInfo.cvv && agreeTerms;
       default: return true;
@@ -128,77 +117,86 @@ export default function TicketBooking() {
   };
 
   return (
-    <Box bg="surface.background" position="relative" minHeight="100vh">
-      <PulseAnimation />
-
-      {/* Modern Header Section */}
-      <Box bg="surface.elevated" borderBottom="1px solid" borderColor="border.subtle" py="32" px="32">
-        <Stack spacing="8" maxWidth="1400px" mx="auto" align="center">
-          <Stack direction="horizontal" spacing="4" align="center">
-            <ModernIcon type="diamond" size="xl" />
-            <Heading size="4xl" semantic="primary">
-              FESTIVAL TICKETS
-            </Heading>
-            <ModernIcon type="diamond" size="xl" />
+    <div className="page-container">
+      <Stack spacing="6">
+        {/* Header */}
+        <div className="hero-section">
+          <Stack spacing="3" align="center">
+            <Stack direction="horizontal" spacing="3" align="center">
+              <ModernIcon type="diamond" size="xl" />
+              <Heading size="4xl" weight="bold" semantic="primary">
+                FESTIVAL TICKETS
+              </Heading>
+              <ModernIcon type="diamond" size="xl" />
+            </Stack>
+            <Text variant="body-lg" semantic="secondary">
+              Secure your spot at the most electric festivals
+            </Text>
+            <Badge variant="primary" size="lg">
+              <ModernIcon type="star" size="sm" />
+              SECURE CHECKOUT
+            </Badge>
           </Stack>
-          <Text variant="body-lg" semantic="secondary" align="center">
-            Secure your spot at the most electric festivals
-          </Text>
-          <Badge variant="primary" size="lg">
-            <ModernIcon type="star" size="sm" />
-            SECURE CHECKOUT
-          </Badge>
-        </Stack>
-      </Box>
-
-      <Box p="32" maxWidth="1400px" mx="auto">
-        <Stack spacing="32">
+        </div>
 
         {/* Progress Stepper */}
-        <Box>
-          <ProgressStepper
-            steps={steps.map((step, index) => ({
-              label: step.title,
-              description: step.description,
-              status: index < currentStep ? 'completed' : index === currentStep ? 'active' : 'disabled'
-            }))}
-            currentStep={currentStep}
-          />
-        </Box>
+        <Card variant="glass" padding="20">
+          <div className="responsive-grid stepper">
+            {steps.map((step, index) => (
+              <div
+                key={step.id}
+                className={`step-item ${index < currentStep ? 'completed' : index === currentStep ? 'active' : 'disabled'}`}
+              >
+                <div className="step-number">
+                  {index < currentStep ? '✓' : index + 1}
+                </div>
+                <Stack spacing="1" align="center">
+                  <Text variant="caption" weight="bold" semantic="primary">
+                    {step.title}
+                  </Text>
+                  <Text variant="caption" semantic="secondary">
+                    {step.description}
+                  </Text>
+                </Stack>
+              </div>
+            ))}
+          </div>
+        </Card>
 
-          <div className="responsive-ticket-layout">
-            {/* Enhanced Main Content */}
-            <Box>
-              <Card variant="elevated" padding="40">
-                <Stack spacing="24">
+        {/* Main Layout */}
+        <div className="responsive-grid ticket-layout">
+          {/* Main Content */}
+          <div className="ticket-main">
+            <Card variant="elevated" padding="32">
+              <Stack spacing="6">
 
-                  {/* Step 0: Enhanced Festival Selection */}
-                  {currentStep === 0 && (
-                    <Stack spacing="20">
-                      <Stack spacing="4" align="center">
-                        <ModernIcon type="festival" size="xl" />
-                        <Heading size="2xl" semantic="primary">
-                          Select Your Festival Experience
-                        </Heading>
-                        <Text variant="body-lg" semantic="secondary" align="center">
-                          Choose from our premium festival collection
-                        </Text>
-                      </Stack>
+                {/* Step 0: Festival Selection */}
+                {currentStep === 0 && (
+                  <Stack spacing="6">
+                    <Stack spacing="3" align="center">
+                      <ModernIcon type="festival" size="xl" />
+                      <Heading size="2xl" semantic="primary">
+                        Select Your Festival Experience
+                      </Heading>
+                      <Text variant="body-lg" semantic="secondary" align="center">
+                        Choose from our premium festival collection
+                      </Text>
+                    </Stack>
 
                     {/* Festival Selection */}
                     <Stack spacing="4">
                       <Text variant="body-md" weight="bold" semantic="primary">
                         Choose Festival
                       </Text>
-                      <div className="responsive-cards-grid">
+                      <div className="responsive-grid festivals">
                         {festivals.map((festival) => (
                           <Card
                             key={festival.id}
                             variant={selectedFestival.id === festival.id ? "elevated" : "outlined"}
-                            padding="lg"
+                            padding="20"
                           >
-                            <Stack spacing="2">
-                              <Stack direction="horizontal" justify="between" align="start">
+                            <Stack spacing="4">
+                              <div className="responsive-grid festival-header">
                                 <ModernIcon type={festival.icon} size="xl" />
                                 <Button
                                   variant={selectedFestival.id === festival.id ? "primary" : "ghost"}
@@ -207,16 +205,18 @@ export default function TicketBooking() {
                                 >
                                   {selectedFestival.id === festival.id ? "SELECTED" : "SELECT"}
                                 </Button>
+                              </div>
+                              <Stack spacing="2">
+                                <Heading size="md" semantic="primary">
+                                  {festival.name}
+                                </Heading>
+                                <Text variant="caption" semantic="secondary">
+                                  {festival.date}
+                                </Text>
+                                <Text variant="caption" semantic="secondary">
+                                  {festival.location}
+                                </Text>
                               </Stack>
-                              <Heading size="md" semantic="primary">
-                                {festival.name}
-                              </Heading>
-                              <Text variant="caption" semantic="secondary">
-                                {festival.date}
-                              </Text>
-                              <Text variant="caption" semantic="secondary">
-                                {festival.location}
-                              </Text>
                             </Stack>
                           </Card>
                         ))}
@@ -228,37 +228,42 @@ export default function TicketBooking() {
                       <Text variant="body-md" weight="bold" semantic="primary">
                         Choose Ticket Type
                       </Text>
-                      <RadioGroup
-                        value={selectedTicketType}
-                        onChange={setSelectedTicketType}
-                        options={selectedFestival.ticketTypes.map((ticket) => ({
-                          value: ticket.id,
-                          label: `${ticket.name} - $${ticket.price}`
-                        }))}
-                      />
-
-                      {/* Show ticket details for selected option */}
-                      {selectedTicket && (
-                        <Card variant="outlined" padding="lg">
-                          <Stack spacing="2">
-                            <Stack direction="horizontal" spacing="4" align="center">
-                              <Text variant="body-md" weight="bold" semantic="primary">
-                                {selectedTicket.name}
-                              </Text>
-                              <Badge variant="primary" size="sm">
-                                ${selectedTicket.price}
+                      <Stack spacing="3">
+                        {selectedFestival.ticketTypes.map((ticket) => (
+                          <Card
+                            key={ticket.id}
+                            variant={selectedTicketType === ticket.id ? "elevated" : "outlined"}
+                            padding="16"
+                          >
+                            <div className="responsive-grid ticket-option">
+                              <Stack spacing="2">
+                                <label className="ticket-radio">
+                                  <input
+                                    type="radio"
+                                    name="ticketType"
+                                    value={ticket.id}
+                                    checked={selectedTicketType === ticket.id}
+                                    onChange={(e) => setSelectedTicketType(e.target.value)}
+                                  />
+                                  <Text variant="body-md" weight="bold" semantic="primary">
+                                    {ticket.name}
+                                  </Text>
+                                </label>
+                                <Stack direction="horizontal" spacing="2" className="perks">
+                                  {ticket.perks.map((perk) => (
+                                    <Badge key={perk} variant="secondary" size="sm">
+                                      {perk}
+                                    </Badge>
+                                  ))}
+                                </Stack>
+                              </Stack>
+                              <Badge variant="primary" size="md">
+                                ${ticket.price}
                               </Badge>
-                            </Stack>
-                            <Stack direction="horizontal" spacing="2">
-                              {selectedTicket.perks.map((perk) => (
-                                <Badge key={perk} variant="secondary" size="sm">
-                                  {perk}
-                                </Badge>
-                              ))}
-                            </Stack>
-                          </Stack>
-                        </Card>
-                      )}
+                            </div>
+                          </Card>
+                        ))}
+                      </Stack>
                     </Stack>
 
                     {/* Quantity Selection */}
@@ -266,17 +271,16 @@ export default function TicketBooking() {
                       <Text variant="body-md" weight="bold" semantic="primary">
                         Number of Tickets
                       </Text>
-                      <Box width="200px">
-                        <Input
+                      <div className="quantity-selector">
+                        <input
                           type="number"
-                          value={quantity.toString()}
+                          value={quantity}
                           onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
                           min={1}
                           max={8}
-                          label="Quantity"
-                          inputSize="md"
+                          className="quantity-input"
                         />
-                      </Box>
+                      </div>
                     </Stack>
                   </Stack>
                 )}
@@ -291,11 +295,11 @@ export default function TicketBooking() {
                       Add optional extras to make your festival unforgettable
                     </Text>
 
-                    <div className="responsive-cards-grid">
+                    <div className="responsive-grid addons">
                       {addOns.map((addon) => (
-                        <Card key={addon.id} variant="outlined" padding="lg">
+                        <Card key={addon.id} variant="outlined" padding="20">
                           <Stack spacing="4">
-                            <Stack direction="horizontal" justify="between" align="start">
+                            <div className="responsive-grid addon-header">
                               <Stack spacing="2">
                                 <Text variant="body-md" weight="bold" semantic="primary">
                                   {addon.name}
@@ -307,22 +311,25 @@ export default function TicketBooking() {
                               <Badge variant="primary" size="sm">
                                 +${addon.price}
                               </Badge>
-                            </Stack>
-                            <Checkbox
-                              checked={selectedAddOns.includes(addon.id)}
-                              onChange={() => handleAddOnToggle(addon.id)}
-                              label="Add to order"
-                            />
+                            </div>
+                            <label className="addon-checkbox">
+                              <input
+                                type="checkbox"
+                                checked={selectedAddOns.includes(addon.id)}
+                                onChange={() => handleAddOnToggle(addon.id)}
+                              />
+                              <span>Add to order</span>
+                            </label>
                           </Stack>
                         </Card>
                       ))}
                     </div>
 
-                    <Alert variant="info" title="Pro Tip">
-                      <Text variant="body-sm">
-                        Save money by bundling add-ons! Camping + Parking + Meal Plan = 15% discount
+                    <Card variant="glass" padding="16">
+                      <Text variant="body-sm" semantic="primary">
+                        💡 <strong>Pro Tip:</strong> Save money by bundling add-ons! Camping + Parking + Meal Plan = 15% discount
                       </Text>
-                    </Alert>
+                    </Card>
                   </Stack>
                 )}
 
@@ -333,31 +340,38 @@ export default function TicketBooking() {
                       Your Information
                     </Heading>
 
-                    <div className="responsive-cards-grid">
+                    <div className="responsive-grid info-sections">
                       <Stack spacing="4">
                         <Text variant="body-md" weight="bold" semantic="primary">
                           Personal Details
                         </Text>
-                        <Input
+                        <input
+                          type="text"
                           placeholder="First Name"
                           value={guestInfo.firstName}
                           onChange={(e) => setGuestInfo({...guestInfo, firstName: e.target.value})}
+                          className="form-input"
                         />
-                        <Input
+                        <input
+                          type="text"
                           placeholder="Last Name"
                           value={guestInfo.lastName}
                           onChange={(e) => setGuestInfo({...guestInfo, lastName: e.target.value})}
+                          className="form-input"
                         />
-                        <Input
-                          placeholder="Email Address"
+                        <input
                           type="email"
+                          placeholder="Email Address"
                           value={guestInfo.email}
                           onChange={(e) => setGuestInfo({...guestInfo, email: e.target.value})}
+                          className="form-input"
                         />
-                        <Input
+                        <input
+                          type="tel"
                           placeholder="Phone Number"
                           value={guestInfo.phone}
                           onChange={(e) => setGuestInfo({...guestInfo, phone: e.target.value})}
+                          className="form-input"
                         />
                       </Stack>
 
@@ -365,31 +379,21 @@ export default function TicketBooking() {
                         <Text variant="body-md" weight="bold" semantic="primary">
                           Age Verification
                         </Text>
-                        <Select
+                        <select
                           value={guestInfo.age}
-                          onChange={(value) => setGuestInfo({...guestInfo, age: value})}
-                          options={[
-                            { value: '18+', label: '18+ Years' },
-                            { value: '21+', label: '21+ Years' },
-                            { value: 'under-18', label: 'Under 18 (Guardian Required)' }
-                          ]}
-                        />
+                          onChange={(e) => setGuestInfo({...guestInfo, age: e.target.value})}
+                          className="form-select"
+                        >
+                          <option value="18+">18+ Years</option>
+                          <option value="21+">21+ Years</option>
+                          <option value="under-18">Under 18 (Guardian Required)</option>
+                        </select>
 
-                        <Alert variant="warning" title="Important">
-                          <Text variant="body-sm">
-                            Valid ID matching the name on this order will be required at festival entry.
-                            Age restrictions apply for certain areas.
+                        <Card variant="glass" padding="16">
+                          <Text variant="body-sm" semantic="primary">
+                            ⚠️ <strong>Important:</strong> Valid ID matching the name on this order will be required at festival entry.
                           </Text>
-                        </Alert>
-
-                        <Stack spacing="2">
-                          <Checkbox
-                            label="Subscribe to festival updates and exclusive offers"
-                          />
-                          <Checkbox
-                            label="I agree to receive SMS notifications about my order"
-                          />
-                        </Stack>
+                        </Card>
                       </Stack>
                     </div>
                   </Stack>
@@ -402,32 +406,40 @@ export default function TicketBooking() {
                       Payment Information
                     </Heading>
 
-                    <div className="responsive-cards-grid">
+                    <div className="responsive-grid payment-sections">
                       <Stack spacing="4">
                         <Text variant="body-md" weight="bold" semantic="primary">
                           Payment Method
                         </Text>
-                        <Input
+                        <input
+                          type="text"
                           placeholder="Card Number"
                           value={paymentInfo.cardNumber}
                           onChange={(e) => setPaymentInfo({...paymentInfo, cardNumber: e.target.value})}
+                          className="form-input"
                         />
-                        <div className="responsive-cards-grid">
-                          <Input
+                        <div className="responsive-grid card-details">
+                          <input
+                            type="text"
                             placeholder="MM/YY"
                             value={paymentInfo.expiryDate}
                             onChange={(e) => setPaymentInfo({...paymentInfo, expiryDate: e.target.value})}
+                            className="form-input"
                           />
-                          <Input
+                          <input
+                            type="text"
                             placeholder="CVV"
                             value={paymentInfo.cvv}
                             onChange={(e) => setPaymentInfo({...paymentInfo, cvv: e.target.value})}
+                            className="form-input"
                           />
                         </div>
-                        <Input
+                        <input
+                          type="text"
                           placeholder="Cardholder Name"
                           value={paymentInfo.cardholderName}
                           onChange={(e) => setPaymentInfo({...paymentInfo, cardholderName: e.target.value})}
+                          className="form-input"
                         />
                       </Stack>
 
@@ -435,23 +447,26 @@ export default function TicketBooking() {
                         <Text variant="body-md" weight="bold" semantic="primary">
                           Insurance & Protection
                         </Text>
-                        <Card variant="outlined" padding="md">
-                          <Stack spacing="2">
-                            <Stack direction="horizontal" justify="between" align="center">
+                        <Card variant="outlined" padding="16">
+                          <Stack spacing="3">
+                            <div className="responsive-grid insurance-option">
                               <Stack spacing="1">
                                 <Text variant="body-sm" weight="bold" semantic="primary">
                                   Event Protection Insurance
                                 </Text>
                                 <Text variant="caption" semantic="secondary">
-                                  Full refund if you can&apos;t attend due to covered reasons
+                                  Full refund if you can't attend due to covered reasons
                                 </Text>
                               </Stack>
-                              <Switch
-                                checked={wantInsurance}
-                                onChange={(e) => setWantInsurance(e.target.checked)}
-                                label="Add insurance"
-                              />
-                            </Stack>
+                              <label className="insurance-switch">
+                                <input
+                                  type="checkbox"
+                                  checked={wantInsurance}
+                                  onChange={(e) => setWantInsurance(e.target.checked)}
+                                />
+                                <span>Add insurance</span>
+                              </label>
+                            </div>
                             {wantInsurance && (
                               <Badge variant="primary" size="sm">
                                 +$29 Insurance Fee
@@ -460,21 +475,24 @@ export default function TicketBooking() {
                           </Stack>
                         </Card>
 
-                        <Alert variant="success" title="Secure Payment">
-                          <Text variant="body-sm">
-                            Your payment information is encrypted and secure. We never store your card details.
+                        <Card variant="glass" padding="16">
+                          <Text variant="body-sm" semantic="primary">
+                            🔒 <strong>Secure Payment:</strong> Your payment information is encrypted and secure.
                           </Text>
-                        </Alert>
+                        </Card>
                       </Stack>
                     </div>
 
                     <Divider />
 
-                    <Checkbox
-                      checked={agreeTerms}
-                      onChange={(e) => setAgreeTerms(e.target.checked)}
-                      label="I agree to the Terms of Service and Privacy Policy"
-                    />
+                    <label className="terms-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={agreeTerms}
+                        onChange={(e) => setAgreeTerms(e.target.checked)}
+                      />
+                      <span>I agree to the Terms of Service and Privacy Policy</span>
+                    </label>
                   </Stack>
                 )}
 
@@ -489,23 +507,23 @@ export default function TicketBooking() {
                       Your tickets have been purchased successfully. Check your email for confirmation and entry details.
                     </Text>
 
-                    <Card variant="elevated" padding="lg">
+                    <Card variant="elevated" padding="20">
                       <Stack spacing="4">
                         <Text variant="body-md" weight="bold" semantic="primary">
                           Order #{Math.random().toString(36).substr(2, 9).toUpperCase()}
                         </Text>
-                        <Stack direction="horizontal" justify="between">
+                        <div className="responsive-grid order-detail">
                           <Text variant="caption" semantic="secondary">Festival</Text>
                           <Text variant="caption" semantic="primary">{selectedFestival.name}</Text>
-                        </Stack>
-                        <Stack direction="horizontal" justify="between">
+                        </div>
+                        <div className="responsive-grid order-detail">
                           <Text variant="caption" semantic="secondary">Tickets</Text>
                           <Text variant="caption" semantic="primary">{quantity}x {selectedTicket?.name}</Text>
-                        </Stack>
-                        <Stack direction="horizontal" justify="between">
+                        </div>
+                        <div className="responsive-grid order-detail">
                           <Text variant="caption" semantic="secondary">Total Paid</Text>
                           <Text variant="body-md" weight="bold" semantic="primary">${total.toFixed(2)}</Text>
-                        </Stack>
+                        </div>
                       </Stack>
                     </Card>
 
@@ -522,7 +540,7 @@ export default function TicketBooking() {
 
                 {/* Navigation Buttons */}
                 {currentStep < 4 && (
-                  <Stack direction="horizontal" justify="between">
+                  <div className="responsive-grid navigation">
                     <Button
                       variant="ghost"
                       disabled={currentStep === 0}
@@ -537,15 +555,15 @@ export default function TicketBooking() {
                     >
                       {currentStep === 3 ? 'COMPLETE PURCHASE' : 'CONTINUE'}
                     </Button>
-                  </Stack>
+                  </div>
                 )}
               </Stack>
             </Card>
-          </Box>
+          </div>
 
-            {/* Enhanced Order Summary Sidebar */}
-            <div className="ticket-sidebar">
-              <Stack spacing="8">
+          {/* Order Summary Sidebar */}
+          <div className="ticket-sidebar">
+            <Stack spacing="6">
               <Card variant="elevated" padding="24">
                 <Stack spacing="6">
                   <Stack direction="horizontal" spacing="3" align="center">
@@ -556,90 +574,78 @@ export default function TicketBooking() {
                   </Stack>
                   <Divider />
 
-                <Stack spacing="2">
-                  <Stack direction="horizontal" justify="between">
-                    <Text variant="caption" semantic="secondary">Festival</Text>
-                    <Text variant="caption" semantic="primary">{selectedFestival.name}</Text>
-                  </Stack>
+                  <Stack spacing="2">
+                    <div className="responsive-grid summary-item">
+                      <Text variant="caption" semantic="secondary">Festival</Text>
+                      <Text variant="caption" semantic="primary">{selectedFestival.name}</Text>
+                    </div>
 
-                  {selectedTicket && (
-                    <>
-                      <Stack direction="horizontal" justify="between">
+                    {selectedTicket && (
+                      <div className="responsive-grid summary-item">
                         <Text variant="caption" semantic="secondary">{selectedTicket.name} x{quantity}</Text>
                         <Text variant="caption" semantic="primary">${(selectedTicket.price * quantity).toFixed(2)}</Text>
-                      </Stack>
-                    </>
-                  )}
+                      </div>
+                    )}
 
-                  {selectedAddOns.map((addonId) => {
-                    const addon = addOns.find(a => a.id === addonId);
-                    return addon ? (
-                      <Stack key={addonId} direction="horizontal" justify="between">
-                        <Text variant="caption" semantic="secondary">{addon.name}</Text>
-                        <Text variant="caption" semantic="primary">${addon.price.toFixed(2)}</Text>
-                      </Stack>
-                    ) : null;
-                  })}
+                    {selectedAddOns.map((addonId) => {
+                      const addon = addOns.find(a => a.id === addonId);
+                      return addon ? (
+                        <div key={addonId} className="responsive-grid summary-item">
+                          <Text variant="caption" semantic="secondary">{addon.name}</Text>
+                          <Text variant="caption" semantic="primary">${addon.price.toFixed(2)}</Text>
+                        </div>
+                      ) : null;
+                    })}
 
-                  <Divider />
+                    <Divider />
 
-                  <Stack direction="horizontal" justify="between">
-                    <Text variant="caption" semantic="secondary">Subtotal</Text>
-                    <Text variant="caption" semantic="primary">${subtotal.toFixed(2)}</Text>
+                    <div className="responsive-grid summary-item">
+                      <Text variant="caption" semantic="secondary">Subtotal</Text>
+                      <Text variant="caption" semantic="primary">${subtotal.toFixed(2)}</Text>
+                    </div>
+
+                    <div className="responsive-grid summary-item">
+                      <Text variant="caption" semantic="secondary">Service Fees</Text>
+                      <Text variant="caption" semantic="primary">${fees.toFixed(2)}</Text>
+                    </div>
+
+                    {wantInsurance && (
+                      <div className="responsive-grid summary-item">
+                        <Text variant="caption" semantic="secondary">Insurance</Text>
+                        <Text variant="caption" semantic="primary">${insurance.toFixed(2)}</Text>
+                      </div>
+                    )}
+
+                    <Divider />
+
+                    <div className="responsive-grid summary-item">
+                      <Text variant="body-md" weight="bold" semantic="primary">Total</Text>
+                      <Text variant="body-md" weight="bold" semantic="primary">${total.toFixed(2)}</Text>
+                    </div>
                   </Stack>
 
-                  <Stack direction="horizontal" justify="between">
-                    <Text variant="caption" semantic="secondary">Service Fees</Text>
-                    <Text variant="caption" semantic="primary">${fees.toFixed(2)}</Text>
-                  </Stack>
-
-                  {wantInsurance && (
-                    <Stack direction="horizontal" justify="between">
-                      <Text variant="caption" semantic="secondary">Insurance</Text>
-                      <Text variant="caption" semantic="primary">${insurance.toFixed(2)}</Text>
-                    </Stack>
-                  )}
-
-                  <Divider />
-
-                  <Stack direction="horizontal" justify="between">
-                    <Text variant="body-md" weight="bold" semantic="primary">Total</Text>
-                    <Text variant="body-md" weight="bold" semantic="primary">${total.toFixed(2)}</Text>
-                  </Stack>
+                  <Text variant="caption" semantic="secondary">
+                    Step {currentStep + 1} of {steps.length}
+                  </Text>
                 </Stack>
+              </Card>
 
-                <Text variant="caption" semantic="secondary">
-                  Step {currentStep + 1} of {steps.length}
-                </Text>
-              </Stack>
-            </Card>
-
-            {/* Help & Support */}
-            <Card variant="outlined" padding="md">
+              {/* Trust Indicators */}
               <Stack spacing="2">
-                <Text variant="body-sm" weight="bold" semantic="primary">
-                  Need Help?
-                </Text>
-                <Text variant="caption" semantic="secondary">
-                  Our support team is available 24/7 to help with your order.
-                </Text>
-                <Button variant="outline" size="sm">
-                  LIVE CHAT
-                </Button>
+                <Badge variant="success" size="sm">
+                  <ModernIcon type="diamond" size="sm" /> SSL SECURED
+                </Badge>
+                <Badge variant="primary" size="sm">
+                  <ModernIcon type="crown" size="sm" /> TRUSTED PAYMENT
+                </Badge>
+                <Badge variant="secondary" size="sm">
+                  <ModernIcon type="music" size="sm" /> MOBILE TICKETS
+                </Badge>
               </Stack>
-            </Card>
-
-            {/* Trust Indicators */}
-            <Stack spacing="2">
-              <Badge variant="success" size="sm"><ModernIcon type="diamond" size="sm" /> SSL SECURED</Badge>
-              <Badge variant="primary" size="sm"><ModernIcon type="crown" size="sm" /> TRUSTED PAYMENT</Badge>
-              <Badge variant="secondary" size="sm"><ModernIcon type="music" size="sm" /> MOBILE TICKETS</Badge>
             </Stack>
-            </Stack>
-            </div>
           </div>
-        </Stack>
-      </Box>
-    </Box>
+        </div>
+      </Stack>
+    </div>
   );
 }
