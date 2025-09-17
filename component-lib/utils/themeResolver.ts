@@ -1,4 +1,4 @@
-import { tokens } from '../tokens';
+import { tokens, shadows, spacing, radii, colors } from '../tokens';
 import type { BrandTheme } from '../components/providers/ThemeProvider';
 
 export type Theme = 'light' | 'dark';
@@ -15,39 +15,110 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string {
 
 
 /**
+ * Checks if a value is a raw CSS value (not a token path)
+ */
+function isRawValue(value: string): boolean {
+  return value.includes('rgba(') || value.includes('rgb(') || value.includes('#') ||
+         value.includes('linear-gradient') || value.includes('px') || value.includes('rem');
+}
+
+/**
  * Resolves a semantic token to its actual color value based on the current theme
- * 
+ *
  * @param semanticTokenPath - Path to semantic token (e.g., 'text.primary')
  * @param theme - Current theme ('light' or 'dark')
  * @param brandTheme - Optional brand theme for overrides
  * @returns Resolved hex color value
- * 
+ *
  * @example
  * resolveSemanticToken('text.primary', 'light') // returns '#0f172a' (gray.900)
  * resolveSemanticToken('interactive.primary.background', 'dark') // returns '#0ea5e9' (blue.500)
  * resolveSemanticToken('interactive.primary.background', 'light', cypherTheme) // returns brand primary
  */
 export function resolveSemanticToken(
-  semanticTokenPath: string, 
+  semanticTokenPath: string,
   theme: Theme = 'light',
   brandTheme?: BrandTheme
 ): string {
+  // Check if it's a raw value (not a token path)
+  if (isRawValue(semanticTokenPath)) {
+    return semanticTokenPath;
+  }
+
+  // Handle spacing tokens (these are static, not theme-aware)
+  if (semanticTokenPath.startsWith('spacing.')) {
+    const spacingKey = semanticTokenPath.replace('spacing.', '');
+    const spacingValue = (spacing as Record<string, string>)[spacingKey];
+    if (spacingValue) return spacingValue;
+  }
+
+  // Handle radii tokens (these are static, not theme-aware)
+  if (semanticTokenPath.startsWith('radii.')) {
+    const radiiKey = semanticTokenPath.replace('radii.', '');
+    const radiiValue = (radii as Record<string, string>)[radiiKey];
+    if (radiiValue) return radiiValue;
+  }
+
+  // Handle shadow token mapping
+  if (semanticTokenPath.startsWith('effects.shadow.')) {
+    const shadowName = semanticTokenPath.replace('effects.shadow.', '');
+
+    // First check if it exists in semantic shadows (with light/dark)
+    const semanticShadow = getNestedValue(tokens.semantic, semanticTokenPath);
+    if (semanticShadow && typeof semanticShadow === 'object' && (semanticShadow as Record<string, string>)[theme]) {
+      return (semanticShadow as Record<string, string>)[theme];
+    }
+
+    // Fallback to static shadows
+    const staticShadow = (shadows as Record<string, string>)[shadowName];
+    if (staticShadow) return staticShadow;
+  }
+
+  // Handle gradient token mapping
+  if (semanticTokenPath.startsWith('effects.gradient.')) {
+    const gradientName = semanticTokenPath.replace('effects.gradient.', '');
+
+    // Check semantic gradients first
+    const semanticGradient = getNestedValue(tokens.semantic, semanticTokenPath);
+    if (semanticGradient && typeof semanticGradient === 'object' && (semanticGradient as Record<string, string>)[theme]) {
+      return (semanticGradient as Record<string, string>)[theme];
+    }
+
+    // Map specific gradient names to their definitions
+    const gradientMappings: Record<string, string> = {
+      'dramatic': 'linear-gradient(135deg, #e542ff 0%, #00ff94 100%)',
+    };
+
+    if (gradientMappings[gradientName]) {
+      return gradientMappings[gradientName];
+    }
+  }
+
+  // Handle direct brand color references (e.g., brand.primary.500)
+  if (semanticTokenPath.startsWith('brand.')) {
+    const colorPath = semanticTokenPath.replace('brand.', '');
+    const brandColor = getNestedValue(tokens.colors.brand as Record<string, unknown>, colorPath);
+    if (brandColor && typeof brandColor === 'string') {
+      return brandColor;
+    }
+  }
+
   // Get the semantic token definition
   const semanticToken = getNestedValue(tokens.semantic, semanticTokenPath);
-  
+
   if (!semanticToken) {
     console.warn(`Semantic token not found: ${semanticTokenPath}`);
     return '#000000'; // Fallback to black
   }
-  
+
   // If it's a direct value (not theme-aware), return it
   if (typeof semanticToken === 'string') {
     return semanticToken;
   }
-  
+
   // Get the color reference for the current theme
   const colorReference = (semanticToken as Record<string, string>)[theme];
-  
+
   if (!colorReference) {
     console.warn(`Theme '${theme}' not found for semantic token: ${semanticTokenPath}`);
     return '#000000'; // Fallback to black

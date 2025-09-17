@@ -841,7 +841,15 @@ export const tokens = {
     "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
     "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
     "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+    "3xl": "0 35px 60px -12px rgba(0, 0, 0, 0.25), 0 16px 32px -8px rgba(0, 0, 0, 0.15), 0 6px 12px -4px rgba(0, 0, 0, 0.1)",
+    "dramatic": "0 40px 80px -16px rgba(0, 0, 0, 0.3), 0 20px 40px -12px rgba(0, 0, 0, 0.2), 0 8px 16px -4px rgba(0, 0, 0, 0.15)",
+    "glow": "0 0 20px 4px rgba(229, 66, 255, 0.2), 0 0 40px 8px rgba(229, 66, 255, 0.1), 0 8px 32px -4px rgba(0, 0, 0, 0.3)",
+    "glow-secondary": "0 0 20px 4px rgba(255, 221, 51, 0.2), 0 0 40px 8px rgba(255, 221, 51, 0.1), 0 8px 32px -4px rgba(0, 0, 0, 0.3)",
+    "glow-success": "0 0 20px 4px rgba(16, 185, 129, 0.2), 0 0 40px 8px rgba(16, 185, 129, 0.1), 0 8px 32px -4px rgba(0, 0, 0, 0.3)",
+    "elevated": "0 32px 64px -12px rgba(0, 0, 0, 0.4), 0 16px 32px -8px rgba(0, 0, 0, 0.25), 0 8px 16px -4px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+    "floating": "0 48px 96px -16px rgba(0, 0, 0, 0.35), 0 24px 48px -12px rgba(0, 0, 0, 0.2), 0 12px 24px -6px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)",
     "inner": "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
+    "inner-glow": "inset 0 0 20px 2px rgba(229, 66, 255, 0.1), inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
     "none": "none"
   },
   "spacing": {

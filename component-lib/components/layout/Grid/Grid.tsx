@@ -18,8 +18,8 @@ export interface GridProps extends Omit<BoxProps, 'display'> {
   templateRows?: string;
   
   /**
-   * Gap between grid items
-   * @default 16
+   * Gap between grid items - supports numeric spacing tokens (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 56, 64) or pixel values
+   * @default '4'
    */
   gap?: number | string;
   
@@ -38,7 +38,7 @@ export const Grid = React.forwardRef<HTMLDivElement, GridProps>(({
   columns,
   templateColumns,
   templateRows,
-  gap = 16,
+  gap = '4',
   rowGap,
   columnGap,
   children,

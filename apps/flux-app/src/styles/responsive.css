@@ -1,0 +1,169 @@
+/* Responsive Layout Utilities for Flux App */
+
+/* Mobile-first responsive grid layouts */
+.responsive-main-layout {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Mobile: Single column */
+@media (max-width: 768px) {
+  .responsive-main-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .desktop-sidebar {
+    order: -1; /* Move sidebar to top on mobile */
+  }
+
+  .mobile-hidden {
+    display: none;
+  }
+}
+
+/* Tablet: Still single column but more spacing */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .responsive-main-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .desktop-sidebar {
+    order: -1;
+  }
+}
+
+/* Desktop: Two column layout */
+@media (min-width: 1025px) {
+  .responsive-main-layout {
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+    padding: 32px;
+  }
+
+  .desktop-sidebar {
+    order: initial;
+  }
+}
+
+/* Large Desktop: Wider sidebar */
+@media (min-width: 1400px) {
+  .responsive-main-layout {
+    grid-template-columns: 1fr 350px;
+    gap: 32px;
+  }
+}
+
+/* Responsive cards grid */
+.responsive-cards-grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .responsive-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .responsive-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .responsive-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Responsive stats grid */
+.responsive-stats-grid {
+  display: grid;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .responsive-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .responsive-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 901px) {
+  .responsive-stats-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Responsive ticket layout */
+.responsive-ticket-layout {
+  display: grid;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+@media (max-width: 1024px) {
+  .responsive-ticket-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .ticket-sidebar {
+    order: -1;
+  }
+}
+
+@media (min-width: 1025px) {
+  .responsive-ticket-layout {
+    grid-template-columns: 1fr 350px;
+    gap: 32px;
+    padding: 32px;
+  }
+
+  .ticket-sidebar {
+    order: initial;
+  }
+}
+
+/* Utility classes for responsive behavior */
+@media (max-width: 768px) {
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+
+  .mobile-full-width {
+    width: 100% !important;
+  }
+
+  .mobile-text-center {
+    text-align: center !important;
+  }
+}
+
+/* Responsive navigation improvements */
+@media (max-width: 768px) {
+  .responsive-nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .nav-item {
+    min-width: max-content;
+  }
+}

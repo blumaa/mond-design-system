@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { useTheme } from '../../providers/ThemeProvider';
+import { tokens } from '../../../tokens/tokens';
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   as?: keyof React.JSX.IntrinsicElements;
@@ -112,9 +113,15 @@ const convertToPixels = (value: string | number): string => {
 
 const getSpacingValue = (value: string | number, theme: (path: string) => string): string => {
   if (typeof value === 'string') {
-    // Check if it's a semantic token
+    // Check if it's a semantic token (contains dots)
     if (value.includes('.')) {
       return theme(value);
+    }
+    // Check if it's a numeric spacing token (0, 1, 2, 3, 4, etc.)
+    if (/^\d+$/.test(value)) {
+      // Access spacing tokens directly since they're not theme-aware
+      const spacingValue = (tokens.spacing as Record<string, string>)[value];
+      return spacingValue || `${value}px`;
     }
     return value;
   }
@@ -230,9 +237,9 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     ...(gridTemplate && { gridTemplate }),
     ...(gridTemplateColumns && { gridTemplateColumns }),
     ...(gridTemplateRows && { gridTemplateRows }),
-    ...(gap !== undefined && { gap: convertToPixels(gap) }),
-    ...(rowGap !== undefined && { rowGap: convertToPixels(rowGap) }),
-    ...(columnGap !== undefined && { columnGap: convertToPixels(columnGap) }),
+    ...(gap !== undefined && { gap: getSpacingValue(gap, theme) }),
+    ...(rowGap !== undefined && { rowGap: getSpacingValue(rowGap, theme) }),
+    ...(columnGap !== undefined && { columnGap: getSpacingValue(columnGap, theme) }),
     
     // Size
     ...(width !== undefined && { width: convertToPixels(width) }),

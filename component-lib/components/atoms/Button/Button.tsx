@@ -9,7 +9,7 @@ import {
 } from "../../../tokens";
 import { useTheme } from "../../providers/ThemeProvider";
 
-export type ButtonVariant = "primary" | "outline" | "ghost";
+export type ButtonVariant = "primary" | "outline" | "ghost" | "gradient" | "gradient-secondary" | "glow";
 export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonCorners = "default" | "rounded";
 export type ButtonAlignContent = "left" | "center" | "right";
@@ -122,6 +122,60 @@ const getVariantStyles = (
         focusStyles: {
           outline: `2px solid ${theme("border.default")}`,
           outlineOffset: "2px",
+        },
+      },
+      gradient: {
+        background: theme("effects.gradient.dramatic"),
+        color: "white",
+        border: "none",
+        boxShadow: theme("effects.shadow.glow"),
+        hoverStyles: {
+          transform: "translateY(-2px)",
+          boxShadow: theme("effects.shadow.floating"),
+        },
+        activeStyles: {
+          transform: "translateY(0px)",
+          boxShadow: theme("effects.shadow.lg"),
+        },
+        focusStyles: {
+          outline: `3px solid rgba(229, 66, 255, 0.3)`,
+          outlineOffset: "2px",
+        },
+      },
+      "gradient-secondary": {
+        background: `linear-gradient(135deg, ${theme("brand.secondary.500")} 0%, ${theme("brand.warning.500")} 100%)`,
+        color: "white",
+        border: "none",
+        boxShadow: theme("effects.shadow.glow-secondary"),
+        hoverStyles: {
+          transform: "translateY(-2px)",
+          boxShadow: theme("effects.shadow.floating"),
+        },
+        activeStyles: {
+          transform: "translateY(0px)",
+          boxShadow: theme("effects.shadow.lg"),
+        },
+        focusStyles: {
+          outline: `3px solid rgba(255, 221, 51, 0.3)`,
+          outlineOffset: "2px",
+        },
+      },
+      glow: {
+        background: `linear-gradient(135deg, ${theme("brand.primary.600")} 0%, ${theme("brand.primary.500")} 100%)`,
+        color: "white",
+        border: "1px solid rgba(255, 255, 255, 0.2)",
+        boxShadow: `${theme("effects.shadow.glow")}, 0 0 0 1px rgba(255, 255, 255, 0.1) inset`,
+        hoverStyles: {
+          transform: "translateY(-3px) scale(1.02)",
+          boxShadow: `${theme("effects.shadow.floating")}, 0 0 30px 10px rgba(229, 66, 255, 0.3)`,
+        },
+        activeStyles: {
+          transform: "translateY(-1px) scale(1.01)",
+          boxShadow: theme("effects.shadow.elevated"),
+        },
+        focusStyles: {
+          outline: `3px solid rgba(229, 66, 255, 0.4)`,
+          outlineOffset: "3px",
         },
       },
     }[variant] || {}
@@ -244,7 +298,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       // State
       cursor: disabled ? "not-allowed" : "pointer",
       opacity: disabled ? 0.6 : 1,
-      transition: "all 150ms ease",
+      transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
       outline: "none",
       // Component styles
       ...variantStyles,

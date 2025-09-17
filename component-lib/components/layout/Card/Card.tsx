@@ -7,8 +7,8 @@ export interface CardProps extends BoxProps {
    * Card variant
    * @default 'elevated'
    */
-  variant?: 'flat' | 'outlined' | 'elevated';
-  
+  variant?: 'flat' | 'outlined' | 'elevated' | 'glass' | 'floating';
+
   /**
    * Padding inside the card
    * @default 24
@@ -22,8 +22,8 @@ export interface CardFooterProps extends BoxProps {}
 
 const getCardStyles = (variant: CardProps['variant'], theme: ReturnType<typeof useTheme>) => {
   const baseStyles = {
-    borderRadius: 8,
-    transition: 'all 150ms ease',
+    borderRadius: 12,
+    transition: 'all 300ms ease',
   };
 
   switch (variant) {
@@ -39,12 +39,41 @@ const getCardStyles = (variant: CardProps['variant'], theme: ReturnType<typeof u
         border: '1px solid',
         borderColor: 'border.default',
       };
+    case 'glass':
+      return {
+        ...baseStyles,
+        bg: 'rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: theme('effects.shadow.glow'),
+        '&:hover': {
+          bg: 'rgba(255, 255, 255, 0.08)',
+          transform: 'translateY(-2px)',
+          boxShadow: theme('effects.shadow.floating'),
+        },
+      };
+    case 'floating':
+      return {
+        ...baseStyles,
+        bg: 'surface.elevated',
+        boxShadow: theme('effects.shadow.floating'),
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: theme('effects.shadow.dramatic'),
+        },
+      };
     case 'elevated':
     default:
       return {
         ...baseStyles,
         bg: 'surface.elevated',
-        boxShadow: theme('effects.shadow.sm'),
+        boxShadow: theme('effects.shadow.lg'),
+        border: '1px solid rgba(255, 255, 255, 0.05)',
+        '&:hover': {
+          transform: 'translateY(-1px)',
+          boxShadow: theme('effects.shadow.xl'),
+        },
       };
   }
 };
@@ -58,12 +87,26 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(({
 }, ref) => {
   const theme = useTheme(isDarkMode);
   const styles = getCardStyles(variant, theme);
-  
+
+  // Separate CSS properties from React props
+  const stylesAny = styles as any;
+  const backdropFilter = stylesAny.backdropFilter;
+  const hoverStyles = stylesAny['&:hover'];
+
+  // Remove problematic properties and create clean boxProps
+  const { backdropFilter: _, '&:hover': __, ...boxProps } = stylesAny;
+
+  // Create proper CSS style object
+  const cssStyles: React.CSSProperties = {
+    ...(backdropFilter && { backdropFilter }),
+  };
+
   return (
     <Box
       ref={ref}
       p={padding}
-      {...styles}
+      style={cssStyles}
+      {...boxProps}
       {...props}
     >
       {children}
