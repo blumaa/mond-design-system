@@ -8,7 +8,6 @@ import {
   Text,
   Badge,
   Heading,
-  Grid,
   Divider,
   Button,
   Input,
@@ -277,7 +276,7 @@ export default function TicketBooking() {
                           label="Quantity"
                           inputSize="md"
                         />
-                      </div>
+                      </Box>
                     </Stack>
                   </Stack>
                 )}
