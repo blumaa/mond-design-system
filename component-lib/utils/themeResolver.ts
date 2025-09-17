@@ -1,4 +1,4 @@
-import { tokens, shadows, spacing, radii, colors } from '../tokens';
+import { tokens, shadows, spacing, radii } from '../tokens';
 import type { BrandTheme } from '../components/providers/ThemeProvider';
 
 export type Theme = 'light' | 'dark';

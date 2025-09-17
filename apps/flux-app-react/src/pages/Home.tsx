@@ -64,7 +64,8 @@ const trendingArtists = [
 ];
 
 export default function Home() {
-  const handleSearch = (_query: string) => {
+  const handleSearch = (query: string) => {
+    console.log('Search query:', query);
     // Handle search functionality
   };
 
