@@ -1,3 +1,11 @@
+## 1.11.0 (2025-09-29)
+
+* feat: update plan ([8ddfbde](https://github.com/blumaa/mond-design-system/commit/8ddfbde))
+* fix flux app ([ae6ff01](https://github.com/blumaa/mond-design-system/commit/ae6ff01))
+* fix lint and ts ([c3b0090](https://github.com/blumaa/mond-design-system/commit/c3b0090))
+* fix stuff for ci ([1cff95d](https://github.com/blumaa/mond-design-system/commit/1cff95d))
+* rebuild flux-app ([0b92d49](https://github.com/blumaa/mond-design-system/commit/0b92d49))
+
 ## 1.10.0 (2025-09-15)
 
 * feat: from blumaa/fix-style-prop-in-cypher-app ([8bae5b5](https://github.com/blumaa/mond-design-system/commit/8bae5b5))
