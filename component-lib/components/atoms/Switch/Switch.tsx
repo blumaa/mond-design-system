@@ -1,13 +1,22 @@
 'use client';
-import React, { useId, useState } from 'react';
+import React, { useId } from 'react';
 import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../../tokens';
 import { useTheme } from '../../providers/ThemeProvider';
-import { Box } from '../../layout/Box/Box';
 
 export type SwitchSize = 'sm' | 'md' | 'lg';
 
-export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface SwitchProps {
+  /**
+   * Unique identifier for the switch
+   * @default auto-generated
+   */
+  id?: string;
+
+  /**
+   * Test identifier
+   */
   'data-testid'?: string;
+
   /**
    * Switch size
    * @default 'md'
@@ -26,14 +35,55 @@ export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
   label?: string;
 
   /**
-   * Helper text
+   * Helper text displayed below label
    */
   helperText?: string;
 
   /**
-   * Error message to display
+   * Error message to display (takes precedence over helperText)
    */
   error?: string;
+
+  /**
+   * Controlled checked state
+   */
+  checked?: boolean;
+
+  /**
+   * Default checked state for uncontrolled component
+   */
+  defaultChecked?: boolean;
+
+  /**
+   * Makes the input read-only
+   */
+  readOnly?: boolean;
+
+  /**
+   * Disabled state
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
+   * Change event handler - receives the native change event
+   */
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+
+  /**
+   * Click event handler - receives the native click event
+   */
+  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
+
+  /**
+   * Focus event handler
+   */
+  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+
+  /**
+   * Blur event handler
+   */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const getSizeStyles = (size: SwitchSize) => {
@@ -62,34 +112,64 @@ const getSizeStyles = (size: SwitchSize) => {
         thumbOffset: '2px',
         fontSize: fontSizes.lg,
       };
-    default:
-      return {};
   }
 };
 
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
-  ({
-    size = 'md',
-    isDarkMode,
-    label,
-    helperText,
-    error,
-    className,
-    checked,
-    disabled,
-    onChange,
-    onClick,
-    'data-testid': dataTestId,
-    ...props
-  }, ref) => {
+  (
+    {
+      id,
+      'data-testid': dataTestId,
+      size = 'md',
+      isDarkMode,
+      label,
+      helperText,
+      error,
+      checked,
+      defaultChecked,
+      readOnly,
+      disabled = false,
+      onChange,
+      onClick,
+      onFocus,
+      onBlur,
+    },
+    ref
+  ) => {
     const theme = useTheme(isDarkMode);
     const sizeStyles = getSizeStyles(size);
     const generatedId = useId();
-    const switchId = props.id || `switch-${generatedId}`;
+    const switchId = id || `switch-${generatedId}`;
 
-    // Track focus state in React instead of DOM manipulation
-    const [isFocused, setIsFocused] = useState(false);
+    // Container styles
+    const containerStyles: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'flex-start',
+      gap: spacing[2],
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      userSelect: 'none',
+    };
 
+    // Hidden checkbox styles - sized exactly to track dimensions
+    const checkboxStyles: React.CSSProperties = {
+      position: 'absolute',
+      opacity: 0,
+      width: sizeStyles.width,
+      height: sizeStyles.height,
+      margin: 0,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      zIndex: 1,
+    };
+
+    // Visual track wrapper
+    const trackWrapperStyles: React.CSSProperties = {
+      position: 'relative',
+      flexShrink: 0,
+      width: sizeStyles.width,
+      height: sizeStyles.height,
+    };
+
+    // Visual track styles
     const trackStyles: React.CSSProperties = {
       width: sizeStyles.width,
       height: sizeStyles.height,
@@ -98,16 +178,14 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         ? theme('interactive.primary.background')
         : theme('border.default'),
       border: `1px solid ${error ? theme('border.error') : 'transparent'}`,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      outline: 'none',
       transition: 'all 200ms ease',
       position: 'relative',
-      flexShrink: 0,
+      pointerEvents: 'none',
       opacity: disabled ? 0.6 : 1,
-      // Apply focus ring via React state
-      boxShadow: isFocused ? `0 0 0 3px ${theme('feedback.info.background')}` : 'none',
+      cursor: disabled ? 'not-allowed' : 'pointer',
     };
 
+    // Visual thumb styles
     const thumbStyles: React.CSSProperties = {
       width: sizeStyles.thumbSize,
       height: sizeStyles.thumbSize,
@@ -119,27 +197,23 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       transition: 'all 200ms ease',
       position: 'absolute',
       top: '50%',
-      transform: `translateY(-50%) translateX(${checked
-        ? `calc(${sizeStyles.width} - ${sizeStyles.thumbSize} - ${sizeStyles.thumbOffset})`
-        : sizeStyles.thumbOffset})`,
-      pointerEvents: 'none', // Prevent thumb from intercepting clicks
+      transform: `translateY(-50%) translateX(${
+        checked
+          ? `calc(${sizeStyles.width} - ${sizeStyles.thumbSize} - ${sizeStyles.thumbOffset})`
+          : sizeStyles.thumbOffset
+      })`,
+      pointerEvents: 'none',
     };
 
-    const labelStyles: React.CSSProperties = {
+    // Label text styles
+    const labelTextStyles: React.CSSProperties = {
       fontSize: sizeStyles.fontSize,
       fontWeight: fontWeights.normal,
       fontFamily: fontFamilies.sans,
       color: disabled ? theme('text.disabled') : theme('text.primary'),
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      userSelect: 'none',
     };
 
-    const containerStyles: React.CSSProperties = {
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: spacing[2],
-    };
-
+    // Message (helper text or error) styles
     const messageStyles: React.CSSProperties = {
       display: 'block',
       marginTop: spacing[1],
@@ -147,96 +221,55 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       color: error ? theme('text.error') : theme('text.secondary'),
     };
 
-    // Handle focus via React state
-    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(true);
-      props.onFocus?.(e);
-    };
-
-    // Handle blur via React state
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false);
-      props.onBlur?.(e);
-    };
-
-    // Handle clicks on the visual track - forward to hidden checkbox
-    const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (disabled) return;
-
-      // Prevent any default behavior that might cause scrolling
-      e.preventDefault();
-
-      // Call user's onClick handler if provided
-      if (onClick) {
-        const syntheticEvent = e as unknown as React.MouseEvent<HTMLInputElement>;
-        onClick(syntheticEvent);
+    // Focus visible styles - applied via CSS
+    const focusVisibleStyles = `
+      #${switchId}:focus-visible + span {
+        box-shadow: 0 0 0 3px ${theme('feedback.info.background')};
       }
-
-      // Get the hidden checkbox and programmatically click it
-      const checkbox = document.getElementById(switchId) as HTMLInputElement;
-      if (checkbox) {
-        checkbox.click(); // This triggers onChange naturally
-      }
-    };
+    `;
 
     return (
-      <Box className={className} data-testid={dataTestId}>
-        <Box style={containerStyles}>
-          {/* Visual switch track - clickable */}
-          <Box
-            position="relative"
-            style={{ flexShrink: 0 }}
-            onClick={handleTrackClick}
-            role="presentation" // This is just visual, real control is the checkbox
-          >
-            {/* Hidden checkbox for accessibility and form integration */}
+      <div data-testid={dataTestId}>
+        <style>{focusVisibleStyles}</style>
+
+        <label htmlFor={switchId} style={containerStyles}>
+          {/* Switch visual container */}
+          <span style={trackWrapperStyles}>
+            {/* Hidden checkbox - the actual form control */}
             <input
               ref={ref}
               type="checkbox"
               id={switchId}
               checked={checked}
+              defaultChecked={defaultChecked}
+              readOnly={readOnly}
               disabled={disabled}
               onChange={onChange}
               onClick={onClick}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              style={{
-                position: 'absolute',
-                opacity: 0,
-                width: '100%',
-                height: '100%',
-                margin: 0,
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                zIndex: 1, // Ensure it's on top for keyboard interaction
-              }}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              style={checkboxStyles}
               aria-label={label || 'Switch'}
-              {...props}
             />
-            {/* Visual track */}
-            <Box data-switch-track style={trackStyles}>
-              {/* Visual thumb */}
-              <Box style={thumbStyles} />
-            </Box>
-          </Box>
 
-          {/* Label text - uses native label association */}
+            {/* Visual track */}
+            <div data-switch-track style={trackStyles}>
+              {/* Visual thumb */}
+              <div style={thumbStyles} />
+            </div>
+          </span>
+
+          {/* Label text and messages */}
           {label && (
-            <Box>
-              <label
-                htmlFor={switchId}
-                style={labelStyles}
-              >
-                {label}
-              </label>
+            <span>
+              <span style={labelTextStyles}>{label}</span>
               {(error || helperText) && (
-                <Box as="span" style={messageStyles}>
-                  {error || helperText}
-                </Box>
+                <span style={messageStyles}>{error || helperText}</span>
               )}
-            </Box>
+            </span>
           )}
-        </Box>
-      </Box>
+        </label>
+      </div>
     );
   }
 );
