@@ -86,7 +86,8 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
    * Dark mode
    * @default false
    */
-  
+  isDarkMode?: boolean;
+
   /**
    * Custom data testid for testing
    */
@@ -94,7 +95,7 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export const Header = React.forwardRef<HTMLElement, HeaderProps>(
-  ({ 
+  ({
     logo,
     logoHref,
     navigationItems = [],
@@ -106,13 +107,13 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
     height = '64px',
     sticky = false,
     variant = 'solid',
-    
+    isDarkMode: propIsDarkMode,
     'data-testid': dataTestId,
     className,
-    ...props 
+    ...props
   }, ref) => {
     const { theme, colorScheme } = useThemeContext();
-    const isDarkMode = colorScheme === 'dark';
+    const isDarkMode = propIsDarkMode ?? (colorScheme === 'dark');
     const [internalMobileMenuOpen, setInternalMobileMenuOpen] = useState(false);
     
     // Controlled vs uncontrolled mobile menu state
@@ -156,41 +157,28 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
 
     const renderNavigationItem = (item: NavigationItem, isMobile = false) => {
       const content = (
-        <Box
+        <Button
+          variant="ghost"
+          size={isMobile ? "md" : "sm"}
+          disabled={item.disabled}
+          onClick={item.disabled ? undefined : item.onClick}
+          isDarkMode={isDarkMode}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: isMobile ? `${spacing[3]} ${spacing[4]}` : `${spacing[2]} ${spacing[3]}`,
-            color: item.active ? theme('text.accent') : (item.disabled ? theme('text.disabled') : theme('text.primary')),
-            textDecoration: 'none',
-            fontSize: fontSizes.sm,
-            fontFamily: fontFamilies.sans,
+            color: item.active ? theme('text.accent') : undefined,
             fontWeight: item.active ? fontWeights.medium : fontWeights.normal,
-            cursor: item.disabled ? 'not-allowed' : 'pointer',
-            borderRadius: radii.md,
-            transition: 'background-color 150ms ease, color 150ms ease',
             ...(isMobile && {
               width: '100%',
               justifyContent: 'flex-start',
             }),
           }}
-          onClick={item.disabled ? undefined : item.onClick}
-          onMouseEnter={(e) => {
-            if (!item.disabled) {
-              (e.target as HTMLElement).style.backgroundColor = theme('surface.hover');
-            }
-          }}
-          onMouseLeave={(e) => {
-            (e.target as HTMLElement).style.backgroundColor = 'transparent';
-          }}
         >
           {item.label}
           {item.children && (
-            <Box style={{ marginLeft: spacing[2], fontSize: fontSizes.xs }}>
+            <Box ml={2} fontSize="xs">
               ▼
             </Box>
           )}
-        </Box>
+        </Button>
       );
 
       if (item.href && !item.disabled) {

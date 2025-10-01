@@ -42,12 +42,13 @@ const getCardStyles = (variant: CardProps['variant'], theme: ReturnType<typeof u
     case 'glass':
       return {
         ...baseStyles,
-        bg: 'rgba(255, 255, 255, 0.05)',
+        bg: theme('surface.overlay'),
         backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
+        border: `1px solid ${theme('border.subtle')}`,
         boxShadow: theme('effects.shadow.glow'),
+        opacity: 0.9,
         '&:hover': {
-          bg: 'rgba(255, 255, 255, 0.08)',
+          opacity: 0.95,
           transform: 'translateY(-2px)',
           boxShadow: theme('effects.shadow.floating'),
         },
@@ -57,7 +58,7 @@ const getCardStyles = (variant: CardProps['variant'], theme: ReturnType<typeof u
         ...baseStyles,
         bg: 'surface.elevated',
         boxShadow: theme('effects.shadow.floating'),
-        border: '1px solid rgba(255, 255, 255, 0.1)',
+        border: `1px solid ${theme('border.subtle')}`,
         '&:hover': {
           transform: 'translateY(-4px)',
           boxShadow: theme('effects.shadow.dramatic'),
@@ -69,7 +70,6 @@ const getCardStyles = (variant: CardProps['variant'], theme: ReturnType<typeof u
         ...baseStyles,
         bg: 'surface.elevated',
         boxShadow: theme('effects.shadow.lg'),
-        border: '1px solid rgba(255, 255, 255, 0.05)',
         '&:hover': {
           transform: 'translateY(-1px)',
           boxShadow: theme('effects.shadow.xl'),
