@@ -169,7 +169,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
 
     return (
       <Box className={className} data-testid={dataTestId}>
-        <Box as="label" htmlFor={switchId} style={containerStyles} onClick={handleLabelClick}>
+        <label htmlFor={switchId} style={containerStyles} onClick={handleLabelClick}>
           <Box position="relative" style={{ flexShrink: 0 }}>
             <input
               ref={ref}
@@ -203,7 +203,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
               )}
             </Box>
           )}
-        </Box>
+        </label>
       </Box>
     );
   }
