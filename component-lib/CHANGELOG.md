@@ -1,3 +1,7 @@
+## 1.12.0 (2025-10-01)
+
+* feat: add isDarkMode prop to MDS components for consistent dark mode support ([b5585bd](https://github.com/blumaa/mond-design-system/commit/b5585bd))
+
 ## 1.11.0 (2025-09-29)
 
 * feat: update plan ([8ddfbde](https://github.com/blumaa/mond-design-system/commit/8ddfbde))
