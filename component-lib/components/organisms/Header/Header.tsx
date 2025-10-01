@@ -193,11 +193,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
         );
       }
 
-      return (
-        <Box key={item.label} as={item.onClick ? 'button' : 'div'}>
-          {content}
-        </Box>
-      );
+      return content;
     };
 
     const variantStyles = getVariantStyles();
