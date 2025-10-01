@@ -1,3 +1,9 @@
+## <small>1.16.1 (2025-10-01)</small>
+
+* fix: switch label ([f5acfbb](https://github.com/blumaa/mond-design-system/commit/f5acfbb))
+* fix: switch label fix ([a71fe64](https://github.com/blumaa/mond-design-system/commit/a71fe64))
+* fix: the switch jumping ([96194c4](https://github.com/blumaa/mond-design-system/commit/96194c4))
+
 ## 1.16.0 (2025-10-01)
 
 * feat: fix header buttons ([5c26a50](https://github.com/blumaa/mond-design-system/commit/5c26a50))
