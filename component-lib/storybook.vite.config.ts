@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     sourcemap: true,
-    minify: 'esbuild',
+    minify: false,
     chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
