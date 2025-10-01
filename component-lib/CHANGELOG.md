@@ -1,3 +1,7 @@
+## 1.16.0 (2025-10-01)
+
+* feat: fix header buttons ([5c26a50](https://github.com/blumaa/mond-design-system/commit/5c26a50))
+
 ## 1.15.0 (2025-10-01)
 
 * feat: fix build ([fad1af3](https://github.com/blumaa/mond-design-system/commit/fad1af3))
