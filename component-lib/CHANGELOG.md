@@ -1,3 +1,7 @@
+## 1.15.0 (2025-10-01)
+
+* feat: fix build ([fad1af3](https://github.com/blumaa/mond-design-system/commit/fad1af3))
+
 ## 1.14.0 (2025-10-01)
 
 * feat: disable minification in Storybook build for platform compatibility ([c44c4d0](https://github.com/blumaa/mond-design-system/commit/c44c4d0))
