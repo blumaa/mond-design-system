@@ -1,3 +1,7 @@
+## 1.14.0 (2025-10-01)
+
+* feat: disable minification in Storybook build for platform compatibility ([c44c4d0](https://github.com/blumaa/mond-design-system/commit/c44c4d0))
+
 ## 1.13.0 (2025-10-01)
 
 * feat: add .npmrc to fix rollup optional dependency CI/CD error ([d7460c1](https://github.com/blumaa/mond-design-system/commit/d7460c1))
