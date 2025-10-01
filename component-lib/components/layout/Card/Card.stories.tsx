@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Card, CardHeader, CardBody, CardFooter } from './Card';
 import { Stack } from '../Stack/Stack';

@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
 import { AvatarGroup, AvatarData } from './AvatarGroup';
 // Actions simplified for Storybook 9.x compatibility
 

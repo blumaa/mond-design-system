@@ -1,4 +1,3 @@
-import React from 'react';
 import { Meta } from '@storybook/react';
 import { fontFamilies, fontSizes, fontWeights, lineHeights, letterSpacings } from '../index';
 

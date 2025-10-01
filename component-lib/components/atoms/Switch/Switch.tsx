@@ -166,6 +166,12 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       // Prevent any default behavior that might cause scrolling
       e.preventDefault();
 
+      // Call user's onClick handler if provided
+      if (onClick) {
+        const syntheticEvent = e as unknown as React.MouseEvent<HTMLInputElement>;
+        onClick(syntheticEvent);
+      }
+
       // Get the hidden checkbox and programmatically click it
       const checkbox = document.getElementById(switchId) as HTMLInputElement;
       if (checkbox) {
