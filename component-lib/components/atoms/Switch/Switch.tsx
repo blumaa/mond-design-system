@@ -13,8 +13,13 @@ export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
    * @default 'md'
    */
   size?: SwitchSize;
-  
-  
+
+  /**
+   * Dark mode control for theme resolution
+   * @default false
+   */
+  isDarkMode?: boolean;
+
   /**
    * Label text
    */
@@ -63,8 +68,9 @@ const getSizeStyles = (size: SwitchSize) => {
 };
 
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
-  ({ 
+  ({
     size = 'md',
+    isDarkMode,
     label,
     helperText,
     error,
@@ -72,9 +78,9 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     checked,
     disabled,
     'data-testid': dataTestId,
-    ...props 
+    ...props
   }, ref) => {
-    const theme = useTheme();
+    const theme = useTheme(isDarkMode);
     const sizeStyles = getSizeStyles(size);
     const generatedId = useId();
     const switchId = props.id || `switch-${generatedId}`;

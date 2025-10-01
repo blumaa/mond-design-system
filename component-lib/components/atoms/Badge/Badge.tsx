@@ -13,14 +13,19 @@ export interface BadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
    * @default 'default'
    */
   variant?: BadgeVariant;
-  
+
   /**
    * Badge size
    * @default 'md'
    */
   size?: BadgeSize;
-  
-  
+
+  /**
+   * Dark mode control for theme resolution
+   * @default false
+   */
+  isDarkMode?: boolean;
+
   /**
    * Badge content
    */
@@ -99,15 +104,16 @@ const getVariantStyles = (variant: BadgeVariant, theme: (path: string) => string
 };
 
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ 
+  ({
     variant = 'default',
     size = 'md',
+    isDarkMode,
     className,
     children,
     'data-testid': dataTestId,
-    ...props 
+    ...props
   }, ref) => {
-    const theme = useTheme();
+    const theme = useTheme(isDarkMode);
     const sizeStyles = getSizeStyles(size);
     const variantStyles = getVariantStyles(variant, theme);
 

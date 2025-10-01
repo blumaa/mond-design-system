@@ -15,10 +15,11 @@ export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   size?: AvatarSize;
   
   /**
-   * Dark mode
+   * Dark mode control for theme resolution
    * @default false
    */
-  
+  isDarkMode?: boolean;
+
   /**
    * Image source URL
    */
@@ -84,18 +85,18 @@ const getSizeStyles = (size: AvatarSize) => {
 };
 
 export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
-  ({ 
+  ({
     size = 'md',
-    
+    isDarkMode,
     src,
     alt,
     fallback,
     children,
     className,
     'data-testid': dataTestId,
-    ...props 
+    ...props
   }, ref) => {
-    const theme = useTheme();
+    const theme = useTheme(isDarkMode);
     const sizeStyles = getSizeStyles(size);
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);

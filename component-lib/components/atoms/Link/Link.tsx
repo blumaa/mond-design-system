@@ -22,13 +22,18 @@ export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>
    * Icon element to display
    */
   icon?: React.ReactNode;
-  
+
+  /**
+   * Dark mode control for theme resolution
+   * @default false
+   */
+  isDarkMode?: boolean;
+
   /**
    * Link content
    */
   children?: React.ReactNode;
-  
-  
+
   /**
    * Link href
    */
@@ -99,16 +104,17 @@ const getLinkStyles = (theme: ReturnType<typeof useTheme>) => {
 };
 
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ 
+  ({
     size = 'medium',
     iconOnly = false,
     icon,
+    isDarkMode,
     children,
     href,
     style = {},
     ...props
   }, ref) => {
-    const theme = useTheme();
+    const theme = useTheme(isDarkMode);
     const sizeStyles = getSizeStyles(size, iconOnly);
     const linkStyles = getLinkStyles(theme);
 

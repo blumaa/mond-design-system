@@ -88,6 +88,12 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
   as?: 'span' | 'p' | 'div' | 'label' | 'strong' | 'em' | 'small';
 
   /**
+   * Dark mode control for theme resolution
+   * @default false
+   */
+  isDarkMode?: boolean;
+
+  /**
    * Text content
    */
   children: React.ReactNode;
@@ -152,11 +158,12 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
   strikethrough = false,
   truncate = false,
   as = 'span',
+  isDarkMode,
   children,
   color,
   ...props
 }, ref) => {
-  const theme = useTheme();
+  const theme = useTheme(isDarkMode);
   const variantStyles = getVariantStyles(variant);
   const semanticColor = getSemanticColor(semantic, theme);
   
