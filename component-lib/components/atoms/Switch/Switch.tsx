@@ -173,18 +173,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       }
     };
 
-    // Handle clicks on the label text - forward to hidden checkbox
-    const handleLabelClick = (e: React.MouseEvent<HTMLElement>) => {
-      if (disabled) return;
-
-      e.preventDefault();
-
-      const checkbox = document.getElementById(switchId) as HTMLInputElement;
-      if (checkbox) {
-        checkbox.click();
-      }
-    };
-
     return (
       <Box className={className} data-testid={dataTestId}>
         <Box style={containerStyles}>
@@ -225,13 +213,12 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             </Box>
           </Box>
 
-          {/* Label text - clickable, but handled explicitly */}
+          {/* Label text - uses native label association */}
           {label && (
             <Box>
               <label
                 htmlFor={switchId}
                 style={labelStyles}
-                onClick={handleLabelClick}
               >
                 {label}
               </label>
