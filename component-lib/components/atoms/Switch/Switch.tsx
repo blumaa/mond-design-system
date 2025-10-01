@@ -159,17 +159,14 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       props.onBlur?.(e);
     };
 
-    const handleLabelClick = (e: React.MouseEvent<HTMLLabelElement>) => {
-      e.preventDefault();
-      if (!disabled) {
-        const input = e.currentTarget.querySelector('input');
-        input?.click();
-      }
+    const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
+      // Prevent the default label behavior that causes page jump
+      e.stopPropagation();
     };
 
     return (
       <Box className={className} data-testid={dataTestId}>
-        <label htmlFor={switchId} style={containerStyles} onClick={handleLabelClick}>
+        <label htmlFor={switchId} style={containerStyles}>
           <Box position="relative" style={{ flexShrink: 0 }}>
             <input
               ref={ref}
@@ -185,6 +182,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
                 margin: 0,
                 cursor: disabled ? 'not-allowed' : 'pointer',
               }}
+              onClick={handleInputClick}
               onFocus={handleFocus}
               onBlur={handleBlur}
               {...props}
