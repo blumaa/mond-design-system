@@ -6,19 +6,12 @@ export default defineConfig({
   plugins: [react()],
   build: {
     sourcemap: true,
-    minify: 'terser',
+    minify: 'esbuild',
     chunkSizeWarningLimit: 600,
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
     rollupOptions: {
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
-          'vendor-storybook': ['@storybook/react', 'storybook/internal/preview-api'],
         },
       },
     },
