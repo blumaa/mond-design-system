@@ -1,3 +1,9 @@
+## 1.13.0 (2025-10-01)
+
+* feat: add .npmrc to fix rollup optional dependency CI/CD error ([d7460c1](https://github.com/blumaa/mond-design-system/commit/d7460c1))
+* feat: add isDarkMode prop to Header component for theme control ([14f723c](https://github.com/blumaa/mond-design-system/commit/14f723c))
+* feat: fix Storybook build errors in CI/CD by replacing terser with esbuild ([a2f2736](https://github.com/blumaa/mond-design-system/commit/a2f2736))
+
 ## 1.12.0 (2025-10-01)
 
 * feat: add isDarkMode prop to MDS components for consistent dark mode support ([b5585bd](https://github.com/blumaa/mond-design-system/commit/b5585bd))
