@@ -1,3 +1,7 @@
+## <small>1.16.3 (2025-10-01)</small>
+
+* fix: storybook ([633d03b](https://github.com/blumaa/mond-design-system/commit/633d03b))
+
 ## <small>1.16.2 (2025-10-01)</small>
 
 * fix: switch onclick ([6f2f097](https://github.com/blumaa/mond-design-system/commit/6f2f097))
