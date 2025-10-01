@@ -1,3 +1,8 @@
+## <small>1.16.2 (2025-10-01)</small>
+
+* fix: switch onclick ([6f2f097](https://github.com/blumaa/mond-design-system/commit/6f2f097))
+* fix: switch refactor ([10acc50](https://github.com/blumaa/mond-design-system/commit/10acc50))
+
 ## <small>1.16.1 (2025-10-01)</small>
 
 * fix: switch label ([f5acfbb](https://github.com/blumaa/mond-design-system/commit/f5acfbb))
