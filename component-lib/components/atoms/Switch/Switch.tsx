@@ -159,9 +159,17 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       props.onBlur?.(e);
     };
 
+    const handleLabelClick = (e: React.MouseEvent<HTMLLabelElement>) => {
+      e.preventDefault();
+      if (!disabled) {
+        const input = e.currentTarget.querySelector('input');
+        input?.click();
+      }
+    };
+
     return (
       <Box className={className} data-testid={dataTestId}>
-        <Box as="label" style={containerStyles}>
+        <Box as="label" htmlFor={switchId} style={containerStyles} onClick={handleLabelClick}>
           <Box position="relative" style={{ flexShrink: 0 }}>
             <input
               ref={ref}
