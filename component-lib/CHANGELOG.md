@@ -1,3 +1,7 @@
+## <small>1.16.4 (2025-10-01)</small>
+
+* fix: atomic refactor ([36d570b](https://github.com/blumaa/mond-design-system/commit/36d570b))
+
 ## <small>1.16.3 (2025-10-01)</small>
 
 * fix: storybook ([633d03b](https://github.com/blumaa/mond-design-system/commit/633d03b))
