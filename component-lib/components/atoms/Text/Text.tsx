@@ -106,14 +106,22 @@ const getVariantStyles = (variant: TextVariant) => {
   
   if (typographyTokens[variant as keyof typeof typographyTokens]) {
     const token = typographyTokens[variant as keyof typeof typographyTokens];
-    return {
+    const styles: Record<string, string | undefined> = {
       fontSize: token.fontSize,
       lineHeight: token.lineHeight,
       fontWeight: token.fontWeight,
       letterSpacing: token.letterSpacing,
-      textTransform: 'textTransform' in token ? token.textTransform : undefined,
-      fontFamily: 'fontFamily' in token ? token.fontFamily : undefined,
     };
+
+    // Only include optional properties if they're defined
+    if ('textTransform' in token && token.textTransform) {
+      styles.textTransform = token.textTransform;
+    }
+    if ('fontFamily' in token && token.fontFamily) {
+      styles.fontFamily = token.fontFamily;
+    }
+
+    return styles;
   }
   
   // Fallback to legacy styles for backward compatibility
