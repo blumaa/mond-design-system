@@ -65,6 +65,7 @@ export const Label = forwardRef<HTMLLabelElement, LabelProps>(({
 
   const labelStyle = {
     display: 'inline-block',
+    fontFamily: tokens.fontFamilies.sans,
     fontSize: sizeStyles.fontSize,
     lineHeight: sizeStyles.lineHeight,
     fontWeight,
