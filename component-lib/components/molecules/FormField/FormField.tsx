@@ -2,7 +2,8 @@
 import React from 'react';
 import { Stack } from '../../layout/Stack/Stack';
 import { Box } from '../../layout/Box/Box';
-import { useTheme } from '../../providers/ThemeProvider';
+import { Label } from '../../atoms/Label/Label';
+import { Text } from '../../atoms/Text/Text';
 
 export interface FormFieldProps {
   'data-testid'?: string;
@@ -27,13 +28,7 @@ export interface FormFieldProps {
    * Help text to display below the field
    */
   helpText?: string;
-  
-  /**
-   * Dark mode control for theme resolution
-   * @default false
-   */
-  isDarkMode?: boolean;
-  
+
   /**
    * Form control element (input, select, textarea, etc.)
    */
@@ -46,18 +41,16 @@ export interface FormFieldProps {
 }
 
 export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
-  ({ 
+  ({
     label,
     required = false,
     error,
     helpText,
-    isDarkMode,
     children,
     className,
     'data-testid': dataTestId,
-    ...props 
+    ...props
   }, ref) => {
-    const theme = useTheme(isDarkMode);
     const fieldId = React.useId();
     const errorId = error ? `${fieldId}-error` : undefined;
     const helpId = helpText ? `${fieldId}-help` : undefined;
@@ -82,62 +75,45 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
         {...props}
       >
         <Stack spacing={6}>
-          {/* Label */}
+          {/* Label - using Label atom */}
           {label && (
-            <Box
-              as="label"
-              fontSize={14}
-              fontWeight="medium"
-              color={theme('text.primary')}
-              display="flex"
-              alignItems="center"
-              gap={4}
-              style={{ cursor: 'pointer' }}
-              {...(fieldId && { htmlFor: fieldId })}
+            <Label
+              htmlFor={fieldId}
+              required={required}
+              size="md"
+              semantic={error ? 'error' : 'default'}
             >
               {label}
-              {required && (
-                <Box
-                  as="span"
-                  color={theme('feedback.error.text')}
-                  fontSize={14}
-                  lineHeight="1"
-                  aria-label="required"
-                >
-                  *
-                </Box>
-              )}
-            </Box>
+            </Label>
           )}
-          
+
           {/* Form Control */}
           <Box>
             {childrenWithProps}
           </Box>
-          
-          {/* Error Message */}
+
+          {/* Error Message - using Text atom */}
           {error && (
-            <Box
+            <Text
               id={errorId}
-              fontSize={12}
-              color={theme('feedback.error.text')}
+              variant="caption"
+              semantic="error"
               role="alert"
               aria-live="polite"
             >
               {error}
-            </Box>
+            </Text>
           )}
-          
-          {/* Help Text */}
+
+          {/* Help Text - using Text atom */}
           {helpText && !error && (
-            <Box
+            <Text
               id={helpId}
-              fontSize={12}
-              color={theme('text.secondary')}
-              lineHeight="1.4"
+              variant="caption"
+              semantic="secondary"
             >
               {helpText}
-            </Box>
+            </Text>
           )}
         </Stack>
       </Box>
