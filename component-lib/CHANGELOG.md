@@ -1,3 +1,7 @@
+## <small>1.17.1 (2025-10-02)</small>
+
+* fix: label font-family ([1550fa9](https://github.com/blumaa/mond-design-system/commit/1550fa9))
+
 ## 1.17.0 (2025-10-02)
 
 * feat: update formField ([81ce399](https://github.com/blumaa/mond-design-system/commit/81ce399))
