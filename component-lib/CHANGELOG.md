@@ -1,3 +1,7 @@
+## <small>1.17.2 (2025-10-02)</small>
+
+* fix: font family in Text ([ca1779f](https://github.com/blumaa/mond-design-system/commit/ca1779f))
+
 ## <small>1.17.1 (2025-10-02)</small>
 
 * fix: label font-family ([1550fa9](https://github.com/blumaa/mond-design-system/commit/1550fa9))
