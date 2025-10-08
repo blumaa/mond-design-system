@@ -676,7 +676,6 @@ export const FormContainer = React.forwardRef<HTMLFormElement, FormContainerProp
             type="submit"
             size={size}
             disabled={disabled || formState.submissionState === 'submitting'}
-            
           >
             {formState.submissionState === 'submitting' ? 'Submitting...' : submitText}
           </Button>

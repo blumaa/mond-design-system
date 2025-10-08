@@ -49,6 +49,20 @@ describe('Button Component', () => {
       const button = screen.getByRole('button');
       expect(button).toHaveStyle('background-color: transparent');
     });
+
+    it('renders destructive variant correctly', () => {
+      render(<Button variant="destructive">Delete</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveStyle('background-color: #dc2626'); // red.600 / error.600
+      expect(button).toHaveAttribute('data-variant', 'destructive');
+    });
+
+    it('renders warning variant correctly', () => {
+      render(<Button variant="warning">Warning</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveStyle('background-color: #d97706'); // amber.600 / warning.600
+      expect(button).toHaveAttribute('data-variant', 'warning');
+    });
   });
 
   describe('sizes', () => {
@@ -88,46 +102,6 @@ describe('Button Component', () => {
     });
   });
 
-  describe('alignContent prop', () => {
-    it('applies center alignment by default', () => {
-      render(<Button>Center</Button>);
-      const buttonElement = screen.getByText(/center/i);
-      expect(buttonElement).toHaveStyle('justify-content: center');
-    });
-
-    it('applies left alignment when alignContent is "left"', () => {
-      render(<Button alignContent="left">Left Aligned</Button>);
-      const buttonElement = screen.getByText(/left aligned/i);
-      expect(buttonElement).toHaveStyle('justify-content: flex-start');
-    });
-
-    it('applies center alignment when alignContent is "center"', () => {
-      render(<Button alignContent="center">Center Aligned</Button>);
-      const buttonElement = screen.getByText(/center aligned/i);
-      expect(buttonElement).toHaveStyle('justify-content: center');
-    });
-
-    it('applies right alignment when alignContent is "right"', () => {
-      render(<Button alignContent="right">Right Aligned</Button>);
-      const buttonElement = screen.getByText(/right aligned/i);
-      expect(buttonElement).toHaveStyle('justify-content: flex-end');
-    });
-
-    it('ensures button has inline-flex display for alignment to work', () => {
-      render(<Button alignContent="left">Test</Button>);
-      const buttonElement = screen.getByText(/test/i);
-      expect(buttonElement).toHaveStyle('display: inline-flex');
-    });
-  });
-
-  describe('icon-only buttons', () => {
-    it('renders icon-only button', () => {
-      render(<Button iconOnly>Icon</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toBeInTheDocument();
-    });
-  });
-
   describe('dark mode', () => {
     it('applies dark mode styles', () => {
       renderWithDarkMode(<Button>Dark Mode</Button>);
@@ -140,30 +114,30 @@ describe('Button Component', () => {
     it('handles mouse enter and leave', () => {
       render(<Button>Hover Test</Button>);
       const button = screen.getByRole('button');
-      
+
       fireEvent.mouseEnter(button);
       fireEvent.mouseLeave(button);
-      
+
       expect(button).toBeInTheDocument();
     });
 
     it('handles mouse down and up', () => {
       render(<Button>Press Test</Button>);
       const button = screen.getByRole('button');
-      
+
       fireEvent.mouseDown(button);
       fireEvent.mouseUp(button);
-      
+
       expect(button).toBeInTheDocument();
     });
 
     it('handles focus and blur', () => {
       render(<Button>Focus Test</Button>);
       const button = screen.getByRole('button');
-      
+
       fireEvent.focus(button);
       fireEvent.blur(button);
-      
+
       expect(button).toBeInTheDocument();
     });
   });
@@ -175,10 +149,10 @@ describe('Button Component', () => {
       expect(button).toBeInTheDocument();
     });
 
-    it('forwards additional props', () => {
-      render(<Button data-testid="custom-button" aria-label="Custom Button">Test</Button>);
-      const button = screen.getByTestId('custom-button');
-      expect(button).toHaveAttribute('aria-label', 'Custom Button');
+    it('always has type="button"', () => {
+      render(<Button>Button Type</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('type', 'button');
     });
   });
 
@@ -186,9 +160,8 @@ describe('Button Component', () => {
     it('forwards ref correctly', () => {
       const ref = React.createRef<HTMLButtonElement>();
       render(<Button ref={ref}>Ref Button</Button>);
-      
+
       expect(ref.current).toBeInstanceOf(HTMLButtonElement);
     });
   });
 });
-

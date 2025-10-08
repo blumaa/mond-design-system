@@ -9,13 +9,12 @@ import {
 } from "../../../tokens";
 import { useTheme } from "../../providers/ThemeProvider";
 
-export type ButtonVariant = "primary" | "outline" | "ghost" | "gradient" | "gradient-secondary" | "glow";
+export type ButtonVariant = "primary" | "outline" | "ghost" | "destructive" | "warning";
 export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonCorners = "default" | "rounded";
 export type ButtonAlignContent = "left" | "center" | "right";
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps {
   /**
    * Button variant
    * @default 'primary'
@@ -52,9 +51,10 @@ export interface ButtonProps
   iconOnly?: boolean;
 
   /**
-   * Click event handler
+   * Button expands to fill container width
+   * @default false
    */
-  onClick?: (evt: React.MouseEvent<HTMLButtonElement>) => void;
+  fullWidth?: boolean;
 
   /**
    * Is button disabled
@@ -63,125 +63,75 @@ export interface ButtonProps
   disabled?: boolean;
 
   /**
+   * Click event handler
+   */
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+
+  /**
+   * Accessible label for screen readers
+   */
+  "aria-label"?: string;
+
+  /**
+   * Indicates current item in navigation
+   */
+  "aria-current"?: "page" | "step" | "location" | "date" | "time" | "true" | "false";
+
+  /**
+   * Test ID for testing purposes
+   */
+  "data-testid"?: string;
+
+  /**
+   * Button type for form interaction
+   * @default "button"
+   */
+  type?: "button" | "submit" | "reset";
+
+  /**
    * Dark mode control for theme resolution
    * @default false
    */
   isDarkMode?: boolean;
 }
 
+// Variant style definitions using theme tokens
 const getVariantStyles = (
   variant: ButtonVariant,
   theme: ReturnType<typeof useTheme>,
 ) => {
-  return (
-    {
-      primary: {
-        backgroundColor: theme("interactive.primary.background"),
-        color: theme("interactive.primary.text"),
-        border: `1px solid ${theme("interactive.primary.background")}`,
-        hoverStyles: {
-          backgroundColor: theme("interactive.primary.backgroundHover"),
-        },
-        activeStyles: {
-          backgroundColor: theme("interactive.primary.backgroundPressed"),
-        },
-        focusStyles: {
-          outline: `2px solid ${theme("border.focused")}`,
-          outlineOffset: "2px",
-        },
-      },
-      outline: {
-        backgroundColor: "transparent",
-        color: theme("interactive.primary.background"),
-        border: `1px solid ${theme("interactive.primary.background")}`,
-        hoverStyles: {
-          backgroundColor: theme("interactive.primary.background"),
-          color: theme("interactive.primary.text"),
-          borderColor: theme("interactive.primary.background"),
-        },
-        activeStyles: {
-          backgroundColor: theme("interactive.primary.backgroundHover"),
-          color: theme("interactive.primary.text"),
-          borderColor: theme("interactive.primary.backgroundHover"),
-        },
-        focusStyles: {
-          outline: `2px solid ${theme("border.focused")}`,
-          outlineOffset: "2px",
-        },
-      },
-      ghost: {
-        backgroundColor: "transparent",
-        color: theme("interactive.ghost.text"),
-        border: "none",
-        hoverStyles: {
-          backgroundColor: theme("interactive.ghost.backgroundHover"),
-        },
-        activeStyles: {
-          backgroundColor: theme("interactive.ghost.backgroundPressed"),
-        },
-        focusStyles: {
-          outline: `2px solid ${theme("border.default")}`,
-          outlineOffset: "2px",
-        },
-      },
-      gradient: {
-        background: theme("effects.gradient.dramatic"),
-        color: "white",
-        border: "none",
-        boxShadow: theme("effects.shadow.glow"),
-        hoverStyles: {
-          transform: "translateY(-2px)",
-          boxShadow: theme("effects.shadow.floating"),
-        },
-        activeStyles: {
-          transform: "translateY(0px)",
-          boxShadow: theme("effects.shadow.lg"),
-        },
-        focusStyles: {
-          outline: `3px solid rgba(229, 66, 255, 0.3)`,
-          outlineOffset: "2px",
-        },
-      },
-      "gradient-secondary": {
-        background: `linear-gradient(135deg, ${theme("brand.secondary.500")} 0%, ${theme("brand.warning.500")} 100%)`,
-        color: "white",
-        border: "none",
-        boxShadow: theme("effects.shadow.glow-secondary"),
-        hoverStyles: {
-          transform: "translateY(-2px)",
-          boxShadow: theme("effects.shadow.floating"),
-        },
-        activeStyles: {
-          transform: "translateY(0px)",
-          boxShadow: theme("effects.shadow.lg"),
-        },
-        focusStyles: {
-          outline: `3px solid rgba(255, 221, 51, 0.3)`,
-          outlineOffset: "2px",
-        },
-      },
-      glow: {
-        background: `linear-gradient(135deg, ${theme("brand.primary.600")} 0%, ${theme("brand.primary.500")} 100%)`,
-        color: "white",
-        border: "1px solid rgba(255, 255, 255, 0.2)",
-        boxShadow: `${theme("effects.shadow.glow")}, 0 0 0 1px rgba(255, 255, 255, 0.1) inset`,
-        hoverStyles: {
-          transform: "translateY(-3px) scale(1.02)",
-          boxShadow: `${theme("effects.shadow.floating")}, 0 0 30px 10px rgba(229, 66, 255, 0.3)`,
-        },
-        activeStyles: {
-          transform: "translateY(-1px) scale(1.01)",
-          boxShadow: theme("effects.shadow.elevated"),
-        },
-        focusStyles: {
-          outline: `3px solid rgba(229, 66, 255, 0.4)`,
-          outlineOffset: "3px",
-        },
-      },
-    }[variant] || {}
-  );
+  const variants = {
+    primary: {
+      backgroundColor: theme("interactive.primary.background"),
+      color: theme("interactive.primary.text"),
+      border: "none",
+    },
+    outline: {
+      backgroundColor: "transparent",
+      color: theme("interactive.primary.background"),
+      border: `1px solid ${theme("interactive.primary.background")}`,
+    },
+    ghost: {
+      backgroundColor: "transparent",
+      color: theme("interactive.ghost.text"),
+      border: "none",
+    },
+    destructive: {
+      backgroundColor: theme("brand.error.600"),
+      color: theme("interactive.primary.text"),
+      border: "none",
+    },
+    warning: {
+      backgroundColor: theme("brand.warning.600"),
+      color: theme("interactive.primary.text"),
+      border: "none",
+    },
+  };
+
+  return variants[variant];
 };
 
+// Size style definitions
 const getSizeStyles = (size: ButtonSize, iconOnly: boolean = false) => {
   if (iconOnly) {
     switch (size) {
@@ -232,20 +182,21 @@ const getSizeStyles = (size: ButtonSize, iconOnly: boolean = false) => {
   }
 };
 
+// Corner style definitions
 const getCornerStyles = (corners: ButtonCorners) => {
-  switch (corners) {
-    case "rounded":
-      return {
-        borderRadius: radii.full,
-      };
-    case "default":
-    default:
-      return {
-        borderRadius: radii.md,
-      };
-  }
+  const cornerStyles = {
+    default: {
+      borderRadius: radii.md,
+    },
+    rounded: {
+      borderRadius: radii.full,
+    },
+  };
+
+  return cornerStyles[corners];
 };
 
+// Alignment style definitions
 const getAlignmentStyles = (alignContent: ButtonAlignContent) => {
   switch (alignContent) {
     case "left":
@@ -273,9 +224,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       alignContent = "center",
       children,
       iconOnly = false,
+      fullWidth = false,
       disabled = false,
+      onClick,
+      "aria-label": ariaLabel,
+      "aria-current": ariaCurrent,
+      "data-testid": dataTestId,
+      type = "button",
       isDarkMode,
-      ...props
     },
     ref,
   ) => {
@@ -285,13 +241,81 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const cornerStyles = getCornerStyles(corners);
     const alignmentStyles = getAlignmentStyles(alignContent);
 
-    const baseStyles = {
+    // Generate CSS class with a unique identifier
+    const buttonId = React.useId();
+    const uniqueClass = `mond-button-${buttonId.replace(/:/g, "-")}`;
+
+    // Build dynamic CSS for pseudo-states
+    const dynamicCSS = React.useMemo(() => {
+      const hoverStyles: Record<string, string> = {};
+      const activeStyles: Record<string, string> = {};
+      const focusStyles: Record<string, string> = {
+        outline: `2px solid ${theme("border.focused")}`,
+        outlineOffset: "2px",
+      };
+
+      // Define hover and active states per variant
+      switch (variant) {
+        case "primary":
+          hoverStyles.backgroundColor = theme("interactive.primary.backgroundHover");
+          activeStyles.backgroundColor = theme("interactive.primary.backgroundPressed");
+          break;
+        case "outline":
+          hoverStyles.backgroundColor = theme("interactive.primary.background");
+          hoverStyles.color = theme("interactive.primary.text");
+          activeStyles.backgroundColor = theme("interactive.primary.backgroundHover");
+          activeStyles.color = theme("interactive.primary.text");
+          break;
+        case "ghost":
+          hoverStyles.backgroundColor = theme("interactive.ghost.backgroundHover");
+          activeStyles.backgroundColor = theme("interactive.ghost.backgroundPressed");
+          focusStyles.outline = `2px solid ${theme("border.default")}`;
+          break;
+        case "destructive":
+          hoverStyles.backgroundColor = theme("brand.error.500");
+          activeStyles.backgroundColor = theme("brand.error.700");
+          break;
+        case "warning":
+          hoverStyles.backgroundColor = theme("brand.warning.500");
+          activeStyles.backgroundColor = theme("brand.warning.700");
+          break;
+      }
+
+      // Convert style objects to CSS strings
+      const hoverCSS = Object.entries(hoverStyles)
+        .map(([key, value]) => `${key.replace(/([A-Z])/g, "-$1").toLowerCase()}: ${value};`)
+        .join(" ");
+
+      const activeCSS = Object.entries(activeStyles)
+        .map(([key, value]) => `${key.replace(/([A-Z])/g, "-$1").toLowerCase()}: ${value};`)
+        .join(" ");
+
+      const focusCSS = Object.entries(focusStyles)
+        .map(([key, value]) => `${key.replace(/([A-Z])/g, "-$1").toLowerCase()}: ${value};`)
+        .join(" ");
+
+      return `
+        .${uniqueClass}:hover:not(:disabled) {
+          ${hoverCSS}
+        }
+        .${uniqueClass}:active:not(:disabled) {
+          ${activeCSS}
+        }
+        .${uniqueClass}:focus-visible {
+          ${focusCSS}
+        }
+      `;
+    }, [variant, theme, uniqueClass]);
+
+    const baseStyles: React.CSSProperties = {
       // Layout
-      display: "inline-flex",
+      display: fullWidth ? "flex" : "inline-flex",
       alignItems: "center",
       boxSizing: "border-box",
-      whiteSpace: "nowrap" as const,
-      minWidth: "fit-content",
+      whiteSpace: "nowrap",
+      minWidth: fullWidth ? undefined : "fit-content",
+      width: fullWidth ? "100%" : undefined,
+      gap: spacing[2],
       // Typography
       fontFamily: fontFamilies.sans,
       fontWeight: fontWeights.medium,
@@ -300,122 +324,37 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       opacity: disabled ? 0.6 : 1,
       transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
       outline: "none",
-      // Component styles
+      // Variant, size, corner, and alignment styles
       ...variantStyles,
       ...cornerStyles,
       ...alignmentStyles,
       ...sizeStyles, // Size styles LAST to ensure padding is applied
     };
 
-    // Convert styles object to inline style for simplicity
-    const inlineStyles: React.CSSProperties = {};
-    Object.entries(baseStyles).forEach(([key, value]) => {
-      if (typeof value === "string" || typeof value === "number") {
-        // @ts-expect-error - dynamic styles
-        inlineStyles[key] = value;
-      }
-    });
-
-    // Merge props.style with component styles, component styles take precedence
-    const { style: propsStyle, ...otherProps } = props;
-    const finalStyles = {
-      ...propsStyle,
-      ...inlineStyles,
-    };
-
-    // Handle hover, active, and focus states
-    const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!disabled && variantStyles.hoverStyles) {
-        Object.entries(variantStyles.hoverStyles).forEach(([key, value]) => {
-          // @ts-expect-error - dynamic styles
-          e.currentTarget.style[key] = value;
-        });
-      }
-    };
-
-    const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!disabled && variantStyles.hoverStyles) {
-        // Reset to base styles
-        Object.entries(variantStyles.hoverStyles).forEach(([key]) => {
-          // @ts-expect-error - dynamic styles
-          const originalValue = baseStyles[key];
-          if (originalValue !== undefined) {
-            // @ts-expect-error - dynamic styles
-            e.currentTarget.style[key] = originalValue;
-          }
-        });
-      }
-    };
-
-    const handleMouseDown = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!disabled && variantStyles.activeStyles) {
-        Object.entries(variantStyles.activeStyles).forEach(([key, value]) => {
-          // @ts-expect-error - dynamic styles
-          e.currentTarget.style[key] = value;
-        });
-      }
-    };
-
-    const handleMouseUp = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!disabled && variantStyles.activeStyles) {
-        // Reset to hover styles if still hovering, otherwise base styles
-        const isHovering = e.currentTarget.matches(":hover");
-        const stylesToApply =
-          isHovering && variantStyles.hoverStyles
-            ? variantStyles.hoverStyles
-            : baseStyles;
-
-        Object.entries(variantStyles.activeStyles).forEach(([key]) => {
-          // @ts-expect-error - dynamic styles
-          const resetValue = stylesToApply[key];
-          if (resetValue !== undefined) {
-            // @ts-expect-error - dynamic styles
-            e.currentTarget.style[key] = resetValue;
-          }
-        });
-      }
-    };
-
-    const handleFocus = (e: React.FocusEvent<HTMLButtonElement>) => {
-      if (!disabled && variantStyles.focusStyles) {
-        Object.entries(variantStyles.focusStyles).forEach(([key, value]) => {
-          // @ts-expect-error - dynamic styles
-          e.currentTarget.style[key] = value;
-        });
-      }
-    };
-
-    const handleBlur = (e: React.FocusEvent<HTMLButtonElement>) => {
-      if (!disabled && variantStyles.focusStyles) {
-        Object.entries(variantStyles.focusStyles).forEach(([key]) => {
-          // @ts-expect-error - dynamic styles
-          e.currentTarget.style[key] = "";
-        });
-      }
-    };
-
     return (
-      <button
-        ref={ref}
-        disabled={disabled}
-        style={finalStyles}
-        data-mond-button
-        data-align-content={alignContent}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        {...otherProps}
-      >
-        {children}
-      </button>
+      <>
+        <style>{dynamicCSS}</style>
+        <button
+          ref={ref}
+          type={type}
+          disabled={disabled}
+          onClick={onClick}
+          aria-label={ariaLabel}
+          aria-current={ariaCurrent}
+          data-testid={dataTestId}
+          className={uniqueClass}
+          style={baseStyles}
+          data-mond-button
+          data-variant={variant}
+          data-align-content={alignContent}
+        >
+          {children}
+        </button>
+      </>
     );
   },
 );
 
 Button.displayName = "Button";
 
-// Also export as default for better compatibility
 export default Button;

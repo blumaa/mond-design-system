@@ -15,8 +15,8 @@ import { Button } from '@mond-design-system/theme';
 
 function MyComponent() {
   return (
-    <Button 
-      variant="primary" 
+    <Button
+      variant="primary"
       onClick={() => console.log('clicked')}
     >
       Click me
@@ -25,11 +25,11 @@ function MyComponent() {
 }
 \`\`\`
 
-A versatile button component with multiple variants, sizes, and styling options. Supports icons, loading states, and full accessibility.
+A versatile button component following atomic design principles with multiple variants, sizes, and styling options. Supports icons and full accessibility.
 
 **Key Features:**
-- 🎨 Multiple variants (primary, outline, ghost)
-- 📏 Three sizes (sm, md, lg) 
+- 🎨 Five variants (primary, outline, ghost, destructive, warning)
+- 📏 Three sizes (sm, md, lg)
 - 🔘 Rounded and default corner styles
 - ♿ Full keyboard navigation and ARIA support
 - ⚡ Click handlers and form integration
@@ -41,7 +41,7 @@ A versatile button component with multiple variants, sizes, and styling options.
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['primary', 'outline', 'ghost'],
+      options: ['primary', 'outline', 'ghost', 'destructive', 'warning'],
     },
     size: {
       control: { type: 'select' },
@@ -58,6 +58,10 @@ A versatile button component with multiple variants, sizes, and styling options.
     iconOnly: {
       control: { type: 'boolean' },
       description: 'Icon-only button with no text',
+    },
+    fullWidth: {
+      control: { type: 'boolean' },
+      description: 'Button expands to fill container width',
     },
     disabled: {
       control: { type: 'boolean' },
@@ -92,41 +96,146 @@ export const Default: Story = {
     variant: 'primary',
     size: 'md',
     corners: 'default',
-    alignContent: 'center',
-    children: <span>Button</span>,
-    iconOnly: false,
+    children: 'Button',
     disabled: false,
   },
 };
 
+export const AllVariants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <Button variant="primary">Primary</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="destructive">Destructive</Button>
+      <Button variant="warning">Warning</Button>
+    </div>
+  ),
+};
+
+export const AllSizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Primary</h3>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Button variant="primary" size="sm">Small</Button>
+          <Button variant="primary" size="md">Medium</Button>
+          <Button variant="primary" size="lg">Large</Button>
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Outline</h3>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Button variant="outline" size="sm">Small</Button>
+          <Button variant="outline" size="md">Medium</Button>
+          <Button variant="outline" size="lg">Large</Button>
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Ghost</h3>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Button variant="ghost" size="sm">Small</Button>
+          <Button variant="ghost" size="md">Medium</Button>
+          <Button variant="ghost" size="lg">Large</Button>
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Destructive</h3>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Button variant="destructive" size="sm">Small</Button>
+          <Button variant="destructive" size="md">Medium</Button>
+          <Button variant="destructive" size="lg">Large</Button>
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Warning</h3>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Button variant="warning" size="sm">Small</Button>
+          <Button variant="warning" size="md">Medium</Button>
+          <Button variant="warning" size="lg">Large</Button>
+        </div>
+      </div>
+    </div>
+  ),
+};
+
+export const Outline: Story = {
+  args: {
+    variant: 'outline',
+    size: 'md',
+    corners: 'default',
+    children: 'Outline Button',
+    disabled: false,
+  },
+};
+
+export const Ghost: Story = {
+  args: {
+    variant: 'ghost',
+    size: 'md',
+    corners: 'default',
+    children: 'Ghost Button',
+    disabled: false,
+  },
+};
+
+export const Destructive: Story = {
+  args: {
+    variant: 'destructive',
+    size: 'md',
+    corners: 'default',
+    children: 'Delete',
+    disabled: false,
+  },
+};
+
+export const Warning: Story = {
+  args: {
+    variant: 'warning',
+    size: 'md',
+    corners: 'default',
+    children: 'Warning',
+    disabled: false,
+  },
+};
 
 export const WithIcon: Story = {
   args: {
     variant: 'primary',
     size: 'md',
     corners: 'default',
-    alignContent: 'center',
     children: (
       <>
-        <svg 
-          width="16" 
-          height="16" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2" 
-          strokeLinecap="round" 
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ marginRight: '8px' }}
         >
           <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
         </svg>
         Button with Icon
       </>
     ),
-    iconOnly: false,
     disabled: false,
   },
+};
+
+export const DisabledStates: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <Button variant="primary" disabled>Primary Disabled</Button>
+      <Button variant="outline" disabled>Outline Disabled</Button>
+      <Button variant="ghost" disabled>Ghost Disabled</Button>
+      <Button variant="destructive" disabled>Destructive Disabled</Button>
+      <Button variant="warning" disabled>Warning Disabled</Button>
+    </div>
+  ),
 };
 
 export const IconOnly: Story = {
@@ -134,61 +243,51 @@ export const IconOnly: Story = {
     variant: 'primary',
     size: 'md',
     corners: 'default',
-    alignContent: 'center',
+    iconOnly: true,
     children: (
-      <svg 
-        width="16" 
-        height="16" 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
         strokeLinejoin="round"
       >
         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
       </svg>
     ),
-    iconOnly: true,
     disabled: false,
   },
 };
 
-export const AlignmentDemo: Story = {
-  args: {
-    variant: 'primary',
-    size: 'md',
-    corners: 'default',
-    alignContent: 'left',
-    children: <span>Left Aligned</span>,
-    iconOnly: false,
-    disabled: false,
-    style: { width: '300px', minWidth: '300px' },
-  },
+export const AlignmentLeft: Story = {
+  render: () => (
+    <div style={{ width: '300px' }}>
+      <Button variant="primary" alignContent="left" fullWidth>
+        Left Aligned
+      </Button>
+    </div>
+  ),
 };
 
 export const AlignmentCenter: Story = {
-  args: {
-    variant: 'primary',
-    size: 'md',
-    corners: 'default',
-    alignContent: 'center',
-    children: <span>Center Aligned</span>,
-    iconOnly: false,
-    disabled: false,
-    style: { width: '300px', minWidth: '300px' },
-  },
+  render: () => (
+    <div style={{ width: '300px' }}>
+      <Button variant="primary" alignContent="center" fullWidth>
+        Center Aligned
+      </Button>
+    </div>
+  ),
 };
 
 export const AlignmentRight: Story = {
-  args: {
-    variant: 'primary',
-    size: 'md',
-    corners: 'default',
-    alignContent: 'right',
-    children: <span>Right Aligned</span>,
-    iconOnly: false,
-    disabled: false,
-    style: { width: '300px', minWidth: '300px' },
-  },
+  render: () => (
+    <div style={{ width: '300px' }}>
+      <Button variant="primary" alignContent="right" fullWidth>
+        Right Aligned
+      </Button>
+    </div>
+  ),
 };

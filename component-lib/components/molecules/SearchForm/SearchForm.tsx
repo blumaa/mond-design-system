@@ -245,22 +245,13 @@ export const SearchForm = React.forwardRef<HTMLFormElement, SearchFormProps>(
               }}
             >
               <Button
-                type="button"
                 variant="ghost"
                 size={size}
-                iconOnly
                 disabled={disabled}
-                
                 onClick={handleClearClick}
+                iconOnly
                 aria-label="Clear search"
                 data-testid={dataTestId ? `${dataTestId}-clear` : undefined}
-                style={{
-                  minWidth: 'auto',
-                  padding: '4px',
-                  backgroundColor: 'transparent',
-                  border: 'none',
-                  color: theme('text.secondary'),
-                }}
               >
                 <Icon size="sm" >
                   {clearIcon}
@@ -276,14 +267,8 @@ export const SearchForm = React.forwardRef<HTMLFormElement, SearchFormProps>(
           variant="primary"
           size={size}
           disabled={disabled || loading || !currentValue}
-          
           aria-label={searchButtonLabel}
           data-testid={dataTestId ? `${dataTestId}-button` : undefined}
-          style={{
-            borderRadius: '0 5px 5px 0',
-            borderLeft: `1px solid ${theme('border.subtle')}`,
-            minWidth: size === 'sm' ? '32px' : size === 'lg' ? '48px' : '40px',
-          }}
         >
           <Icon size={size === 'sm' ? 'sm' : 'md'} >
             {loading ? spinnerIcon : searchIcon}

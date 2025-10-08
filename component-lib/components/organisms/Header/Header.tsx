@@ -162,15 +162,8 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
           size={isMobile ? "md" : "sm"}
           disabled={item.disabled}
           onClick={item.disabled ? undefined : item.onClick}
+          alignContent={isMobile ? "left" : "center"}
           isDarkMode={isDarkMode}
-          style={{
-            color: item.active ? theme('text.accent') : undefined,
-            fontWeight: item.active ? fontWeights.medium : fontWeights.normal,
-            ...(isMobile && {
-              width: '100%',
-              justifyContent: 'flex-start',
-            }),
-          }}
         >
           {item.label}
           {item.children && (
@@ -421,8 +414,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                         action.onClick();
                         setMobileMenuOpen(false);
                       }}
-                      
-                      style={{ justifyContent: 'flex-start' }}
+                      alignContent="left"
                     >
                       {action.icon && (
                         <Box style={{ marginRight: action.label ? spacing[2] : 0 }}>

@@ -12,43 +12,38 @@ export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default 'horizontal'
    */
   orientation?: ButtonGroupOrientation;
-  
+
   /**
    * Gap between buttons using design tokens
    * @default spacing[2]
    */
   gap?: string | number;
-  
+
   /**
    * Variant applied to all buttons in the group
    */
   variant?: ButtonVariant;
-  
+
   /**
    * Size applied to all buttons in the group
    */
   size?: ButtonSize;
-  
+
   /**
    * Corner style applied to all buttons in the group
    */
   corners?: ButtonCorners;
-  
+
   /**
-   * Content alignment applied to all buttons in the group
+   * Alignment applied to all buttons in the group
    */
   alignContent?: ButtonAlignContent;
-  
-  /**
-   * Dark mode applied to all buttons in the group
-   * @default false
-   */
-  
+
   /**
    * Button components to group together
    */
   children: React.ReactNode;
-  
+
   /**
    * Custom data testid for testing
    */
@@ -56,29 +51,28 @@ export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
-  ({ 
+  ({
     orientation = 'horizontal',
     gap = spacing[2],
     variant,
     size,
     corners,
     alignContent,
-    
     children,
     'data-testid': dataTestId,
-    ...props 
+    ...props
   }, ref) => {
-    
+
     // Clone children to inherit group-level props
     const enhancedChildren = React.Children.map(children, (child) => {
       if (React.isValidElement(child)) {
         const childType = child.type as React.ComponentType;
         // Check if it's a Button component (by displayName or component name)
         const isButton = childType && (
-          childType.displayName === 'Button' || 
+          childType.displayName === 'Button' ||
           (childType as React.ComponentType & { name?: string }).name === 'Button'
         );
-        
+
         if (isButton) {
           const childProps = child.props as Record<string, unknown>;
           return React.cloneElement(child, {
@@ -86,7 +80,7 @@ export const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
             size: childProps.size || size,
             corners: childProps.corners || corners,
             alignContent: childProps.alignContent || alignContent,
-            isDarkMode: childProps.isDarkMode 
+            isDarkMode: childProps.isDarkMode
           } as Record<string, unknown>);
         }
       }
