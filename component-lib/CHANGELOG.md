@@ -1,3 +1,8 @@
+## 1.18.0 (2025-10-08)
+
+* fix: fix ci ([be680f9](https://github.com/blumaa/mond-design-system/commit/be680f9))
+* feat: refactor button ([1153981](https://github.com/blumaa/mond-design-system/commit/1153981))
+
 ## <small>1.17.2 (2025-10-02)</small>
 
 * fix: font family in Text ([ca1779f](https://github.com/blumaa/mond-design-system/commit/ca1779f))
