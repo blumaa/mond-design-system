@@ -101,7 +101,7 @@ export default function Artists() {
                 </Stack>
 
                 <Stack direction="horizontal" spacing="4" className="artist-buttons">
-                  <Button variant="gradient" size="lg">
+                  <Button variant="primary" size="lg">
                     FOLLOW ({featuredArtist.followers})
                   </Button>
                   <Button variant="ghost" size="lg">

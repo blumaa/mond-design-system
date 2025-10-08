@@ -185,7 +185,7 @@ export default function Home() {
                         </Stack>
 
                         <Button
-                          variant={festival.status === 'sold-out' ? 'outline' : 'gradient'}
+                          variant={festival.status === 'sold-out' ? 'outline' : 'primary'}
                           disabled={festival.status === 'sold-out'}
                         >
                           {festival.status === 'sold-out' ? 'SOLD OUT' : 'GET TICKETS'}
@@ -221,7 +221,7 @@ export default function Home() {
                       {artist.followers}
                     </Badge>
                   </Stack>
-                  <Button variant="glow" size="sm">
+                  <Button variant="primary" size="sm">
                     FOLLOW
                   </Button>
                 </Stack>
