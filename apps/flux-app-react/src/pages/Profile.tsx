@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import {
-  Card,
-  Stack,
+  Box,
   Text,
   Badge,
   Heading,
   Divider,
   Button,
-  TagList,
 } from '@mond-design-system/theme';
 import { ModernIcon } from '../components/ModernIcon';
-
 // Mock user data
 const userData = {
   id: "raver-001",
@@ -106,117 +103,117 @@ export default function Profile() {
 
   return (
     <div className="page-container">
-      <Stack spacing="6">
+      <Box gap="md">
         {/* Profile Header */}
-        <Card variant="elevated" padding="32">
-          <Stack spacing="6">
+        <Box>
+          <Box gap="md">
             <div className="responsive-grid profile-header">
-              <Stack align="center" spacing="4">
+              <Box alignItems="center" gap="md">
                 <div className="profile-avatar">
                   <ModernIcon type={userData.icon} size="2xl" />
                 </div>
-                <Stack direction="horizontal" spacing="2" align="center">
+                <Box display="flex" gap="md" alignItems="center">
                   {userData.verified && (
-                    <Badge variant="success" size="md">
+                    <Badge size="md">
                       <ModernIcon type="crown" size="sm" />
                       VERIFIED
                     </Badge>
                   )}
-                  <Badge variant="primary" size="md">
+                  <Badge size="md">
                     <ModernIcon type="diamond" size="sm" />
                     FLUX MEMBER
                   </Badge>
-                </Stack>
-              </Stack>
+                </Box>
+              </Box>
 
-              <Stack spacing="4">
-                <Stack spacing="2">
-                  <Stack direction="horizontal" align="center" spacing="2">
+              <Box gap="md">
+                <Box gap="md">
+                  <Box display="flex" alignItems="center" gap="md">
                     <Heading size="4xl" weight="bold" semantic="primary">
                       {userData.displayName}
                     </Heading>
-                    <Badge variant="success" size="md">
+                    <Badge size="md">
                       <ModernIcon type="star" size="sm" />
                     </Badge>
-                  </Stack>
+                  </Box>
 
-                  <Text variant="body-lg" semantic="secondary">
+                  <Text semantic="secondary">
                     @{userData.username} • Member since {userData.joinDate}
                   </Text>
 
-                  <Stack direction="horizontal" spacing="4" align="center" className="profile-info">
-                    <Stack direction="horizontal" spacing="2" align="center">
+                  <Box display="flex" gap="md" alignItems="center" className="profile-info">
+                    <Box display="flex" gap="md" alignItems="center">
                       <ModernIcon type="festival" size="sm" />
-                      <Text variant="body-sm" semantic="secondary">{userData.location}</Text>
-                    </Stack>
-                    <Stack direction="horizontal" spacing="2" align="center">
+                      <Text semantic="secondary">{userData.location}</Text>
+                    </Box>
+                    <Box display="flex" gap="md" alignItems="center">
                       <ModernIcon type="star" size="sm" />
-                      <Text variant="body-sm" semantic="secondary">{userData.email}</Text>
-                    </Stack>
-                  </Stack>
+                      <Text semantic="secondary">{userData.email}</Text>
+                    </Box>
+                  </Box>
 
-                  <Text variant="body-lg" semantic="primary">
+                  <Text semantic="primary">
                     {userData.bio}
                   </Text>
-                </Stack>
+                </Box>
 
-                <Stack direction="horizontal" spacing="3" className="profile-buttons">
+                <Box display="flex" gap="md" className="profile-buttons">
                   <Button
-                    variant="primary"
+                   
                     size="lg"
                     onClick={() => editMode ? handleSaveProfile() : setEditMode(true)}
                   >
                     <ModernIcon type={editMode ? "star" : "crown"} size="sm" />
                     {editMode ? "SAVE CHANGES" : "EDIT PROFILE"}
                   </Button>
-                  <Button variant="outline" size="lg">
+                  <Button size="lg">
                     <ModernIcon type="rocket" size="sm" />
                     SHARE PROFILE
                   </Button>
-                  <Button variant="ghost" size="lg">
+                  <Button size="lg">
                     <ModernIcon type="diamond" size="sm" />
                     MORE
                   </Button>
-                </Stack>
-              </Stack>
+                </Box>
+              </Box>
             </div>
 
             {/* Profile Stats */}
             <div className="responsive-grid stats">
-              <Card variant="outlined" padding="16">
-                <Stack align="center" spacing="2">
+              <Box>
+                <Box alignItems="center" gap="md">
                   <ModernIcon type="festival" size="lg" />
-                  <Text variant="display" weight="bold" semantic="primary">{userData.stats.festivalsAttended}</Text>
-                  <Text variant="body-sm" semantic="secondary" weight="medium" align="center">Festivals Attended</Text>
-                </Stack>
-              </Card>
-              <Card variant="outlined" padding="16">
-                <Stack align="center" spacing="2">
+                  <Text weight="bold" semantic="primary">{userData.stats.festivalsAttended}</Text>
+                  <Text semantic="secondary" weight="medium" alignItems="center">Festivals Attended</Text>
+                </Box>
+              </Box>
+              <Box>
+                <Box alignItems="center" gap="md">
                   <ModernIcon type="crown" size="lg" />
-                  <Text variant="display" weight="bold" semantic="primary">{userData.stats.artistsFollowed}</Text>
-                  <Text variant="body-sm" semantic="secondary" weight="medium" align="center">Artists Following</Text>
-                </Stack>
-              </Card>
-              <Card variant="outlined" padding="16">
-                <Stack align="center" spacing="2">
+                  <Text weight="bold" semantic="primary">{userData.stats.artistsFollowed}</Text>
+                  <Text semantic="secondary" weight="medium" alignItems="center">Artists Following</Text>
+                </Box>
+              </Box>
+              <Box>
+                <Box alignItems="center" gap="md">
                   <ModernIcon type="butterfly" size="lg" />
-                  <Text variant="display" weight="bold" semantic="primary">{userData.stats.friendsConnected}</Text>
-                  <Text variant="body-sm" semantic="secondary" weight="medium" align="center">Friends Connected</Text>
-                </Stack>
-              </Card>
-              <Card variant="outlined" padding="16">
-                <Stack align="center" spacing="2">
+                  <Text weight="bold" semantic="primary">{userData.stats.friendsConnected}</Text>
+                  <Text semantic="secondary" weight="medium" alignItems="center">Friends Connected</Text>
+                </Box>
+              </Box>
+              <Box>
+                <Box alignItems="center" gap="md">
                   <ModernIcon type="star" size="lg" />
-                  <Text variant="display" weight="bold" semantic="primary">{userData.stats.postsShared}</Text>
-                  <Text variant="body-sm" semantic="secondary" weight="medium" align="center">Posts Shared</Text>
-                </Stack>
-              </Card>
+                  <Text weight="bold" semantic="primary">{userData.stats.postsShared}</Text>
+                  <Text semantic="secondary" weight="medium" alignItems="center">Posts Shared</Text>
+                </Box>
+              </Box>
             </div>
-          </Stack>
-        </Card>
+          </Box>
+        </Box>
 
         {/* Tab Navigation */}
-        <Card variant="glass" padding="20">
+        <Box>
           <div className="responsive-grid profile-tabs">
             {[
               { id: 'overview', label: 'OVERVIEW', icon: 'star' },
@@ -236,7 +233,7 @@ export default function Profile() {
               </Button>
             ))}
           </div>
-        </Card>
+        </Box>
 
         {/* Main Content Layout */}
         <div className="responsive-grid profile-layout">
@@ -244,118 +241,119 @@ export default function Profile() {
           <div className="profile-main">
             {/* Overview Tab */}
             {activeTab === 'overview' && (
-              <Stack spacing="6">
+              <Box gap="md">
                 {/* Recent Activity */}
-                <Card variant="elevated" padding="20">
-                  <Stack spacing="4">
+                <Box>
+                  <Box gap="md">
                     <Heading size="2xl" weight="bold" semantic="primary">RECENT ACTIVITY</Heading>
                     <Divider />
 
-                    <Stack spacing="3">
+                    <Box gap="md">
                       {userData.recentActivity.map((activity, index) => (
                         <div key={index} className="responsive-grid activity-item">
-                          <Stack direction="horizontal" spacing="3" align="center">
+                          <Box display="flex" gap="md" alignItems="center">
                             <ModernIcon type={activity.icon as any} size="md" />
-                            <Stack spacing="1">
-                              <Text variant="body-sm" semantic="primary">
+                            <Box gap="md">
+                              <Text semantic="primary">
                                 {activity.action}
                               </Text>
-                              <Text variant="caption" semantic="secondary">
+                              <Text semantic="secondary">
                                 {activity.date}
                               </Text>
-                            </Stack>
-                          </Stack>
-                          <Badge variant="secondary" size="sm">
+                            </Box>
+                          </Box>
+                          <Badge size="sm">
                             {activity.type.toUpperCase()}
                           </Badge>
                         </div>
                       ))}
-                    </Stack>
-                  </Stack>
-                </Card>
+                    </Box>
+                  </Box>
+                </Box>
 
                 {/* Achievements */}
-                <Card variant="elevated" padding="20">
-                  <Stack spacing="4">
+                <Box>
+                  <Box gap="md">
                     <Heading size="2xl" weight="bold" semantic="primary">ACHIEVEMENTS</Heading>
                     <Divider />
 
                     <div className="responsive-grid achievements">
                       {userData.achievements.map((achievement) => (
-                        <Card
+                        <Box
                           key={achievement.id}
-                          variant={achievement.earned ? "elevated" : "outlined"}
-                          padding="16"
+                          bg={achievement.earned ? "surface.elevated" : undefined}
+                          p="lg"
+                          borderRadius={8}
                         >
-                          <Stack spacing="3" align="center">
+                          <Box gap="md" alignItems="center">
                             <ModernIcon type={achievement.icon} size="lg" />
-                            <Stack spacing="1" align="center">
-                              <Text variant="body-sm" weight="bold" semantic="primary">
+                            <Box gap="md" alignItems="center">
+                              <Text weight="bold" semantic="primary">
                                 {achievement.name}
                               </Text>
-                              <Text variant="caption" semantic="secondary" align="center">
+                              <Text semantic="secondary" alignItems="center">
                                 {achievement.description}
                               </Text>
-                            </Stack>
+                            </Box>
                             {achievement.earned ? (
-                              <Badge variant="success" size="sm">EARNED</Badge>
+                              <Badge size="sm">EARNED</Badge>
                             ) : (
-                              <Text variant="caption" semantic="secondary">85% Complete</Text>
+                              <Text semantic="secondary">85% Complete</Text>
                             )}
-                          </Stack>
-                        </Card>
+                          </Box>
+                        </Box>
                       ))}
                     </div>
-                  </Stack>
-                </Card>
-              </Stack>
+                  </Box>
+                </Box>
+              </Box>
             )}
 
             {/* Events Tab */}
             {activeTab === 'events' && (
-              <Card variant="elevated" padding="20">
-                <Stack spacing="4">
+              <Box>
+                <Box gap="md">
                   <Heading size="2xl" weight="bold" semantic="primary">UPCOMING EVENTS</Heading>
                   <Divider />
 
-                  <Stack spacing="3">
+                  <Box gap="md">
                     {userData.upcomingEvents.map((event) => {
                       const statusBadge = getEventStatusBadge(event.status);
                       return (
-                        <Card key={event.name} variant="outlined" padding="16">
+                        <Box key={event.name}>
                           <div className="responsive-grid event-item">
-                            <Stack spacing="2">
-                              <Text variant="body-md" weight="bold" semantic="primary">
+                            <Box gap="md">
+                              <Text weight="bold" semantic="primary">
                                 {event.name}
                               </Text>
-                              <Stack direction="horizontal" spacing="4">
-                                <Text variant="caption" semantic="secondary">
+                              <Box display="flex" gap="md">
+                                <Text semantic="secondary">
                                   {event.date}
                                 </Text>
-                                <Text variant="caption" semantic="secondary">
+                                <Text semantic="secondary">
                                   {event.location}
                                 </Text>
-                              </Stack>
-                            </Stack>
+                              </Box>
+                            </Box>
                             <Badge variant={statusBadge.variant} size="sm">
                               {statusBadge.text}
                             </Badge>
                           </div>
-                        </Card>
+                        </Box>
                       );
                     })}
-                  </Stack>
-                </Stack>
-              </Card>
+                  </Box>
+                </Box>
+              </Box>
             )}
 
             {/* Friends Tab */}
             {activeTab === 'friends' && (
-              <Card variant="elevated" padding="20">
-                <Stack spacing="4">
+              <Box>
+                <Box gap="md">
                   <div className="responsive-grid friends-header">
                     <Heading size="2xl" weight="bold" semantic="primary">FESTIVAL FRIENDS</Heading>
-                    <Button variant="primary" size="sm">
+                    <Button size="sm">
                       FIND FRIENDS
                     </Button>
                   </div>
@@ -365,47 +363,47 @@ export default function Profile() {
                     {userData.friends.map((friend) => {
                       const statusBadge = getStatusBadge(friend.status);
                       return (
-                        <Card key={friend.name} variant="outlined" padding="16">
+                        <Box key={friend.name}>
                           <div className="responsive-grid friend-item">
-                            <Stack direction="horizontal" spacing="3" align="center">
+                            <Box display="flex" gap="md" alignItems="center">
                               <ModernIcon type={friend.icon} size="lg" />
-                              <Stack spacing="1">
-                                <Text variant="body-sm" weight="bold" semantic="primary">
+                              <Box gap="md">
+                                <Text weight="bold" semantic="primary">
                                   {friend.name}
                                 </Text>
-                                <Text variant="caption" semantic="secondary">
+                                <Text semantic="secondary">
                                   {friend.mutualFriends} mutual friends
                                 </Text>
-                              </Stack>
-                            </Stack>
-                            <Stack direction="horizontal" spacing="2" align="center">
+                              </Box>
+                            </Box>
+                            <Box display="flex" gap="md" alignItems="center">
                               <Badge variant={statusBadge.variant} size="sm">
                                 {statusBadge.text}
                               </Badge>
-                              <Button variant="ghost" size="sm">
+                              <Button size="sm">
                                 VIEW
                               </Button>
-                            </Stack>
+                            </Box>
                           </div>
-                        </Card>
+                        </Box>
                       );
                     })}
                   </div>
-                </Stack>
-              </Card>
+                </Box>
+              </Box>
             )}
 
             {/* Settings Tab */}
             {activeTab === 'settings' && (
-              <Stack spacing="6">
+              <Box gap="md">
                 {/* Profile Settings */}
-                <Card variant="elevated" padding="20">
-                  <Stack spacing="4">
+                <Box>
+                  <Box gap="md">
                     <Heading size="2xl" weight="bold" semantic="primary">PROFILE SETTINGS</Heading>
                     <Divider />
 
                     {editMode ? (
-                      <Stack spacing="4">
+                      <Box gap="md">
                         <input
                           type="text"
                           placeholder="Display Name"
@@ -427,27 +425,27 @@ export default function Profile() {
                           onChange={(e) => setUserInfo({...userInfo, location: e.target.value})}
                           className="form-input"
                         />
-                      </Stack>
+                      </Box>
                     ) : (
-                      <Text variant="caption" semantic="secondary">
+                      <Text semantic="secondary">
                         Click "Edit Profile" to modify your information
                       </Text>
                     )}
-                  </Stack>
-                </Card>
+                  </Box>
+                </Box>
 
                 {/* Privacy Settings */}
-                <Card variant="elevated" padding="20">
-                  <Stack spacing="4">
+                <Box>
+                  <Box gap="md">
                     <Heading size="2xl" weight="bold" semantic="primary">PRIVACY SETTINGS</Heading>
                     <Divider />
 
-                    <Stack spacing="4">
+                    <Box gap="md">
                       <div className="responsive-grid setting-item">
-                        <Stack spacing="1">
-                          <Text variant="body-sm" weight="bold" semantic="primary">Public Profile</Text>
-                          <Text variant="caption" semantic="secondary">Allow others to find your profile</Text>
-                        </Stack>
+                        <Box gap="md">
+                          <Text weight="bold" semantic="primary">Public Profile</Text>
+                          <Text semantic="secondary">Allow others to find your profile</Text>
+                        </Box>
                         <label className="setting-switch">
                           <input
                             type="checkbox"
@@ -462,10 +460,10 @@ export default function Profile() {
                       </div>
 
                       <div className="responsive-grid setting-item">
-                        <Stack spacing="1">
-                          <Text variant="body-sm" weight="bold" semantic="primary">Show Location</Text>
-                          <Text variant="caption" semantic="secondary">Display your location on profile</Text>
-                        </Stack>
+                        <Box gap="md">
+                          <Text weight="bold" semantic="primary">Show Location</Text>
+                          <Text semantic="secondary">Display your location on profile</Text>
+                        </Box>
                         <label className="setting-switch">
                           <input
                             type="checkbox"
@@ -480,10 +478,10 @@ export default function Profile() {
                       </div>
 
                       <div className="responsive-grid setting-item">
-                        <Stack spacing="1">
-                          <Text variant="body-sm" weight="bold" semantic="primary">Activity Visibility</Text>
-                          <Text variant="caption" semantic="secondary">Show your festival activity to friends</Text>
-                        </Stack>
+                        <Box gap="md">
+                          <Text weight="bold" semantic="primary">Activity Visibility</Text>
+                          <Text semantic="secondary">Show your festival activity to friends</Text>
+                        </Box>
                         <label className="setting-switch">
                           <input
                             type="checkbox"
@@ -496,81 +494,84 @@ export default function Profile() {
                           <span></span>
                         </label>
                       </div>
-                    </Stack>
-                  </Stack>
-                </Card>
-              </Stack>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
             )}
 
             {/* Activity Tab */}
             {activeTab === 'activity' && (
-              <Card variant="elevated" padding="20">
-                <Stack spacing="4">
+              <Box>
+                <Box gap="md">
                   <Heading size="2xl" weight="bold" semantic="primary">ACTIVITY TIMELINE</Heading>
                   <Divider />
 
-                  <Card variant="glass" padding="16">
-                    <Text variant="body-sm" semantic="primary">
+                  <Box>
+                    <Text semantic="primary">
                       📊 <strong>Activity Feed:</strong> Your detailed activity timeline shows all your festival interactions, music discoveries, and social connections.
                     </Text>
-                  </Card>
-                </Stack>
-              </Card>
+                  </Box>
+                </Box>
+              </Box>
             )}
           </div>
 
           {/* Sidebar */}
           <div className="profile-sidebar">
-            <Stack spacing="6">
+            <Box gap="md">
               {/* Music Preferences */}
-              <Card variant="elevated" padding="20">
-                <Stack spacing="4">
+              <Box>
+                <Box gap="md">
                   <Heading size="lg" weight="bold" semantic="primary">MUSIC TASTE</Heading>
                   <Divider />
 
-                  <TagList
-                    tags={userData.stats.favoriteGenres.map(genre => ({ id: genre, label: genre }))}
-                    size="md"
-                  />
+                  <Box display="flex" gap="sm">
+                    {userData.stats.favoriteGenres.map(genre => (
+                      <Badge key={genre} size="sm">
+                        {genre}
+                      </Badge>
+                    ))}
+                  </Box>
 
-                  <Card variant="glass" padding="16">
-                    <Text variant="body-sm" semantic="primary">
+                  <Box bg="surface.elevated" p="md" borderRadius={8}>
+                    <Text semantic="primary">
                       🎵 <strong>Recommendation:</strong> Based on your taste, check out the new Techno Rising playlist!
                     </Text>
-                  </Card>
-                </Stack>
-              </Card>
+                  </Box>
+                </Box>
+              </Box>
 
               {/* Quick Stats */}
-              <Card variant="outlined" padding="20">
-                <Stack spacing="4">
+              <Box>
+                <Box gap="md">
                   <Heading size="lg" weight="bold" semantic="primary">THIS MONTH</Heading>
                   <Divider />
 
-                  <Stack spacing="2">
+                  <Box gap="md">
                     <div className="responsive-grid stat-item">
-                      <Text variant="caption" semantic="secondary">Festivals Attended</Text>
-                      <Text variant="caption" semantic="primary">2</Text>
+                      <Text semantic="secondary">Festivals Attended</Text>
+                      <Text semantic="primary">2</Text>
                     </div>
                     <div className="responsive-grid stat-item">
-                      <Text variant="caption" semantic="secondary">New Friends</Text>
-                      <Text variant="caption" semantic="primary">8</Text>
+                      <Text semantic="secondary">New Friends</Text>
+                      <Text semantic="primary">8</Text>
                     </div>
                     <div className="responsive-grid stat-item">
-                      <Text variant="caption" semantic="secondary">Hours Listened</Text>
-                      <Text variant="caption" semantic="primary">127h</Text>
+                      <Text semantic="secondary">Hours Listened</Text>
+                      <Text semantic="primary">127h</Text>
                     </div>
                     <div className="responsive-grid stat-item">
-                      <Text variant="caption" semantic="secondary">Posts Shared</Text>
-                      <Text variant="caption" semantic="primary">12</Text>
+                      <Text semantic="secondary">Posts Shared</Text>
+                      <Text semantic="primary">12</Text>
                     </div>
-                  </Stack>
-                </Stack>
-              </Card>
-            </Stack>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
           </div>
         </div>
-      </Stack>
+      </Box>
     </div>
   );
 }

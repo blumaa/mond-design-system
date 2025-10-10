@@ -1,13 +1,10 @@
 'use client';
 
 import {
-  Card,
-  Stack,
   Box,
   Text,
   Badge,
   Heading,
-  Grid,
   Divider,
 } from "@mond-design-system/theme";
 import { InteractiveChartFilters } from "../../components/InteractiveChartFilters";
@@ -76,221 +73,221 @@ export default function Analytics() {
     <Box bg="surface.background" p="2xl" position="relative">
       <MatrixRain />
 
-      <Stack spacing="xl">
-        <Stack spacing="md">
+      <Box display="flex" flexDirection="column" gap="xl">
+        <Box display="flex" flexDirection="column" gap="md">
           <Heading size="4xl" semantic="primary">
             SYSTEM ANALYTICS
           </Heading>
           <Text variant="body-lg" semantic="secondary">
             Neural network performance insights • Quantum data analysis
           </Text>
-        </Stack>
+        </Box>
 
         {/* Interactive Chart Filters - Client Island */}
         <InteractiveChartFilters />
 
         {/* Deployment Overview */}
-        <Card variant="elevated" padding="xl">
-          <Stack spacing="lg">
+        <Box bg="surface.elevated" p="xl" borderRadius={8}>
+          <Box display="flex" flexDirection="column" gap="lg">
             <Heading size="lg" semantic="primary">
               DEPLOYMENT OVERVIEW
             </Heading>
             <Divider />
 
-            <Grid columns={5} gap="lg">
-              <Stack spacing="sm" align="center">
+            <Box display="grid" gridTemplateColumns="repeat(5, 1fr)" gap="lg">
+              <Box display="flex" flexDirection="column" gap="sm" alignItems="center">
                 <Text variant="title" semantic="primary">
                   {deploymentStats.total}
                 </Text>
                 <Text variant="caption" semantic="secondary">Total Deployments</Text>
-              </Stack>
+              </Box>
 
-              <Stack spacing="sm" align="center">
+              <Box display="flex" flexDirection="column" gap="sm" alignItems="center">
                 <Text variant="title" color="feedback.success.text">
                   {deploymentStats.successful}
                 </Text>
                 <Text variant="caption" semantic="secondary">Successful</Text>
-              </Stack>
+              </Box>
 
-              <Stack spacing="sm" align="center">
+              <Box display="flex" flexDirection="column" gap="sm" alignItems="center">
                 <Text variant="title" color="feedback.error.text">
                   {deploymentStats.failed}
                 </Text>
                 <Text variant="caption" semantic="secondary">Failed</Text>
-              </Stack>
+              </Box>
 
-              <Stack spacing="sm" align="center">
+              <Box display="flex" flexDirection="column" gap="sm" alignItems="center">
                 <Text variant="title" semantic="primary">
                   {deploymentStats.successRate}%
                 </Text>
                 <Text variant="caption" semantic="secondary">Success Rate</Text>
-              </Stack>
+              </Box>
 
-              <Stack spacing="sm" align="center">
+              <Box display="flex" flexDirection="column" gap="sm" alignItems="center">
                 <Text variant="title" semantic="primary">
                   {deploymentStats.avgDuration}
                 </Text>
                 <Text variant="caption" semantic="secondary">Avg Duration</Text>
-              </Stack>
-            </Grid>
-          </Stack>
-        </Card>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
 
         {/* Main Analytics Grid */}
-        <Grid columns={2} gap="xl">
+        <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="xl">
 
           {/* Code Quality Metrics */}
-          <Card variant="elevated" padding="xl">
-            <Stack spacing="lg">
+          <Box bg="surface.elevated" p="xl" borderRadius={8}>
+            <Box display="flex" flexDirection="column" gap="lg">
               <Heading size="lg" semantic="primary">
                 CODE QUALITY METRICS
               </Heading>
               <Divider />
 
-              <Stack spacing="md">
+              <Box display="flex" flexDirection="column" gap="md">
                 {codeQualityMetrics.map((metric) => {
                   const statusBadge = getStatusBadge(metric.status);
                   return (
-                    <Stack key={metric.name} spacing="sm">
-                      <Stack direction="horizontal" justify="between" align="center">
+                    <Box key={metric.name} display="flex" flexDirection="column" gap="sm">
+                      <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Text variant="body-sm">{metric.name}</Text>
                         <Badge variant={statusBadge.variant} size="sm">
                           {statusBadge.text}
                         </Badge>
-                      </Stack>
+                      </Box>
 
-                      <Stack direction="horizontal" justify="between" align="end">
+                      <Box display="flex" justifyContent="space-between" alignItems="flex-end">
                         <Text variant="body-lg" semantic="primary">
                           {metric.value}
                         </Text>
                         <Text variant="caption" semantic="secondary">
                           {metric.unit}
                         </Text>
-                      </Stack>
+                      </Box>
                       <Divider />
-                    </Stack>
+                    </Box>
                   );
                 })}
-              </Stack>
-            </Stack>
-          </Card>
+              </Box>
+            </Box>
+          </Box>
 
           {/* Performance Metrics */}
-          <Card variant="elevated" padding="xl">
-            <Stack spacing="lg">
+          <Box bg="surface.elevated" p="xl" borderRadius={8}>
+            <Box display="flex" flexDirection="column" gap="lg">
               <Heading size="lg" semantic="primary">
                 PERFORMANCE METRICS
               </Heading>
               <Divider />
 
-              <Stack spacing="md">
+              <Box display="flex" flexDirection="column" gap="md">
                 {performanceData.map((item) => {
                   const trendBadge = getStatusBadge(item.trend);
                   return (
-                    <Stack key={item.metric} spacing="sm">
-                      <Stack direction="horizontal" justify="between" align="center">
+                    <Box key={item.metric} display="flex" flexDirection="column" gap="sm">
+                      <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Text variant="body-sm">{item.metric}</Text>
                         <Badge variant={trendBadge.variant} size="sm">
                           {trendBadge.text}
                         </Badge>
-                      </Stack>
+                      </Box>
 
-                      <Stack direction="horizontal" justify="between">
+                      <Box display="flex" justifyContent="space-between">
                         <Text variant="body-md" semantic="primary">
                           {item.current}
                         </Text>
                         <Text variant="caption" semantic="secondary">
                           Target: {item.target}
                         </Text>
-                      </Stack>
+                      </Box>
                       <Divider />
-                    </Stack>
+                    </Box>
                   );
                 })}
-              </Stack>
-            </Stack>
-          </Card>
+              </Box>
+            </Box>
+          </Box>
 
           {/* Security Analysis */}
-          <Card variant="elevated" padding="xl">
-            <Stack spacing="lg">
+          <Box bg="surface.elevated" p="xl" borderRadius={8}>
+            <Box display="flex" flexDirection="column" gap="lg">
               <Heading size="lg" semantic="primary">
                 SECURITY ANALYSIS
               </Heading>
               <Divider />
 
-              <Stack spacing="md">
+              <Box display="flex" flexDirection="column" gap="md">
                 {securityInsights.map((item) => {
                   const statusBadge = getStatusBadge(item.status);
                   return (
-                    <Stack key={item.category} spacing="sm">
-                      <Stack direction="horizontal" justify="between" align="center">
+                    <Box key={item.category} display="flex" flexDirection="column" gap="sm">
+                      <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Text variant="body-sm">{item.category}</Text>
                         <Badge variant={statusBadge.variant} size="sm">
                           {statusBadge.text}
                         </Badge>
-                      </Stack>
+                      </Box>
 
-                      <Stack direction="horizontal" justify="between" align="center">
+                      <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Text variant="body-lg" semantic="primary">
                           {item.score}/100
                         </Text>
                         <Text variant="caption" color={item.issues > 0 ? "feedback.warning.text" : "text.secondary"}>
                           {item.issues} issues
                         </Text>
-                      </Stack>
+                      </Box>
                       <Divider />
-                    </Stack>
+                    </Box>
                   );
                 })}
-              </Stack>
-            </Stack>
-          </Card>
+              </Box>
+            </Box>
+          </Box>
 
           {/* Recent Deployments */}
-          <Card variant="elevated" padding="xl">
-            <Stack spacing="lg">
+          <Box bg="surface.elevated" p="xl" borderRadius={8}>
+            <Box display="flex" flexDirection="column" gap="lg">
               <Heading size="lg" semantic="primary">
                 RECENT DEPLOYMENTS
               </Heading>
               <Divider />
 
-              <Stack spacing="md" maxHeight="300px" overflow="auto">
+              <Box display="flex" flexDirection="column" gap="md" maxHeight="300px" overflow="auto">
                 {recentDeployments.map((deployment) => {
                   const statusBadge = getStatusBadge(deployment.status);
                   return (
-                    <Stack key={deployment.id} spacing="sm">
-                      <Stack direction="horizontal" justify="between" align="center">
+                    <Box key={deployment.id} display="flex" flexDirection="column" gap="sm">
+                      <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Text variant="body-sm" weight="bold">
                           {deployment.id}
                         </Text>
                         <Badge variant={statusBadge.variant} size="sm">
                           {statusBadge.text}
                         </Badge>
-                      </Stack>
+                      </Box>
 
-                      <Stack direction="horizontal" justify="between">
+                      <Box display="flex" justifyContent="space-between">
                         <Text variant="caption" semantic="secondary">
                           {deployment.timestamp}
                         </Text>
                         <Text variant="caption" semantic="primary">
                           {deployment.duration}
                         </Text>
-                      </Stack>
+                      </Box>
 
                       <Text variant="caption" semantic="secondary">
                         Environment: {deployment.environment}
                       </Text>
                       <Divider />
-                    </Stack>
+                    </Box>
                   );
                 })}
-              </Stack>
-            </Stack>
-          </Card>
+              </Box>
+            </Box>
+          </Box>
 
-        </Grid>
-      </Stack>
+        </Box>
+      </Box>
     </Box>
   );
 }

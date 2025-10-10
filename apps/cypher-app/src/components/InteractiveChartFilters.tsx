@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Card, Stack, Text, Badge, Heading, Divider, Select, Button } from '@mond-design-system/theme';
+import { Box, Text, Badge, Heading, Divider, Select, Button } from '@mond-design-system/theme';
 
 const timeRanges = [
   { value: '1h', label: 'Last Hour' },
@@ -31,35 +31,35 @@ export function InteractiveChartFilters() {
   };
 
   return (
-    <Card variant="elevated" padding="xl">
-      <Stack spacing="lg">
-        <Stack direction="horizontal" justify="between" align="center">
+    <Box bg="surface.elevated" p="xl" borderRadius={8}>
+      <Box display="flex" flexDirection="column" gap="lg">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
           <Heading size="lg" semantic="primary">
             NEURAL ANALYSIS CONTROLS
           </Heading>
           <Badge variant="primary" size="sm">INTERACTIVE</Badge>
-        </Stack>
+        </Box>
 
         <Divider />
 
-        <Stack direction="horizontal" spacing="xl" align="end">
-          <Stack spacing="sm" flex="1">
+        <Box display="flex" gap="xl" alignItems="flex-end">
+          <Box display="flex" flexDirection="column" gap="sm" flex="1">
             <Text variant="body-sm" semantic="secondary">Time Range</Text>
             <Select
               value={selectedTimeRange}
               onChange={setSelectedTimeRange}
               options={timeRanges}
             />
-          </Stack>
+          </Box>
 
-          <Stack spacing="sm" flex="1">
+          <Box display="flex" flexDirection="column" gap="sm" flex="1">
             <Text variant="body-sm" semantic="secondary">Metric Type</Text>
             <Select
               value={selectedMetric}
               onChange={setSelectedMetric}
               options={metricTypes}
             />
-          </Stack>
+          </Box>
 
           <Button
             variant="primary"
@@ -68,24 +68,24 @@ export function InteractiveChartFilters() {
           >
             {isAnalyzing ? 'Analyzing...' : 'Run Analysis'}
           </Button>
-        </Stack>
+        </Box>
 
         {isAnalyzing && (
-          <Stack spacing="sm">
+          <Box display="flex" flexDirection="column" gap="sm">
             <Badge variant="warning" size="sm">PROCESSING</Badge>
             <Text variant="caption" semantic="secondary">
               Neural network analyzing {selectedMetric} data for {timeRanges.find(r => r.value === selectedTimeRange)?.label.toLowerCase()}...
             </Text>
-          </Stack>
+          </Box>
         )}
 
-        <Stack direction="horizontal" spacing="md">
+        <Box display="flex" gap="md">
           <Text variant="caption" semantic="secondary">
             Selected: {metricTypes.find(m => m.value === selectedMetric)?.label} • {timeRanges.find(r => r.value === selectedTimeRange)?.label}
           </Text>
           <Badge variant="success" size="sm">QUANTUM ENCRYPTED</Badge>
-        </Stack>
-      </Stack>
-    </Card>
+        </Box>
+      </Box>
+    </Box>
   );
 }

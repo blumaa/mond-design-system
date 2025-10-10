@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Box, Text, Badge, Stack } from '@mond-design-system/theme';
+import { Box, Text, Badge } from '@mond-design-system/theme';
 
 const navigationItems = [
   { href: '/', label: 'DASHBOARD', icon: '⚡' },
@@ -34,10 +34,10 @@ export function Navigation() {
       bg="surface.overlay"
       p="lg"
     >
-      <Stack direction="horizontal" justify="between" align="center">
+      <Box display="flex" justifyContent="space-between" alignItems="center">
 
         {/* Brand section */}
-        <Stack direction="horizontal" align="center" spacing="md">
+        <Box display="flex" alignItems="center" gap="md">
           <Text
             variant="body-md"
             weight="bold"
@@ -54,32 +54,32 @@ export function Navigation() {
           <Badge variant="success" size="sm">
             ONLINE
           </Badge>
-        </Stack>
+        </Box>
 
         {/* Navigation Links */}
-        <Stack direction="horizontal" align="center" spacing="xl">
+        <Box display="flex" alignItems="center" gap="xl">
           {navigationItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link key={item.href} href={item.href}>
-                <Stack
-                  direction="horizontal"
-                  align="center"
-                  spacing="sm"
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap="sm"
                   p="sm"
                 >
                   <Text variant="body-sm">{item.icon}</Text>
                   <Text variant="body-sm" weight={isActive ? "bold" : "normal"}>
                     {item.label}
                   </Text>
-                </Stack>
+                </Box>
               </Link>
             );
           })}
-        </Stack>
+        </Box>
 
         {/* Status section */}
-        <Stack direction="horizontal" align="center" spacing="md">
+        <Box display="flex" alignItems="center" gap="md">
           <Text
             variant="caption"
             semantic="primary"
@@ -89,9 +89,9 @@ export function Navigation() {
           <Badge variant="primary" size="sm">
             SECURE
           </Badge>
-        </Stack>
+        </Box>
 
-      </Stack>
+      </Box>
     </Box>
   );
 }

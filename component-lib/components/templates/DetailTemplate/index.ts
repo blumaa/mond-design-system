@@ -1,1 +1,0 @@
-export { DetailTemplate, type DetailTemplateProps, type DetailAction, type DetailMetaItem, type DetailSection, type DetailTab, type RelatedItem } from './DetailTemplate';

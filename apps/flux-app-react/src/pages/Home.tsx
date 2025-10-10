@@ -1,13 +1,11 @@
 import {
-  Card,
-  Stack,
+  Box,
   Text,
   Badge,
   Heading,
   Divider,
   Button,
-  TagList,
-  SearchForm,
+  Input,
 } from '@mond-design-system/theme';
 import { ModernIcon } from '../components/ModernIcon';
 
@@ -79,43 +77,42 @@ export default function Home() {
 
   return (
     <div className="page-container">
-      <Stack spacing="6">
+      <Box display="flex" flexDirection="column" gap="xl">
         {/* Hero Section */}
         <div className="hero-section">
-          <Stack spacing="4" align="center">
+          <Box display="flex" flexDirection="column" gap="lg" alignItems="center">
             <div className="hero-title">
               <Heading size="4xl" weight="bold" semantic="primary">
                 DISCOVER ELECTRIC FESTIVALS
               </Heading>
             </div>
             <div className="hero-subtitle">
-              <Text variant="body-lg" semantic="primary" align="center">
+              <Text variant="body-lg" semantic="primary" alignItems="center">
                 Underground music • Immersive art • Electric vibes • Festival communities
               </Text>
             </div>
-          </Stack>
+          </Box>
 
           {/* Search */}
           <div className="search-container">
-            <SearchForm
+            <Input
               placeholder="Search festivals, artists, genres..."
-              onSearch={handleSearch}
-              size="lg"
+              onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
 
-          <Stack direction="horizontal" spacing="4" align="center" justify="center">
+          <Box display="flex" gap="lg" alignItems="center" justifyContent="center">
             <Badge variant="primary" size="lg">
               45 FESTIVALS LIVE
             </Badge>
             <Badge variant="success" size="lg">
               2.1M RAVERS CONNECTED
             </Badge>
-          </Stack>
+          </Box>
         </div>
 
         {/* Featured Festivals Grid */}
-        <Stack spacing="6">
+        <Box display="flex" flexDirection="column" gap="xl">
           <Heading size="2xl" weight="bold" semantic="primary">
             FEATURED FESTIVALS
           </Heading>
@@ -124,65 +121,68 @@ export default function Home() {
             {featuredFestivals.map((festival) => {
               const statusBadge = getStatusBadge(festival.status);
               return (
-                <Card key={festival.id} variant="floating" padding="24">
-                  <Stack spacing="6">
+                <Box key={festival.id} bg="surface.elevated" p="xl" borderRadius={8}>
+                  <Box display="flex" flexDirection="column" gap="xl">
                     {/* Festival Header */}
-                    <Stack direction="horizontal" justify="between" align="start">
-                      <Stack spacing="2">
+                    <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+                      <Box display="flex" flexDirection="column" gap="sm">
                         <ModernIcon type={festival.icon} size="xl" />
                         <Heading size="lg" weight="bold" semantic="primary">
                           {festival.name}
                         </Heading>
-                      </Stack>
+                      </Box>
                       <Badge variant={statusBadge.variant} size="sm">
                         {statusBadge.text}
                       </Badge>
-                    </Stack>
+                    </Box>
 
                     {/* Festival Details */}
-                    <Stack spacing="4">
-                      <Stack direction="horizontal" justify="between">
+                    <Box display="flex" flexDirection="column" gap="lg">
+                      <Box display="flex" justifyContent="space-between">
                         <Text variant="body-sm" semantic="secondary">
                           {festival.date}
                         </Text>
                         <Text variant="body-sm" semantic="secondary">
                           {festival.location}
                         </Text>
-                      </Stack>
+                      </Box>
 
                       <Text variant="body-sm" semantic="primary">
                         {festival.description}
                       </Text>
 
-                      <TagList
-                        tags={festival.genres.map(genre => ({ id: genre, label: genre }))}
-                        size="sm"
-                      />
+                      <Box display="flex" gap="sm">
+                        {festival.genres.map(genre => (
+                          <Badge key={genre} variant="secondary" size="sm">
+                            {genre}
+                          </Badge>
+                        ))}
+                      </Box>
 
-                      <Stack spacing="2">
+                      <Box display="flex" flexDirection="column" gap="sm">
                         <Text variant="body-sm" weight="medium" semantic="primary">
                           Headliners
                         </Text>
-                        <Stack direction="horizontal" spacing="2">
+                        <Box display="flex" gap="sm">
                           {festival.headliners.map((artist) => (
                             <Badge key={artist} variant="primary" size="sm">
                               {artist}
                             </Badge>
                           ))}
-                        </Stack>
-                      </Stack>
+                        </Box>
+                      </Box>
 
                       <Divider />
 
-                      <Stack direction="horizontal" justify="between" align="center">
-                        <Stack spacing="1">
+                      <Box display="flex" justifyContent="space-between" alignItems="center">
+                        <Box display="flex" flexDirection="column" gap="xs">
                           <Text variant="body-sm" semantic="primary">
                             {festival.attendees.toLocaleString()} attending
                           </Text>
                           <Text variant="body-md" weight="bold" semantic="primary">
                             {festival.price}
                           </Text>
-                        </Stack>
+                        </Box>
 
                         <Button
                           variant={festival.status === 'sold-out' ? 'outline' : 'primary'}
@@ -190,27 +190,27 @@ export default function Home() {
                         >
                           {festival.status === 'sold-out' ? 'SOLD OUT' : 'GET TICKETS'}
                         </Button>
-                      </Stack>
-                    </Stack>
-                  </Stack>
-                </Card>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
               );
             })}
           </div>
-        </Stack>
+        </Box>
 
         {/* Trending Artists */}
-        <Stack spacing="6">
+        <Box display="flex" flexDirection="column" gap="xl">
           <Heading size="2xl" weight="bold" semantic="primary">
             TRENDING ARTISTS
           </Heading>
 
           <div className="responsive-grid artists">
             {trendingArtists.map((artist) => (
-              <Card key={artist.id} variant="glass" padding="20">
-                <Stack spacing="4" align="center">
+              <Box key={artist.id} bg="surface.elevated" p="lg" borderRadius={8}>
+                <Box display="flex" flexDirection="column" gap="lg" alignItems="center">
                   <ModernIcon type={artist.icon} size="lg" />
-                  <Stack spacing="2" align="center">
+                  <Box display="flex" flexDirection="column" gap="sm" alignItems="center">
                     <Text variant="body-sm" weight="bold" semantic="primary">
                       {artist.name}
                     </Text>
@@ -220,45 +220,45 @@ export default function Home() {
                     <Badge variant="primary" size="sm">
                       {artist.followers}
                     </Badge>
-                  </Stack>
+                  </Box>
                   <Button variant="primary" size="sm">
                     FOLLOW
                   </Button>
-                </Stack>
-              </Card>
+                </Box>
+              </Box>
             ))}
           </div>
-        </Stack>
+        </Box>
 
         {/* Stats Section */}
-        <Card variant="glass" padding="32">
-          <Stack spacing="6">
-            <Heading size="2xl" weight="bold" semantic="primary" align="center">
+        <Box bg="surface.elevated" p="2xl" borderRadius={8}>
+          <Box display="flex" flexDirection="column" gap="xl">
+            <Heading size="2xl" weight="bold" semantic="primary" alignItems="center">
               FLUX COMMUNITY STATS
             </Heading>
 
             <div className="responsive-grid stats">
-              <Stack align="center" spacing="2">
+              <Box display="flex" flexDirection="column" alignItems="center" gap="sm">
                 <Text variant="display" weight="bold" semantic="accent">2.1M</Text>
                 <Text variant="body-md" weight="medium" semantic="primary">Active Ravers</Text>
-              </Stack>
-              <Stack align="center" spacing="2">
+              </Box>
+              <Box display="flex" flexDirection="column" alignItems="center" gap="sm">
                 <Text variant="display" weight="bold" semantic="accent">450+</Text>
                 <Text variant="body-md" weight="medium" semantic="primary">Festivals Listed</Text>
-              </Stack>
-              <Stack align="center" spacing="2">
+              </Box>
+              <Box display="flex" flexDirection="column" alignItems="center" gap="sm">
                 <Text variant="display" weight="bold" semantic="accent">12K+</Text>
                 <Text variant="body-md" weight="medium" semantic="primary">Artists Featured</Text>
-              </Stack>
-              <Stack align="center" spacing="2">
+              </Box>
+              <Box display="flex" flexDirection="column" alignItems="center" gap="sm">
                 <Text variant="display" weight="bold" semantic="accent">95%</Text>
                 <Text variant="body-md" weight="medium" semantic="primary">Satisfaction Rate</Text>
-              </Stack>
+              </Box>
             </div>
-          </Stack>
-        </Card>
+          </Box>
+        </Box>
 
-      </Stack>
+      </Box>
     </div>
   );
 }

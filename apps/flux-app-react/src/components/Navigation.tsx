@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Text, Badge, Stack } from '@mond-design-system/theme';
+import { Text, Badge, Box } from '@mond-design-system/theme';
 import { ModernIcon } from './ModernIcon';
 
 const navigationItems = [
@@ -62,17 +62,17 @@ export function Navigation() {
             const isActive = location.pathname === item.href;
             return (
               <Link key={item.href} to={item.href} style={{ textDecoration: 'none' }}>
-                <Stack
-                  direction="horizontal"
-                  align="center"
-                  spacing="2"
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap="sm"
                   p="md"
                 >
                   <ModernIcon type={item.icon} size="sm" />
                   <Text variant="body" weight={isActive ? "bold" : "normal"} semantic="primary">
                     {item.label}
                   </Text>
-                </Stack>
+                </Box>
               </Link>
             );
           })}
@@ -110,17 +110,17 @@ export function Navigation() {
                   style={{ textDecoration: 'none' }}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <Stack
-                    direction="horizontal"
-                    align="center"
-                    spacing="3"
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap="md"
                     p="md"
                   >
                     <ModernIcon type={item.icon} size="sm" />
                     <Text variant="body" weight={isActive ? "bold" : "normal"} semantic="primary">
                       {item.label}
                     </Text>
-                  </Stack>
+                  </Box>
                 </Link>
               );
             })}

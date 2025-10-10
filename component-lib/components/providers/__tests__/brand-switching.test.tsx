@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { ThemeProvider } from '../ThemeProvider';
-import { Button } from '../../atoms/Button/Button';
+import { Button } from '../../Button/Button';
 import { cypherTheme } from '../../../brands/cypher';
 import { mondTheme } from '../../../brands/mond';
 

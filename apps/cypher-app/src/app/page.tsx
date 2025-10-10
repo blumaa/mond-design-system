@@ -1,13 +1,10 @@
 'use client';
 
 import {
-  Card,
-  Stack,
   Box,
   Text,
   Badge,
   Heading,
-  Grid,
   Divider,
 } from "@mond-design-system/theme";
 import { LiveSystemStatus } from "../components/LiveSystemStatus";
@@ -57,74 +54,74 @@ export default function Dashboard() {
       <MatrixRain />
 
       {/* Dashboard Header */}
-      <Stack spacing="xl" mb="3xl">
+      <Box display="flex" flexDirection="column" gap="xl" mb="3xl">
         <Heading size="4xl" semantic="primary">
           CYPHER COMMAND CENTER
         </Heading>
         <Text variant="body-lg" semantic="secondary">
           Secure neural network interface • Real-time system monitoring
         </Text>
-      </Stack>
+      </Box>
 
       {/* Main Dashboard Grid */}
-      <Grid columns={3} gap="xl">
+      <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap="xl">
 
         {/* System Metrics */}
-        <Card variant="elevated" padding="xl">
-          <Stack spacing="lg">
+        <Box bg="surface.elevated" p="xl" borderRadius={8}>
+          <Box display="flex" flexDirection="column" gap="lg">
             <Heading size="lg" semantic="primary">
               SYSTEM METRICS
             </Heading>
             <Divider />
 
-            <Stack spacing="md">
-              <Stack direction="horizontal" justify="between">
+            <Box display="flex" flexDirection="column" gap="md">
+              <Box display="flex" justifyContent="space-between">
                 <Text variant="body-sm">CPU Usage</Text>
                 <Text variant="body-sm" weight="bold" semantic="primary">
                   {systemStats.cpu}%
                 </Text>
-              </Stack>
+              </Box>
 
-              <Stack direction="horizontal" justify="between">
+              <Box display="flex" justifyContent="space-between">
                 <Text variant="body-sm">Memory</Text>
                 <Text variant="body-sm" weight="bold" semantic="primary">
                   {systemStats.memory}%
                 </Text>
-              </Stack>
+              </Box>
 
-              <Stack direction="horizontal" justify="between">
+              <Box display="flex" justifyContent="space-between">
                 <Text variant="body-sm">Network I/O</Text>
                 <Text variant="body-sm" weight="bold" semantic="primary">
                   {systemStats.network} KB/s
                 </Text>
-              </Stack>
+              </Box>
 
-              <Stack direction="horizontal" justify="between">
+              <Box display="flex" justifyContent="space-between">
                 <Text variant="body-sm">Uptime</Text>
                 <Text variant="body-sm" weight="bold" semantic="primary">
                   {systemStats.uptime}
                 </Text>
-              </Stack>
-            </Stack>
+              </Box>
+            </Box>
 
             <Badge variant="success" size="lg">
               ALL SYSTEMS OPERATIONAL
             </Badge>
-          </Stack>
-        </Card>
+          </Box>
+        </Box>
 
         {/* Active Sessions */}
-        <Card variant="elevated" padding="xl">
-          <Stack spacing="lg">
+        <Box bg="surface.elevated" p="xl" borderRadius={8}>
+          <Box display="flex" flexDirection="column" gap="lg">
             <Heading size="lg" semantic="primary">
               ACTIVE SESSIONS
             </Heading>
             <Divider />
 
-            <Stack spacing="md">
+            <Box display="flex" flexDirection="column" gap="md">
               {activeSessions.map((session) => (
-                <Stack key={session.id} spacing="sm">
-                  <Stack direction="horizontal" justify="between">
+                <Box key={session.id} display="flex" flexDirection="column" gap="sm">
+                  <Box display="flex" justifyContent="space-between">
                     <Text variant="body-sm" weight="bold">
                       {session.id}
                     </Text>
@@ -134,7 +131,7 @@ export default function Dashboard() {
                     >
                       {session.status.toUpperCase()}
                     </Badge>
-                  </Stack>
+                  </Box>
                   <Text variant="caption" semantic="secondary">
                     {session.user}
                   </Text>
@@ -142,44 +139,44 @@ export default function Dashboard() {
                     Location: {session.location}
                   </Text>
                   <Divider />
-                </Stack>
+                </Box>
               ))}
-            </Stack>
-          </Stack>
-        </Card>
+            </Box>
+          </Box>
+        </Box>
 
         {/* Security Controls */}
-        <Card variant="elevated" padding="xl">
-          <Stack spacing="lg">
+        <Box bg="surface.elevated" p="xl" borderRadius={8}>
+          <Box display="flex" flexDirection="column" gap="lg">
             <Heading size="lg" semantic="primary">
               SECURITY STATUS
             </Heading>
             <Divider />
 
-            <Stack spacing="md">
+            <Box display="flex" flexDirection="column" gap="md">
               {securityControls.map((control) => (
-                <Stack key={control.name} spacing="sm">
-                  <Stack direction="horizontal" justify="between">
+                <Box key={control.name} display="flex" flexDirection="column" gap="sm">
+                  <Box display="flex" justifyContent="space-between">
                     <Text variant="body-sm">{control.name}</Text>
                     <Badge variant="primary" size="sm">
                       {control.status.toUpperCase()}
                     </Badge>
-                  </Stack>
+                  </Box>
                   <Text variant="caption" semantic="primary">
                     Security Level: {control.level}
                   </Text>
                   <Divider />
-                </Stack>
+                </Box>
               ))}
-            </Stack>
+            </Box>
 
             <Badge variant="success" size="lg">
               MAXIMUM SECURITY ENABLED
             </Badge>
-          </Stack>
-        </Card>
+          </Box>
+        </Box>
 
-      </Grid>
+      </Box>
 
       {/* Live System Status - Client Island */}
       <Box mt="2xl">

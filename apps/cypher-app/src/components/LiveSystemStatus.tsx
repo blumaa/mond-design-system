@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Card, Stack, Text, Badge, Heading, Divider } from '@mond-design-system/theme';
+import { Box, Text, Badge, Heading, Divider } from '@mond-design-system/theme';
 
 interface SystemEvent {
   id: string;
@@ -64,28 +64,28 @@ export function LiveSystemStatus() {
   };
 
   return (
-    <Card variant="elevated" padding="xl">
-      <Stack spacing="lg">
-        <Stack direction="horizontal" justify="between" align="center">
+    <Box bg="surface.elevated" p="xl" borderRadius={8}>
+      <Box display="flex" flexDirection="column" gap="lg">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
           <Heading size="lg" semantic="primary">
             LIVE SYSTEM LOG
           </Heading>
-          <Stack direction="horizontal" spacing="md" align="center">
+          <Box display="flex" gap="md" alignItems="center">
             <Text variant="caption" semantic="secondary">
               Uptime: {formatUptime(uptime)}
             </Text>
             <Badge variant="success" size="sm">
               LIVE
             </Badge>
-          </Stack>
-        </Stack>
+          </Box>
+        </Box>
 
         <Divider />
 
-        <Stack spacing="sm" maxHeight="300px" overflow="auto">
+        <Box display="flex" flexDirection="column" gap="sm" maxHeight="300px" overflow="auto">
           {events.map((event) => (
-            <Stack key={event.id} direction="horizontal" justify="between" align="center" p="sm">
-              <Stack direction="horizontal" spacing="md" align="center">
+            <Box key={event.id} display="flex" justifyContent="space-between" alignItems="center" p="sm">
+              <Box display="flex" gap="md" alignItems="center">
                 <Text variant="caption" semantic="secondary">
                   {event.timestamp}
                 </Text>
@@ -93,11 +93,11 @@ export function LiveSystemStatus() {
                   {event.type.toUpperCase()}
                 </Badge>
                 <Text variant="body-sm">{event.message}</Text>
-              </Stack>
-            </Stack>
+              </Box>
+            </Box>
           ))}
-        </Stack>
-      </Stack>
-    </Card>
+        </Box>
+      </Box>
+    </Box>
   );
 }

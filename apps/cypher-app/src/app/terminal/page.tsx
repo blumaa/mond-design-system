@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Text, Card, Input, Stack, Badge, Heading, Divider } from '@mond-design-system/theme';
+import { Box, Text, Input, Badge, Heading, Divider } from '@mond-design-system/theme';
 import { MatrixRain } from '../../components/MatrixRain';
 
 interface TerminalLine {
@@ -113,34 +113,34 @@ export default function Terminal() {
     <Box bg="surface.background" p="2xl" position="relative">
       <MatrixRain />
 
-      <Stack spacing="xl">
-        <Stack spacing="md">
+      <Box display="flex" flexDirection="column" gap="xl">
+        <Box display="flex" flexDirection="column" gap="md">
           <Heading size="4xl" semantic="primary">
             CYPHER TERMINAL
           </Heading>
           <Text variant="body-lg" semantic="secondary">
             Neural network command interface • Quantum encryption enabled
           </Text>
-        </Stack>
+        </Box>
 
-        <Card variant="elevated" padding="xl" bg="surface.primary" minHeight="600px">
-          <Stack spacing="lg" height="100%">
+        <Box bg="surface.elevated" p="xl" borderRadius={8} minHeight="600px">
+          <Box display="flex" flexDirection="column" gap="lg" height="100%">
 
             {/* Terminal Header */}
-            <Stack direction="horizontal" justify="between" align="center">
-              <Stack direction="horizontal" spacing="md" align="center">
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Box display="flex" gap="md" alignItems="center">
                 <Badge variant="success" size="sm">CONNECTED</Badge>
                 <Text variant="caption" semantic="secondary">
                   Session: admin@cypher.sys
                 </Text>
-              </Stack>
-              <Stack direction="horizontal" spacing="md" align="center">
+              </Box>
+              <Box display="flex" gap="md" alignItems="center">
                 <Text variant="caption" semantic="secondary">
                   Encryption: QUANTUM
                 </Text>
                 <Badge variant="primary" size="sm">SECURE</Badge>
-              </Stack>
-            </Stack>
+              </Box>
+            </Box>
 
             <Divider />
 
@@ -150,10 +150,10 @@ export default function Terminal() {
               overflow="auto"
               p="md"
               bg="surface.background"
-              borderRadius="md"
+              borderRadius={8}
               maxHeight="400px"
             >
-              <Stack spacing="xs">
+              <Box display="flex" flexDirection="column" gap="xs">
                 {lines.map((line) => (
                   <Text
                     key={line.id}
@@ -166,21 +166,21 @@ export default function Terminal() {
                 ))}
 
                 {isProcessing && (
-                  <Stack direction="horizontal" spacing="sm" align="center">
+                  <Box display="flex" gap="sm" alignItems="center">
                     <Text variant="body-sm" semantic="primary">
                       Processing...
                     </Text>
                     <Badge variant="warning" size="sm">WORKING</Badge>
-                  </Stack>
+                  </Box>
                 )}
 
                 <div ref={terminalEndRef} />
-              </Stack>
+              </Box>
             </Box>
 
             {/* Input Area */}
             <form onSubmit={handleSubmit}>
-              <Stack direction="horizontal" spacing="sm" align="center">
+              <Box display="flex" gap="sm" alignItems="center">
                 <Text variant="body-sm" semantic="primary">
                   cypher@neural:~$
                 </Text>
@@ -196,16 +196,16 @@ export default function Terminal() {
                 {isProcessing && (
                   <Badge variant="warning" size="sm">PROCESSING</Badge>
                 )}
-              </Stack>
+              </Box>
             </form>
 
             {/* Command Help */}
             <Text variant="caption" semantic="secondary">
               Available commands: help, status, scan, users, deploy, logs, clear, hack
             </Text>
-          </Stack>
-        </Card>
-      </Stack>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }

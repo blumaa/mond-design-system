@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Card, Stack, Badge, Heading, Divider, Grid } from '@mond-design-system/theme';
+import { Box, Text, Badge, Heading, Divider } from '@mond-design-system/theme';
 import { MatrixRain } from '../../components/MatrixRain';
 
 interface SystemMetric {
@@ -130,144 +130,144 @@ export default function Monitor() {
     <Box bg="surface.background" p="2xl" position="relative">
       <MatrixRain />
 
-      <Stack spacing="xl">
-        <Stack spacing="md">
-          <Stack direction="horizontal" justify="between" align="center">
+      <Box display="flex" flexDirection="column" gap="xl">
+        <Box display="flex" flexDirection="column" gap="md">
+          <Box display="flex" justifyContent="space-between" alignItems="center">
             <Heading size="4xl" semantic="primary">
               SYSTEM MONITOR
             </Heading>
-            <Stack direction="horizontal" spacing="md" align="center">
+            <Box display="flex" gap="md" alignItems="center">
               <Text variant="caption" semantic="secondary">
                 Last Update: {lastUpdate.toLocaleTimeString()}
               </Text>
               <Badge variant="success" size="sm">LIVE</Badge>
-            </Stack>
-          </Stack>
+            </Box>
+          </Box>
           <Text variant="body-lg" semantic="secondary">
             Real-time neural network monitoring • Quantum sensors active
           </Text>
-        </Stack>
+        </Box>
 
         {/* System Metrics Grid */}
-        <Grid columns={3} gap="lg">
+        <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap="lg">
           {metrics.map((metric) => {
             const statusBadge = getStatusBadge(metric.status);
             return (
-              <Card key={metric.id} variant="elevated" padding="lg">
-                <Stack spacing="md">
-                  <Stack direction="horizontal" justify="between" align="center">
+              <Box key={metric.id} bg="surface.elevated" p="lg" borderRadius={8}>
+                <Box display="flex" flexDirection="column" gap="md">
+                  <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Text variant="body-md" weight="bold">{metric.name}</Text>
                     <Badge variant={statusBadge.variant} size="sm">
                       {statusBadge.text}
                     </Badge>
-                  </Stack>
+                  </Box>
 
-                  <Stack direction="horizontal" align="end" spacing="sm">
+                  <Box display="flex" alignItems="flex-end" gap="sm">
                     <Text variant="title" semantic="primary">
                       {metric.value}
                     </Text>
                     <Text variant="body-sm" semantic="secondary">
                       {metric.unit}
                     </Text>
-                  </Stack>
+                  </Box>
 
-                  <Stack spacing="xs">
+                  <Box display="flex" flexDirection="column" gap="xs">
                     <Text variant="caption" semantic="secondary">History (last 5 readings)</Text>
-                    <Stack direction="horizontal" spacing="xs">
+                    <Box display="flex" gap="xs">
                       {metric.history.map((value, index) => (
                         <Box
                           key={index}
                           bg="brand.interactive.background"
                           height={`${(value / 100) * 40 + 10}px`}
                           width="8px"
-                          borderRadius="sm"
+                          borderRadius={4}
                           opacity={index === metric.history.length - 1 ? 1 : 0.6}
                         />
                       ))}
-                    </Stack>
-                  </Stack>
-                </Stack>
-              </Card>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
             );
           })}
-        </Grid>
+        </Box>
 
         {/* Network Connections and Alerts */}
-        <Grid columns={2} gap="xl">
+        <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="xl">
 
           {/* Network Connections */}
-          <Card variant="elevated" padding="xl">
-            <Stack spacing="lg">
+          <Box bg="surface.elevated" p="xl" borderRadius={8}>
+            <Box display="flex" flexDirection="column" gap="lg">
               <Heading size="lg" semantic="primary">
                 NETWORK CONNECTIONS
               </Heading>
               <Divider />
 
-              <Stack spacing="md">
+              <Box display="flex" flexDirection="column" gap="md">
                 {connections.map((connection) => {
                   const statusBadge = getStatusBadge(connection.status);
                   return (
-                    <Stack key={connection.id} spacing="sm">
-                      <Stack direction="horizontal" justify="between" align="center">
+                    <Box key={connection.id} display="flex" flexDirection="column" gap="sm">
+                      <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Text variant="body-sm" weight="bold">
                           {connection.source} → {connection.destination}
                         </Text>
                         <Badge variant={statusBadge.variant} size="sm">
                           {statusBadge.text}
                         </Badge>
-                      </Stack>
+                      </Box>
 
-                      <Stack direction="horizontal" justify="between">
+                      <Box display="flex" justifyContent="space-between">
                         <Text variant="caption" semantic="secondary">
                           Protocol: {connection.protocol}
                         </Text>
                         <Text variant="caption" semantic="primary">
                           {connection.bandwidth.toFixed(1)} KB/s
                         </Text>
-                      </Stack>
+                      </Box>
                       <Divider />
-                    </Stack>
+                    </Box>
                   );
                 })}
-              </Stack>
-            </Stack>
-          </Card>
+              </Box>
+            </Box>
+          </Box>
 
           {/* System Alerts */}
-          <Card variant="elevated" padding="xl">
-            <Stack spacing="lg">
+          <Box bg="surface.elevated" p="xl" borderRadius={8}>
+            <Box display="flex" flexDirection="column" gap="lg">
               <Heading size="lg" semantic="primary">
                 SYSTEM ALERTS
               </Heading>
               <Divider />
 
-              <Stack spacing="md" maxHeight="300px" overflow="auto">
+              <Box display="flex" flexDirection="column" gap="md" maxHeight="300px" overflow="auto">
                 {alerts.map((alert) => {
                   const alertBadge = getAlertBadge(alert.level);
                   return (
-                    <Stack key={alert.id} spacing="sm">
-                      <Stack direction="horizontal" justify="between" align="center">
+                    <Box key={alert.id} display="flex" flexDirection="column" gap="sm">
+                      <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Badge variant={alertBadge.variant} size="sm">
                           {alertBadge.text}
                         </Badge>
                         <Text variant="caption" semantic="secondary">
                           {alert.timestamp}
                         </Text>
-                      </Stack>
+                      </Box>
 
                       <Text variant="body-sm">{alert.message}</Text>
                       <Text variant="caption" semantic="secondary">
                         Source: {alert.source}
                       </Text>
                       <Divider />
-                    </Stack>
+                    </Box>
                   );
                 })}
-              </Stack>
-            </Stack>
-          </Card>
-        </Grid>
-      </Stack>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }
