@@ -1,3 +1,7 @@
+## 1.20.0 (2025-10-10)
+
+* feat: add icon semantic tokens ([8c5fc8e](https://github.com/blumaa/mond-design-system/commit/8c5fc8e))
+
 ## <small>1.19.1 (2025-10-10)</small>
 
 * fix: add link dark/light mode for text color ([b77772c](https://github.com/blumaa/mond-design-system/commit/b77772c))
