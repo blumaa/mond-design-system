@@ -83,7 +83,7 @@ const getSizeStyles = (size: LinkSize, iconOnly: boolean = false) => {
 
 const getLinkStyles = (theme: ReturnType<typeof useTheme>) => {
   return {
-    color: 'inherit',
+    color: theme('text.primary'),
     textDecoration: 'underline',
     textDecorationColor: theme('text.link'),
     textUnderlineOffset: '1px',
@@ -126,7 +126,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       textDecoration: 'underline',
       textDecorationColor: theme('text.link'),
       textUnderlineOffset: '1px',
-      color: 'inherit',
+      color: theme('text.primary'),
       ...sizeStyles,
       ...style,
     };
