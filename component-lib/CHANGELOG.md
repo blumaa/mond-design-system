@@ -1,3 +1,7 @@
+## 1.21.0 (2025-10-10)
+
+* feat: add slate color palette with brand background ([786e0b2](https://github.com/blumaa/mond-design-system/commit/786e0b2))
+
 ## 1.20.0 (2025-10-10)
 
 * feat: add icon semantic tokens ([8c5fc8e](https://github.com/blumaa/mond-design-system/commit/8c5fc8e))
