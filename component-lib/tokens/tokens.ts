@@ -201,6 +201,24 @@ export const tokens = {
         "dark": "brand.primary.400"
       }
     },
+    "icon": {
+      "primary": {
+        "light": "gray.900",
+        "dark": "gray.100"
+      },
+      "secondary": {
+        "light": "gray.600",
+        "dark": "gray.400"
+      },
+      "tertiary": {
+        "light": "gray.500",
+        "dark": "gray.500"
+      },
+      "disabled": {
+        "light": "gray.400",
+        "dark": "gray.600"
+      }
+    },
     "surface": {
       "background": {
         "light": "white.50",

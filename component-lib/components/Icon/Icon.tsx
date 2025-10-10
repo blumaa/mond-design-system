@@ -54,19 +54,19 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(({
   children,
   label,
   decorative = false,
-  color = 'currentColor',
+  color = 'icon.primary',
   isDarkMode,
-  
+
   className = '',
   style,
   ...props
 }, ref) => {
   const iconSize = getIconSize(size);
   const theme = useTheme(isDarkMode);
-  
+
   // Resolve color if it contains semantic tokens
-  const resolvedColor = typeof color === 'string' && color.includes('.') 
-    ? theme(color) 
+  const resolvedColor = typeof color === 'string' && color.includes('.')
+    ? theme(color)
     : color;
   
   const iconStyles: React.CSSProperties = {
