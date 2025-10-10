@@ -63,7 +63,7 @@
     "surface": {
       "background": {
         "light": "white.50",
-        "dark": "black.200"
+        "dark": "slate.800"
       },
       "elevated": {
         "light": "white.50",

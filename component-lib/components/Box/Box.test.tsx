@@ -309,7 +309,7 @@ describe('Box Component', () => {
       );
       const boxElement = screen.getByTestId('semantic-dark-box');
       // These should resolve to dark mode values
-      expect(boxElement).toHaveStyle('background-color: #141414');
+      expect(boxElement).toHaveStyle('background-color: #27374D');
       expect(boxElement).toHaveStyle('color: #f1f5f9');
     });
 
