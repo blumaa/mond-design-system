@@ -1,3 +1,7 @@
+## 1.19.0 (2025-10-10)
+
+* feat: major update and restructure ([25fcca4](https://github.com/blumaa/mond-design-system/commit/25fcca4))
+
 ## 1.18.0 (2025-10-08)
 
 * fix: fix ci ([be680f9](https://github.com/blumaa/mond-design-system/commit/be680f9))
