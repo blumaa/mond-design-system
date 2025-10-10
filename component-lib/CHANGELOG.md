@@ -1,3 +1,7 @@
+## <small>1.19.1 (2025-10-10)</small>
+
+* fix: add link dark/light mode for text color ([b77772c](https://github.com/blumaa/mond-design-system/commit/b77772c))
+
 ## 1.19.0 (2025-10-10)
 
 * feat: major update and restructure ([25fcca4](https://github.com/blumaa/mond-design-system/commit/25fcca4))
