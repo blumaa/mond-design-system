@@ -97,11 +97,6 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
    * Text content
    */
   children: React.ReactNode;
-
-  /**
-   * Allow additional props for components like framer-motion
-   */
-  [key: string]: any;
 }
 
 const getVariantStyles = (variant: TextVariant) => {
