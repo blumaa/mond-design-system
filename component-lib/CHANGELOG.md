@@ -1,3 +1,7 @@
+## 1.22.0 (2025-10-14)
+
+* feat: add as prop to Link for framework-agnostic routing ([9b95022](https://github.com/blumaa/mond-design-system/commit/9b95022))
+
 ## 1.21.0 (2025-10-10)
 
 * feat: add slate color palette with brand background ([786e0b2](https://github.com/blumaa/mond-design-system/commit/786e0b2))
