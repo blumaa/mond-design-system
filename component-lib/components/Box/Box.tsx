@@ -3,7 +3,7 @@ import { useTheme } from '../providers/ThemeProvider';
 import { tokens } from '../../tokens';
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
-  as?: keyof React.JSX.IntrinsicElements;
+  as?: React.ElementType;
   
   /**
    * Force dark mode styling (overrides provider colorScheme)

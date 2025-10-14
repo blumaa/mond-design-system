@@ -82,10 +82,10 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
   truncate?: boolean;
 
   /**
-   * HTML element to render as
+   * HTML element or component to render as
    * @default 'span'
    */
-  as?: 'span' | 'p' | 'div' | 'label' | 'strong' | 'em' | 'small';
+  as?: React.ElementType;
 
   /**
    * Dark mode control for theme resolution
@@ -98,6 +98,10 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
    */
   children: React.ReactNode;
 
+  /**
+   * Allow additional props for components like framer-motion
+   */
+  [key: string]: any;
 }
 
 const getVariantStyles = (variant: TextVariant) => {
@@ -190,7 +194,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
       as={as}
       ref={ref}
       fontFamily={tokens.fontFamilies.sans}
-      fontWeight={tokens.fontWeights[weight]}
+      fontWeight={tokens.fontWeights[weight as TextWeight]}
       fontStyle={italic ? 'italic' : 'normal'}
       textAlign={align}
       textDecoration={textDecoration}
