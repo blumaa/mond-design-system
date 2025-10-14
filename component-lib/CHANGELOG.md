@@ -1,3 +1,7 @@
+## <small>1.23.1 (2025-10-14)</small>
+
+* fix: add index signature to TextProps for framer-motion support ([3cfc846](https://github.com/blumaa/mond-design-system/commit/3cfc846))
+
 ## 1.23.0 (2025-10-14)
 
 * fix: remove index signature from TextProps ([939a4b8](https://github.com/blumaa/mond-design-system/commit/939a4b8))
