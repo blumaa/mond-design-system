@@ -1,3 +1,8 @@
+## 1.23.0 (2025-10-14)
+
+* fix: remove index signature from TextProps ([939a4b8](https://github.com/blumaa/mond-design-system/commit/939a4b8))
+* feat: allow React.ElementType for as prop in Box and Text components ([1cd4a66](https://github.com/blumaa/mond-design-system/commit/1cd4a66))
+
 ## 1.22.0 (2025-10-14)
 
 * feat: add as prop to Link for framework-agnostic routing ([9b95022](https://github.com/blumaa/mond-design-system/commit/9b95022))
