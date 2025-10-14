@@ -11,13 +11,13 @@ export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>
    * @default 'medium'
    */
   size?: LinkSize;
-  
+
   /**
    * Icon-only link (no text content)
    * @default false
    */
   iconOnly?: boolean;
-  
+
   /**
    * Icon element to display
    */
@@ -38,6 +38,12 @@ export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>
    * Link href
    */
   href: string;
+
+  /**
+   * Custom link component for framework-specific routing
+   * @default 'a'
+   */
+  as?: React.ElementType;
 }
 
 const getSizeStyles = (size: LinkSize, iconOnly: boolean = false) => {
@@ -105,6 +111,7 @@ const getLinkStyles = (theme: ReturnType<typeof useTheme>) => {
 
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   ({
+    as: Component = 'a',
     size = 'medium',
     iconOnly = false,
     icon,
@@ -199,7 +206,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     };
 
     return (
-      <a
+      <Component
         ref={ref}
         href={href}
         style={baseStyles}
@@ -214,7 +221,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       >
         {icon && icon}
         {!iconOnly && children}
-      </a>
+      </Component>
     );
   }
 );
