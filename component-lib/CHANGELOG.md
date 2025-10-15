@@ -1,3 +1,7 @@
+## <small>1.24.2 (2025-10-15)</small>
+
+* fix: use Box props instead of style prop in Popover ([dd8fb1d](https://github.com/blumaa/mond-design-system/commit/dd8fb1d))
+
 ## <small>1.24.1 (2025-10-15)</small>
 
 * fix: add hover trigger and remove delays ([4254004](https://github.com/blumaa/mond-design-system/commit/4254004))
