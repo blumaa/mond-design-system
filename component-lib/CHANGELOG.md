@@ -1,3 +1,7 @@
+## <small>1.24.1 (2025-10-15)</small>
+
+* fix: add hover trigger and remove delays ([4254004](https://github.com/blumaa/mond-design-system/commit/4254004))
+
 ## 1.24.0 (2025-10-15)
 
 * feat: add Popover component ([78f0573](https://github.com/blumaa/mond-design-system/commit/78f0573))
