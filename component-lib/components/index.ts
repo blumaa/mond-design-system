@@ -37,6 +37,7 @@ export * from './Pagination';
 export * from './Accordion';
 export * from './ToastContainer';
 export * from './Carousel';
+export * from './Popover';
 
 // Providers
 export * from './providers';
