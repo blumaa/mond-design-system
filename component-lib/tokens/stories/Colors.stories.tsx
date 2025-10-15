@@ -90,11 +90,50 @@ const ColorGroup = ({ name, colors }: { name: string; colors: Record<string, unk
   );
 };
 
-export const All = () => (
+// Individual color group stories to avoid exceeding Chromatic's size limit
+export const Primary = () => (
   <div style={{ padding: '2rem' }}>
-    <h1 style={{ marginBottom: '2rem', fontFamily: fontFamilies.sans }}>Color Tokens</h1>
-    {Object.entries(colors).map(([name, shades]) => (
-      <ColorGroup key={name} name={name} colors={shades as Record<string, unknown>} />
-    ))}
+    <ColorGroup name="primary" colors={colors.primary as Record<string, unknown>} />
+  </div>
+);
+
+export const Gray = () => (
+  <div style={{ padding: '2rem' }}>
+    <ColorGroup name="gray" colors={colors.gray as Record<string, unknown>} />
+  </div>
+);
+
+export const Error = () => (
+  <div style={{ padding: '2rem' }}>
+    <ColorGroup name="error" colors={colors.error as Record<string, unknown>} />
+  </div>
+);
+
+export const Warning = () => (
+  <div style={{ padding: '2rem' }}>
+    <ColorGroup name="warning" colors={colors.warning as Record<string, unknown>} />
+  </div>
+);
+
+export const Success = () => (
+  <div style={{ padding: '2rem' }}>
+    <ColorGroup name="success" colors={colors.success as Record<string, unknown>} />
+  </div>
+);
+
+export const Info = () => (
+  <div style={{ padding: '2rem' }}>
+    <ColorGroup name="info" colors={colors.info as Record<string, unknown>} />
+  </div>
+);
+
+export const BaseColors = () => (
+  <div style={{ padding: '2rem' }}>
+    <h2 style={{ marginBottom: '1rem', fontFamily: fontFamilies.sans }}>Base Colors</h2>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <ColorSwatch color={colors.white} name="white" />
+      <ColorSwatch color={colors.black} name="black" />
+      <ColorSwatch color={colors.transparent} name="transparent" />
+    </div>
   </div>
 );
