@@ -9,6 +9,8 @@ export type PopoverPlacement =
   | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'
   | 'left-start' | 'left-end' | 'right-start' | 'right-end';
 
+export type PopoverTrigger = 'click' | 'hover';
+
 export interface PopoverProps {
   /**
    * Element that triggers the popover
@@ -47,6 +49,12 @@ export interface PopoverProps {
    * @default 8
    */
   offset?: number;
+
+  /**
+   * Trigger behavior
+   * @default 'click'
+   */
+  trigger?: PopoverTrigger;
 
   /**
    * Close popover when clicking outside
@@ -178,6 +186,7 @@ export const Popover: React.FC<PopoverProps> = ({
   defaultOpen = false,
   placement = 'bottom',
   offset = 8,
+  trigger = 'click',
   closeOnClickOutside = true,
   closeOnEscape = true,
   className,
@@ -204,12 +213,26 @@ export const Popover: React.FC<PopoverProps> = ({
   }, [isControlled, onOpenChange]);
 
   const handleToggle = () => {
-    setIsOpen(!isOpen);
+    if (trigger === 'click') {
+      setIsOpen(!isOpen);
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (trigger === 'hover') {
+      setIsOpen(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (trigger === 'hover') {
+      setIsOpen(false);
+    }
   };
 
   // Handle click outside
   useEffect(() => {
-    if (!closeOnClickOutside || !isOpen) return;
+    if (!closeOnClickOutside || !isOpen || trigger === 'hover') return;
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -224,7 +247,7 @@ export const Popover: React.FC<PopoverProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen, closeOnClickOutside, setIsOpen]);
+  }, [isOpen, closeOnClickOutside, setIsOpen, trigger]);
 
   // Handle escape key
   useEffect(() => {
@@ -287,6 +310,8 @@ export const Popover: React.FC<PopoverProps> = ({
       position="relative"
       display="inline-block"
       data-testid={dataTestId}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Box onClick={handleToggle}>
         {children}

@@ -30,13 +30,7 @@ export interface TooltipProps {
    * @default false
    */
   isDarkMode?: boolean;
-  
-  /**
-   * Delay before showing tooltip (ms)
-   * @default 300
-   */
-  delay?: number;
-  
+
   /**
    * Whether tooltip is disabled
    * @default false
@@ -152,49 +146,15 @@ export const Tooltip: React.FC<TooltipProps> = ({
   placement = 'top',
   trigger = 'hover',
   isDarkMode,
-  delay = 300,
   disabled = false,
   className,
   children,
   'data-testid': dataTestId,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   const theme = useTheme(isDarkMode);
-
-  const shouldShow = !disabled && (
-    (trigger === 'hover' && isHovered) ||
-    (trigger === 'focus' && isFocused) ||
-    (trigger === 'click' && isVisible)
-  );
-
-  useEffect(() => {
-    if (shouldShow && !isVisible) {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      timeoutRef.current = setTimeout(() => {
-        setIsVisible(true);
-      }, delay);
-    } else if (!shouldShow && isVisible) {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      if (trigger !== 'click') {
-        setIsVisible(false);
-      }
-    }
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [shouldShow, isVisible, delay, trigger]);
 
   // Handle click outside for click trigger
   useEffect(() => {
@@ -213,31 +173,31 @@ export const Tooltip: React.FC<TooltipProps> = ({
   }, [trigger, isVisible]);
 
   const handleMouseEnter = () => {
-    if (trigger === 'hover') {
-      setIsHovered(true);
+    if (trigger === 'hover' && !disabled) {
+      setIsVisible(true);
     }
   };
 
   const handleMouseLeave = () => {
-    if (trigger === 'hover') {
-      setIsHovered(false);
+    if (trigger === 'hover' && !disabled) {
+      setIsVisible(false);
     }
   };
 
   const handleFocus = () => {
-    if (trigger === 'focus') {
-      setIsFocused(true);
+    if (trigger === 'focus' && !disabled) {
+      setIsVisible(true);
     }
   };
 
   const handleBlur = () => {
-    if (trigger === 'focus') {
-      setIsFocused(false);
+    if (trigger === 'focus' && !disabled) {
+      setIsVisible(false);
     }
   };
 
   const handleClick = () => {
-    if (trigger === 'click') {
+    if (trigger === 'click' && !disabled) {
       setIsVisible(!isVisible);
     }
   };

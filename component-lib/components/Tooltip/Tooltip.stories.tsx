@@ -28,8 +28,7 @@ A flexible tooltip component that provides contextual information on hover, focu
 **Key Features:**
 - 🎯 Four placement options (top, bottom, left, right)
 - 🖱️ Multiple triggers (hover, focus, click)
-- ⏱️ Configurable show/hide delays
-- 📝 Rich content support (text, HTML, React components)  
+- 📝 Rich content support (text, HTML, React components)
 - ♿ Full keyboard navigation and ARIA support
 - 🚫 Disable functionality when needed
 - 🌙 Dark mode support with proper contrast
@@ -49,9 +48,6 @@ A flexible tooltip component that provides contextual information on hover, focu
     },
     isDarkMode: {
       control: 'boolean',
-    },
-    delay: {
-      control: 'number',
     },
     disabled: {
       control: 'boolean',
@@ -197,27 +193,9 @@ export const Disabled: Story = {
       <Tooltip content="This tooltip works" disabled={false}>
         <Button>Enabled</Button>
       </Tooltip>
-      
+
       <Tooltip content="This tooltip is disabled" disabled={true}>
         <Button disabled>Disabled</Button>
-      </Tooltip>
-    </div>
-  ),
-};
-
-export const DelayDemo: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '1rem', padding: '2rem' }}>
-      <Tooltip content="No delay" delay={0}>
-        <Button>No delay</Button>
-      </Tooltip>
-      
-      <Tooltip content="Short delay (300ms)" delay={300}>
-        <Button>300ms delay</Button>
-      </Tooltip>
-      
-      <Tooltip content="Long delay (800ms)" delay={800}>
-        <Button>800ms delay</Button>
       </Tooltip>
     </div>
   ),

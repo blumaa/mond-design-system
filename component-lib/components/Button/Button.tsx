@@ -68,6 +68,26 @@ export interface ButtonProps {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 
   /**
+   * Mouse enter event handler
+   */
+  onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+
+  /**
+   * Mouse leave event handler
+   */
+  onMouseLeave?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+
+  /**
+   * Focus event handler
+   */
+  onFocus?: (event: React.FocusEvent<HTMLButtonElement>) => void;
+
+  /**
+   * Blur event handler
+   */
+  onBlur?: (event: React.FocusEvent<HTMLButtonElement>) => void;
+
+  /**
    * Accessible label for screen readers
    */
   "aria-label"?: string;
@@ -227,6 +247,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       fullWidth = false,
       disabled = false,
       onClick,
+      onMouseEnter,
+      onMouseLeave,
+      onFocus,
+      onBlur,
       "aria-label": ariaLabel,
       "aria-current": ariaCurrent,
       "data-testid": dataTestId,
@@ -339,6 +363,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           type={type}
           disabled={disabled}
           onClick={onClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          onFocus={onFocus}
+          onBlur={onBlur}
           aria-label={ariaLabel}
           aria-current={ariaCurrent}
           data-testid={dataTestId}

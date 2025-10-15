@@ -1,17 +1,9 @@
 import React from 'react';
-import { render, screen, renderWithDarkMode, fireEvent, waitFor, act } from '../../test-utils';
+import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Tooltip } from './Tooltip';
 
-// Mock timers for delay testing
-jest.useFakeTimers();
-
 describe('Tooltip Component', () => {
-  afterEach(() => {
-    act(() => {
-      jest.clearAllTimers();
-    });
-  });
 
   it('renders trigger element', () => {
     render(
@@ -37,30 +29,22 @@ describe('Tooltip Component', () => {
   });
 
   describe('hover trigger', () => {
-    it('shows tooltip on mouse enter with delay', async () => {
+    it('shows tooltip on mouse enter', async () => {
       render(
-        <Tooltip content="Tooltip content" trigger="hover" delay={100} data-testid="tooltip">
+        <Tooltip content="Tooltip content" trigger="hover" data-testid="tooltip">
           <button>Hover me</button>
         </Tooltip>
       );
-      
+
       const buttonElement = screen.getByText('Hover me');
       const tooltipContent = screen.getByTestId('tooltip-content');
-      
+
       // Initially hidden
       expect(tooltipContent).toHaveStyle('opacity: 0');
-      
+
       // Hover over button
       fireEvent.mouseEnter(buttonElement);
-      
-      // Still hidden before delay
-      expect(tooltipContent).toHaveStyle('opacity: 0');
-      
-      // Advance timers and check visibility
-      act(() => {
-        jest.advanceTimersByTime(100);
-      });
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 1');
         expect(tooltipContent).toHaveAttribute('aria-hidden', 'false');
@@ -69,27 +53,24 @@ describe('Tooltip Component', () => {
 
     it('hides tooltip on mouse leave', async () => {
       render(
-        <Tooltip content="Tooltip content" trigger="hover" delay={100} data-testid="tooltip">
+        <Tooltip content="Tooltip content" trigger="hover" data-testid="tooltip">
           <button>Hover me</button>
         </Tooltip>
       );
-      
+
       const buttonElement = screen.getByText('Hover me');
       const tooltipContent = screen.getByTestId('tooltip-content');
-      
+
       // Show tooltip
       fireEvent.mouseEnter(buttonElement);
-      act(() => {
-        jest.advanceTimersByTime(100);
-      });
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 1');
       });
-      
+
       // Hide tooltip
       fireEvent.mouseLeave(buttonElement);
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 0');
       });
@@ -99,20 +80,16 @@ describe('Tooltip Component', () => {
   describe('focus trigger', () => {
     it('shows tooltip on focus', async () => {
       render(
-        <Tooltip content="Tooltip content" trigger="focus" delay={100} data-testid="tooltip">
+        <Tooltip content="Tooltip content" trigger="focus" data-testid="tooltip">
           <button>Focus me</button>
         </Tooltip>
       );
-      
+
       const buttonElement = screen.getByText('Focus me');
       const tooltipContent = screen.getByTestId('tooltip-content');
-      
+
       fireEvent.focus(buttonElement);
-      
-      act(() => {
-        jest.advanceTimersByTime(100);
-      });
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 1');
       });
@@ -120,27 +97,24 @@ describe('Tooltip Component', () => {
 
     it('hides tooltip on blur', async () => {
       render(
-        <Tooltip content="Tooltip content" trigger="focus" delay={100} data-testid="tooltip">
+        <Tooltip content="Tooltip content" trigger="focus" data-testid="tooltip">
           <button>Focus me</button>
         </Tooltip>
       );
-      
+
       const buttonElement = screen.getByText('Focus me');
       const tooltipContent = screen.getByTestId('tooltip-content');
-      
+
       // Show tooltip
       fireEvent.focus(buttonElement);
-      act(() => {
-        jest.advanceTimersByTime(100);
-      });
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 1');
       });
-      
+
       // Hide tooltip
       fireEvent.blur(buttonElement);
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 0');
       });
@@ -150,30 +124,27 @@ describe('Tooltip Component', () => {
   describe('click trigger', () => {
     it('toggles tooltip on click', async () => {
       render(
-        <Tooltip content="Tooltip content" trigger="click" delay={100} data-testid="tooltip">
+        <Tooltip content="Tooltip content" trigger="click" data-testid="tooltip">
           <button>Click me</button>
         </Tooltip>
       );
-      
+
       const buttonElement = screen.getByText('Click me');
       const tooltipContent = screen.getByTestId('tooltip-content');
-      
+
       // Initially hidden
       expect(tooltipContent).toHaveStyle('opacity: 0');
-      
+
       // Show tooltip
       fireEvent.click(buttonElement);
-      act(() => {
-        jest.advanceTimersByTime(100);
-      });
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 1');
       });
-      
+
       // Hide tooltip
       fireEvent.click(buttonElement);
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 0');
       });
@@ -182,30 +153,27 @@ describe('Tooltip Component', () => {
     it('hides tooltip when clicking outside', async () => {
       render(
         <div>
-          <Tooltip content="Tooltip content" trigger="click" delay={100} data-testid="tooltip">
+          <Tooltip content="Tooltip content" trigger="click" data-testid="tooltip">
             <button>Click me</button>
           </Tooltip>
           <div data-testid="outside">Outside</div>
         </div>
       );
-      
+
       const buttonElement = screen.getByText('Click me');
       const tooltipContent = screen.getByTestId('tooltip-content');
       const outsideElement = screen.getByTestId('outside');
-      
+
       // Show tooltip
       fireEvent.click(buttonElement);
-      act(() => {
-        jest.advanceTimersByTime(100);
-      });
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 1');
       });
-      
+
       // Click outside
       fireEvent.mouseDown(outsideElement);
-      
+
       await waitFor(() => {
         expect(tooltipContent).toHaveStyle('opacity: 0');
       });
@@ -293,22 +261,18 @@ describe('Tooltip Component', () => {
   });
 
   describe('disabled state', () => {
-    it('does not show tooltip when disabled', async () => {
+    it('does not show tooltip when disabled', () => {
       render(
-        <Tooltip content="Tooltip content" disabled trigger="hover" delay={100} data-testid="tooltip">
+        <Tooltip content="Tooltip content" disabled trigger="hover" data-testid="tooltip">
           <button>Hover me</button>
         </Tooltip>
       );
-      
+
       const buttonElement = screen.getByText('Hover me');
       const tooltipContent = screen.getByTestId('tooltip-content');
-      
+
       fireEvent.mouseEnter(buttonElement);
-      
-      act(() => {
-        jest.advanceTimersByTime(100);
-      });
-      
+
       // Should remain hidden
       expect(tooltipContent).toHaveStyle('opacity: 0');
     });
@@ -433,38 +397,8 @@ describe('Tooltip Component', () => {
         <button>Button</button>
       </Tooltip>
     );
-    
+
     const tooltipContainer = screen.getByTestId('tooltip');
     expect(tooltipContainer).toHaveClass('custom-class');
-  });
-
-  describe('delay', () => {
-    it('respects custom delay', async () => {
-      render(
-        <Tooltip content="Delayed tooltip" trigger="hover" delay={500} data-testid="tooltip">
-          <button>Hover me</button>
-        </Tooltip>
-      );
-      
-      const buttonElement = screen.getByText('Hover me');
-      const tooltipContent = screen.getByTestId('tooltip-content');
-      
-      fireEvent.mouseEnter(buttonElement);
-      
-      // Should not be visible after 400ms
-      act(() => {
-        jest.advanceTimersByTime(400);
-      });
-      expect(tooltipContent).toHaveStyle('opacity: 0');
-      
-      // Should be visible after 500ms
-      act(() => {
-        jest.advanceTimersByTime(100);
-      });
-      
-      await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 1');
-      });
-    });
   });
 });

@@ -627,6 +627,34 @@ export const ShareDialog: Story = {
   ),
 };
 
+export const HoverTrigger: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem' }}>
+      <Popover
+        content="This appears on hover (no delay)"
+        placement="top"
+        trigger="hover"
+      >
+        <Button size="sm">Hover Me</Button>
+      </Popover>
+      <Popover
+        content={
+          <div>
+            <div style={{ fontWeight: 600, marginBottom: '4px' }}>Hover Popover</div>
+            <div style={{ fontSize: '0.875rem' }}>
+              Great for showing additional info without requiring a click
+            </div>
+          </div>
+        }
+        placement="bottom"
+        trigger="hover"
+      >
+        <Button size="sm" variant="outline">Rich Content</Button>
+      </Popover>
+    </div>
+  ),
+};
+
 export const CustomOffset: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem' }}>
