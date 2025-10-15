@@ -1,3 +1,7 @@
+## <small>1.24.3 (2025-10-15)</small>
+
+* fix: add React imports to story files ([4270d14](https://github.com/blumaa/mond-design-system/commit/4270d14))
+
 ## <small>1.24.2 (2025-10-15)</small>
 
 * fix: use Box props instead of style prop in Popover ([dd8fb1d](https://github.com/blumaa/mond-design-system/commit/dd8fb1d))
