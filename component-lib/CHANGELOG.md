@@ -1,3 +1,7 @@
+## 1.24.0 (2025-10-15)
+
+* feat: add Popover component ([78f0573](https://github.com/blumaa/mond-design-system/commit/78f0573))
+
 ## <small>1.23.1 (2025-10-14)</small>
 
 * fix: add index signature to TextProps for framer-motion support ([3cfc846](https://github.com/blumaa/mond-design-system/commit/3cfc846))
