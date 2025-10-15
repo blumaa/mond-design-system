@@ -1,3 +1,7 @@
+## <small>1.24.6 (2025-10-15)</small>
+
+* fix: popover padding ([1d17ad2](https://github.com/blumaa/mond-design-system/commit/1d17ad2))
+
 ## <small>1.24.5 (2025-10-15)</small>
 
 * fix: use correct color paths in Colors stories and simplify CI ([76e1bc9](https://github.com/blumaa/mond-design-system/commit/76e1bc9))
