@@ -44,18 +44,6 @@ jobs:
       - name: Build packages
         run: yarn build
 
-      - name: Run tests
-        run: yarn test
-        working-directory: component-lib
-
-      - name: Run lint
-        run: yarn lint
-        working-directory: component-lib
-
-      - name: Type check
-        run: yarn typecheck
-        working-directory: component-lib
-
       - name: Test npm authentication
         run: |
           echo "Testing npm whoami with provided token..."

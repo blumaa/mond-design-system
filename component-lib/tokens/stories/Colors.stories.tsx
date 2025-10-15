@@ -91,9 +91,9 @@ const ColorGroup = ({ name, colors }: { name: string; colors: Record<string, unk
 };
 
 // Individual color group stories to avoid exceeding Chromatic's size limit
-export const Primary = () => (
+export const Blue = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="primary" colors={colors.primary as Record<string, unknown>} />
+    <ColorGroup name="blue" colors={colors.blue as Record<string, unknown>} />
   </div>
 );
 
@@ -103,27 +103,27 @@ export const Gray = () => (
   </div>
 );
 
-export const Error = () => (
+export const Red = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="error" colors={colors.error as Record<string, unknown>} />
+    <ColorGroup name="red" colors={colors.red as Record<string, unknown>} />
   </div>
 );
 
-export const Warning = () => (
+export const Green = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="warning" colors={colors.warning as Record<string, unknown>} />
+    <ColorGroup name="green" colors={colors.green as Record<string, unknown>} />
   </div>
 );
 
-export const Success = () => (
+export const Amber = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="success" colors={colors.success as Record<string, unknown>} />
+    <ColorGroup name="amber" colors={colors.amber as Record<string, unknown>} />
   </div>
 );
 
-export const Info = () => (
+export const BrandColors = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="info" colors={colors.info as Record<string, unknown>} />
+    <ColorGroup name="brand" colors={colors.brand as Record<string, unknown>} />
   </div>
 );
 
@@ -131,9 +131,9 @@ export const BaseColors = () => (
   <div style={{ padding: '2rem' }}>
     <h2 style={{ marginBottom: '1rem', fontFamily: fontFamilies.sans }}>Base Colors</h2>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
-      <ColorSwatch color={colors.white} name="white" />
-      <ColorSwatch color={colors.black} name="black" />
-      <ColorSwatch color={colors.transparent} name="transparent" />
+      <ColorSwatch color={colors.white['50']} name="white" />
+      <ColorSwatch color={colors.black['900']} name="black" />
+      <ColorSwatch color={colors.slate['900']} name="slate" />
     </div>
   </div>
 );
