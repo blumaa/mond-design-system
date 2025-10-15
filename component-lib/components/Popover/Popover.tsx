@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../tokens';
+import { radii, fontSizes, fontWeights, fontFamilies, shadows } from '../../tokens';
 import { useTheme } from '../providers/ThemeProvider';
 import { Box } from '../Box/Box';
+import { Button } from '../Button/Button';
 
 export type PopoverPlacement =
   | 'top' | 'bottom' | 'left' | 'right'
@@ -102,76 +103,76 @@ const getPlacementStyles = (placement: PopoverPlacement, offset: number = 8) => 
         bottom: '100%',
         left: '50%',
         transform: 'translateX(-50%)',
-        marginBottom: `${offset}px`,
+        mb: offset,
       };
     case 'top-start':
       return {
         bottom: '100%',
         left: 0,
-        marginBottom: `${offset}px`,
+        mb: offset,
       };
     case 'top-end':
       return {
         bottom: '100%',
         right: 0,
-        marginBottom: `${offset}px`,
+        mb: offset,
       };
     case 'bottom':
       return {
         top: '100%',
         left: '50%',
         transform: 'translateX(-50%)',
-        marginTop: `${offset}px`,
+        mt: offset,
       };
     case 'bottom-start':
       return {
         top: '100%',
         left: 0,
-        marginTop: `${offset}px`,
+        mt: offset,
       };
     case 'bottom-end':
       return {
         top: '100%',
         right: 0,
-        marginTop: `${offset}px`,
+        mt: offset,
       };
     case 'left':
       return {
         right: '100%',
         top: '50%',
         transform: 'translateY(-50%)',
-        marginRight: `${offset}px`,
+        mr: offset,
       };
     case 'left-start':
       return {
         right: '100%',
         top: 0,
-        marginRight: `${offset}px`,
+        mr: offset,
       };
     case 'left-end':
       return {
         right: '100%',
         bottom: 0,
-        marginRight: `${offset}px`,
+        mr: offset,
       };
     case 'right':
       return {
         left: '100%',
         top: '50%',
         transform: 'translateY(-50%)',
-        marginLeft: `${offset}px`,
+        ml: offset,
       };
     case 'right-start':
       return {
         left: '100%',
         top: 0,
-        marginLeft: `${offset}px`,
+        ml: offset,
       };
     case 'right-end':
       return {
         left: '100%',
         bottom: 0,
-        marginLeft: `${offset}px`,
+        ml: offset,
       };
     default:
       return {};
@@ -215,6 +216,9 @@ export const Popover: React.FC<PopoverProps> = ({
   const handleToggle = () => {
     if (trigger === 'click') {
       setIsOpen(!isOpen);
+    } else if (trigger === 'hover' && isOpen) {
+      // For hover trigger, clicking when already open should close it
+      setIsOpen(false);
     }
   };
 
@@ -225,14 +229,12 @@ export const Popover: React.FC<PopoverProps> = ({
   };
 
   const handleMouseLeave = () => {
-    if (trigger === 'hover') {
-      setIsOpen(false);
-    }
+    // For hover trigger, don't auto-close - let user close via X button, click outside, or Escape
   };
 
   // Handle click outside
   useEffect(() => {
-    if (!closeOnClickOutside || !isOpen || trigger === 'hover') return;
+    if (!closeOnClickOutside || !isOpen) return;
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -325,24 +327,39 @@ export const Popover: React.FC<PopoverProps> = ({
           aria-modal="false"
           aria-label={ariaLabel}
           data-testid={`${dataTestId || 'popover'}-content`}
-          style={{
-            position: 'absolute',
-            zIndex: 1000,
-            padding: spacing[4],
-            backgroundColor: theme('surface.elevated'),
-            color: theme('text.primary'),
-            border: `1px solid ${theme('border.default')}`,
-            borderRadius: radii.md,
-            fontSize: fontSizes.sm,
-            fontWeight: fontWeights.normal,
-            fontFamily: fontFamilies.sans,
-            minWidth: '200px',
-            maxWidth: '320px',
-            lineHeight: '1.5',
-            boxShadow: shadows.lg,
-            ...placementStyles,
-          }}
+          position="absolute"
+          zIndex={1000}
+          p={4}
+          bg="surface.elevated"
+          color="text.primary"
+          border={`1px solid ${theme('border.default')}`}
+          borderRadius={radii.md}
+          fontSize={fontSizes.sm}
+          fontWeight={fontWeights.normal}
+          fontFamily={fontFamilies.sans}
+          minWidth="200px"
+          maxWidth="320px"
+          lineHeight="1.5"
+          boxShadow={shadows.lg}
+          {...placementStyles}
         >
+          {trigger === 'hover' && (
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+            >
+              <Button
+                variant="ghost"
+                size="sm"
+                iconOnly
+                onClick={() => setIsOpen(false)}
+                aria-label="Close popover"
+                data-testid={`${dataTestId || 'popover'}-close`}
+              >
+                ×
+              </Button>
+            </Box>
+          )}
           {content}
         </Box>
       )}

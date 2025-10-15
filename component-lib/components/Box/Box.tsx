@@ -101,7 +101,8 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   overflowX?: React.CSSProperties['overflowX'];
   overflowY?: React.CSSProperties['overflowY'];
   transition?: React.CSSProperties['transition'];
-  
+  transform?: React.CSSProperties['transform'];
+
 }
 
 const convertToPixels = (value: string | number): string => {
@@ -164,8 +165,8 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   textOverflow, whiteSpace, fontFamily,
   
   // Effect props
-  boxShadow, opacity, cursor, overflow, overflowX, overflowY, transition,
-  
+  boxShadow, opacity, cursor, overflow, overflowX, overflowY, transition, transform,
+
   // Theme props
   isDarkMode,
   
@@ -280,6 +281,7 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     ...(overflowX && { overflowX }),
     ...(overflowY && { overflowY }),
     ...(transition && { transition }),
+    ...(transform && { transform }),
   };
 
   return (
