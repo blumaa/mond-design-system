@@ -1,3 +1,7 @@
+## <small>1.24.5 (2025-10-15)</small>
+
+* fix: use correct color paths in Colors stories and simplify CI ([76e1bc9](https://github.com/blumaa/mond-design-system/commit/76e1bc9))
+
 ## <small>1.24.4 (2025-10-15)</small>
 
 * fix: split Colors story to avoid Chromatic size limit ([62c6ca3](https://github.com/blumaa/mond-design-system/commit/62c6ca3))
