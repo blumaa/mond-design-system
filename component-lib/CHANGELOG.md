@@ -1,3 +1,7 @@
+## <small>1.24.4 (2025-10-15)</small>
+
+* fix: split Colors story to avoid Chromatic size limit ([62c6ca3](https://github.com/blumaa/mond-design-system/commit/62c6ca3))
+
 ## <small>1.24.3 (2025-10-15)</small>
 
 * fix: add React imports to story files ([4270d14](https://github.com/blumaa/mond-design-system/commit/4270d14))
