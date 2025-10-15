@@ -329,7 +329,7 @@ export const Popover: React.FC<PopoverProps> = ({
           data-testid={`${dataTestId || 'popover'}-content`}
           position="absolute"
           zIndex={1000}
-          p={4}
+          p={10}
           bg="surface.elevated"
           color="text.primary"
           border={`1px solid ${theme('border.default')}`}
@@ -345,8 +345,10 @@ export const Popover: React.FC<PopoverProps> = ({
         >
           {trigger === 'hover' && (
             <Box
-              display="flex"
-              justifyContent="flex-end"
+              position="absolute"
+              top={0}
+              right={4}
+              zIndex={1}
             >
               <Button
                 variant="ghost"
