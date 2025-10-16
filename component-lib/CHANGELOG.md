@@ -1,3 +1,7 @@
+## <small>1.24.7 (2025-10-16)</small>
+
+* fix: add polymorphic rendering support to Button component ([68e8703](https://github.com/blumaa/mond-design-system/commit/68e8703))
+
 ## <small>1.24.6 (2025-10-15)</small>
 
 * fix: popover padding ([1d17ad2](https://github.com/blumaa/mond-design-system/commit/1d17ad2))
