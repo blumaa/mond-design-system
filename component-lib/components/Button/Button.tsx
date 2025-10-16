@@ -16,6 +16,12 @@ export type ButtonAlignContent = "left" | "center" | "right";
 
 export interface ButtonProps {
   /**
+   * Element type to render as
+   * @default 'button'
+   */
+  as?: React.ElementType;
+
+  /**
    * Button variant
    * @default 'primary'
    */
@@ -65,27 +71,27 @@ export interface ButtonProps {
   /**
    * Click event handler
    */
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 
   /**
    * Mouse enter event handler
    */
-  onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onMouseEnter?: (event: React.MouseEvent<HTMLElement>) => void;
 
   /**
    * Mouse leave event handler
    */
-  onMouseLeave?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onMouseLeave?: (event: React.MouseEvent<HTMLElement>) => void;
 
   /**
    * Focus event handler
    */
-  onFocus?: (event: React.FocusEvent<HTMLButtonElement>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLElement>) => void;
 
   /**
    * Blur event handler
    */
-  onBlur?: (event: React.FocusEvent<HTMLButtonElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLElement>) => void;
 
   /**
    * Accessible label for screen readers
@@ -103,10 +109,25 @@ export interface ButtonProps {
   "data-testid"?: string;
 
   /**
-   * Button type for form interaction
+   * Button type for form interaction (only applies when as='button')
    * @default "button"
    */
   type?: "button" | "submit" | "reset";
+
+  /**
+   * URL to link to (when as='a')
+   */
+  href?: string;
+
+  /**
+   * Link target (when as='a')
+   */
+  target?: string;
+
+  /**
+   * Link rel attribute (when as='a')
+   */
+  rel?: string;
 
   /**
    * Dark mode control for theme resolution
@@ -235,9 +256,10 @@ const getAlignmentStyles = (alignContent: ButtonAlignContent) => {
   }
 };
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLElement, ButtonProps>(
   (
     {
+      as = "button",
       variant = "primary",
       size = "md",
       corners = "default",
@@ -255,6 +277,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       "aria-current": ariaCurrent,
       "data-testid": dataTestId,
       type = "button",
+      href,
+      target,
+      rel,
       isDarkMode,
     },
     ref,
@@ -264,6 +289,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const sizeStyles = getSizeStyles(size, iconOnly);
     const cornerStyles = getCornerStyles(corners);
     const alignmentStyles = getAlignmentStyles(alignContent);
+
+    const Element = as as React.ElementType;
 
     // Generate CSS class with a unique identifier
     const buttonId = React.useId();
@@ -355,29 +382,50 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ...sizeStyles, // Size styles LAST to ensure padding is applied
     };
 
+    // Build element-specific props
+    const baseElementProps = {
+      ref,
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
+      onFocus,
+      onBlur,
+      "aria-label": ariaLabel,
+      "aria-current": ariaCurrent,
+      "data-testid": dataTestId,
+      className: uniqueClass,
+      style: baseStyles,
+      "data-mond-button": true,
+      "data-variant": variant,
+      "data-align-content": alignContent,
+    };
+
+    // Add element-specific props based on the 'as' prop
+    const elementProps = as === "button"
+      ? {
+          ...baseElementProps,
+          type,
+          disabled,
+        }
+      : as === "a"
+      ? {
+          ...baseElementProps,
+          "aria-disabled": disabled,
+          href,
+          target,
+          rel,
+        }
+      : {
+          ...baseElementProps,
+          "aria-disabled": disabled,
+        };
+
     return (
       <>
         <style>{dynamicCSS}</style>
-        <button
-          ref={ref}
-          type={type}
-          disabled={disabled}
-          onClick={onClick}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          aria-label={ariaLabel}
-          aria-current={ariaCurrent}
-          data-testid={dataTestId}
-          className={uniqueClass}
-          style={baseStyles}
-          data-mond-button
-          data-variant={variant}
-          data-align-content={alignContent}
-        >
+        <Element {...elementProps}>
           {children}
-        </button>
+        </Element>
       </>
     );
   },
