@@ -1,3 +1,7 @@
+## <small>1.24.9 (2025-10-17)</small>
+
+* fix: update color tokens to match portfolio-2023 and remove isDarkMode defaults from stories ([eeb7539](https://github.com/blumaa/mond-design-system/commit/eeb7539))
+
 ## <small>1.24.8 (2025-10-17)</small>
 
 * fix: readme update ([c207c87](https://github.com/blumaa/mond-design-system/commit/c207c87))
