@@ -442,7 +442,6 @@ export const Playground: Story = {
     disabled: false,
     size: 'md',
     weight: 'medium',
-    isDarkMode: false,
     semantic: 'default',
     requiredIndicator: '*',
     htmlFor: 'playground-input',

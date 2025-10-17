@@ -539,7 +539,6 @@ export const Playground: Story = {
     borderRadius: 'none',
     showLoadingSpinner: true,
     loading: 'lazy',
-    isDarkMode: false,
     width: '300px',
   },
   parameters: {

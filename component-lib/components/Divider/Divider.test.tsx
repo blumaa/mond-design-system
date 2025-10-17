@@ -39,7 +39,7 @@ describe('Divider', () => {
   it('applies dark mode colors correctly', () => {
     const { rerender } = renderWithDarkMode(<Divider variant="default"  />);
     let divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('background-color: #475569'); // gray.600
+    expect(divider).toHaveStyle('background-color: #414A4C'); // gray.600
 
     rerender(<Divider variant="subtle"  />);
     divider = screen.getByRole('separator');
@@ -130,7 +130,7 @@ describe('Divider', () => {
     const text = screen.getByText('Section');
     
     expect(divider).toHaveStyle('font-size: 0.875rem'); // sm
-    expect(divider).toHaveStyle('color: #475569'); // gray.600 in light mode
+    expect(divider).toHaveStyle('color: #414A4C'); // gray.600 in light mode
     expect(divider).toHaveStyle('font-weight: 500'); // medium
     expect(text).toBeInTheDocument();
   });

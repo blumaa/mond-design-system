@@ -292,8 +292,8 @@ describe('Box Component', () => {
       );
       const boxElement = screen.getByTestId('semantic-light-box');
       // These should resolve to light mode values
-      expect(boxElement).toHaveStyle('background-color: #ffffff');
-      expect(boxElement).toHaveStyle('color: #0f172a');
+      expect(boxElement).toHaveStyle('background-color: #F2F3F4');
+      expect(boxElement).toHaveStyle('color: #414A4C');
     });
 
     it('resolves semantic tokens for colors in dark mode', () => {
@@ -310,7 +310,7 @@ describe('Box Component', () => {
       const boxElement = screen.getByTestId('semantic-dark-box');
       // These should resolve to dark mode values
       expect(boxElement).toHaveStyle('background-color: #27374D');
-      expect(boxElement).toHaveStyle('color: #f1f5f9');
+      expect(boxElement).toHaveStyle('color: #DDE6ED');
     });
 
     it('passes through non-semantic color values', () => {

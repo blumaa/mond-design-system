@@ -93,7 +93,7 @@ describe('Badge Component', () => {
       render(<Badge data-testid="light-badge">Light</Badge>);
       const badgeElement = screen.getByTestId('light-badge');
       expect(badgeElement).toHaveStyle('background-color: #ffffff');
-      expect(badgeElement).toHaveStyle('color: #475569');
+      expect(badgeElement).toHaveStyle('color: #414A4C');
     });
   });
 

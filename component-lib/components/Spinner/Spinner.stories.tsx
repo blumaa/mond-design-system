@@ -237,7 +237,6 @@ export const InContext: Story = {
 export const Playground: Story = {
   args: {
     size: 'md',
-    isDarkMode: false,
     label: 'Loading...',
   },
   parameters: {

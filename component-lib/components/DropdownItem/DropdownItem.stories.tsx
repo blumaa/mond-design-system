@@ -106,8 +106,7 @@ A single dropdown menu item component. Internal component used by the Dropdown c
     divider: false,
     hasChildren: false,
     depth: 0,
-    focused: false,
-    isDarkMode: false
+    focused: false
   }
 } satisfies Meta<typeof DropdownItem>;
 

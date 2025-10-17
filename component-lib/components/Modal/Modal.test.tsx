@@ -195,7 +195,7 @@ describe('Modal Component', () => {
       
       const modal = screen.getByTestId('modal');
       expect(modal).toHaveStyle('background-color: #171717');
-      expect(modal).toHaveStyle('color: #f1f5f9');
+      expect(modal).toHaveStyle('color: #DDE6ED');
     });
 
     it('applies light mode styling by default', () => {
@@ -207,7 +207,7 @@ describe('Modal Component', () => {
       
       const modal = screen.getByTestId('modal');
       expect(modal).toHaveStyle('background-color: #ffffff');
-      expect(modal).toHaveStyle('color: #0f172a');
+      expect(modal).toHaveStyle('color: #414A4C');
     });
   });
 
@@ -358,7 +358,7 @@ describe('Modal Component', () => {
       expect(overlay).toHaveStyle('inset: 0');
       expect(overlay).toHaveStyle('z-index: 1000');
       // backdrop-filter may not be fully supported in test environment
-      expect(overlay).toHaveStyle('background-color: rgb(254, 254, 254)');
+      expect(overlay).toHaveStyle('background-color: rgb(242, 243, 244)');
     });
   });
 

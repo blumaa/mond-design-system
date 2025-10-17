@@ -292,7 +292,6 @@ export const Playground: Story = {
     orientation: 'horizontal',
     variant: 'default',
     size: 'md',
-    isDarkMode: false,
   },
   parameters: {
     docs: {

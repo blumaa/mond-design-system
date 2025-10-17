@@ -63,7 +63,7 @@ describe('Label', () => {
   it('applies semantic colors in light mode', () => {
     const { rerender } = render(<Label semantic="default" >Username</Label>);
     let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #0f172a'); // text.primary (gray.900)
+    expect(label).toHaveStyle('color: #414A4C'); // text.primary (gray.900)
 
     rerender(<Label semantic="error" >Username</Label>);
     label = screen.getByText('Username');
@@ -77,7 +77,7 @@ describe('Label', () => {
   it('applies semantic colors in dark mode', () => {
     const { rerender } = renderWithDarkMode(<Label semantic="default" >Username</Label>);
     let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #f1f5f9'); // text.primary (gray.100)
+    expect(label).toHaveStyle('color: #DDE6ED'); // text.primary (gray.100)
 
     rerender(<Label semantic="error" >Username</Label>);
     label = screen.getByText('Username');

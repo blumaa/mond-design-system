@@ -102,7 +102,6 @@ A single accordion item that can be expanded and collapsed. Internal component u
     size: 'md',
     variant: 'default',
     iconPosition: 'right',
-    isDarkMode: false,
     disabled: false
   }
 } satisfies Meta<typeof AccordionItem>;

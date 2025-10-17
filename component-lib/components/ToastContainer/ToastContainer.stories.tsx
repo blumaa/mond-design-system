@@ -242,7 +242,6 @@ export const Interactive: Story = {
   args: {
     position: 'top-right',
     maxToasts: 5,
-    isDarkMode: false,
   },
 };
 

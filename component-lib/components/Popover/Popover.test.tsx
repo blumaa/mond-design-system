@@ -409,7 +409,7 @@ describe('Popover Component', () => {
 
       const content = screen.getByTestId('popover-content');
       expect(content).toHaveStyle('background-color: #171717');
-      expect(content).toHaveStyle('color: #f1f5f9');
+      expect(content).toHaveStyle('color: #DDE6ED');
     });
 
     it('applies light mode styling by default', () => {
@@ -421,7 +421,7 @@ describe('Popover Component', () => {
 
       const content = screen.getByTestId('popover-content');
       expect(content).toHaveStyle('background-color: #ffffff');
-      expect(content).toHaveStyle('color: #0f172a');
+      expect(content).toHaveStyle('color: #414A4C');
     });
   });
 

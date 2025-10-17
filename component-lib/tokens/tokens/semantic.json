@@ -2,7 +2,7 @@
   "semantic": {
     "text": {
       "primary": {
-        "light": "gray.900",
+        "light": "gray.600",
         "dark": "gray.100"
       },
       "secondary": {
@@ -44,7 +44,7 @@
     },
     "icon": {
       "primary": {
-        "light": "gray.900",
+        "light": "gray.600",
         "dark": "gray.100"
       },
       "secondary": {
@@ -62,7 +62,7 @@
     },
     "surface": {
       "background": {
-        "light": "white.50",
+        "light": "white.100",
         "dark": "slate.800"
       },
       "elevated": {
@@ -228,7 +228,7 @@
           "dark": "gray.500"
         },
         "text": {
-          "light": "gray.900",
+          "light": "gray.600",
           "dark": "gray.100"
         }
       },

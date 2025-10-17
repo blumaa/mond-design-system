@@ -15,12 +15,12 @@ export const tokens = {
     },
     "gray": {
       "50": "#f8fafc",
-      "100": "#f1f5f9",
+      "100": "#DDE6ED",
       "200": "#e2e8f0",
       "300": "#cbd5e1",
       "400": "#94a3b8",
       "500": "#64748b",
-      "600": "#475569",
+      "600": "#414A4C",
       "700": "#334155",
       "800": "#1e293b",
       "900": "#0f172a"
@@ -75,7 +75,7 @@ export const tokens = {
     },
     "white": {
       "50": "#ffffff",
-      "100": "#fefefe",
+      "100": "#F2F3F4",
       "200": "#fdfdfd",
       "300": "#fcfcfc",
       "400": "#fbfbfb",
@@ -173,7 +173,7 @@ export const tokens = {
   "semantic": {
     "text": {
       "primary": {
-        "light": "gray.900",
+        "light": "gray.600",
         "dark": "gray.100"
       },
       "secondary": {
@@ -215,7 +215,7 @@ export const tokens = {
     },
     "icon": {
       "primary": {
-        "light": "gray.900",
+        "light": "gray.600",
         "dark": "gray.100"
       },
       "secondary": {
@@ -233,7 +233,7 @@ export const tokens = {
     },
     "surface": {
       "background": {
-        "light": "white.50",
+        "light": "white.100",
         "dark": "slate.800"
       },
       "elevated": {
@@ -399,7 +399,7 @@ export const tokens = {
           "dark": "gray.500"
         },
         "text": {
-          "light": "gray.900",
+          "light": "gray.600",
           "dark": "gray.100"
         }
       },

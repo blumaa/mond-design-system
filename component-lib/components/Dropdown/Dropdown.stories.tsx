@@ -483,7 +483,6 @@ export const Playground: Story = {
     options: basicOptions,
     placement: 'bottom-start',
     closeOnSelect: true,
-    isDarkMode: false,
   },
   render: (args) => (
     <Dropdown

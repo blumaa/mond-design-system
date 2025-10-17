@@ -160,7 +160,7 @@ describe('Switch Component', () => {
       const track = container.querySelector('[data-switch-track]') as HTMLElement;
       expect(track).not.toBeNull();
       if (track) {
-        expect(track).toHaveStyle('background-color: #475569');
+        expect(track).toHaveStyle('background-color: #414A4C');
       }
     });
 

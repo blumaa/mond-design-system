@@ -71,7 +71,6 @@ A flexible Heading component for creating semantic headings (h1-h6) with consist
     weight: 'bold',
     semantic: 'primary',
     truncate: false,
-    isDarkMode: false,
   },
 };
 

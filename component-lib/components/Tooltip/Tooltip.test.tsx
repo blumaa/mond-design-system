@@ -244,7 +244,7 @@ describe('Tooltip Component', () => {
       
       const tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toHaveStyle('background-color: #171717');
-      expect(tooltipContent).toHaveStyle('color: #f1f5f9');
+      expect(tooltipContent).toHaveStyle('color: #DDE6ED');
     });
 
     it('applies light mode styling by default', () => {
@@ -256,7 +256,7 @@ describe('Tooltip Component', () => {
       
       const tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toHaveStyle('background-color: #ffffff');
-      expect(tooltipContent).toHaveStyle('color: #0f172a');
+      expect(tooltipContent).toHaveStyle('color: #414A4C');
     });
   });
 

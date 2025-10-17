@@ -84,7 +84,6 @@ A flexible Text component for displaying text content with semantic variants, ty
     underline: false,
     strikethrough: false,
     truncate: false,
-    isDarkMode: false,
   },
 };
 

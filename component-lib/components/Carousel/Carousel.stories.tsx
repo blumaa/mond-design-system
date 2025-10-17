@@ -551,7 +551,6 @@ export const Playground: Story = {
     itemGap: 'md',
     animationDuration: 300,
     indicatorPosition: 'bottom-center',
-    isDarkMode: false,
     initialSlide: 0,
     onSlideChange: (index) => console.log(`Slide changed to: ${index}`),
   },

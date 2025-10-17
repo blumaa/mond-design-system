@@ -489,7 +489,6 @@ export const Playground: Story = {
     duration: 5000,
     dismissible: true,
     animationState: 'visible',
-    isDarkMode: false,
     onDismiss: () => {},
   },
   parameters: {

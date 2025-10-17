@@ -447,7 +447,6 @@ export const Playground: Story = {
     size: 'md',
     removable: false,
     disabled: false,
-    isDarkMode: false,
   },
   parameters: {
     docs: {
