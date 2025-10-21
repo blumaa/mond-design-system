@@ -71,9 +71,6 @@ A flexible Text component for displaying text content with semantic variants, ty
     truncate: {
       control: 'boolean',
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
   },
   args: {
     variant: 'body-md',

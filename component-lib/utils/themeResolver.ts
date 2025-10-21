@@ -7,10 +7,10 @@ export type Theme = 'light' | 'dark';
  * Gets a nested property value from an object using dot notation
  * Example: getNestedValue(colors, 'blue.500') returns colors.blue[500]
  */
-function getNestedValue(obj: Record<string, unknown>, path: string): string {
+function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
   return path.split('.').reduce((current: Record<string, unknown>, key) => {
     return (current?.[key] as Record<string, unknown>) ?? {};
-  }, obj) as unknown as string;
+  }, obj);
 }
 
 
@@ -18,8 +18,15 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string {
  * Checks if a value is a raw CSS value (not a token path)
  */
 function isRawValue(value: string): boolean {
+  // CSS keywords
+  if (value === 'none' || value === 'transparent' || value === 'inherit' || value === 'initial' || value === 'unset') {
+    return true;
+  }
+
+  // CSS color/value formats
   return value.includes('rgba(') || value.includes('rgb(') || value.includes('#') ||
-         value.includes('linear-gradient') || value.includes('px') || value.includes('rem');
+         value.includes('linear-gradient') || value.includes('px') || value.includes('rem') ||
+         value.includes('em') || value.includes('%') || value.includes('vh') || value.includes('vw');
 }
 
 /**
@@ -123,7 +130,12 @@ export function resolveSemanticToken(
     console.warn(`Theme '${theme}' not found for semantic token: ${semanticTokenPath}`);
     return '#000000'; // Fallback to black
   }
-  
+
+  // If the color reference is already a raw value (hex color, rgba, etc.), return it directly
+  if (isRawValue(colorReference)) {
+    return colorReference;
+  }
+
   // Check if this is a brand color reference (e.g., 'brand.primary.600')
   if (colorReference.startsWith('brand.') && brandTheme) {
     const brandPath = colorReference.replace('brand.', '');
@@ -140,13 +152,13 @@ export function resolveSemanticToken(
   }
   
   // Resolve the color reference from base tokens (e.g., 'gray.900' -> '#0f172a')
-  const resolvedColor = getNestedValue(tokens.colors, colorReference);
-  
-  if (!resolvedColor) {
+  const resolvedColor = getNestedValue(tokens.colors, colorReference) as string;
+
+  if (!resolvedColor || typeof resolvedColor !== 'string') {
     console.warn(`Color reference not found: ${colorReference} for semantic token: ${semanticTokenPath}`);
     return '#000000'; // Fallback to black
   }
-  
+
   return resolvedColor;
 }
 

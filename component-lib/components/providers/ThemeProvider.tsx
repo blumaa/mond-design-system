@@ -1,7 +1,5 @@
-'use client';
-
-import React, { useContext, useMemo } from 'react';
-import { createThemeResolver, type Theme } from '../../utils/themeResolver';
+import React from 'react';
+import type { Theme } from '../../utils/themeResolver';
 
 /**
  * Brand theme configuration interface
@@ -39,24 +37,14 @@ export interface ColorScale {
 }
 
 /**
- * Theme context value providing resolved theme functions
- */
-export interface ThemeContextValue {
-  theme: ReturnType<typeof createThemeResolver>;
-  colorScheme: Theme;
-  brandTheme: BrandTheme | null;
-}
-
-const ThemeContext = React.createContext<ThemeContextValue | undefined>(undefined);
-
-/**
- * Props for the brand-agnostic ThemeProvider
+ * Props for the ThemeProvider
  */
 export interface ThemeProviderProps {
   children: React.ReactNode;
   /**
    * External brand theme configuration
-   * If not provided, uses default brand colors
+   * Brand colors will be injected as CSS variables
+   * If not provided, uses default brand colors from tokens
    */
   brandTheme?: BrandTheme;
   /**
@@ -64,6 +52,10 @@ export interface ThemeProviderProps {
    * @default 'light'
    */
   colorScheme?: Theme;
+  /**
+   * Additional class name for the theme wrapper
+   */
+  className?: string;
 }
 
 /**
@@ -110,116 +102,130 @@ const defaultBrandTheme: BrandTheme = {
 };
 
 /**
- * Brand-agnostic ThemeProvider component
- * 
- * Accepts external brand theme configurations and provides
- * theme resolution to child components via context.
+ * Generate inline CSS variable overrides for brand theme
+ */
+function generateBrandCSSVariables(brandTheme: BrandTheme): React.CSSProperties {
+  const cssVars: Record<string, string> = {};
+
+  // Map brand theme colors to CSS variables
+  // This allows runtime brand switching while maintaining SSR compatibility
+  Object.entries(brandTheme.colors.brand).forEach(([colorType, colorScale]) => {
+    if (colorScale) {
+      Object.entries(colorScale).forEach(([shade, value]) => {
+        if (value) {
+          cssVars[`--mond-color-brand-${colorType}-${shade}`] = value;
+        }
+      });
+    }
+  });
+
+  return cssVars as React.CSSProperties;
+}
+
+/**
+ * SSR-Compatible ThemeProvider Component
+ *
+ * This component provides theming via:
+ * 1. data-theme attribute for light/dark mode switching
+ * 2. Inline CSS variables for optional brand theme overrides
+ *
+ * Unlike the previous Context-based approach, this component:
+ * - ✅ Works with Server Components (no "use client")
+ * - ✅ No React Context required
+ * - ✅ Themes applied via CSS variables
+ * - ✅ SSR-compatible
+ *
+ * @example
+ * // Basic usage (light theme, default brand)
+ * <ThemeProvider>
+ *   <App />
+ * </ThemeProvider>
+ *
+ * @example
+ * // Dark mode
+ * <ThemeProvider colorScheme="dark">
+ *   <App />
+ * </ThemeProvider>
+ *
+ * @example
+ * // Custom brand theme
+ * <ThemeProvider brandTheme={nordstromTheme} colorScheme="dark">
+ *   <App />
+ * </ThemeProvider>
  */
 export function ThemeProvider({
   children,
-  brandTheme = defaultBrandTheme,
+  brandTheme,
   colorScheme = 'light',
+  className,
 }: ThemeProviderProps) {
-  // Create theme resolver with brand awareness
-  const themeResolver = useMemo(() => {
-    // Create brand-aware theme resolver that merges brand colors
-    // with base design system tokens
-    return createThemeResolver(colorScheme, brandTheme);
-  }, [colorScheme, brandTheme]);
-
-  const contextValue: ThemeContextValue = {
-    theme: themeResolver,
-    colorScheme,
-    brandTheme,
-  };
+  // Generate inline CSS variables for brand theme (if provided)
+  const brandCSSVars = brandTheme ? generateBrandCSSVariables(brandTheme) : undefined;
 
   return (
-    <ThemeContext.Provider value={contextValue}>
+    <div
+      data-theme={colorScheme}
+      data-brand={brandTheme?.id}
+      className={className}
+      style={brandCSSVars}
+    >
       {children}
-    </ThemeContext.Provider>
+    </div>
   );
 }
 
-/**
- * Hook to access theme context
- * 
- * @returns Theme context value with theme resolver and brand info
- * 
- * @example
- * function MyComponent() {
- *   const { theme, colorScheme, brandTheme } = useTheme();
- *   
- *   return (
- *     <div style={{ 
- *       color: theme('text.primary'),
- *       backgroundColor: theme('interactive.primary.background')
- *     }}>
- *       {brandTheme?.name} in {colorScheme} mode
- *     </div>
- *   );
- * }
- */
-export function useThemeContext(): ThemeContextValue {
-  const context = useContext(ThemeContext);
-  
-  if (context === undefined) {
-    throw new Error('useThemeContext must be used within a ThemeProvider');
-  }
-  
-  return context;
-}
+// Export types for backward compatibility
+export type { Theme };
 
 /**
- * Hook to get theme resolver function
- * 
- * @returns Theme resolver function for current theme and brand
- * 
- * @example
- * function MyComponent() {
- *   const theme = useThemeResolver();
- *   
- *   return (
- *     <button style={{ 
- *       backgroundColor: theme('interactive.primary.background'),
- *       color: theme('interactive.primary.text')
- *     }}>
- *       Themed Button
- *     </button>
- *   );
- * }
+ * Backward compatibility: Deprecated hooks
+ *
+ * These hooks are provided for backward compatibility during migration.
+ * They will be removed in a future major version.
+ *
+ * Migration guide:
+ * - Instead of: const theme = useTheme(); const bg = theme('surface.background');
+ * - Use: const bg = 'var(--mond-surface-background)';
  */
-export function useThemeResolver() {
-  const { theme } = useThemeContext();
-  return theme;
-}
+
+import { createThemeResolver } from '../../utils/themeResolver';
 
 /**
- * Brand-aware theme hook that combines ThemeProvider brand context with isDarkMode prop
- * This is the primary hook components should use for theme resolution
- * 
- * @param isDarkMode - Whether dark mode is active (component-level control)
- *                    If undefined, uses provider's colorScheme
- * @returns Theme resolver function with brand context and light/dark mode
- * 
- * @example
- * function MyComponent({ isDarkMode }) {
- *   const theme = useTheme(isDarkMode); // Falls back to provider colorScheme if undefined
- *   
- *   return (
- *     <button style={{ 
- *       backgroundColor: theme('interactive.primary.background'), 
- *       color: theme('interactive.primary.text')
- *     }}>
- *       Smart Theme Button
- *     </button>
- *   );
- * }
+ * @deprecated Use CSS variables directly instead
+ * This hook now returns a static theme resolver with default values
+ * Components using this hook should be migrated to use CSS variables
  */
 export function useTheme(isDarkMode?: boolean) {
-  const { brandTheme, colorScheme } = useThemeContext();
-  // Use component prop if provided, otherwise fall back to provider colorScheme
-  const currentTheme: Theme = isDarkMode !== undefined 
-    ? (isDarkMode ? 'dark' : 'light')
-    : colorScheme;
-  return createThemeResolver(currentTheme, brandTheme || undefined);
+  // Return a static theme resolver for backward compatibility
+  // This allows components to build, but they should migrate to CSS variables
+  const theme = isDarkMode ? 'dark' : 'light';
+  return createThemeResolver(theme, defaultBrandTheme);
+}
+
+/**
+ * @deprecated Use CSS variables directly instead
+ */
+export interface ThemeContextValue {
+  theme: ReturnType<typeof createThemeResolver>;
+  colorScheme: Theme;
+  brandTheme: BrandTheme | null;
+}
+
+/**
+ * @deprecated Use CSS variables directly instead
+ * Returns default theme values for backward compatibility
+ */
+export function useThemeContext(): ThemeContextValue {
+  return {
+    theme: createThemeResolver('light', defaultBrandTheme),
+    colorScheme: 'light',
+    brandTheme: defaultBrandTheme,
+  };
+}
+
+/**
+ * @deprecated Use CSS variables directly instead
+ */
+export function useThemeResolver() {
+  return createThemeResolver('light', defaultBrandTheme);
 }

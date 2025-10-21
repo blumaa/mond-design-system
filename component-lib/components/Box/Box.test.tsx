@@ -19,44 +19,44 @@ describe('Box Component', () => {
   });
 
   describe('spacing props', () => {
-    it('applies padding props correctly', () => {
+    it('applies padding props correctly with numeric values', () => {
       render(
-        <Box 
-          pt={8} 
-          pr={12} 
-          pb={20} 
-          pl={14} 
+        <Box
+          pt={8}
+          pr={12}
+          pb={20}
+          pl={14}
           data-testid="padding-box"
         >
           Content
         </Box>
       );
       const boxElement = screen.getByTestId('padding-box');
-      
-      // Individual sides should be applied
+
+      // Individual sides should be applied as pixel values
       expect(boxElement).toHaveStyle('padding-top: 8px');
       expect(boxElement).toHaveStyle('padding-right: 12px');
       expect(boxElement).toHaveStyle('padding-bottom: 20px');
       expect(boxElement).toHaveStyle('padding-left: 14px');
     });
 
-    it('applies margin props correctly', () => {
+    it('applies margin props correctly with numeric values', () => {
       render(
-        <Box 
-          m={16} 
-          mx={24} 
-          my={32} 
-          mt={8} 
-          mr={12} 
-          mb={20} 
-          ml={14} 
+        <Box
+          m={16}
+          mx={24}
+          my={32}
+          mt={8}
+          mr={12}
+          mb={20}
+          ml={14}
           data-testid="margin-box"
         >
           Content
         </Box>
       );
       const boxElement = screen.getByTestId('margin-box');
-      
+
       // Individual sides should override mx/my
       expect(boxElement).toHaveStyle('margin-top: 8px');
       expect(boxElement).toHaveStyle('margin-right: 12px');
@@ -70,25 +70,130 @@ describe('Box Component', () => {
       expect(boxElement).toHaveStyle('padding: 1rem');
       expect(boxElement).toHaveStyle('margin: 2em');
     });
+
+    describe('CSS Variable Integration - Spacing Tokens', () => {
+      it('converts numeric spacing token keys to CSS variables', () => {
+        render(<Box p="4" m="2" data-testid="token-spacing">Content</Box>);
+        const boxElement = screen.getByTestId('token-spacing');
+
+        // Should use CSS variables for spacing tokens
+        expect(boxElement).toHaveStyle('padding: var(--mond-spacing-4)');
+        expect(boxElement).toHaveStyle('margin: var(--mond-spacing-2)');
+      });
+
+      it('handles compound spacing props with tokens', () => {
+        render(
+          <Box
+            px="4"
+            py="2"
+            data-testid="compound-spacing"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('compound-spacing');
+
+        expect(boxElement).toHaveStyle('padding-left: var(--mond-spacing-4)');
+        expect(boxElement).toHaveStyle('padding-right: var(--mond-spacing-4)');
+        expect(boxElement).toHaveStyle('padding-top: var(--mond-spacing-2)');
+        expect(boxElement).toHaveStyle('padding-bottom: var(--mond-spacing-2)');
+      });
+    });
   });
 
   describe('color props', () => {
-    it('applies background color', () => {
+    it('applies background color with raw values', () => {
       render(<Box bg="#ff0000" data-testid="bg-box">Content</Box>);
       const boxElement = screen.getByTestId('bg-box');
       expect(boxElement).toHaveStyle('background-color: #ff0000');
     });
 
-    it('applies text color', () => {
+    it('applies text color with raw values', () => {
       render(<Box color="#00ff00" data-testid="color-box">Content</Box>);
       const boxElement = screen.getByTestId('color-box');
       expect(boxElement).toHaveStyle('color: #00ff00');
     });
 
-    it('applies border color', () => {
+    it('applies border color with raw values', () => {
       render(<Box borderColor="#0000ff" data-testid="border-color-box">Content</Box>);
       const boxElement = screen.getByTestId('border-color-box');
       expect(boxElement).toHaveStyle('border-color: #0000ff');
+    });
+
+    describe('CSS Variable Integration - Semantic Tokens', () => {
+      it('converts semantic token paths to CSS variables for background', () => {
+        render(
+          <Box
+            bg="surface.background"
+            data-testid="semantic-bg-box"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('semantic-bg-box');
+        // Should use CSS variable instead of resolved value
+        expect(boxElement).toHaveStyle('background-color: var(--mond-surface-background)');
+      });
+
+      it('converts semantic token paths to CSS variables for color', () => {
+        render(
+          <Box
+            color="text.primary"
+            data-testid="semantic-color-box"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('semantic-color-box');
+        expect(boxElement).toHaveStyle('color: var(--mond-text-primary)');
+      });
+
+      it('converts semantic token paths to CSS variables for border color', () => {
+        render(
+          <Box
+            borderColor="border.default"
+            data-testid="semantic-border-box"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('semantic-border-box');
+        expect(boxElement).toHaveStyle('border-color: var(--mond-border-default)');
+      });
+
+      it('handles multiple semantic tokens correctly', () => {
+        render(
+          <Box
+            bg="surface.background"
+            color="text.primary"
+            borderColor="border.default"
+            data-testid="multi-semantic-box"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('multi-semantic-box');
+        expect(boxElement).toHaveStyle('background-color: var(--mond-surface-background)');
+        expect(boxElement).toHaveStyle('color: var(--mond-text-primary)');
+        expect(boxElement).toHaveStyle('border-color: var(--mond-border-default)');
+      });
+
+      it('passes through non-semantic color values unchanged', () => {
+        render(
+          <Box
+            bg="red"
+            color="#00ff00"
+            borderColor="rgb(0, 0, 255)"
+            data-testid="direct-color-box"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('direct-color-box');
+        expect(boxElement).toHaveStyle('background-color: red');
+        expect(boxElement).toHaveStyle('color: #00ff00');
+        expect(boxElement).toHaveStyle('border-color: rgb(0, 0, 255)');
+      });
     });
   });
 
@@ -101,12 +206,12 @@ describe('Box Component', () => {
 
     it('applies position properties', () => {
       render(
-        <Box 
-          position="absolute" 
-          top={10} 
-          right="20px" 
-          bottom={30} 
-          left="40px" 
+        <Box
+          position="absolute"
+          top={10}
+          right="20px"
+          bottom={30}
+          left="40px"
           zIndex={5}
           data-testid="position-box"
         >
@@ -126,7 +231,7 @@ describe('Box Component', () => {
   describe('flexbox props', () => {
     it('applies flexbox properties', () => {
       render(
-        <Box 
+        <Box
           display="flex"
           flexDirection="column"
           alignItems="center"
@@ -149,7 +254,7 @@ describe('Box Component', () => {
   describe('grid props', () => {
     it('applies grid properties', () => {
       render(
-        <Box 
+        <Box
           display="grid"
           gridTemplateColumns="1fr 1fr"
           gap={16}
@@ -165,12 +270,30 @@ describe('Box Component', () => {
       expect(boxElement).toHaveStyle('gap: 16px');
       expect(boxElement).toHaveStyle('grid-area: header');
     });
+
+    it('converts token gap values to CSS variables', () => {
+      render(
+        <Box
+          display="grid"
+          gap="4"
+          rowGap="2"
+          columnGap="6"
+          data-testid="token-gap-box"
+        >
+          Content
+        </Box>
+      );
+      const boxElement = screen.getByTestId('token-gap-box');
+      expect(boxElement).toHaveStyle('gap: var(--mond-spacing-4)');
+      expect(boxElement).toHaveStyle('row-gap: var(--mond-spacing-2)');
+      expect(boxElement).toHaveStyle('column-gap: var(--mond-spacing-6)');
+    });
   });
 
   describe('size props', () => {
     it('applies size properties', () => {
       render(
-        <Box 
+        <Box
           width={200}
           height="150px"
           minWidth={100}
@@ -191,7 +314,7 @@ describe('Box Component', () => {
   describe('border props', () => {
     it('applies border properties', () => {
       render(
-        <Box 
+        <Box
           border="1px solid #000"
           borderRadius={8}
           borderWidth={2}
@@ -210,7 +333,7 @@ describe('Box Component', () => {
 
     it('applies individual border sides', () => {
       render(
-        <Box 
+        <Box
           borderTop="1px solid red"
           borderRight="2px dashed blue"
           borderBottom="3px dotted green"
@@ -231,7 +354,7 @@ describe('Box Component', () => {
   describe('typography props', () => {
     it('applies typography properties', () => {
       render(
-        <Box 
+        <Box
           fontSize={16}
           fontWeight="bold"
           fontStyle="italic"
@@ -258,7 +381,7 @@ describe('Box Component', () => {
   describe('effect props', () => {
     it('applies effect properties', () => {
       render(
-        <Box 
+        <Box
           boxShadow="0 2px 4px rgba(0,0,0,0.1)"
           opacity={0.8}
           cursor="pointer"
@@ -278,54 +401,46 @@ describe('Box Component', () => {
     });
   });
 
-  describe('semantic token integration', () => {
-    it('resolves semantic tokens for colors in light mode', () => {
+  describe('SSR compatibility', () => {
+    it('renders correctly without client-side hooks', () => {
+      // Box should not depend on useTheme or any client-side hooks
       render(
-        <Box 
+        <Box
           bg="surface.background"
           color="text.primary"
-          
-          data-testid="semantic-light-box"
+          p="4"
+          data-testid="ssr-box"
         >
-          Content
+          SSR Content
         </Box>
       );
-      const boxElement = screen.getByTestId('semantic-light-box');
-      // These should resolve to light mode values
-      expect(boxElement).toHaveStyle('background-color: #F2F3F4');
-      expect(boxElement).toHaveStyle('color: #414A4C');
+      const boxElement = screen.getByTestId('ssr-box');
+      expect(boxElement).toBeInTheDocument();
+      expect(boxElement).toHaveTextContent('SSR Content');
+
+      // Should use CSS variables (SSR-compatible)
+      expect(boxElement).toHaveStyle('background-color: var(--mond-surface-background)');
+      expect(boxElement).toHaveStyle('color: var(--mond-text-primary)');
+      expect(boxElement).toHaveStyle('padding: var(--mond-spacing-4)');
     });
 
-    it('resolves semantic tokens for colors in dark mode', () => {
-      renderWithDarkMode(
-        <Box 
+    it('does not require ThemeProvider context', () => {
+      // Render without ThemeProvider wrapper
+      const { getByTestId } = render(
+        <Box
           bg="surface.background"
-          color="text.primary"
-          
-          data-testid="semantic-dark-box"
+          p={4}
+          data-testid="no-provider-box"
         >
-          Content
-        </Box>
+          No Provider
+        </Box>,
+        { themeProviderProps: undefined } // Explicitly no provider
       );
-      const boxElement = screen.getByTestId('semantic-dark-box');
-      // These should resolve to dark mode values
-      expect(boxElement).toHaveStyle('background-color: #27374D');
-      expect(boxElement).toHaveStyle('color: #DDE6ED');
-    });
 
-    it('passes through non-semantic color values', () => {
-      render(
-        <Box 
-          bg="red"
-          color="#00ff00"
-          data-testid="direct-color-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('direct-color-box');
-      expect(boxElement).toHaveStyle('background-color: red');
-      expect(boxElement).toHaveStyle('color: #00ff00');
+      const boxElement = getByTestId('no-provider-box');
+      expect(boxElement).toBeInTheDocument();
+      // CSS variables should still be applied (they'll be defined in CSS)
+      expect(boxElement).toHaveStyle('background-color: var(--mond-surface-background)');
     });
   });
 
@@ -339,7 +454,7 @@ describe('Box Component', () => {
     it('supports custom props and event handlers', () => {
       const handleClick = jest.fn();
       render(
-        <Box 
+        <Box
           onClick={handleClick}
           role="button"
           aria-label="Custom box"
@@ -348,11 +463,11 @@ describe('Box Component', () => {
           Content
         </Box>
       );
-      
+
       const boxElement = screen.getByTestId('custom-box');
       expect(boxElement).toHaveAttribute('role', 'button');
       expect(boxElement).toHaveAttribute('aria-label', 'Custom box');
-      
+
       boxElement.click();
       expect(handleClick).toHaveBeenCalled();
     });
@@ -367,7 +482,7 @@ describe('Box Component', () => {
   describe('edge cases', () => {
     it('handles zero values correctly', () => {
       render(
-        <Box 
+        <Box
           p={0}
           m={0}
           width={0}
@@ -412,6 +527,40 @@ describe('Box Component', () => {
       render(<Box color="var(--custom-color)" data-testid="custom-prop-box">Content</Box>);
       const boxElement = screen.getByTestId('custom-prop-box');
       expect(boxElement).toHaveStyle('color: var(--custom-color)');
+    });
+  });
+
+  describe('Token value resolution logic', () => {
+    it('correctly identifies and converts token paths with dots', () => {
+      render(
+        <Box
+          bg="interactive.primary.background"
+          color="text.secondary"
+          data-testid="dotted-paths"
+        >
+          Content
+        </Box>
+      );
+      const boxElement = screen.getByTestId('dotted-paths');
+      expect(boxElement).toHaveStyle('background-color: var(--mond-interactive-primary-background)');
+      expect(boxElement).toHaveStyle('color: var(--mond-text-secondary)');
+    });
+
+    it('correctly differentiates between token keys and raw values', () => {
+      render(
+        <Box
+          p="4"        // Token key -> CSS variable
+          m="10px"     // Raw value -> Direct value
+          width="50%"  // Raw value -> Direct value
+          data-testid="mixed-values"
+        >
+          Content
+        </Box>
+      );
+      const boxElement = screen.getByTestId('mixed-values');
+      expect(boxElement).toHaveStyle('padding: var(--mond-spacing-4)');
+      expect(boxElement).toHaveStyle('margin: 10px');
+      expect(boxElement).toHaveStyle('width: 50%');
     });
   });
 });

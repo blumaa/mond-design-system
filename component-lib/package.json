@@ -12,7 +12,13 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.js"
-    }
+    },
+    "./styles.css": "./dist/styles.css",
+    "./theme.css": "./dist/theme.css",
+    "./button.css": "./dist/button.css",
+    "./badge.css": "./dist/badge.css",
+    "./avatar.css": "./dist/avatar.css",
+    "./text.css": "./dist/text.css"
   },
   "files": [
     "dist",
@@ -33,9 +39,11 @@
     "design-tokens"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:tokens && yarn build:lib",
+    "build": "yarn clean && yarn build:tokens && yarn build:css && yarn build:lib && yarn build:styles",
     "build:tokens": "node --import tsx tokens/scripts/build.ts",
+    "build:css": "node --import tsx tokens/scripts/generateCSSVariables.ts",
     "build:lib": "tsc --project tsconfig.build.json",
+    "build:styles": "cp components/Button/button.css dist/ && cp components/Badge/badge.css dist/ && cp components/Avatar/avatar.css dist/ && cp components/Text/text.css dist/ && cp styles.css dist/",
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn build",
     "dev": "concurrently \"yarn dev:tokens\" \"yarn dev:components\" \"yarn storybook\"",

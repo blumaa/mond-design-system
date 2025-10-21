@@ -44,9 +44,6 @@ A flexible avatar component that displays user profile images with automatic fal
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg', 'xl', '2xl'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     src: {
       control: 'text',
     },

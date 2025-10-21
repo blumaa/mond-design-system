@@ -1,0 +1,100 @@
+/**
+ * Badge Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base Badge Styles */
+.mond-badge {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
+  /* Typography */
+  font-family: var(--mond-font-family-sans);
+  font-weight: var(--mond-font-weight-medium);
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+
+  /* Shape */
+  border-radius: var(--mond-radii-full);
+
+  /* Animation */
+  transition: all 150ms ease;
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+/* Small Size */
+.mond-badge--sm {
+  font-size: var(--mond-font-size-xs);
+  padding: var(--mond-spacing-1) var(--mond-spacing-2);
+  height: 20px;
+}
+
+/* Medium Size (Default) */
+.mond-badge--md {
+  font-size: var(--mond-font-size-sm);
+  padding: var(--mond-spacing-1) var(--mond-spacing-3);
+  height: 24px;
+}
+
+/* Large Size */
+.mond-badge--lg {
+  font-size: var(--mond-font-size-base);
+  padding: var(--mond-spacing-2) var(--mond-spacing-4);
+  height: 32px;
+}
+
+/* ============================================
+   VARIANTS
+   ============================================ */
+
+/* Default Variant */
+.mond-badge--default {
+  background-color: var(--mond-surface-elevated);
+  color: var(--mond-text-secondary);
+  border: 1px solid var(--mond-border-default);
+}
+
+/* Primary Variant */
+.mond-badge--primary {
+  background-color: var(--mond-brand-interactive-background);
+  color: var(--mond-brand-interactive-text);
+  border: none;
+}
+
+/* Secondary Variant */
+.mond-badge--secondary {
+  background-color: var(--mond-surface-elevated);
+  color: var(--mond-text-primary);
+  border: 1px solid var(--mond-border-subtle);
+}
+
+/* Success Variant */
+.mond-badge--success {
+  background-color: var(--mond-brand-interactive-background);
+  color: var(--mond-brand-interactive-text);
+  border: 1px solid var(--mond-brand-interactive-background);
+  box-shadow: var(--mond-effects-brand-glow-subtle);
+}
+
+/* Warning Variant */
+.mond-badge--warning {
+  background-color: var(--mond-feedback-warning-background);
+  color: var(--mond-feedback-warning-text);
+  border: 1px solid var(--mond-feedback-warning-border);
+}
+
+/* Error Variant */
+.mond-badge--error {
+  background-color: var(--mond-feedback-error-background);
+  color: var(--mond-feedback-error-text);
+  border: 1px solid var(--mond-feedback-error-border);
+}

@@ -1,3 +1,4 @@
+'use client';
 import { forwardRef, useState } from 'react';
 import { Box, BoxProps } from '../Box/Box';
 import { Spinner } from '../Spinner/Spinner';
@@ -147,9 +148,9 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(({
       
       {/* Loading spinner */}
       <Box style={spinnerContainerStyle}>
-        <Spinner size="md" isDarkMode={isDarkMode} label="Loading image..." />
+        <Spinner size="md" label="Loading image..." />
       </Box>
-      
+
       {/* Error state */}
       <Box style={errorContainerStyle}>
         <div>

@@ -1,35 +1,34 @@
 import React, { forwardRef } from 'react';
 import { Box, type BoxProps } from '../Box/Box';
 import { tokens } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
 
-export type TextVariant = 
+export type TextVariant =
   | 'display'
-  | 'headline' 
+  | 'headline'
   | 'title'
   | 'subtitle'
   | 'body'
-  | 'body-sm' 
-  | 'caption' 
+  | 'body-sm'
+  | 'caption'
   | 'overline'
   | 'code'
   // Legacy variants (for backward compatibility)
-  | 'body-lg' 
+  | 'body-lg'
   | 'body-md';
 
 export type TextWeight = keyof typeof tokens.fontWeights;
 
 export type TextAlign = 'left' | 'center' | 'right' | 'justify';
 
-export type TextSemantic = 
-  | 'primary' 
-  | 'secondary' 
-  | 'tertiary' 
-  | 'disabled' 
-  | 'inverse' 
-  | 'link' 
-  | 'success' 
-  | 'warning' 
+export type TextSemantic =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'disabled'
+  | 'inverse'
+  | 'link'
+  | 'success'
+  | 'warning'
   | 'error'
   | 'accent';
 
@@ -88,12 +87,6 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
   as?: React.ElementType;
 
   /**
-   * Dark mode control for theme resolution
-   * @default false
-   */
-  isDarkMode?: boolean;
-
-  /**
    * Text content
    */
   children: React.ReactNode;
@@ -103,62 +96,31 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
   [key: string]: any;
 }
 
-const getVariantStyles = (variant: TextVariant) => {
-  // Use semantic typography tokens for new variants
-  const typographyTokens = tokens.semantic.typography;
-  
-  if (typographyTokens[variant as keyof typeof typographyTokens]) {
-    const token = typographyTokens[variant as keyof typeof typographyTokens];
-    const styles: Record<string, string | undefined> = {
-      fontSize: token.fontSize,
-      lineHeight: token.lineHeight,
-      fontWeight: token.fontWeight,
-      letterSpacing: token.letterSpacing,
-    };
-
-    // Only include optional properties if they're defined
-    if ('textTransform' in token && token.textTransform) {
-      styles.textTransform = token.textTransform;
-    }
-    if ('fontFamily' in token && token.fontFamily) {
-      styles.fontFamily = token.fontFamily;
-    }
-
-    return styles;
-  }
-  
-  // Fallback to legacy styles for backward compatibility
-  const legacyStyles = {
-    'body-lg': {
-      fontSize: '1.125rem',
-      lineHeight: '1.625',
-    },
-    'body-md': {
-      fontSize: '1rem',
-      lineHeight: '1.5',
-    },
-  };
-
-  return legacyStyles[variant as keyof typeof legacyStyles] || legacyStyles['body-md'];
-};
-
-const getSemanticColor = (semantic: TextSemantic, theme: ReturnType<typeof useTheme>): string => {
-  const semanticColors = {
-    primary: theme('text.primary'),
-    secondary: theme('text.secondary'),
-    tertiary: theme('text.tertiary'),
-    disabled: theme('text.disabled'),
-    inverse: theme('text.inverse'),
-    link: theme('text.link'),
-    success: theme('text.success'),
-    warning: theme('text.warning'),
-    error: theme('text.error'),
-    accent: theme('text.accent'),
-  };
-
-  return semanticColors[semantic] || semanticColors.primary;
-};
-
+/**
+ * Text Component
+ *
+ * A flexible text component that supports multiple variants, semantic colors,
+ * and text modifiers. Uses CSS variables for theming.
+ *
+ * **SSR-Compatible**: Uses CSS classes and CSS variables instead of runtime theme resolution.
+ * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
+ *
+ * @example
+ * // Display text
+ * <Text variant="display">Large Display Text</Text>
+ *
+ * @example
+ * // Semantic colored text
+ * <Text semantic="error" weight="bold">Error Message</Text>
+ *
+ * @example
+ * // Text with modifiers
+ * <Text variant="body" italic underline>Italic Underlined</Text>
+ *
+ * @example
+ * // Custom element type
+ * <Text as="p" variant="body">Paragraph text</Text>
+ */
 export const Text = forwardRef<HTMLElement, TextProps>(({
   variant = 'body-md',
   weight = 'normal',
@@ -169,36 +131,38 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
   strikethrough = false,
   truncate = false,
   as = 'span',
-  isDarkMode,
   children,
+  className,
   color,
   ...props
 }, ref) => {
-  const theme = useTheme(isDarkMode);
-  const variantStyles = getVariantStyles(variant);
-  const semanticColor = getSemanticColor(semantic, theme);
-  
-  // Use custom color if provided, otherwise use semantic color
-  const textColor = color || semanticColor;
+  // Build CSS class names
+  const classNames = [
+    `mond-text--${variant}`,
+    `mond-text--${semantic}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const textDecorations = [];
   if (underline) textDecorations.push('underline');
   if (strikethrough) textDecorations.push('line-through');
-  const textDecoration = textDecorations.length > 0 
-    ? textDecorations.join(' ') 
+  const textDecoration = textDecorations.length > 0
+    ? textDecorations.join(' ')
     : 'none';
 
   return (
     <Box
       as={as}
       ref={ref}
+      className={classNames}
       fontFamily={tokens.fontFamilies.sans}
       fontWeight={tokens.fontWeights[weight as TextWeight]}
       fontStyle={italic ? 'italic' : 'normal'}
       textAlign={align}
       textDecoration={textDecoration}
-      color={textColor}
-      {...variantStyles}
+      color={color} // Allow custom color to override semantic
       {...(truncate && {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -212,3 +176,5 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
 });
 
 Text.displayName = 'Text';
+
+export default Text;

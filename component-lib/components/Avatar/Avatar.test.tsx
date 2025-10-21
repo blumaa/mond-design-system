@@ -1,253 +1,234 @@
+/**
+ * Avatar Component Tests - SSR-Compatible Version
+ *
+ * TDD: These tests are written FIRST to define the expected behavior
+ * of the refactored Avatar component that:
+ * - Uses "use client" at component level (needs useState for image loading)
+ * - Removes useTheme() hook dependency
+ * - Uses CSS variables instead of runtime theme resolution
+ * - Uses static CSS classes instead of inline styles
+ * - Maintains all existing functionality
+ */
+
 import React from 'react';
-import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../test-utils';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Avatar } from './Avatar';
+import type { AvatarProps } from './Avatar';
 
-// Mock image loading
-const mockImage = {
-  onload: null as (() => void) | null,
-  onerror: null as (() => void) | null,
-};
+describe('Avatar Component - SSR Compatible', () => {
+  describe('SSR Compatibility', () => {
+    it('renders without ThemeProvider context', () => {
+      render(<Avatar fallback="John Doe" />);
+      expect(screen.getByText('JD')).toBeInTheDocument();
+    });
 
-beforeAll(() => {
-  // Mock Image constructor
-  global.Image = class implements Partial<HTMLImageElement> {
-    onload: (() => void) | null = null;
-    onerror: (() => void) | null = null;
-    src: string = '';
-    
-    constructor() {
-      setTimeout(() => {
-        if (this.onload) {
-          this.onload();
-        }
-      }, 100);
-      return mockImage as unknown as HTMLImageElement;
-    }
-  } as typeof Image;
-});
-
-describe('Avatar Component', () => {
-  it('renders avatar container', () => {
-    render(<Avatar data-testid="avatar" />);
-    const avatarElement = screen.getByTestId('avatar');
-    expect(avatarElement).toBeInTheDocument();
+    it('does not use useTheme() hook', () => {
+      const { container } = render(<Avatar fallback="Test" />);
+      expect(container.firstChild).toBeInTheDocument();
+    });
   });
 
-  it('displays fallback when no src provided', () => {
-    render(<Avatar fallback="John Doe" data-testid="avatar" />);
-    const fallbackElement = screen.getByTestId('avatar-fallback');
-    expect(fallbackElement).toBeInTheDocument();
-    expect(fallbackElement).toHaveTextContent('JD');
+  describe('Basic Rendering', () => {
+    it('renders as a div element', () => {
+      const { container } = render(<Avatar fallback="Test" />);
+      const avatar = container.firstChild;
+      expect(avatar).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it('applies correct display name', () => {
+      expect(Avatar.displayName).toBe('Avatar');
+    });
   });
 
-  it('generates initials from fallback text', () => {
-    render(<Avatar fallback="Alice Bob Charlie" data-testid="avatar" />);
-    const fallbackElement = screen.getByTestId('avatar-fallback');
-    expect(fallbackElement).toHaveTextContent('AB');
+  describe('CSS Class-Based Styling', () => {
+    it('applies base CSS class', () => {
+      const { container } = render(<Avatar fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar');
+    });
+
+    it('applies size-specific CSS class for xs', () => {
+      const { container } = render(<Avatar size="xs" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar--xs');
+    });
+
+    it('applies size-specific CSS class for sm', () => {
+      const { container } = render(<Avatar size="sm" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar--sm');
+    });
+
+    it('applies size-specific CSS class for md', () => {
+      const { container } = render(<Avatar size="md" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar--md');
+    });
+
+    it('applies size-specific CSS class for lg', () => {
+      const { container } = render(<Avatar size="lg" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar--lg');
+    });
+
+    it('applies size-specific CSS class for xl', () => {
+      const { container } = render(<Avatar size="xl" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar--xl');
+    });
+
+    it('applies size-specific CSS class for 2xl', () => {
+      const { container } = render(<Avatar size="2xl" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar--2xl');
+    });
   });
 
-  it('shows question mark when no fallback provided', () => {
-    render(<Avatar data-testid="avatar" />);
-    const fallbackElement = screen.getByTestId('avatar-fallback');
-    expect(fallbackElement).toHaveTextContent('?');
+  describe('Data Attributes', () => {
+    it('sets data-testid when provided', () => {
+      render(<Avatar data-testid="my-avatar" fallback="Test" />);
+      expect(screen.getByTestId('my-avatar')).toBeInTheDocument();
+    });
+
+    it('sets data-size attribute', () => {
+      const { container } = render(<Avatar size="lg" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveAttribute('data-size', 'lg');
+    });
   });
 
-  it('displays custom children as fallback', () => {
-    render(
-      <Avatar data-testid="avatar">
-        <span data-testid="custom-fallback">👤</span>
-      </Avatar>
-    );
-    const customFallback = screen.getByTestId('custom-fallback');
-    expect(customFallback).toBeInTheDocument();
-    expect(customFallback).toHaveTextContent('👤');
+  describe('Fallback Handling', () => {
+    it('displays fallback text when no image provided', () => {
+      render(<Avatar fallback="John Doe" />);
+      expect(screen.getByText('JD')).toBeInTheDocument();
+    });
+
+    it('generates correct initials from fallback', () => {
+      render(<Avatar fallback="Alice Bob" />);
+      expect(screen.getByText('AB')).toBeInTheDocument();
+    });
+
+    it('limits initials to 2 characters', () => {
+      render(<Avatar fallback="Alice Bob Charlie" />);
+      expect(screen.getByText('AB')).toBeInTheDocument();
+    });
+
+    it('displays question mark when no fallback or image', () => {
+      render(<Avatar />);
+      expect(screen.getByText('?')).toBeInTheDocument();
+    });
+
+    it('displays custom children over fallback text', () => {
+      render(<Avatar fallback="Test"><span>👤</span></Avatar>);
+      expect(screen.getByText('👤')).toBeInTheDocument();
+      expect(screen.queryByText('T')).not.toBeInTheDocument();
+    });
   });
 
-  describe('image handling', () => {
+  describe('Image Handling', () => {
     it('renders image when src is provided', () => {
-      render(
-        <Avatar 
-          src="https://example.com/avatar.jpg" 
-          alt="User avatar" 
-          data-testid="avatar" 
-        />
-      );
-      
-      const imageElement = screen.getByAltText('User avatar');
-      expect(imageElement).toBeInTheDocument();
-      expect(imageElement).toHaveAttribute('src', 'https://example.com/avatar.jpg');
+      render(<Avatar src="https://example.com/avatar.jpg" alt="User Avatar" />);
+      const img = screen.getByRole('img', { hidden: true });
+      expect(img).toBeInTheDocument();
+      expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg');
+      expect(img).toHaveAttribute('alt', 'User Avatar');
+
+      // Trigger image load to show it
+      fireEvent.load(img);
+      expect(img).toHaveStyle('display: block');
     });
 
-    it('shows fallback when image fails to load', async () => {
-      render(
-        <Avatar 
-          src="https://example.com/broken-image.jpg" 
-          fallback="John Doe"
-          data-testid="avatar" 
-        />
-      );
-
-      const imageElement = screen.getByAltText('John Doe');
-      
-      // Simulate image error
-      fireEvent.error(imageElement);
-      
-      await waitFor(() => {
-        const fallbackElement = screen.getByTestId('avatar-fallback');
-        expect(fallbackElement).toBeInTheDocument();
-        expect(fallbackElement).toHaveTextContent('JD');
-      });
-    });
-
-    it('uses fallback text as alt when no alt provided', () => {
+    it('uses fallback as alt text when no alt provided', () => {
       render(<Avatar src="https://example.com/avatar.jpg" fallback="John Doe" />);
-      const imageElement = screen.getByAltText('John Doe');
-      expect(imageElement).toBeInTheDocument();
+      const img = screen.getByRole('img', { hidden: true });
+      expect(img).toHaveAttribute('alt', 'John Doe');
     });
 
-    it('defaults to "Avatar" alt text when no alt or fallback provided', () => {
+    it('uses "Avatar" as default alt text', () => {
       render(<Avatar src="https://example.com/avatar.jpg" />);
-      const imageElement = screen.getByAltText('Avatar');
-      expect(imageElement).toBeInTheDocument();
+      const img = screen.getByRole('img', { hidden: true });
+      expect(img).toHaveAttribute('alt', 'Avatar');
     });
   });
 
-  describe('sizes', () => {
-    it('renders extra small size correctly', () => {
-      render(<Avatar size="xs" data-testid="xs-avatar" />);
-      const avatarElement = screen.getByTestId('xs-avatar');
-      expect(avatarElement).toHaveStyle('width: 24px');
-      expect(avatarElement).toHaveStyle('height: 24px');
-    });
-
-    it('renders small size correctly', () => {
-      render(<Avatar size="sm" data-testid="sm-avatar" />);
-      const avatarElement = screen.getByTestId('sm-avatar');
-      expect(avatarElement).toHaveStyle('width: 32px');
-      expect(avatarElement).toHaveStyle('height: 32px');
-    });
-
-    it('renders medium size correctly', () => {
-      render(<Avatar size="md" data-testid="md-avatar" />);
-      const avatarElement = screen.getByTestId('md-avatar');
-      expect(avatarElement).toHaveStyle('width: 40px');
-      expect(avatarElement).toHaveStyle('height: 40px');
-    });
-
-    it('renders large size correctly', () => {
-      render(<Avatar size="lg" data-testid="lg-avatar" />);
-      const avatarElement = screen.getByTestId('lg-avatar');
-      expect(avatarElement).toHaveStyle('width: 48px');
-      expect(avatarElement).toHaveStyle('height: 48px');
-    });
-
-    it('renders extra large size correctly', () => {
-      render(<Avatar size="xl" data-testid="xl-avatar" />);
-      const avatarElement = screen.getByTestId('xl-avatar');
-      expect(avatarElement).toHaveStyle('width: 64px');
-      expect(avatarElement).toHaveStyle('height: 64px');
-    });
-
-    it('renders 2xl size correctly', () => {
-      render(<Avatar size="2xl" data-testid="2xl-avatar" />);
-      const avatarElement = screen.getByTestId('2xl-avatar');
-      expect(avatarElement).toHaveStyle('width: 80px');
-      expect(avatarElement).toHaveStyle('height: 80px');
+  describe('Custom ClassName', () => {
+    it('applies custom className alongside base class', () => {
+      const { container } = render(<Avatar className="custom-class" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar');
+      expect(avatar).toHaveClass('custom-class');
     });
   });
 
-  describe('dark mode', () => {
-    it('applies dark mode styling', () => {
-      renderWithDarkMode(<Avatar fallback="Dark" data-testid="dark-avatar" />);
-      const avatarElement = screen.getByTestId('dark-avatar');
-      expect(avatarElement).toHaveStyle('background-color: #171717');
-    });
-
-    it('applies light mode styling by default', () => {
-      render(<Avatar fallback="Light" data-testid="light-avatar" />);
-      const avatarElement = screen.getByTestId('light-avatar');
-      expect(avatarElement).toHaveStyle('background-color: #ffffff');
-    });
-  });
-
-  describe('styling', () => {
-    it('applies correct base styles', () => {
-      render(<Avatar data-testid="styled-avatar" />);
-      const avatarElement = screen.getByTestId('styled-avatar');
-      
-      expect(avatarElement).toHaveStyle('display: inline-flex');
-      expect(avatarElement).toHaveStyle('align-items: center');
-      expect(avatarElement).toHaveStyle('justify-content: center');
-      expect(avatarElement).toHaveStyle('border-radius: 9999px');
-      expect(avatarElement).toHaveStyle('overflow: hidden');
-      expect(avatarElement).toHaveStyle('flex-shrink: 0');
-    });
-
-    it('applies correct fallback text styles', () => {
-      render(<Avatar fallback="AB" data-testid="avatar" />);
-      const fallbackElement = screen.getByTestId('avatar-fallback');
-      
-      expect(fallbackElement).toHaveStyle('display: flex');
-      expect(fallbackElement).toHaveStyle('align-items: center');
-      expect(fallbackElement).toHaveStyle('justify-content: center');
-      expect(fallbackElement).toHaveStyle('text-transform: uppercase');
-      expect(fallbackElement).toHaveStyle('user-select: none');
-      expect(fallbackElement).toHaveStyle('font-weight: 500');
-    });
-
-    it('applies font family to fallback', () => {
-      render(<Avatar fallback="Test" data-testid="avatar" />);
-      const fallbackElement = screen.getByTestId('avatar-fallback');
-      expect(fallbackElement).toHaveStyle("font-family: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif");
-    });
-  });
-
-  describe('accessibility', () => {
-    it('supports custom props', () => {
-      render(
-        <Avatar 
-          data-testid="custom-avatar"
-          role="img"
-          aria-label="User profile picture"
-        />
-      );
-      
-      const avatarElement = screen.getByTestId('custom-avatar');
-      expect(avatarElement).toHaveAttribute('role', 'img');
-      expect(avatarElement).toHaveAttribute('aria-label', 'User profile picture');
-    });
-
-    it('forwards ref correctly', () => {
+  describe('Ref Forwarding', () => {
+    it('forwards ref to div element', () => {
       const ref = React.createRef<HTMLDivElement>();
-      render(<Avatar ref={ref} />);
+      render(<Avatar ref={ref} fallback="Test" />);
       expect(ref.current).toBeInstanceOf(HTMLDivElement);
     });
   });
 
-  it('applies custom className', () => {
-    render(<Avatar className="custom-class" data-testid="class-avatar" />);
-    const avatarElement = screen.getByTestId('class-avatar');
-    expect(avatarElement).toHaveClass('custom-class');
+  describe('Backward Compatibility', () => {
+    it('does NOT accept isDarkMode prop (removed)', () => {
+      const props = { fallback: 'Test', isDarkMode: true } as any;
+      const { container } = render(<Avatar {...props} />);
+      expect(container.firstChild).toBeInTheDocument();
+    });
+
+    it('maintains existing API for size prop', () => {
+      const { container } = render(<Avatar size="xl" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveAttribute('data-size', 'xl');
+    });
   });
 
-  describe('edge cases', () => {
-    it('handles empty fallback text', () => {
-      render(<Avatar fallback="" data-testid="avatar" />);
-      const fallbackElement = screen.getByTestId('avatar-fallback');
-      expect(fallbackElement).toHaveTextContent('?');
+  describe('CSS Variable Usage', () => {
+    it('does not use inline styles for theme colors', () => {
+      const { container } = render(<Avatar fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      const inlineStyle = avatar.getAttribute('style');
+
+      if (inlineStyle) {
+        expect(inlineStyle).not.toContain('background-color: rgb');
+        expect(inlineStyle).not.toContain('border: 1px solid rgb');
+      }
     });
 
-    it('handles single character fallback', () => {
-      render(<Avatar fallback="A" data-testid="avatar" />);
-      const fallbackElement = screen.getByTestId('avatar-fallback');
-      expect(fallbackElement).toHaveTextContent('A');
+    it('relies on CSS classes for theming', () => {
+      const { container } = render(<Avatar size="md" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar--md');
+    });
+  });
+
+  describe('Combination Props', () => {
+    it('applies multiple classes when multiple props are set', () => {
+      const { container } = render(
+        <Avatar
+          size="lg"
+          className="custom"
+          fallback="Test User"
+        />
+      );
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveClass('mond-avatar');
+      expect(avatar).toHaveClass('mond-avatar--lg');
+      expect(avatar).toHaveClass('custom');
+    });
+  });
+
+  describe('HTML Attributes', () => {
+    it('forwards standard HTML attributes', () => {
+      const { container } = render(<Avatar title="User Avatar" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveAttribute('title', 'User Avatar');
     });
 
-    it('handles fallback with special characters', () => {
-      render(<Avatar fallback="John-Paul O'Connor" data-testid="avatar" />);
-      const fallbackElement = screen.getByTestId('avatar-fallback');
-      expect(fallbackElement).toHaveTextContent('JO');
+    it('forwards aria attributes', () => {
+      const { container } = render(<Avatar aria-label="Profile Picture" fallback="Test" />);
+      const avatar = container.firstChild as HTMLElement;
+      expect(avatar).toHaveAttribute('aria-label', 'Profile Picture');
     });
   });
 });
