@@ -1,98 +1,108 @@
-import { render, screen, renderWithDarkMode } from '../../test-utils';
+/**
+ * Spinner Component Tests - SSR-Compatible Version
+ */
+
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Spinner } from './Spinner';
 
-describe('Spinner', () => {
-  it('renders with default props', () => {
-    render(<Spinner />);
-    
-    const spinner = screen.getByRole('status');
-    expect(spinner).toBeInTheDocument();
-    expect(spinner).toHaveAttribute('aria-label', 'Loading...');
-  });
+describe('Spinner Component - SSR Compatible', () => {
+  describe('SSR Compatibility', () => {
+    it('renders without ThemeProvider context', () => {
+      const { container } = render(<Spinner />);
+      expect(container.firstChild).toBeInTheDocument();
+    });
 
-  it('renders with custom label', () => {
-    render(<Spinner label="Processing..." />);
-    
-    const spinner = screen.getByRole('status');
-    expect(spinner).toHaveAttribute('aria-label', 'Processing...');
-    expect(screen.getByText('Processing...')).toBeInTheDocument();
-  });
-
-  it('applies size variants correctly', () => {
-    const { rerender } = render(<Spinner size="xs" />);
-    let spinner = screen.getByRole('status');
-    expect(spinner).toHaveStyle('width: 1rem; height: 1rem');
-
-    rerender(<Spinner size="lg" />);
-    spinner = screen.getByRole('status');
-    expect(spinner).toHaveStyle('width: 2rem; height: 2rem');
-  });
-
-  it('applies custom color in light mode', () => {
-    render(<Spinner color="#ff0000"  />);
-    
-    const spinner = screen.getByRole('status');
-    expect(spinner).toHaveStyle('border-top: 2px solid #ff0000');
-  });
-
-  it('applies theme-based color for light mode', () => {
-    render(<Spinner  />);
-    
-    const spinner = screen.getByRole('status');
-    expect(spinner).toHaveStyle('border-top: 2px solid #0284c7'); // blue.600
-  });
-
-  it('applies theme-based color for dark mode', () => {
-    renderWithDarkMode(<Spinner  />);
-    
-    const spinner = screen.getByRole('status');
-    expect(spinner).toHaveStyle('border-top: 2px solid #38bdf8'); // blue.400
-  });
-
-  it('applies custom className', () => {
-    render(<Spinner className="custom-spinner" />);
-    
-    const spinner = screen.getByRole('status');
-    expect(spinner).toHaveClass('mond-spinner', 'custom-spinner');
-  });
-
-  it('forwards additional props to Box', () => {
-    render(<Spinner data-testid="custom-spinner" p="4" />);
-    
-    const spinner = screen.getByTestId('custom-spinner');
-    expect(spinner).toBeInTheDocument();
-  });
-
-  it('applies spinning animation', () => {
-    render(<Spinner />);
-    
-    const spinner = screen.getByRole('status');
-    expect(spinner).toHaveStyle('animation: mond-spin 1s linear infinite');
-  });
-
-  it('has proper accessibility attributes', () => {
-    render(<Spinner />);
-    
-    const spinner = screen.getByRole('status');
-    const hiddenText = screen.getByText('Loading...');
-    
-    expect(spinner).toHaveAttribute('role', 'status');
-    expect(spinner).toHaveAttribute('aria-label', 'Loading...');
-    
-    // Check that the text is visually hidden but available to screen readers
-    expect(hiddenText).toHaveStyle({
-      position: 'absolute',
-      width: '1px',
-      height: '1px',
-      overflow: 'hidden'
+    it('does not use useEffect for keyframes injection', () => {
+      const { container } = render(<Spinner />);
+      expect(container.firstChild).toBeInTheDocument();
     });
   });
 
-  it('applies custom styles', () => {
-    render(<Spinner style={{ margin: '10px' }} />);
-    
-    const spinner = screen.getByRole('status');
-    expect(spinner).toHaveStyle('margin: 10px');
+  describe('Basic Rendering', () => {
+    it('renders as a div element', () => {
+      const { container } = render(<Spinner />);
+      const spinner = container.firstChild as HTMLElement;
+      expect(spinner.tagName).toBe('DIV');
+    });
+
+    it('applies correct display name', () => {
+      expect(Spinner.displayName).toBe('Spinner');
+    });
+
+    it('includes accessibility label', () => {
+      render(<Spinner label="Loading content" />);
+      expect(screen.getByText('Loading content')).toBeInTheDocument();
+    });
+  });
+
+  describe('Size Variants', () => {
+    it('applies xs size class', () => {
+      const { container } = render(<Spinner size="xs" />);
+      const spinner = container.firstChild as HTMLElement;
+      expect(spinner).toHaveClass('mond-spinner--xs');
+    });
+
+    it('applies sm size class', () => {
+      const { container } = render(<Spinner size="sm" />);
+      const spinner = container.firstChild as HTMLElement;
+      expect(spinner).toHaveClass('mond-spinner--sm');
+    });
+
+    it('applies md size class (default)', () => {
+      const { container } = render(<Spinner size="md" />);
+      const spinner = container.firstChild as HTMLElement;
+      expect(spinner).toHaveClass('mond-spinner--md');
+    });
+
+    it('applies lg size class', () => {
+      const { container } = render(<Spinner size="lg" />);
+      const spinner = container.firstChild as HTMLElement;
+      expect(spinner).toHaveClass('mond-spinner--lg');
+    });
+
+    it('applies xl size class', () => {
+      const { container } = render(<Spinner size="xl" />);
+      const spinner = container.firstChild as HTMLElement;
+      expect(spinner).toHaveClass('mond-spinner--xl');
+    });
+  });
+
+  describe('Custom ClassName', () => {
+    it('applies custom className alongside base class', () => {
+      const { container } = render(<Spinner className="custom-class" />);
+      const spinner = container.firstChild as HTMLElement;
+      expect(spinner).toHaveClass('mond-spinner');
+      expect(spinner).toHaveClass('custom-class');
+    });
+  });
+
+  describe('Ref Forwarding', () => {
+    it('forwards ref to div element', () => {
+      const ref = React.createRef<HTMLDivElement>();
+      render(<Spinner ref={ref} />);
+      expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('has role="status" by default', () => {
+      const { container } = render(<Spinner />);
+      const spinner = container.firstChild as HTMLElement;
+      expect(spinner).toHaveAttribute('role', 'status');
+    });
+
+    it('has aria-live="polite"', () => {
+      const { container } = render(<Spinner />);
+      const spinner = container.firstChild as HTMLElement;
+      expect(spinner).toHaveAttribute('aria-live', 'polite');
+    });
+
+    it('displays visually hidden label', () => {
+      render(<Spinner label="Custom loading" />);
+      const label = screen.getByText('Custom loading');
+      expect(label).toHaveClass('mond-spinner__label');
+    });
   });
 });

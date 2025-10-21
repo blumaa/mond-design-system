@@ -4,6 +4,10 @@
 @import '../dist/badge.css';
 @import '../dist/avatar.css';
 @import '../dist/text.css';
+@import '../dist/heading.css';
+@import '../dist/label.css';
+@import '../dist/divider.css';
+@import '../dist/spinner.css';
 
 /* Global font family - ensure DM Sans is used everywhere */
 *, *::before, *::after {

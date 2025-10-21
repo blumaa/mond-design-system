@@ -18,7 +18,11 @@
     "./button.css": "./dist/button.css",
     "./badge.css": "./dist/badge.css",
     "./avatar.css": "./dist/avatar.css",
-    "./text.css": "./dist/text.css"
+    "./text.css": "./dist/text.css",
+    "./heading.css": "./dist/heading.css",
+    "./label.css": "./dist/label.css",
+    "./divider.css": "./dist/divider.css",
+    "./spinner.css": "./dist/spinner.css"
   },
   "files": [
     "dist",
@@ -43,7 +47,7 @@
     "build:tokens": "node --import tsx tokens/scripts/build.ts",
     "build:css": "node --import tsx tokens/scripts/generateCSSVariables.ts",
     "build:lib": "tsc --project tsconfig.build.json",
-    "build:styles": "cp components/Button/button.css dist/ && cp components/Badge/badge.css dist/ && cp components/Avatar/avatar.css dist/ && cp components/Text/text.css dist/ && cp styles.css dist/",
+    "build:styles": "cp components/Button/button.css dist/ && cp components/Badge/badge.css dist/ && cp components/Avatar/avatar.css dist/ && cp components/Text/text.css dist/ && cp components/Heading/heading.css dist/ && cp components/Label/label.css dist/ && cp components/Divider/divider.css dist/ && cp components/Spinner/spinner.css dist/ && cp styles.css dist/",
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn build",
     "dev": "concurrently \"yarn dev:tokens\" \"yarn dev:components\" \"yarn storybook\"",

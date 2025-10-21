@@ -1,0 +1,62 @@
+/**
+ * Spinner Component Styles
+ */
+
+/* Keyframes */
+@keyframes mond-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Base Spinner */
+.mond-spinner {
+  border: 2px solid transparent;
+  border-top-color: var(--mond-brand-interactive-background);
+  border-radius: 50%;
+  animation: mond-spin 1s linear infinite;
+  position: relative;
+  display: inline-block;
+}
+
+/* Size Variants */
+.mond-spinner--xs {
+  width: var(--mond-spacing-4); /* 1rem */
+  height: var(--mond-spacing-4);
+}
+
+.mond-spinner--sm {
+  width: var(--mond-spacing-5); /* 1.25rem */
+  height: var(--mond-spacing-5);
+}
+
+.mond-spinner--md {
+  width: var(--mond-spacing-6); /* 1.5rem */
+  height: var(--mond-spacing-6);
+}
+
+.mond-spinner--lg {
+  width: var(--mond-spacing-8); /* 2rem */
+  height: var(--mond-spacing-8);
+}
+
+.mond-spinner--xl {
+  width: var(--mond-spacing-10); /* 2.5rem */
+  height: var(--mond-spacing-10);
+}
+
+/* Visually Hidden Label for Screen Readers */
+.mond-spinner__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
