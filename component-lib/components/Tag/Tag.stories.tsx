@@ -72,10 +72,6 @@ A versatile tag/chip component for displaying labels, categories, status indicat
       control: 'boolean',
       description: 'Whether the tag is disabled',
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Whether to use dark theme colors',
-    },
     icon: {
       control: false,
       description: 'Optional icon to display',

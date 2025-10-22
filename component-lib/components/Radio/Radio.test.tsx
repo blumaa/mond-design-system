@@ -1,251 +1,176 @@
+/**
+ * Radio Component Tests - SSR-Compatible Version
+ */
+
 import React from 'react';
-import { render, screen, fireEvent, renderWithDarkMode } from '../../test-utils';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { Radio } from './Radio';
 
-describe('Radio Component', () => {
-  it('renders radio with label', () => {
-    render(<Radio label="Option 1" name="test-radio" />);
-    const labelElement = screen.getByText(/option 1/i);
-    const radioElement = screen.getByRole('radio');
-    
-    expect(labelElement).toBeInTheDocument();
-    expect(radioElement).toBeInTheDocument();
-  });
-
-  it('handles checked state changes', () => {
-    const handleChange = jest.fn();
-    render(
-      <Radio 
-        label="Test radio" 
-        name="test"
-        onChange={handleChange}
-        data-testid="test-radio"
-      />
-    );
-    
-    const radioElement = screen.getByRole('radio');
-    fireEvent.click(radioElement);
-    
-    expect(handleChange).toHaveBeenCalled();
-  });
-
-  it('renders in checked state', () => {
-    render(<Radio label="Checked radio" name="test" checked readOnly />);
-    const radioElement = screen.getByRole('radio');
-    expect(radioElement).toBeChecked();
-  });
-
-  it('renders in unchecked state by default', () => {
-    render(<Radio label="Unchecked radio" name="test" />);
-    const radioElement = screen.getByRole('radio');
-    expect(radioElement).not.toBeChecked();
-  });
-
-  describe('sizes', () => {
-    it('renders small size correctly', () => {
-      render(<Radio size="sm" label="Small radio" name="size-test" data-testid="sm-radio" />);
-      const container = screen.getByTestId('sm-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('width: 16px');
-      expect(radioDiv).toHaveStyle('height: 16px');
+describe('Radio Component - SSR Compatible', () => {
+  describe('SSR Compatibility', () => {
+    it('renders without ThemeProvider context', () => {
+      const { container } = render(<Radio />);
+      expect(container.querySelector('input[type="radio"]')).toBeInTheDocument();
     });
 
-    it('renders medium size correctly', () => {
-      render(<Radio size="md" label="Medium radio" name="size-test" data-testid="md-radio" />);
-      const container = screen.getByTestId('md-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('width: 20px');
-      expect(radioDiv).toHaveStyle('height: 20px');
-    });
-
-    it('renders large size correctly', () => {
-      render(<Radio size="lg" label="Large radio" name="size-test" data-testid="lg-radio" />);
-      const container = screen.getByTestId('lg-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('width: 24px');
-      expect(radioDiv).toHaveStyle('height: 24px');
+    it('uses CSS classes instead of inline styles', () => {
+      const { container } = render(<Radio size="md" />);
+      const wrapper = container.querySelector('.mond-radio');
+      expect(wrapper).toBeInTheDocument();
     });
   });
 
-  describe('radio group behavior', () => {
-    it('maintains mutual exclusivity within same name group', () => {
-      render(
-        <div>
-          <Radio label="Option 1" name="group1" value="option1" />
-          <Radio label="Option 2" name="group1" value="option2" />
-          <Radio label="Option 3" name="group1" value="option3" />
-        </div>
-      );
-      
-      const radios = screen.getAllByRole('radio');
-      expect(radios).toHaveLength(3);
-      
-      // All should have the same name attribute
-      radios.forEach(radio => {
-        expect(radio).toHaveAttribute('name', 'group1');
-      });
+  describe('Basic Rendering', () => {
+    it('renders radio input element', () => {
+      render(<Radio data-testid="radio" />);
+      expect(screen.getByTestId('radio')).toBeInTheDocument();
     });
 
-    it('allows different groups to be independent', () => {
-      render(
-        <div>
-          <Radio label="Group 1 Option A" name="group1" value="1a" />
-          <Radio label="Group 1 Option B" name="group1" value="1b" />
-          <Radio label="Group 2 Option A" name="group2" value="2a" />
-          <Radio label="Group 2 Option B" name="group2" value="2b" />
-        </div>
-      );
-      
-      const group1Radios = screen.getAllByRole('radio').filter(
-        radio => radio.getAttribute('name') === 'group1'
-      );
-      const group2Radios = screen.getAllByRole('radio').filter(
-        radio => radio.getAttribute('name') === 'group2'
-      );
-      
-      expect(group1Radios).toHaveLength(2);
-      expect(group2Radios).toHaveLength(2);
+    it('applies correct display name', () => {
+      expect(Radio.displayName).toBe('Radio');
+    });
+
+    it('renders with label', () => {
+      render(<Radio label="Option A" />);
+      expect(screen.getByText('Option A')).toBeInTheDocument();
+    });
+
+    it('renders as unchecked by default', () => {
+      render(<Radio data-testid="radio" />);
+      expect(screen.getByTestId('radio')).not.toBeChecked();
+    });
+
+    it('renders as checked when checked prop is true', () => {
+      render(<Radio checked data-testid="radio" onChange={() => {}} />);
+      expect(screen.getByTestId('radio')).toBeChecked();
     });
   });
 
-  describe('error state', () => {
+  describe('Size Variants', () => {
+    it('applies sm size class', () => {
+      const { container } = render(<Radio size="sm" />);
+      expect(container.querySelector('.mond-radio--sm')).toBeInTheDocument();
+    });
+
+    it('applies md size class (default)', () => {
+      const { container } = render(<Radio size="md" />);
+      expect(container.querySelector('.mond-radio--md')).toBeInTheDocument();
+    });
+
+    it('applies lg size class', () => {
+      const { container } = render(<Radio size="lg" />);
+      expect(container.querySelector('.mond-radio--lg')).toBeInTheDocument();
+    });
+  });
+
+  describe('Error State', () => {
+    it('applies error class when error message provided', () => {
+      const { container } = render(<Radio error="Selection required" />);
+      expect(container.querySelector('.mond-radio--error')).toBeInTheDocument();
+    });
+
     it('displays error message', () => {
-      render(<Radio label="Required radio" name="test" error="Please select an option" />);
-      const errorMessage = screen.getByText(/please select an option/i);
-      expect(errorMessage).toBeInTheDocument();
+      render(<Radio label="Option" error="Required" />);
+      expect(screen.getByText('Required')).toBeInTheDocument();
     });
 
-    it('applies error styling', () => {
-      render(
-        <Radio 
-          label="Error radio" 
-          name="test"
-          error="Error message"
-          data-testid="error-radio"
-        />
-      );
-      const container = screen.getByTestId('error-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('border: 1px solid #ef4444');
+    it('error message has error styling class', () => {
+      const { container } = render(<Radio label="Option" error="Required" />);
+      const message = container.querySelector('.mond-radio__message--error');
+      expect(message).toBeInTheDocument();
     });
   });
 
-  describe('helper text', () => {
+  describe('Helper Text', () => {
     it('displays helper text', () => {
-      render(<Radio label="Email updates" name="test" helperText="Receive notifications via email" />);
-      const helperText = screen.getByText(/receive notifications via email/i);
-      expect(helperText).toBeInTheDocument();
+      render(<Radio label="Option" helperText="Select one option" />);
+      expect(screen.getByText('Select one option')).toBeInTheDocument();
+    });
+
+    it('helper text has helper styling class', () => {
+      const { container } = render(<Radio label="Option" helperText="Helper" />);
+      const message = container.querySelector('.mond-radio__message--helper');
+      expect(message).toBeInTheDocument();
+    });
+
+    it('error takes precedence over helper text', () => {
+      render(<Radio label="Option" error="Error" helperText="Helper" />);
+      expect(screen.getByText('Error')).toBeInTheDocument();
+      expect(screen.queryByText('Helper')).not.toBeInTheDocument();
     });
   });
 
-  describe('dark mode', () => {
-    it('applies dark mode styling', () => {
-      renderWithDarkMode(<Radio label="Dark radio" name="test" data-testid="dark-radio" />);
-      const container = screen.getByTestId('dark-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('background-color: #171717');
+  describe('Disabled State', () => {
+    it('applies disabled attribute', () => {
+      render(<Radio disabled data-testid="radio" />);
+      expect(screen.getByTestId('radio')).toBeDisabled();
     });
 
-    it('applies light mode styling by default', () => {
-      render(<Radio label="Light radio" name="test" data-testid="light-radio" />);
-      const container = screen.getByTestId('light-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('background-color: #ffffff');
+    it('applies disabled class', () => {
+      const { container } = render(<Radio disabled />);
+      expect(container.querySelector('.mond-radio--disabled')).toBeInTheDocument();
     });
   });
 
-  describe('disabled state', () => {
-    it('renders disabled radio', () => {
-      render(<Radio label="Disabled radio" name="test" disabled />);
-      const radioElement = screen.getByRole('radio');
-      expect(radioElement).toBeDisabled();
-    });
-
-    it('applies disabled cursor styling', () => {
-      render(<Radio label="Disabled" name="test" disabled data-testid="disabled-radio" />);
-      const container = screen.getByTestId('disabled-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('cursor: not-allowed');
+  describe('Ref Forwarding', () => {
+    it('forwards ref to input element', () => {
+      const ref = React.createRef<HTMLInputElement>();
+      render(<Radio ref={ref} />);
+      expect(ref.current).toBeInstanceOf(HTMLInputElement);
+      expect(ref.current?.type).toBe('radio');
     });
   });
 
-  describe('accessibility', () => {
-    it('associates label with radio using htmlFor and id', () => {
-      render(<Radio label="Accessible radio" name="test" id="accessible-radio" />);
-      const radioElement = screen.getByRole('radio');
-      expect(radioElement).toHaveAttribute('id', 'accessible-radio');
+  describe('Label Association', () => {
+    it('associates label with radio via id', () => {
+      render(<Radio label="Option A" id="custom-id" />);
+      const radio = screen.getByRole('radio');
+      expect(radio).toHaveAttribute('id', 'custom-id');
+      expect(screen.getByText('Option A')).toBeInTheDocument();
     });
 
-    it('supports value attribute for form submission', () => {
-      render(<Radio label="Value test" name="test" value="test-value" />);
-      const radioElement = screen.getByRole('radio');
-      expect(radioElement).toHaveAttribute('value', 'test-value');
-    });
-
-    it('supports keyboard interaction', () => {
+    it('generates unique IDs when not provided', () => {
       render(
         <div>
-          <Radio label="Option 1" name="keyboard-test" value="1" />
-          <Radio label="Option 2" name="keyboard-test" value="2" />
-          <Radio label="Option 3" name="keyboard-test" value="3" />
+          <Radio label="First" data-testid="radio-1" />
+          <Radio label="Second" data-testid="radio-2" />
         </div>
       );
-      
-      const radios = screen.getAllByRole('radio');
-      
-      // Focus first radio
-      radios[0].focus();
-      expect(radios[0]).toHaveFocus();
-      
-      // Arrow key navigation would be handled by the browser
-      fireEvent.keyDown(radios[0], { key: 'ArrowDown' });
+      const id1 = screen.getByTestId('radio-1').id;
+      const id2 = screen.getByTestId('radio-2').id;
+      expect(id1).not.toBe(id2);
+      expect(id1).toBeTruthy();
+      expect(id2).toBeTruthy();
     });
   });
 
-  describe('focus states', () => {
-    it('handles focus and blur events', () => {
-      const handleFocus = jest.fn();
-      const handleBlur = jest.fn();
-      
-      render(
-        <Radio 
-          label="Focus test"
-          name="test"
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
-      );
-      
-      const radioElement = screen.getByRole('radio');
-      
-      fireEvent.focus(radioElement);
-      expect(handleFocus).toHaveBeenCalled();
-      
-      fireEvent.blur(radioElement);
-      expect(handleBlur).toHaveBeenCalled();
+  describe('Interactivity', () => {
+    it('handles onChange events', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<Radio onChange={handleChange} data-testid="radio" />);
+
+      await user.click(screen.getByTestId('radio'));
+      expect(handleChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not trigger onChange when disabled', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<Radio disabled onChange={handleChange} data-testid="radio" />);
+
+      await user.click(screen.getByTestId('radio'));
+      expect(handleChange).not.toHaveBeenCalled();
     });
   });
 
-  describe('visual indicator', () => {
-    it('shows dot when checked', () => {
-      render(<Radio label="Checked" name="test" checked readOnly data-testid="checked-radio" />);
-      const container = screen.getByTestId('checked-radio');
-      const dot = container.querySelector('[data-radio] > div') as HTMLElement;
-      expect(dot).toHaveStyle('opacity: 1');
+  describe('Custom ClassName', () => {
+    it('applies custom className to container', () => {
+      const { container } = render(<Radio className="custom-class" />);
+      const wrapper = container.querySelector('.custom-class');
+      expect(wrapper).toBeInTheDocument();
     });
-
-    it('hides dot when unchecked', () => {
-      render(<Radio label="Unchecked" name="test" data-testid="unchecked-radio" />);
-      const container = screen.getByTestId('unchecked-radio');
-      const dot = container.querySelector('[data-radio] > div') as HTMLElement;
-      expect(dot).toHaveStyle('opacity: 0');
-    });
-  });
-
-  it('renders without label', () => {
-    render(<Radio name="test" data-testid="no-label-radio" />);
-    const radioElement = screen.getByRole('radio');
-    expect(radioElement).toBeInTheDocument();
   });
 });

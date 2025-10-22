@@ -13,7 +13,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Label } from './Label';
-import type { LabelProps } from './Label';
 
 describe('Label Component - SSR Compatible', () => {
   describe('SSR Compatibility', () => {

@@ -51,10 +51,6 @@ A flexible layout primitive that accepts style props and can render as any HTML 
       options: ['div', 'section', 'article', 'main', 'aside', 'header', 'footer', 'nav', 'span'],
       description: 'The HTML element to render',
     },
-    isDarkMode: {
-      control: { type: 'boolean' },
-      description: 'Enable dark mode theme',
-    },
     // Spacing
     p: { control: { type: 'text' }, description: 'Padding (all sides)' },
     px: { control: { type: 'text' }, description: 'Padding horizontal (left & right)' },
@@ -248,21 +244,21 @@ export const SemanticTokens: Story = {
         border="1px solid"
         borderColor="border.default"
         borderRadius={4}
-        
       >
         Light Mode - Using semantic tokens
       </Box>
-      <Box
-        p={16}
-        bg="surface.primary"
-        color="text.primary"
-        border="1px solid"
-        borderColor="border.default"
-        borderRadius={4}
-        
-      >
-        Dark Mode - Using semantic tokens
-      </Box>
+      <div data-theme="dark">
+        <Box
+          p={16}
+          bg="surface.primary"
+          color="text.primary"
+          border="1px solid"
+          borderColor="border.default"
+          borderRadius={4}
+        >
+          Dark Mode - Using semantic tokens
+        </Box>
+      </div>
     </div>
   ),
 };

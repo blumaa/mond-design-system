@@ -104,17 +104,13 @@ Pagination component for navigating through large datasets. Built using composab
     },
   },
   decorators: [
-    (Story, context) => {
+    (Story) => {
       const [globals] = useGlobals();
       const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
-      
-      const storyArgs = {
-        ...context.args,
-        isDarkMode: isDark,
-      };
-      
+
       return (
         <div
+          data-theme={isDark ? 'dark' : 'light'}
           style={{
             padding: '2rem',
             backgroundColor: isDark ? '#1a1a1a' : '#ffffff',
@@ -122,7 +118,7 @@ Pagination component for navigating through large datasets. Built using composab
             minWidth: '800px',
           }}
         >
-          <Story args={storyArgs} />
+          <Story />
         </div>
       );
     },

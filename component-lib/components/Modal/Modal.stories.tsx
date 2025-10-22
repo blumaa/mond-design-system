@@ -61,9 +61,6 @@ A flexible modal component for dialogs, confirmations, forms, and content overla
       control: 'select',
       options: ['sm', 'md', 'lg', 'xl', 'full'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     closeOnOverlayClick: {
       control: 'boolean',
     },
@@ -548,11 +545,10 @@ export const DarkMode: Story = {
           Open Dark Mode Modal
         </button>
         
-        <Modal 
-          isOpen={isOpen} 
+        <Modal
+          isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           title="🌙 Dark Mode Modal"
-          
         >
           <p>This modal is rendered in dark mode with appropriate theming.</p>
           <p>The background, text colors, and borders are all adjusted for the dark theme.</p>

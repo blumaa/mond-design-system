@@ -114,10 +114,6 @@ A flexible carousel/slider component that supports single or multiple items, aut
       control: 'select',
       options: ['bottom-center', 'bottom-left', 'bottom-right'],
     },
-    isDarkMode: {
-      description: 'Dark mode styling',
-      control: 'boolean',
-    },
     initialSlide: {
       description: 'Initial slide index',
       control: 'number',
@@ -494,13 +490,19 @@ export const EmptyCarousel: Story = {
 export const DarkMode: Story = {
   args: {
     items: imageItems,
-    isDarkMode: true,
     autoPlay: true,
     autoPlayInterval: 3000,
   },
   parameters: {
     backgrounds: { default: 'dark' },
   },
+  decorators: [
+    (Story) => (
+      <div data-theme="dark">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const FastAnimation: Story = {

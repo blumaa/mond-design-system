@@ -14,7 +14,7 @@ export interface CSSVariables {
  * Recursively traverse semantic tokens and collect CSS variable definitions
  */
 export function traverseSemanticTokens(
-  obj: any,
+  obj: Record<string, unknown>,
   path: string[] = [],
   cssVars: CSSVariables,
   theme: Theme
@@ -41,7 +41,7 @@ export function traverseSemanticTokens(
         }
       } else {
         // Keep traversing nested objects
-        traverseSemanticTokens(value, currentPath, cssVars, theme);
+        traverseSemanticTokens(value as Record<string, unknown>, currentPath, cssVars, theme);
       }
     } else if (typeof value === 'string') {
       // Direct string value (non-theme-aware token)

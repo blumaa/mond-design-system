@@ -1,7 +1,5 @@
 'use client';
 import React, { useState, useRef, useEffect, useId } from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
 import { Box } from '../Box/Box';
 
 export type SelectSize = 'sm' | 'md' | 'lg';
@@ -19,29 +17,28 @@ export interface SelectProps {
    * @default 'md'
    */
   size?: SelectSize;
-  
+
   /**
    * Select variant
    * @default 'default'
    */
   variant?: SelectVariant;
-  
-  
+
   /**
    * Label text
    */
   label?: string;
-  
+
   /**
    * Error message to display
    */
   error?: string;
-  
+
   /**
    * Success message to display
    */
   success?: string;
-  
+
   /**
    * Helper text
    */
@@ -83,66 +80,8 @@ export interface SelectProps {
   id?: string;
 }
 
-const getSizeStyles = (size: SelectSize) => {
-  switch (size) {
-    case 'sm':
-      return {
-        padding: `${spacing[1]} ${spacing[2]}`,
-        fontSize: fontSizes.sm,
-        height: '32px',
-      };
-    case 'md':
-      return {
-        padding: `${spacing[2]} ${spacing[3]}`,
-        fontSize: fontSizes.base,
-        height: '40px',
-      };
-    case 'lg':
-      return {
-        padding: `${spacing[3]} ${spacing[4]}`,
-        fontSize: fontSizes.lg,
-        height: '48px',
-      };
-    default:
-      return {};
-  }
-};
-
-const getVariantStyles = (variant: SelectVariant, theme: ReturnType<typeof useTheme>) => {
-  const baseColors = {
-    background: theme('surface.input'),
-    border: theme('border.default'),
-    text: theme('text.primary'),
-    placeholder: theme('text.secondary'),
-  };
-
-  switch (variant) {
-    case 'error':
-      return {
-        ...baseColors,
-        border: theme('border.error'),
-        focusBorder: theme('border.error'),
-        focusRing: theme('feedback.error.background'),
-      };
-    case 'success':
-      return {
-        ...baseColors,
-        border: theme('border.success'),
-        focusBorder: theme('border.success'),
-        focusRing: theme('feedback.success.background'),
-      };
-    case 'default':
-    default:
-      return {
-        ...baseColors,
-        focusBorder: theme('border.focused'),
-        focusRing: theme('feedback.info.background'),
-      };
-  }
-};
-
 export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
-  ({ 
+  ({
     size = 'md',
     variant = 'default',
     label,
@@ -155,21 +94,20 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     onChange,
     disabled = false,
     className,
-    id
+    id,
   }, _ref) => {
-    const theme = useTheme();
-    const sizeStyles = getSizeStyles(size);
-    const variantStyles = getVariantStyles(variant, theme);
     const generatedId = useId();
     const selectId = id || `select-${generatedId}`;
-    
+
     const [isOpen, setIsOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
-    const optionsRef = useRef<HTMLDivElement>(null);
 
     const selectedOption = options.find(option => option.value === value);
+
+    // Determine effective variant based on error/success props
+    const effectiveVariant = error ? 'error' : success ? 'success' : variant;
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -229,82 +167,6 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       }
     };
 
-    const selectStyles = {
-      position: 'relative' as const,
-      display: 'inline-block',
-      width: '100%',
-    };
-
-    const triggerStyles = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      width: '100%',
-      backgroundColor: variantStyles.background,
-      border: `1px solid ${variantStyles.border}`,
-      borderRadius: radii.md,
-      color: selectedOption ? variantStyles.text : variantStyles.placeholder,
-      fontFamily: fontFamilies.sans,
-      fontWeight: fontWeights.normal,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      outline: 'none',
-      transition: 'all 150ms ease',
-      opacity: disabled ? 0.6 : 1,
-      ...sizeStyles,
-    };
-
-    const dropdownStyles = {
-      position: 'absolute' as const,
-      top: '100%',
-      left: 0,
-      right: 0,
-      zIndex: 1000,
-      marginTop: spacing[1],
-      backgroundColor: theme('surface.elevated'),
-      border: `1px solid ${theme('border.default')}`,
-      borderRadius: radii.md,
-      boxShadow: shadows.lg,
-      maxHeight: '200px',
-      overflowY: 'auto' as const,
-    };
-
-    const optionStyles = (optionIndex: number, option: SelectOption) => ({
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-      padding: `${spacing[2]} ${spacing[3]}`,
-      fontSize: sizeStyles.fontSize,
-      fontFamily: fontFamilies.sans,
-      fontWeight: fontWeights.normal,
-      color: option.disabled ? theme('text.disabled') : theme('text.primary'),
-      backgroundColor: focusedIndex === optionIndex ? theme('surface.overlay') : 'transparent',
-      cursor: option.disabled ? 'not-allowed' : 'pointer',
-      border: 'none',
-      textAlign: 'left' as const,
-      transition: 'background-color 150ms ease',
-    });
-
-    const labelStyles = {
-      display: 'block',
-      marginBottom: spacing[1],
-      fontSize: fontSizes.sm,
-      fontWeight: fontWeights.medium,
-      color: variantStyles.text,
-    };
-
-    const messageStyles = {
-      display: 'block',
-      marginTop: spacing[1],
-      fontSize: fontSizes.sm,
-      color: error ? theme('text.error') : success ? theme('text.success') : theme('text.secondary'),
-    };
-
-    const chevronStyles = {
-      transition: 'transform 150ms ease',
-      transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-      color: theme('text.secondary'),
-    };
-
     const handleTriggerClick = () => {
       if (!disabled) {
         setIsOpen(!isOpen);
@@ -325,55 +187,61 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       }
     };
 
-    const handleFocus = () => {
-      if (triggerRef.current) {
-        triggerRef.current.style.borderColor = variantStyles.focusBorder;
-        triggerRef.current.style.boxShadow = `0 0 0 3px ${variantStyles.focusRing}`;
-      }
-    };
+    // Build class names
+    const selectClassNames = [
+      'mond-select',
+      `mond-select--${size}`,
+      `mond-select--${effectiveVariant}`,
+      isOpen && 'mond-select--open',
+      className,
+    ].filter(Boolean).join(' ');
 
-    const handleBlur = () => {
-      if (triggerRef.current) {
-        triggerRef.current.style.borderColor = variantStyles.border;
-        triggerRef.current.style.boxShadow = 'none';
-      }
-    };
+    const triggerClassNames = [
+      'mond-select__trigger',
+      !selectedOption && 'mond-select__trigger--placeholder',
+    ].filter(Boolean).join(' ');
+
+    // Determine message to display
+    const message = error || success || helperText;
+    const messageClass = error
+      ? 'mond-select__message--error'
+      : success
+        ? 'mond-select__message--success'
+        : 'mond-select__message--helper';
 
     return (
-      <Box className={className}>
+      <Box className="mond-select-container">
         {label && (
-          <Box as="label" style={labelStyles} {...(selectId && { htmlFor: selectId })}>
+          <label htmlFor={selectId} className="mond-select__label">
             {label}
-          </Box>
+          </label>
         )}
-        <Box ref={containerRef} style={selectStyles}>
+        <div ref={containerRef} className={selectClassNames}>
           <button
             ref={triggerRef}
             id={selectId}
             type="button"
-            style={triggerStyles}
+            className={triggerClassNames}
             onClick={handleTriggerClick}
             onKeyDown={handleKeyDown}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             disabled={disabled}
             aria-expanded={isOpen}
             aria-haspopup="listbox"
           >
             <span>{selectedOption ? selectedOption.label : placeholder}</span>
-            <span style={chevronStyles}>
+            <span className="mond-select__chevron">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M4 6l4 4 4-4H4z" />
               </svg>
             </span>
           </button>
-          
+
           {isOpen && (
-            <Box ref={optionsRef} style={dropdownStyles} role="listbox">
+            <div className="mond-select__dropdown" role="listbox">
               {options.map((option, index) => (
                 <button
                   key={option.value}
-                  style={optionStyles(index, option)}
+                  className={`mond-select__option ${focusedIndex === index ? 'mond-select__option--focused' : ''}`}
                   onClick={() => handleOptionClick(option)}
                   disabled={option.disabled}
                   role="option"
@@ -382,13 +250,13 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                   {option.label}
                 </button>
               ))}
-            </Box>
+            </div>
           )}
-        </Box>
-        {(error || success || helperText) && (
-          <span style={messageStyles}>
-            {error || success || helperText}
-          </span>
+        </div>
+        {message && (
+          <div className={`mond-select__message ${messageClass}`}>
+            {message}
+          </div>
         )}
       </Box>
     );

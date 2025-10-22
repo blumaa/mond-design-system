@@ -13,7 +13,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Text } from './Text';
-import type { TextProps } from './Text';
 
 describe('Text Component - SSR Compatible', () => {
   describe('SSR Compatibility', () => {
@@ -297,7 +296,7 @@ describe('Text Component - SSR Compatible', () => {
 
   describe('Backward Compatibility', () => {
     it('does NOT accept isDarkMode prop (removed)', () => {
-      const props = { children: 'Test', isDarkMode: true } as any;
+      const props = { children: 'Test', isDarkMode: true } as React.ComponentProps<typeof Text> & { isDarkMode?: boolean };
       render(<Text {...props} />);
       const text = screen.getByText('Test');
       expect(text).toBeInTheDocument();

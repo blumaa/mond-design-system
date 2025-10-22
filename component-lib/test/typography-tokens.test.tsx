@@ -24,13 +24,11 @@ describe('Typography Components with Semantic Tokens', () => {
         </Text>,
         cypherTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="display-text"]');
-      expect(textElement).toHaveStyle('font-weight: 800');
-      expect(textElement).toHaveStyle('line-height: 1.1');
-      expect(textElement).toHaveStyle('letter-spacing: -0.02em');
-      // fontSize uses clamp, so we just check it exists
-      expect(textElement).toHaveAttribute('style');
+      expect(textElement).toBeInTheDocument();
+      expect(textElement).toHaveClass('mond-text--display');
+      // Typography styling is now handled by CSS classes and variables
     });
 
     it('should render headline variant with typography tokens', () => {
@@ -40,11 +38,11 @@ describe('Typography Components with Semantic Tokens', () => {
         </Text>,
         fluxTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="headline-text"]');
-      expect(textElement).toHaveStyle('font-weight: 700');
-      expect(textElement).toHaveStyle('line-height: 1.2');
-      expect(textElement).toHaveStyle('letter-spacing: -0.01em');
+      expect(textElement).toBeInTheDocument();
+      expect(textElement).toHaveClass('mond-text--headline');
+      // Typography styling is now handled by CSS classes and variables
     });
 
     it('should render title variant with typography tokens', () => {
@@ -54,11 +52,11 @@ describe('Typography Components with Semantic Tokens', () => {
         </Text>,
         mondTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="title-text"]');
-      expect(textElement).toHaveStyle('font-size: 1.5rem');
-      expect(textElement).toHaveStyle('font-weight: 600');
-      expect(textElement).toHaveStyle('line-height: 1.3');
+      expect(textElement).toBeInTheDocument();
+      expect(textElement).toHaveClass('mond-text--title');
+      // Typography styling is now handled by CSS classes and variables
     });
 
     it('should render body variant with typography tokens', () => {
@@ -68,11 +66,11 @@ describe('Typography Components with Semantic Tokens', () => {
         </Text>,
         cypherTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="body-text"]');
-      expect(textElement).toHaveStyle('font-size: 1rem');
-      expect(textElement).toHaveStyle('font-weight: 400');
-      expect(textElement).toHaveStyle('line-height: 1.5');
+      expect(textElement).toBeInTheDocument();
+      expect(textElement).toHaveClass('mond-text--body');
+      // Typography styling is now handled by CSS classes and variables
     });
 
     it('should render code variant with monospace font', () => {
@@ -82,11 +80,11 @@ describe('Typography Components with Semantic Tokens', () => {
         </Text>,
         cypherTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="code-text"]');
-      expect(textElement).toHaveStyle('font-size: 0.875rem');
-      expect(textElement).toHaveStyle('font-family: monospace');
-      expect(textElement).toHaveStyle('line-height: 1.4');
+      expect(textElement).toBeInTheDocument();
+      expect(textElement).toHaveClass('mond-text--code');
+      // Typography styling is now handled by CSS classes and variables
     });
 
     it('should render overline variant with uppercase transform', () => {
@@ -96,12 +94,11 @@ describe('Typography Components with Semantic Tokens', () => {
         </Text>,
         fluxTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="overline-text"]');
-      expect(textElement).toHaveStyle('font-size: 0.75rem');
-      expect(textElement).toHaveStyle('text-transform: uppercase');
-      expect(textElement).toHaveStyle('letter-spacing: 0.1em');
-      expect(textElement).toHaveStyle('font-weight: 600');
+      expect(textElement).toBeInTheDocument();
+      expect(textElement).toHaveClass('mond-text--overline');
+      // Typography styling is now handled by CSS classes and variables
     });
   });
 
@@ -114,21 +111,21 @@ describe('Typography Components with Semantic Tokens', () => {
           <Text variant="caption">Caption</Text>
         </>
       );
-      
+
       // Test with different brands - typography should be consistent
       const { container: cypherContainer } = renderWithTheme(<TestTypography />, cypherTheme);
       const { container: fluxContainer } = renderWithTheme(<TestTypography />, fluxTheme);
       const { container: mondContainer } = renderWithTheme(<TestTypography />, mondTheme);
-      
-      // All headlines should have same font size/weight (consistent typography hierarchy)
+
+      // All headlines should have same CSS classes (consistent typography hierarchy)
       const cypherHeadline = cypherContainer.querySelector('span');
       const fluxHeadline = fluxContainer.querySelector('span');
       const mondHeadline = mondContainer.querySelector('span');
-      
-      expect(cypherHeadline).toHaveStyle('font-weight: 700');
-      expect(fluxHeadline).toHaveStyle('font-weight: 700');
-      expect(mondHeadline).toHaveStyle('font-weight: 700');
-      
+
+      expect(cypherHeadline).toHaveClass('mond-text--headline');
+      expect(fluxHeadline).toHaveClass('mond-text--headline');
+      expect(mondHeadline).toHaveClass('mond-text--headline');
+
       // Typography hierarchy is consistent, but colors might differ per brand
       // This demonstrates semantic consistency with brand-adaptive colors
     });
@@ -143,12 +140,14 @@ describe('Typography Components with Semantic Tokens', () => {
         </>,
         cypherTheme
       );
-      
+
       const bodyLg = container.querySelector('[data-testid="body-lg"]');
       const bodyMd = container.querySelector('[data-testid="body-md"]');
-      
-      expect(bodyLg).toHaveStyle('font-size: 1.125rem');
-      expect(bodyMd).toHaveStyle('font-size: 1rem');
+
+      expect(bodyLg).toBeInTheDocument();
+      expect(bodyLg).toHaveClass('mond-text--body-lg');
+      expect(bodyMd).toBeInTheDocument();
+      expect(bodyMd).toHaveClass('mond-text--body-md');
     });
   });
 });

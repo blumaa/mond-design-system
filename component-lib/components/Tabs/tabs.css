@@ -1,0 +1,113 @@
+/**
+ * Tabs Component Styles
+ */
+
+/* Container */
+.mond-tabs {
+  width: 100%;
+}
+
+/* Tabs List */
+.mond-tabs__list {
+  display: flex;
+  position: relative;
+}
+
+.mond-tabs__list--line {
+  border-bottom: 1px solid var(--mond-border-default);
+  background-color: transparent;
+}
+
+.mond-tabs__list--card {
+  background-color: var(--mond-surface-elevated);
+  border-radius: var(--mond-radii-md);
+  border: 1px solid var(--mond-border-default);
+  overflow: hidden;
+}
+
+/* Tab Trigger (Button) */
+.mond-tabs__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mond-font-family-sans);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 150ms ease;
+  position: relative;
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
+  color: var(--mond-text-secondary);
+}
+
+/* Size variants */
+.mond-tabs__trigger--sm {
+  font-size: var(--mond-font-size-sm);
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  min-height: 32px;
+}
+
+.mond-tabs__trigger--md {
+  font-size: var(--mond-font-size-base);
+  padding: var(--mond-spacing-3) var(--mond-spacing-4);
+  min-height: 40px;
+}
+
+.mond-tabs__trigger--lg {
+  font-size: var(--mond-font-size-lg);
+  padding: var(--mond-spacing-4) var(--mond-spacing-6);
+  min-height: 48px;
+}
+
+/* Active state */
+.mond-tabs__trigger--active {
+  font-weight: var(--mond-font-weight-semibold);
+  color: var(--mond-text-primary);
+}
+
+.mond-tabs__trigger--active.mond-tabs__trigger--card {
+  background-color: var(--mond-interactive-secondary-background);
+  border-radius: var(--mond-radii-md);
+}
+
+/* Disabled state */
+.mond-tabs__trigger--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  color: var(--mond-text-disabled);
+}
+
+/* Hover state (line variant only, not active or disabled) */
+.mond-tabs__trigger--line:hover:not(.mond-tabs__trigger--active):not(:disabled) {
+  color: var(--mond-text-primary);
+  background-color: var(--mond-interactive-ghost-backgroundHover);
+}
+
+/* Active indicator (line variant) */
+.mond-tabs__indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: transparent;
+  transition: background-color 150ms ease;
+}
+
+.mond-tabs__indicator--active {
+  background-color: var(--mond-interactive-primary-background);
+}
+
+/* Tab Content */
+.mond-tabs__content {
+  display: none;
+  padding: var(--mond-spacing-4);
+  color: var(--mond-text-primary);
+  outline: none;
+}
+
+.mond-tabs__content--active {
+  display: block;
+}

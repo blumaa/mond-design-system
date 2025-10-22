@@ -46,9 +46,6 @@ A flexible tooltip component that provides contextual information on hover, focu
       control: 'select',
       options: ['hover', 'focus', 'click'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     disabled: {
       control: 'boolean',
     },

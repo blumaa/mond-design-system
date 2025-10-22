@@ -63,9 +63,6 @@ A customizable dropdown menu component with support for icons, nested items, div
     closeOnSelect: {
       control: 'boolean',
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
   },
 };
 
@@ -435,9 +432,9 @@ export const DarkMode: Story = {
       gap: '2rem'
     }}>
       <div>
-        <h3 style={{ 
-          marginBottom: '1rem', 
-          fontSize: '16px', 
+        <h3 style={{
+          marginBottom: '1rem',
+          fontSize: '16px',
           fontWeight: 600,
           color: 'white'
         }}>
@@ -445,16 +442,15 @@ export const DarkMode: Story = {
         </h3>
         <Dropdown
           options={optionsWithIcons}
-          trigger={<Button variant="outline" isDarkMode>Account Menu</Button>}
-          isDarkMode
+          trigger={<Button variant="outline">Account Menu</Button>}
           onSelect={(value, option) => console.log('Selected:', value, option)}
         />
       </div>
-      
+
       <div>
-        <h3 style={{ 
-          marginBottom: '1rem', 
-          fontSize: '16px', 
+        <h3 style={{
+          marginBottom: '1rem',
+          fontSize: '16px',
           fontWeight: 600,
           color: 'white'
         }}>
@@ -462,14 +458,20 @@ export const DarkMode: Story = {
         </h3>
         <Dropdown
           options={nestedOptions}
-          trigger={<Button variant="primary" isDarkMode>File Menu</Button>}
-          isDarkMode
+          trigger={<Button variant="primary">File Menu</Button>}
           closeOnSelect={false}
           onSelect={(value, option) => console.log('Selected:', value, option)}
         />
       </div>
     </div>
   ),
+  decorators: [
+    (Story) => (
+      <div data-theme="dark">
+        <Story />
+      </div>
+    ),
+  ],
   parameters: {
     backgrounds: {
       default: 'dark',

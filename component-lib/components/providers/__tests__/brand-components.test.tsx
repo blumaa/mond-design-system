@@ -24,9 +24,10 @@ describe('Brand System - Multiple Components', () => {
     expect(button).toBeInTheDocument();
     expect(badge).toBeInTheDocument();
     expect(linkText).toBeInTheDocument();
-    
+
     // All components should render without errors when using CYPHER brand
-    expect(button).toHaveAttribute('data-mond-button');
+    // Button uses CSS classes for styling, not data attributes
+    expect(button).toHaveClass('mond-button');
   });
 
   it('should apply FLUX brand to multiple components', () => {

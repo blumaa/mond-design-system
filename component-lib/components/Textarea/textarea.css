@@ -1,0 +1,89 @@
+.mond-textarea-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mond-spacing-1);
+}
+
+.mond-textarea__label {
+  font-family: var(--mond-font-family-sans);
+  font-size: var(--mond-font-size-sm);
+  font-weight: var(--mond-font-weight-medium);
+  color: var(--mond-text-primary);
+}
+
+.mond-textarea__field {
+  width: 100%;
+  font-family: var(--mond-font-family-sans);
+  color: var(--mond-text-primary);
+  background-color: var(--mond-surface-input);
+  border: 1px solid var(--mond-border-default);
+  border-radius: var(--mond-radii-md);
+  transition: all 150ms ease;
+  outline: none;
+  resize: vertical;
+}
+
+.mond-textarea__field::placeholder {
+  color: var(--mond-text-secondary);
+}
+
+.mond-textarea__field:focus {
+  border-color: var(--mond-brand-interactive-background);
+  box-shadow: 0 0 0 3px var(--mond-feedback-info-background);
+}
+
+.mond-textarea__field:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background-color: var(--mond-surface-disabled);
+}
+
+.mond-textarea--sm .mond-textarea__field {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-sm);
+}
+
+.mond-textarea--md .mond-textarea__field {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-base);
+}
+
+.mond-textarea--lg .mond-textarea__field {
+  padding: var(--mond-spacing-3) var(--mond-spacing-4);
+  font-size: var(--mond-font-size-lg);
+}
+
+.mond-textarea--error .mond-textarea__field {
+  border-color: var(--mond-border-error);
+}
+
+.mond-textarea--error .mond-textarea__field:focus {
+  border-color: var(--mond-border-error);
+  box-shadow: 0 0 0 3px var(--mond-feedback-error-background);
+}
+
+.mond-textarea--success .mond-textarea__field {
+  border-color: var(--mond-border-success);
+}
+
+.mond-textarea--success .mond-textarea__field:focus {
+  border-color: var(--mond-border-success);
+  box-shadow: 0 0 0 3px var(--mond-feedback-success-background);
+}
+
+.mond-textarea__message {
+  font-size: var(--mond-font-size-sm);
+  margin-top: var(--mond-spacing-1);
+}
+
+.mond-textarea__message--error {
+  color: var(--mond-text-error);
+}
+
+.mond-textarea__message--success {
+  color: var(--mond-text-success);
+}
+
+.mond-textarea__message--helper {
+  color: var(--mond-text-secondary);
+}

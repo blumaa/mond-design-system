@@ -1,0 +1,188 @@
+/**
+ * Select Component Styles
+ */
+
+.mond-select-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mond-spacing-1);
+}
+
+/* Label */
+.mond-select__label {
+  font-family: var(--mond-font-family-sans);
+  font-size: var(--mond-font-size-sm);
+  font-weight: var(--mond-font-weight-medium);
+  color: var(--mond-text-primary);
+}
+
+/* Select Wrapper */
+.mond-select {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Trigger Button */
+.mond-select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--mond-surface-input);
+  border: 1px solid var(--mond-border-default);
+  border-radius: var(--mond-radii-md);
+  color: var(--mond-text-primary);
+  font-family: var(--mond-font-family-sans);
+  font-weight: var(--mond-font-weight-normal);
+  cursor: pointer;
+  outline: none;
+  transition: all 150ms ease;
+}
+
+.mond-select__trigger:focus {
+  border-color: var(--mond-brand-interactive-background);
+  box-shadow: 0 0 0 3px var(--mond-feedback-info-background);
+}
+
+.mond-select__trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Placeholder state */
+.mond-select__trigger--placeholder {
+  color: var(--mond-text-secondary);
+}
+
+/* Size Variants */
+.mond-select--sm .mond-select__trigger {
+  padding: var(--mond-spacing-1) var(--mond-spacing-2);
+  font-size: var(--mond-font-size-sm);
+  height: 32px;
+}
+
+.mond-select--md .mond-select__trigger {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-base);
+  height: 40px;
+}
+
+.mond-select--lg .mond-select__trigger {
+  padding: var(--mond-spacing-3) var(--mond-spacing-4);
+  font-size: var(--mond-font-size-lg);
+  height: 48px;
+}
+
+/* Variant States */
+.mond-select--error .mond-select__trigger {
+  border-color: var(--mond-border-error);
+}
+
+.mond-select--error .mond-select__trigger:focus {
+  border-color: var(--mond-border-error);
+  box-shadow: 0 0 0 3px var(--mond-feedback-error-background);
+}
+
+.mond-select--success .mond-select__trigger {
+  border-color: var(--mond-border-success);
+}
+
+.mond-select--success .mond-select__trigger:focus {
+  border-color: var(--mond-border-success);
+  box-shadow: 0 0 0 3px var(--mond-feedback-success-background);
+}
+
+/* Chevron Icon */
+.mond-select__chevron {
+  transition: transform 150ms ease;
+  color: var(--mond-text-secondary);
+  flex-shrink: 0;
+  margin-left: var(--mond-spacing-2);
+}
+
+.mond-select--open .mond-select__chevron {
+  transform: rotate(180deg);
+}
+
+/* Dropdown */
+.mond-select__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  margin-top: var(--mond-spacing-1);
+  background-color: var(--mond-surface-elevated);
+  border: 1px solid var(--mond-border-default);
+  border-radius: var(--mond-radii-md);
+  box-shadow: var(--mond-shadow-lg);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Option */
+.mond-select__option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-family: var(--mond-font-family-sans);
+  font-weight: var(--mond-font-weight-normal);
+  color: var(--mond-text-primary);
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  transition: background-color 150ms ease;
+}
+
+.mond-select__option:hover:not(:disabled) {
+  background-color: var(--mond-surface-overlay);
+}
+
+.mond-select__option--focused {
+  background-color: var(--mond-surface-overlay);
+}
+
+.mond-select__option:disabled {
+  color: var(--mond-text-disabled);
+  cursor: not-allowed;
+}
+
+.mond-select__option[aria-selected="true"] {
+  background-color: var(--mond-surface-overlay);
+  font-weight: var(--mond-font-weight-medium);
+}
+
+/* Size variants for options */
+.mond-select--sm .mond-select__option {
+  font-size: var(--mond-font-size-sm);
+}
+
+.mond-select--md .mond-select__option {
+  font-size: var(--mond-font-size-base);
+}
+
+.mond-select--lg .mond-select__option {
+  font-size: var(--mond-font-size-lg);
+}
+
+/* Messages */
+.mond-select__message {
+  font-family: var(--mond-font-family-sans);
+  font-size: var(--mond-font-size-sm);
+  margin-top: var(--mond-spacing-1);
+}
+
+.mond-select__message--error {
+  color: var(--mond-text-error);
+}
+
+.mond-select__message--success {
+  color: var(--mond-text-success);
+}
+
+.mond-select__message--helper {
+  color: var(--mond-text-secondary);
+}

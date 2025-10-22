@@ -1,8 +1,5 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { radii, fontSizes, fontWeights, fontFamilies, shadows } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
-import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
 
 export type PopoverPlacement =
@@ -46,7 +43,7 @@ export interface PopoverProps {
   placement?: PopoverPlacement;
 
   /**
-   * Offset distance from trigger
+   * Offset distance from trigger in pixels
    * @default 8
    */
   offset?: number;
@@ -80,12 +77,6 @@ export interface PopoverProps {
   contentClassName?: string;
 
   /**
-   * Dark mode
-   * @default false
-   */
-  isDarkMode?: boolean;
-
-  /**
    * Test ID for the popover
    */
   'data-testid'?: string;
@@ -95,89 +86,6 @@ export interface PopoverProps {
    */
   'aria-label'?: string;
 }
-
-const getPlacementStyles = (placement: PopoverPlacement, offset: number = 8) => {
-  switch (placement) {
-    case 'top':
-      return {
-        bottom: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        mb: offset,
-      };
-    case 'top-start':
-      return {
-        bottom: '100%',
-        left: 0,
-        mb: offset,
-      };
-    case 'top-end':
-      return {
-        bottom: '100%',
-        right: 0,
-        mb: offset,
-      };
-    case 'bottom':
-      return {
-        top: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        mt: offset,
-      };
-    case 'bottom-start':
-      return {
-        top: '100%',
-        left: 0,
-        mt: offset,
-      };
-    case 'bottom-end':
-      return {
-        top: '100%',
-        right: 0,
-        mt: offset,
-      };
-    case 'left':
-      return {
-        right: '100%',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        mr: offset,
-      };
-    case 'left-start':
-      return {
-        right: '100%',
-        top: 0,
-        mr: offset,
-      };
-    case 'left-end':
-      return {
-        right: '100%',
-        bottom: 0,
-        mr: offset,
-      };
-    case 'right':
-      return {
-        left: '100%',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        ml: offset,
-      };
-    case 'right-start':
-      return {
-        left: '100%',
-        top: 0,
-        ml: offset,
-      };
-    case 'right-end':
-      return {
-        left: '100%',
-        bottom: 0,
-        ml: offset,
-      };
-    default:
-      return {};
-  }
-};
 
 export const Popover: React.FC<PopoverProps> = ({
   children,
@@ -192,15 +100,12 @@ export const Popover: React.FC<PopoverProps> = ({
   closeOnEscape = true,
   className,
   contentClassName,
-  isDarkMode,
   'data-testid': dataTestId,
   'aria-label': ariaLabel,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(defaultOpen);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const theme = useTheme(isDarkMode);
 
   // Controlled vs uncontrolled state
   const isControlled = controlledIsOpen !== undefined;
@@ -303,53 +208,54 @@ export const Popover: React.FC<PopoverProps> = ({
     };
   }, [isOpen]);
 
-  const placementStyles = getPlacementStyles(placement, offset);
+  // Build class names
+  const containerClassNames = ['mond-popover-container', className].filter(Boolean).join(' ');
+
+  const popoverClassNames = [
+    'mond-popover',
+    `mond-popover--${placement}`,
+    contentClassName,
+  ].filter(Boolean).join(' ');
+
+  // Build inline style for offset (using CSS custom property)
+  const popoverStyle = offset !== 8 ? { '--mond-popover-offset': `${offset}px` } as React.CSSProperties : undefined;
 
   return (
-    <Box
+    <div
       ref={containerRef}
-      className={className}
-      position="relative"
-      display="inline-block"
+      className={containerClassNames}
       data-testid={dataTestId}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Box onClick={handleToggle}>
+      <div
+        onClick={handleToggle}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleToggle();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+      >
         {children}
-      </Box>
+      </div>
 
       {isOpen && (
-        <Box
+        <div
           ref={contentRef}
-          className={contentClassName}
+          className={popoverClassNames}
+          style={popoverStyle}
           role="dialog"
           aria-modal="false"
           aria-label={ariaLabel}
           data-testid={`${dataTestId || 'popover'}-content`}
-          position="absolute"
-          zIndex={1000}
-          p={10}
-          bg="surface.elevated"
-          color="text.primary"
-          border={`1px solid ${theme('border.default')}`}
-          borderRadius={radii.md}
-          fontSize={fontSizes.sm}
-          fontWeight={fontWeights.normal}
-          fontFamily={fontFamilies.sans}
-          minWidth="200px"
-          maxWidth="320px"
-          lineHeight="1.5"
-          boxShadow={shadows.lg}
-          {...placementStyles}
         >
           {trigger === 'hover' && (
-            <Box
-              position="absolute"
-              top={0}
-              right={4}
-              zIndex={1}
-            >
+            <div className="mond-popover__close-container">
               <Button
                 variant="ghost"
                 size="sm"
@@ -360,12 +266,12 @@ export const Popover: React.FC<PopoverProps> = ({
               >
                 ×
               </Button>
-            </Box>
+            </div>
           )}
           {content}
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 

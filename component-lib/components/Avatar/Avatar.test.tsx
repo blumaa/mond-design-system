@@ -14,7 +14,6 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Avatar } from './Avatar';
-import type { AvatarProps } from './Avatar';
 
 describe('Avatar Component - SSR Compatible', () => {
   describe('SSR Compatibility', () => {
@@ -171,7 +170,7 @@ describe('Avatar Component - SSR Compatible', () => {
 
   describe('Backward Compatibility', () => {
     it('does NOT accept isDarkMode prop (removed)', () => {
-      const props = { fallback: 'Test', isDarkMode: true } as any;
+      const props = { fallback: 'Test', isDarkMode: true } as React.ComponentProps<typeof Avatar> & { isDarkMode?: boolean };
       const { container } = render(<Avatar {...props} />);
       expect(container.firstChild).toBeInTheDocument();
     });

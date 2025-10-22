@@ -1,0 +1,182 @@
+/**
+ * Switch Component Styles
+ */
+
+.mond-switch-container {
+  display: inline-flex;
+}
+
+/* Label wrapper */
+.mond-switch__label-wrapper {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--mond-spacing-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.mond-switch--disabled .mond-switch__label-wrapper {
+  cursor: not-allowed;
+}
+
+/* Track wrapper */
+.mond-switch__track-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Hidden native input */
+.mond-switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.mond-switch--disabled .mond-switch__input {
+  cursor: not-allowed;
+}
+
+/* Visual track (background) */
+.mond-switch__track {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--mond-radii-full);
+  background-color: var(--mond-border-default);
+  border: 1px solid transparent;
+  transition: all 200ms ease;
+  position: relative;
+  pointer-events: none;
+}
+
+/* Checked state track */
+.mond-switch--checked .mond-switch__track {
+  background-color: var(--mond-brand-interactive-background);
+}
+
+/* Error state track */
+.mond-switch--error .mond-switch__track {
+  border-color: var(--mond-border-error);
+}
+
+/* Disabled state track */
+.mond-switch--disabled .mond-switch__track {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Visual thumb (sliding circle) */
+.mond-switch__thumb {
+  border-radius: var(--mond-radii-full);
+  background-color: var(--mond-surface-background);
+  box-shadow: var(--mond-shadow-sm);
+  transition: all 200ms ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Checked state thumb */
+.mond-switch--checked .mond-switch__thumb {
+  background-color: var(--mond-text-on-color);
+}
+
+/* Focus visible state */
+.mond-switch__input:focus-visible ~ .mond-switch__track {
+  box-shadow: 0 0 0 3px var(--mond-feedback-info-background);
+}
+
+/* Size Variants - SM */
+.mond-switch--sm .mond-switch__track-wrapper {
+  width: 32px;
+  height: 18px;
+}
+
+.mond-switch--sm .mond-switch__thumb {
+  width: 14px;
+  height: 14px;
+  left: 2px;
+}
+
+.mond-switch--sm.mond-switch--checked .mond-switch__thumb {
+  left: calc(32px - 14px - 2px);
+}
+
+.mond-switch--sm .mond-switch__label-text {
+  font-size: var(--mond-font-size-sm);
+}
+
+/* Size Variants - MD */
+.mond-switch--md .mond-switch__track-wrapper {
+  width: 44px;
+  height: 24px;
+}
+
+.mond-switch--md .mond-switch__thumb {
+  width: 20px;
+  height: 20px;
+  left: 2px;
+}
+
+.mond-switch--md.mond-switch--checked .mond-switch__thumb {
+  left: calc(44px - 20px - 2px);
+}
+
+.mond-switch--md .mond-switch__label-text {
+  font-size: var(--mond-font-size-base);
+}
+
+/* Size Variants - LG */
+.mond-switch--lg .mond-switch__track-wrapper {
+  width: 56px;
+  height: 32px;
+}
+
+.mond-switch--lg .mond-switch__thumb {
+  width: 28px;
+  height: 28px;
+  left: 2px;
+}
+
+.mond-switch--lg.mond-switch--checked .mond-switch__thumb {
+  left: calc(56px - 28px - 2px);
+}
+
+.mond-switch--lg .mond-switch__label-text {
+  font-size: var(--mond-font-size-lg);
+}
+
+/* Label content */
+.mond-switch__label-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.mond-switch__label-text {
+  font-family: var(--mond-font-family-sans);
+  font-weight: var(--mond-font-weight-normal);
+  color: var(--mond-text-primary);
+}
+
+.mond-switch--disabled .mond-switch__label-text {
+  color: var(--mond-text-disabled);
+}
+
+/* Message */
+.mond-switch__message {
+  display: block;
+  margin-top: var(--mond-spacing-1);
+  font-family: var(--mond-font-family-sans);
+  font-size: var(--mond-font-size-sm);
+}
+
+.mond-switch__message--error {
+  color: var(--mond-text-error);
+}
+
+.mond-switch__message--helper {
+  color: var(--mond-text-secondary);
+}

@@ -69,9 +69,6 @@ A versatile popover component for displaying rich interactive content triggered 
         'right-end',
       ],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     closeOnClickOutside: {
       control: 'boolean',
     },

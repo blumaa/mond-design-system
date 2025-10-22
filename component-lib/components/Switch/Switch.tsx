@@ -1,7 +1,5 @@
 'use client';
 import React, { useId } from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
 
 export type SwitchSize = 'sm' | 'md' | 'lg';
 
@@ -22,12 +20,6 @@ export interface SwitchProps {
    * @default 'md'
    */
   size?: SwitchSize;
-
-  /**
-   * Dark mode control for theme resolution
-   * @default false
-   */
-  isDarkMode?: boolean;
 
   /**
    * Label text
@@ -86,42 +78,12 @@ export interface SwitchProps {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-const getSizeStyles = (size: SwitchSize) => {
-  switch (size) {
-    case 'sm':
-      return {
-        width: '32px',
-        height: '18px',
-        thumbSize: '14px',
-        thumbOffset: '2px',
-        fontSize: fontSizes.sm,
-      };
-    case 'md':
-      return {
-        width: '44px',
-        height: '24px',
-        thumbSize: '20px',
-        thumbOffset: '2px',
-        fontSize: fontSizes.base,
-      };
-    case 'lg':
-      return {
-        width: '56px',
-        height: '32px',
-        thumbSize: '28px',
-        thumbOffset: '2px',
-        fontSize: fontSizes.lg,
-      };
-  }
-};
-
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       id,
       'data-testid': dataTestId,
       size = 'md',
-      isDarkMode,
       label,
       helperText,
       error,
@@ -136,137 +98,66 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     },
     ref
   ) => {
-    const theme = useTheme(isDarkMode);
-    const sizeStyles = getSizeStyles(size);
     const generatedId = useId();
     const switchId = id || `switch-${generatedId}`;
 
-    // Container styles
-    const containerStyles: React.CSSProperties = {
-      display: 'inline-flex',
-      alignItems: 'flex-start',
-      gap: spacing[2],
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      userSelect: 'none',
-    };
+    // Build container class names
+    const containerClassNames = [
+      'mond-switch',
+      `mond-switch--${size}`,
+      error && 'mond-switch--error',
+      disabled && 'mond-switch--disabled',
+      checked && 'mond-switch--checked',
+    ].filter(Boolean).join(' ');
 
-    // Hidden checkbox styles - sized exactly to track dimensions
-    const checkboxStyles: React.CSSProperties = {
-      position: 'absolute',
-      opacity: 0,
-      width: sizeStyles.width,
-      height: sizeStyles.height,
-      margin: 0,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      zIndex: 1,
-    };
-
-    // Visual track wrapper
-    const trackWrapperStyles: React.CSSProperties = {
-      position: 'relative',
-      flexShrink: 0,
-      width: sizeStyles.width,
-      height: sizeStyles.height,
-    };
-
-    // Visual track styles
-    const trackStyles: React.CSSProperties = {
-      width: sizeStyles.width,
-      height: sizeStyles.height,
-      borderRadius: radii.full,
-      backgroundColor: checked
-        ? theme('interactive.primary.background')
-        : theme('border.default'),
-      border: `1px solid ${error ? theme('border.error') : 'transparent'}`,
-      transition: 'all 200ms ease',
-      position: 'relative',
-      pointerEvents: 'none',
-      opacity: disabled ? 0.6 : 1,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-    };
-
-    // Visual thumb styles
-    const thumbStyles: React.CSSProperties = {
-      width: sizeStyles.thumbSize,
-      height: sizeStyles.thumbSize,
-      borderRadius: radii.full,
-      backgroundColor: checked
-        ? theme('interactive.primary.text')
-        : theme('surface.background'),
-      boxShadow: theme('effects.shadow.base'),
-      transition: 'all 200ms ease',
-      position: 'absolute',
-      top: '50%',
-      transform: `translateY(-50%) translateX(${
-        checked
-          ? `calc(${sizeStyles.width} - ${sizeStyles.thumbSize} - ${sizeStyles.thumbOffset})`
-          : sizeStyles.thumbOffset
-      })`,
-      pointerEvents: 'none',
-    };
-
-    // Label text styles
-    const labelTextStyles: React.CSSProperties = {
-      fontSize: sizeStyles.fontSize,
-      fontWeight: fontWeights.normal,
-      fontFamily: fontFamilies.sans,
-      color: disabled ? theme('text.disabled') : theme('text.primary'),
-    };
-
-    // Message (helper text or error) styles
-    const messageStyles: React.CSSProperties = {
-      display: 'block',
-      marginTop: spacing[1],
-      fontSize: fontSizes.sm,
-      color: error ? theme('text.error') : theme('text.secondary'),
-    };
-
-    // Focus visible styles - applied via CSS
-    const focusVisibleStyles = `
-      #${switchId}:focus-visible + span {
-        box-shadow: 0 0 0 3px ${theme('feedback.info.background')};
-      }
-    `;
+    // Determine message to display
+    const message = error || helperText;
+    const messageClass = error
+      ? 'mond-switch__message--error'
+      : 'mond-switch__message--helper';
 
     return (
-      <div data-testid={dataTestId}>
-        <style>{focusVisibleStyles}</style>
-
-        <label htmlFor={switchId} style={containerStyles}>
+      <div className="mond-switch-container">
+        <label htmlFor={switchId} className="mond-switch__label-wrapper">
           {/* Switch visual container */}
-          <span style={trackWrapperStyles}>
-            {/* Hidden checkbox - the actual form control */}
-            <input
-              ref={ref}
-              type="checkbox"
-              id={switchId}
-              checked={checked}
-              defaultChecked={defaultChecked}
-              readOnly={readOnly}
-              disabled={disabled}
-              onChange={onChange}
-              onClick={onClick}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              style={checkboxStyles}
-              aria-label={label || 'Switch'}
-            />
+          <div className={containerClassNames}>
+            <div className="mond-switch__track-wrapper">
+              {/* Hidden checkbox - the actual form control */}
+              <input
+                ref={ref}
+                type="checkbox"
+                id={switchId}
+                checked={checked}
+                defaultChecked={defaultChecked}
+                readOnly={readOnly}
+                disabled={disabled}
+                onChange={onChange}
+                onClick={onClick}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                className="mond-switch__input"
+                data-testid={dataTestId}
+                aria-label={label || 'Switch'}
+              />
 
-            {/* Visual track */}
-            <div data-switch-track style={trackStyles}>
-              {/* Visual thumb */}
-              <div style={thumbStyles} />
+              {/* Visual track */}
+              <div className="mond-switch__track">
+                {/* Visual thumb */}
+                <div className="mond-switch__thumb" />
+              </div>
             </div>
-          </span>
+          </div>
 
           {/* Label text and messages */}
           {label && (
-            <span>
-              <span style={labelTextStyles}>{label}</span>
-              {(error || helperText) && (
-                <span style={messageStyles}>{error || helperText}</span>
+            <div className="mond-switch__label-content">
+              <span className="mond-switch__label-text">{label}</span>
+              {message && (
+                <span className={`mond-switch__message ${messageClass}`}>
+                  {message}
+                </span>
               )}
-            </span>
+            </div>
           )}
         </label>
       </div>

@@ -61,9 +61,6 @@ A dropdown select component for choosing from predefined options. Perfect for fo
       control: 'select',
       options: ['default', 'error', 'success'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     disabled: {
       control: 'boolean',
     },
