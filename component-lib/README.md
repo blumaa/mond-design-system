@@ -241,18 +241,34 @@ Some components (Button, Box, Text) support polymorphic rendering via the `as` p
 
 The design system uses CSS variables for all styling, ensuring consistent theming across components.
 
-### Using Design Tokens
+### Using Semantic Color Tokens
 
-**For component props (Box, Text, Heading):**
-Use semantic token paths or direct values:
+Use semantic token paths for theme-aware colors:
 
 ```tsx
-<Box bg="surface.elevated" p={4}>        {/* Semantic token path */}
-<Text color="text.primary">Content</Text>
+// Text colors
+<Text color="text.primary">Primary text</Text>
+<Text color="text.secondary">Secondary text</Text>
+<Text color="text.error">Error message</Text>
+
+// Surface/background colors
+<Box bg="surface.elevated">Elevated surface</Box>
+<Box bg="surface.background">Background</Box>
+
+// Border colors
+<Box borderColor="border.default">Default border</Box>
 ```
 
-**For custom CSS/styles:**
-Use CSS variables directly:
+**Available semantic token categories:**
+- `text.*` - Text colors (primary, secondary, tertiary, error, success, warning, link, inverse, disabled, accent)
+- `surface.*` - Background surfaces (background, elevated, card, input, primary, secondary)
+- `border.*` - Border colors (default, subtle, strong, focused, error, success, warning)
+- `interactive.*` - Interactive elements (used internally by components)
+- `icon.*` - Icon colors (primary, secondary, tertiary, disabled)
+
+### Using Design Tokens in Custom CSS
+
+For custom styles, use CSS variables directly:
 
 ```css
 .my-custom-class {
@@ -262,12 +278,13 @@ Use CSS variables directly:
 }
 ```
 
-**For TypeScript/reference only:**
-Tokens can be imported but are not needed for styling:
+### TypeScript Token Imports
+
+Tokens can be imported for type reference but are NOT needed for styling:
 
 ```tsx
 import { colors, spacing, fontSizes } from '@mond-design-system/theme';
-// Only use for documentation or type references
+// Only use for documentation or type references, not for styling
 ```
 
 ### Typography Scale
@@ -293,7 +310,7 @@ Spacing props accept numbers (converted to pixels) or strings. Use numbers for c
 
 ## Theme Support
 
-All components support light and dark themes via the `ThemeProvider`:
+All components support light and dark themes via the `ThemeProvider`. Themes are controlled globally at the provider level.
 
 ```tsx
 import { ThemeProvider, mondTheme } from '@mond-design-system/theme';
@@ -303,6 +320,7 @@ function App() {
 
   return (
     <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      {/* All components automatically use the theme */}
       <Text semantic="primary">Automatically themed text</Text>
       <Heading level={1} semantic="secondary">Automatically themed heading</Heading>
       <Button variant="primary">Automatically themed button</Button>
