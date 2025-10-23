@@ -27,14 +27,23 @@ pnpm add @mond-design-system/theme
 
 ## 🚀 Quick Start
 
+First, import the base styles:
+
 ```tsx
-import { Text, Heading, Icon, Button } from '@mond-design-system/theme';
+// In your main app file
+import '@mond-design-system/theme/styles.css';
+```
+
+Then use the components:
+
+```tsx
+import { Text, Heading, Button } from '@mond-design-system/theme';
 
 function App() {
   return (
     <div>
       <Heading level={1}>Welcome to Mond Design System</Heading>
-      <Text variant="body-lg" semantic="secondary">
+      <Text variant="body" semantic="secondary">
         A modern design system for building consistent user interfaces.
       </Text>
       <Button variant="primary">Get Started</Button>
@@ -66,12 +75,11 @@ import { Heading } from '@mond-design-system/theme';
 <Heading semantic="secondary">Subtle heading</Heading>
 
 // Additional options
-<Heading 
+<Heading
   level={2}
   weight="medium"
   align="center"
   truncate
-  isDarkMode={false}
 >
   Customized Heading
 </Heading>
@@ -84,8 +92,7 @@ Flexible text component with semantic variants and typography control.
 import { Text } from '@mond-design-system/theme';
 
 // Variants for different content types
-<Text variant="body-lg">Large body text</Text>
-<Text variant="body-md">Default body text</Text>
+<Text variant="body">Default body text</Text>
 <Text variant="body-sm">Small body text</Text>
 <Text variant="caption">Caption text</Text>
 <Text variant="overline">SECTION HEADER</Text>
@@ -125,10 +132,6 @@ import { Icon } from '@mond-design-system/theme';
 <Icon size="md">...</Icon>    // 20px (default)
 <Icon size="2xl">...</Icon>   // 40px
 
-// Colors
-<Icon color="red">...</Icon>
-<Icon color="blue.500">...</Icon>  // Design token
-
 // Decorative icons (hidden from screen readers)
 <Icon decorative>
   <path d="..." />
@@ -149,53 +152,65 @@ Foundational layout primitive with design system props.
 import { Box } from '@mond-design-system/theme';
 
 <Box
-  p="4"              // padding from spacing scale
-  m="2"              // margin from spacing scale
-  bg="blue.50"       // background from color tokens
-  color="text.primary" // semantic color
-  borderRadius="md"   // border radius token
+  p={4}              // padding from spacing scale
+  m={2}              // margin from spacing scale
+  bg="surface.elevated" // semantic background color
+  color="text.primary" // semantic text color
+  borderRadius="8px"  // border radius
   display="flex"
   alignItems="center"
-  isDarkMode={false}
 >
   Content
 </Box>
 ```
 
 #### Other Available Components
-- **Button** - Primary, secondary, and ghost variants
+- **Button** - Primary, outline, ghost, destructive, and warning variants
 - **Input** - Text input with validation states
 - **Textarea** - Multi-line text input
 - **Checkbox** - Checkbox input with labels
 - **Radio** - Radio button input
 - **Select** - Dropdown selection
 - **Switch** - Toggle switch control
-- **Stack** - Vertical layout container
-- **Grid** - CSS Grid layout wrapper
-- **Card** - Content container with elevation
 - **Badge** - Status indicators and labels
 - **Avatar** - User profile images with fallbacks
 - **Tooltip** - Contextual information overlays
 - **Modal** - Dialog overlays
 - **Tabs** - Tab navigation interface
 - **Link** - Styled anchor elements
-- **FormField** - Form field wrapper with labels
-- **FormGroup** - Form section grouping
+- **Divider** - Visual separator
+- **Spinner** - Loading indicator
+- **Tag** - Removable labels
+- **Label** - Form labels
+- **Image** - Image component with loading states
+- **Dropdown** - Dropdown menu
+- **Accordion** - Collapsible content sections
+- **Pagination** - Page navigation
+- **Popover** - Contextual overlays
+- **Carousel** - Image and content carousel
+- **ToastContainer** - Toast notifications
 
 ## 🎨 Design Tokens
 
 ### Colors
+
+Use semantic color tokens for theme-aware styling:
+
 ```tsx
-// Semantic colors (automatically adapt to theme)
+// Semantic text colors
 color="text.primary"        // Main text color
 color="text.secondary"      // Supporting text
-color="surface.background"  // Background surfaces
-color="interactive.primary.background" // Button backgrounds
+color="text.error"          // Error messages
+color="text.success"        // Success messages
 
-// Direct color tokens
-color="blue.500"   // Specific blue shade
-color="gray.100"   // Light gray
-color="red.600"    // Error red
+// Semantic surface colors
+bg="surface.background"     // Background surfaces
+bg="surface.elevated"       // Elevated surfaces
+bg="surface.card"           // Card backgrounds
+
+// Semantic border colors
+borderColor="border.default"  // Default borders
+borderColor="border.focused"  // Focused state
 ```
 
 ### Typography
@@ -208,23 +223,29 @@ fontFamily="sans"    // DM Sans font stack
 
 ### Spacing
 ```tsx
-padding="4"    // 1rem
-margin="8"     // 2rem
-gap="2"        // 0.5rem
+p={4}      // padding: 1rem
+m={8}      // margin: 2rem
+gap={2}    // gap: 0.5rem
 ```
 
 ## 🌙 Theme Support
 
-All components support light and dark themes through the `isDarkMode` prop:
+All components support light and dark themes through the `ThemeProvider`:
 
 ```tsx
-<Text isDarkMode={true} semantic="primary">
-  Dark theme text
-</Text>
+import { ThemeProvider, mondTheme } from '@mond-design-system/theme';
 
-<Heading isDarkMode={darkMode} semantic="secondary">
-  Responsive theme heading
-</Heading>
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <Text semantic="primary">Automatically themed text</Text>
+      <Heading level={1} semantic="secondary">Automatically themed heading</Heading>
+      <Button variant="primary">Automatically themed button</Button>
+    </ThemeProvider>
+  );
+}
 ```
 
 ## 📖 Documentation
