@@ -66,28 +66,23 @@ A collapsible accordion component for organizing content in expandable sections.
     allowToggleOff: {
       control: 'boolean',
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
   },
   decorators: [
-    (Story, context) => {
+    (Story) => {
       const [globals] = useGlobals();
       const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
-      
-      const storyArgs = {
-        ...context.args,
-        isDarkMode: isDark,
-      };
-      
+
       return (
-        <div style={{
-          padding: '2rem',
-          backgroundColor: isDark ? '#27374D' : '#F2F3F4', 
-          borderRadius: '8px',
-          minHeight: '400px',
-        }}>
-          <Story args={storyArgs} />
+        <div
+          data-theme={isDark ? 'dark' : 'light'}
+          style={{
+            padding: '2rem',
+            backgroundColor: isDark ? '#27374D' : '#F2F3F4',
+            borderRadius: '8px',
+            minHeight: '400px',
+          }}
+        >
+          <Story />
         </div>
       );
     },

@@ -1,8 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { radii, fontSizes, fontWeights, fontFamilies } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
-import { Box } from '../Box/Box';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
@@ -13,81 +10,55 @@ export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
    * @default 'md'
    */
   size?: AvatarSize;
-  
-  /**
-   * Dark mode control for theme resolution
-   * @default false
-   */
-  isDarkMode?: boolean;
 
   /**
    * Image source URL
    */
   src?: string;
-  
+
   /**
    * Alt text for the image
    */
   alt?: string;
-  
+
   /**
    * Fallback text (usually initials)
    */
   fallback?: string;
-  
+
   /**
    * Custom fallback content
    */
   children?: React.ReactNode;
 }
 
-const getSizeStyles = (size: AvatarSize) => {
-  switch (size) {
-    case 'xs':
-      return {
-        width: '24px',
-        height: '24px',
-        fontSize: fontSizes.xs,
-      };
-    case 'sm':
-      return {
-        width: '32px',
-        height: '32px',
-        fontSize: fontSizes.sm,
-      };
-    case 'md':
-      return {
-        width: '40px',
-        height: '40px',
-        fontSize: fontSizes.base,
-      };
-    case 'lg':
-      return {
-        width: '48px',
-        height: '48px',
-        fontSize: fontSizes.lg,
-      };
-    case 'xl':
-      return {
-        width: '64px',
-        height: '64px',
-        fontSize: fontSizes.xl,
-      };
-    case '2xl':
-      return {
-        width: '80px',
-        height: '80px',
-        fontSize: fontSizes['2xl'],
-      };
-    default:
-      return {};
-  }
-};
-
+/**
+ * Avatar Component
+ *
+ * A circular avatar component that displays images or fallback content (initials or custom).
+ * Uses CSS variables for theming.
+ *
+ * **SSR-Compatible with Client Features**: Uses 'use client' for image loading state management,
+ * but removes runtime theme resolution in favor of CSS variables.
+ * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
+ *
+ * @example
+ * // Avatar with image
+ * <Avatar src="https://example.com/user.jpg" alt="User Name" />
+ *
+ * @example
+ * // Avatar with fallback initials
+ * <Avatar fallback="John Doe" size="lg" />
+ *
+ * @example
+ * // Avatar with custom fallback content
+ * <Avatar size="md">
+ *   <span>👤</span>
+ * </Avatar>
+ */
 export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
   ({
     size = 'md',
-    isDarkMode,
     src,
     alt,
     fallback,
@@ -96,46 +67,17 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
     'data-testid': dataTestId,
     ...props
   }, ref) => {
-    const theme = useTheme(isDarkMode);
-    const sizeStyles = getSizeStyles(size);
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
 
-    const containerStyles = {
-      position: 'relative' as const,
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: sizeStyles.width,
-      height: sizeStyles.height,
-      borderRadius: radii.full,
-      backgroundColor: theme('surface.elevated'),
-      border: `1px solid ${theme('border.subtle')}`,
-      overflow: 'hidden' as const,
-      flexShrink: 0,
-    };
-
-    const imageStyles = {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover' as const,
-      display: imageLoaded && !imageError ? 'block' : 'none',
-    };
-
-    const fallbackStyles = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '100%',
-      height: '100%',
-      fontSize: sizeStyles.fontSize,
-      fontFamily: fontFamilies.sans,
-      fontWeight: fontWeights.medium,
-      color: theme('text.secondary'),
-      backgroundColor: theme('surface.elevated'),
-      textTransform: 'uppercase' as const,
-      userSelect: 'none' as const,
-    };
+    // Build CSS class names
+    const classNames = [
+      'mond-avatar',
+      `mond-avatar--${size}`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     const handleImageLoad = () => {
       setImageLoaded(true);
@@ -160,33 +102,32 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
     const fallbackContent = children || (fallback ? getInitials(fallback) : '?');
 
     return (
-      <Box
+      <div
         ref={ref}
-        className={className}
+        className={classNames}
         data-testid={dataTestId}
-        style={{
-          ...containerStyles,
-        }}
+        data-size={size}
         {...props}
       >
         {src && (
           <img
             src={src}
             alt={alt || fallback || 'Avatar'}
-            style={imageStyles}
+            className="mond-avatar__image"
+            style={{ display: imageLoaded && !imageError ? 'block' : 'none' }}
             onLoad={handleImageLoad}
             onError={handleImageError}
           />
         )}
         {showFallback && (
-          <Box
-            style={fallbackStyles}
+          <div
+            className="mond-avatar__fallback"
             data-testid={`${dataTestId || 'avatar'}-fallback`}
           >
             {fallbackContent}
-          </Box>
+          </div>
         )}
-      </Box>
+      </div>
     );
   }
 );

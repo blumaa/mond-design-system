@@ -1,7 +1,5 @@
-import { forwardRef, useEffect } from 'react';
+import { forwardRef } from 'react';
 import { Box, BoxProps } from '../Box/Box';
-import { tokens } from '../../tokens';
-import { useThemeContext } from '../providers/ThemeProvider';
 
 export interface SpinnerProps extends Omit<BoxProps, 'children' | 'width' | 'height'> {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -9,86 +7,52 @@ export interface SpinnerProps extends Omit<BoxProps, 'children' | 'width' | 'hei
   label?: string;
 }
 
-const sizeMap = {
-  xs: tokens.spacing['4'], // 1rem
-  sm: tokens.spacing['5'], // 1.25rem  
-  md: tokens.spacing['6'], // 1.5rem
-  lg: tokens.spacing['8'], // 2rem
-  xl: tokens.spacing['10'], // 2.5rem
-};
-
-const getSpinnerColor = (color?: string, isDark?: boolean) => {
-  if (color) return color;
-  return isDark ? tokens.colors.blue['400'] : tokens.colors.blue['600'];
-};
-
-// Inject CSS animation keyframes into the document head
-const injectSpinnerKeyframes = () => {
-  const keyframeId = 'mond-spinner-keyframes';
-  
-  if (document.getElementById(keyframeId)) return;
-  
-  const style = document.createElement('style');
-  style.id = keyframeId;
-  style.textContent = `
-    @keyframes mond-spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  `;
-  document.head.appendChild(style);
-};
-
-export const Spinner = forwardRef<HTMLElement, SpinnerProps>(({
+/**
+ * Spinner Component
+ *
+ * A loading indicator with multiple sizes. Uses CSS animations for rotation.
+ * Uses CSS variables for theming.
+ *
+ * **SSR-Compatible**: Uses CSS classes and CSS animations (no useEffect).
+ * **Theme-Aware**: Automatically responds to data-theme attribute changes.
+ *
+ * @example
+ * <Spinner />
+ *
+ * @example
+ * <Spinner size="lg" label="Loading data..." />
+ */
+export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(({
   size = 'md',
   color,
-  
   label = 'Loading...',
   className = '',
   style,
   ...props
 }, ref) => {
-  const { colorScheme } = useThemeContext();
-  const isDark = colorScheme === 'dark';
-  
-  const spinnerSize = sizeMap[size];
-  const spinnerColor = getSpinnerColor(color, isDark);
-
-  useEffect(() => {
-    injectSpinnerKeyframes();
-  }, []);
+  const classNames = [
+    'mond-spinner',
+    `mond-spinner--${size}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const spinnerStyle = {
-    width: spinnerSize,
-    height: spinnerSize,
-    border: '2px solid transparent',
-    borderTop: `2px solid ${spinnerColor}`,
-    borderRadius: '50%',
-    animation: 'mond-spin 1s linear infinite',
-    position: 'relative' as const,
+    ...(color && { borderTopColor: color }),
     ...style,
   };
 
   return (
     <Box
       ref={ref}
-      className={`mond-spinner ${className}`}
+      className={classNames}
       style={spinnerStyle}
       role="status"
-      aria-label={label}
+      aria-live="polite"
       {...props}
     >
-      <span style={{ 
-        position: 'absolute', 
-        width: '1px', 
-        height: '1px', 
-        padding: '0', 
-        margin: '-1px', 
-        overflow: 'hidden', 
-        clip: 'rect(0, 0, 0, 0)', 
-        whiteSpace: 'nowrap', 
-        border: '0' 
-      }}>
+      <span className="mond-spinner__label">
         {label}
       </span>
     </Box>
@@ -96,3 +60,5 @@ export const Spinner = forwardRef<HTMLElement, SpinnerProps>(({
 });
 
 Spinner.displayName = 'Spinner';
+
+export default Spinner;

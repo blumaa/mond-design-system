@@ -112,16 +112,44 @@ gap="2"        // 0.5rem
 
 ## 🌙 Theme Support
 
-All components support light and dark themes through the `isDarkMode` prop:
+All components support light and dark themes via `ThemeProvider`:
 
 ```tsx
-<Text isDarkMode={true} semantic="primary">
-  Dark theme text
-</Text>
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme, cypherTheme, fluxTheme } from '@mond-design-system/theme';
 
-<Heading isDarkMode={darkMode} semantic="secondary">
-  Responsive theme heading
-</Heading>
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('dark');
+
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <Text semantic="primary">
+        Automatically themed text
+      </Text>
+
+      <Heading semantic="secondary">
+        Automatically themed heading
+      </Heading>
+
+      <Button onClick={() => setColorScheme(colorScheme === 'light' ? 'dark' : 'light')}>
+        Toggle Theme
+      </Button>
+    </ThemeProvider>
+  );
+}
+```
+
+### Brand Theme Support
+Switch between different brand identities (Mond, CYPHER, FLUX):
+
+```tsx
+<ThemeProvider brandTheme={cypherTheme} colorScheme="dark">
+  <Button variant="primary">CYPHER Theme</Button>
+</ThemeProvider>
+
+<ThemeProvider brandTheme={fluxTheme} colorScheme="light">
+  <Button variant="primary">FLUX Theme</Button>
+</ThemeProvider>
 ```
 
 ## 🏗️ Explore the Components

@@ -1,318 +1,216 @@
+/**
+ * Switch Component Tests - SSR-Compatible Version
+ */
+
 import React from 'react';
-import { render, screen, renderWithDarkMode, fireEvent } from '../../test-utils';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { Switch } from './Switch';
 
-describe('Switch Component', () => {
-  it('renders switch with label', () => {
-    render(<Switch label="Enable notifications" />);
-    const labelElement = screen.getByText(/enable notifications/i);
-    const switchElement = screen.getByRole('checkbox');
-    
-    expect(labelElement).toBeInTheDocument();
-    expect(switchElement).toBeInTheDocument();
-  });
-
-  it('handles checked state changes', () => {
-    const handleChange = jest.fn();
-    render(
-      <Switch 
-        label="Test switch" 
-        onChange={handleChange}
-        data-testid="test-switch"
-      />
-    );
-    
-    const switchElement = screen.getByRole('checkbox');
-    fireEvent.click(switchElement);
-    
-    expect(handleChange).toHaveBeenCalled();
-  });
-
-  it('renders in checked state', () => {
-    render(<Switch label="Checked switch" checked readOnly />);
-    const switchElement = screen.getByRole('checkbox');
-    expect(switchElement).toBeChecked();
-  });
-
-  it('renders in unchecked state by default', () => {
-    render(<Switch label="Unchecked switch" />);
-    const switchElement = screen.getByRole('checkbox');
-    expect(switchElement).not.toBeChecked();
-  });
-
-  describe('sizes', () => {
-    it('renders small size correctly', () => {
-      render(<Switch size="sm" label="Small switch" data-testid="sm-switch" />);
-      const container = screen.getByTestId('sm-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('width: 32px');
-        expect(track).toHaveStyle('height: 18px');
-      }
+describe('Switch Component - SSR Compatible', () => {
+  describe('SSR Compatibility', () => {
+    it('renders without ThemeProvider context', () => {
+      const { container } = render(<Switch />);
+      expect(container.querySelector('input[type="checkbox"]')).toBeInTheDocument();
     });
 
-    it('renders medium size correctly', () => {
-      render(<Switch size="md" label="Medium switch" data-testid="md-switch" />);
-      const container = screen.getByTestId('md-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('width: 44px');
-        expect(track).toHaveStyle('height: 24px');
-      }
+    it('uses CSS classes instead of inline styles', () => {
+      const { container } = render(<Switch size="md" />);
+      const wrapper = container.querySelector('.mond-switch');
+      expect(wrapper).toBeInTheDocument();
     });
 
-    it('renders large size correctly', () => {
-      render(<Switch size="lg" label="Large switch" data-testid="lg-switch" />);
-      const container = screen.getByTestId('lg-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('width: 56px');
-        expect(track).toHaveStyle('height: 32px');
-      }
+    it('does not inject styles via style tag', () => {
+      const { container } = render(<Switch />);
+      expect(container.querySelector('style')).not.toBeInTheDocument();
     });
   });
 
-  describe('visual states', () => {
-    it('shows correct background color when checked', () => {
-      render(<Switch label="Checked" checked readOnly data-testid="checked-switch" />);
-      const container = screen.getByTestId('checked-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('background-color: #0284c7');
-      }
+  describe('Basic Rendering', () => {
+    it('renders switch input element', () => {
+      render(<Switch data-testid="switch" />);
+      expect(screen.getByTestId('switch')).toBeInTheDocument();
     });
 
-    it('shows correct background color when unchecked', () => {
-      render(<Switch label="Unchecked" data-testid="unchecked-switch" />);
-      const container = screen.getByTestId('unchecked-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('background-color: #cbd5e1');
-      }
+    it('applies correct display name', () => {
+      expect(Switch.displayName).toBe('Switch');
     });
 
-    it('moves thumb to correct position when checked', () => {
-      render(<Switch label="Checked" checked readOnly data-testid="checked-switch" />);
-      const container = screen.getByTestId('checked-switch');
-      const thumb = container.querySelector('[data-switch-track] > div') as HTMLElement;
-      
-      expect(thumb).not.toBeNull();
-      if (thumb) {
-        // The thumb should be translated to the right when checked
-        expect(thumb).toHaveStyle('transform: translateY(-50%) translateX(calc(44px - 20px - 2px))');
-      }
+    it('renders with label', () => {
+      render(<Switch label="Enable notifications" />);
+      expect(screen.getByText('Enable notifications')).toBeInTheDocument();
     });
 
-    it('positions thumb at start when unchecked', () => {
-      render(<Switch label="Unchecked" data-testid="unchecked-switch" />);
-      const container = screen.getByTestId('unchecked-switch');
-      const thumb = container.querySelector('[data-switch-track] > div') as HTMLElement;
-      
-      expect(thumb).not.toBeNull();
-      if (thumb) {
-        expect(thumb).toHaveStyle('transform: translateY(-50%) translateX(2px)');
-      }
+    it('renders as unchecked by default', () => {
+      render(<Switch data-testid="switch" />);
+      expect(screen.getByTestId('switch')).not.toBeChecked();
+    });
+
+    it('renders as checked when checked prop is true', () => {
+      render(<Switch checked data-testid="switch" onChange={() => {}} />);
+      expect(screen.getByTestId('switch')).toBeChecked();
+    });
+
+    it('uses defaultChecked for uncontrolled component', () => {
+      render(<Switch defaultChecked data-testid="switch" />);
+      expect(screen.getByTestId('switch')).toBeChecked();
     });
   });
 
-  describe('error state', () => {
+  describe('Size Variants', () => {
+    it('applies sm size class', () => {
+      const { container } = render(<Switch size="sm" />);
+      expect(container.querySelector('.mond-switch--sm')).toBeInTheDocument();
+    });
+
+    it('applies md size class (default)', () => {
+      const { container } = render(<Switch size="md" />);
+      expect(container.querySelector('.mond-switch--md')).toBeInTheDocument();
+    });
+
+    it('applies lg size class', () => {
+      const { container } = render(<Switch size="lg" />);
+      expect(container.querySelector('.mond-switch--lg')).toBeInTheDocument();
+    });
+  });
+
+  describe('Error State', () => {
+    it('applies error class when error message provided', () => {
+      const { container } = render(<Switch error="Required" />);
+      expect(container.querySelector('.mond-switch--error')).toBeInTheDocument();
+    });
+
     it('displays error message', () => {
-      render(<Switch label="Required switch" error="This setting is required" />);
-      const errorMessage = screen.getByText(/this setting is required/i);
-      expect(errorMessage).toBeInTheDocument();
+      render(<Switch label="Enable" error="Required" />);
+      expect(screen.getByText('Required')).toBeInTheDocument();
     });
 
-    it('applies error styling', () => {
-      render(
-        <Switch 
-          label="Error switch" 
-          error="Error message"
-          data-testid="error-switch"
-        />
-      );
-      const container = screen.getByTestId('error-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('border: 1px solid #ef4444');
-      }
+    it('error message has error styling class', () => {
+      const { container } = render(<Switch label="Enable" error="Required" />);
+      const message = container.querySelector('.mond-switch__message--error');
+      expect(message).toBeInTheDocument();
     });
   });
 
-  describe('helper text', () => {
+  describe('Helper Text', () => {
     it('displays helper text', () => {
-      render(<Switch label="Email notifications" helperText="Get updates via email" />);
-      const helperText = screen.getByText(/get updates via email/i);
-      expect(helperText).toBeInTheDocument();
+      render(<Switch label="Enable" helperText="Toggle to enable feature" />);
+      expect(screen.getByText('Toggle to enable feature')).toBeInTheDocument();
+    });
+
+    it('helper text has helper styling class', () => {
+      const { container } = render(<Switch label="Enable" helperText="Helper" />);
+      const message = container.querySelector('.mond-switch__message--helper');
+      expect(message).toBeInTheDocument();
+    });
+
+    it('error takes precedence over helper text', () => {
+      render(<Switch label="Enable" error="Error" helperText="Helper" />);
+      expect(screen.getByText('Error')).toBeInTheDocument();
+      expect(screen.queryByText('Helper')).not.toBeInTheDocument();
     });
   });
 
-  describe('dark mode', () => {
-    it('applies dark mode styling', () => {
-      renderWithDarkMode(<Switch label="Dark switch" data-testid="dark-switch" />);
-      const container = screen.getByTestId('dark-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('background-color: #414A4C');
-      }
+  describe('Disabled State', () => {
+    it('applies disabled attribute', () => {
+      render(<Switch disabled data-testid="switch" />);
+      expect(screen.getByTestId('switch')).toBeDisabled();
     });
 
-    it('applies light mode styling by default', () => {
-      render(<Switch label="Light switch" data-testid="light-switch" />);
-      const container = screen.getByTestId('light-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('background-color: #cbd5e1');
-      }
+    it('applies disabled class', () => {
+      const { container } = render(<Switch disabled />);
+      expect(container.querySelector('.mond-switch--disabled')).toBeInTheDocument();
     });
   });
 
-  describe('disabled state', () => {
-    it('renders disabled switch', () => {
-      render(<Switch label="Disabled switch" disabled />);
-      const switchElement = screen.getByRole('checkbox');
-      expect(switchElement).toBeDisabled();
+  describe('Checked State', () => {
+    it('applies checked class when checked', () => {
+      const { container } = render(<Switch checked onChange={() => {}} />);
+      expect(container.querySelector('.mond-switch--checked')).toBeInTheDocument();
     });
 
-    it('applies disabled cursor styling', () => {
-      render(<Switch label="Disabled" disabled data-testid="disabled-switch" />);
-      const container = screen.getByTestId('disabled-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('cursor: not-allowed');
-      }
-    });
-
-    it('applies disabled opacity', () => {
-      render(<Switch label="Disabled" disabled data-testid="disabled-switch" />);
-      const container = screen.getByTestId('disabled-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      expect(track).not.toBeNull();
-      if (track) {
-        expect(track).toHaveStyle('opacity: 0.6');
-      }
+    it('does not apply checked class when unchecked', () => {
+      const { container } = render(<Switch checked={false} onChange={() => {}} />);
+      expect(container.querySelector('.mond-switch--checked')).not.toBeInTheDocument();
     });
   });
 
-  describe('accessibility', () => {
-    it('uses checkbox role for screen readers', () => {
-      render(<Switch label="Accessible switch" />);
-      const switchElement = screen.getByRole('checkbox');
-      expect(switchElement).toBeInTheDocument();
-    });
-
-    it('associates label with switch using htmlFor and id', () => {
-      render(<Switch label="Accessible switch" id="accessible-switch" />);
-      const switchElement = screen.getByRole('checkbox');
-      expect(switchElement).toHaveAttribute('id', 'accessible-switch');
-    });
-
-    it('supports keyboard interaction', () => {
-      const handleChange = jest.fn();
-      render(<Switch label="Keyboard test" onChange={handleChange} />);
-      
-      const switchElement = screen.getByRole('checkbox');
-      switchElement.focus();
-      
-      // Space key should toggle the switch
-      fireEvent.keyDown(switchElement, { key: ' ', code: 'Space' });
-      fireEvent.keyUp(switchElement, { key: ' ', code: 'Space' });
-      
-      expect(switchElement).toHaveFocus();
+  describe('ReadOnly State', () => {
+    it('applies readOnly attribute', () => {
+      render(<Switch readOnly data-testid="switch" />);
+      expect(screen.getByTestId('switch')).toHaveAttribute('readonly');
     });
   });
 
-  describe('focus states', () => {
-    it('handles focus and blur events', () => {
-      const handleFocus = jest.fn();
-      const handleBlur = jest.fn();
-      
+  describe('Ref Forwarding', () => {
+    it('forwards ref to input element', () => {
+      const ref = React.createRef<HTMLInputElement>();
+      render(<Switch ref={ref} />);
+      expect(ref.current).toBeInstanceOf(HTMLInputElement);
+      expect(ref.current?.type).toBe('checkbox');
+    });
+  });
+
+  describe('Label Association', () => {
+    it('associates label with switch via id', () => {
+      render(<Switch label="Enable feature" id="custom-id" />);
+      const switchInput = screen.getByRole('checkbox');
+      expect(switchInput).toHaveAttribute('id', 'custom-id');
+      expect(screen.getByText('Enable feature')).toBeInTheDocument();
+    });
+
+    it('generates unique IDs when not provided', () => {
       render(
-        <Switch 
-          label="Focus test"
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
+        <div>
+          <Switch label="First" data-testid="switch-1" />
+          <Switch label="Second" data-testid="switch-2" />
+        </div>
       );
-      
-      const switchElement = screen.getByRole('checkbox');
-      
-      fireEvent.focus(switchElement);
-      expect(handleFocus).toHaveBeenCalled();
-      
-      fireEvent.blur(switchElement);
-      expect(handleBlur).toHaveBeenCalled();
+      const id1 = screen.getByTestId('switch-1').id;
+      const id2 = screen.getByTestId('switch-2').id;
+      expect(id1).not.toBe(id2);
+      expect(id1).toBeTruthy();
+      expect(id2).toBeTruthy();
     });
   });
 
-  describe('controlled vs uncontrolled', () => {
-    it('works as controlled component', () => {
-      let checked = false;
-      const setChecked = jest.fn((newChecked) => {
-        checked = newChecked;
-      });
-      
-      const { rerender } = render(
-        <Switch 
-          label="Controlled"
-          checked={checked}
-          onChange={(e) => setChecked(e.target.checked)}
-        />
-      );
-      
-      const switchElement = screen.getByRole('checkbox');
-      expect(switchElement).not.toBeChecked();
-      
-      fireEvent.click(switchElement);
-      expect(setChecked).toHaveBeenCalledWith(true);
-      
-      // Rerender with new checked state
-      rerender(
-        <Switch 
-          label="Controlled"
-          checked={true}
-          onChange={(e) => setChecked(e.target.checked)}
-        />
-      );
-      
-      expect(switchElement).toBeChecked();
+  describe('Interactivity', () => {
+    it('handles onChange events', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<Switch onChange={handleChange} data-testid="switch" />);
+
+      await user.click(screen.getByTestId('switch'));
+      expect(handleChange).toHaveBeenCalledTimes(1);
     });
 
-    it('works as uncontrolled component', () => {
-      render(<Switch label="Uncontrolled" defaultChecked />);
-      const switchElement = screen.getByRole('checkbox');
-      expect(switchElement).toBeChecked();
+    it('handles onClick events', async () => {
+      const user = userEvent.setup();
+      const handleClick = jest.fn();
+      render(<Switch onClick={handleClick} data-testid="switch" />);
+
+      await user.click(screen.getByTestId('switch'));
+      expect(handleClick).toHaveBeenCalledTimes(1);
     });
-  });
 
-  it('renders without label', () => {
-    render(<Switch data-testid="no-label-switch" />);
-    const switchElement = screen.getByRole('checkbox');
-    expect(switchElement).toBeInTheDocument();
-  });
+    it('does not trigger onChange when disabled', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<Switch disabled onChange={handleChange} data-testid="switch" />);
 
-  describe('animation and transitions', () => {
-    it('applies transition styles', () => {
-      render(<Switch label="Animated" data-testid="animated-switch" />);
-      const container = screen.getByTestId('animated-switch');
-      const track = container.querySelector('[data-switch-track]') as HTMLElement;
-      const thumb = container.querySelector('[data-switch-track] > div') as HTMLElement;
-      
-      expect(track).not.toBeNull();
-      expect(thumb).not.toBeNull();
-      if (track && thumb) {
-        expect(track).toHaveStyle('transition: all 200ms ease');
-        expect(thumb).toHaveStyle('transition: all 200ms ease');
-      }
+      await user.click(screen.getByTestId('switch'));
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+
+    it('applies readOnly but onChange still fires (browser behavior)', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<Switch readOnly onChange={handleChange} data-testid="switch" />);
+
+      await user.click(screen.getByTestId('switch'));
+      // Note: readonly attribute on checkboxes doesn't prevent onChange in browsers
+      expect(handleChange).toHaveBeenCalled();
     });
   });
 });

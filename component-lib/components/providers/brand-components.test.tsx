@@ -1,11 +1,11 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { ThemeProvider } from '../ThemeProvider';
-import { Button } from '../../Button/Button';
-import { Badge } from '../../Badge/Badge';
-import { Text } from '../../Text/Text';
-import { cypherTheme } from '../../../brands/cypher';
-import { fluxTheme } from '../../../brands/flux';
+import { ThemeProvider } from './ThemeProvider';
+import { Button } from '../Button/Button';
+import { Badge } from '../Badge/Badge';
+import { Text } from '../Text/Text';
+import { cypherTheme } from '../../brands/cypher';
+import { fluxTheme } from '../../brands/flux';
 
 describe('Brand System - Multiple Components', () => {
   it('should apply CYPHER brand to multiple components', () => {
@@ -24,9 +24,10 @@ describe('Brand System - Multiple Components', () => {
     expect(button).toBeInTheDocument();
     expect(badge).toBeInTheDocument();
     expect(linkText).toBeInTheDocument();
-    
+
     // All components should render without errors when using CYPHER brand
-    expect(button).toHaveAttribute('data-mond-button');
+    // Button uses CSS classes for styling, not data attributes
+    expect(button).toHaveClass('mond-button');
   });
 
   it('should apply FLUX brand to multiple components', () => {

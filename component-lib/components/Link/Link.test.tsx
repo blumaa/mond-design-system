@@ -14,25 +14,25 @@ describe('Link Component', () => {
 
   it('renders with default props', () => {
     render(<Link href="/test">Default Link</Link>);
-    
+
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('data-mond-link');
-    expect(link).toHaveStyle('display: inline-flex');
-    expect(link).toHaveStyle('align-items: center');
+    // CSS classes handle all styling
+    expect(link).toHaveClass('mond-link');
   });
 
   it('renders with different sizes', () => {
     const { rerender } = render(<Link href="/test" size="small">Small</Link>);
     let link = screen.getByRole('link');
-    expect(link).toHaveStyle('font-size: 0.875rem'); // fontSizes.sm
+    expect(link).toHaveClass('mond-link--small');
 
     rerender(<Link href="/test" size="medium">Medium</Link>);
     link = screen.getByRole('link');
-    expect(link).toHaveStyle('font-size: 1rem'); // fontSizes.base
+    expect(link).toHaveClass('mond-link--medium');
 
     rerender(<Link href="/test" size="large">Large</Link>);
     link = screen.getByRole('link');
-    expect(link).toHaveStyle('font-size: 1.125rem'); // fontSizes.lg
+    expect(link).toHaveClass('mond-link--large');
   });
 
   it('renders icon-only links correctly', () => {
@@ -154,19 +154,21 @@ describe('Link Component', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it('renders with dark mode', () => {
+  it('renders with dark mode (SSR-compatible)', () => {
     renderWithDarkMode(<Link href="/test">Dark Mode Link</Link>);
-    
+
     const link = screen.getByRole('link');
     expect(link).toBeInTheDocument();
-    expect(link).toHaveStyle('text-decoration-color: #38bdf8'); // blue.400 for dark mode
+    // CSS variables handle theming automatically
+    expect(link).toHaveClass('mond-link');
   });
 
-  it('renders with light mode by default', () => {
+  it('renders with light mode by default (SSR-compatible)', () => {
     render(<Link href="/test">Light Mode Link</Link>);
-    
+
     const link = screen.getByRole('link');
-    expect(link).toHaveStyle('text-decoration-color: #0284c7'); // blue.600 for light mode
+    // CSS variables handle theming automatically
+    expect(link).toHaveClass('mond-link');
   });
 
   it('has proper accessibility attributes', () => {
@@ -198,9 +200,10 @@ describe('Link Component', () => {
 
   it('applies font family from design tokens', () => {
     render(<Link href="/test">Font Link</Link>);
-    
+
     const link = screen.getByRole('link');
-    expect(link).toHaveStyle(`font-family: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif`);
+    // CSS variables handle font-family
+    expect(link).toHaveClass('mond-link');
   });
 
   it('handles empty children gracefully', () => {
@@ -214,31 +217,34 @@ describe('Link Component', () => {
   describe('Size-specific styling', () => {
     it('applies correct gap for small size with content', () => {
       render(<Link href="/test" size="small">Small with gap</Link>);
-      
+
       const link = screen.getByRole('link');
-      expect(link).toHaveStyle('gap: 0.5rem'); // spacing[2]
+      expect(link).toHaveClass('mond-link--small');
+      expect(link).not.toHaveClass('mond-link--icon-only');
     });
 
     it('applies correct gap for medium size with content', () => {
       render(<Link href="/test" size="medium">Medium with gap</Link>);
-      
+
       const link = screen.getByRole('link');
-      expect(link).toHaveStyle('gap: 0.5rem'); // spacing[2]
+      expect(link).toHaveClass('mond-link--medium');
+      expect(link).not.toHaveClass('mond-link--icon-only');
     });
 
     it('applies correct gap for large size with content', () => {
       render(<Link href="/test" size="large">Large with gap</Link>);
-      
+
       const link = screen.getByRole('link');
-      expect(link).toHaveStyle('gap: 0.5rem'); // spacing[2]
+      expect(link).toHaveClass('mond-link--large');
+      expect(link).not.toHaveClass('mond-link--icon-only');
     });
 
     it('does not apply gap for icon-only links', () => {
       const TestIcon = <span>Icon</span>;
       render(<Link href="/test" size="small" iconOnly icon={TestIcon} />);
-      
+
       const link = screen.getByRole('link');
-      expect(link).not.toHaveStyle('gap: 0.5rem');
+      expect(link).toHaveClass('mond-link--icon-only');
     });
   });
 

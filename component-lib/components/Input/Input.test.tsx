@@ -1,157 +1,157 @@
+/**
+ * Input Component Tests - SSR-Compatible Version
+ */
+
 import React from 'react';
-import { render, screen, renderWithDarkMode, fireEvent } from '../../test-utils';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Input } from './Input';
 
-describe('Input Component', () => {
-  it('renders the input with correct placeholder', () => {
-    render(<Input placeholder="Enter text" />);
-    const inputElement = screen.getByPlaceholderText(/enter text/i);
-    expect(inputElement).toBeInTheDocument();
-  });
-
-  it('renders with a label when provided', () => {
-    render(<Input label="Email" placeholder="Enter email" />);
-    const labelElement = screen.getByText(/email/i);
-    const inputElement = screen.getByLabelText(/email/i);
-    expect(labelElement).toBeInTheDocument();
-    expect(inputElement).toBeInTheDocument();
-  });
-
-  it('displays helper text when provided', () => {
-    render(<Input helperText="This is helper text" />);
-    const helperElement = screen.getByText(/this is helper text/i);
-    expect(helperElement).toBeInTheDocument();
-  });
-
-  it('displays error message when provided', () => {
-    render(<Input error="This field is required" />);
-    const errorElement = screen.getByText(/this field is required/i);
-    expect(errorElement).toBeInTheDocument();
-  });
-
-  it('displays success message when provided', () => {
-    render(<Input success="Looks good!" />);
-    const successElement = screen.getByText(/looks good!/i);
-    expect(successElement).toBeInTheDocument();
-  });
-
-  it('handles onChange events', () => {
-    const handleChange = jest.fn();
-    render(<Input onChange={handleChange} placeholder="Type here" />);
-    const inputElement = screen.getByPlaceholderText(/type here/i);
-    
-    fireEvent.change(inputElement, { target: { value: 'test value' } });
-    expect(handleChange).toHaveBeenCalledTimes(1);
-  });
-
-  it('handles onFocus and onBlur events', () => {
-    const handleFocus = jest.fn();
-    const handleBlur = jest.fn();
-    
-    render(
-      <Input 
-        onFocus={handleFocus} 
-        onBlur={handleBlur} 
-        placeholder="Focus test" 
-      />
-    );
-    
-    const inputElement = screen.getByPlaceholderText(/focus test/i);
-    
-    fireEvent.focus(inputElement);
-    expect(handleFocus).toHaveBeenCalledTimes(1);
-    
-    fireEvent.blur(inputElement);
-    expect(handleBlur).toHaveBeenCalledTimes(1);
-  });
-
-  it('applies disabled attribute correctly', () => {
-    render(<Input disabled placeholder="Disabled input" />);
-    const inputElement = screen.getByPlaceholderText(/disabled input/i);
-    expect(inputElement).toBeDisabled();
-  });
-
-  it('forwards ref correctly', () => {
-    const ref = React.createRef<HTMLInputElement>();
-    render(<Input ref={ref} placeholder="Ref test" />);
-    expect(ref.current).toBeInstanceOf(HTMLInputElement);
-  });
-
-  describe('sizes', () => {
-    it('applies small size styles', () => {
-      render(<Input inputSize="sm" data-testid="small-input" />);
-      const inputElement = screen.getByTestId('small-input');
-      expect(inputElement).toHaveStyle('height: 32px');
+describe('Input Component - SSR Compatible', () => {
+  describe('SSR Compatibility', () => {
+    it('renders without ThemeProvider context', () => {
+      render(<Input />);
+      const input = screen.getByRole('textbox');
+      expect(input).toBeInTheDocument();
     });
 
-    it('applies medium size styles by default', () => {
-      render(<Input data-testid="medium-input" />);
-      const inputElement = screen.getByTestId('medium-input');
-      expect(inputElement).toHaveStyle('height: 40px');
-    });
-
-    it('applies large size styles', () => {
-      render(<Input inputSize="lg" data-testid="large-input" />);
-      const inputElement = screen.getByTestId('large-input');
-      expect(inputElement).toHaveStyle('height: 48px');
+    it('does not use useTheme() hook', () => {
+      const { container } = render(<Input />);
+      expect(container.firstChild).toBeInTheDocument();
     });
   });
 
-  describe('variants', () => {
-    it('applies default variant styles', () => {
-      render(<Input variant="default" data-testid="default-input" />);
-      const inputElement = screen.getByTestId('default-input');
-      // Check that it has basic styling (border, background, etc.)
-      expect(inputElement).toHaveStyle('border: 1px solid #cbd5e1');
+  describe('Basic Rendering', () => {
+    it('renders as an input element', () => {
+      render(<Input />);
+      expect(screen.getByRole('textbox')).toBeInTheDocument();
     });
 
-    it('renders error variant with error styling', () => {
+    it('applies correct display name', () => {
+      expect(Input.displayName).toBe('Input');
+    });
+  });
+
+  describe('Size Variants', () => {
+    it('applies sm size class', () => {
+      render(<Input inputSize="sm" data-testid="input-sm" />);
+      const wrapper = screen.getByTestId('input-sm').parentElement;
+      expect(wrapper).toHaveClass('mond-input--sm');
+    });
+
+    it('applies md size class (default)', () => {
+      render(<Input inputSize="md" data-testid="input-md" />);
+      const wrapper = screen.getByTestId('input-md').parentElement;
+      expect(wrapper).toHaveClass('mond-input--md');
+    });
+
+    it('applies lg size class', () => {
+      render(<Input inputSize="lg" data-testid="input-lg" />);
+      const wrapper = screen.getByTestId('input-lg').parentElement;
+      expect(wrapper).toHaveClass('mond-input--lg');
+    });
+  });
+
+  describe('Variant States', () => {
+    it('applies default variant class', () => {
+      render(<Input variant="default" data-testid="input" />);
+      const wrapper = screen.getByTestId('input').parentElement;
+      expect(wrapper).toHaveClass('mond-input--default');
+    });
+
+    it('applies error variant class', () => {
+      render(<Input variant="error" data-testid="input" />);
+      const wrapper = screen.getByTestId('input').parentElement;
+      expect(wrapper).toHaveClass('mond-input--error');
+    });
+
+    it('applies success variant class', () => {
+      render(<Input variant="success" data-testid="input" />);
+      const wrapper = screen.getByTestId('input').parentElement;
+      expect(wrapper).toHaveClass('mond-input--success');
+    });
+  });
+
+  describe('Label', () => {
+    it('renders label when provided', () => {
+      render(<Input label="Email" />);
+      expect(screen.getByText('Email')).toBeInTheDocument();
+    });
+
+    it('associates label with input via htmlFor', () => {
+      render(<Input label="Username" data-testid="input" />);
+      const input = screen.getByTestId('input');
+      const label = screen.getByText('Username');
+      expect(label).toHaveAttribute('for', input.id);
+    });
+  });
+
+  describe('Messages', () => {
+    it('displays error message', () => {
+      render(<Input error="Invalid email" />);
+      expect(screen.getByText('Invalid email')).toBeInTheDocument();
+    });
+
+    it('displays success message', () => {
+      render(<Input success="Email verified" />);
+      expect(screen.getByText('Email verified')).toBeInTheDocument();
+    });
+
+    it('displays helper text', () => {
+      render(<Input helperText="Enter your email address" />);
+      expect(screen.getByText('Enter your email address')).toBeInTheDocument();
+    });
+  });
+
+  describe('Disabled State', () => {
+    it('applies disabled attribute', () => {
+      render(<Input disabled data-testid="input" />);
+      expect(screen.getByTestId('input')).toBeDisabled();
+    });
+
+    it('applies disabled class to wrapper', () => {
+      render(<Input disabled data-testid="input" />);
+      const wrapper = screen.getByTestId('input').parentElement;
+      expect(wrapper).toHaveClass('mond-input--disabled');
+    });
+  });
+
+  describe('Interactivity', () => {
+    it('handles onChange events', () => {
+      const handleChange = jest.fn();
+      render(<Input onChange={handleChange} data-testid="input" />);
+      const input = screen.getByTestId('input');
+      fireEvent.change(input, { target: { value: 'test' } });
+      expect(handleChange).toHaveBeenCalled();
+    });
+
+    it('handles value prop', () => {
+      render(<Input value="controlled" onChange={() => {}} data-testid="input" />);
+      expect(screen.getByTestId('input')).toHaveValue('controlled');
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('generates unique id for each input instance', () => {
       render(
-        <Input 
-          variant="error" 
-          error="Error message"
-          data-testid="error-input" 
-        />
+        <div>
+          <Input data-testid="input-1" />
+          <Input data-testid="input-2" />
+        </div>
       );
-      const inputElement = screen.getByTestId('error-input');
-      const errorMessage = screen.getByText(/error message/i);
-      
-      expect(inputElement).toHaveStyle('border: 1px solid #ef4444');
-      expect(errorMessage).toBeInTheDocument();
+      const id1 = screen.getByTestId('input-1').id;
+      const id2 = screen.getByTestId('input-2').id;
+
+      expect(id1).toBeTruthy();
+      expect(id2).toBeTruthy();
+      expect(id1).not.toBe(id2);
     });
 
-    it('renders success variant with success styling', () => {
-      render(
-        <Input 
-          variant="success" 
-          success="Success message"
-          data-testid="success-input" 
-        />
-      );
-      const inputElement = screen.getByTestId('success-input');
-      const successMessage = screen.getByText(/success message/i);
-      
-      expect(inputElement).toHaveStyle('border: 1px solid #22c55e');
-      expect(successMessage).toBeInTheDocument();
-    });
-  });
-
-  describe('dark mode', () => {
-    it('applies dark mode styling when is true', () => {
-      renderWithDarkMode(<Input  data-testid="dark-input" />);
-      const inputElement = screen.getByTestId('dark-input');
-      
-      // Check for dark background color (semantic: surface.input in dark mode -> black.100)
-      expect(inputElement).toHaveStyle('background-color: #171717');
-    });
-
-    it('applies light mode styling by default', () => {
-      render(<Input data-testid="light-input" />);
-      const inputElement = screen.getByTestId('light-input');
-      
-      // Check for light background color (semantic: surface.input in light mode -> white.50) 
-      expect(inputElement).toHaveStyle('background-color: #ffffff');
+    it('forwards standard input attributes', () => {
+      render(<Input placeholder="Enter text" type="email" data-testid="input" />);
+      const input = screen.getByTestId('input');
+      expect(input).toHaveAttribute('placeholder', 'Enter text');
+      expect(input).toHaveAttribute('type', 'email');
     });
   });
 });

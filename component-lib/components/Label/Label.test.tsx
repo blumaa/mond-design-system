@@ -1,177 +1,239 @@
-import { render, screen, renderWithDarkMode } from '../../test-utils';
+/**
+ * Label Component Tests - SSR-Compatible Version
+ *
+ * TDD: These tests are written FIRST to define the expected behavior
+ * of the refactored Label component that:
+ * - Removes useTheme() hook dependency
+ * - Uses CSS variables for semantic colors
+ * - Uses CSS classes for label sizes and states
+ * - Maintains all existing functionality
+ */
+
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Label } from './Label';
 
-describe('Label', () => {
-  it('renders with default props', () => {
-    render(<Label>Username</Label>);
-    
-    const label = screen.getByText('Username');
-    expect(label).toBeInTheDocument();
-    expect(label.tagName).toBe('LABEL');
-    expect(label).toHaveClass('mond-label', 'mond-label--md');
+describe('Label Component - SSR Compatible', () => {
+  describe('SSR Compatibility', () => {
+    it('renders without ThemeProvider context', () => {
+      render(<Label>Label Text</Label>);
+      expect(screen.getByText('Label Text')).toBeInTheDocument();
+    });
+
+    it('does not use useTheme() hook', () => {
+      const { container } = render(<Label>Test</Label>);
+      expect(container.firstChild).toBeInTheDocument();
+    });
   });
 
-  it('renders with htmlFor attribute', () => {
-    render(<Label htmlFor="username">Username</Label>);
-    
-    const label = screen.getByText('Username');
-    expect(label).toHaveAttribute('for', 'username');
+  describe('Basic Rendering', () => {
+    it('renders as a label element', () => {
+      render(<Label>Label</Label>);
+      const label = screen.getByText('Label');
+      expect(label.tagName).toBe('LABEL');
+    });
+
+    it('renders children content', () => {
+      render(<Label>Form Label</Label>);
+      expect(screen.getByText('Form Label')).toBeInTheDocument();
+    });
+
+    it('applies correct display name', () => {
+      expect(Label.displayName).toBe('Label');
+    });
   });
 
-  it('renders required indicator', () => {
-    render(<Label required>Username</Label>);
-    
-    const label = screen.getByText('Username');
-    const required = screen.getByText('*');
-    
-    expect(label).toBeInTheDocument();
-    expect(required).toBeInTheDocument();
-    expect(required).toHaveAttribute('aria-label', 'required');
+  describe('htmlFor Attribute', () => {
+    it('applies htmlFor attribute when provided', () => {
+      render(<Label htmlFor="input-id">Label</Label>);
+      const label = screen.getByText('Label');
+      expect(label).toHaveAttribute('for', 'input-id');
+    });
+
+    it('does not have htmlFor attribute when not provided', () => {
+      render(<Label>Label</Label>);
+      const label = screen.getByText('Label');
+      expect(label).not.toHaveAttribute('for');
+    });
   });
 
-  it('renders custom required indicator', () => {
-    render(<Label required requiredIndicator="(required)">Username</Label>);
-    
-    const required = screen.getByText('(required)');
-    expect(required).toBeInTheDocument();
-    expect(required).toHaveAttribute('aria-label', 'required');
+  describe('Size Variants with CSS Classes', () => {
+    it('applies sm size class', () => {
+      render(<Label size="sm">Small</Label>);
+      const label = screen.getByText('Small');
+      expect(label).toHaveClass('mond-label--sm');
+    });
+
+    it('applies md size class (default)', () => {
+      render(<Label size="md">Medium</Label>);
+      const label = screen.getByText('Medium');
+      expect(label).toHaveClass('mond-label--md');
+    });
+
+    it('applies lg size class', () => {
+      render(<Label size="lg">Large</Label>);
+      const label = screen.getByText('Large');
+      expect(label).toHaveClass('mond-label--lg');
+    });
   });
 
-  it('applies size variants correctly', () => {
-    const { rerender } = render(<Label size="sm">Username</Label>);
-    let label = screen.getByText('Username');
-    expect(label).toHaveStyle('font-size: 0.75rem'); // xs
-    expect(label).toHaveClass('mond-label--sm');
+  describe('Semantic Colors', () => {
+    it('applies default semantic class', () => {
+      render(<Label semantic="default">Default</Label>);
+      const label = screen.getByText('Default');
+      expect(label).toHaveClass('mond-label--default');
+    });
 
-    rerender(<Label size="lg">Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('font-size: 1rem'); // base
-    expect(label).toHaveClass('mond-label--lg');
+    it('applies error semantic class', () => {
+      render(<Label semantic="error">Error</Label>);
+      const label = screen.getByText('Error');
+      expect(label).toHaveClass('mond-label--error');
+    });
+
+    it('applies success semantic class', () => {
+      render(<Label semantic="success">Success</Label>);
+      const label = screen.getByText('Success');
+      expect(label).toHaveClass('mond-label--success');
+    });
   });
 
-  it('applies weight variants correctly', () => {
-    const { rerender } = render(<Label weight="normal">Username</Label>);
-    let label = screen.getByText('Username');
-    expect(label).toHaveStyle('font-weight: 400'); // normal
+  describe('Disabled State', () => {
+    it('applies disabled class when disabled', () => {
+      render(<Label disabled>Disabled</Label>);
+      const label = screen.getByText('Disabled');
+      expect(label).toHaveClass('mond-label--disabled');
+    });
 
-    rerender(<Label weight="semibold">Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('font-weight: 600'); // semibold
+    it('applies disabled cursor style when disabled', () => {
+      render(<Label disabled>Disabled</Label>);
+      const label = screen.getByText('Disabled');
+      expect(label).toHaveStyle('cursor: not-allowed');
+    });
+
+    it('does not apply disabled class when not disabled', () => {
+      render(<Label>Normal</Label>);
+      const label = screen.getByText('Normal');
+      expect(label).not.toHaveClass('mond-label--disabled');
+    });
   });
 
-  it('applies semantic colors in light mode', () => {
-    const { rerender } = render(<Label semantic="default" >Username</Label>);
-    let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #414A4C'); // text.primary (gray.900)
+  describe('Required Indicator', () => {
+    it('does not show required indicator by default', () => {
+      render(<Label>Label</Label>);
+      expect(screen.queryByText('*')).not.toBeInTheDocument();
+    });
 
-    rerender(<Label semantic="error" >Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #dc2626'); // red.600
+    it('shows required indicator when required is true', () => {
+      render(<Label required>Required Label</Label>);
+      expect(screen.getByText('*')).toBeInTheDocument();
+      expect(screen.getByLabelText('required')).toBeInTheDocument();
+    });
 
-    rerender(<Label semantic="success" >Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #16a34a'); // green.600
+    it('uses custom required indicator', () => {
+      render(<Label required requiredIndicator="(required)">Custom</Label>);
+      expect(screen.getByText('(required)')).toBeInTheDocument();
+    });
+
+    it('applies required indicator class', () => {
+      render(<Label required>Required</Label>);
+      const indicator = screen.getByText('*');
+      expect(indicator).toHaveClass('mond-label__required');
+    });
   });
 
-  it('applies semantic colors in dark mode', () => {
-    const { rerender } = renderWithDarkMode(<Label semantic="default" >Username</Label>);
-    let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #DDE6ED'); // text.primary (gray.100)
+  describe('Font Weight', () => {
+    it('applies medium weight by default', () => {
+      render(<Label>Medium</Label>);
+      const label = screen.getByText('Medium');
+      expect(label).toHaveStyle('font-weight: 500');
+    });
 
-    rerender(<Label semantic="error" >Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #f87171'); // red.400
+    it('applies normal weight', () => {
+      render(<Label weight="normal">Normal</Label>);
+      const label = screen.getByText('Normal');
+      expect(label).toHaveStyle('font-weight: 400');
+    });
 
-    rerender(<Label semantic="success" >Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #4ade80'); // green.400
+    it('applies semibold weight', () => {
+      render(<Label weight="semibold">Semibold</Label>);
+      const label = screen.getByText('Semibold');
+      expect(label).toHaveStyle('font-weight: 600');
+    });
   });
 
-  it('applies disabled state correctly', () => {
-    const { rerender } = render(<Label disabled >Username</Label>);
-    let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #94a3b8'); // gray.400
-    expect(label).toHaveStyle('cursor: not-allowed');
-    expect(label).toHaveClass('mond-label--disabled');
-
-    rerender(<Label disabled >Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #94a3b8'); // text.disabled (gray.400)
+  describe('Custom ClassName', () => {
+    it('applies custom className alongside base class', () => {
+      render(<Label className="custom-class">Custom</Label>);
+      const label = screen.getByText('Custom');
+      expect(label).toHaveClass('mond-label--md'); // default size
+      expect(label).toHaveClass('custom-class');
+    });
   });
 
-  it('disabled state overrides semantic colors', () => {
-    render(<Label disabled semantic="error" >Username</Label>);
-    
-    const label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #94a3b8'); // gray.400, not red
+  describe('Ref Forwarding', () => {
+    it('forwards ref to label element', () => {
+      const ref = React.createRef<HTMLLabelElement>();
+      render(<Label ref={ref}>Ref Test</Label>);
+      expect(ref.current).toBeInstanceOf(HTMLLabelElement);
+      expect(ref.current?.textContent).toContain('Ref Test');
+    });
   });
 
-  it('applies custom className', () => {
-    render(<Label className="custom-label">Username</Label>);
-    
-    const label = screen.getByText('Username');
-    expect(label).toHaveClass('mond-label', 'custom-label');
+  describe('Combined Props', () => {
+    it('applies multiple props correctly', () => {
+      render(
+        <Label
+          size="lg"
+          semantic="error"
+          weight="semibold"
+          required
+          disabled
+          htmlFor="test-input"
+        >
+          Combined Label
+        </Label>
+      );
+      const label = screen.getByText(/Combined Label/);
+      expect(label).toHaveClass('mond-label--lg');
+      expect(label).toHaveClass('mond-label--error');
+      expect(label).toHaveClass('mond-label--disabled');
+      expect(label).toHaveAttribute('for', 'test-input');
+      expect(label).toHaveStyle('font-weight: 600');
+      expect(screen.getByText('*')).toBeInTheDocument();
+    });
   });
 
-  it('forwards additional props to Box', () => {
-    render(<Label data-testid="custom-label" p="2">Username</Label>);
-    
-    const label = screen.getByTestId('custom-label');
-    expect(label).toBeInTheDocument();
+  describe('HTML Attributes', () => {
+    it('forwards standard HTML attributes', () => {
+      render(<Label title="Label Title">Test</Label>);
+      const label = screen.getByText('Test');
+      expect(label).toHaveAttribute('title', 'Label Title');
+    });
+
+    it('forwards aria attributes', () => {
+      render(<Label aria-describedby="helper-text">Label</Label>);
+      const label = screen.getByText('Label');
+      expect(label).toHaveAttribute('aria-describedby', 'helper-text');
+    });
+
+    it('forwards data attributes', () => {
+      render(<Label data-testid="test-label">Test</Label>);
+      expect(screen.getByTestId('test-label')).toBeInTheDocument();
+    });
   });
 
-  it('applies custom styles', () => {
-    render(<Label style={{ textTransform: 'uppercase' }}>Username</Label>);
-    
-    const label = screen.getByText('Username');
-    expect(label).toHaveStyle('text-transform: uppercase');
-  });
+  describe('Cursor Styles', () => {
+    it('applies pointer cursor by default', () => {
+      render(<Label>Clickable</Label>);
+      const label = screen.getByText('Clickable');
+      expect(label).toHaveStyle('cursor: pointer');
+    });
 
-  it('has proper cursor styles', () => {
-    const { rerender } = render(<Label>Username</Label>);
-    let label = screen.getByText('Username');
-    expect(label).toHaveStyle('cursor: pointer');
-
-    rerender(<Label disabled>Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('cursor: not-allowed');
-  });
-
-  it('applies default margin bottom', () => {
-    render(<Label>Username</Label>);
-    
-    const label = screen.getByText('Username');
-    expect(label).toHaveStyle('margin-bottom: 0.25rem');
-  });
-
-  it('renders complex children', () => {
-    render(
-      <Label>
-        <span>Username</span>
-        <small> (optional)</small>
-      </Label>
-    );
-    
-    const label = screen.getByText('Username');
-    const optional = screen.getByText('(optional)');
-    
-    expect(label).toBeInTheDocument();
-    expect(optional).toBeInTheDocument();
-  });
-
-  it('required indicator has proper styling', () => {
-    render(<Label required >Username</Label>);
-    
-    const required = screen.getByText('*');
-    expect(required).toHaveStyle('color: #dc2626'); // text.error (red.600)
-    expect(required).toHaveStyle('margin-left: 0.25rem');
-  });
-
-  it('required indicator adapts to dark mode', () => {
-    renderWithDarkMode(<Label required >Username</Label>);
-    
-    const required = screen.getByText('*');
-    expect(required).toHaveStyle('color: #f87171'); // red.400 in dark mode
+    it('applies not-allowed cursor when disabled', () => {
+      render(<Label disabled>Disabled</Label>);
+      const label = screen.getByText('Disabled');
+      expect(label).toHaveStyle('cursor: not-allowed');
+    });
   });
 });

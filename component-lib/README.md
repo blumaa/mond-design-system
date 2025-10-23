@@ -231,15 +231,28 @@ Many components support polymorphic rendering via the `as` prop, allowing you to
 
 ## Design Tokens
 
+The design system uses CSS variables for all styling, ensuring consistent theming across components.
+
 ### Semantic Colors
+
+All colors are available as CSS variables in your component styles:
+
+```css
+/* Available as CSS variables */
+color: var(--mond-text-primary);                    /* Main text */
+color: var(--mond-text-secondary);                  /* Supporting text */
+background-color: var(--mond-surface-background);   /* Background */
+background-color: var(--mond-surface-elevated);     /* Elevated surfaces */
+background-color: var(--mond-brand-primary);        /* Brand colors */
+```
+
+For TypeScript/Storybook reference, tokens can be imported from:
+
 ```tsx
-// Semantic colors that adapt to light/dark themes
-color="text.primary"                    // Main text
-color="text.secondary"                  // Supporting text
-color="surface.background"              // Background
-color="surface.elevated"                // Elevated surfaces
-color="interactive.primary.background"  // Primary buttons
-color="brand.primary.600"               // Brand colors
+import { colors, spacing, fontSizes } from '@mond-design-system/theme';
+
+// Use for documentation or type references
+const myColor = colors.gray[600];
 ```
 
 ### Typography Scale
@@ -261,24 +274,52 @@ mx="auto"      // Horizontal margin auto
 
 ## Theme Support
 
-All components support light and dark themes:
+All components support light and dark themes via the `ThemeProvider`:
 
 ```tsx
-<Text isDarkMode={true} semantic="primary">
-  Dark theme text
-</Text>
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme';
 
-<Heading isDarkMode={darkMode} semantic="secondary">
-  Responsive theme heading
-</Heading>
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
 
-<Button isDarkMode={isDark} variant="primary">
-  Themed button
-</Button>
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <Text semantic="primary">
+        Automatically themed text
+      </Text>
 
-<Box isDarkMode bg="surface.elevated" p={4}>
-  Themed container
-</Box>
+      <Heading semantic="secondary">
+        Automatically themed heading
+      </Heading>
+
+      <Button variant="primary">
+        Automatically themed button
+      </Button>
+
+      <Box bg="surface.elevated" p={4}>
+        Automatically themed container
+      </Box>
+    </ThemeProvider>
+  );
+}
+```
+
+### Brand Theme Support
+
+The design system supports multiple brand themes (Mond, CYPHER, FLUX):
+
+```tsx
+import { cypherTheme, fluxTheme, mondTheme } from '@mond-design-system/theme';
+
+// Switch between brand themes
+<ThemeProvider brandTheme={cypherTheme} colorScheme="dark">
+  <Button variant="primary">CYPHER Styled Button</Button>
+</ThemeProvider>
+
+<ThemeProvider brandTheme={fluxTheme} colorScheme="light">
+  <Button variant="primary">FLUX Styled Button</Button>
+</ThemeProvider>
 ```
 
 ## Form Examples

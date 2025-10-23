@@ -121,57 +121,54 @@ describe('Select Component', () => {
 
   describe('sizes', () => {
     it('renders small size correctly', () => {
-      render(<Select size="sm" options={mockOptions} data-testid="sm-select" />);
-      const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('font-size: 0.875rem');
-      expect(selectButton).toHaveStyle('height: 32px');
+      const { container } = render(<Select size="sm" options={mockOptions} data-testid="sm-select" />);
+      const selectWrapper = container.querySelector('.mond-select--sm');
+      expect(selectWrapper).toBeInTheDocument();
     });
 
     it('renders medium size correctly', () => {
-      render(<Select size="md" options={mockOptions} data-testid="md-select" />);
-      const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('font-size: 1rem');
-      expect(selectButton).toHaveStyle('height: 40px');
+      const { container } = render(<Select size="md" options={mockOptions} data-testid="md-select" />);
+      const selectWrapper = container.querySelector('.mond-select--md');
+      expect(selectWrapper).toBeInTheDocument();
     });
 
     it('renders large size correctly', () => {
-      render(<Select size="lg" options={mockOptions} data-testid="lg-select" />);
-      const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('font-size: 1.125rem');
-      expect(selectButton).toHaveStyle('height: 48px');
+      const { container } = render(<Select size="lg" options={mockOptions} data-testid="lg-select" />);
+      const selectWrapper = container.querySelector('.mond-select--lg');
+      expect(selectWrapper).toBeInTheDocument();
     });
   });
 
   describe('variants', () => {
     it('renders error variant with error styling', () => {
-      render(
-        <Select 
-          variant="error" 
+      const { container } = render(
+        <Select
+          variant="error"
           options={mockOptions}
           error="Please select an option"
           data-testid="error-select"
         />
       );
-      const selectButton = screen.getByRole('button');
+      const selectWrapper = container.querySelector('.mond-select--error');
       const errorMessage = screen.getByText(/please select an option/i);
-      
-      expect(selectButton).toHaveStyle('border: 1px solid #ef4444');
+
+      expect(selectWrapper).toBeInTheDocument();
       expect(errorMessage).toBeInTheDocument();
     });
 
     it('renders success variant with success styling', () => {
-      render(
-        <Select 
-          variant="success" 
+      const { container } = render(
+        <Select
+          variant="success"
           options={mockOptions}
           success="Good choice!"
           data-testid="success-select"
         />
       );
-      const selectButton = screen.getByRole('button');
+      const selectWrapper = container.querySelector('.mond-select--success');
       const successMessage = screen.getByText(/good choice!/i);
-      
-      expect(selectButton).toHaveStyle('border: 1px solid #22c55e');
+
+      expect(selectWrapper).toBeInTheDocument();
       expect(successMessage).toBeInTheDocument();
     });
   });
@@ -223,16 +220,18 @@ describe('Select Component', () => {
   });
 
   describe('dark mode', () => {
-    it('applies dark mode styling', () => {
+    it('renders correctly in dark mode (SSR-compatible)', () => {
       renderWithDarkMode(<Select options={mockOptions} data-testid="dark-select" />);
       const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('background-color: #171717');
+      // CSS variables handle theming automatically
+      expect(selectButton).toHaveClass('mond-select__trigger');
     });
 
-    it('applies light mode styling by default', () => {
+    it('renders correctly in light mode (SSR-compatible)', () => {
       render(<Select options={mockOptions} data-testid="light-select" />);
       const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('background-color: #ffffff');
+      // CSS variables handle theming automatically
+      expect(selectButton).toHaveClass('mond-select__trigger');
     });
   });
 

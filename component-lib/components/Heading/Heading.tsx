@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import { Box, type BoxProps } from '../Box/Box';
-import { fontSizes, fontWeights, lineHeights, fontFamilies } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
+import { fontWeights, fontFamilies } from '../../tokens';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -9,10 +8,10 @@ export type HeadingSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4x
 
 export type HeadingWeight = keyof typeof fontWeights;
 
-export type HeadingSemantic = 
-  | 'primary' 
-  | 'secondary' 
-  | 'tertiary' 
+export type HeadingSemantic =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
   | 'inverse';
 
 export interface HeadingProps extends Omit<BoxProps, 'as'> {
@@ -54,12 +53,6 @@ export interface HeadingProps extends Omit<BoxProps, 'as'> {
    * Heading content
    */
   children: React.ReactNode;
-
-  /**
-   * Dark mode control for theme resolution
-   * @default false
-   */
-  isDarkMode?: boolean;
 }
 
 const getDefaultSizeForLevel = (level: HeadingLevel): HeadingSize => {
@@ -71,68 +64,31 @@ const getDefaultSizeForLevel = (level: HeadingLevel): HeadingSize => {
     5: 'lg' as HeadingSize,
     6: 'md' as HeadingSize,
   };
-  
+
   return levelSizeMap[level];
 };
 
-const getSizeStyles = (size: HeadingSize) => {
-  const sizeStyleMap = {
-    xs: {
-      fontSize: fontSizes.xs,
-      lineHeight: lineHeights.tight,
-    },
-    sm: {
-      fontSize: fontSizes.sm,
-      lineHeight: lineHeights.tight,
-    },
-    md: {
-      fontSize: fontSizes.base,
-      lineHeight: lineHeights.tight,
-    },
-    lg: {
-      fontSize: fontSizes.lg,
-      lineHeight: lineHeights.tight,
-    },
-    xl: {
-      fontSize: fontSizes.xl,
-      lineHeight: lineHeights.tight,
-    },
-    '2xl': {
-      fontSize: fontSizes['2xl'],
-      lineHeight: lineHeights.tight,
-    },
-    '3xl': {
-      fontSize: fontSizes['3xl'],
-      lineHeight: lineHeights.tight,
-    },
-    '4xl': {
-      fontSize: fontSizes['4xl'],
-      lineHeight: lineHeights.none,
-    },
-    '5xl': {
-      fontSize: fontSizes['5xl'],
-      lineHeight: lineHeights.none,
-    },
-    '6xl': {
-      fontSize: fontSizes['6xl'],
-      lineHeight: lineHeights.none,
-    },
-  };
-
-  return sizeStyleMap[size];
-};
-
-const getSemanticColor = (semantic: HeadingSemantic, theme: ReturnType<typeof useTheme>): string => {
-  const semanticColors = {
-    primary: theme('text.primary'),
-    secondary: theme('text.secondary'),
-    tertiary: theme('text.tertiary'),
-    inverse: theme('text.inverse'),
-  };
-
-  return semanticColors[semantic] || semanticColors.primary;
-};
-
+/**
+ * Heading Component
+ *
+ * A semantic heading component (h1-h6) with flexible sizing and styling.
+ * Uses CSS variables for theming.
+ *
+ * **SSR-Compatible**: Uses CSS classes and CSS variables instead of runtime theme resolution.
+ * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
+ *
+ * @example
+ * // H1 with default sizing
+ * <Heading level={1}>Page Title</Heading>
+ *
+ * @example
+ * // H2 with custom size
+ * <Heading level={2} size="4xl">Large Subtitle</Heading>
+ *
+ * @example
+ * // Semantic colors
+ * <Heading semantic="secondary">Secondary Heading</Heading>
+ */
 export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
   level = 1,
   size,
@@ -141,29 +97,32 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
   align,
   truncate = false,
   children,
+  className,
   color,
-  isDarkMode,
   ...props
 }, ref) => {
-  const theme = useTheme(isDarkMode);
   const headingElement = `h${level}` as keyof React.JSX.IntrinsicElements;
   const effectiveSize = size || getDefaultSizeForLevel(level);
-  const sizeStyles = getSizeStyles(effectiveSize);
-  const semanticColor = getSemanticColor(semantic, theme);
-  
-  // Use custom color if provided, otherwise use semantic color
-  const headingColor = color || semanticColor;
+
+  // Build CSS class names
+  const classNames = [
+    `mond-heading--${effectiveSize}`,
+    `mond-heading--${semantic}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <Box
       as={headingElement}
       ref={ref}
+      className={classNames}
       fontFamily={fontFamilies.sans}
       fontWeight={fontWeights[weight]}
       textAlign={align}
-      color={headingColor}
+      color={color} // Allow custom color to override semantic
       m="0" // Reset default heading margins
-      {...sizeStyles}
       {...(truncate && {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -177,3 +136,5 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
 });
 
 Heading.displayName = 'Heading';
+
+export default Heading;

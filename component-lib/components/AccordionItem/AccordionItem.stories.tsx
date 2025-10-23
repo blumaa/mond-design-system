@@ -87,10 +87,6 @@ A single accordion item that can be expanded and collapsed. Internal component u
       options: ['left', 'right'],
       description: 'Icon position'
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Dark mode styling'
-    },
     itemId: {
       control: 'text',
       description: 'Unique identifier for accessibility'
@@ -210,12 +206,18 @@ export const CustomIcon: Story = {
 // Dark Mode
 export const DarkMode: Story = {
   args: {
-    isDarkMode: true,
     title: 'Dark Mode Accordion'
   },
   parameters: {
     backgrounds: { default: 'dark' }
-  }
+  },
+  decorators: [
+    (Story) => (
+      <div data-theme="dark">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 // Rich Content

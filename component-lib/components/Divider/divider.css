@@ -1,0 +1,74 @@
+/**
+ * Divider Component Styles
+ */
+
+.mond-divider {
+  border: 0;
+  margin: 0;
+}
+
+/* Orientation */
+.mond-divider--horizontal {
+  width: 100%;
+  height: 0;
+  margin-top: var(--mond-spacing-4);
+  margin-bottom: var(--mond-spacing-4);
+}
+
+.mond-divider--vertical {
+  width: 0;
+  height: 100%;
+  margin-left: var(--mond-spacing-4);
+  margin-right: var(--mond-spacing-4);
+  display: inline-block;
+}
+
+/* Variants */
+.mond-divider--default.mond-divider--horizontal {
+  border-top: 1px solid var(--mond-border-default);
+}
+
+.mond-divider--default.mond-divider--vertical {
+  border-left: 1px solid var(--mond-border-default);
+}
+
+.mond-divider--subtle.mond-divider--horizontal {
+  border-top: 1px solid var(--mond-border-subtle);
+}
+
+.mond-divider--subtle.mond-divider--vertical {
+  border-left: 1px solid var(--mond-border-subtle);
+}
+
+.mond-divider--strong.mond-divider--horizontal {
+  border-top: 1px solid var(--mond-border-strong);
+}
+
+.mond-divider--strong.mond-divider--vertical {
+  border-left: 1px solid var(--mond-border-strong);
+}
+
+/* Sizes */
+.mond-divider--sm.mond-divider--horizontal {
+  border-top-width: 1px;
+}
+
+.mond-divider--sm.mond-divider--vertical {
+  border-left-width: 1px;
+}
+
+.mond-divider--md.mond-divider--horizontal {
+  border-top-width: 1px;
+}
+
+.mond-divider--md.mond-divider--vertical {
+  border-left-width: 1px;
+}
+
+.mond-divider--lg.mond-divider--horizontal {
+  border-top-width: 2px;
+}
+
+.mond-divider--lg.mond-divider--vertical {
+  border-left-width: 2px;
+}

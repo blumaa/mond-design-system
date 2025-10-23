@@ -72,10 +72,6 @@ A form label component with support for required indicators, semantic variants, 
       options: ['normal', 'medium', 'semibold'],
       description: 'Font weight variant',
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Whether to use dark theme colors',
-    },
     semantic: {
       control: 'select',
       options: ['default', 'error', 'success'],

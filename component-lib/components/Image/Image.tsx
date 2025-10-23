@@ -1,10 +1,9 @@
+'use client';
 import { forwardRef, useState } from 'react';
-import { Box, BoxProps } from '../Box/Box';
 import { Spinner } from '../Spinner/Spinner';
 import { tokens } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
 
-export interface ImageProps extends Omit<BoxProps, 'as' | 'children'> {
+export interface ImageProps extends React.HTMLAttributes<HTMLDivElement> {
   src: string;
   alt: string;
   width?: string | number;
@@ -18,25 +17,10 @@ export interface ImageProps extends Omit<BoxProps, 'as' | 'children'> {
   onError?: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   loading?: 'eager' | 'lazy';
   crossOrigin?: 'anonymous' | 'use-credentials';
-  /**
-   * Dark mode
-   * @default undefined - falls back to provider colorScheme
-   */
-  isDarkMode?: boolean;
+  imgRef?: React.Ref<HTMLImageElement>;
 }
 
-const getAspectRatioStyle = (aspectRatio: string) => {
-  const ratioMap = {
-    '1:1': '1 / 1',
-    '4:3': '4 / 3', 
-    '16:9': '16 / 9',
-    '3:2': '3 / 2',
-    'auto': 'auto',
-  };
-  return ratioMap[aspectRatio as keyof typeof ratioMap] || 'auto';
-};
-
-export const Image = forwardRef<HTMLImageElement, ImageProps>(({
+export const Image = forwardRef<HTMLDivElement, ImageProps>(({
   src,
   alt,
   width,
@@ -50,13 +34,11 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(({
   onError,
   loading = 'lazy',
   crossOrigin,
-  isDarkMode,
   className = '',
   style,
+  imgRef,
   ...props
 }, ref) => {
-  const theme = useTheme(isDarkMode);
-  
   const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>('loading');
   const [currentSrc, setCurrentSrc] = useState(src);
 
@@ -75,91 +57,74 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(({
     onError?.(event);
   };
 
-  const imageContainerStyle = {
-    position: 'relative' as const,
-    display: 'inline-block',
-    overflow: 'hidden',
-    aspectRatio: getAspectRatioStyle(aspectRatio),
+  // Build class names
+  const containerClassNames = [
+    'mond-image',
+    `mond-image--ratio-${aspectRatio.replace(':', '-')}`,
+    imageState === 'loading' && 'mond-image--loading',
+    imageState === 'error' && 'mond-image--error',
+    className,
+  ].filter(Boolean).join(' ');
+
+  const imgClassNames = [
+    'mond-image__img',
+    `mond-image__img--${fit}`,
+    imageState === 'loaded' && 'mond-image__img--loaded',
+  ].filter(Boolean).join(' ');
+
+  // Build inline styles for container
+  const containerStyle: React.CSSProperties = {
     borderRadius: tokens.radii[borderRadius],
     width: width || (aspectRatio !== 'auto' ? '100%' : undefined),
     height: height || (aspectRatio !== 'auto' ? 'auto' : undefined),
     ...style,
   };
 
-  const imageStyle = {
-    width: '100%',
-    height: '100%',
-    objectFit: fit,
-    display: imageState === 'loaded' ? 'block' : 'none',
-  };
-
-  const spinnerContainerStyle = {
-    position: 'absolute' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    display: imageState === 'loading' && showLoadingSpinner ? 'flex' : 'none',
-  };
-
-  const errorContainerStyle = {
-    position: 'absolute' as const,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    display: imageState === 'error' ? 'flex' : 'none',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme('surface.elevated'),
-    color: theme('text.tertiary'),
-    fontSize: tokens.fontSizes.sm,
-    textAlign: 'center' as const,
-    padding: tokens.spacing['4'],
-  };
-
-  const placeholderStyle = {
-    width: '100%',
-    height: '100%',
+  // Build inline styles for placeholder (only for height override)
+  const placeholderStyle: React.CSSProperties = {
     minHeight: height || '120px',
-    backgroundColor: theme('surface.elevated'),
-    display: imageState === 'loading' && !showLoadingSpinner ? 'block' : 'none',
   };
 
   return (
-    <Box
-      className={`mond-image ${imageState === 'loading' ? 'mond-image--loading' : ''} ${imageState === 'error' ? 'mond-image--error' : ''} ${className}`}
-      style={imageContainerStyle}
+    <div
+      ref={ref}
+      className={containerClassNames}
+      style={containerStyle}
       {...props}
     >
       <img
-        ref={ref}
+        ref={imgRef}
         src={currentSrc}
         alt={alt}
-        style={imageStyle}
+        className={imgClassNames}
         onLoad={handleLoad}
         onError={handleError}
         loading={loading}
         crossOrigin={crossOrigin}
       />
-      
-      {/* Loading state */}
-      <Box style={placeholderStyle} />
-      
+
+      {/* Placeholder (no spinner) */}
+      {!showLoadingSpinner && (
+        <div
+          className="mond-image__placeholder mond-image__placeholder--no-spinner"
+          style={placeholderStyle}
+        />
+      )}
+
       {/* Loading spinner */}
-      <Box style={spinnerContainerStyle}>
-        <Spinner size="md" isDarkMode={isDarkMode} label="Loading image..." />
-      </Box>
-      
+      <div className="mond-image__spinner">
+        <Spinner size="md" label="Loading image..." />
+      </div>
+
       {/* Error state */}
-      <Box style={errorContainerStyle}>
+      <div className="mond-image__error">
         <div>
-          <div style={{ marginBottom: tokens.spacing['2'] }}>
-            <svg 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              style={{ opacity: 0.5 }}
+          <div className="mond-image__error-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
             >
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2" />
               <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
@@ -168,8 +133,8 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(({
           </div>
           <div>Failed to load image</div>
         </div>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 });
 

@@ -1,0 +1,127 @@
+/**
+ * Popover Component Styles
+ */
+
+.mond-popover-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Popover Content */
+.mond-popover {
+  position: absolute;
+  z-index: 1000;
+  padding: var(--mond-spacing-3);
+  background-color: var(--mond-surface-elevated);
+  color: var(--mond-text-primary);
+  border: 1px solid var(--mond-border-default);
+  border-radius: var(--mond-radii-md);
+  font-size: var(--mond-font-size-sm);
+  font-weight: var(--mond-font-weight-normal);
+  font-family: var(--mond-font-family-sans);
+  min-width: 200px;
+  max-width: 320px;
+  line-height: 1.5;
+  box-shadow: var(--mond-shadow-lg);
+}
+
+/* Close Button Container */
+.mond-popover__close-container {
+  position: absolute;
+  top: 0;
+  right: var(--mond-spacing-1);
+  z-index: 1;
+}
+
+/* Placement - Top */
+.mond-popover--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mond-popover--top-start {
+  bottom: 100%;
+  left: 0;
+}
+
+.mond-popover--top-end {
+  bottom: 100%;
+  right: 0;
+}
+
+/* Placement - Bottom */
+.mond-popover--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mond-popover--bottom-start {
+  top: 100%;
+  left: 0;
+}
+
+.mond-popover--bottom-end {
+  top: 100%;
+  right: 0;
+}
+
+/* Placement - Left */
+.mond-popover--left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mond-popover--left-start {
+  right: 100%;
+  top: 0;
+}
+
+.mond-popover--left-end {
+  right: 100%;
+  bottom: 0;
+}
+
+/* Placement - Right */
+.mond-popover--right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mond-popover--right-start {
+  left: 100%;
+  top: 0;
+}
+
+.mond-popover--right-end {
+  left: 100%;
+  bottom: 0;
+}
+
+/* Offset variations - using CSS custom property */
+.mond-popover--top,
+.mond-popover--top-start,
+.mond-popover--top-end {
+  margin-bottom: var(--mond-popover-offset, 8px);
+}
+
+.mond-popover--bottom,
+.mond-popover--bottom-start,
+.mond-popover--bottom-end {
+  margin-top: var(--mond-popover-offset, 8px);
+}
+
+.mond-popover--left,
+.mond-popover--left-start,
+.mond-popover--left-end {
+  margin-right: var(--mond-popover-offset, 8px);
+}
+
+.mond-popover--right,
+.mond-popover--right-start,
+.mond-popover--right-end {
+  margin-left: var(--mond-popover-offset, 8px);
+}

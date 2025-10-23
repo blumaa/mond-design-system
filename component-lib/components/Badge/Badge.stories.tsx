@@ -45,9 +45,6 @@ A versatile badge component for labels, status indicators, and notifications. Pe
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     children: {
       control: 'text',
       description: 'Badge content',

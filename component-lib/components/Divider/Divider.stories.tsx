@@ -66,10 +66,6 @@ A visual separator component that can be horizontal or vertical, with optional t
       options: ['sm', 'md', 'lg'],
       description: 'Thickness of the divider line',
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Whether to use dark theme colors',
-    },
     children: {
       control: 'text',
       description: 'Optional text content to display in the center',

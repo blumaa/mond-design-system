@@ -77,10 +77,6 @@ A complete toast notification system that displays multiple toast messages with 
       control: { type: 'number', min: 1, max: 10 },
       description: 'Maximum number of toasts to display simultaneously',
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Enable dark mode',
-    },
   },
 };
 
@@ -88,14 +84,12 @@ export default meta;
 type Story = StoryObj<typeof ToastContainer>;
 
 // Interactive demo component
-const ToastDemo = ({ 
-  position = 'top-right', 
-  maxToasts = 5, 
-  isDarkMode = false 
+const ToastDemo = ({
+  position = 'top-right',
+  maxToasts = 5,
 }: {
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center';
   maxToasts?: number;
-  isDarkMode?: boolean;
 }) => {
   const [toasts, setToasts] = useState<ToastData[]>([]);
   
@@ -159,11 +153,9 @@ const ToastDemo = ({
   }, []);
 
   return (
-    <Box style={{ 
-      padding: '2rem', 
-      minHeight: '100vh', 
-      backgroundColor: isDarkMode ? '#141414' : '#ffffff',
-      color: isDarkMode ? '#f1f5f9' : '#0f172a',
+    <Box style={{
+      padding: '2rem',
+      minHeight: '100vh',
     }}>
       <Box style={{ marginBottom: '2rem' }}>
         <h2>Toast Container Demo</h2>
@@ -209,7 +201,6 @@ const ToastDemo = ({
         position={position}
         maxToasts={maxToasts}
         onDismiss={handleDismiss}
-        isDarkMode={isDarkMode}
         data-testid="demo-toast-container"
       />
     </Box>
@@ -355,11 +346,14 @@ export const Positions: Story = {
 
 // Dark mode example
 export const DarkMode: Story = {
-  render: (args) => <ToastDemo {...args} />,
+  render: (args) => (
+    <div data-theme="dark" style={{ minHeight: '100vh', backgroundColor: '#141414' }}>
+      <ToastDemo {...args} />
+    </div>
+  ),
   args: {
     position: 'top-right',
     maxToasts: 5,
-    isDarkMode: true,
   },
   parameters: {
     backgrounds: { default: 'dark' },

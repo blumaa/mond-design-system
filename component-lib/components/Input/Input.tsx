@@ -1,7 +1,5 @@
 'use client';
 import React, { useId } from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
 import { Box } from '../Box/Box';
 
 export type InputSize = 'sm' | 'md' | 'lg';
@@ -13,197 +11,109 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
    * @default 'md'
    */
   inputSize?: InputSize;
-  
+
   /**
    * Input variant
    * @default 'default'
    */
   variant?: InputVariant;
-  
-  
+
   /**
    * Label for the input
    */
   label?: string;
-  
+
   /**
    * Error message to display
    */
   error?: string;
-  
+
   /**
    * Success message to display
    */
   success?: string;
-  
+
   /**
    * Helper text
    */
   helperText?: string;
-
-  /**
-   * Dark mode control for theme resolution
-   * @default false
-   */
-  isDarkMode?: boolean;
 }
 
-const getSizeStyles = (size: InputSize) => {
-  switch (size) {
-    case 'sm':
-      return {
-        padding: `${spacing[1]} ${spacing[2]}`,
-        fontSize: fontSizes.sm,
-        height: '32px',
-      };
-    case 'md':
-      return {
-        padding: `${spacing[2]} ${spacing[3]}`,
-        fontSize: fontSizes.base,
-        height: '40px',
-      };
-    case 'lg':
-      return {
-        padding: `${spacing[3]} ${spacing[4]}`,
-        fontSize: fontSizes.lg,
-        height: '48px',
-      };
-    default:
-      return {};
-  }
-};
+/**
+ * Input Component
+ *
+ * A text input component with labels, validation states, and helper text.
+ * Uses CSS variables for theming.
+ *
+ * **SSR-Compatible**: Keeps 'use client' for interactivity but uses CSS variables for theming.
+ * **Theme-Aware**: Automatically responds to data-theme attribute changes.
+ *
+ * @example
+ * <Input label="Email" type="email" placeholder="you@example.com" />
+ *
+ * @example
+ * <Input label="Password" type="password" error="Password is required" variant="error" />
+ */
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(({
+  inputSize = 'md',
+  variant = 'default',
+  label,
+  error,
+  success,
+  helperText,
+  disabled,
+  id: providedId,
+  className,
+  ...props
+}, ref) => {
+  const generatedId = useId();
+  const id = providedId || generatedId;
 
-const getVariantStyles = (variant: InputVariant, theme: ReturnType<typeof useTheme>) => {
-  const baseColors = {
-    background: theme('surface.input'),
-    border: theme('border.default'),
-    text: theme('text.primary'),
-    placeholder: theme('text.secondary'),
-  };
+  // Determine variant based on error/success
+  const effectiveVariant = error ? 'error' : success ? 'success' : variant;
 
-  switch (variant) {
-    case 'error':
-      return {
-        ...baseColors,
-        border: theme('border.error'),
-        focusBorder: theme('border.error'),
-        focusRing: theme('feedback.error.background'),
-      };
-    case 'success':
-      return {
-        ...baseColors,
-        border: theme('border.success'),
-        focusBorder: theme('border.success'),
-        focusRing: theme('feedback.success.background'),
-      };
-    case 'default':
-    default:
-      return {
-        ...baseColors,
-        focusBorder: theme('border.focused'),
-        focusRing: theme('feedback.info.background'),
-      };
-  }
-};
+  // Build wrapper class names
+  const wrapperClassNames = [
+    'mond-input',
+    `mond-input--${inputSize}`,
+    `mond-input--${effectiveVariant}`,
+    disabled && 'mond-input--disabled',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ 
-    inputSize = 'md', 
-    variant = 'default',
-    label,
-    error,
-    success,
-    helperText,
-    isDarkMode,
-    className,
-    ...props 
-  }, ref) => {
-    const theme = useTheme(isDarkMode);
-    const sizeStyles = getSizeStyles(inputSize);
-    const variantStyles = getVariantStyles(variant, theme);
-    const generatedId = useId();
-    const inputId = props.id || `input-${generatedId}`;
+  // Get message to display
+  const message = error || success || helperText;
+  const messageClass = error
+    ? 'mond-input__message--error'
+    : success
+    ? 'mond-input__message--success'
+    : 'mond-input__message--helper';
 
-    const inputStyles = {
-      // Layout
-      display: 'block',
-      width: '100%',
-      boxSizing: 'border-box' as const,
-      
-      // Typography
-      fontFamily: fontFamilies.sans,
-      fontWeight: fontWeights.normal,
-      
-      // Appearance
-      backgroundColor: variantStyles.background,
-      border: `1px solid ${variantStyles.border}`,
-      borderRadius: radii.md,
-      color: variantStyles.text,
-      
-      // Sizing
-      ...sizeStyles,
-      
-      // States
-      outline: 'none',
-      transition: 'all 150ms ease',
-      
-      // Placeholder
-      '::placeholder': {
-        color: variantStyles.placeholder,
-      },
-    };
-
-
-    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-      e.target.style.borderColor = variantStyles.focusBorder;
-      e.target.style.boxShadow = `0 0 0 3px ${variantStyles.focusRing}`;
-      props.onFocus?.(e);
-    };
-
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      e.target.style.borderColor = variantStyles.border;
-      e.target.style.boxShadow = 'none';
-      props.onBlur?.(e);
-    };
-
-    return (
-      <Box className={className}>
-        {label && (
-          <Box
-            as="label"
-            display="block"
-            mb={1}
-            fontSize={14}
-            fontWeight="medium"
-            color={variantStyles.text}
-            style={{ cursor: 'pointer' }}
-            {...(inputId && { htmlFor: inputId })}
-          >
-            {label}
-          </Box>
-        )}
+  return (
+    <Box className="mond-input-container">
+      {label && (
+        <label htmlFor={id} className="mond-input__label">
+          {label}
+        </label>
+      )}
+      <div className={wrapperClassNames}>
         <input
           ref={ref}
-          id={inputId}
-          style={inputStyles}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          id={id}
+          className={`mond-input__field ${className || ''}`}
+          disabled={disabled}
           {...props}
         />
-        {(error || success || helperText) && (
-          <Box
-            display="block"
-            mt={1}
-            fontSize={12}
-            color={error ? theme('text.error') : success ? theme('text.success') : theme('text.secondary')}
-          >
-            {error || success || helperText}
-          </Box>
-        )}
-      </Box>
-    );
-  }
-);
+      </div>
+      {message && (
+        <div className={`mond-input__message ${messageClass}`}>
+          {message}
+        </div>
+      )}
+    </Box>
+  );
+});
 
 Input.displayName = 'Input';
 

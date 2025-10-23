@@ -1,9 +1,8 @@
-'use client';
-
 import { ReactNode } from "react";
 import { JetBrains_Mono } from "next/font/google";
 import { ThemeProvider, Box } from "@mond-design-system/theme";
 import { cypherTheme } from "@mond-design-system/theme";
+import "@mond-design-system/theme/styles.css";
 import { Navigation } from "../components/Navigation";
 
 const jetbrainsMono = JetBrains_Mono({

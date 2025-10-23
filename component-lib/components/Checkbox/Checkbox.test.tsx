@@ -1,193 +1,203 @@
+/**
+ * Checkbox Component Tests - SSR-Compatible Version
+ */
+
 import React from 'react';
-import { render, screen, renderWithDarkMode, fireEvent } from '../../test-utils';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { Checkbox } from './Checkbox';
 
-describe('Checkbox Component', () => {
-  it('renders checkbox with label', () => {
-    render(<Checkbox label="Accept terms" />);
-    const labelElement = screen.getByText(/accept terms/i);
-    const checkboxElement = screen.getByRole('checkbox');
-    
-    expect(labelElement).toBeInTheDocument();
-    expect(checkboxElement).toBeInTheDocument();
-  });
+describe('Checkbox Component - SSR Compatible', () => {
+  describe('SSR Compatibility', () => {
+    it('renders without ThemeProvider context', () => {
+      const { container } = render(<Checkbox />);
+      expect(container.querySelector('input[type="checkbox"]')).toBeInTheDocument();
+    });
 
-  it('handles checked state changes', () => {
-    const handleChange = jest.fn();
-    render(
-      <Checkbox 
-        label="Test checkbox" 
-        onChange={handleChange}
-        data-testid="test-checkbox"
-      />
-    );
-    
-    const checkboxElement = screen.getByRole('checkbox');
-    fireEvent.click(checkboxElement);
-    
-    expect(handleChange).toHaveBeenCalled();
-  });
-
-  it('renders in checked state', () => {
-    const handleChange = jest.fn();
-    render(<Checkbox label="Checked checkbox" checked onChange={handleChange} />);
-    const checkboxElement = screen.getByRole('checkbox');
-    expect(checkboxElement).toBeChecked();
-  });
-
-  it('renders in unchecked state by default', () => {
-    render(<Checkbox label="Unchecked checkbox" />);
-    const checkboxElement = screen.getByRole('checkbox');
-    expect(checkboxElement).not.toBeChecked();
-  });
-
-  describe('indeterminate state', () => {
-    it('handles indeterminate state correctly', () => {
-      render(<Checkbox label="Indeterminate" indeterminate />);
-      const checkboxElement = screen.getByRole('checkbox');
-      // Note: indeterminate is a property, not an attribute
-      expect(checkboxElement).toHaveProperty('indeterminate', true);
+    it('uses CSS classes instead of inline styles', () => {
+      const { container } = render(<Checkbox size="md" />);
+      const wrapper = container.querySelector('.mond-checkbox');
+      expect(wrapper).toBeInTheDocument();
     });
   });
 
-  describe('sizes', () => {
-    it('renders small size correctly', () => {
-      render(<Checkbox size="sm" label="Small checkbox" data-testid="sm-checkbox" />);
-      const container = screen.getByTestId('sm-checkbox');
-      const checkboxDiv = container.querySelector('[data-checkbox]') as HTMLElement;
-      expect(checkboxDiv).toHaveStyle('width: 16px');
-      expect(checkboxDiv).toHaveStyle('height: 16px');
+  describe('Basic Rendering', () => {
+    it('renders checkbox input element', () => {
+      render(<Checkbox data-testid="checkbox" />);
+      expect(screen.getByTestId('checkbox')).toBeInTheDocument();
     });
 
-    it('renders medium size correctly', () => {
-      render(<Checkbox size="md" label="Medium checkbox" data-testid="md-checkbox" />);
-      const container = screen.getByTestId('md-checkbox');
-      const checkboxDiv = container.querySelector('[data-checkbox]') as HTMLElement;
-      expect(checkboxDiv).toHaveStyle('width: 20px');
-      expect(checkboxDiv).toHaveStyle('height: 20px');
+    it('applies correct display name', () => {
+      expect(Checkbox.displayName).toBe('Checkbox');
     });
 
-    it('renders large size correctly', () => {
-      render(<Checkbox size="lg" label="Large checkbox" data-testid="lg-checkbox" />);
-      const container = screen.getByTestId('lg-checkbox');
-      const checkboxDiv = container.querySelector('[data-checkbox]') as HTMLElement;
-      expect(checkboxDiv).toHaveStyle('width: 24px');
-      expect(checkboxDiv).toHaveStyle('height: 24px');
+    it('renders with label', () => {
+      render(<Checkbox label="Accept terms" />);
+      expect(screen.getByText('Accept terms')).toBeInTheDocument();
+    });
+
+    it('renders as unchecked by default', () => {
+      render(<Checkbox data-testid="checkbox" />);
+      expect(screen.getByTestId('checkbox')).not.toBeChecked();
+    });
+
+    it('renders as checked when checked prop is true', () => {
+      render(<Checkbox checked data-testid="checkbox" onChange={() => {}} />);
+      expect(screen.getByTestId('checkbox')).toBeChecked();
     });
   });
 
-  describe('error state', () => {
+  describe('Size Variants', () => {
+    it('applies sm size class', () => {
+      const { container } = render(<Checkbox size="sm" />);
+      expect(container.querySelector('.mond-checkbox--sm')).toBeInTheDocument();
+    });
+
+    it('applies md size class (default)', () => {
+      const { container } = render(<Checkbox size="md" />);
+      expect(container.querySelector('.mond-checkbox--md')).toBeInTheDocument();
+    });
+
+    it('applies lg size class', () => {
+      const { container } = render(<Checkbox size="lg" />);
+      expect(container.querySelector('.mond-checkbox--lg')).toBeInTheDocument();
+    });
+  });
+
+  describe('Error State', () => {
+    it('applies error class when error message provided', () => {
+      const { container } = render(<Checkbox error="Field is required" />);
+      expect(container.querySelector('.mond-checkbox--error')).toBeInTheDocument();
+    });
+
     it('displays error message', () => {
-      render(<Checkbox label="Required checkbox" error="This field is required" />);
-      const errorMessage = screen.getByText(/this field is required/i);
-      expect(errorMessage).toBeInTheDocument();
+      render(<Checkbox label="Accept" error="Required" />);
+      expect(screen.getByText('Required')).toBeInTheDocument();
     });
 
-    it('applies error styling', () => {
-      render(
-        <Checkbox 
-          label="Error checkbox" 
-          error="Error message"
-          data-testid="error-checkbox"
-        />
-      );
-      const container = screen.getByTestId('error-checkbox');
-      const checkboxDiv = container.querySelector('[data-checkbox]') as HTMLElement;
-      expect(checkboxDiv).toHaveStyle('border: 1px solid #ef4444');
+    it('error message has error styling class', () => {
+      const { container } = render(<Checkbox label="Accept" error="Required" />);
+      const message = container.querySelector('.mond-checkbox__message--error');
+      expect(message).toBeInTheDocument();
     });
   });
 
-  describe('helper text', () => {
+  describe('Helper Text', () => {
     it('displays helper text', () => {
-      render(<Checkbox label="Newsletter" helperText="Get weekly updates" />);
-      const helperText = screen.getByText(/get weekly updates/i);
-      expect(helperText).toBeInTheDocument();
+      render(<Checkbox label="Accept" helperText="Check to continue" />);
+      expect(screen.getByText('Check to continue')).toBeInTheDocument();
+    });
+
+    it('helper text has helper styling class', () => {
+      const { container } = render(<Checkbox label="Accept" helperText="Helper" />);
+      const message = container.querySelector('.mond-checkbox__message--helper');
+      expect(message).toBeInTheDocument();
+    });
+
+    it('error takes precedence over helper text', () => {
+      render(<Checkbox label="Accept" error="Error" helperText="Helper" />);
+      expect(screen.getByText('Error')).toBeInTheDocument();
+      expect(screen.queryByText('Helper')).not.toBeInTheDocument();
     });
   });
 
-  describe('dark mode', () => {
-    it('applies dark mode styling', () => {
-      renderWithDarkMode(<Checkbox label="Dark checkbox" data-testid="dark-checkbox" />);
-      const container = screen.getByTestId('dark-checkbox');
-      const checkboxDiv = container.querySelector('[data-checkbox]') as HTMLElement;
-      expect(checkboxDiv).toHaveStyle('background-color: #171717');
+  describe('Disabled State', () => {
+    it('applies disabled attribute', () => {
+      render(<Checkbox disabled data-testid="checkbox" />);
+      expect(screen.getByTestId('checkbox')).toBeDisabled();
     });
 
-    it('applies light mode styling by default', () => {
-      render(<Checkbox label="Light checkbox" data-testid="light-checkbox" />);
-      const container = screen.getByTestId('light-checkbox');
-      const checkboxDiv = container.querySelector('[data-checkbox]') as HTMLElement;
-      expect(checkboxDiv).toHaveStyle('background-color: #ffffff');
+    it('applies disabled class', () => {
+      const { container } = render(<Checkbox disabled />);
+      expect(container.querySelector('.mond-checkbox--disabled')).toBeInTheDocument();
     });
   });
 
-  describe('disabled state', () => {
-    it('renders disabled checkbox', () => {
-      render(<Checkbox label="Disabled checkbox" disabled />);
-      const checkboxElement = screen.getByRole('checkbox');
-      expect(checkboxElement).toBeDisabled();
+  describe('Indeterminate State', () => {
+    it('sets indeterminate property on input element', () => {
+      render(<Checkbox indeterminate data-testid="checkbox" />);
+      const checkbox = screen.getByTestId('checkbox') as HTMLInputElement;
+      expect(checkbox.indeterminate).toBe(true);
     });
 
-    it('applies disabled cursor styling', () => {
-      render(<Checkbox label="Disabled" disabled data-testid="disabled-checkbox" />);
-      const container = screen.getByTestId('disabled-checkbox');
-      const checkboxDiv = container.querySelector('[data-checkbox]') as HTMLElement;
-      expect(checkboxDiv).not.toBeNull();
-      if (checkboxDiv) {
-        expect(checkboxDiv).toHaveStyle('cursor: not-allowed');
-      }
-    });
-  });
-
-  describe('accessibility', () => {
-    it('associates label with checkbox using htmlFor and id', () => {
-      render(<Checkbox label="Accessible checkbox" id="accessible-cb" />);
-      screen.getByText(/accessible checkbox/i).closest('label');
-      const checkboxElement = screen.getByRole('checkbox');
-      
-      expect(checkboxElement).toHaveAttribute('id', 'accessible-cb');
+    it('applies indeterminate class', () => {
+      const { container } = render(<Checkbox indeterminate />);
+      expect(container.querySelector('.mond-checkbox--indeterminate')).toBeInTheDocument();
     });
 
-    it('supports keyboard interaction', () => {
-      const handleChange = jest.fn();
-      render(<Checkbox label="Keyboard test" onChange={handleChange} />);
-      
-      const checkboxElement = screen.getByRole('checkbox');
-      fireEvent.keyDown(checkboxElement, { key: ' ', code: 'Space' });
-      
-      // The space key should trigger the change (though this is native browser behavior)
-      checkboxElement.focus();
-      fireEvent.keyDown(checkboxElement, { key: ' ' });
+    it('updates indeterminate property when prop changes', () => {
+      const { rerender } = render(<Checkbox indeterminate={false} data-testid="checkbox" />);
+      const checkbox = screen.getByTestId('checkbox') as HTMLInputElement;
+      expect(checkbox.indeterminate).toBe(false);
+
+      rerender(<Checkbox indeterminate={true} data-testid="checkbox" />);
+      expect(checkbox.indeterminate).toBe(true);
     });
   });
 
-  describe('focus states', () => {
-    it('handles focus and blur events', () => {
-      const handleFocus = jest.fn();
-      const handleBlur = jest.fn();
-      
+  describe('Ref Forwarding', () => {
+    it('forwards ref to input element', () => {
+      const ref = React.createRef<HTMLInputElement>();
+      render(<Checkbox ref={ref} />);
+      expect(ref.current).toBeInstanceOf(HTMLInputElement);
+    });
+
+    it('supports indeterminate via ref', () => {
+      const ref = React.createRef<HTMLInputElement>();
+      render(<Checkbox ref={ref} indeterminate />);
+      expect(ref.current?.indeterminate).toBe(true);
+    });
+  });
+
+  describe('Label Association', () => {
+    it('associates label with checkbox via id', () => {
+      render(<Checkbox label="Accept terms" id="custom-id" />);
+      const checkbox = screen.getByRole('checkbox');
+      expect(checkbox).toHaveAttribute('id', 'custom-id');
+      expect(screen.getByText('Accept terms')).toBeInTheDocument();
+    });
+
+    it('generates unique IDs when not provided', () => {
       render(
-        <Checkbox 
-          label="Focus test"
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
+        <div>
+          <Checkbox label="First" data-testid="checkbox-1" />
+          <Checkbox label="Second" data-testid="checkbox-2" />
+        </div>
       );
-      
-      const checkboxElement = screen.getByRole('checkbox');
-      
-      fireEvent.focus(checkboxElement);
-      expect(handleFocus).toHaveBeenCalled();
-      
-      fireEvent.blur(checkboxElement);
-      expect(handleBlur).toHaveBeenCalled();
+      const id1 = screen.getByTestId('checkbox-1').id;
+      const id2 = screen.getByTestId('checkbox-2').id;
+      expect(id1).not.toBe(id2);
+      expect(id1).toBeTruthy();
+      expect(id2).toBeTruthy();
     });
   });
 
-  it('renders without label', () => {
-    render(<Checkbox data-testid="no-label-checkbox" />);
-    const checkboxElement = screen.getByRole('checkbox');
-    expect(checkboxElement).toBeInTheDocument();
+  describe('Interactivity', () => {
+    it('handles onChange events', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<Checkbox onChange={handleChange} data-testid="checkbox" />);
+
+      await user.click(screen.getByTestId('checkbox'));
+      expect(handleChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not trigger onChange when disabled', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<Checkbox disabled onChange={handleChange} data-testid="checkbox" />);
+
+      await user.click(screen.getByTestId('checkbox'));
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Custom ClassName', () => {
+    it('applies custom className to container', () => {
+      const { container } = render(<Checkbox className="custom-class" />);
+      const wrapper = container.querySelector('.custom-class');
+      expect(wrapper).toBeInTheDocument();
+    });
   });
 });

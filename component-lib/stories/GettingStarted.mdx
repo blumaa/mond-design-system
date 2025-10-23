@@ -126,33 +126,36 @@ function ActionButtons() {
 
 ### 5. Theme Support
 
-Handle light and dark themes:
+Handle light and dark themes with `ThemeProvider`:
 
 ```tsx
-function ThemedComponent({ isDarkMode }) {
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme';
+
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
+
   return (
-    <Box 
-      bg="surface.background"
-      color="text.primary"
-      p="4"
-      borderRadius="md"
-      isDarkMode={isDarkMode}
-    >
-      <Heading 
-        level={2} 
-        semantic="primary"
-        isDarkMode={isDarkMode}
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <Box
+        bg="surface.background"
+        color="text.primary"
+        p="4"
+        borderRadius="md"
       >
-        Themed Content
-      </Heading>
-      
-      <Text 
-        semantic="secondary"
-        isDarkMode={isDarkMode}
-      >
-        This content automatically adapts to light and dark themes.
-      </Text>
-    </Box>
+        <Heading level={2} semantic="primary">
+          Themed Content
+        </Heading>
+
+        <Text semantic="secondary">
+          This content automatically adapts to light and dark themes.
+        </Text>
+
+        <Button onClick={() => setColorScheme(colorScheme === 'light' ? 'dark' : 'light')}>
+          Toggle Theme
+        </Button>
+      </Box>
+    </ThemeProvider>
   );
 }
 ```

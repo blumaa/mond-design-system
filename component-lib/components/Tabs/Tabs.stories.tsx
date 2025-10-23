@@ -57,9 +57,6 @@ A flexible tabs component for organizing content into multiple panels. Perfect f
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
   },
 };
 

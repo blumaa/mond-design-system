@@ -48,9 +48,6 @@ A smooth toggle switch component for binary choices and settings. Perfect for en
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     checked: {
       control: 'boolean',
     },

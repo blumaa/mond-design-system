@@ -102,10 +102,6 @@ A highly customizable toast notification component with support for different ty
       options: ['entering', 'visible', 'exiting'],
       description: 'Animation state for enter/exit transitions',
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Whether to use dark theme colors',
-    },
     onDismiss: {
       description: 'Callback when toast is dismissed',
       action: 'dismissed',
@@ -426,12 +422,18 @@ export const DarkMode: Story = {
     type: 'info',
     title: 'Dark Mode Toast',
     message: 'This toast is displayed in dark mode with appropriate theming.',
-    isDarkMode: true,
     onDismiss: () => {},
   },
   parameters: {
-    theme: 'dark',
+    backgrounds: { default: 'dark' },
   },
+  decorators: [
+    (Story) => (
+      <div data-theme="dark">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const AllVariants: Story = {

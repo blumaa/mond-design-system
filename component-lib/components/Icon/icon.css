@@ -1,0 +1,41 @@
+/**
+ * Icon Component Styles
+ */
+
+.mond-icon {
+  display: inline-block;
+  line-height: 1;
+  flex-shrink: 0;
+  color: var(--mond-icon-primary);
+}
+
+/* Size Variants */
+.mond-icon--xs {
+  width: 12px;
+  height: 12px;
+}
+
+.mond-icon--sm {
+  width: 16px;
+  height: 16px;
+}
+
+.mond-icon--md {
+  width: 20px;
+  height: 20px;
+}
+
+.mond-icon--lg {
+  width: 24px;
+  height: 24px;
+}
+
+.mond-icon--xl {
+  width: 32px;
+  height: 32px;
+}
+
+.mond-icon--2xl {
+  width: 40px;
+  height: 40px;
+}

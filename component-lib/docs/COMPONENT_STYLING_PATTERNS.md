@@ -1,160 +1,213 @@
-# Component Token-Only Styling Patterns
+# Component Styling Patterns
 
 ## 🎯 **Core Principle**
 
-**Components must use semantic tokens exclusively - no hardcoded colors, spacing, or typography values.**
+**Components must use CSS variables for all styling - no hardcoded colors, spacing, or typography values.**
+
+All design tokens are available as CSS variables in the format `var(--mond-*)`. Components use CSS classes and import their own `.css` files.
 
 ## 📋 **Token Categories**
 
 ### **1. Interactive States**
 Use for buttons, inputs, and interactive elements:
 
-```tsx
-// ✅ CORRECT - Brand-aware interactive tokens
-backgroundColor: theme('brand.interactive.background'),
-color: theme('brand.interactive.text'),
+```css
+/* ✅ CORRECT - Brand-aware interactive tokens */
+.component {
+  background-color: var(--mond-brand-interactive-background);
+  color: var(--mond-brand-interactive-text);
+}
 
-// ✅ CORRECT - Standard interactive tokens  
-backgroundColor: theme('interactive.primary.background'),
-color: theme('interactive.primary.text'),
+/* ✅ CORRECT - Standard interactive tokens */
+.component--primary {
+  background-color: var(--mond-interactive-primary-background);
+  color: var(--mond-interactive-primary-text);
+}
 
-// ❌ WRONG - Hardcoded colors
-backgroundColor: '#3b82f6',
-color: '#ffffff',
+/* ❌ WRONG - Hardcoded colors */
+.component {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
 ```
 
 ### **2. Feedback States**
 Use for success/error/warning states:
 
-```tsx
-// ✅ CORRECT - Semantic feedback tokens
-backgroundColor: theme('feedback.success.background'),
-color: theme('feedback.success.text'),
-border: `1px solid ${theme('feedback.success.border')}`,
+```css
+/* ✅ CORRECT - Semantic feedback tokens */
+.component--success {
+  background-color: var(--mond-feedback-success-background);
+  color: var(--mond-feedback-success-text);
+  border: 1px solid var(--mond-feedback-success-border);
+}
 
-// ❌ WRONG - Hardcoded feedback colors
-backgroundColor: '#22c55e',
-color: '#ffffff',
+/* ❌ WRONG - Hardcoded feedback colors */
+.component--success {
+  background-color: #22c55e;
+  color: #ffffff;
+}
 ```
 
 ### **3. Surface & Background**
 Use for cards, containers, overlays:
 
-```tsx
-// ✅ CORRECT - Semantic surface tokens
-backgroundColor: theme('surface.elevated'),
-backgroundColor: theme('surface.overlay'),
-backgroundColor: theme('surface.terminal'), // Brand-specific
+```css
+/* ✅ CORRECT - Semantic surface tokens */
+.card {
+  background-color: var(--mond-surface-elevated);
+}
 
-// ❌ WRONG - Hardcoded backgrounds
-backgroundColor: 'rgba(0, 0, 0, 0.5)',
-backgroundColor: '#ffffff',
+.overlay {
+  background-color: var(--mond-surface-overlay);
+}
+
+.terminal {
+  background-color: var(--mond-surface-terminal); /* Brand-specific */
+}
+
+/* ❌ WRONG - Hardcoded backgrounds */
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
 ```
 
 ### **4. Text Colors**
 Use semantic text tokens:
 
-```tsx
-// ✅ CORRECT - Semantic text tokens
-color: theme('text.primary'),
-color: theme('text.secondary'), 
-color: theme('text.accent'), // Brand-aware accent text
+```css
+/* ✅ CORRECT - Semantic text tokens */
+.text {
+  color: var(--mond-text-primary);
+}
 
-// ❌ WRONG - Hardcoded text colors
-color: '#6b7280',
-color: '#000000',
+.text--secondary {
+  color: var(--mond-text-secondary);
+}
+
+.text--accent {
+  color: var(--mond-text-accent); /* Brand-aware accent text */
+}
+
+/* ❌ WRONG - Hardcoded text colors */
+.text {
+  color: #6b7280;
+}
 ```
 
 ### **5. Spacing & Layout**
 Use semantic spacing tokens:
 
-```tsx
-// ✅ CORRECT - Semantic spacing
-padding: theme('spacing.md'),
-margin: theme('spacing.lg'),
-gap: theme('spacing.sm'),
+```css
+/* ✅ CORRECT - Semantic spacing */
+.component {
+  padding: var(--mond-spacing-md);
+  margin: var(--mond-spacing-lg);
+  gap: var(--mond-spacing-sm);
+}
 
-// ❌ WRONG - Hardcoded spacing
-padding: '16px',
-margin: '24px',
+/* ❌ WRONG - Hardcoded spacing */
+.component {
+  padding: 16px;
+  margin: 24px;
+}
 ```
 
 ### **6. Brand-Aware Patterns**
 For components that should adapt to brand identity:
 
-```tsx
-// ✅ CORRECT - Brand-aware tokens (auto-adapts to CYPHER/FLUX/MOND)
-backgroundColor: theme('brand.interactive.background'),
-boxShadow: theme('effects.brand.glow.subtle'),
-borderColor: theme('border.brand.accent'),
+```css
+/* ✅ CORRECT - Brand-aware tokens (auto-adapts to CYPHER/FLUX/MOND) */
+.button--primary {
+  background-color: var(--mond-brand-interactive-background);
+  box-shadow: var(--mond-effects-brand-glow-subtle);
+  border-color: var(--mond-border-brand-accent);
+}
 
-// ❌ WRONG - Fixed colors (doesn't adapt to brand)
-backgroundColor: theme('feedback.success.background'),
+/* ❌ WRONG - Fixed colors (doesn't adapt to brand) */
+.button--primary {
+  background-color: var(--mond-feedback-success-background);
+}
 ```
 
 ## 🏗️ **Implementation Patterns**
 
 ### **Variant-Based Styling**
+```css
+/* component.css */
+.mond-component {
+  /* Base styles */
+  font-family: var(--mond-font-family-sans);
+  font-size: var(--mond-font-size-md);
+  border-radius: var(--mond-radii-md);
+}
+
+.mond-component--primary {
+  background-color: var(--mond-brand-interactive-background);
+  color: var(--mond-brand-interactive-text);
+  border: 1px solid var(--mond-brand-interactive-background);
+  box-shadow: var(--mond-effects-brand-glow-subtle);
+}
+
+.mond-component--secondary {
+  background-color: var(--mond-interactive-secondary-background);
+  color: var(--mond-interactive-secondary-text);
+  border: 1px solid var(--mond-interactive-secondary-border);
+}
+```
+
 ```tsx
-const getVariantStyles = (variant: ComponentVariant, theme: Theme) => {
-  switch (variant) {
-    case 'primary':
-      return {
-        backgroundColor: theme('brand.interactive.background'),
-        color: theme('brand.interactive.text'),
-        border: `1px solid ${theme('brand.interactive.background')}`,
-        boxShadow: theme('effects.brand.glow.subtle'),
-      };
-    case 'secondary': 
-      return {
-        backgroundColor: theme('interactive.secondary.background'),
-        color: theme('interactive.secondary.text'),
-        border: `1px solid ${theme('interactive.secondary.border')}`,
-      };
-  }
+// Component.tsx
+import './component.css';
+
+export const Component = ({ variant = 'primary', ...props }) => {
+  const className = `mond-component mond-component--${variant}`;
+  return <div className={className} {...props} />;
 };
 ```
 
 ### **State-Based Styling**
-```tsx
-const styles = {
-  // Base styles
-  ...baseStyles,
-  
-  // Hover states
-  '&:hover': {
-    backgroundColor: theme('brand.interactive.backgroundHover'),
-  },
-  
-  // Focus states
-  '&:focus': {
-    outline: `2px solid ${theme('border.focused')}`,
-    outlineOffset: '2px',
-  },
-  
-  // Disabled states
-  '&:disabled': {
-    backgroundColor: theme('interactive.primary.backgroundDisabled'),
-    color: theme('interactive.primary.textDisabled'),
-  },
-};
+```css
+.mond-component {
+  /* Base styles */
+  background-color: var(--mond-brand-interactive-background);
+  transition: background-color 0.2s;
+}
+
+/* Hover states */
+.mond-component:hover:not(:disabled) {
+  background-color: var(--mond-brand-interactive-backgroundHover);
+}
+
+/* Focus states */
+.mond-component:focus {
+  outline: 2px solid var(--mond-border-focused);
+  outline-offset: 2px;
+}
+
+/* Disabled states */
+.mond-component:disabled {
+  background-color: var(--mond-interactive-primary-backgroundDisabled);
+  color: var(--mond-interactive-primary-textDisabled);
+  cursor: not-allowed;
+}
 ```
 
 ## 🚫 **Anti-Patterns to Avoid**
 
 ### **❌ Hardcoded Values**
-```tsx
-// NEVER do this
-const styles = {
-  backgroundColor: '#3b82f6',
-  color: '#ffffff', 
-  padding: '16px',
-  borderRadius: '8px',
-  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-};
+```css
+/* NEVER do this */
+.component {
+  background-color: #3b82f6;
+  color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 ```
 
-### **❌ CSS-in-JS with Raw Values**
+### **❌ Inline Styles with Raw Values**
 ```tsx
 // NEVER do this
 <div style={{
@@ -164,15 +217,15 @@ const styles = {
 }}>
 ```
 
-### **❌ Mixed Token and Hardcoded**
-```tsx
-// NEVER mix approaches
-const styles = {
-  backgroundColor: theme('surface.elevated'), // ✅ Good
-  color: '#6b7280', // ❌ Wrong - should use theme('text.secondary')
-  padding: theme('spacing.md'), // ✅ Good  
-  margin: '8px', // ❌ Wrong - should use theme('spacing.sm')
-};
+### **❌ Mixed CSS Variables and Hardcoded**
+```css
+/* NEVER mix approaches */
+.component {
+  background-color: var(--mond-surface-elevated); /* ✅ Good */
+  color: #6b7280; /* ❌ Wrong - should use var(--mond-text-secondary) */
+  padding: var(--mond-spacing-md); /* ✅ Good */
+  margin: 8px; /* ❌ Wrong - should use var(--mond-spacing-sm) */
+}
 ```
 
 ## ✅ **Component Checklist**
@@ -199,9 +252,44 @@ Before considering a component complete, verify:
 
 ## 🔧 **Migration Guide**
 
-1. **Identify hardcoded values**: Search for `#`, `rgb`, `rgba`, `px` patterns
-2. **Map to semantic tokens**: Use the token categories above
-3. **Test with brand themes**: Verify component works with CYPHER, FLUX, MOND themes  
-4. **Update tests**: Ensure tests don't rely on hardcoded values
+### **Converting from Inline Styles to CSS Variables**
 
-This ensures all components are truly brand-agnostic and automatically adapt to any brand context.
+1. **Create a CSS file** for your component
+2. **Identify hardcoded values** in inline styles: Search for `#`, `rgb`, `rgba`, `px` patterns
+3. **Map to CSS variables**: Use `var(--mond-*)` format with the token categories above
+4. **Import CSS** in your component: `import './component.css'`
+5. **Test with brand themes**: Verify component works with CYPHER, FLUX, MOND themes using `ThemeProvider`
+6. **Update tests**: Ensure tests check for CSS classes, not inline styles
+
+### **Example Migration**
+
+**Before:**
+```tsx
+// ❌ Old inline style approach
+<div style={{
+  backgroundColor: '#3b82f6',
+  color: '#ffffff',
+  padding: '16px',
+  borderRadius: '8px'
+}}>
+```
+
+**After:**
+```css
+/* component.css */
+.mond-component {
+  background-color: var(--mond-brand-interactive-background);
+  color: var(--mond-brand-interactive-text);
+  padding: var(--mond-spacing-md);
+  border-radius: var(--mond-radii-md);
+}
+```
+
+```tsx
+// ✅ New CSS class approach
+import './component.css';
+
+<div className="mond-component">
+```
+
+This ensures all components are truly brand-agnostic and automatically adapt to any brand context via CSS variables.

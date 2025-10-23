@@ -147,15 +147,21 @@ describe('ToastContainer', () => {
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
       render(<ToastContainer {...defaultProps} />);
-      
+
       const container = screen.getByRole('region', { name: 'Toast notifications' });
       expect(container).toHaveAttribute('aria-live', 'polite');
 
       const toasts = screen.getAllByRole('alert');
-      toasts.forEach(toast => {
+      toasts.forEach((toast, index) => {
         expect(toast).toHaveAttribute('aria-live', 'polite');
         expect(toast).toHaveAttribute('aria-atomic', 'true');
-        expect(toast).toHaveAttribute('tabIndex', '0');
+        // The third toast (index 2) has dismissible: false, so tabIndex is -1
+        // Other toasts are dismissible by default, so tabIndex is 0
+        if (index === 2) {
+          expect(toast).toHaveAttribute('tabIndex', '-1');
+        } else {
+          expect(toast).toHaveAttribute('tabIndex', '0');
+        }
       });
     });
   });
@@ -350,30 +356,21 @@ describe('Toast', () => {
   });
 
   describe('Animation States', () => {
-    it('applies correct styles for different animation states', () => {
+    it('applies correct classes for different animation states', () => {
       const { rerender } = render(
         <Toast {...defaultToastProps} animationState="entering" />
       );
 
       let toast = screen.getByRole('alert');
-      expect(toast).toHaveStyle({ 
-        transform: 'translateX(100%) scale(0.9)', 
-        opacity: '0' 
-      });
+      expect(toast).toHaveClass('mond-toast--entering');
 
       rerender(<Toast {...defaultToastProps} animationState="visible" />);
       toast = screen.getByRole('alert');
-      expect(toast).toHaveStyle({ 
-        transform: 'translateX(0%) scale(1)', 
-        opacity: '1' 
-      });
+      expect(toast).toHaveClass('mond-toast--visible');
 
       rerender(<Toast {...defaultToastProps} animationState="exiting" />);
       toast = screen.getByRole('alert');
-      expect(toast).toHaveStyle({ 
-        transform: 'translateX(100%) scale(0.9)', 
-        opacity: '0' 
-      });
+      expect(toast).toHaveClass('mond-toast--exiting');
     });
   });
 

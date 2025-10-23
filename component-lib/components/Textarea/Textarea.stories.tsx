@@ -54,9 +54,6 @@ A flexible textarea component for multi-line text input. Perfect for comments, d
       control: 'select',
       options: ['default', 'error', 'success'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
   },
 };
 

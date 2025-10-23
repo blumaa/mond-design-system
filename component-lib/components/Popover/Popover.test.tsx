@@ -211,9 +211,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('bottom: 100%');
-      expect(content).toHaveStyle('left: 50%');
-      expect(content).toHaveStyle('transform: translateX(-50%)');
+      expect(content).toHaveClass('mond-popover--top');
     });
 
     it('applies top-start placement styles', () => {
@@ -224,8 +222,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('bottom: 100%');
-      expect(content).toHaveStyle('left: 0');
+      expect(content).toHaveClass('mond-popover--top-start');
     });
 
     it('applies top-end placement styles', () => {
@@ -236,8 +233,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('bottom: 100%');
-      expect(content).toHaveStyle('right: 0');
+      expect(content).toHaveClass('mond-popover--top-end');
     });
 
     it('applies bottom placement styles', () => {
@@ -248,9 +244,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('top: 100%');
-      expect(content).toHaveStyle('left: 50%');
-      expect(content).toHaveStyle('transform: translateX(-50%)');
+      expect(content).toHaveClass('mond-popover--bottom');
     });
 
     it('applies bottom-start placement styles', () => {
@@ -261,8 +255,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('top: 100%');
-      expect(content).toHaveStyle('left: 0');
+      expect(content).toHaveClass('mond-popover--bottom-start');
     });
 
     it('applies bottom-end placement styles', () => {
@@ -273,8 +266,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('top: 100%');
-      expect(content).toHaveStyle('right: 0');
+      expect(content).toHaveClass('mond-popover--bottom-end');
     });
 
     it('applies left placement styles', () => {
@@ -285,9 +277,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('right: 100%');
-      expect(content).toHaveStyle('top: 50%');
-      expect(content).toHaveStyle('transform: translateY(-50%)');
+      expect(content).toHaveClass('mond-popover--left');
     });
 
     it('applies left-start placement styles', () => {
@@ -298,8 +288,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('right: 100%');
-      expect(content).toHaveStyle('top: 0');
+      expect(content).toHaveClass('mond-popover--left-start');
     });
 
     it('applies left-end placement styles', () => {
@@ -310,8 +299,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('right: 100%');
-      expect(content).toHaveStyle('bottom: 0');
+      expect(content).toHaveClass('mond-popover--left-end');
     });
 
     it('applies right placement styles', () => {
@@ -322,9 +310,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('left: 100%');
-      expect(content).toHaveStyle('top: 50%');
-      expect(content).toHaveStyle('transform: translateY(-50%)');
+      expect(content).toHaveClass('mond-popover--right');
     });
 
     it('applies right-start placement styles', () => {
@@ -335,8 +321,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('left: 100%');
-      expect(content).toHaveStyle('top: 0');
+      expect(content).toHaveClass('mond-popover--right-start');
     });
 
     it('applies right-end placement styles', () => {
@@ -347,8 +332,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('left: 100%');
-      expect(content).toHaveStyle('bottom: 0');
+      expect(content).toHaveClass('mond-popover--right-end');
     });
   });
 
@@ -361,7 +345,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('margin-bottom: 16px');
+      expect(content).toHaveStyle('--mond-popover-offset: 16px');
     });
   });
 
@@ -400,7 +384,7 @@ describe('Popover Component', () => {
   });
 
   describe('dark mode', () => {
-    it('applies dark mode styling', () => {
+    it('applies dark mode styling (SSR-compatible)', () => {
       renderWithDarkMode(
         <Popover content="Dark popover" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -408,11 +392,11 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('background-color: #171717');
-      expect(content).toHaveStyle('color: #DDE6ED');
+      // CSS variables handle theming automatically
+      expect(content).toHaveClass('mond-popover');
     });
 
-    it('applies light mode styling by default', () => {
+    it('applies light mode styling by default (SSR-compatible)', () => {
       render(
         <Popover content="Light popover" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -420,8 +404,8 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('background-color: #ffffff');
-      expect(content).toHaveStyle('color: #414A4C');
+      // CSS variables handle theming automatically
+      expect(content).toHaveClass('mond-popover');
     });
   });
 
@@ -482,14 +466,8 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-
-      expect(content).toHaveStyle('position: absolute');
-      expect(content).toHaveStyle('z-index: 1000');
-      expect(content).toHaveStyle('border-radius: 0.25rem');
-      expect(content).toHaveStyle('font-size: 0.875rem');
-      expect(content).toHaveStyle('min-width: 200px');
-      expect(content).toHaveStyle('max-width: 320px');
-      expect(content).toHaveStyle('line-height: 1.5');
+      // CSS classes handle all styling
+      expect(content).toHaveClass('mond-popover');
     });
 
     it('applies custom className to container', () => {

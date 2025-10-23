@@ -1,7 +1,4 @@
-'use client';
 import React from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
 
 export type BadgeVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
 export type BadgeSize = 'sm' | 'md' | 'lg';
@@ -21,134 +18,67 @@ export interface BadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
   size?: BadgeSize;
 
   /**
-   * Dark mode control for theme resolution
-   * @default false
-   */
-  isDarkMode?: boolean;
-
-  /**
    * Badge content
    */
   children: React.ReactNode;
 }
 
-const getSizeStyles = (size: BadgeSize) => {
-  switch (size) {
-    case 'sm':
-      return {
-        fontSize: fontSizes.xs,
-        paddingX: spacing[2],
-        paddingY: spacing[1],
-        height: '20px',
-      };
-    case 'md':
-      return {
-        fontSize: fontSizes.sm,
-        paddingX: spacing[3],
-        paddingY: spacing[1],
-        height: '24px',
-      };
-    case 'lg':
-      return {
-        fontSize: fontSizes.base,
-        paddingX: spacing[4],
-        paddingY: spacing[2],
-        height: '32px',
-      };
-    default:
-      return {};
-  }
-};
-
-const getVariantStyles = (variant: BadgeVariant, theme: (path: string) => string) => {
-  switch (variant) {
-    case 'primary':
-      return {
-        backgroundColor: theme('interactive.primary.background'),
-        color: theme('interactive.primary.text'),
-        border: 'none',
-      };
-    case 'secondary':
-      return {
-        backgroundColor: theme('interactive.secondary.background'),
-        color: theme('interactive.secondary.text'),
-        border: `1px solid ${theme('interactive.secondary.border')}`,
-      };
-    case 'success':
-      return {
-        backgroundColor: theme('brand.interactive.background'),
-        color: theme('brand.interactive.text'),
-        border: `1px solid ${theme('brand.interactive.background')}`,
-        boxShadow: theme('effects.brand.glow.subtle'),
-      };
-    case 'warning':
-      return {
-        backgroundColor: theme('feedback.warning.background'),
-        color: theme('feedback.warning.text'),
-        border: `1px solid ${theme('feedback.warning.border')}`,
-      };
-    case 'error':
-      return {
-        backgroundColor: theme('feedback.error.background'),
-        color: theme('feedback.error.text'),
-        border: `1px solid ${theme('feedback.error.border')}`,
-      };
-    case 'default':
-    default:
-      return {
-        backgroundColor: theme('surface.elevated'),
-        color: theme('text.secondary'),
-        border: `1px solid ${theme('border.default')}`,
-      };
-  }
-};
-
+/**
+ * Badge Component
+ *
+ * A small status indicator or label that uses CSS variables for theming.
+ * Supports multiple variants and sizes.
+ *
+ * **SSR-Compatible**: Uses CSS classes and CSS variables instead of runtime theme resolution.
+ * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
+ *
+ * @example
+ * // Primary badge
+ * <Badge variant="primary">New</Badge>
+ *
+ * @example
+ * // Success badge with custom size
+ * <Badge variant="success" size="lg">Verified</Badge>
+ *
+ * @example
+ * // Badge with number
+ * <Badge variant="error" size="sm">99+</Badge>
+ */
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
-  ({
-    variant = 'default',
-    size = 'md',
-    isDarkMode,
-    className,
-    children,
-    'data-testid': dataTestId,
-    ...props
-  }, ref) => {
-    const theme = useTheme(isDarkMode);
-    const sizeStyles = getSizeStyles(size);
-    const variantStyles = getVariantStyles(variant, theme);
-
-    const badgeStyles = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: radii.full,
-      fontFamily: fontFamilies.sans,
-      fontWeight: fontWeights.medium,
-      textAlign: 'center' as const,
-      whiteSpace: 'nowrap' as const,
-      userSelect: 'none' as const,
-      transition: 'all 150ms ease',
-      fontSize: sizeStyles.fontSize,
-      paddingLeft: sizeStyles.paddingX,
-      paddingRight: sizeStyles.paddingX,
-      paddingTop: sizeStyles.paddingY,
-      paddingBottom: sizeStyles.paddingY,
-      height: sizeStyles.height,
-      ...variantStyles,
-    };
+  (
+    {
+      variant = 'default',
+      size = 'md',
+      className,
+      children,
+      'data-testid': dataTestId,
+      ...props
+    },
+    ref,
+  ) => {
+    // Build CSS class names
+    const classNames = [
+      'mond-badge',
+      `mond-badge--${variant}`,
+      `mond-badge--${size}`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     return (
       <span
         ref={ref}
-        className={className}
+        className={classNames}
         data-testid={dataTestId}
-        style={badgeStyles}
+        data-variant={variant}
+        data-size={size}
         {...props}
       >
         {children}
       </span>
     );
-  }
+  },
 );
 
 Badge.displayName = 'Badge';
