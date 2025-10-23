@@ -1,11 +1,11 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { ThemeProvider } from '../ThemeProvider';
-import { Button } from '../../Button/Button';
-import { Badge } from '../../Badge/Badge';
-import { Text } from '../../Text/Text';
-import { cypherTheme } from '../../../brands/cypher';
-import { fluxTheme } from '../../../brands/flux';
+import { ThemeProvider } from './ThemeProvider';
+import { Button } from '../Button/Button';
+import { Badge } from '../Badge/Badge';
+import { Text } from '../Text/Text';
+import { cypherTheme } from '../../brands/cypher';
+import { fluxTheme } from '../../brands/flux';
 
 describe('Brand System - Multiple Components', () => {
   it('should apply CYPHER brand to multiple components', () => {

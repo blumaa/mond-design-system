@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Badge } from '../Badge';
-import { ThemeProvider } from '../../providers/ThemeProvider';
-import { cypherTheme, fluxTheme, mondTheme } from '../../../brands';
+import { Badge } from './Badge';
+import { ThemeProvider } from '../providers/ThemeProvider';
+import { cypherTheme, fluxTheme, mondTheme } from '../../brands';
 import type { BrandTheme } from '../../providers/ThemeProvider';
 
 // Helper to render Badge with brand context

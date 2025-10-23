@@ -63,11 +63,10 @@
     "design-tokens"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:tokens && yarn build:css && yarn build:lib && yarn build:styles",
-    "build:tokens": "node --import tsx tokens/scripts/build.ts",
-    "build:css": "node --import tsx tokens/scripts/generateCSSVariables.ts",
+    "build": "yarn clean && yarn build:tokens && yarn build:lib && yarn build:styles",
+    "build:tokens": "node --import tsx tokens/scripts/generateTokens.ts",
     "build:lib": "tsc --project tsconfig.build.json",
-    "build:styles": "cp components/Button/button.css dist/ && cp components/Badge/badge.css dist/ && cp components/Avatar/avatar.css dist/ && cp components/Text/text.css dist/ && cp components/Heading/heading.css dist/ && cp components/Label/label.css dist/ && cp components/Divider/divider.css dist/ && cp components/Spinner/spinner.css dist/ && cp components/Input/input.css dist/ && cp components/Textarea/textarea.css dist/ && cp components/Checkbox/checkbox.css dist/ && cp components/Radio/radio.css dist/ && cp components/Switch/switch.css dist/ && cp components/Select/select.css dist/ && cp components/Tooltip/tooltip.css dist/ && cp components/Popover/popover.css dist/ && cp components/Modal/modal.css dist/ && cp components/Link/link.css dist/ && cp components/Image/image.css dist/ && cp components/Icon/icon.css dist/ && cp components/Tag/tag.css dist/ && cp components/Dropdown/dropdown.css dist/ && cp components/DropdownItem/dropdownitem.css dist/ && cp components/Tabs/tabs.css dist/ && cp components/Accordion/accordion.css dist/ && cp components/AccordionItem/accordionitem.css dist/ && cp components/ToastContainer/toast.css dist/ && cp components/Carousel/carousel.css dist/ && cp styles.css dist/",
+    "build:styles": "find components -name '*.css' -exec cp {} dist/ \\; && cp styles.css dist/",
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn build",
     "dev": "concurrently \"yarn dev:tokens\" \"yarn dev:components\" \"yarn storybook\"",
