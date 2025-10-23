@@ -171,16 +171,39 @@ boxShadow="none"  // No shadow
 
 ## 🌙 Theme Integration
 
-### Using Semantic Tokens
-The recommended approach is to use semantic tokens that automatically adapt:
+### Using ThemeProvider
+Wrap your application with `ThemeProvider` to enable theme switching:
 
 ```tsx
-// ✅ Recommended - adapts to theme
-<Box 
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme';
+
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <Box
+        bg="surface.background"
+        color="text.primary"
+        borderColor="border.default"
+      >
+        Themed content automatically adapts
+      </Box>
+    </ThemeProvider>
+  );
+}
+```
+
+### Using Semantic Tokens
+Use semantic tokens that automatically adapt to the current theme:
+
+```tsx
+// ✅ Recommended - adapts to theme via ThemeProvider
+<Box
   bg="surface.background"
   color="text.primary"
   borderColor="border.default"
-  isDarkMode={isDarkMode}
 >
   Themed content
 </Box>
@@ -191,28 +214,14 @@ The recommended approach is to use semantic tokens that automatically adapt:
 </Box>
 ```
 
-### Component Theme Props
-Most components accept an `isDarkMode` prop for theme switching:
-
-```tsx
-<Text isDarkMode={isDarkMode} semantic="primary">
-  This text adapts to the theme
-</Text>
-
-<Heading isDarkMode={isDarkMode} semantic="secondary">
-  This heading also adapts
-</Heading>
-```
-
 ## 📖 Token Usage in Components
 
 ### Text Component
 ```tsx
-<Text 
+<Text
   variant="body-lg"        // Uses fontSize and lineHeight tokens
   weight="semibold"        // Uses fontWeight tokens
   semantic="primary"       // Uses semantic color tokens
-  isDarkMode={isDarkMode}  // Enables theme adaptation
 >
   Styled with design tokens
 </Text>
@@ -222,10 +231,9 @@ Most components accept an `isDarkMode` prop for theme switching:
 ```tsx
 <Box
   p="4"                    // Uses spacing tokens
-  bg="surface.card"        // Uses semantic color tokens  
+  bg="surface.card"        // Uses semantic color tokens
   borderRadius="md"        // Uses radius tokens
   boxShadow="sm"           // Uses shadow tokens
-  isDarkMode={isDarkMode}  // Enables theme adaptation
 >
   Layout with design tokens
 </Box>
@@ -270,10 +278,12 @@ bg="white"
 
 ### 4. Theme Consistency
 ```tsx
-// ✅ Good - passes theme prop
-<MyComponent isDarkMode={isDarkMode} />
+// ✅ Good - wrapped in ThemeProvider
+<ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+  <MyComponent />
+</ThemeProvider>
 
-// ❌ Inconsistent - missing theme awareness
+// ❌ Inconsistent - missing ThemeProvider
 <MyComponent />
 ```
 

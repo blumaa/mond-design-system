@@ -124,24 +124,35 @@ For basic atoms and molecules:
 export interface ComponentProps extends BoxProps {
   variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
-  isDarkMode?: boolean;
 }
 
 export const Component: React.FC<ComponentProps> = ({
   variant = 'primary',
-  size = 'md', 
-  isDarkMode = false,
+  size = 'md',
   children,
   ...boxProps
 }) => {
-  const theme = useTheme(isDarkMode);
-  
+  // Component applies its own CSS classes internally
+  const classNames = [
+    'mond-component',
+    `mond-component--${variant}`,
+    `mond-component--${size}`
+  ].join(' ');
+
   return (
-    <Box {...boxProps} /* styling logic */>
+    <Box className={classNames} {...boxProps}>
       {children}
     </Box>
   );
 };
+```
+
+**Usage:**
+```tsx
+// Users don't need to manually add classes
+<Component variant="primary" size="lg">
+  Content
+</Component>
 ```
 
 ### 3. Compositional Pattern
@@ -284,19 +295,29 @@ export interface ComponentProps extends BoxProps {
 ```
 
 ### Styling Standards
-✅ **Design tokens only** - use tokens from `tokens/tokens.ts`  
-✅ **Theme integration** - use `useTheme()` hook for dark mode  
-✅ **Box foundation** - build on Box component  
-✅ **Responsive design** - support mobile and desktop  
+✅ **CSS Variables** - use CSS variables via `var(--mond-*)` for theming
+✅ **Design tokens** - reference tokens from `tokens/index.ts` for TypeScript types
+✅ **Box foundation** - build on Box component
+✅ **Responsive design** - support mobile and desktop
 
-```typescript
-const theme = useTheme(isDarkMode);
-const styles = {
-  backgroundColor: theme('surface.primary'),
-  color: theme('text.primary'),
-  padding: spacing[4],
-  borderRadius: radii.md,
-};
+```css
+/* component.css */
+.mond-component {
+  background-color: var(--mond-surface-primary);
+  color: var(--mond-text-primary);
+  padding: var(--mond-spacing-4);
+  border-radius: var(--mond-radii-md);
+}
+
+.mond-component--primary {
+  background-color: var(--mond-brand-primary);
+  color: var(--mond-brand-on-primary);
+}
+```
+
+**Import CSS in component:**
+```tsx
+import './component.css';
 ```
 
 ### Accessibility Requirements
