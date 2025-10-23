@@ -1,3 +1,14 @@
+## 1.25.0 (2025-10-23)
+
+* fix: apps ([fa3d9a4](https://github.com/blumaa/mond-design-system/commit/fa3d9a4))
+* feat: token and component refactor with agnostic theme ([5ac0ace](https://github.com/blumaa/mond-design-system/commit/5ac0ace))
+* clean up ([a647b16](https://github.com/blumaa/mond-design-system/commit/a647b16))
+* convert avatar, badge, button, text, and add themeProvider and css ([741b4f2](https://github.com/blumaa/mond-design-system/commit/741b4f2))
+* final refactor ([8a8f3ca](https://github.com/blumaa/mond-design-system/commit/8a8f3ca))
+* Merge pull request #7 from blumaa/fix-use-clinet-problem ([df1ca1b](https://github.com/blumaa/mond-design-system/commit/df1ca1b)), closes [#7](https://github.com/blumaa/mond-design-system/issues/7)
+* refactor divider, heading, label, spinner ([497a11b](https://github.com/blumaa/mond-design-system/commit/497a11b))
+* update documentation ([b0e6cef](https://github.com/blumaa/mond-design-system/commit/b0e6cef))
+
 ## <small>1.24.9 (2025-10-17)</small>
 
 * fix: update color tokens to match portfolio-2023 and remove isDarkMode defaults from stories ([eeb7539](https://github.com/blumaa/mond-design-system/commit/eeb7539))
