@@ -1,3 +1,7 @@
+## <small>1.25.1 (2025-10-23)</small>
+
+* fix: audit and cleanup ([77686bb](https://github.com/blumaa/mond-design-system/commit/77686bb))
+
 ## 1.25.0 (2025-10-23)
 
 * fix: apps ([fa3d9a4](https://github.com/blumaa/mond-design-system/commit/fa3d9a4))
