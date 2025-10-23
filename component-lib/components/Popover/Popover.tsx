@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '../Button/Button';
 
 export type PopoverPlacement =
@@ -7,7 +7,7 @@ export type PopoverPlacement =
   | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'
   | 'left-start' | 'left-end' | 'right-start' | 'right-end';
 
-export type PopoverTrigger = 'click' | 'hover';
+type PopoverTrigger = 'click' | 'hover';
 
 export interface PopoverProps {
   /**
@@ -277,4 +277,3 @@ export const Popover: React.FC<PopoverProps> = ({
 
 Popover.displayName = 'Popover';
 
-export default Popover;

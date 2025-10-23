@@ -1,5 +1,5 @@
 'use client';
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Box, BoxProps } from '../Box/Box';
 
 export interface DropdownItemProps extends Omit<BoxProps, 'onClick' | 'children' | 'onMouseEnter' | 'onFocus' | 'onSelect'> {

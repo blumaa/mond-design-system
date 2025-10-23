@@ -1,9 +1,6 @@
 import React from 'react';
 
-/**
- * Theme type for color scheme
- */
-export type Theme = 'light' | 'dark';
+type Theme = 'light' | 'dark';
 
 /**
  * Brand theme configuration interface

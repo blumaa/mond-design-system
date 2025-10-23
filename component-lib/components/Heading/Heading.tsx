@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Box, type BoxProps } from '../Box/Box';
 import { fontWeights, fontFamilies } from '../../tokens';
 
@@ -137,4 +137,3 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
 
 Heading.displayName = 'Heading';
 
-export default Heading;

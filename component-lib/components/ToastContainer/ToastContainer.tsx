@@ -253,4 +253,3 @@ export const ToastContainer = React.forwardRef<HTMLDivElement, ToastContainerPro
 
 ToastContainer.displayName = 'ToastContainer';
 
-export default ToastContainer;

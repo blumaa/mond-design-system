@@ -388,4 +388,3 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
 
 Pagination.displayName = 'Pagination';
 
-export default Pagination;

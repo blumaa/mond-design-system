@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { tokens } from '../../tokens';
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {

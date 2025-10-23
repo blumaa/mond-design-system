@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Box, type BoxProps } from '../Box/Box';
 import { tokens } from '../../tokens';
 
@@ -177,4 +177,3 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
 
 Text.displayName = 'Text';
 
-export default Text;
