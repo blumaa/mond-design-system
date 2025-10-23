@@ -1,3 +1,8 @@
+## <small>1.25.3 (2025-10-23)</small>
+
+* fix: main readme ([86df00c](https://github.com/blumaa/mond-design-system/commit/86df00c))
+* fix update readme ([228afde](https://github.com/blumaa/mond-design-system/commit/228afde))
+
 ## <small>1.25.2 (2025-10-23)</small>
 
 * fix: readme.md ([37a930c](https://github.com/blumaa/mond-design-system/commit/37a930c))
