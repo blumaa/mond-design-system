@@ -120,7 +120,7 @@ export default function ButtonTestPage() {
           ✅ SSR Verified
         </h3>
         <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.6' }}>
-          <li>No "use client" directive needed</li>
+          <li>No &quot;use client&quot; directive needed</li>
           <li>All styles load from static CSS</li>
           <li>CSS variables respond to data-theme attribute</li>
           <li>Zero hydration errors</li>

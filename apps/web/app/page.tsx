@@ -1,13 +1,8 @@
 "use client";
 import { Box, Button, Divider, Heading } from "@mond-design-system/theme";
 import { DarkModeToggle } from "./components/DarkModeToggle";
-import { useTheme as useThemeContext } from "./components/ThemeWrapper";
-import { useTheme } from "@mond-design-system/theme";
 
 export default function Home() {
-  const { isDarkMode } = useThemeContext();
-  const theme = useTheme(isDarkMode);
-
   return (
     <>
       <DarkModeToggle />
@@ -20,17 +15,17 @@ export default function Home() {
           minHeight: "100vh",
           gap: "1rem",
           padding: "2rem",
-          backgroundColor: theme("surface.background"),
-          color: theme("text.primary"),
+          backgroundColor: "var(--surface-background)",
+          color: "var(--text-primary)",
           transition: "all 0.3s ease",
         }}
       >
-        <Heading level={1} size="4xl" weight="bold" isDarkMode={isDarkMode}>
+        <Heading level={1} size="4xl" weight="bold">
           Mond Design System
         </Heading>
 
         <Box width="50%" mb="2rem">
-          <Divider size="sm" isDarkMode={isDarkMode} variant="subtle" />
+          <Divider size="sm" variant="subtle" />
         </Box>
 
         <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>
