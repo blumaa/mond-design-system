@@ -14,6 +14,15 @@ pnpm add @mond-design-system/theme
 
 ## Quick Start
 
+First, import the base styles in your app entry point:
+
+```tsx
+// In your main app file (e.g., App.tsx, _app.tsx, or index.tsx)
+import '@mond-design-system/theme/styles.css';
+```
+
+Then use the components:
+
 ```tsx
 import { Text, Heading, Icon, Button, Box } from '@mond-design-system/theme';
 
@@ -21,7 +30,7 @@ function MyComponent() {
   return (
     <Box p={4}>
       <Heading level={1}>Welcome to Mond Design System</Heading>
-      <Text variant="body-lg" semantic="secondary">
+      <Text variant="body" semantic="secondary">
         Modern, accessible components with TypeScript support
       </Text>
 
@@ -43,7 +52,7 @@ function MyComponent() {
 ## Components
 
 ### Typography
-- **Heading** - Semantic heading elements (h1-h6) with flexible sizing and polymorphic rendering
+- **Heading** - Semantic heading elements (h1-h6) with flexible sizing
 - **Text** - Flexible text component with semantic variants, styling options, and polymorphic rendering
 
 ### Icons & Graphics
@@ -54,7 +63,6 @@ function MyComponent() {
 ### Layout & Containers
 - **Box** - Foundational layout primitive with design system props and polymorphic rendering
 - **Divider** - Visual separator with horizontal and vertical orientations
-- **Card** - Content container with elevation and padding
 
 ### Form Controls
 - **Button** - Five variants (primary, outline, ghost, destructive, warning) with polymorphic rendering
@@ -92,17 +100,17 @@ function MyComponent() {
 ## Key Features
 
 - ✅ **TypeScript First** - Full type safety and IntelliSense support
-- ✅ **Polymorphic Components** - Render components as different elements (Button, Box, Text as links, divs, etc.)
+- ✅ **Polymorphic Components** - Render components as different elements (Button, Box, Text)
 - ✅ **Accessibility** - WCAG 2.1 AA compliant components with full keyboard support
 - ✅ **Design Tokens** - Semantic color system with light/dark themes
 - ✅ **Consistent API** - Similar props across all components
 - ✅ **Tree Shakeable** - Import only what you need
-- ✅ **Zero Runtime Dependencies** - No external dependencies
+- ✅ **SSR Compatible** - Works with Next.js, Remix, and other SSR frameworks
 - ✅ **Responsive Design** - Mobile-first responsive components
 
 ## Polymorphic Rendering
 
-Many components support polymorphic rendering via the `as` prop, allowing you to render them as different HTML elements while maintaining their styling:
+Some components (Button, Box, Text) support polymorphic rendering via the `as` prop, allowing you to render them as different HTML elements while maintaining their styling:
 
 ### Button as Link
 
@@ -139,7 +147,7 @@ Many components support polymorphic rendering via the `as` prop, allowing you to
 
 ```tsx
 // Render Box as a section
-<Box as="section" p={4} bg="surface.elevated">
+<Box as="section" p={4}>
   <Heading level={2}>Section Title</Heading>
 </Box>
 
@@ -159,7 +167,7 @@ Many components support polymorphic rendering via the `as` prop, allowing you to
 
 ```tsx
 // Render Text as a span
-<Text as="span" weight="bold" color="brand.primary.600">
+<Text as="span" weight="bold">
   Inline text
 </Text>
 
@@ -175,12 +183,12 @@ Many components support polymorphic rendering via the `as` prop, allowing you to
 // Heading with semantic levels
 <Heading level={1} size="4xl">Main Title</Heading>
 <Heading level={2} semantic="secondary">Section Title</Heading>
-<Heading as="h1" level={2}>Visual h2 as semantic h1</Heading>
+<Heading level={1} size="3xl">Custom sized h1</Heading>
 
 // Text with variants and semantic colors
-<Text variant="body-lg" semantic="primary">Main content text</Text>
+<Text variant="body" semantic="primary">Main content text</Text>
 <Text variant="caption" semantic="tertiary">Helper text</Text>
-<Text weight="bold" underline>Important information</Text>
+<Text variant="body" weight="bold" underline>Important information</Text>
 ```
 
 ## Button Variants
@@ -223,8 +231,8 @@ Many components support polymorphic rendering via the `as` prop, allowing you to
   <circle cx="12" cy="12" r="10" />
 </Icon>
 
-// Custom colors and sizing
-<Icon size="2xl" color="blue.500">
+// Custom sizing
+<Icon size="2xl" label="Large icon">
   <path d="M20.84..." />
 </Icon>
 ```
@@ -233,43 +241,54 @@ Many components support polymorphic rendering via the `as` prop, allowing you to
 
 The design system uses CSS variables for all styling, ensuring consistent theming across components.
 
-### Semantic Colors
+### Using Design Tokens
 
-All colors are available as CSS variables in your component styles:
+**For component props (Box, Text, Heading):**
+Use semantic token paths or direct values:
 
-```css
-/* Available as CSS variables */
-color: var(--mond-text-primary);                    /* Main text */
-color: var(--mond-text-secondary);                  /* Supporting text */
-background-color: var(--mond-surface-background);   /* Background */
-background-color: var(--mond-surface-elevated);     /* Elevated surfaces */
-background-color: var(--mond-brand-primary);        /* Brand colors */
+```tsx
+<Box bg="surface.elevated" p={4}>        {/* Semantic token path */}
+<Text color="text.primary">Content</Text>
 ```
 
-For TypeScript/Storybook reference, tokens can be imported from:
+**For custom CSS/styles:**
+Use CSS variables directly:
+
+```css
+.my-custom-class {
+  color: var(--mond-text-primary);
+  background-color: var(--mond-surface-background);
+  border-color: var(--mond-border-default);
+}
+```
+
+**For TypeScript/reference only:**
+Tokens can be imported but are not needed for styling:
 
 ```tsx
 import { colors, spacing, fontSizes } from '@mond-design-system/theme';
-
-// Use for documentation or type references
-const myColor = colors.gray[600];
+// Only use for documentation or type references
 ```
 
 ### Typography Scale
+
+Typography props can be used on Box, Text, and Heading components:
+
 ```tsx
-fontSize="lg"          // 1.125rem
-fontWeight="semibold"  // 600
-lineHeight="relaxed"   // 1.625
-fontFamily="sans"      // DM Sans font stack
+<Box fontSize="1.125rem" fontWeight={600}>Custom typography</Box>
+<Text weight="semibold">Semibold text</Text>
+<Heading weight="bold" level={1}>Bold heading</Heading>
 ```
 
 ### Spacing System
+
+Spacing props accept numbers (converted to pixels) or strings. Use numbers for consistency:
+
 ```tsx
-padding="4"    // 1rem
-margin="8"     // 2rem
-gap="2"        // 0.5rem
-p={4}          // Shorthand padding
-mx="auto"      // Horizontal margin auto
+<Box p={4}>        {/* Padding: 1rem */}
+<Box m={8}>        {/* Margin: 2rem */}
+<Box gap={2}>      {/* Gap: 0.5rem */}
+<Box mx="auto">    {/* Horizontal margin: auto */}
 ```
 
 ## Theme Support
@@ -277,29 +296,16 @@ mx="auto"      // Horizontal margin auto
 All components support light and dark themes via the `ThemeProvider`:
 
 ```tsx
-import { ThemeProvider } from '@mond-design-system/theme';
-import { mondTheme } from '@mond-design-system/theme';
+import { ThemeProvider, mondTheme } from '@mond-design-system/theme';
 
 function App() {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
 
   return (
     <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
-      <Text semantic="primary">
-        Automatically themed text
-      </Text>
-
-      <Heading semantic="secondary">
-        Automatically themed heading
-      </Heading>
-
-      <Button variant="primary">
-        Automatically themed button
-      </Button>
-
-      <Box bg="surface.elevated" p={4}>
-        Automatically themed container
-      </Box>
+      <Text semantic="primary">Automatically themed text</Text>
+      <Heading level={1} semantic="secondary">Automatically themed heading</Heading>
+      <Button variant="primary">Automatically themed button</Button>
     </ThemeProvider>
   );
 }
@@ -310,7 +316,7 @@ function App() {
 The design system supports multiple brand themes (Mond, CYPHER, FLUX):
 
 ```tsx
-import { cypherTheme, fluxTheme, mondTheme } from '@mond-design-system/theme';
+import { ThemeProvider, cypherTheme, fluxTheme } from '@mond-design-system/theme';
 
 // Switch between brand themes
 <ThemeProvider brandTheme={cypherTheme} colorScheme="dark">
@@ -369,15 +375,13 @@ import type {
   BoxProps
 } from '@mond-design-system/theme';
 
-const MyHeading: HeadingProps = {
-  level: 1,
-  size: '4xl',
-  semantic: 'primary'
-};
+// Type-safe component usage
+const MyHeading = (props: HeadingProps) => <Heading {...props} />;
 
-// Polymorphic component types
-<Button as="a" href="/link" /> // TypeScript knows this is valid
-<Box as="section" p={4} />     // Full type safety
+// Polymorphic component types are fully supported
+<Button as="a" href="/link" />  // TypeScript validates anchor props
+<Box as="section" p={4} />       // Full type safety with Box props
+<Text as="label" htmlFor="id">   // Label props are available
 ```
 
 ## Development
