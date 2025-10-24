@@ -1,3 +1,7 @@
+## <small>1.25.4 (2025-10-24)</small>
+
+* fix: storybook docs ([6adeecc](https://github.com/blumaa/mond-design-system/commit/6adeecc))
+
 ## <small>1.25.3 (2025-10-23)</small>
 
 * fix: main readme ([86df00c](https://github.com/blumaa/mond-design-system/commit/86df00c))
