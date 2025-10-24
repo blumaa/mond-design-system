@@ -97,6 +97,29 @@ html {
 .docblock-source {
   background-color: var(--surface-color) !important;
   border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+.docblock-source pre,
+.docblock-source code,
+.docblock-source pre code,
+.docblock-source pre code span,
+.docblock-source .token,
+.docblock-source .token.punctuation,
+.docblock-source .token.keyword,
+.docblock-source .token.string,
+.docblock-source .token.function,
+.docblock-source .token.class-name,
+.docblock-source .token.operator,
+.docblock-source .token.number,
+.docblock-source .token.boolean,
+.docblock-source .token.constant,
+.docblock-source .token.property,
+.docblock-source .token.tag,
+.docblock-source .token.attr-name,
+.docblock-source .token.attr-value,
+.docblock-source .token.comment {
+  color: var(--text-color) !important;
 }
 
 /* Style the controls panel */
