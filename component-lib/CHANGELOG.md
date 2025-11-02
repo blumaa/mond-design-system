@@ -1,3 +1,7 @@
+## <small>1.25.5 (2025-11-02)</small>
+
+* fix: Icon refactor ([caa4021](https://github.com/blumaa/mond-design-system/commit/caa4021))
+
 ## <small>1.25.4 (2025-10-24)</small>
 
 * fix: storybook docs ([6adeecc](https://github.com/blumaa/mond-design-system/commit/6adeecc))
