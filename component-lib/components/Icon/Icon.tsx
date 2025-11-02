@@ -1,8 +1,9 @@
 import { forwardRef } from 'react';
+import type { ColorValue } from '../../tokens';
 
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
-export interface IconProps extends React.SVGAttributes<SVGSVGElement> {
+export interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
   /**
    * Icon size
    * @default 'md'
@@ -10,9 +11,19 @@ export interface IconProps extends React.SVGAttributes<SVGSVGElement> {
   size?: IconSize;
 
   /**
-   * SVG path data or React SVG element
+   * SVG element to display
    */
   children: React.ReactNode;
+
+  /**
+   * Icon color - pass a value from the colors token object
+   * @default 'currentColor'
+   * @example
+   * import { colors } from '@mond-design-system/theme';
+   * <Icon color={colors.red["500"]}><HeartIcon /></Icon>
+   * <Icon color={colors.brand.primary["600"]}><HeartIcon /></Icon>
+   */
+  color?: ColorValue;
 
   /**
    * Accessible label for the icon
@@ -26,9 +37,10 @@ export interface IconProps extends React.SVGAttributes<SVGSVGElement> {
   decorative?: boolean;
 }
 
-export const Icon = forwardRef<SVGSVGElement, IconProps>(({
+export const Icon = forwardRef<HTMLSpanElement, IconProps>(({
   size = 'md',
   children,
+  color,
   label,
   decorative = false,
   className = '',
@@ -41,18 +53,17 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(({
   ].filter(Boolean).join(' ');
 
   return (
-    <svg
+    <span
       ref={ref}
       className={classes}
-      fill="currentColor"
-      viewBox="0 0 24 24"
+      style={color ? { color } : undefined}
       aria-label={!decorative && label ? label : undefined}
       aria-hidden={decorative}
       role={decorative ? 'presentation' : 'img'}
       {...props}
     >
       {children}
-    </svg>
+    </span>
   );
 });
 

@@ -91,6 +91,7 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
+    "@heroicons/react": "^2.2.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.0",
     "@semantic-release/git": "^10.0.1",

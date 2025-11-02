@@ -2,19 +2,20 @@ import React from 'react';
 import { render, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Icon, IconSize } from './Icon';
+import { colors } from '../../tokens';
 
-const TestPath = () => (
-  <path 
-    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
-    fill="currentColor"
-  />
+// Mock SVG component (simulating Heroicons)
+const TestSVG = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+  </svg>
 );
 
 describe('Icon', () => {
   it('renders correctly with default props', () => {
     render(
       <Icon>
-        <TestPath />
+        <TestSVG />
       </Icon>
     );
 
@@ -22,13 +23,12 @@ describe('Icon', () => {
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveClass('mond-icon');
     expect(icon).toHaveClass('mond-icon--md');
-    expect(icon).toHaveAttribute('viewBox', '0 0 24 24');
   });
 
   it('renders with custom size', () => {
     render(
       <Icon size="lg">
-        <TestPath />
+        <TestSVG />
       </Icon>
     );
 
@@ -43,7 +43,7 @@ describe('Icon', () => {
     sizes.forEach((size) => {
       const { unmount } = render(
         <Icon size={size}>
-          <TestPath />
+          <TestSVG />
         </Icon>
       );
 
@@ -58,7 +58,7 @@ describe('Icon', () => {
   it('renders with accessibility label', () => {
     render(
       <Icon label="Test icon">
-        <TestPath />
+        <TestSVG />
       </Icon>
     );
 
@@ -72,83 +72,72 @@ describe('Icon', () => {
   it('renders as decorative when specified', () => {
     render(
       <Icon decorative data-testid="decorative-icon">
-        <TestPath />
+        <TestSVG />
       </Icon>
     );
-    
+
     const icon = screen.getByTestId('decorative-icon');
     expect(icon).toHaveAttribute('aria-hidden', 'true');
     expect(icon).toHaveAttribute('role', 'presentation');
     expect(icon).not.toHaveAttribute('aria-label');
   });
 
-  it('renders with custom color', () => {
+  it('renders with custom color from design tokens', () => {
     render(
-      <Icon color="red">
-        <TestPath />
+      <Icon color={colors.red["500"]}>
+        <TestSVG />
       </Icon>
     );
 
     const icon = screen.getByRole('img');
-    // Color is passed through as an SVG attribute
-    expect(icon).toHaveAttribute('color', 'red');
+    // Color is applied via inline style
+    expect(icon).toHaveStyle({ color: colors.red["500"] });
   });
 
   it('passes through additional props', () => {
     render(
       <Icon className="custom-class" data-testid="custom-icon">
-        <TestPath />
+        <TestSVG />
       </Icon>
     );
-    
+
     const icon = screen.getByTestId('custom-icon');
     expect(icon).toHaveClass('custom-class');
   });
 
   it('forwards ref correctly', () => {
-    const ref = React.createRef<SVGSVGElement>();
-    
+    const ref = React.createRef<HTMLSpanElement>();
+
     render(
       <Icon ref={ref}>
-        <TestPath />
+        <TestSVG />
       </Icon>
     );
-    
-    expect(ref.current).toBeInstanceOf(SVGSVGElement);
+
+    expect(ref.current).toBeInstanceOf(HTMLSpanElement);
   });
 
-  it('has flexShrink set to 0 to prevent shrinking', () => {
+  it('renders as a span element', () => {
     render(
       <Icon data-testid="icon">
-        <TestPath />
+        <TestSVG />
       </Icon>
     );
 
     const icon = screen.getByTestId('icon');
-    // Icon uses CSS classes for styling, including flex behavior
+    expect(icon.tagName).toBe('SPAN');
     expect(icon).toHaveClass('mond-icon');
   });
 
-  it('is inline-block by default', () => {
+  it('wraps SVG children correctly', () => {
     render(
       <Icon data-testid="icon">
-        <TestPath />
+        <TestSVG />
       </Icon>
     );
 
     const icon = screen.getByTestId('icon');
-    // Icon uses CSS classes for display properties
-    expect(icon).toHaveClass('mond-icon');
-  });
-
-  it('supports dark mode', () => {
-    render(
-      <Icon data-testid="icon">
-        <TestPath />
-      </Icon>
-    );
-    
-    const icon = screen.getByTestId('icon');
-    expect(icon).toBeInTheDocument();
+    const svg = icon.querySelector('svg');
+    expect(svg).toBeInTheDocument();
   });
 });

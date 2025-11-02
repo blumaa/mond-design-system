@@ -1,49 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from './Icon';
-
-// Sample SVG paths for demonstration
-const HeartIcon = () => (
-  <path
-    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-    fill="currentColor"
-  />
-);
-
-const StarIcon = () => (
-  <path
-    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-    fill="currentColor"
-  />
-);
-
-const CheckIcon = () => (
-  <path
-    d="M20 6L9 17l-5-5"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    fill="none"
-  />
-);
-
-const SearchIcon = () => (
-  <>
-    <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
-    <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </>
-);
-
-const ArrowRightIcon = () => (
-  <path
-    d="M5 12h14M12 5l7 7-7 7"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    fill="none"
-  />
-);
+import { colors } from '../../tokens';
+import {
+  HeartIcon,
+  StarIcon,
+  CheckIcon,
+  MagnifyingGlassIcon,
+  ArrowRightIcon,
+  WrenchScrewdriverIcon,
+} from '@heroicons/react/24/solid';
 
 const meta: Meta<typeof Icon> = {
   title: 'Components/Icon',
@@ -56,25 +21,25 @@ const meta: Meta<typeof Icon> = {
 ### Quick Start
 \`\`\`tsx
 import { Icon } from '@mond-design-system/theme';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 function MyComponent() {
   return (
-    <Icon size="md" label="Search" color="currentColor">
-      <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" />
-      <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
+    <Icon size="md" label="Search">
+      <MagnifyingGlassIcon />
     </Icon>
   );
 }
 \`\`\`
 
-A flexible Icon component that renders SVG icons with consistent sizing and accessibility features. Perfect for buttons, navigation, status indicators, and decorative elements.
+A flexible Icon component that wraps SVG icons (like Heroicons) with consistent sizing and accessibility features. Perfect for buttons, navigation, status indicators, and decorative elements.
 
 **Key Features:**
 - 📐 Six sizes (xs, sm, md, lg, xl, 2xl) for perfect scaling
 - 🎨 Inherits text color by default, customizable with any color
 - ♿ Full accessibility with screen reader support
 - 🏷️ Decorative mode to hide from assistive technology
-- 📝 Flexible content - accepts any SVG paths or elements
+- 📝 Works with any SVG icon library (Heroicons, Lucide, etc.)
 - 🎯 Proper ARIA labeling for semantic icons
 - 🌙 Works seamlessly in light and dark themes
 `
@@ -148,19 +113,19 @@ export const Sizes: Story = {
 export const Colors: Story = {
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-      <Icon color="currentColor" label="Default color heart">
+      <Icon label="Default color heart">
         <HeartIcon />
       </Icon>
-      <Icon color="red" label="Red heart">
+      <Icon color={colors.red["500"]} label="Red heart">
         <HeartIcon />
       </Icon>
-      <Icon color="blue" label="Blue heart">
+      <Icon color={colors.blue["500"]} label="Blue heart">
         <HeartIcon />
       </Icon>
-      <Icon color="green" label="Green heart">
+      <Icon color={colors.green["500"]} label="Green heart">
         <HeartIcon />
       </Icon>
-      <Icon color="#8B5CF6" label="Purple heart">
+      <Icon color={colors.brand.primary["500"]} label="Primary brand heart">
         <HeartIcon />
       </Icon>
     </div>
@@ -168,7 +133,7 @@ export const Colors: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Icons inherit the current text color by default, but can be customized with any color value.'
+        story: 'Icons inherit the current text color by default, but can be customized with color values from the design system tokens.'
       }
     }
   }
@@ -187,17 +152,20 @@ export const IconVariants: Story = {
         <CheckIcon />
       </Icon>
       <Icon label="Search">
-        <SearchIcon />
+        <MagnifyingGlassIcon />
       </Icon>
       <Icon label="Arrow right">
         <ArrowRightIcon />
+      </Icon>
+      <Icon label="Wrench and screwdriver">
+        <WrenchScrewdriverIcon />
       </Icon>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Examples of different icon styles - filled, outlined, and stroke-based icons all work with the Icon component.'
+        story: 'Examples of different Heroicons used with the Icon component.'
       }
     }
   }
@@ -235,12 +203,12 @@ export const InText: Story = {
   render: () => (
     <p style={{ fontSize: '16px', lineHeight: '1.5' }}>
       This task is complete{' '}
-      <Icon size="sm" color="green" decorative>
+      <Icon size="sm" color={colors.green["500"]} decorative>
         <CheckIcon />
       </Icon>
       {' '}and you can search{' '}
       <Icon size="sm" decorative>
-        <SearchIcon />
+        <MagnifyingGlassIcon />
       </Icon>
       {' '}for more tasks.
     </p>

@@ -31,3 +31,14 @@ export const tokens = {
   letterSpacings: typographyTokens.letterSpacings,
   radii: radiiTokens.radii,
 };
+
+// Utility type to extract all color values (hex codes) from the colors object
+type ExtractColorValues<T> = T extends Record<string, unknown>
+  ? {
+      [K in keyof T]: T[K] extends string
+        ? T[K]
+        : ExtractColorValues<T[K]>
+    }[keyof T]
+  : never;
+
+export type ColorValue = ExtractColorValues<typeof colors> | 'currentColor';
