@@ -1,6 +1,6 @@
 {
   "name": "@mond-design-system/theme",
-  "version": "1.25.5",
+  "version": "1.26.0",
   "description": "A modern, accessible React component library with TypeScript support, design tokens, and built-in light/dark themes",
   "license": "MIT",
   "type": "module",

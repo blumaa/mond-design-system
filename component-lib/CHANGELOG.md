@@ -1,3 +1,10 @@
+## 1.26.0 (2025-11-03)
+
+* feat: clean up tokens folder ([0eab3a0](https://github.com/blumaa/mond-design-system/commit/0eab3a0))
+* feat: styled-Components ([d7254b0](https://github.com/blumaa/mond-design-system/commit/d7254b0))
+* feat: token-restructure-styled-components ([564e66d](https://github.com/blumaa/mond-design-system/commit/564e66d))
+* fix ci build ([c4bfa54](https://github.com/blumaa/mond-design-system/commit/c4bfa54))
+
 ## <small>1.25.5 (2025-11-02)</small>
 
 * fix: Icon refactor ([caa4021](https://github.com/blumaa/mond-design-system/commit/caa4021))
