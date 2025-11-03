@@ -18,8 +18,6 @@
   },
   "include": [
     "index.ts",
-    "components/**/*",
-    "tokens/**/*",
     "src/**/*"
   ],
   "exclude": [
@@ -27,11 +25,6 @@
     "**/*.test.tsx",
     "**/*.stories.ts",
     "**/*.stories.tsx",
-    "tokens/scripts/**/*",
-    "tokens/primitives/**/*",
-    "tokens/semantic/**/*",
-    "tokens/brands/**/*",
-    "tokens/config.json",
     "node_modules",
     "dist"
   ]

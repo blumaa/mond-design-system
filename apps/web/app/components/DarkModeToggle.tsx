@@ -8,10 +8,10 @@ export function DarkModeToggle() {
 
   return (
     <Box
-      style={{ 
-        position: 'fixed', 
-        top: '1rem', 
-        left: '1rem', 
+      style={{
+        position: 'fixed',
+        top: '1rem',
+        left: '1rem',
         zIndex: 1000,
         backdropFilter: 'blur(10px)',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
@@ -19,21 +19,21 @@ export function DarkModeToggle() {
       }}
       display="flex"
       alignItems="center"
-      gap={2}
-      p={2}
-      bg="surface.elevated"
+      gap="2"
+      padding="2"
+      backgroundColor="surfaceElevated"
       borderRadius="md"
       border="1px solid"
-      borderColor="border.default"
+      borderColor="borderDefault"
     >
       <Box
         fontSize={14}
         fontWeight="medium"
-        color="text.primary"
+        color="textPrimary"
       >
         {isDarkMode ? '🌙' : '☀️'}
       </Box>
-      <Switch 
+      <Switch
         checked={isDarkMode}
         onChange={toggleDarkMode}
         size="sm"

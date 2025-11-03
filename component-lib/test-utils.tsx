@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
-import { ThemeProvider, ThemeProviderProps } from './components/providers/ThemeProvider';
+import { ThemeProvider, ThemeProviderProps } from './src/components/providers/ThemeProvider';
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   /**

@@ -21,10 +21,10 @@
  * ```
  */
 
-import { theme as defaultLight } from '../../dist/themes/default-light.js';
-import { theme as defaultDark } from '../../dist/themes/default-dark.js';
-import { theme as bsfLight } from '../../dist/themes/bsf-light.js';
-import { theme as bsfDark } from '../../dist/themes/bsf-dark.js';
+import { theme as defaultLight } from '../../dist/themes/default-light';
+import { theme as defaultDark } from '../../dist/themes/default-dark';
+import { theme as bsfLight } from '../../dist/themes/bsf-light';
+import { theme as bsfDark } from '../../dist/themes/bsf-dark';
 
 // Default brand themes
 export const defaultLightTheme = defaultLight;
@@ -34,8 +34,58 @@ export const defaultDarkTheme = defaultDark;
 export const bsfLightTheme = bsfLight;
 export const bsfDarkTheme = bsfDark;
 
+// Type definitions - define the shape of a theme
+export interface Theme {
+  colors: {
+    [key: string]: string;
+  };
+  space: {
+    [key: string]: string;
+  };
+  fontSizes: {
+    xs: string;
+    sm: string;
+    base: string;
+    lg: string;
+    xl: string;
+    '2xl': string;
+    '3xl': string;
+    '4xl': string;
+  };
+  fontWeights: {
+    normal: string;
+    medium: string;
+    semibold: string;
+    bold: string;
+  };
+  fonts: {
+    sans: string;
+    mono: string;
+  };
+  lineHeights: {
+    none: string;
+    tight: string;
+    normal: string;
+    relaxed: string;
+  };
+  letterSpacings: {
+    tight: string;
+    normal: string;
+    wide: string;
+  };
+  radii: {
+    [key: string]: string;
+  };
+  shadows: {
+    [key: string]: string;
+  };
+}
+
+export type Brand = 'default' | 'bsf';
+export type Mode = 'light' | 'dark';
+
 // Theme collections for easy switching
-export const themes = {
+export const themes: Record<Brand, Record<Mode, Theme>> = {
   default: {
     light: defaultLightTheme,
     dark: defaultDarkTheme,
@@ -45,8 +95,3 @@ export const themes = {
     dark: bsfDarkTheme,
   },
 };
-
-// Type definitions
-export type Theme = typeof defaultLightTheme;
-export type Brand = 'default' | 'bsf';
-export type Mode = 'light' | 'dark';

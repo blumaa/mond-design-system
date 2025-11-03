@@ -9,39 +9,39 @@ Semantic colors automatically adapt to light and dark themes, providing consiste
 
 #### Text Colors
 ```tsx
-color="text.primary"    // Main content text
-color="text.secondary"  // Supporting information  
-color="text.tertiary"   // Less important details
-color="text.disabled"   // Inactive content
-color="text.inverse"    // Text on dark backgrounds
-color="text.link"       // Interactive links
-color="text.success"    // Positive feedback
-color="text.warning"    // Cautionary information
-color="text.error"      // Problem notifications
+color="textPrimary"    // Main content text
+color="textSecondary"  // Supporting information
+color="textTertiary"   // Less important details
+color="textDisabled"   // Inactive content
+color="textInverse"    // Text on dark backgrounds
+color="textLink"       // Interactive links
+color="textSuccess"    // Positive feedback
+color="textWarning"    // Cautionary information
+color="textError"      // Problem notifications
 ```
 
 #### Surface Colors
 ```tsx
-color="surface.background"  // Main background
-color="surface.elevated"    // Elevated surfaces
-color="surface.overlay"     // Modal overlays
-color="surface.card"        // Card backgrounds
-color="surface.input"       // Form input backgrounds
-color="surface.disabled"    // Disabled element backgrounds
+backgroundColor="surfaceBackground"  // Main background
+backgroundColor="surfaceElevated"    // Elevated surfaces
+backgroundColor="surfaceOverlay"     // Modal overlays
+backgroundColor="surfaceCard"        // Card backgrounds
+backgroundColor="surfaceInput"       // Form input backgrounds
+backgroundColor="surfaceDisabled"    // Disabled element backgrounds
 ```
 
 #### Interactive Colors
 ```tsx
 // Primary Actions
-color="interactive.primary.background"        // Button background
-color="interactive.primary.backgroundHover"   // Button hover state
-color="interactive.primary.backgroundPressed" // Button pressed state
-color="interactive.primary.text"             // Button text
+backgroundColor="interactivePrimaryBackground"        // Button background
+backgroundColor="interactivePrimaryBackgroundHover"   // Button hover state
+backgroundColor="interactivePrimaryBackgroundPressed" // Button pressed state
+color="interactivePrimaryText"                        // Button text
 
-// Secondary Actions  
-color="interactive.secondary.background"      // Secondary button
-color="interactive.secondary.border"          // Secondary button border
-color="interactive.secondary.text"           // Secondary button text
+// Secondary Actions
+backgroundColor="interactiveSecondaryBackground"      // Secondary button
+borderColor="interactiveSecondaryBorder"              // Secondary button border
+color="interactiveSecondaryText"                      // Secondary button text
 ```
 
 ### Direct Color Tokens
@@ -49,19 +49,19 @@ Use specific color values when semantic colors don't apply:
 
 ```tsx
 // Blue palette
-color="blue.50"    // Lightest blue
-color="blue.500"   // Medium blue  
-color="blue.900"   // Darkest blue
+color="blue50"    // Lightest blue
+color="blue500"   // Medium blue
+color="blue900"   // Darkest blue
 
 // Gray palette
-color="gray.100"   // Light gray
-color="gray.500"   // Medium gray
-color="gray.800"   // Dark gray
+color="gray100"   // Light gray
+color="gray500"   // Medium gray
+color="gray800"   // Dark gray
 
 // Status colors
-color="red.500"    // Error red
-color="green.500"  // Success green
-color="amber.500"  // Warning amber
+color="red500"    // Error red
+color="green500"  // Success green
+color="amber500"  // Warning amber
 ```
 
 ## 📏 Spacing
@@ -87,14 +87,14 @@ spacing="24"  // 96px (6rem)
 
 ### Usage Examples
 ```tsx
-<Box 
-  p="4"        // padding: 1rem
-  m="2"        // margin: 0.5rem  
-  px="6"       // padding-left & padding-right: 1.5rem
-  my="8"       // margin-top & margin-bottom: 2rem
-  pt="3"       // padding-top: 0.75rem
-  mb="5"       // margin-bottom: 1.25rem
-  gap="4"      // gap: 1rem (for flexbox/grid)
+<Box
+  padding="4"                                  // padding: 1rem
+  margin="2"                                   // margin: 0.5rem
+  paddingLeft="6" paddingRight="6"            // padding-left & padding-right: 1.5rem
+  marginTop="8" marginBottom="8"              // margin-top & margin-bottom: 2rem
+  paddingTop="3"                              // padding-top: 0.75rem
+  marginBottom="5"                            // margin-bottom: 1.25rem
+  gap="4"                                     // gap: 1rem (for flexbox/grid)
 >
   Content
 </Box>
@@ -184,9 +184,9 @@ function App() {
   return (
     <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
       <Box
-        bg="surface.background"
-        color="text.primary"
-        borderColor="border.default"
+        backgroundColor="surfaceBackground"
+        color="textPrimary"
+        borderColor="borderDefault"
       >
         Themed content automatically adapts
       </Box>
@@ -201,15 +201,15 @@ Use semantic tokens that automatically adapt to the current theme:
 ```tsx
 // ✅ Recommended - adapts to theme via ThemeProvider
 <Box
-  bg="surface.background"
-  color="text.primary"
-  borderColor="border.default"
+  backgroundColor="surfaceBackground"
+  color="textPrimary"
+  borderColor="borderDefault"
 >
   Themed content
 </Box>
 
 // ❌ Not recommended - static colors
-<Box bg="white" color="black">
+<Box backgroundColor="white" color="black">
   Static content
 </Box>
 ```
@@ -230,10 +230,10 @@ Use semantic tokens that automatically adapt to the current theme:
 ### Box Component
 ```tsx
 <Box
-  p="4"                    // Uses spacing tokens
-  bg="surface.card"        // Uses semantic color tokens
-  borderRadius="md"        // Uses radius tokens
-  boxShadow="sm"           // Uses shadow tokens
+  padding="4"                        // Uses spacing tokens
+  backgroundColor="surfaceCard"      // Uses semantic color tokens
+  borderRadius="md"                  // Uses radius tokens
+  boxShadow="sm"                     // Uses shadow tokens
 >
   Layout with design tokens
 </Box>
@@ -244,20 +244,20 @@ Use semantic tokens that automatically adapt to the current theme:
 ### 1. Prefer Semantic Tokens
 ```tsx
 // ✅ Good - semantic meaning
-color="text.primary"
-bg="surface.background"
+color="textPrimary"
+backgroundColor="surfaceBackground"
 
 // ❌ Avoid - hardcoded values
-color="gray.900" 
-bg="white"
+color="gray900"
+backgroundColor="white"
 ```
 
 ### 2. Use Consistent Spacing
 ```tsx
 // ✅ Good - uses spacing scale
 <Stack spacing="4">
-  <Box mb="2">Item 1</Box>
-  <Box mb="2">Item 2</Box>
+  <Box marginBottom="2">Item 1</Box>
+  <Box marginBottom="2">Item 2</Box>
 </Stack>
 
 // ❌ Avoid - arbitrary values

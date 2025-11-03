@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Preview } from "@storybook/react";
 import { withThemeByClassName } from '@storybook/addon-themes';
-import { ThemeProvider } from '../components/providers/ThemeProvider';
+import { ThemeProvider } from '../src/components/providers/ThemeProvider';
 import './styles.css';
 
 const preview: Preview = {

@@ -1,5 +1,5 @@
 // Export all tokens
-export * from './tokens';
+export * from './src/tokens';
 
 // Export all components
-export * from './components';
+export * from './src/components';

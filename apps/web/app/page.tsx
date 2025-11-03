@@ -24,7 +24,7 @@ export default function Home() {
           Mond Design System
         </Heading>
 
-        <Box width="50%" mb="2rem">
+        <Box width="50%" marginBottom="2rem">
           <Divider size="sm" variant="subtle" />
         </Box>
 
