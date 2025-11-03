@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from './Icon';
-import { colors } from '../../tokens';
 import {
   HeartIcon,
   StarIcon,
@@ -116,16 +115,16 @@ export const Colors: Story = {
       <Icon label="Default color heart">
         <HeartIcon />
       </Icon>
-      <Icon color={colors.red["500"]} label="Red heart">
+      <Icon color="ColorRed500" label="Red heart">
         <HeartIcon />
       </Icon>
-      <Icon color={colors.blue["500"]} label="Blue heart">
+      <Icon color="ColorBlue500" label="Blue heart">
         <HeartIcon />
       </Icon>
-      <Icon color={colors.green["500"]} label="Green heart">
+      <Icon color="ColorGreen500" label="Green heart">
         <HeartIcon />
       </Icon>
-      <Icon color={colors.brand.primary["500"]} label="Primary brand heart">
+      <Icon color="ColorBrandPrimary500" label="Primary brand heart">
         <HeartIcon />
       </Icon>
     </div>
@@ -133,7 +132,7 @@ export const Colors: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Icons inherit the current text color by default, but can be customized with color values from the design system tokens.'
+        story: 'Icons inherit the current text color by default, but can be customized with color token keys from the design system.'
       }
     }
   }
@@ -203,7 +202,7 @@ export const InText: Story = {
   render: () => (
     <p style={{ fontSize: '16px', lineHeight: '1.5' }}>
       This task is complete{' '}
-      <Icon size="sm" color={colors.green["500"]} decorative>
+      <Icon size="sm" color="ColorGreen500" decorative>
         <CheckIcon />
       </Icon>
       {' '}and you can search{' '}
@@ -227,7 +226,7 @@ export const CustomStyling: Story = {
     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
       <Icon
         size="lg"
-        color="red"
+        color="ColorRed500"
         style={{ padding: '8px', backgroundColor: '#fef2f2', borderRadius: '8px' }}
         label="Heart with background"
       >
@@ -235,7 +234,7 @@ export const CustomStyling: Story = {
       </Icon>
       <Icon
         size="lg"
-        color="blue"
+        color="ColorBlue500"
         style={{ border: '2px solid currentColor', borderRadius: '50%', padding: '8px' }}
         label="Star with border"
       >

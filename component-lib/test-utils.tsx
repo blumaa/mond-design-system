@@ -9,15 +9,15 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   themeProviderProps?: Partial<ThemeProviderProps>;
 }
 
-const AllTheProviders = ({ 
-  children, 
+const AllTheProviders = ({
+  children,
   colorScheme = 'light',
-  brandTheme,
-}: { 
+  brand,
+}: {
   children: React.ReactNode;
 } & Partial<ThemeProviderProps>) => {
   return (
-    <ThemeProvider colorScheme={colorScheme} brandTheme={brandTheme}>
+    <ThemeProvider colorScheme={colorScheme} brand={brand}>
       {children}
     </ThemeProvider>
   );

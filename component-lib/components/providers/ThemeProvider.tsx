@@ -1,41 +1,21 @@
-import React from 'react';
-
-type Theme = 'light' | 'dark';
-
-/**
- * Brand theme configuration interface
- * External brand themes must conform to this structure
- */
-export interface BrandTheme {
-  id: string;
-  name: string;
-  description?: string;
-  colors: {
-    brand: {
-      primary: ColorScale;
-      secondary?: ColorScale;
-      success?: ColorScale;
-      warning?: ColorScale;
-      error?: ColorScale;
-    };
-  };
-}
+'use client';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+import { themes, type Theme as ThemeObject, type Brand, type Mode } from '../../src/themes';
 
 /**
- * Color scale interface for brand color tokens
+ * Theme context value for hooks
  */
-export interface ColorScale {
-  50?: string;
-  100?: string;
-  200?: string;
-  300?: string;
-  400?: string;
-  500: string; // Required base color
-  600?: string;
-  700?: string;
-  800?: string;
-  900?: string;
+export interface ThemeContextValue {
+  mode: Mode;
+  brand: Brand;
+  setMode: (mode: Mode) => void;
+  setBrand: (brand: Brand) => void;
+  toggleMode: () => void;
+  currentTheme: ThemeObject;
 }
+
+const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 /**
  * Props for the ThemeProvider
@@ -43,94 +23,217 @@ export interface ColorScale {
 export interface ThemeProviderProps {
   children: React.ReactNode;
   /**
-   * External brand theme configuration
-   * Brand colors will be injected as CSS variables
-   * If not provided, uses default brand colors from tokens
-   */
-  brandTheme?: BrandTheme;
-  /**
    * Color scheme (light/dark mode)
    * @default 'light'
    */
-  colorScheme?: Theme;
+  colorScheme?: Mode;
   /**
-   * Additional class name for the theme wrapper
+   * Brand ('default' or 'bsf')
+   * @default 'default'
    */
-  className?: string;
+  brand?: Brand;
+  /**
+   * Whether to enable stateful theme switching via hooks
+   * When enabled, provides useTheme hook for runtime theme changes
+   * @default false
+   */
+  enableHooks?: boolean;
+  /**
+   * Whether to persist theme to localStorage (only works with enableHooks)
+   * @default true
+   */
+  enablePersistence?: boolean;
+  /**
+   * localStorage key for theme mode
+   * @default 'mond-theme-mode'
+   */
+  storageKeyMode?: string;
+  /**
+   * localStorage key for brand
+   * @default 'mond-theme-brand'
+   */
+  storageKeyBrand?: string;
 }
 
 /**
- * Generate inline CSS variable overrides for brand theme
+ * Stateful ThemeProvider with hooks support
  */
-function generateBrandCSSVariables(brandTheme: BrandTheme): React.CSSProperties {
-  const cssVars: Record<string, string> = {};
-
-  // Map brand theme colors to CSS variables
-  // This allows runtime brand switching while maintaining SSR compatibility
-  Object.entries(brandTheme.colors.brand).forEach(([colorType, colorScale]) => {
-    if (colorScale) {
-      Object.entries(colorScale).forEach(([shade, value]) => {
-        if (value) {
-          cssVars[`--mond-color-brand-${colorType}-${shade}`] = value;
-        }
-      });
-    }
-  });
-
-  return cssVars as React.CSSProperties;
-}
-
-/**
- * SSR-Compatible ThemeProvider Component
- *
- * This component provides theming via:
- * 1. data-theme attribute for light/dark mode switching
- * 2. Inline CSS variables for optional brand theme overrides
- *
- * Unlike the previous Context-based approach, this component:
- * - ✅ Works with Server Components (no "use client")
- * - ✅ No React Context required
- * - ✅ Themes applied via CSS variables
- * - ✅ SSR-compatible
- *
- * @example
- * // Basic usage (light theme, default brand)
- * <ThemeProvider>
- *   <App />
- * </ThemeProvider>
- *
- * @example
- * // Dark mode
- * <ThemeProvider colorScheme="dark">
- *   <App />
- * </ThemeProvider>
- *
- * @example
- * // Custom brand theme
- * <ThemeProvider brandTheme={nordstromTheme} colorScheme="dark">
- *   <App />
- * </ThemeProvider>
- */
-export function ThemeProvider({
+function StatefulThemeProvider({
   children,
-  brandTheme,
   colorScheme = 'light',
-  className,
+  brand: initialBrand = 'default',
+  enablePersistence = true,
+  storageKeyMode = 'mond-theme-mode',
+  storageKeyBrand = 'mond-theme-brand',
 }: ThemeProviderProps) {
-  // Generate inline CSS variables for brand theme (if provided)
-  const brandCSSVars = brandTheme ? generateBrandCSSVariables(brandTheme) : undefined;
+  const [mode, setModeState] = useState<Mode>(colorScheme);
+  const [brand, setBrandState] = useState<Brand>(initialBrand);
+  const [mounted, setMounted] = useState(false);
+
+  // Initialize theme from localStorage on mount (client-side only)
+  useEffect(() => {
+    if (!enablePersistence) {
+      setMounted(true);
+      return;
+    }
+
+    const storedMode = localStorage.getItem(storageKeyMode) as Mode | null;
+    const storedBrand = localStorage.getItem(storageKeyBrand) as Brand | null;
+
+    if (storedMode && (storedMode === 'light' || storedMode === 'dark')) {
+      setModeState(storedMode);
+    }
+
+    if (storedBrand && (storedBrand === 'default' || storedBrand === 'bsf')) {
+      setBrandState(storedBrand);
+    }
+
+    setMounted(true);
+  }, [enablePersistence, storageKeyMode, storageKeyBrand]);
+
+  // Persist theme to localStorage
+  useEffect(() => {
+    if (!mounted || !enablePersistence) return;
+
+    localStorage.setItem(storageKeyMode, mode);
+    localStorage.setItem(storageKeyBrand, brand);
+  }, [mode, brand, mounted, enablePersistence, storageKeyMode, storageKeyBrand]);
+
+  const setMode = (newMode: Mode) => {
+    setModeState(newMode);
+  };
+
+  const setBrand = (newBrand: Brand) => {
+    setBrandState(newBrand);
+  };
+
+  const toggleMode = () => {
+    setModeState((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
+  // Get the current theme object based on brand and mode
+  const currentTheme = themes[brand][mode];
+
+  const value: ThemeContextValue = {
+    mode,
+    brand,
+    setMode,
+    setBrand,
+    toggleMode,
+    currentTheme,
+  };
+
+  // Prevent flash of wrong theme on SSR by rendering with default theme until mounted
+  if (!mounted) {
+    const initialTheme = themes[initialBrand][colorScheme];
+    return (
+      <StyledThemeProvider theme={initialTheme}>
+        {children}
+      </StyledThemeProvider>
+    );
+  }
 
   return (
-    <div
-      data-theme={colorScheme}
-      data-brand={brandTheme?.id}
-      className={className}
-      style={brandCSSVars}
-    >
-      {children}
-    </div>
+    <ThemeContext.Provider value={value}>
+      <StyledThemeProvider theme={currentTheme}>
+        {children}
+      </StyledThemeProvider>
+    </ThemeContext.Provider>
   );
 }
 
-// Deprecated hooks have been removed.
-// All components now use CSS variables directly via var(--mond-*)
+/**
+ * ThemeProvider Component
+ *
+ * Provides theming via styled-components ThemeProvider with auto-generated theme objects.
+ *
+ * **Two modes of operation:**
+ *
+ * ### Static Mode (default, SSR-compatible)
+ * - No React Context
+ * - No hooks
+ * - Theme set via props only
+ * - Perfect for SSR/SSG
+ *
+ * ### Stateful Mode (enableHooks=true)
+ * - React Context with useTheme hook
+ * - Runtime theme switching
+ * - localStorage persistence
+ * - Client-side only
+ *
+ * @example
+ * // Static usage (SSR-safe)
+ * <ThemeProvider colorScheme="dark" brand="default">
+ *   <App />
+ * </ThemeProvider>
+ *
+ * @example
+ * // Stateful usage with hooks
+ * <ThemeProvider enableHooks colorScheme="light" brand="default">
+ *   <App />
+ * </ThemeProvider>
+ *
+ * // Then in components:
+ * function ThemeSwitcher() {
+ *   const { mode, toggleMode, brand, setBrand } = useTheme();
+ *   return <button onClick={toggleMode}>Toggle theme</button>;
+ * }
+ */
+export function ThemeProvider(props: ThemeProviderProps) {
+  if (props.enableHooks) {
+    return <StatefulThemeProvider {...props} />;
+  }
+
+  // Static mode (SSR-compatible)
+  const {
+    children,
+    colorScheme = 'light',
+    brand = 'default',
+  } = props;
+
+  const theme = themes[brand][colorScheme];
+
+  return (
+    <StyledThemeProvider theme={theme}>
+      {children}
+    </StyledThemeProvider>
+  );
+}
+
+/**
+ * useTheme Hook
+ *
+ * Access the current theme context to read or update theme settings.
+ * Only works when ThemeProvider has enableHooks=true.
+ *
+ * @throws {Error} If used outside of ThemeProvider or if enableHooks is false
+ *
+ * @example
+ * function ThemeSwitcher() {
+ *   const { mode, toggleMode, brand, setBrand } = useTheme();
+ *
+ *   return (
+ *     <div>
+ *       <button onClick={toggleMode}>
+ *         Switch to {mode === 'light' ? 'dark' : 'light'} mode
+ *       </button>
+ *       <select value={brand} onChange={(e) => setBrand(e.target.value as Brand)}>
+ *         <option value="default">Default Brand</option>
+ *         <option value="bsf">BSF Brand</option>
+ *       </select>
+ *     </div>
+ *   );
+ * }
+ */
+export const useTheme = (): ThemeContextValue => {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error(
+      'useTheme must be used within a ThemeProvider with enableHooks=true'
+    );
+  }
+  return context;
+};
+
+// Re-export types for convenience
+export type { Brand, Mode, ThemeObject as Theme };

@@ -1,44 +1,24 @@
 /**
- * Minimal token exports for type safety
+ * Design System Tokens
  *
- * Components now use CSS variables for styling, but some still need
- * token values for TypeScript types or programmatic calculations.
+ * Re-exports design tokens from the generated themes for use in stories and documentation.
  */
 
-import spacingTokens from './tokens/spacing.json';
-import typographyTokens from './tokens/typography.json';
-import radiiTokens from './tokens/radii.json';
-import colorsTokens from './tokens/colors.json';
-import shadowsTokens from './tokens/shadows.json';
+import { defaultLightTheme } from '../src/themes/index';
 
-export const spacing = spacingTokens.spacing;
-export const fontFamilies = typographyTokens.fontFamilies;
-export const fontSizes = typographyTokens.fontSizes;
-export const fontWeights = typographyTokens.fontWeights;
-export const lineHeights = typographyTokens.lineHeights;
-export const letterSpacings = typographyTokens.letterSpacings;
-export const radii = radiiTokens.radii;
-export const colors = colorsTokens.colors;
-export const shadows = shadowsTokens.shadows;
+// Export tokens from the default light theme
+const theme = defaultLightTheme;
 
-// Legacy export for components that haven't been fully migrated
-export const tokens = {
-  spacing: spacingTokens.spacing,
-  fontFamilies: typographyTokens.fontFamilies,
-  fontSizes: typographyTokens.fontSizes,
-  fontWeights: typographyTokens.fontWeights,
-  lineHeights: typographyTokens.lineHeights,
-  letterSpacings: typographyTokens.letterSpacings,
-  radii: radiiTokens.radii,
-};
+export const colors = theme.colors;
+export const spacing = theme.space;
+export const radii = theme.radii;
+export const shadows = theme.shadows;
+export const fontFamilies = theme.fonts;
+export const fontSizes = theme.fontSizes;
+export const fontWeights = theme.fontWeights;
+export const lineHeights = theme.lineHeights;
+export const letterSpacings = theme.letterSpacings || {};
 
-// Utility type to extract all color values (hex codes) from the colors object
-type ExtractColorValues<T> = T extends Record<string, unknown>
-  ? {
-      [K in keyof T]: T[K] extends string
-        ? T[K]
-        : ExtractColorValues<T[K]>
-    }[keyof T]
-  : never;
-
-export type ColorValue = ExtractColorValues<typeof colors> | 'currentColor';
+// Re-export the theme itself for reference
+export const defaultTheme = theme;
+export type { Theme as DefaultTheme } from '../src/themes/index';

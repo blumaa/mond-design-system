@@ -1,41 +1,41 @@
 /**
- * Heading Component Tests - SSR-Compatible Version
- *
- * TDD: These tests are written FIRST to define the expected behavior
- * of the refactored Heading component that:
- * - Removes useTheme() hook dependency
- * - Uses CSS variables for semantic colors
- * - Uses CSS classes for heading sizes
- * - Maintains all existing functionality
+ * Heading Component Tests - Styled Components Version
  */
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { ThemeProvider } from 'styled-components';
 import { Heading } from './Heading';
+import { defaultLightTheme } from '../../src/themes';
 
-describe('Heading Component - SSR Compatible', () => {
+// Helper to render with theme
+const renderWithTheme = (ui: React.ReactElement, theme = defaultLightTheme) => {
+  return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
+};
+
+describe('Heading Component - Styled Components', () => {
   describe('SSR Compatibility', () => {
-    it('renders without ThemeProvider context', () => {
-      render(<Heading>Hello World</Heading>);
-      expect(screen.getByText('Hello World')).toBeInTheDocument();
+    it('renders without requiring "use client" directive', () => {
+      const { container } = renderWithTheme(<Heading>Test</Heading>);
+      expect(container.firstChild).toBeInTheDocument();
     });
 
-    it('does not use useTheme() hook', () => {
-      const { container } = render(<Heading>Test</Heading>);
-      expect(container.firstChild).toBeInTheDocument();
+    it('works with ThemeProvider context', () => {
+      renderWithTheme(<Heading>With Provider</Heading>);
+      expect(screen.getByText('With Provider')).toBeInTheDocument();
     });
   });
 
   describe('Basic Rendering', () => {
     it('renders as h1 element by default', () => {
-      render(<Heading>Heading</Heading>);
+      renderWithTheme(<Heading>Heading</Heading>);
       const heading = screen.getByText('Heading');
       expect(heading.tagName).toBe('H1');
     });
 
     it('renders children content', () => {
-      render(<Heading>Hello Heading</Heading>);
+      renderWithTheme(<Heading>Hello Heading</Heading>);
       expect(screen.getByText('Hello Heading')).toBeInTheDocument();
     });
 
@@ -46,169 +46,184 @@ describe('Heading Component - SSR Compatible', () => {
 
   describe('Heading Levels', () => {
     it('renders as h1 when level is 1', () => {
-      render(<Heading level={1}>H1</Heading>);
+      renderWithTheme(<Heading level={1}>H1</Heading>);
       const heading = screen.getByText('H1');
       expect(heading.tagName).toBe('H1');
     });
 
     it('renders as h2 when level is 2', () => {
-      render(<Heading level={2}>H2</Heading>);
+      renderWithTheme(<Heading level={2}>H2</Heading>);
       const heading = screen.getByText('H2');
       expect(heading.tagName).toBe('H2');
     });
 
     it('renders as h3 when level is 3', () => {
-      render(<Heading level={3}>H3</Heading>);
+      renderWithTheme(<Heading level={3}>H3</Heading>);
       const heading = screen.getByText('H3');
       expect(heading.tagName).toBe('H3');
     });
 
     it('renders as h4 when level is 4', () => {
-      render(<Heading level={4}>H4</Heading>);
+      renderWithTheme(<Heading level={4}>H4</Heading>);
       const heading = screen.getByText('H4');
       expect(heading.tagName).toBe('H4');
     });
 
     it('renders as h5 when level is 5', () => {
-      render(<Heading level={5}>H5</Heading>);
+      renderWithTheme(<Heading level={5}>H5</Heading>);
       const heading = screen.getByText('H5');
       expect(heading.tagName).toBe('H5');
     });
 
     it('renders as h6 when level is 6', () => {
-      render(<Heading level={6}>H6</Heading>);
+      renderWithTheme(<Heading level={6}>H6</Heading>);
       const heading = screen.getByText('H6');
       expect(heading.tagName).toBe('H6');
     });
   });
 
-  describe('Size Variants with CSS Classes', () => {
-    it('applies default size class based on level 1 (4xl)', () => {
-      render(<Heading level={1}>Heading</Heading>);
+  describe('Styled Components Styling', () => {
+    it('renders with styled-components classes', () => {
+      renderWithTheme(<Heading>Test</Heading>);
+      const element = screen.getByText('Test');
+      expect(element).toBeInTheDocument();
+      expect(element.className).toBeTruthy();
+    });
+  });
+
+  describe('Size Variants with Data Attributes', () => {
+    it('applies default size based on level 1 (4xl)', () => {
+      renderWithTheme(<Heading level={1}>Heading</Heading>);
       const heading = screen.getByText('Heading');
-      expect(heading).toHaveClass('mond-heading--4xl');
+      expect(heading).toHaveAttribute('data-size', '4xl');
     });
 
-    it('applies default size class based on level 2 (3xl)', () => {
-      render(<Heading level={2}>Heading</Heading>);
+    it('applies default size based on level 2 (3xl)', () => {
+      renderWithTheme(<Heading level={2}>Heading</Heading>);
       const heading = screen.getByText('Heading');
-      expect(heading).toHaveClass('mond-heading--3xl');
+      expect(heading).toHaveAttribute('data-size', '3xl');
     });
 
-    it('applies default size class based on level 3 (2xl)', () => {
-      render(<Heading level={3}>Heading</Heading>);
+    it('applies default size based on level 3 (2xl)', () => {
+      renderWithTheme(<Heading level={3}>Heading</Heading>);
       const heading = screen.getByText('Heading');
-      expect(heading).toHaveClass('mond-heading--2xl');
+      expect(heading).toHaveAttribute('data-size', '2xl');
     });
 
-    it('applies custom size class overriding level default', () => {
-      render(<Heading level={1} size="sm">Small H1</Heading>);
+    it('applies custom size overriding level default', () => {
+      renderWithTheme(<Heading level={1} size="sm">Small H1</Heading>);
       const heading = screen.getByText('Small H1');
-      expect(heading).toHaveClass('mond-heading--sm');
+      expect(heading).toHaveAttribute('data-size', 'sm');
     });
 
-    it('applies xs size class', () => {
-      render(<Heading size="xs">XS</Heading>);
+    it('applies xs size', () => {
+      renderWithTheme(<Heading size="xs">XS</Heading>);
       const heading = screen.getByText('XS');
-      expect(heading).toHaveClass('mond-heading--xs');
+      expect(heading).toHaveAttribute('data-size', 'xs');
     });
 
-    it('applies sm size class', () => {
-      render(<Heading size="sm">SM</Heading>);
+    it('applies sm size', () => {
+      renderWithTheme(<Heading size="sm">SM</Heading>);
       const heading = screen.getByText('SM');
-      expect(heading).toHaveClass('mond-heading--sm');
+      expect(heading).toHaveAttribute('data-size', 'sm');
     });
 
-    it('applies md size class', () => {
-      render(<Heading size="md">MD</Heading>);
+    it('applies md size', () => {
+      renderWithTheme(<Heading size="md">MD</Heading>);
       const heading = screen.getByText('MD');
-      expect(heading).toHaveClass('mond-heading--md');
+      expect(heading).toHaveAttribute('data-size', 'md');
     });
 
-    it('applies lg size class', () => {
-      render(<Heading size="lg">LG</Heading>);
+    it('applies lg size', () => {
+      renderWithTheme(<Heading size="lg">LG</Heading>);
       const heading = screen.getByText('LG');
-      expect(heading).toHaveClass('mond-heading--lg');
+      expect(heading).toHaveAttribute('data-size', 'lg');
     });
 
-    it('applies xl size class', () => {
-      render(<Heading size="xl">XL</Heading>);
+    it('applies xl size', () => {
+      renderWithTheme(<Heading size="xl">XL</Heading>);
       const heading = screen.getByText('XL');
-      expect(heading).toHaveClass('mond-heading--xl');
+      expect(heading).toHaveAttribute('data-size', 'xl');
     });
 
-    it('applies 2xl size class', () => {
-      render(<Heading size="2xl">2XL</Heading>);
+    it('applies 2xl size', () => {
+      renderWithTheme(<Heading size="2xl">2XL</Heading>);
       const heading = screen.getByText('2XL');
-      expect(heading).toHaveClass('mond-heading--2xl');
+      expect(heading).toHaveAttribute('data-size', '2xl');
     });
 
-    it('applies 3xl size class', () => {
-      render(<Heading size="3xl">3XL</Heading>);
+    it('applies 3xl size', () => {
+      renderWithTheme(<Heading size="3xl">3XL</Heading>);
       const heading = screen.getByText('3XL');
-      expect(heading).toHaveClass('mond-heading--3xl');
+      expect(heading).toHaveAttribute('data-size', '3xl');
     });
 
-    it('applies 4xl size class', () => {
-      render(<Heading size="4xl">4XL</Heading>);
+    it('applies 4xl size', () => {
+      renderWithTheme(<Heading size="4xl">4XL</Heading>);
       const heading = screen.getByText('4XL');
-      expect(heading).toHaveClass('mond-heading--4xl');
+      expect(heading).toHaveAttribute('data-size', '4xl');
     });
 
-    it('applies 5xl size class', () => {
-      render(<Heading size="5xl">5XL</Heading>);
+    it('applies 5xl size', () => {
+      renderWithTheme(<Heading size="5xl">5XL</Heading>);
       const heading = screen.getByText('5XL');
-      expect(heading).toHaveClass('mond-heading--5xl');
+      expect(heading).toHaveAttribute('data-size', '5xl');
     });
 
-    it('applies 6xl size class', () => {
-      render(<Heading size="6xl">6XL</Heading>);
+    it('applies 6xl size', () => {
+      renderWithTheme(<Heading size="6xl">6XL</Heading>);
       const heading = screen.getByText('6XL');
-      expect(heading).toHaveClass('mond-heading--6xl');
+      expect(heading).toHaveAttribute('data-size', '6xl');
     });
   });
 
   describe('Semantic Colors', () => {
-    it('applies primary semantic class by default', () => {
-      render(<Heading>Primary</Heading>);
+    it('applies primary semantic by default', () => {
+      renderWithTheme(<Heading>Primary</Heading>);
       const heading = screen.getByText('Primary');
-      expect(heading).toHaveClass('mond-heading--primary');
+      expect(heading).toHaveAttribute('data-semantic', 'primary');
     });
 
-    it('applies secondary semantic class', () => {
-      render(<Heading semantic="secondary">Secondary</Heading>);
+    it('applies secondary semantic', () => {
+      renderWithTheme(<Heading semantic="secondary">Secondary</Heading>);
       const heading = screen.getByText('Secondary');
-      expect(heading).toHaveClass('mond-heading--secondary');
+      expect(heading).toHaveAttribute('data-semantic', 'secondary');
     });
 
-    it('applies tertiary semantic class', () => {
-      render(<Heading semantic="tertiary">Tertiary</Heading>);
+    it('applies tertiary semantic', () => {
+      renderWithTheme(<Heading semantic="tertiary">Tertiary</Heading>);
       const heading = screen.getByText('Tertiary');
-      expect(heading).toHaveClass('mond-heading--tertiary');
+      expect(heading).toHaveAttribute('data-semantic', 'tertiary');
     });
 
-    it('applies inverse semantic class', () => {
-      render(<Heading semantic="inverse">Inverse</Heading>);
+    it('applies inverse semantic', () => {
+      renderWithTheme(<Heading semantic="inverse">Inverse</Heading>);
       const heading = screen.getByText('Inverse');
-      expect(heading).toHaveClass('mond-heading--inverse');
+      expect(heading).toHaveAttribute('data-semantic', 'inverse');
     });
   });
 
   describe('Font Weight', () => {
     it('applies bold weight by default', () => {
-      render(<Heading>Bold</Heading>);
+      renderWithTheme(<Heading>Bold</Heading>);
       const heading = screen.getByText('Bold');
       expect(heading).toHaveStyle('font-weight: 700');
     });
 
-    it('applies custom weight', () => {
-      render(<Heading weight="normal">Normal</Heading>);
+    it('applies normal weight', () => {
+      renderWithTheme(<Heading weight="normal">Normal</Heading>);
       const heading = screen.getByText('Normal');
       expect(heading).toHaveStyle('font-weight: 400');
     });
 
+    it('applies medium weight', () => {
+      renderWithTheme(<Heading weight="medium">Medium</Heading>);
+      const heading = screen.getByText('Medium');
+      expect(heading).toHaveStyle('font-weight: 500');
+    });
+
     it('applies semibold weight', () => {
-      render(<Heading weight="semibold">Semibold</Heading>);
+      renderWithTheme(<Heading weight="semibold">Semibold</Heading>);
       const heading = screen.getByText('Semibold');
       expect(heading).toHaveStyle('font-weight: 600');
     });
@@ -216,19 +231,19 @@ describe('Heading Component - SSR Compatible', () => {
 
   describe('Text Alignment', () => {
     it('applies left alignment', () => {
-      render(<Heading align="left">Left</Heading>);
+      renderWithTheme(<Heading align="left">Left</Heading>);
       const heading = screen.getByText('Left');
       expect(heading).toHaveStyle('text-align: left');
     });
 
     it('applies center alignment', () => {
-      render(<Heading align="center">Center</Heading>);
+      renderWithTheme(<Heading align="center">Center</Heading>);
       const heading = screen.getByText('Center');
       expect(heading).toHaveStyle('text-align: center');
     });
 
     it('applies right alignment', () => {
-      render(<Heading align="right">Right</Heading>);
+      renderWithTheme(<Heading align="right">Right</Heading>);
       const heading = screen.getByText('Right');
       expect(heading).toHaveStyle('text-align: right');
     });
@@ -236,7 +251,7 @@ describe('Heading Component - SSR Compatible', () => {
 
   describe('Text Truncation', () => {
     it('applies truncate styles when enabled', () => {
-      render(<Heading truncate>Truncated heading</Heading>);
+      renderWithTheme(<Heading truncate>Truncated heading</Heading>);
       const heading = screen.getByText('Truncated heading');
       expect(heading).toHaveStyle({
         overflow: 'hidden',
@@ -246,67 +261,65 @@ describe('Heading Component - SSR Compatible', () => {
     });
 
     it('does not apply truncate styles by default', () => {
-      render(<Heading>Normal heading</Heading>);
+      renderWithTheme(<Heading>Normal heading</Heading>);
       const heading = screen.getByText('Normal heading');
       expect(heading).not.toHaveStyle('overflow: hidden');
     });
   });
 
   describe('Custom ClassName', () => {
-    it('applies custom className alongside base classes', () => {
-      render(<Heading className="custom-class">Custom</Heading>);
+    it('applies custom className', () => {
+      renderWithTheme(<Heading className="custom-class">Custom</Heading>);
       const heading = screen.getByText('Custom');
-      expect(heading).toHaveClass('mond-heading--4xl'); // default size
-      expect(heading).toHaveClass('mond-heading--primary'); // default semantic
       expect(heading).toHaveClass('custom-class');
+    });
+  });
+
+  describe('Custom Color', () => {
+    it('applies custom color override', () => {
+      renderWithTheme(<Heading color="rgb(255, 0, 0)">Red Heading</Heading>);
+      const heading = screen.getByText('Red Heading');
+      expect(heading).toHaveStyle('color: rgb(255, 0, 0)');
     });
   });
 
   describe('Ref Forwarding', () => {
     it('forwards ref to heading element', () => {
       const ref = React.createRef<HTMLHeadingElement>();
-      render(<Heading ref={ref}>Ref Test</Heading>);
+      renderWithTheme(<Heading ref={ref}>Ref Test</Heading>);
       expect(ref.current).toBeInstanceOf(HTMLHeadingElement);
       expect(ref.current?.textContent).toBe('Ref Test');
     });
   });
 
-  describe('Backward Compatibility', () => {
-    it('does NOT accept isDarkMode prop (removed)', () => {
-      const props = { children: 'Test', isDarkMode: true } as React.ComponentProps<typeof Heading> & { isDarkMode?: boolean };
-      render(<Heading {...props} />);
-      const heading = screen.getByText('Test');
-      expect(heading).toBeInTheDocument();
-    });
-
-    it('maintains existing API for level prop', () => {
-      render(<Heading level={3}>H3</Heading>);
-      const heading = screen.getByText('H3');
-      expect(heading.tagName).toBe('H3');
-    });
-
-    it('maintains existing API for semantic prop', () => {
-      render(<Heading semantic="secondary">Secondary</Heading>);
-      expect(screen.getByText('Secondary')).toHaveClass('mond-heading--secondary');
-    });
-  });
-
   describe('HTML Attributes', () => {
     it('forwards standard HTML attributes', () => {
-      render(<Heading title="Heading Title">Test</Heading>);
+      renderWithTheme(<Heading title="Heading Title">Test</Heading>);
       const heading = screen.getByText('Test');
       expect(heading).toHaveAttribute('title', 'Heading Title');
     });
 
     it('forwards aria attributes', () => {
-      render(<Heading aria-label="Main Heading">Heading</Heading>);
+      renderWithTheme(<Heading aria-label="Main Heading">Heading</Heading>);
       const heading = screen.getByText('Heading');
       expect(heading).toHaveAttribute('aria-label', 'Main Heading');
     });
 
     it('forwards data attributes', () => {
-      render(<Heading data-testid="test-heading">Test</Heading>);
+      renderWithTheme(<Heading data-testid="test-heading">Test</Heading>);
       expect(screen.getByTestId('test-heading')).toBeInTheDocument();
+    });
+  });
+
+  describe('Data Attributes', () => {
+    it('sets data-size attribute', () => {
+      renderWithTheme(<Heading size="lg">Test</Heading>);
+      expect(screen.getByText('Test')).toHaveAttribute('data-size', 'lg');
+    });
+
+    it('sets data-semantic attribute', () => {
+      renderWithTheme(<Heading semantic="secondary">Test</Heading>);
+      expect(screen.getByText('Test')).toHaveAttribute('data-semantic', 'secondary');
     });
   });
 });

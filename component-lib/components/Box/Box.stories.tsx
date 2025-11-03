@@ -52,14 +52,18 @@ A flexible layout primitive that accepts style props and can render as any HTML 
       description: 'The HTML element to render',
     },
     // Spacing
-    p: { control: { type: 'text' }, description: 'Padding (all sides)' },
-    px: { control: { type: 'text' }, description: 'Padding horizontal (left & right)' },
-    py: { control: { type: 'text' }, description: 'Padding vertical (top & bottom)' },
-    m: { control: { type: 'text' }, description: 'Margin (all sides)' },
-    mx: { control: { type: 'text' }, description: 'Margin horizontal (left & right)' },
-    my: { control: { type: 'text' }, description: 'Margin vertical (top & bottom)' },
+    padding: { control: { type: 'text' }, description: 'Padding (all sides)' },
+    paddingLeft: { control: { type: 'text' }, description: 'Padding left' },
+    paddingRight: { control: { type: 'text' }, description: 'Padding right' },
+    paddingTop: { control: { type: 'text' }, description: 'Padding top' },
+    paddingBottom: { control: { type: 'text' }, description: 'Padding bottom' },
+    margin: { control: { type: 'text' }, description: 'Margin (all sides)' },
+    marginLeft: { control: { type: 'text' }, description: 'Margin left' },
+    marginRight: { control: { type: 'text' }, description: 'Margin right' },
+    marginTop: { control: { type: 'text' }, description: 'Margin top' },
+    marginBottom: { control: { type: 'text' }, description: 'Margin bottom' },
     // Colors
-    bg: { control: { type: 'color' }, description: 'Background color' },
+    backgroundColor: { control: { type: 'color' }, description: 'Background color' },
     color: { control: { type: 'color' }, description: 'Text color' },
     borderColor: { control: { type: 'color' }, description: 'Border color' },
     // Layout
@@ -120,8 +124,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: 'This is a Box component',
-    p: 16,
-    bg: '#f8f9fa',
+    padding: 16,
+    backgroundColor: '#f8f9fa',
     border: '1px solid #e9ecef',
     borderRadius: 4,
   },
@@ -130,16 +134,16 @@ export const Default: Story = {
 export const DifferentElements: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-      <Box as="div" p={12} bg="#e3f2fd" borderRadius={4}>
+      <Box as="div" padding={12} backgroundColor="#e3f2fd" borderRadius={4}>
         Div element (default)
       </Box>
-      <Box as="section" p={12} bg="#f3e5f5" borderRadius={4}>
+      <Box as="section" padding={12} backgroundColor="#f3e5f5" borderRadius={4}>
         Section element
       </Box>
-      <Box as="article" p={12} bg="#e8f5e8" borderRadius={4}>
+      <Box as="article" padding={12} backgroundColor="#e8f5e8" borderRadius={4}>
         Article element
       </Box>
-      <Box as="span" p={8} bg="#fff3e0" borderRadius={4} display="inline-block">
+      <Box as="span" padding={8} backgroundColor="#fff3e0" borderRadius={4} display="inline-block">
         Span element (inline-block)
       </Box>
     </div>
@@ -153,33 +157,33 @@ export const FlexboxLayout: Story = {
       flexDirection="row"
       alignItems="center"
       justifyContent="space-between"
-      p={24}
-      bg="#f5f5f5"
+      padding={24}
+      backgroundColor="#f5f5f5"
       borderRadius={8}
       minHeight={120}
     >
       <Box
-        bg="#2196f3"
+        backgroundColor="#2196f3"
         color="white"
-        p={16}
+        padding={16}
         borderRadius={4}
         fontWeight="bold"
       >
         Item 1
       </Box>
       <Box
-        bg="#4caf50"
+        backgroundColor="#4caf50"
         color="white"
-        p={16}
+        padding={16}
         borderRadius={4}
         fontWeight="bold"
       >
         Item 2
       </Box>
       <Box
-        bg="#ff9800"
+        backgroundColor="#ff9800"
         color="white"
-        p={16}
+        padding={16}
         borderRadius={4}
         fontWeight="bold"
       >
@@ -195,20 +199,20 @@ export const GridLayout: Story = {
       display="grid"
       gridTemplateColumns="1fr 1fr"
       gap={16}
-      p={24}
-      bg="#fafafa"
+      padding={24}
+      backgroundColor="#fafafa"
       borderRadius={8}
     >
-      <Box bg="#e91e63" color="white" p={20} borderRadius={4} textAlign="center">
+      <Box backgroundColor="#e91e63" color="white" padding={20} borderRadius={4} textAlign="center">
         Grid Item 1
       </Box>
-      <Box bg="#9c27b0" color="white" p={20} borderRadius={4} textAlign="center">
+      <Box backgroundColor="#9c27b0" color="white" padding={20} borderRadius={4} textAlign="center">
         Grid Item 2
       </Box>
-      <Box bg="#673ab7" color="white" p={20} borderRadius={4} textAlign="center">
+      <Box backgroundColor="#673ab7" color="white" padding={20} borderRadius={4} textAlign="center">
         Grid Item 3
       </Box>
-      <Box bg="#3f51b5" color="white" p={20} borderRadius={4} textAlign="center">
+      <Box backgroundColor="#3f51b5" color="white" padding={20} borderRadius={4} textAlign="center">
         Grid Item 4
       </Box>
     </Box>
@@ -218,16 +222,16 @@ export const GridLayout: Story = {
 export const SpacingShowcase: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-      <Box p={8} bg="#ffebee" borderRadius={4}>
+      <Box padding={8} backgroundColor="#ffebee" borderRadius={4}>
         Padding: 8px
       </Box>
-      <Box px={24} py={12} bg="#f3e5f5" borderRadius={4}>
+      <Box paddingLeft={24} paddingRight={24} paddingTop={12} paddingBottom={12} backgroundColor="#f3e5f5" borderRadius={4}>
         Padding X: 24px, Y: 12px
       </Box>
-      <Box pt={20} pr={16} pb={12} pl={8} bg="#e8f5e8" borderRadius={4}>
+      <Box paddingTop={20} paddingRight={16} paddingBottom={12} paddingLeft={8} backgroundColor="#e8f5e8" borderRadius={4}>
         Individual padding sides
       </Box>
-      <Box m={16} p={12} bg="#e3f2fd" borderRadius={4}>
+      <Box margin={16} padding={12} backgroundColor="#e3f2fd" borderRadius={4}>
         Margin: 16px, Padding: 12px
       </Box>
     </div>
@@ -238,8 +242,8 @@ export const SemanticTokens: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
       <Box
-        p={16}
-        bg="surface.primary"
+        padding={16}
+        backgroundColor="surface.primary"
         color="text.primary"
         border="1px solid"
         borderColor="border.default"
@@ -249,8 +253,8 @@ export const SemanticTokens: Story = {
       </Box>
       <div data-theme="dark">
         <Box
-          p={16}
-          bg="surface.primary"
+          padding={16}
+          backgroundColor="surface.primary"
           color="text.primary"
           border="1px solid"
           borderColor="border.default"
@@ -267,15 +271,16 @@ export const ResponsiveCard: Story = {
   render: () => (
     <Box
       maxWidth={400}
-      mx="auto"
-      bg="white"
+      marginLeft="auto"
+      marginRight="auto"
+      backgroundColor="white"
       borderRadius={8}
       boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
       overflow="hidden"
     >
       <Box
         height={200}
-        bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+        backgroundColor="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -285,19 +290,21 @@ export const ResponsiveCard: Story = {
       >
         Header Image Area
       </Box>
-      <Box p={20}>
-        <Box fontSize={24} fontWeight="bold" mb={8} color="#333">
+      <Box padding={20}>
+        <Box fontSize={24} fontWeight="bold" marginBottom={8} color="#333">
           Card Title
         </Box>
-        <Box color="#666" lineHeight="1.6" mb={16}>
+        <Box color="#666" lineHeight="1.6" marginBottom={16}>
           This is a card built entirely with the Box component. It demonstrates
           how you can create complex layouts using just style props.
         </Box>
         <Box display="flex" gap={12}>
           <Box
-            px={16}
-            py={8}
-            bg="#2196f3"
+            paddingLeft={16}
+            paddingRight={16}
+            paddingTop={8}
+            paddingBottom={8}
+            backgroundColor="#2196f3"
             color="white"
             borderRadius={4}
             cursor="pointer"
@@ -307,8 +314,10 @@ export const ResponsiveCard: Story = {
             Primary
           </Box>
           <Box
-            px={16}
-            py={8}
+            paddingLeft={16}
+            paddingRight={16}
+            paddingTop={8}
+            paddingBottom={8}
             border="1px solid #2196f3"
             color="#2196f3"
             borderRadius={4}
@@ -330,7 +339,7 @@ export const PositionedElements: Story = {
       position="relative"
       width={300}
       height={200}
-      bg="#f0f0f0"
+      backgroundColor="#f0f0f0"
       border="2px dashed #ccc"
       borderRadius={8}
     >
@@ -338,9 +347,9 @@ export const PositionedElements: Story = {
         position="absolute"
         top={10}
         left={10}
-        bg="#f44336"
+        backgroundColor="#f44336"
         color="white"
-        p={8}
+        padding={8}
         borderRadius={4}
         fontSize={12}
       >
@@ -350,9 +359,9 @@ export const PositionedElements: Story = {
         position="absolute"
         top={10}
         right={10}
-        bg="#4caf50"
+        backgroundColor="#4caf50"
         color="white"
-        p={8}
+        padding={8}
         borderRadius={4}
         fontSize={12}
       >
@@ -362,9 +371,9 @@ export const PositionedElements: Story = {
         position="absolute"
         bottom={10}
         left={10}
-        bg="#2196f3"
+        backgroundColor="#2196f3"
         color="white"
-        p={8}
+        padding={8}
         borderRadius={4}
         fontSize={12}
       >
@@ -374,9 +383,9 @@ export const PositionedElements: Story = {
         position="absolute"
         bottom={10}
         right={10}
-        bg="#ff9800"
+        backgroundColor="#ff9800"
         color="white"
-        p={8}
+        padding={8}
         borderRadius={4}
         fontSize={12}
       >
@@ -387,9 +396,9 @@ export const PositionedElements: Story = {
         top="50%"
         left="50%"
         style={{ transform: 'translate(-50%, -50%)' }}
-        bg="#9c27b0"
+        backgroundColor="#9c27b0"
         color="white"
-        p={12}
+        padding={12}
         borderRadius={4}
         fontSize={14}
         fontWeight="bold"
@@ -402,11 +411,11 @@ export const PositionedElements: Story = {
 
 export const Typography: Story = {
   render: () => (
-    <Box p={24} bg="#fafafa" borderRadius={8}>
-      <Box fontSize={32} fontWeight="bold" mb={16} color="#2c3e50">
+    <Box padding={24} backgroundColor="#fafafa" borderRadius={8}>
+      <Box fontSize={32} fontWeight="bold" marginBottom={16} color="#2c3e50">
         Typography with Box
       </Box>
-      <Box fontSize={18} mb={12} color="#34495e" lineHeight="1.6">
+      <Box fontSize={18} marginBottom={12} color="#34495e" lineHeight="1.6">
         This is a paragraph created with Box component. You can control all
         typography properties through props.
       </Box>
@@ -418,7 +427,7 @@ export const Typography: Story = {
         fontWeight="500"
         textTransform="uppercase"
         letterSpacing="0.5px"
-        mt={16}
+        marginTop={16}
         color="#e74c3c"
       >
         Transformed Text
@@ -430,11 +439,11 @@ export const Typography: Story = {
 export const Interactive: Story = {
   render: () => {
     const [clicked, setClicked] = React.useState(false);
-    
+
     return (
       <Box
-        p={20}
-        bg={clicked ? '#4caf50' : '#2196f3'}
+        padding={20}
+        backgroundColor={clicked ? '#4caf50' : '#2196f3'}
         color="white"
         borderRadius={8}
         cursor="pointer"

@@ -1,9 +1,11 @@
-'use client';
 import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
+import { Box } from '../Box/Box';
+import type { BoxProps } from '../Box/Box';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
-export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size'> {
+export interface AvatarProps extends Omit<BoxProps, 'size' | 'as'> {
   'data-testid'?: string;
   /**
    * Avatar size
@@ -32,15 +34,136 @@ export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   children?: React.ReactNode;
 }
 
+// Styled Avatar Container
+const StyledAvatar = styled(Box)<{ size?: AvatarSize }>`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: ${({ theme }) => theme.radii.full};
+  background-color: ${({ theme }) => theme.colors.surfaceElevated};
+  border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  overflow: hidden;
+  flex-shrink: 0;
+
+  /* === SIZES === */
+
+  /* Extra Small: 24x24 */
+  ${({ size }) =>
+    size === 'xs' &&
+    css`
+      width: 24px;
+      height: 24px;
+    `}
+
+  /* Small: 32x32 */
+  ${({ size }) =>
+    size === 'sm' &&
+    css`
+      width: 32px;
+      height: 32px;
+    `}
+
+  /* Medium: 40x40 (default) */
+  ${({ size }) =>
+    (size === 'md' || !size) &&
+    css`
+      width: 40px;
+      height: 40px;
+    `}
+
+  /* Large: 48x48 */
+  ${({ size }) =>
+    size === 'lg' &&
+    css`
+      width: 48px;
+      height: 48px;
+    `}
+
+  /* Extra Large: 64x64 */
+  ${({ size }) =>
+    size === 'xl' &&
+    css`
+      width: 64px;
+      height: 64px;
+    `}
+
+  /* 2X Large: 80x80 */
+  ${({ size }) =>
+    size === '2xl' &&
+    css`
+      width: 80px;
+      height: 80px;
+    `}
+`;
+
+// Styled Image
+const AvatarImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+// Styled Fallback
+const AvatarFallback = styled(Box)<{ size?: AvatarSize }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  background-color: ${({ theme }) => theme.colors.surfaceElevated};
+  text-transform: uppercase;
+  user-select: none;
+
+  /* Size-specific font sizes */
+  ${({ size, theme }) =>
+    size === 'xs' &&
+    css`
+      font-size: ${theme.fontSizes.xs};
+    `}
+
+  ${({ size, theme }) =>
+    size === 'sm' &&
+    css`
+      font-size: ${theme.fontSizes.sm};
+    `}
+
+  ${({ size, theme }) =>
+    (size === 'md' || !size) &&
+    css`
+      font-size: ${theme.fontSizes.base};
+    `}
+
+  ${({ size, theme }) =>
+    size === 'lg' &&
+    css`
+      font-size: ${theme.fontSizes.lg};
+    `}
+
+  ${({ size, theme }) =>
+    size === 'xl' &&
+    css`
+      font-size: ${theme.fontSizes.xl};
+    `}
+
+  ${({ size, theme }) =>
+    size === '2xl' &&
+    css`
+      font-size: ${theme.fontSizes['2xl']};
+    `}
+`;
+
 /**
  * Avatar Component
  *
  * A circular avatar component that displays images or fallback content (initials or custom).
- * Uses CSS variables for theming.
+ * Uses styled-components for theming.
  *
- * **SSR-Compatible with Client Features**: Uses 'use client' for image loading state management,
- * but removes runtime theme resolution in favor of CSS variables.
- * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
+ * **Theme-Aware**: Uses theme object from styled-components ThemeProvider
+ * **Client Component**: Uses 'use client' for image loading state management
  *
  * @example
  * // Avatar with image
@@ -56,28 +179,21 @@ export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
  *   <span>👤</span>
  * </Avatar>
  */
-export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
-  ({
-    size = 'md',
-    src,
-    alt,
-    fallback,
-    children,
-    className,
-    'data-testid': dataTestId,
-    ...props
-  }, ref) => {
+export const Avatar = React.forwardRef<HTMLElement, AvatarProps>(
+  (
+    {
+      size = 'md',
+      src,
+      alt,
+      fallback,
+      children,
+      'data-testid': dataTestId,
+      ...props
+    },
+    ref,
+  ) => {
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
-
-    // Build CSS class names
-    const classNames = [
-      'mond-avatar',
-      `mond-avatar--${size}`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
 
     const handleImageLoad = () => {
       setImageLoaded(true);
@@ -102,35 +218,33 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
     const fallbackContent = children || (fallback ? getInitials(fallback) : '?');
 
     return (
-      <div
-        ref={ref}
-        className={classNames}
+      <StyledAvatar
+        ref={ref as React.Ref<HTMLElement>}
+        size={size}
         data-testid={dataTestId}
         data-size={size}
         {...props}
       >
         {src && (
-          <img
+          <AvatarImage
             src={src}
             alt={alt || fallback || 'Avatar'}
-            className="mond-avatar__image"
             style={{ display: imageLoaded && !imageError ? 'block' : 'none' }}
             onLoad={handleImageLoad}
             onError={handleImageError}
           />
         )}
         {showFallback && (
-          <div
-            className="mond-avatar__fallback"
+          <AvatarFallback
+            size={size}
             data-testid={`${dataTestId || 'avatar'}-fallback`}
           >
             {fallbackContent}
-          </div>
+          </AvatarFallback>
         )}
-      </div>
+      </StyledAvatar>
     );
-  }
+  },
 );
 
 Avatar.displayName = 'Avatar';
-

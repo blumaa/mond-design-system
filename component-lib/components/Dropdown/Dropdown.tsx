@@ -1,5 +1,5 @@
-'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import styled, { css } from 'styled-components';
 import { DropdownItem } from '../DropdownItem/DropdownItem';
 
 export interface DropdownOption {
@@ -54,6 +54,59 @@ export interface DropdownProps extends Omit<React.HTMLAttributes<HTMLDivElement>
    */
   'data-testid'?: string;
 }
+
+const StyledDropdown = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+interface StyledMenuProps {
+  $placement: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+}
+
+const StyledMenu = styled.div<StyledMenuProps>`
+  position: absolute;
+  z-index: 1000;
+  min-width: 200px;
+  background-color: ${({ theme }) => theme.colors.surfaceElevated};
+  border: 1px solid ${({ theme }) => theme.colors.borderDefault};
+  border-radius: ${({ theme }) => theme.radii.md};
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  padding: ${({ theme }) => theme.space[1]};
+
+  /* Placement variants */
+  ${({ $placement, theme }) =>
+    $placement === 'bottom-start' &&
+    css`
+      top: 100%;
+      left: 0;
+      margin-top: ${theme.space[1]};
+    `}
+
+  ${({ $placement, theme }) =>
+    $placement === 'bottom-end' &&
+    css`
+      top: 100%;
+      right: 0;
+      margin-top: ${theme.space[1]};
+    `}
+
+  ${({ $placement, theme }) =>
+    $placement === 'top-start' &&
+    css`
+      bottom: 100%;
+      left: 0;
+      margin-bottom: ${theme.space[1]};
+    `}
+
+  ${({ $placement, theme }) =>
+    $placement === 'top-end' &&
+    css`
+      bottom: 100%;
+      right: 0;
+      margin-bottom: ${theme.space[1]};
+    `}
+`;
 
 export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
   ({
@@ -229,20 +282,10 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       );
     };
 
-    const dropdownClassNames = [
-      'mond-dropdown',
-      className,
-    ].filter(Boolean).join(' ');
-
-    const menuClassNames = [
-      'mond-dropdown__menu',
-      `mond-dropdown__menu--${placement}`,
-    ].filter(Boolean).join(' ');
-
     return (
-      <div
+      <StyledDropdown
         ref={ref || dropdownRef}
-        className={dropdownClassNames}
+        className={className}
         data-testid={dataTestId}
         {...props}
       >
@@ -265,18 +308,17 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
 
         {/* Dropdown Menu */}
         {isOpen && (
-          <div
+          <StyledMenu
             ref={menuRef}
             role="menu"
-            className={menuClassNames}
+            $placement={placement}
           >
             {options.map((option, index) => renderOption(option, index))}
-          </div>
+          </StyledMenu>
         )}
-      </div>
+      </StyledDropdown>
     );
   }
 );
 
 Dropdown.displayName = 'Dropdown';
-

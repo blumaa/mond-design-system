@@ -3,27 +3,31 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../test-utils';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { Switch } from './Switch';
 
 describe('Switch Component - SSR Compatible', () => {
   describe('SSR Compatibility', () => {
-    it('renders without ThemeProvider context', () => {
+    it('renders without errors', () => {
       const { container } = render(<Switch />);
       expect(container.querySelector('input[type="checkbox"]')).toBeInTheDocument();
     });
 
-    it('uses CSS classes instead of inline styles', () => {
-      const { container } = render(<Switch size="md" />);
-      const wrapper = container.querySelector('.mond-switch');
-      expect(wrapper).toBeInTheDocument();
+    it('renders with proper structure', () => {
+      const { container } = render(<Switch size="md" data-testid="switch" />);
+      const switchContainer = container.querySelector('.mond-switch-container');
+      expect(switchContainer).toBeInTheDocument();
+      expect(screen.getByTestId('switch')).toBeInTheDocument();
     });
 
-    it('does not inject styles via style tag', () => {
-      const { container } = render(<Switch />);
-      expect(container.querySelector('style')).not.toBeInTheDocument();
+    it('uses data attributes for state', () => {
+      const { container } = render(<Switch size="lg" disabled checked onChange={() => {}} />);
+      const switchContainer = container.querySelector('.mond-switch-container');
+      expect(switchContainer).toHaveAttribute('data-size', 'lg');
+      expect(switchContainer).toHaveAttribute('data-disabled');
+      expect(switchContainer).toHaveAttribute('data-checked');
     });
   });
 
@@ -59,26 +63,30 @@ describe('Switch Component - SSR Compatible', () => {
   });
 
   describe('Size Variants', () => {
-    it('applies sm size class', () => {
+    it('applies sm size data attribute', () => {
       const { container } = render(<Switch size="sm" />);
-      expect(container.querySelector('.mond-switch--sm')).toBeInTheDocument();
+      const switchContainer = container.querySelector('.mond-switch-container');
+      expect(switchContainer).toHaveAttribute('data-size', 'sm');
     });
 
-    it('applies md size class (default)', () => {
+    it('applies md size data attribute (default)', () => {
       const { container } = render(<Switch size="md" />);
-      expect(container.querySelector('.mond-switch--md')).toBeInTheDocument();
+      const switchContainer = container.querySelector('.mond-switch-container');
+      expect(switchContainer).toHaveAttribute('data-size', 'md');
     });
 
-    it('applies lg size class', () => {
+    it('applies lg size data attribute', () => {
       const { container } = render(<Switch size="lg" />);
-      expect(container.querySelector('.mond-switch--lg')).toBeInTheDocument();
+      const switchContainer = container.querySelector('.mond-switch-container');
+      expect(switchContainer).toHaveAttribute('data-size', 'lg');
     });
   });
 
   describe('Error State', () => {
-    it('applies error class when error message provided', () => {
+    it('applies error data attribute when error message provided', () => {
       const { container } = render(<Switch error="Required" />);
-      expect(container.querySelector('.mond-switch--error')).toBeInTheDocument();
+      const switchContainer = container.querySelector('.mond-switch-container');
+      expect(switchContainer).toHaveAttribute('data-error');
     });
 
     it('displays error message', () => {
@@ -86,10 +94,11 @@ describe('Switch Component - SSR Compatible', () => {
       expect(screen.getByText('Required')).toBeInTheDocument();
     });
 
-    it('error message has error styling class', () => {
+    it('error message is rendered in message element', () => {
       const { container } = render(<Switch label="Enable" error="Required" />);
-      const message = container.querySelector('.mond-switch__message--error');
+      const message = container.querySelector('.mond-switch__message');
       expect(message).toBeInTheDocument();
+      expect(message).toHaveTextContent('Required');
     });
   });
 
@@ -99,10 +108,11 @@ describe('Switch Component - SSR Compatible', () => {
       expect(screen.getByText('Toggle to enable feature')).toBeInTheDocument();
     });
 
-    it('helper text has helper styling class', () => {
+    it('helper text is rendered in message element', () => {
       const { container } = render(<Switch label="Enable" helperText="Helper" />);
-      const message = container.querySelector('.mond-switch__message--helper');
+      const message = container.querySelector('.mond-switch__message');
       expect(message).toBeInTheDocument();
+      expect(message).toHaveTextContent('Helper');
     });
 
     it('error takes precedence over helper text', () => {
@@ -118,21 +128,24 @@ describe('Switch Component - SSR Compatible', () => {
       expect(screen.getByTestId('switch')).toBeDisabled();
     });
 
-    it('applies disabled class', () => {
+    it('applies disabled data attribute', () => {
       const { container } = render(<Switch disabled />);
-      expect(container.querySelector('.mond-switch--disabled')).toBeInTheDocument();
+      const switchContainer = container.querySelector('.mond-switch-container');
+      expect(switchContainer).toHaveAttribute('data-disabled');
     });
   });
 
   describe('Checked State', () => {
-    it('applies checked class when checked', () => {
+    it('applies checked data attribute when checked', () => {
       const { container } = render(<Switch checked onChange={() => {}} />);
-      expect(container.querySelector('.mond-switch--checked')).toBeInTheDocument();
+      const switchContainer = container.querySelector('.mond-switch-container');
+      expect(switchContainer).toHaveAttribute('data-checked');
     });
 
-    it('does not apply checked class when unchecked', () => {
+    it('does not apply checked data attribute when unchecked', () => {
       const { container } = render(<Switch checked={false} onChange={() => {}} />);
-      expect(container.querySelector('.mond-switch--checked')).not.toBeInTheDocument();
+      const switchContainer = container.querySelector('.mond-switch-container');
+      expect(switchContainer).not.toHaveAttribute('data-checked');
     });
   });
 

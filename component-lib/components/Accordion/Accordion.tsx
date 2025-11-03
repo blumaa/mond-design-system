@@ -1,5 +1,5 @@
-'use client';
 import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
 import { AccordionItem } from '../AccordionItem/AccordionItem';
 
 export type AccordionMode = 'single' | 'multiple';
@@ -28,6 +28,38 @@ export interface AccordionProps {
   iconPosition?: 'left' | 'right';
   className?: string;
 }
+
+interface StyledAccordionProps {
+  $variant: AccordionVariant;
+}
+
+const StyledAccordion = styled.div<StyledAccordionProps>`
+  font-family: ${({ theme }) => theme.fonts.sans};
+
+  /* Variant: default */
+  ${({ $variant }) =>
+    $variant === 'default' &&
+    css`
+      border: none;
+      border-radius: 0;
+    `}
+
+  /* Variant: bordered */
+  ${({ $variant, theme }) =>
+    $variant === 'bordered' &&
+    css`
+      border: 1px solid ${theme.colors.borderDefault};
+      border-radius: ${theme.radii.md};
+    `}
+
+  /* Variant: filled */
+  ${({ $variant }) =>
+    $variant === 'filled' &&
+    css`
+      border: none;
+      border-radius: 0;
+    `}
+`;
 
 export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
   ({
@@ -132,17 +164,12 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
       }
     };
 
-    const containerClassNames = [
-      'mond-accordion',
-      `mond-accordion--${variant}`,
-      className,
-    ].filter(Boolean).join(' ');
-
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-      <div
+      <StyledAccordion
         ref={ref}
-        className={containerClassNames}
+        $variant={variant}
+        className={className}
         data-mond-accordion
         role="region"
         aria-label="Accordion"
@@ -171,7 +198,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
             </AccordionItem>
           );
         })}
-      </div>
+      </StyledAccordion>
     );
   }
 );

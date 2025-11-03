@@ -1,5 +1,5 @@
-'use client';
 import React, { useState, useContext } from 'react';
+import styled, { css } from 'styled-components';
 
 export interface TabItem {
   id: string;
@@ -40,22 +40,156 @@ const useTabsContext = () => {
   return context;
 };
 
+const StyledTabsContainer = styled.div`
+  width: 100%;
+`;
+
+interface StyledTabsListProps {
+  $variant: TabsVariant;
+}
+
+const StyledTabsList = styled.div<StyledTabsListProps>`
+  display: flex;
+  position: relative;
+
+  ${({ $variant, theme }) =>
+    $variant === 'line' &&
+    css`
+      border-bottom: 1px solid ${theme.colors.borderDefault};
+      background-color: transparent;
+    `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'card' &&
+    css`
+      background-color: ${theme.colors.surfaceElevated};
+      border-radius: ${theme.radii.md};
+      border: 1px solid ${theme.colors.borderDefault};
+      overflow: hidden;
+    `}
+`;
+
+interface StyledTabsTriggerProps {
+  $variant: TabsVariant;
+  $size: TabsSize;
+  $active: boolean;
+}
+
+const StyledTabsTrigger = styled.button<StyledTabsTriggerProps>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 150ms ease;
+  position: relative;
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
+  color: ${({ theme }) => theme.colors.textSecondary};
+
+  /* Size variants */
+  ${({ $size, theme }) =>
+    $size === 'sm' &&
+    css`
+      font-size: ${theme.fontSizes.sm};
+      padding: ${theme.space[2]} ${theme.space[3]};
+      min-height: 32px;
+    `}
+
+  ${({ $size, theme }) =>
+    $size === 'md' &&
+    css`
+      font-size: ${theme.fontSizes.base};
+      padding: ${theme.space[3]} ${theme.space[4]};
+      min-height: 40px;
+    `}
+
+  ${({ $size, theme }) =>
+    $size === 'lg' &&
+    css`
+      font-size: ${theme.fontSizes.lg};
+      padding: ${theme.space[4]} ${theme.space[6]};
+      min-height: 48px;
+    `}
+
+  /* Active state */
+  ${({ $active, theme }) =>
+    $active &&
+    css`
+      font-weight: ${theme.fontWeights.semibold};
+      color: ${theme.colors.textPrimary};
+    `}
+
+  /* Active state for card variant */
+  ${({ $active, $variant, theme }) =>
+    $active && $variant === 'card' &&
+    css`
+      background-color: ${theme.colors.gray200};
+      border-radius: ${theme.radii.md};
+    `}
+
+  /* Disabled state */
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    color: ${({ theme }) => theme.colors.textDisabled};
+  }
+
+  /* Hover state (line variant only, not active or disabled) */
+  ${({ $variant, $active, theme }) =>
+    $variant === 'line' && !$active &&
+    css`
+      &:hover:not(:disabled) {
+        color: ${theme.colors.textPrimary};
+        background-color: ${theme.colors.gray100};
+      }
+    `}
+`;
+
+interface StyledIndicatorProps {
+  $active: boolean;
+}
+
+const StyledIndicator = styled.div<StyledIndicatorProps>`
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: transparent;
+  transition: background-color 150ms ease;
+
+  ${({ $active, theme }) =>
+    $active &&
+    css`
+      background-color: ${theme.colors.blue600};
+    `}
+`;
+
+interface StyledTabsContentProps {
+  $active: boolean;
+}
+
+const StyledTabsContent = styled.div<StyledTabsContentProps>`
+  display: ${({ $active }) => ($active ? 'block' : 'none')};
+  padding: ${({ theme }) => theme.space[4]};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  outline: none;
+`;
+
 const TabsList: React.FC<{ children: React.ReactNode; className?: string }> = ({
   children,
   className
 }) => {
   const { variant } = useTabsContext();
 
-  const listClassNames = [
-    'mond-tabs__list',
-    `mond-tabs__list--${variant}`,
-    className,
-  ].filter(Boolean).join(' ');
-
   return (
-    <div className={listClassNames} role="tablist">
+    <StyledTabsList $variant={variant} className={className} role="tablist">
       {children}
-    </div>
+    </StyledTabsList>
   );
 };
 
@@ -67,15 +201,6 @@ const TabsTrigger: React.FC<{
 }> = ({ value, children, disabled = false, className }) => {
   const { activeTab, setActiveTab, variant, size } = useTabsContext();
   const isActive = activeTab === value;
-
-  const triggerClassNames = [
-    'mond-tabs__trigger',
-    `mond-tabs__trigger--${variant}`,
-    `mond-tabs__trigger--${size}`,
-    isActive && 'mond-tabs__trigger--active',
-    disabled && 'mond-tabs__trigger--disabled',
-    className,
-  ].filter(Boolean).join(' ');
 
   const handleClick = () => {
     if (!disabled) {
@@ -91,8 +216,8 @@ const TabsTrigger: React.FC<{
   };
 
   return (
-    <button
-      className={triggerClassNames}
+    <StyledTabsTrigger
+      className={className}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       disabled={disabled}
@@ -101,12 +226,15 @@ const TabsTrigger: React.FC<{
       aria-disabled={disabled}
       tabIndex={isActive ? 0 : -1}
       data-state={isActive ? 'active' : 'inactive'}
+      $variant={variant}
+      $size={size}
+      $active={isActive}
     >
       {children}
       {variant === 'line' && (
-        <div className={`mond-tabs__indicator ${isActive ? 'mond-tabs__indicator--active' : ''}`} />
+        <StyledIndicator $active={isActive} />
       )}
-    </button>
+    </StyledTabsTrigger>
   );
 };
 
@@ -118,21 +246,16 @@ const TabsContent: React.FC<{
   const { activeTab } = useTabsContext();
   const isActive = activeTab === value;
 
-  const contentClassNames = [
-    'mond-tabs__content',
-    isActive && 'mond-tabs__content--active',
-    className,
-  ].filter(Boolean).join(' ');
-
   return (
-    <div
-      className={contentClassNames}
+    <StyledTabsContent
+      className={className}
       role="tabpanel"
       aria-hidden={!isActive}
       tabIndex={0}
+      $active={isActive}
     >
       {children}
-    </div>
+    </StyledTabsContent>
   );
 };
 
@@ -169,7 +292,7 @@ export const Tabs: React.FC<TabsProps> = ({
 
   return (
     <TabsContext.Provider value={contextValue}>
-      <div className={`mond-tabs ${className || ''}`} data-testid={dataTestId}>
+      <StyledTabsContainer className={className} data-testid={dataTestId}>
         {children ? (
           children
         ) : tabs ? (
@@ -189,7 +312,7 @@ export const Tabs: React.FC<TabsProps> = ({
             ))}
           </>
         ) : null}
-      </div>
+      </StyledTabsContainer>
     </TabsContext.Provider>
   );
 };

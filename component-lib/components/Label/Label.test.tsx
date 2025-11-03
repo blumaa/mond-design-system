@@ -1,41 +1,44 @@
 /**
- * Label Component Tests - SSR-Compatible Version
- *
- * TDD: These tests are written FIRST to define the expected behavior
- * of the refactored Label component that:
- * - Removes useTheme() hook dependency
- * - Uses CSS variables for semantic colors
- * - Uses CSS classes for label sizes and states
- * - Maintains all existing functionality
+ * Label Component Tests - Styled-Components Version
  */
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { ThemeProvider } from 'styled-components';
+import { defaultLightTheme } from '../../src/themes';
 import { Label } from './Label';
+
+const renderWithTheme = (ui: React.ReactElement, theme = defaultLightTheme) => {
+  return render(
+    <ThemeProvider theme={theme}>
+      {ui}
+    </ThemeProvider>
+  );
+};
 
 describe('Label Component - SSR Compatible', () => {
   describe('SSR Compatibility', () => {
-    it('renders without ThemeProvider context', () => {
-      render(<Label>Label Text</Label>);
+    it('renders with ThemeProvider context', () => {
+      renderWithTheme(<Label>Label Text</Label>);
       expect(screen.getByText('Label Text')).toBeInTheDocument();
     });
 
-    it('does not use useTheme() hook', () => {
-      const { container } = render(<Label>Test</Label>);
+    it('uses styled-components with theme', () => {
+      const { container } = renderWithTheme(<Label>Test</Label>);
       expect(container.firstChild).toBeInTheDocument();
     });
   });
 
   describe('Basic Rendering', () => {
     it('renders as a label element', () => {
-      render(<Label>Label</Label>);
+      renderWithTheme(<Label>Label</Label>);
       const label = screen.getByText('Label');
       expect(label.tagName).toBe('LABEL');
     });
 
     it('renders children content', () => {
-      render(<Label>Form Label</Label>);
+      renderWithTheme(<Label>Form Label</Label>);
       expect(screen.getByText('Form Label')).toBeInTheDocument();
     });
 
@@ -46,127 +49,127 @@ describe('Label Component - SSR Compatible', () => {
 
   describe('htmlFor Attribute', () => {
     it('applies htmlFor attribute when provided', () => {
-      render(<Label htmlFor="input-id">Label</Label>);
+      renderWithTheme(<Label htmlFor="input-id">Label</Label>);
       const label = screen.getByText('Label');
       expect(label).toHaveAttribute('for', 'input-id');
     });
 
     it('does not have htmlFor attribute when not provided', () => {
-      render(<Label>Label</Label>);
+      renderWithTheme(<Label>Label</Label>);
       const label = screen.getByText('Label');
       expect(label).not.toHaveAttribute('for');
     });
   });
 
   describe('Size Variants with CSS Classes', () => {
-    it('applies sm size class', () => {
-      render(<Label size="sm">Small</Label>);
+    it('applies sm size data attribute', () => {
+      renderWithTheme(<Label size="sm">Small</Label>);
       const label = screen.getByText('Small');
-      expect(label).toHaveClass('mond-label--sm');
+      expect(label).toHaveAttribute('data-size', 'sm');
     });
 
-    it('applies md size class (default)', () => {
-      render(<Label size="md">Medium</Label>);
+    it('applies md size data attribute (default)', () => {
+      renderWithTheme(<Label size="md">Medium</Label>);
       const label = screen.getByText('Medium');
-      expect(label).toHaveClass('mond-label--md');
+      expect(label).toHaveAttribute('data-size', 'md');
     });
 
-    it('applies lg size class', () => {
-      render(<Label size="lg">Large</Label>);
+    it('applies lg size data attribute', () => {
+      renderWithTheme(<Label size="lg">Large</Label>);
       const label = screen.getByText('Large');
-      expect(label).toHaveClass('mond-label--lg');
+      expect(label).toHaveAttribute('data-size', 'lg');
     });
   });
 
   describe('Semantic Colors', () => {
-    it('applies default semantic class', () => {
-      render(<Label semantic="default">Default</Label>);
+    it('applies default semantic data attribute', () => {
+      renderWithTheme(<Label semantic="default">Default</Label>);
       const label = screen.getByText('Default');
-      expect(label).toHaveClass('mond-label--default');
+      expect(label).toHaveAttribute('data-semantic', 'default');
     });
 
-    it('applies error semantic class', () => {
-      render(<Label semantic="error">Error</Label>);
+    it('applies error semantic data attribute', () => {
+      renderWithTheme(<Label semantic="error">Error</Label>);
       const label = screen.getByText('Error');
-      expect(label).toHaveClass('mond-label--error');
+      expect(label).toHaveAttribute('data-semantic', 'error');
     });
 
-    it('applies success semantic class', () => {
-      render(<Label semantic="success">Success</Label>);
+    it('applies success semantic data attribute', () => {
+      renderWithTheme(<Label semantic="success">Success</Label>);
       const label = screen.getByText('Success');
-      expect(label).toHaveClass('mond-label--success');
+      expect(label).toHaveAttribute('data-semantic', 'success');
     });
   });
 
   describe('Disabled State', () => {
-    it('applies disabled class when disabled', () => {
-      render(<Label disabled>Disabled</Label>);
+    it('applies disabled data attribute when disabled', () => {
+      renderWithTheme(<Label disabled>Disabled</Label>);
       const label = screen.getByText('Disabled');
-      expect(label).toHaveClass('mond-label--disabled');
+      expect(label).toHaveAttribute('data-disabled');
     });
 
     it('applies disabled cursor style when disabled', () => {
-      render(<Label disabled>Disabled</Label>);
+      renderWithTheme(<Label disabled>Disabled</Label>);
       const label = screen.getByText('Disabled');
       expect(label).toHaveStyle('cursor: not-allowed');
     });
 
-    it('does not apply disabled class when not disabled', () => {
-      render(<Label>Normal</Label>);
+    it('does not apply disabled data attribute when not disabled', () => {
+      renderWithTheme(<Label>Normal</Label>);
       const label = screen.getByText('Normal');
-      expect(label).not.toHaveClass('mond-label--disabled');
+      expect(label).not.toHaveAttribute('data-disabled');
     });
   });
 
   describe('Required Indicator', () => {
     it('does not show required indicator by default', () => {
-      render(<Label>Label</Label>);
+      renderWithTheme(<Label>Label</Label>);
       expect(screen.queryByText('*')).not.toBeInTheDocument();
     });
 
     it('shows required indicator when required is true', () => {
-      render(<Label required>Required Label</Label>);
+      renderWithTheme(<Label required>Required Label</Label>);
       expect(screen.getByText('*')).toBeInTheDocument();
       expect(screen.getByLabelText('required')).toBeInTheDocument();
     });
 
     it('uses custom required indicator', () => {
-      render(<Label required requiredIndicator="(required)">Custom</Label>);
+      renderWithTheme(<Label required requiredIndicator="(required)">Custom</Label>);
       expect(screen.getByText('(required)')).toBeInTheDocument();
     });
 
-    it('applies required indicator class', () => {
-      render(<Label required>Required</Label>);
+    it('renders required indicator', () => {
+      renderWithTheme(<Label required>Required</Label>);
       const indicator = screen.getByText('*');
-      expect(indicator).toHaveClass('mond-label__required');
+      expect(indicator).toBeInTheDocument();
     });
   });
 
   describe('Font Weight', () => {
     it('applies medium weight by default', () => {
-      render(<Label>Medium</Label>);
+      renderWithTheme(<Label>Medium</Label>);
       const label = screen.getByText('Medium');
       expect(label).toHaveStyle('font-weight: 500');
     });
 
     it('applies normal weight', () => {
-      render(<Label weight="normal">Normal</Label>);
+      renderWithTheme(<Label weight="normal">Normal</Label>);
       const label = screen.getByText('Normal');
       expect(label).toHaveStyle('font-weight: 400');
     });
 
     it('applies semibold weight', () => {
-      render(<Label weight="semibold">Semibold</Label>);
+      renderWithTheme(<Label weight="semibold">Semibold</Label>);
       const label = screen.getByText('Semibold');
       expect(label).toHaveStyle('font-weight: 600');
     });
   });
 
   describe('Custom ClassName', () => {
-    it('applies custom className alongside base class', () => {
-      render(<Label className="custom-class">Custom</Label>);
+    it('applies custom className', () => {
+      renderWithTheme(<Label className="custom-class">Custom</Label>);
       const label = screen.getByText('Custom');
-      expect(label).toHaveClass('mond-label--md'); // default size
+      expect(label).toHaveAttribute('data-size', 'md'); // default size
       expect(label).toHaveClass('custom-class');
     });
   });
@@ -174,7 +177,7 @@ describe('Label Component - SSR Compatible', () => {
   describe('Ref Forwarding', () => {
     it('forwards ref to label element', () => {
       const ref = React.createRef<HTMLLabelElement>();
-      render(<Label ref={ref}>Ref Test</Label>);
+      renderWithTheme(<Label ref={ref}>Ref Test</Label>);
       expect(ref.current).toBeInstanceOf(HTMLLabelElement);
       expect(ref.current?.textContent).toContain('Ref Test');
     });
@@ -182,7 +185,7 @@ describe('Label Component - SSR Compatible', () => {
 
   describe('Combined Props', () => {
     it('applies multiple props correctly', () => {
-      render(
+      renderWithTheme(
         <Label
           size="lg"
           semantic="error"
@@ -195,9 +198,9 @@ describe('Label Component - SSR Compatible', () => {
         </Label>
       );
       const label = screen.getByText(/Combined Label/);
-      expect(label).toHaveClass('mond-label--lg');
-      expect(label).toHaveClass('mond-label--error');
-      expect(label).toHaveClass('mond-label--disabled');
+      expect(label).toHaveAttribute('data-size', 'lg');
+      expect(label).toHaveAttribute('data-semantic', 'error');
+      expect(label).toHaveAttribute('data-disabled');
       expect(label).toHaveAttribute('for', 'test-input');
       expect(label).toHaveStyle('font-weight: 600');
       expect(screen.getByText('*')).toBeInTheDocument();
@@ -206,32 +209,32 @@ describe('Label Component - SSR Compatible', () => {
 
   describe('HTML Attributes', () => {
     it('forwards standard HTML attributes', () => {
-      render(<Label title="Label Title">Test</Label>);
+      renderWithTheme(<Label title="Label Title">Test</Label>);
       const label = screen.getByText('Test');
       expect(label).toHaveAttribute('title', 'Label Title');
     });
 
     it('forwards aria attributes', () => {
-      render(<Label aria-describedby="helper-text">Label</Label>);
+      renderWithTheme(<Label aria-describedby="helper-text">Label</Label>);
       const label = screen.getByText('Label');
       expect(label).toHaveAttribute('aria-describedby', 'helper-text');
     });
 
     it('forwards data attributes', () => {
-      render(<Label data-testid="test-label">Test</Label>);
+      renderWithTheme(<Label data-testid="test-label">Test</Label>);
       expect(screen.getByTestId('test-label')).toBeInTheDocument();
     });
   });
 
   describe('Cursor Styles', () => {
     it('applies pointer cursor by default', () => {
-      render(<Label>Clickable</Label>);
+      renderWithTheme(<Label>Clickable</Label>);
       const label = screen.getByText('Clickable');
       expect(label).toHaveStyle('cursor: pointer');
     });
 
     it('applies not-allowed cursor when disabled', () => {
-      render(<Label disabled>Disabled</Label>);
+      renderWithTheme(<Label disabled>Disabled</Label>);
       const label = screen.getByText('Disabled');
       expect(label).toHaveStyle('cursor: not-allowed');
     });

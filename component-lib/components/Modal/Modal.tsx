@@ -1,5 +1,6 @@
-'use client';
 import React, { useEffect, useRef } from 'react';
+import styled, { css } from 'styled-components';
+import { Box } from '../Box/Box';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
@@ -53,6 +54,114 @@ export interface ModalProps {
   'data-testid'?: string;
 }
 
+const StyledOverlay = styled(Box)`
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ${({ theme }) => theme.space[4]};
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+`;
+
+const StyledModal = styled(Box)<{ $size: ModalSize }>`
+  background-color: ${({ theme }) => theme.colors.surfaceElevated};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  border-radius: ${({ theme }) => theme.radii.lg};
+  box-shadow: ${({ theme }) => theme.shadows['2xl']};
+  position: relative;
+  max-height: 90vh;
+  overflow: hidden;
+  outline: none;
+
+  ${({ $size }) => {
+    switch ($size) {
+      case 'sm':
+        return css`
+          max-width: 400px;
+          width: 90vw;
+        `;
+      case 'md':
+        return css`
+          max-width: 500px;
+          width: 90vw;
+        `;
+      case 'lg':
+        return css`
+          max-width: 700px;
+          width: 90vw;
+        `;
+      case 'xl':
+        return css`
+          max-width: 900px;
+          width: 90vw;
+        `;
+      case 'full':
+        return css`
+          max-width: 95vw;
+          width: 95vw;
+          max-height: 95vh;
+        `;
+      default:
+        return css`
+          max-width: 500px;
+          width: 90vw;
+        `;
+    }
+  }}
+`;
+
+const StyledModalHeader = styled(Box)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: ${({ theme }) => theme.space[4]} ${({ theme }) => theme.space[6]};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  font-size: ${({ theme }) => theme.fontSizes.lg};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  font-family: ${({ theme }) => theme.fonts.sans};
+`;
+
+const StyledCloseButton = styled(Box).attrs({ as: 'button' })`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: ${({ theme }) => theme.radii.sm};
+  font-size: ${({ theme }) => theme.fontSizes.lg};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  transition: all 150ms ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.gray200};
+    color: ${({ theme }) => theme.colors.textPrimary};
+  }
+`;
+
+const StyledModalBody = styled(Box)`
+  padding: ${({ theme }) => theme.space[4]} ${({ theme }) => theme.space[6]};
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-family: ${({ theme }) => theme.fonts.sans};
+  line-height: 1.6;
+  max-height: 60vh;
+  overflow-y: auto;
+`;
+
+const StyledModalFooter = styled(Box)`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: ${({ theme }) => theme.space[3]};
+  padding: ${({ theme }) => theme.space[4]} ${({ theme }) => theme.space[6]};
+  border-top: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+`;
+
 export const ModalHeader: React.FC<{
   children: React.ReactNode;
   onClose?: () => void;
@@ -64,22 +173,19 @@ export const ModalHeader: React.FC<{
   showCloseButton = true,
   className
 }) => {
-  const headerClassNames = ['mond-modal__header', className].filter(Boolean).join(' ');
-
   return (
-    <div className={headerClassNames}>
-      <div>{children}</div>
+    <StyledModalHeader className={className}>
+      <Box>{children}</Box>
       {showCloseButton && onClose && (
-        <button
-          className="mond-modal__close-button"
+        <StyledCloseButton
           onClick={onClose}
           aria-label="Close modal"
           data-testid="modal-close-button"
         >
           ×
-        </button>
+        </StyledCloseButton>
       )}
-    </div>
+    </StyledModalHeader>
   );
 };
 
@@ -87,12 +193,10 @@ export const ModalBody: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => {
-  const bodyClassNames = ['mond-modal__body', className].filter(Boolean).join(' ');
-
   return (
-    <div className={bodyClassNames}>
+    <StyledModalBody className={className}>
       {children}
-    </div>
+    </StyledModalBody>
   );
 };
 
@@ -100,12 +204,10 @@ export const ModalFooter: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => {
-  const footerClassNames = ['mond-modal__footer', className].filter(Boolean).join(' ');
-
   return (
-    <div className={footerClassNames}>
+    <StyledModalFooter className={className}>
       {children}
-    </div>
+    </StyledModalFooter>
   );
 };
 
@@ -203,12 +305,6 @@ export const Modal: React.FC<ModalProps> = ({
 
   if (!isOpen) return null;
 
-  const modalClassNames = [
-    'mond-modal',
-    `mond-modal--${size}`,
-    className,
-  ].filter(Boolean).join(' ');
-
   const handleOverlayClick = (event: React.MouseEvent) => {
     if (closeOnOverlayClick && event.target === event.currentTarget) {
       onClose();
@@ -216,8 +312,7 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div
-      className="mond-modal-overlay"
+    <StyledOverlay
       onClick={handleOverlayClick}
       onKeyDown={(e) => {
         if (closeOnEscapeKey && e.key === 'Escape') {
@@ -227,10 +322,12 @@ export const Modal: React.FC<ModalProps> = ({
       data-testid={`${dataTestId || 'modal'}-overlay`}
       role="presentation"
     >
-      <div
+      <StyledModal
         ref={modalRef}
-        className={modalClassNames}
+        $size={size}
+        className={className}
         data-testid={dataTestId}
+        data-size={size}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? `${dataTestId || 'modal'}-title` : undefined}
@@ -238,7 +335,7 @@ export const Modal: React.FC<ModalProps> = ({
       >
         {title && (
           <ModalHeader onClose={onClose}>
-            <div id={`${dataTestId || 'modal'}-title`}>{title}</div>
+            <Box id={`${dataTestId || 'modal'}-title`}>{title}</Box>
           </ModalHeader>
         )}
 
@@ -247,8 +344,8 @@ export const Modal: React.FC<ModalProps> = ({
         ) : (
           children
         )}
-      </div>
-    </div>
+      </StyledModal>
+    </StyledOverlay>
   );
 };
 

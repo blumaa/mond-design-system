@@ -1,11 +1,21 @@
 import React from 'react';
 import { render, renderWithDarkMode, screen, fireEvent } from '../../test-utils';
 import '@testing-library/jest-dom';
+import { ThemeProvider } from 'styled-components';
+import { defaultLightTheme } from '../../src/themes';
 import { Link } from './Link';
+
+const renderWithTheme = (ui: React.ReactElement, theme = defaultLightTheme) => {
+  return render(
+    <ThemeProvider theme={theme}>
+      {ui}
+    </ThemeProvider>
+  );
+};
 
 describe('Link Component', () => {
   it('renders with required href and children', () => {
-    render(<Link href="https://example.com">Test Link</Link>);
+    renderWithTheme(<Link href="https://example.com">Test Link</Link>);
     
     const link = screen.getByRole('link', { name: 'Test Link' });
     expect(link).toBeInTheDocument();
@@ -13,31 +23,38 @@ describe('Link Component', () => {
   });
 
   it('renders with default props', () => {
-    render(<Link href="/test">Default Link</Link>);
+    renderWithTheme(<Link href="/test">Default Link</Link>);
 
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('data-mond-link');
-    // CSS classes handle all styling
-    expect(link).toHaveClass('mond-link');
+    expect(link).toHaveAttribute('data-size', 'medium');
   });
 
   it('renders with different sizes', () => {
-    const { rerender } = render(<Link href="/test" size="small">Small</Link>);
+    const { rerender } = renderWithTheme(<Link href="/test" size="small">Small</Link>);
     let link = screen.getByRole('link');
-    expect(link).toHaveClass('mond-link--small');
+    expect(link).toHaveAttribute('data-size', 'small');
 
-    rerender(<Link href="/test" size="medium">Medium</Link>);
+    rerender(
+      <ThemeProvider theme={defaultLightTheme}>
+        <Link href="/test" size="medium">Medium</Link>
+      </ThemeProvider>
+    );
     link = screen.getByRole('link');
-    expect(link).toHaveClass('mond-link--medium');
+    expect(link).toHaveAttribute('data-size', 'medium');
 
-    rerender(<Link href="/test" size="large">Large</Link>);
+    rerender(
+      <ThemeProvider theme={defaultLightTheme}>
+        <Link href="/test" size="large">Large</Link>
+      </ThemeProvider>
+    );
     link = screen.getByRole('link');
-    expect(link).toHaveClass('mond-link--large');
+    expect(link).toHaveAttribute('data-size', 'large');
   });
 
   it('renders icon-only links correctly', () => {
     const TestIcon = <svg data-testid="test-icon"><path /></svg>;
-    render(<Link href="/test" iconOnly icon={TestIcon}>Hidden Text</Link>);
+    renderWithTheme(<Link href="/test" iconOnly icon={TestIcon}>Hidden Text</Link>);
     
     const icon = screen.getByTestId('test-icon');
     
@@ -47,7 +64,7 @@ describe('Link Component', () => {
 
   it('renders with icon and text', () => {
     const TestIcon = <svg data-testid="test-icon"><path /></svg>;
-    render(<Link href="/test" icon={TestIcon}>With Icon</Link>);
+    renderWithTheme(<Link href="/test" icon={TestIcon}>With Icon</Link>);
     
     expect(screen.getByTestId('test-icon')).toBeInTheDocument();
     expect(screen.getByText('With Icon')).toBeInTheDocument();
@@ -55,17 +72,17 @@ describe('Link Component', () => {
 
   it('forwards ref correctly', () => {
     const ref = React.createRef<HTMLAnchorElement>();
-    render(<Link ref={ref} href="/test">Ref Link</Link>);
+    renderWithTheme(<Link ref={ref} href="/test">Ref Link</Link>);
     
     expect(ref.current).toBeInstanceOf(HTMLAnchorElement);
     expect(ref.current).toHaveAttribute('href', '/test');
   });
 
   it('forwards additional anchor props', () => {
-    render(
-      <Link 
-        href="/test" 
-        target="_blank" 
+    renderWithTheme(
+      <Link
+        href="/test"
+        target="_blank"
         rel="noopener noreferrer"
         data-testid="custom-link"
         title="Custom Title"
@@ -81,7 +98,7 @@ describe('Link Component', () => {
   });
 
   it('applies custom styles', () => {
-    render(
+    renderWithTheme(
       <Link href="/test" style={{ color: 'red', margin: '10px' }}>
         Styled Link
       </Link>
@@ -98,8 +115,8 @@ describe('Link Component', () => {
     const onMouseDown = jest.fn();
     const onMouseUp = jest.fn();
 
-    render(
-      <Link 
+    renderWithTheme(
+      <Link
         href="/test"
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -129,7 +146,7 @@ describe('Link Component', () => {
     const onFocus = jest.fn();
     const onBlur = jest.fn();
 
-    render(
+    renderWithTheme(
       <Link href="/test" onFocus={onFocus} onBlur={onBlur}>
         Focus Link
       </Link>
@@ -146,7 +163,7 @@ describe('Link Component', () => {
 
   it('handles click events', () => {
     const onClick = jest.fn();
-    render(<Link href="/test" onClick={onClick}>Clickable Link</Link>);
+    renderWithTheme(<Link href="/test" onClick={onClick}>Clickable Link</Link>);
     
     const link = screen.getByRole('link');
     fireEvent.click(link);
@@ -159,20 +176,18 @@ describe('Link Component', () => {
 
     const link = screen.getByRole('link');
     expect(link).toBeInTheDocument();
-    // CSS variables handle theming automatically
-    expect(link).toHaveClass('mond-link');
+    expect(link).toHaveAttribute('data-mond-link');
   });
 
   it('renders with light mode by default (SSR-compatible)', () => {
-    render(<Link href="/test">Light Mode Link</Link>);
+    renderWithTheme(<Link href="/test">Light Mode Link</Link>);
 
     const link = screen.getByRole('link');
-    // CSS variables handle theming automatically
-    expect(link).toHaveClass('mond-link');
+    expect(link).toHaveAttribute('data-mond-link');
   });
 
   it('has proper accessibility attributes', () => {
-    render(<Link href="/test">Accessible Link</Link>);
+    renderWithTheme(<Link href="/test">Accessible Link</Link>);
     
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/test');
@@ -180,7 +195,7 @@ describe('Link Component', () => {
   });
 
   it('handles external links', () => {
-    render(<Link href="https://external.com">External Link</Link>);
+    renderWithTheme(<Link href="https://external.com">External Link</Link>);
     
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', 'https://external.com');
@@ -188,7 +203,7 @@ describe('Link Component', () => {
 
   it('renders without children for icon-only links', () => {
     const TestIcon = <span data-testid="icon">Icon</span>;
-    render(<Link href="/test" iconOnly icon={TestIcon} />);
+    renderWithTheme(<Link href="/test" iconOnly icon={TestIcon} />);
     
     const link = screen.getByRole('link');
     const icon = screen.getByTestId('icon');
@@ -199,58 +214,57 @@ describe('Link Component', () => {
   });
 
   it('applies font family from design tokens', () => {
-    render(<Link href="/test">Font Link</Link>);
+    renderWithTheme(<Link href="/test">Font Link</Link>);
 
     const link = screen.getByRole('link');
-    // CSS variables handle font-family
-    expect(link).toHaveClass('mond-link');
+    expect(link).toHaveAttribute('data-mond-link');
   });
 
   it('handles empty children gracefully', () => {
-    render(<Link href="/test"></Link>);
+    renderWithTheme(<Link href="/test"></Link>);
     
     const link = screen.getByRole('link');
     expect(link).toBeInTheDocument();
     expect(link.textContent).toBe('');
   });
 
-  describe('Size-specific styling', () => {
+  describe('Styled Components Styling', () => {
     it('applies correct gap for small size with content', () => {
-      render(<Link href="/test" size="small">Small with gap</Link>);
+      renderWithTheme(<Link href="/test" size="small">Small with gap</Link>);
 
       const link = screen.getByRole('link');
-      expect(link).toHaveClass('mond-link--small');
-      expect(link).not.toHaveClass('mond-link--icon-only');
+      expect(link).toHaveAttribute('data-size', 'small');
+      expect(link).toHaveAttribute('data-icon-only', 'false');
     });
 
     it('applies correct gap for medium size with content', () => {
-      render(<Link href="/test" size="medium">Medium with gap</Link>);
+      renderWithTheme(<Link href="/test" size="medium">Medium with gap</Link>);
 
       const link = screen.getByRole('link');
-      expect(link).toHaveClass('mond-link--medium');
-      expect(link).not.toHaveClass('mond-link--icon-only');
+      expect(link).toHaveAttribute('data-size', 'medium');
+      expect(link).toHaveAttribute('data-icon-only', 'false');
     });
 
     it('applies correct gap for large size with content', () => {
-      render(<Link href="/test" size="large">Large with gap</Link>);
+      renderWithTheme(<Link href="/test" size="large">Large with gap</Link>);
 
       const link = screen.getByRole('link');
-      expect(link).toHaveClass('mond-link--large');
-      expect(link).not.toHaveClass('mond-link--icon-only');
+      expect(link).toHaveAttribute('data-size', 'large');
+      expect(link).toHaveAttribute('data-icon-only', 'false');
     });
 
     it('does not apply gap for icon-only links', () => {
       const TestIcon = <span>Icon</span>;
-      render(<Link href="/test" size="small" iconOnly icon={TestIcon} />);
+      renderWithTheme(<Link href="/test" size="small" iconOnly icon={TestIcon} />);
 
       const link = screen.getByRole('link');
-      expect(link).toHaveClass('mond-link--icon-only');
+      expect(link).toHaveAttribute('data-icon-only', 'true');
     });
   });
 
   describe('Interactive state handling', () => {
     it('changes styles on hover', () => {
-      render(<Link href="/test">Hover Link</Link>);
+      renderWithTheme(<Link href="/test">Hover Link</Link>);
       
       const link = screen.getByRole('link');
       fireEvent.mouseEnter(link);
@@ -260,7 +274,7 @@ describe('Link Component', () => {
     });
 
     it('resets styles on mouse leave', () => {
-      render(<Link href="/test">Leave Link</Link>);
+      renderWithTheme(<Link href="/test">Leave Link</Link>);
       
       const link = screen.getByRole('link');
       fireEvent.mouseEnter(link);
@@ -270,7 +284,7 @@ describe('Link Component', () => {
     });
 
     it('applies focus styles', () => {
-      render(<Link href="/test">Focus Link</Link>);
+      renderWithTheme(<Link href="/test">Focus Link</Link>);
       
       const link = screen.getByRole('link');
       fireEvent.focus(link);
@@ -279,7 +293,7 @@ describe('Link Component', () => {
     });
 
     it('removes focus styles on blur', () => {
-      render(<Link href="/test">Blur Link</Link>);
+      renderWithTheme(<Link href="/test">Blur Link</Link>);
       
       const link = screen.getByRole('link');
       fireEvent.focus(link);

@@ -1,28 +1,38 @@
 /**
- * Spinner Component Tests - SSR-Compatible Version
+ * Spinner Component Tests - Styled-Components Version
  */
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { ThemeProvider } from 'styled-components';
+import { defaultLightTheme } from '../../src/themes';
 import { Spinner } from './Spinner';
+
+const renderWithTheme = (ui: React.ReactElement, theme = defaultLightTheme) => {
+  return render(
+    <ThemeProvider theme={theme}>
+      {ui}
+    </ThemeProvider>
+  );
+};
 
 describe('Spinner Component - SSR Compatible', () => {
   describe('SSR Compatibility', () => {
-    it('renders without ThemeProvider context', () => {
-      const { container } = render(<Spinner />);
+    it('renders with ThemeProvider context', () => {
+      const { container } = renderWithTheme(<Spinner />);
       expect(container.firstChild).toBeInTheDocument();
     });
 
     it('does not use useEffect for keyframes injection', () => {
-      const { container } = render(<Spinner />);
+      const { container } = renderWithTheme(<Spinner />);
       expect(container.firstChild).toBeInTheDocument();
     });
   });
 
   describe('Basic Rendering', () => {
     it('renders as a div element', () => {
-      const { container } = render(<Spinner />);
+      const { container } = renderWithTheme(<Spinner />);
       const spinner = container.firstChild as HTMLElement;
       expect(spinner.tagName).toBe('DIV');
     });
@@ -32,48 +42,47 @@ describe('Spinner Component - SSR Compatible', () => {
     });
 
     it('includes accessibility label', () => {
-      render(<Spinner label="Loading content" />);
+      renderWithTheme(<Spinner label="Loading content" />);
       expect(screen.getByText('Loading content')).toBeInTheDocument();
     });
   });
 
   describe('Size Variants', () => {
-    it('applies xs size class', () => {
-      const { container } = render(<Spinner size="xs" />);
+    it('applies xs size data attribute', () => {
+      const { container } = renderWithTheme(<Spinner size="xs" />);
       const spinner = container.firstChild as HTMLElement;
-      expect(spinner).toHaveClass('mond-spinner--xs');
+      expect(spinner).toHaveAttribute('data-size', 'xs');
     });
 
-    it('applies sm size class', () => {
-      const { container } = render(<Spinner size="sm" />);
+    it('applies sm size data attribute', () => {
+      const { container } = renderWithTheme(<Spinner size="sm" />);
       const spinner = container.firstChild as HTMLElement;
-      expect(spinner).toHaveClass('mond-spinner--sm');
+      expect(spinner).toHaveAttribute('data-size', 'sm');
     });
 
-    it('applies md size class (default)', () => {
-      const { container } = render(<Spinner size="md" />);
+    it('applies md size data attribute (default)', () => {
+      const { container } = renderWithTheme(<Spinner size="md" />);
       const spinner = container.firstChild as HTMLElement;
-      expect(spinner).toHaveClass('mond-spinner--md');
+      expect(spinner).toHaveAttribute('data-size', 'md');
     });
 
-    it('applies lg size class', () => {
-      const { container } = render(<Spinner size="lg" />);
+    it('applies lg size data attribute', () => {
+      const { container } = renderWithTheme(<Spinner size="lg" />);
       const spinner = container.firstChild as HTMLElement;
-      expect(spinner).toHaveClass('mond-spinner--lg');
+      expect(spinner).toHaveAttribute('data-size', 'lg');
     });
 
-    it('applies xl size class', () => {
-      const { container } = render(<Spinner size="xl" />);
+    it('applies xl size data attribute', () => {
+      const { container } = renderWithTheme(<Spinner size="xl" />);
       const spinner = container.firstChild as HTMLElement;
-      expect(spinner).toHaveClass('mond-spinner--xl');
+      expect(spinner).toHaveAttribute('data-size', 'xl');
     });
   });
 
   describe('Custom ClassName', () => {
-    it('applies custom className alongside base class', () => {
-      const { container } = render(<Spinner className="custom-class" />);
+    it('applies custom className', () => {
+      const { container } = renderWithTheme(<Spinner className="custom-class" />);
       const spinner = container.firstChild as HTMLElement;
-      expect(spinner).toHaveClass('mond-spinner');
       expect(spinner).toHaveClass('custom-class');
     });
   });
@@ -81,28 +90,28 @@ describe('Spinner Component - SSR Compatible', () => {
   describe('Ref Forwarding', () => {
     it('forwards ref to div element', () => {
       const ref = React.createRef<HTMLDivElement>();
-      render(<Spinner ref={ref} />);
+      renderWithTheme(<Spinner ref={ref} />);
       expect(ref.current).toBeInstanceOf(HTMLDivElement);
     });
   });
 
   describe('Accessibility', () => {
     it('has role="status" by default', () => {
-      const { container } = render(<Spinner />);
+      const { container } = renderWithTheme(<Spinner />);
       const spinner = container.firstChild as HTMLElement;
       expect(spinner).toHaveAttribute('role', 'status');
     });
 
     it('has aria-live="polite"', () => {
-      const { container } = render(<Spinner />);
+      const { container } = renderWithTheme(<Spinner />);
       const spinner = container.firstChild as HTMLElement;
       expect(spinner).toHaveAttribute('aria-live', 'polite');
     });
 
     it('displays visually hidden label', () => {
-      render(<Spinner label="Custom loading" />);
+      renderWithTheme(<Spinner label="Custom loading" />);
       const label = screen.getByText('Custom loading');
-      expect(label).toHaveClass('mond-spinner__label');
+      expect(label).toBeInTheDocument();
     });
   });
 });

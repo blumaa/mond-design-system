@@ -1,45 +1,10 @@
-/* Import Design System Styles */
-@import '../dist/theme.css';
-@import '../dist/button.css';
-@import '../dist/badge.css';
-@import '../dist/tag.css';
-@import '../dist/avatar.css';
-@import '../dist/text.css';
-@import '../dist/heading.css';
-@import '../dist/label.css';
-@import '../dist/divider.css';
-@import '../dist/spinner.css';
+/* Import Design System Tokens */
+@import '../dist/tokens.css';
+@import '../dist/tokens-bsf.css';
 
-/* Form Component Styles */
-@import '../dist/input.css';
-@import '../dist/textarea.css';
-@import '../dist/checkbox.css';
-@import '../dist/radio.css';
-@import '../dist/switch.css';
-@import '../dist/select.css';
-
-/* Overlay Component Styles */
-@import '../dist/tooltip.css';
-@import '../dist/popover.css';
-@import '../dist/modal.css';
-
-/* Navigation Component Styles */
-@import '../dist/link.css';
-
-/* Media Component Styles */
-@import '../dist/image.css';
-@import '../dist/icon.css';
-
-/* Interactive Component Styles */
-@import '../dist/dropdown.css';
-@import '../dist/dropdownitem.css';
-@import '../dist/tabs.css';
-@import '../dist/accordion.css';
-@import '../dist/accordionitem.css';
-@import '../dist/carousel.css';
-
-/* Feedback Component Styles */
-@import '../dist/toast.css';
+/* Note: All components have been migrated to styled-components and no longer need CSS imports.
+ * Styles are now injected at runtime via styled-components.
+ */
 
 /* Global font family - ensure DM Sans is used everywhere */
 *, *::before, *::after {

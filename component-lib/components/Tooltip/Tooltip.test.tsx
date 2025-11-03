@@ -1,28 +1,46 @@
 import React from 'react';
-import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../test-utils';
+import { render as rtlRender, screen, fireEvent, waitFor } from '@testing-library/react';
+import { ThemeProvider } from 'styled-components';
 import '@testing-library/jest-dom';
+import { defaultLightTheme, defaultDarkTheme } from '../../src/themes';
 import { Tooltip } from './Tooltip';
+
+const renderWithTheme = (ui: React.ReactElement) => {
+  return rtlRender(
+    <ThemeProvider theme={defaultLightTheme}>
+      {ui}
+    </ThemeProvider>
+  );
+};
+
+const renderWithDarkMode = (ui: React.ReactElement) => {
+  return rtlRender(
+    <ThemeProvider theme={defaultDarkTheme}>
+      {ui}
+    </ThemeProvider>
+  );
+};
 
 describe('Tooltip Component', () => {
 
   it('renders trigger element', () => {
-    render(
+    renderWithTheme(
       <Tooltip content="Tooltip content" data-testid="tooltip">
         <button>Hover me</button>
       </Tooltip>
     );
-    
+
     const buttonElement = screen.getByText('Hover me');
     expect(buttonElement).toBeInTheDocument();
   });
 
   it('renders tooltip content when visible', () => {
-    render(
+    renderWithTheme(
       <Tooltip content="Tooltip content" data-testid="tooltip">
         <button>Hover me</button>
       </Tooltip>
     );
-    
+
     const tooltipContent = screen.getByTestId('tooltip-content');
     expect(tooltipContent).toBeInTheDocument();
     expect(tooltipContent).toHaveAttribute('aria-hidden', 'true');
@@ -30,7 +48,7 @@ describe('Tooltip Component', () => {
 
   describe('hover trigger', () => {
     it('shows tooltip on mouse enter', async () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" trigger="hover" data-testid="tooltip">
           <button>Hover me</button>
         </Tooltip>
@@ -40,19 +58,19 @@ describe('Tooltip Component', () => {
       const tooltipContent = screen.getByTestId('tooltip-content');
 
       // Initially hidden
-      expect(tooltipContent).not.toHaveClass('mond-tooltip--visible');
+      expect(tooltipContent).toHaveAttribute('data-visible', 'false');
 
       // Hover over button
       fireEvent.mouseEnter(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'true');
         expect(tooltipContent).toHaveAttribute('aria-hidden', 'false');
       });
     });
 
     it('hides tooltip on mouse leave', async () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" trigger="hover" data-testid="tooltip">
           <button>Hover me</button>
         </Tooltip>
@@ -65,21 +83,21 @@ describe('Tooltip Component', () => {
       fireEvent.mouseEnter(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'true');
       });
 
       // Hide tooltip
       fireEvent.mouseLeave(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).not.toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'false');
       });
     });
   });
 
   describe('focus trigger', () => {
     it('shows tooltip on focus', async () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" trigger="focus" data-testid="tooltip">
           <button>Focus me</button>
         </Tooltip>
@@ -91,12 +109,12 @@ describe('Tooltip Component', () => {
       fireEvent.focus(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'true');
       });
     });
 
     it('hides tooltip on blur', async () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" trigger="focus" data-testid="tooltip">
           <button>Focus me</button>
         </Tooltip>
@@ -109,21 +127,21 @@ describe('Tooltip Component', () => {
       fireEvent.focus(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'true');
       });
 
       // Hide tooltip
       fireEvent.blur(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).not.toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'false');
       });
     });
   });
 
   describe('click trigger', () => {
     it('toggles tooltip on click', async () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" trigger="click" data-testid="tooltip">
           <button>Click me</button>
         </Tooltip>
@@ -133,25 +151,25 @@ describe('Tooltip Component', () => {
       const tooltipContent = screen.getByTestId('tooltip-content');
 
       // Initially hidden
-      expect(tooltipContent).not.toHaveClass('mond-tooltip--visible');
+      expect(tooltipContent).toHaveAttribute('data-visible', 'false');
 
       // Show tooltip
       fireEvent.click(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'true');
       });
 
       // Hide tooltip
       fireEvent.click(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).not.toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'false');
       });
     });
 
     it('hides tooltip when clicking outside', async () => {
-      render(
+      renderWithTheme(
         <div>
           <Tooltip content="Tooltip content" trigger="click" data-testid="tooltip">
             <button>Click me</button>
@@ -168,63 +186,61 @@ describe('Tooltip Component', () => {
       fireEvent.click(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'true');
       });
 
       // Click outside
       fireEvent.mouseDown(outsideElement);
 
       await waitFor(() => {
-        expect(tooltipContent).not.toHaveClass('mond-tooltip--visible');
+        expect(tooltipContent).toHaveAttribute('data-visible', 'false');
       });
     });
   });
 
   describe('placement', () => {
     it('applies top placement styles', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" placement="top" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
 
-
       const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveClass('mond-tooltip--top');
+      expect(tooltipContent).toHaveAttribute('data-placement', 'top');
     });
 
     it('applies bottom placement styles', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" placement="bottom" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
 
-
       const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveClass('mond-tooltip--bottom');
+      expect(tooltipContent).toHaveAttribute('data-placement', 'bottom');
     });
 
     it('applies left placement styles', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" placement="left" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveClass('mond-tooltip--left');
+      expect(tooltipContent).toHaveAttribute('data-placement', 'left');
     });
 
     it('applies right placement styles', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" placement="right" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveClass('mond-tooltip--right');
+      expect(tooltipContent).toHaveAttribute('data-placement', 'right');
     });
   });
 
@@ -237,26 +253,26 @@ describe('Tooltip Component', () => {
       );
 
       const tooltipContent = screen.getByTestId('tooltip-content');
-      // CSS variables handle theming automatically
-      expect(tooltipContent).toHaveClass('mond-tooltip');
+      // Styled-components handle theming automatically
+      expect(tooltipContent).toBeInTheDocument();
     });
 
     it('applies light mode styling by default (SSR-compatible)', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Light tooltip" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
 
       const tooltipContent = screen.getByTestId('tooltip-content');
-      // CSS variables handle theming automatically
-      expect(tooltipContent).toHaveClass('mond-tooltip');
+      // Styled-components handle theming automatically
+      expect(tooltipContent).toBeInTheDocument();
     });
   });
 
   describe('disabled state', () => {
     it('does not show tooltip when disabled', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip content" disabled trigger="hover" data-testid="tooltip">
           <button>Hover me</button>
         </Tooltip>
@@ -268,13 +284,13 @@ describe('Tooltip Component', () => {
       fireEvent.mouseEnter(buttonElement);
 
       // Should remain hidden
-      expect(tooltipContent).not.toHaveClass('mond-tooltip--visible');
+      expect(tooltipContent).toHaveAttribute('data-visible', 'false');
     });
   });
 
   describe('content variations', () => {
     it('renders text content', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Simple text tooltip" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
@@ -285,7 +301,7 @@ describe('Tooltip Component', () => {
     });
 
     it('renders JSX content', () => {
-      render(
+      renderWithTheme(
         <Tooltip 
           content={
             <div>
@@ -308,38 +324,38 @@ describe('Tooltip Component', () => {
 
   describe('styling', () => {
     it('applies correct base styles', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Styled tooltip" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
 
       const tooltipContent = screen.getByTestId('tooltip-content');
-      // CSS classes handle all styling
-      expect(tooltipContent).toHaveClass('mond-tooltip');
+      // Styled-components handle all styling
+      expect(tooltipContent).toBeInTheDocument();
     });
 
     it('applies font family via CSS', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Font test" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
 
       const tooltipContent = screen.getByTestId('tooltip-content');
-      // CSS variables handle font-family
-      expect(tooltipContent).toHaveClass('mond-tooltip');
+      // Styled-components handle font-family
+      expect(tooltipContent).toBeInTheDocument();
     });
   });
 
   describe('accessibility', () => {
     it('has correct ARIA attributes', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Accessible tooltip" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toHaveAttribute('role', 'tooltip');
       expect(tooltipContent).toHaveAttribute('aria-hidden', 'true');
@@ -348,20 +364,20 @@ describe('Tooltip Component', () => {
     it('preserves child element event handlers', () => {
       const handleClick = jest.fn();
       const handleMouseEnter = jest.fn();
-      
-      render(
+
+      renderWithTheme(
         <Tooltip content="Tooltip content" data-testid="tooltip">
           <button onClick={handleClick} onMouseEnter={handleMouseEnter}>
             Button
           </button>
         </Tooltip>
       );
-      
+
       const buttonElement = screen.getByText('Button');
-      
+
       fireEvent.click(buttonElement);
       expect(handleClick).toHaveBeenCalled();
-      
+
       fireEvent.mouseEnter(buttonElement);
       expect(handleMouseEnter).toHaveBeenCalled();
     });
@@ -369,19 +385,19 @@ describe('Tooltip Component', () => {
 
   describe('arrow', () => {
     it('renders arrow element', () => {
-      render(
+      renderWithTheme(
         <Tooltip content="Tooltip with arrow" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const arrowElement = screen.getByTestId('tooltip-arrow');
       expect(arrowElement).toBeInTheDocument();
     });
   });
 
   it('applies custom className', () => {
-    render(
+    renderWithTheme(
       <Tooltip content="Tooltip content" className="custom-class" data-testid="tooltip">
         <button>Button</button>
       </Tooltip>

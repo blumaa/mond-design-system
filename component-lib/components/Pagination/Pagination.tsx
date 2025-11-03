@@ -1,6 +1,4 @@
-'use client';
 import React from 'react';
-import { spacing, fontFamilies } from '../../tokens';
 import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
 import { Select } from '../Select/Select';
@@ -83,32 +81,32 @@ const getSizeStyles = (size: PaginationSize) => {
         buttonSize: 'sm' as const,
         selectSize: 'sm' as const,
         textVariant: 'body-sm' as const,
-        gap: spacing[1],
-        containerPadding: spacing[2],
+        gap: '0.25rem', // spacing[1]
+        containerPadding: '0.5rem', // spacing[2]
       };
     case 'md':
       return {
         buttonSize: 'md' as const,
         selectSize: 'md' as const,
         textVariant: 'body-md' as const,
-        gap: spacing[2],
-        containerPadding: spacing[3],
+        gap: '0.5rem', // spacing[2]
+        containerPadding: '0.75rem', // spacing[3]
       };
     case 'lg':
       return {
         buttonSize: 'lg' as const,
         selectSize: 'lg' as const,
         textVariant: 'body-lg' as const,
-        gap: spacing[3],
-        containerPadding: spacing[4],
+        gap: '0.75rem', // spacing[3]
+        containerPadding: '1rem', // spacing[4]
       };
     default:
       return {
         buttonSize: 'md' as const,
         selectSize: 'md' as const,
         textVariant: 'body-md' as const,
-        gap: spacing[2],
-        containerPadding: spacing[3],
+        gap: '0.5rem', // spacing[2]
+        containerPadding: '0.75rem', // spacing[3]
       };
   }
 };
@@ -209,7 +207,6 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
       flexWrap: 'wrap' as const,
       gap: sizeStyles.gap,
       padding: sizeStyles.containerPadding,
-      fontFamily: fontFamilies.sans,
     };
 
     const navigationStyles = {
@@ -327,7 +324,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
             >
               {pageNumbers.map((page, index) => (
                 page === 'ellipsis' ? (
-                  <Box key={`ellipsis-${index}`} px="8px">
+                  <Box key={`ellipsis-${index}`} paddingLeft="8px" paddingRight="8px">
                     <Text 
                       variant={sizeStyles.textVariant} 
                       semantic="secondary" 

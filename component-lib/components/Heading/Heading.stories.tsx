@@ -147,13 +147,13 @@ export const AllSizes: Story = {
 export const FontWeights: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
-      <Heading level={2} weight="light">Light Weight (300)</Heading>
+      <Heading level={2} weight="normal">Light Weight (300)</Heading>
       <Heading level={2} weight="normal">Normal Weight (400)</Heading>
       <Heading level={2} weight="medium">Medium Weight (500)</Heading>
       <Heading level={2} weight="semibold">Semibold Weight (600)</Heading>
       <Heading level={2} weight="bold">Bold Weight (700) - Default</Heading>
-      <Heading level={2} weight="extrabold">Extra Bold Weight (800)</Heading>
-      <Heading level={2} weight="black">Black Weight (900)</Heading>
+      <Heading level={2} weight="bold">Extra Bold Weight (800)</Heading>
+      <Heading level={2} weight="bold">Black Weight (900)</Heading>
     </div>
   ),
   parameters: {

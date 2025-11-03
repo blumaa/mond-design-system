@@ -1,9 +1,11 @@
-'use client';
 import React from 'react';
+import styled, { css } from 'styled-components';
+import { Box } from '../Box/Box';
+import type { BoxProps } from '../Box/Box';
 
 export type LinkSize = 'small' | 'medium' | 'large';
 
-export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface LinkProps extends Omit<BoxProps, 'as'>, Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof React.HTMLAttributes<HTMLElement> | 'color'> {
   /**
    * Link size
    * @default 'medium'
@@ -38,7 +40,71 @@ export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>
   as?: React.ElementType;
 }
 
-export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
+interface StyledLinkProps {
+  $size: LinkSize;
+  $iconOnly: boolean;
+}
+
+const StyledLink = styled(Box).attrs({ as: 'a' })<StyledLinkProps>`
+  /* Base Styles */
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  text-decoration: underline;
+  text-decoration-color: ${({ theme }) => theme.colors.textLink};
+  text-underline-offset: 1px;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  transition: text-decoration 150ms ease;
+
+  /* Hover State */
+  &:hover {
+    text-decoration: none;
+  }
+
+  /* Active State */
+  &:active {
+    text-decoration: underline;
+    text-decoration-color: ${({ theme }) => theme.colors.textLink};
+  }
+
+  /* Focus State */
+  &:focus {
+    outline: 2px solid ${({ theme }) => theme.colors.borderFocused};
+    outline-offset: 2px;
+    border-radius: ${({ theme }) => theme.radii.sm};
+  }
+
+  /* Size Variants */
+  ${({ $size, $iconOnly, theme }) => {
+    const gap = $iconOnly ? 0 : theme.space[2];
+
+    switch ($size) {
+      case 'small':
+        return css`
+          font-size: ${theme.fontSizes.sm};
+          gap: ${gap};
+        `;
+      case 'medium':
+        return css`
+          font-size: ${theme.fontSizes.base};
+          gap: ${gap};
+        `;
+      case 'large':
+        return css`
+          font-size: ${theme.fontSizes.lg};
+          gap: ${gap};
+        `;
+      default:
+        return css`
+          font-size: ${theme.fontSizes.base};
+          gap: ${gap};
+        `;
+    }
+  }}
+`;
+
+export const Link = React.forwardRef<HTMLElement, LinkProps>(
   ({
     as: Component = 'a',
     size = 'medium',
@@ -46,30 +112,25 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     icon,
     children,
     href,
-    style = {},
     className = '',
     ...props
   }, ref) => {
-    // Build class names
-    const classNames = [
-      'mond-link',
-      `mond-link--${size}`,
-      iconOnly && 'mond-link--icon-only',
-      className,
-    ].filter(Boolean).join(' ');
-
     return (
-      <Component
-        ref={ref}
+      <StyledLink
+        as={Component}
+        ref={ref as React.Ref<HTMLElement>}
         href={href}
-        style={style}
-        className={classNames}
+        $size={size}
+        $iconOnly={iconOnly}
+        className={className}
         data-mond-link
+        data-size={size}
+        data-icon-only={iconOnly}
         {...props}
       >
         {icon && icon}
         {!iconOnly && children}
-      </Component>
+      </StyledLink>
     );
   }
 );

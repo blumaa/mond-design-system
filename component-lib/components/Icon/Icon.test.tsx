@@ -1,8 +1,17 @@
 import React from 'react';
 import { render, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
+import { ThemeProvider } from 'styled-components';
+import { defaultLightTheme } from '../../src/themes';
 import { Icon, IconSize } from './Icon';
-import { colors } from '../../tokens';
+
+const renderWithTheme = (ui: React.ReactElement, theme = defaultLightTheme) => {
+  return render(
+    <ThemeProvider theme={theme}>
+      {ui}
+    </ThemeProvider>
+  );
+};
 
 // Mock SVG component (simulating Heroicons)
 const TestSVG = () => (
@@ -13,7 +22,7 @@ const TestSVG = () => (
 
 describe('Icon', () => {
   it('renders correctly with default props', () => {
-    render(
+    renderWithTheme(
       <Icon>
         <TestSVG />
       </Icon>
@@ -21,42 +30,39 @@ describe('Icon', () => {
 
     const icon = screen.getByRole('img');
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveClass('mond-icon');
-    expect(icon).toHaveClass('mond-icon--md');
+    expect(icon).toHaveAttribute('data-size', 'md');
   });
 
   it('renders with custom size', () => {
-    render(
+    renderWithTheme(
       <Icon size="lg">
         <TestSVG />
       </Icon>
     );
 
     const icon = screen.getByRole('img');
-    expect(icon).toHaveClass('mond-icon');
-    expect(icon).toHaveClass('mond-icon--lg');
+    expect(icon).toHaveAttribute('data-size', 'lg');
   });
 
   it('applies correct sizes for all size variants', () => {
     const sizes: IconSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 
     sizes.forEach((size) => {
-      const { unmount } = render(
+      const { unmount } = renderWithTheme(
         <Icon size={size}>
           <TestSVG />
         </Icon>
       );
 
       const icon = screen.getByRole('img');
-      expect(icon).toHaveClass('mond-icon');
-      expect(icon).toHaveClass(`mond-icon--${size}`);
+      expect(icon).toHaveAttribute('data-size', size);
 
       unmount();
     });
   });
 
   it('renders with accessibility label', () => {
-    render(
+    renderWithTheme(
       <Icon label="Test icon">
         <TestSVG />
       </Icon>
@@ -70,7 +76,7 @@ describe('Icon', () => {
   });
 
   it('renders as decorative when specified', () => {
-    render(
+    renderWithTheme(
       <Icon decorative data-testid="decorative-icon">
         <TestSVG />
       </Icon>
@@ -82,20 +88,20 @@ describe('Icon', () => {
     expect(icon).not.toHaveAttribute('aria-label');
   });
 
-  it('renders with custom color from design tokens', () => {
-    render(
-      <Icon color={colors.red["500"]}>
+  it('renders with custom color', () => {
+    renderWithTheme(
+      <Icon color="#ef4444">
         <TestSVG />
       </Icon>
     );
 
     const icon = screen.getByRole('img');
-    // Color is applied via inline style
-    expect(icon).toHaveStyle({ color: colors.red["500"] });
+    // Color is applied via styled-components
+    expect(icon).toHaveStyle({ color: 'rgb(239, 68, 68)' });
   });
 
   it('passes through additional props', () => {
-    render(
+    renderWithTheme(
       <Icon className="custom-class" data-testid="custom-icon">
         <TestSVG />
       </Icon>
@@ -108,7 +114,7 @@ describe('Icon', () => {
   it('forwards ref correctly', () => {
     const ref = React.createRef<HTMLSpanElement>();
 
-    render(
+    renderWithTheme(
       <Icon ref={ref}>
         <TestSVG />
       </Icon>
@@ -118,7 +124,7 @@ describe('Icon', () => {
   });
 
   it('renders as a span element', () => {
-    render(
+    renderWithTheme(
       <Icon data-testid="icon">
         <TestSVG />
       </Icon>
@@ -126,11 +132,10 @@ describe('Icon', () => {
 
     const icon = screen.getByTestId('icon');
     expect(icon.tagName).toBe('SPAN');
-    expect(icon).toHaveClass('mond-icon');
   });
 
   it('wraps SVG children correctly', () => {
-    render(
+    renderWithTheme(
       <Icon data-testid="icon">
         <TestSVG />
       </Icon>

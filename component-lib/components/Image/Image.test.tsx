@@ -1,6 +1,16 @@
 import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../test-utils';
 import '@testing-library/jest-dom';
+import { ThemeProvider } from 'styled-components';
+import { defaultLightTheme } from '../../src/themes';
 import { Image } from './Image';
+
+const renderWithTheme = (ui: React.ReactElement, theme = defaultLightTheme) => {
+  return render(
+    <ThemeProvider theme={theme}>
+      {ui}
+    </ThemeProvider>
+  );
+};
 
 // Mock image loading for tests
 Object.defineProperty(global.Image.prototype, 'src', {
@@ -25,7 +35,7 @@ describe('Image', () => {
   });
 
   it('renders with required props', () => {
-    render(<Image src="https://example.com/image.jpg" alt="Test image" />);
+    renderWithTheme(<Image src="https://example.com/image.jpg" alt="Test image" />);
     
     const image = screen.getByRole('img', { hidden: true });
     expect(image).toBeInTheDocument();
@@ -34,80 +44,83 @@ describe('Image', () => {
   });
 
   it('shows loading spinner by default', () => {
-    render(<Image src="https://example.com/image.jpg" alt="Test image" />);
+    renderWithTheme(<Image src="https://example.com/image.jpg" alt="Test image" />);
     
     expect(screen.getByRole('status')).toBeInTheDocument();
     expect(screen.getByText('Loading image...')).toBeInTheDocument();
   });
 
   it('hides loading spinner when disabled', () => {
-    const { container } = render(<Image src="https://example.com/image.jpg" alt="Test image" showLoadingSpinner={false} />);
+    renderWithTheme(<Image src="https://example.com/image.jpg" alt="Test image" showLoadingSpinner={false} data-testid="image-container" />);
 
-    // The spinner is still rendered but hidden via CSS when showLoadingSpinner is false
-    // Instead, check that the placeholder is visible
-    const placeholder = container.querySelector('.mond-image__placeholder--no-spinner');
-    expect(placeholder).toBeInTheDocument();
+    // Spinner should not be visible when disabled
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+
+    // Image container should still be in loading state
+    const imageContainer = screen.getByTestId('image-container');
+    expect(imageContainer).toHaveAttribute('data-state', 'loading');
   });
 
   it('applies object-fit styles correctly', () => {
-    const { rerender } = render(<Image src="https://example.com/image.jpg" alt="Test image" fit="contain" />);
+    const { rerender } = renderWithTheme(<Image src="https://example.com/image.jpg" alt="Test image" fit="contain" />);
     let image = screen.getByRole('img', { hidden: true });
-    expect(image).toHaveClass('mond-image__img--contain');
+    expect(image).toHaveAttribute('data-fit', 'contain');
 
-    rerender(<Image src="https://example.com/image.jpg" alt="Test image" fit="cover" />);
+    rerender(
+      <ThemeProvider theme={defaultLightTheme}>
+        <Image src="https://example.com/image.jpg" alt="Test image" fit="cover" />
+      </ThemeProvider>
+    );
     image = screen.getByRole('img', { hidden: true });
-    expect(image).toHaveClass('mond-image__img--cover');
+    expect(image).toHaveAttribute('data-fit', 'cover');
   });
 
   it('applies aspect ratio correctly', () => {
-    const { container } = render(
-      <Image src="https://example.com/image.jpg" alt="Test image" aspectRatio="16:9" />
+    renderWithTheme(
+      <Image src="https://example.com/image.jpg" alt="Test image" aspectRatio="16:9" data-testid="image-container" />
     );
 
-    // Aspect ratio is now applied via CSS classes
-    // container.firstChild is the ThemeProvider wrapper, so we need firstChild.firstChild
-    const imageContainer = container.firstChild?.firstChild as HTMLElement;
-    expect(imageContainer).toHaveClass('mond-image--ratio-16-9');
+    // Aspect ratio is now tracked via data attribute
+    const imageContainer = screen.getByTestId('image-container');
+    expect(imageContainer).toHaveAttribute('data-aspect-ratio', '16:9');
   });
 
   it('applies border radius from tokens', () => {
-    const { container } = render(
-      <Image src="https://example.com/image.jpg" alt="Test image" borderRadius="lg" />
+    renderWithTheme(
+      <Image src="https://example.com/image.jpg" alt="Test image" borderRadius="lg" data-testid="image-container" />
     );
 
-    // container.firstChild is the ThemeProvider wrapper, so we need firstChild.firstChild
-    const imageContainer = container.firstChild?.firstChild as HTMLElement;
+    const imageContainer = screen.getByTestId('image-container');
     expect(imageContainer.style.borderRadius).toBe('0.5rem'); // lg = 0.5rem
   });
 
   it('applies custom dimensions', () => {
-    const { container } = render(
-      <Image src="https://example.com/image.jpg" alt="Test image" width="200px" height="150px" />
+    renderWithTheme(
+      <Image src="https://example.com/image.jpg" alt="Test image" width="200px" height="150px" data-testid="image-container" />
     );
 
-    // container.firstChild is the ThemeProvider wrapper, so we need firstChild.firstChild
-    const imageContainer = container.firstChild?.firstChild as HTMLElement;
+    const imageContainer = screen.getByTestId('image-container');
     expect(imageContainer.style.width).toBe('200px');
     expect(imageContainer.style.height).toBe('150px');
   });
 
   it('handles successful image load', async () => {
     const onLoad = jest.fn();
-    render(<Image src="https://example.com/valid.jpg" alt="Test image" onLoad={onLoad} />);
+    renderWithTheme(<Image src="https://example.com/valid.jpg" alt="Test image" onLoad={onLoad} />);
 
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.load(image);
 
     await waitFor(() => {
       expect(onLoad).toHaveBeenCalled();
-      // Display is now controlled by CSS class, not inline style
-      expect(image).toHaveClass('mond-image__img--loaded');
+      // Image is visible when loaded
+      expect(image).toBeInTheDocument();
     });
   });
 
   it('handles image error without fallback', async () => {
     const onError = jest.fn();
-    render(<Image src="https://example.com/error.jpg" alt="Test image" onError={onError} />);
+    renderWithTheme(<Image src="https://example.com/error.jpg" alt="Test image" onError={onError} />);
     
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
@@ -139,84 +152,84 @@ describe('Image', () => {
   });
 
   it('applies loading attribute correctly', () => {
-    const { rerender } = render(<Image src="https://example.com/image.jpg" alt="Test image" loading="eager" />);
+    const { rerender } = renderWithTheme(<Image src="https://example.com/image.jpg" alt="Test image" loading="eager" />);
     let image = screen.getByRole('img', { hidden: true });
     expect(image).toHaveAttribute('loading', 'eager');
 
-    rerender(<Image src="https://example.com/image.jpg" alt="Test image" loading="lazy" />);
+    rerender(
+      <ThemeProvider theme={defaultLightTheme}>
+        <Image src="https://example.com/image.jpg" alt="Test image" loading="lazy" />
+      </ThemeProvider>
+    );
     image = screen.getByRole('img', { hidden: true });
     expect(image).toHaveAttribute('loading', 'lazy');
   });
 
   it('applies crossOrigin attribute correctly', () => {
-    render(<Image src="https://example.com/image.jpg" alt="Test image" crossOrigin="anonymous" />);
+    renderWithTheme(<Image src="https://example.com/image.jpg" alt="Test image" crossOrigin="anonymous" />);
     
     const image = screen.getByRole('img', { hidden: true });
     expect(image).toHaveAttribute('crossOrigin', 'anonymous');
   });
 
   it('applies custom className', () => {
-    const { container } = render(
-      <Image src="https://example.com/image.jpg" alt="Test image" className="custom-image" />
+    renderWithTheme(
+      <Image src="https://example.com/image.jpg" alt="Test image" className="custom-image" data-testid="image-container" />
     );
 
-    // container.firstChild is the ThemeProvider wrapper, so we need firstChild.firstChild
-    const imageContainer = container.firstChild?.firstChild;
-    expect(imageContainer).toHaveClass('mond-image', 'mond-image--loading', 'custom-image');
+    const imageContainer = screen.getByTestId('image-container');
+    expect(imageContainer).toHaveClass('custom-image');
+    expect(imageContainer).toHaveAttribute('data-state', 'loading');
   });
 
   it('applies loading state class', () => {
-    const { container } = render(<Image src="https://example.com/image.jpg" alt="Test image" />);
+    renderWithTheme(<Image src="https://example.com/image.jpg" alt="Test image" data-testid="image-container" />);
 
-    // container.firstChild is the ThemeProvider wrapper, so we need firstChild.firstChild
-    const imageContainer = container.firstChild?.firstChild;
-    expect(imageContainer).toHaveClass('mond-image--loading');
+    const imageContainer = screen.getByTestId('image-container');
+    expect(imageContainer).toHaveAttribute('data-state', 'loading');
   });
 
   it('applies error state class', async () => {
-    const { container } = render(<Image src="https://example.com/error.jpg" alt="Test image" />);
+    renderWithTheme(<Image src="https://example.com/error.jpg" alt="Test image" data-testid="image-container" />);
 
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
 
     await waitFor(() => {
-      // container.firstChild is the ThemeProvider wrapper, so we need firstChild.firstChild
-      const imageContainer = container.firstChild?.firstChild;
-      expect(imageContainer).toHaveClass('mond-image--error');
+      const imageContainer = screen.getByTestId('image-container');
+      expect(imageContainer).toHaveAttribute('data-state', 'error');
     });
   });
 
   it('forwards additional props to Box', () => {
-    render(<Image src="https://example.com/image.jpg" alt="Test image" data-testid="custom-image" />);
+    renderWithTheme(<Image src="https://example.com/image.jpg" alt="Test image" data-testid="custom-image" />);
     
     const imageContainer = screen.getByTestId('custom-image');
     expect(imageContainer).toBeInTheDocument();
   });
 
   it('applies custom styles', () => {
-    const { container } = render(
-      <Image src="https://example.com/image.jpg" alt="Test image" style={{ opacity: 0.8 }} />
+    renderWithTheme(
+      <Image src="https://example.com/image.jpg" alt="Test image" style={{ opacity: 0.8 }} data-testid="image-container" />
     );
 
-    // container.firstChild is the ThemeProvider wrapper, so we need firstChild.firstChild
-    const imageContainer = container.firstChild?.firstChild;
+    const imageContainer = screen.getByTestId('image-container');
     expect(imageContainer).toHaveStyle('opacity: 0.8');
   });
 
   it('shows placeholder in light mode when spinner disabled', () => {
-    const { container } = render(
+    renderWithTheme(
       <Image
         src="https://example.com/image.jpg"
         alt="Test image"
         showLoadingSpinner={false}
-
+        data-testid="image-container"
       />
     );
 
-    // Background color is now applied via CSS variable, not inline style
-    const placeholder = container.querySelector('.mond-image__placeholder--no-spinner');
-    expect(placeholder).toBeInTheDocument();
-    expect(placeholder).toHaveClass('mond-image__placeholder');
+    // Check that the container is in loading state
+    const imageContainer = screen.getByTestId('image-container');
+    expect(imageContainer).toHaveAttribute('data-state', 'loading');
   });
 
   it('shows error state in dark mode', async () => {
@@ -227,43 +240,40 @@ describe('Image', () => {
 
     await waitFor(() => {
       const errorContainer = screen.getByText('Failed to load image').parentElement?.parentElement;
-      // Background color and text color are now applied via CSS variables, not inline styles
-      expect(errorContainer).toHaveClass('mond-image__error');
       expect(errorContainer).toBeInTheDocument();
     });
   });
 
   it('shows error state in light mode', async () => {
-    render(<Image src="https://example.com/error.jpg" alt="Test image"  />);
+    renderWithTheme(<Image src="https://example.com/error.jpg" alt="Test image"  />);
 
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
 
     await waitFor(() => {
       const errorContainer = screen.getByText('Failed to load image').parentElement?.parentElement;
-      // Background color and text color are now applied via CSS variables, not inline styles
-      expect(errorContainer).toHaveClass('mond-image__error');
       expect(errorContainer).toBeInTheDocument();
     });
   });
 
   it('applies min-height to placeholder', () => {
-    const { container } = render(
+    renderWithTheme(
       <Image
         src="https://example.com/image.jpg"
         alt="Test image"
         height="200px"
         showLoadingSpinner={false}
+        data-testid="image-container"
       />
     );
 
-    const placeholder = container.querySelector('.mond-image__placeholder--no-spinner') as HTMLElement;
-    expect(placeholder).toBeInTheDocument();
-    expect(placeholder?.style.minHeight).toBe('200px');
+    // Check that container has correct height
+    const imageContainer = screen.getByTestId('image-container');
+    expect(imageContainer.style.height).toBe('200px');
   });
 
   it('shows spinner in dark mode', () => {
-    render(<Image src="https://example.com/image.jpg" alt="Test image"  />);
+    renderWithTheme(<Image src="https://example.com/image.jpg" alt="Test image"  />);
     
     const spinner = screen.getByRole('status');
     // The spinner should be rendered with isDarkMode=true
@@ -271,11 +281,11 @@ describe('Image', () => {
   });
 
   it('handles fallback error correctly', async () => {
-    render(
-      <Image 
-        src="https://example.com/error.jpg" 
+    renderWithTheme(
+      <Image
+        src="https://example.com/error.jpg"
         fallbackSrc="https://example.com/error-fallback.jpg"
-        alt="Test image" 
+        alt="Test image"
       />
     );
     

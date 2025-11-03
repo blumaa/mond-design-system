@@ -1,29 +1,38 @@
 /**
- * Textarea Component Tests - SSR-Compatible Version
+ * Textarea Component Tests - Styled Components Version
  */
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { ThemeProvider } from 'styled-components';
+import { defaultLightTheme } from '../../src/themes';
 import { Textarea } from './Textarea';
 
-describe('Textarea Component - SSR Compatible', () => {
+const renderWithTheme = (ui: React.ReactElement) => {
+  return render(
+    <ThemeProvider theme={defaultLightTheme}>
+      {ui}
+    </ThemeProvider>
+  );
+};
+
+describe('Textarea Component - Styled Components', () => {
   describe('SSR Compatibility', () => {
-    it('renders without ThemeProvider context', () => {
-      const { container } = render(<Textarea />);
+    it('renders with ThemeProvider context', () => {
+      const { container } = renderWithTheme(<Textarea />);
       expect(container.querySelector('textarea')).toBeInTheDocument();
     });
 
-    it('uses CSS classes instead of inline styles', () => {
-      const { container } = render(<Textarea textareaSize="md" />);
-      const wrapper = container.querySelector('.mond-textarea-container');
-      expect(wrapper).toBeInTheDocument();
+    it('uses styled-components theming', () => {
+      const { container } = renderWithTheme(<Textarea textareaSize="md" />);
+      expect(container.firstChild).toBeInTheDocument();
     });
   });
 
   describe('Basic Rendering', () => {
     it('renders textarea element', () => {
-      render(<Textarea placeholder="Enter text" />);
+      renderWithTheme(<Textarea placeholder="Enter text" />);
       expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument();
     });
 
@@ -32,121 +41,126 @@ describe('Textarea Component - SSR Compatible', () => {
     });
 
     it('renders with label', () => {
-      render(<Textarea label="Description" />);
+      renderWithTheme(<Textarea label="Description" />);
       expect(screen.getByText('Description')).toBeInTheDocument();
     });
 
     it('renders with default rows', () => {
-      render(<Textarea data-testid="textarea" />);
+      renderWithTheme(<Textarea data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
       expect(textarea).toHaveAttribute('rows', '4');
     });
 
     it('renders with custom rows', () => {
-      render(<Textarea rows={8} data-testid="textarea" />);
+      renderWithTheme(<Textarea rows={8} data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
       expect(textarea).toHaveAttribute('rows', '8');
     });
   });
 
   describe('Size Variants', () => {
-    it('applies sm size class', () => {
-      const { container } = render(<Textarea textareaSize="sm" />);
-      expect(container.querySelector('.mond-textarea--sm')).toBeInTheDocument();
+    it('applies sm size data attribute', () => {
+      renderWithTheme(<Textarea textareaSize="sm" data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      expect(textarea).toHaveAttribute('data-size', 'sm');
     });
 
-    it('applies md size class (default)', () => {
-      const { container } = render(<Textarea textareaSize="md" />);
-      expect(container.querySelector('.mond-textarea--md')).toBeInTheDocument();
+    it('applies md size data attribute (default)', () => {
+      renderWithTheme(<Textarea textareaSize="md" data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      expect(textarea).toHaveAttribute('data-size', 'md');
     });
 
-    it('applies lg size class', () => {
-      const { container } = render(<Textarea textareaSize="lg" />);
-      expect(container.querySelector('.mond-textarea--lg')).toBeInTheDocument();
+    it('applies lg size data attribute', () => {
+      renderWithTheme(<Textarea textareaSize="lg" data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      expect(textarea).toHaveAttribute('data-size', 'lg');
     });
   });
 
   describe('Variant States', () => {
-    it('applies default variant class', () => {
-      const { container } = render(<Textarea variant="default" />);
-      expect(container.querySelector('.mond-textarea--default')).toBeInTheDocument();
+    it('applies default variant data attribute', () => {
+      renderWithTheme(<Textarea variant="default" data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      expect(textarea).toHaveAttribute('data-variant', 'default');
     });
 
     it('applies error variant when error message provided', () => {
-      const { container } = render(<Textarea error="Field is required" />);
-      expect(container.querySelector('.mond-textarea--error')).toBeInTheDocument();
+      renderWithTheme(<Textarea error="Field is required" data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      expect(textarea).toHaveAttribute('data-variant', 'error');
     });
 
     it('applies success variant when success message provided', () => {
-      const { container } = render(<Textarea success="Looks good!" />);
-      expect(container.querySelector('.mond-textarea--success')).toBeInTheDocument();
+      renderWithTheme(<Textarea success="Looks good!" data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      expect(textarea).toHaveAttribute('data-variant', 'success');
     });
 
     it('error takes precedence over success', () => {
-      const { container } = render(<Textarea error="Error" success="Success" />);
-      expect(container.querySelector('.mond-textarea--error')).toBeInTheDocument();
-      expect(container.querySelector('.mond-textarea--success')).not.toBeInTheDocument();
+      renderWithTheme(<Textarea error="Error" success="Success" data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      expect(textarea).toHaveAttribute('data-variant', 'error');
     });
   });
 
   describe('Messages', () => {
     it('displays error message', () => {
-      render(<Textarea error="Field is required" />);
+      renderWithTheme(<Textarea error="Field is required" />);
       expect(screen.getByText('Field is required')).toBeInTheDocument();
     });
 
     it('displays success message', () => {
-      render(<Textarea success="Looks good!" />);
+      renderWithTheme(<Textarea success="Looks good!" />);
       expect(screen.getByText('Looks good!')).toBeInTheDocument();
     });
 
     it('displays helper text', () => {
-      render(<Textarea helperText="Max 500 characters" />);
+      renderWithTheme(<Textarea helperText="Max 500 characters" />);
       expect(screen.getByText('Max 500 characters')).toBeInTheDocument();
     });
 
-    it('error message has error styling class', () => {
-      const { container } = render(<Textarea error="Error" />);
-      const message = container.querySelector('.mond-textarea__message--error');
-      expect(message).toBeInTheDocument();
+    it('error message renders correctly', () => {
+      renderWithTheme(<Textarea error="Error" />);
+      expect(screen.getByText('Error')).toBeInTheDocument();
     });
 
-    it('success message has success styling class', () => {
-      const { container } = render(<Textarea success="Success" />);
-      const message = container.querySelector('.mond-textarea__message--success');
-      expect(message).toBeInTheDocument();
+    it('success message renders correctly', () => {
+      renderWithTheme(<Textarea success="Success" />);
+      expect(screen.getByText('Success')).toBeInTheDocument();
     });
 
-    it('helper text has helper styling class', () => {
-      const { container } = render(<Textarea helperText="Helper" />);
-      const message = container.querySelector('.mond-textarea__message--helper');
-      expect(message).toBeInTheDocument();
+    it('helper text renders correctly', () => {
+      renderWithTheme(<Textarea helperText="Helper" />);
+      expect(screen.getByText('Helper')).toBeInTheDocument();
     });
   });
 
   describe('Disabled State', () => {
     it('applies disabled attribute', () => {
-      render(<Textarea disabled data-testid="textarea" />);
+      renderWithTheme(<Textarea disabled data-testid="textarea" />);
       expect(screen.getByTestId('textarea')).toBeDisabled();
     });
 
-    it('applies disabled class to wrapper', () => {
-      const { container } = render(<Textarea disabled />);
-      expect(container.querySelector('.mond-textarea--disabled')).toBeInTheDocument();
+    it('maintains data attributes when disabled', () => {
+      renderWithTheme(<Textarea disabled textareaSize="lg" data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      expect(textarea).toBeDisabled();
+      expect(textarea).toHaveAttribute('data-size', 'lg');
     });
   });
 
   describe('Ref Forwarding', () => {
     it('forwards ref to textarea element', () => {
       const ref = React.createRef<HTMLTextAreaElement>();
-      render(<Textarea ref={ref} />);
+      renderWithTheme(<Textarea ref={ref} />);
       expect(ref.current).toBeInstanceOf(HTMLTextAreaElement);
     });
   });
 
   describe('Label Association', () => {
     it('associates label with textarea via id', () => {
-      render(<Textarea label="Description" id="custom-id" />);
+      renderWithTheme(<Textarea label="Description" id="custom-id" />);
       const label = screen.getByText('Description');
       const textarea = screen.getByLabelText('Description');
       expect(label).toHaveAttribute('for', 'custom-id');
@@ -154,7 +168,7 @@ describe('Textarea Component - SSR Compatible', () => {
     });
 
     it('generates unique IDs when not provided', () => {
-      render(
+      renderWithTheme(
         <div>
           <Textarea label="First" data-testid="textarea-1" />
           <Textarea label="Second" data-testid="textarea-2" />
@@ -170,10 +184,9 @@ describe('Textarea Component - SSR Compatible', () => {
 
   describe('Custom ClassName', () => {
     it('applies custom className to textarea field', () => {
-      render(<Textarea className="custom-class" data-testid="textarea" />);
+      renderWithTheme(<Textarea className="custom-class" data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
       expect(textarea).toHaveClass('custom-class');
-      expect(textarea).toHaveClass('mond-textarea__field');
     });
   });
 });

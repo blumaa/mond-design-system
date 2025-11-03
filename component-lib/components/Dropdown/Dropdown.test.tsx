@@ -343,14 +343,13 @@ describe('Dropdown Component', () => {
       <Dropdown
         options={mockOptions}
         trigger={<Button>Open Menu</Button>}
-        isDarkMode
         data-testid="dropdown"
       />
     );
-    
+
     const trigger = screen.getByText('Open Menu');
     fireEvent.click(trigger);
-    
+
     await waitFor(() => {
       expect(screen.getByRole('menu')).toBeInTheDocument();
     });

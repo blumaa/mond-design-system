@@ -5,6 +5,7 @@ const config: StorybookConfig = {
     "../mds-intro-docs/**/*.mdx",
     "../components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
     "../tokens/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
     "@storybook/addon-links",

@@ -102,11 +102,208 @@ function MyComponent() {
 - ✅ **TypeScript First** - Full type safety and IntelliSense support
 - ✅ **Polymorphic Components** - Render components as different elements (Button, Box, Text)
 - ✅ **Accessibility** - WCAG 2.1 AA compliant components with full keyboard support
-- ✅ **Design Tokens** - Semantic color system with light/dark themes
+- ✅ **Design Tokens** - Semantic color system with light/dark themes and multi-brand support
 - ✅ **Consistent API** - Similar props across all components
 - ✅ **Tree Shakeable** - Import only what you need
 - ✅ **SSR Compatible** - Works with Next.js, Remix, and other SSR frameworks
 - ✅ **Responsive Design** - Mobile-first responsive components
+
+## Theming & Design Tokens
+
+The Mond Design System uses a sophisticated token system built with Style Dictionary, offering:
+
+- **Light/Dark Mode** - Automatic theme switching via CSS variables
+- **Multi-Brand Support** - Switch between brand themes (default with blue, BSF with green)
+- **Type-Safe Tokens** - TypeScript types for all design tokens
+- **Semantic Tokens** - Context-aware tokens that adapt to themes
+- **CSS Variable Based** - No JavaScript runtime overhead
+
+### Theme Provider
+
+Use the `ThemeProvider` to enable theming in your app:
+
+```tsx
+import { ThemeProvider } from '@mond-design-system/theme';
+
+// Static theming (SSR-safe)
+function App() {
+  return (
+    <ThemeProvider colorScheme="light" brand="default">
+      <YourApp />
+    </ThemeProvider>
+  );
+}
+
+// Dynamic theming with hooks (client-side)
+function App() {
+  return (
+    <ThemeProvider enableHooks colorScheme="light" brand="default">
+      <YourApp />
+    </ThemeProvider>
+  );
+}
+```
+
+### Runtime Theme Switching
+
+When `enableHooks` is enabled, use the `useTheme` hook for runtime theme switching:
+
+```tsx
+import { useTheme } from '@mond-design-system/theme';
+
+function ThemeSwitcher() {
+  const { mode, brand, setMode, setBrand, toggleMode } = useTheme();
+
+  return (
+    <div>
+      <button onClick={toggleMode}>
+        Switch to {mode === 'light' ? 'dark' : 'light'} mode
+      </button>
+
+      <select value={brand} onChange={(e) => setBrand(e.target.value)}>
+        <option value="default">Default Brand (Blue)</option>
+        <option value="bsf">BSF Brand (Green)</option>
+      </select>
+
+      <p>Current: {mode} mode, {brand} brand</p>
+    </div>
+  );
+}
+```
+
+### Using Design Tokens
+
+#### Option 1: CSS Variables (Recommended)
+
+CSS variables automatically adapt to theme changes:
+
+```css
+.my-component {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border-default);
+}
+
+.my-button {
+  background-color: var(--color-brand-primary-500);
+  color: var(--color-text-inverse);
+}
+```
+
+#### Option 2: TypeScript Tokens
+
+For component props that accept token values:
+
+```tsx
+import * as tokens from '@mond-design-system/theme';
+import type { ColorToken } from '@mond-design-system/theme';
+
+// Type-safe color token
+const primaryColor: ColorToken = 'ColorBrandPrimary500';
+
+// Resolve token to value
+const colorValue = tokens[primaryColor]; // "#0ea5e9" or "#22c55e" depending on brand
+```
+
+### Available Token Categories
+
+**Color Tokens:**
+- `ColorBlue*`, `ColorGray*`, `ColorGreen*`, `ColorRed*`, `ColorAmber*` - Primitive colors
+- `ColorBrandPrimary*`, `ColorBrandSecondary*`, etc. - Brand colors (change per brand)
+- `ColorText*`, `ColorSurface*`, `ColorBorder*` - Semantic colors (change per theme)
+
+**Spacing Tokens:**
+- `Spacing0` to `Spacing64` - Consistent spacing scale
+
+**Typography Tokens:**
+- `FontSizeXs` to `FontSize6xl` - Font sizes
+- `FontWeightThin` to `FontWeightBlack` - Font weights
+- `LineHeight*`, `LetterSpacing*` - Typography modifiers
+
+**Border Radius Tokens:**
+- `RadiiNone` to `RadiiFull` - Border radius values
+
+**Shadow Tokens:**
+- `ShadowSm` to `Shadow3xl` - Box shadows
+- `ShadowGlow*`, `ShadowElevated`, `ShadowFloating` - Special effects
+
+### Theme-Aware Component Example
+
+```tsx
+function ThemedCard() {
+  return (
+    <Box
+      padding="6"
+      style={{
+        backgroundColor: 'var(--color-surface-elevated)',
+        border: '1px solid var(--color-border-default)',
+        borderRadius: 'var(--radii-lg)',
+      }}
+    >
+      <Heading variant="h2" style={{ color: 'var(--color-text-primary)' }}>
+        Card Title
+      </Heading>
+      <Text semantic="secondary">
+        This card automatically adapts to light/dark mode and brand changes!
+      </Text>
+      <Button variant="primary">
+        Primary button uses brand colors
+      </Button>
+    </Box>
+  );
+}
+```
+
+### Brand-Specific Tokens
+
+The system supports multiple brand themes. Import brand-specific CSS:
+
+```tsx
+// For default brand (blue primary)
+import '@mond-design-system/theme/tokens.css';
+
+// For BSF brand (green primary)
+import '@mond-design-system/theme/tokens-bsf.css';
+```
+
+Or use the ThemeProvider to switch brands dynamically:
+
+```tsx
+<ThemeProvider brand="default">  {/* Blue theme */}
+<ThemeProvider brand="bsf">      {/* Green theme */}
+```
+
+### Dark Mode Implementation
+
+Dark mode works automatically when you set the theme:
+
+```tsx
+// Static dark mode
+<ThemeProvider colorScheme="dark">
+
+// Dynamic dark mode
+const { mode, setMode } = useTheme();
+setMode('dark');
+
+// Toggle between modes
+const { toggleMode } = useTheme();
+toggleMode();
+```
+
+The theme provider sets `data-theme="dark"` or `data-theme="light"` on the root element, and CSS variables update automatically.
+
+### localStorage Persistence
+
+Theme preferences are automatically saved to localStorage when using `enableHooks`:
+
+```tsx
+<ThemeProvider
+  enableHooks
+  enablePersistence={true}  // default
+  storageKeyMode="my-theme-mode"
+  storageKeyBrand="my-brand"
+>
+```
 
 ## Polymorphic Rendering
 

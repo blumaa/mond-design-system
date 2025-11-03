@@ -41,6 +41,3 @@ export * from './Popover';
 
 // Providers
 export * from './providers';
-
-// Brands
-export * from '../brands';

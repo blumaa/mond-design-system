@@ -66,10 +66,6 @@ A visual separator component that can be horizontal or vertical, with optional t
       options: ['sm', 'md', 'lg'],
       description: 'Thickness of the divider line',
     },
-    children: {
-      control: 'text',
-      description: 'Optional text content to display in the center',
-    },
   },
 };
 
@@ -165,27 +161,27 @@ export const Sizes: Story = {
   },
 };
 
-export const WithText: Story = {
+export const WithSpacing: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', maxWidth: '400px' }}>
       <div>
-        <p style={{ margin: '0 0 16px 0', textAlign: 'center' }}>Create your account</p>
-        <Divider>OR</Divider>
-        <p style={{ margin: '16px 0 0 0', textAlign: 'center' }}>Sign in with existing account</p>
+        <p style={{ margin: '0 0 16px 0', textAlign: 'center' }}>Content above</p>
+        <Divider />
+        <p style={{ margin: '16px 0 0 0', textAlign: 'center' }}>Content below</p>
       </div>
-      
-      <div style={{ 
-        padding: '24px', 
-        backgroundColor: '#f9fafb', 
-        borderRadius: '8px' 
+
+      <div style={{
+        padding: '24px',
+        backgroundColor: '#f9fafb',
+        borderRadius: '8px'
       }}>
         <h3 style={{ margin: '0 0 16px 0' }}>Section A</h3>
         <p style={{ margin: '0', fontSize: '14px', color: '#6b7280' }}>
           Content for the first section
         </p>
-        
-        <Divider variant="subtle" my="6">Section B</Divider>
-        
+
+        <Divider variant="subtle" marginTop="6" marginBottom="6" />
+
         <p style={{ margin: '0', fontSize: '14px', color: '#6b7280' }}>
           Content for the second section
         </p>
@@ -195,7 +191,7 @@ export const WithText: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Dividers can include text content, commonly used for "OR" separators or section labels.',
+        story: 'Dividers can be used with spacing utilities to separate content sections.',
       },
     },
   },
@@ -204,34 +200,34 @@ export const WithText: Story = {
 export const ThemeVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '32px' }}>
-      <div style={{ 
-        padding: '24px', 
-        backgroundColor: '#ffffff', 
+      <div style={{
+        padding: '24px',
+        backgroundColor: '#ffffff',
         borderRadius: '8px',
         border: '1px solid #e5e7eb',
         minWidth: '200px'
       }}>
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center' }}>Light Theme</h4>
-        <Divider variant="subtle"  />
+        <Divider variant="subtle" />
         <div style={{ margin: '16px 0' }}>
-          <Divider >OR</Divider>
+          <Divider />
         </div>
-        <Divider variant="strong"  />
+        <Divider variant="strong" />
       </div>
-      
-      <div style={{ 
-        padding: '24px', 
-        backgroundColor: '#1f2937', 
+
+      <div style={{
+        padding: '24px',
+        backgroundColor: '#1f2937',
         borderRadius: '8px',
         color: '#f9fafb',
         minWidth: '200px'
       }}>
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center', color: '#f9fafb' }}>Dark Theme</h4>
-        <Divider variant="subtle"  />
+        <Divider variant="subtle" />
         <div style={{ margin: '16px 0' }}>
-          <Divider >OR</Divider>
+          <Divider />
         </div>
-        <Divider variant="strong"  />
+        <Divider variant="strong" />
       </div>
     </div>
   ),
@@ -246,9 +242,9 @@ export const ThemeVariants: Story = {
 
 export const VerticalInForms: Story = {
   render: () => (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
       gap: '0',
       padding: '16px',
       border: '1px solid #e5e7eb',
@@ -256,19 +252,20 @@ export const VerticalInForms: Story = {
       maxWidth: '400px'
     }}>
       <div style={{ flex: 1, textAlign: 'center' }}>
-        <Button style={{ width: '100%' }}>
+        <Button fullWidth>
           Sign In
         </Button>
       </div>
-      
-      <Divider 
-        orientation="vertical" 
-        mx="4" 
-        style={{ height: '48px' }} 
+
+      <Divider
+        orientation="vertical"
+        marginLeft="4"
+        marginRight="4"
+        style={{ height: '48px' }}
       />
-      
+
       <div style={{ flex: 1, textAlign: 'center' }}>
-        <Button variant="outline" style={{ width: '100%' }}>
+        <Button variant="outline" fullWidth>
           Register
         </Button>
       </div>

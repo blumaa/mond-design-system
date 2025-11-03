@@ -120,21 +120,27 @@ export const WithIcons: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '2rem' }}>
       <Tooltip content="This is helpful information">
-        <Button variant="outline" size="sm" style={{ borderRadius: '50%', width: '32px', height: '32px', padding: '4px' }}>
-          ℹ️
-        </Button>
+        <div style={{ borderRadius: '50%', width: '32px', height: '32px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Button variant="outline" size="sm" iconOnly aria-label="Info">
+            ℹ️
+          </Button>
+        </div>
       </Tooltip>
-      
+
       <Tooltip content="Warning: This action cannot be undone">
-        <Button variant="outline" size="sm" style={{ borderRadius: '50%', width: '32px', height: '32px', padding: '4px' }}>
-          ⚠️
-        </Button>
+        <div style={{ borderRadius: '50%', width: '32px', height: '32px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Button variant="outline" size="sm" iconOnly aria-label="Warning">
+            ⚠️
+          </Button>
+        </div>
       </Tooltip>
-      
+
       <Tooltip content="Error: Something went wrong">
-        <Button variant="outline" size="sm" style={{ borderRadius: '50%', width: '32px', height: '32px', padding: '4px' }}>
-          ❌
-        </Button>
+        <div style={{ borderRadius: '50%', width: '32px', height: '32px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Button variant="outline" size="sm" iconOnly aria-label="Error">
+            ❌
+          </Button>
+        </div>
       </Tooltip>
     </div>
   ),

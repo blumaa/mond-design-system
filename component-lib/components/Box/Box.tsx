@@ -1,38 +1,95 @@
-import { forwardRef } from 'react';
-import { tokens } from '../../tokens';
+import React, { forwardRef } from 'react';
+import styled from 'styled-components';
+import { DefaultTheme } from 'styled-components';
 
-export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
+/**
+ * Box Props - System-style utility props for layout and styling
+ * Inspired by styled-system and xstyled patterns but using plain styled-components
+ */
+export interface BoxProps extends Omit<React.HTMLAttributes<HTMLElement>, 'color'> {
   as?: React.ElementType;
 
-  // Spacing
-  p?: string | number;
-  px?: string | number;
-  py?: string | number;
-  pt?: string | number;
-  pr?: string | number;
-  pb?: string | number;
-  pl?: string | number;
-  m?: string | number;
-  mx?: string | number;
-  my?: string | number;
-  mt?: string | number;
-  mr?: string | number;
-  mb?: string | number;
-  ml?: string | number;
-
   // Colors
-  bg?: string;
-  color?: string;
-  borderColor?: string;
+  backgroundColor?: keyof DefaultTheme['colors'] | string | number;
+  color?: keyof DefaultTheme['colors'] | 'currentcolor' | 'inherit' | string | number;
 
-  // Layout
+  // Border Shorthand
+  border?: string;
+  borderTop?: string;
+  borderRight?: string;
+  borderBottom?: string;
+  borderLeft?: string;
+
+  // Border Colors
+  borderColor?: keyof DefaultTheme['colors'] | string;
+  borderTopColor?: keyof DefaultTheme['colors'] | string;
+  borderRightColor?: keyof DefaultTheme['colors'] | string;
+  borderBottomColor?: keyof DefaultTheme['colors'] | string;
+  borderLeftColor?: keyof DefaultTheme['colors'] | string;
+
+  // Border Styles
+  borderStyle?: 'solid' | 'dashed' | 'dotted' | 'double' | 'none';
+  borderTopStyle?: 'solid' | 'dashed' | 'dotted' | 'double' | 'none';
+  borderRightStyle?: 'solid' | 'dashed' | 'dotted' | 'double' | 'none';
+  borderBottomStyle?: 'solid' | 'dashed' | 'dotted' | 'double' | 'none';
+  borderLeftStyle?: 'solid' | 'dashed' | 'dotted' | 'double' | 'none';
+
+  // Border Widths
+  borderWidth?: string | number;
+  borderTopWidth?: string | number;
+  borderRightWidth?: string | number;
+  borderBottomWidth?: string | number;
+  borderLeftWidth?: string | number;
+
+  // Border Radius
+  borderRadius?: keyof DefaultTheme['radii'] | string | number;
+
+  // Shadows
+  boxShadow?: keyof DefaultTheme['shadows'] | 'none' | string;
+
+  // Typography
+  fontFamily?: keyof DefaultTheme['fonts'] | 'inherit' | string;
+  fontSize?: keyof DefaultTheme['fontSizes'] | 'inherit' | string | number;
+  fontWeight?: keyof DefaultTheme['fontWeights'] | 'inherit' | string | number;
+  fontStyle?: React.CSSProperties['fontStyle'];
+  lineHeight?: keyof DefaultTheme['lineHeights'] | 'inherit' | string | number;
+
+  // Spacing - Margin
+  margin?: keyof DefaultTheme['space'] | string | number;
+  marginTop?: keyof DefaultTheme['space'] | string | number;
+  marginRight?: keyof DefaultTheme['space'] | 'auto' | string | number;
+  marginBottom?: keyof DefaultTheme['space'] | string | number;
+  marginLeft?: keyof DefaultTheme['space'] | 'auto' | string | number;
+
+  // Spacing - Padding
+  padding?: keyof DefaultTheme['space'] | string | number;
+  paddingTop?: keyof DefaultTheme['space'] | string | number;
+  paddingRight?: keyof DefaultTheme['space'] | string | number;
+  paddingBottom?: keyof DefaultTheme['space'] | string | number;
+  paddingLeft?: keyof DefaultTheme['space'] | string | number;
+
+  // Grid/Flexbox Gaps
+  gap?: keyof DefaultTheme['space'] | string | number;
+  gridGap?: keyof DefaultTheme['space'] | string | number;
+  gridRowGap?: keyof DefaultTheme['space'] | string | number;
+  gridColumnGap?: keyof DefaultTheme['space'] | string | number;
+
+  // Z-Index
+  zIndex?: number | string;
+
+  // Layout props (passed through as standard CSS)
   display?: React.CSSProperties['display'];
   position?: React.CSSProperties['position'];
   top?: React.CSSProperties['top'];
   right?: React.CSSProperties['right'];
   bottom?: React.CSSProperties['bottom'];
   left?: React.CSSProperties['left'];
-  zIndex?: React.CSSProperties['zIndex'];
+  width?: React.CSSProperties['width'];
+  height?: React.CSSProperties['height'];
+  minWidth?: React.CSSProperties['minWidth'];
+  minHeight?: React.CSSProperties['minHeight'];
+  maxWidth?: React.CSSProperties['maxWidth'];
+  maxHeight?: React.CSSProperties['maxHeight'];
 
   // Flexbox
   flex?: React.CSSProperties['flex'];
@@ -45,303 +102,306 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   justifySelf?: React.CSSProperties['justifySelf'];
 
   // Grid
-  gridArea?: string;
-  gridColumn?: string;
-  gridRow?: string;
-  gridAutoFlow?: string;
-  gridTemplate?: string;
-  gridTemplateColumns?: string;
-  gridTemplateRows?: string;
-  gap?: string | number;
-  rowGap?: string | number;
-  columnGap?: string | number;
+  gridArea?: React.CSSProperties['gridArea'];
+  gridColumn?: React.CSSProperties['gridColumn'];
+  gridRow?: React.CSSProperties['gridRow'];
+  gridAutoFlow?: React.CSSProperties['gridAutoFlow'];
+  gridTemplate?: React.CSSProperties['gridTemplate'];
+  gridTemplateColumns?: React.CSSProperties['gridTemplateColumns'];
+  gridTemplateRows?: React.CSSProperties['gridTemplateRows'];
 
-  // Size
-  width?: string | number;
-  height?: string | number;
-  minWidth?: string | number;
-  minHeight?: string | number;
-  maxWidth?: string | number;
-  maxHeight?: string | number;
+  // Effects
+  opacity?: React.CSSProperties['opacity'];
+  overflow?: React.CSSProperties['overflow'];
+  overflowX?: React.CSSProperties['overflowX'];
+  overflowY?: React.CSSProperties['overflowY'];
+  cursor?: React.CSSProperties['cursor'];
+  transition?: React.CSSProperties['transition'];
+  transform?: React.CSSProperties['transform'];
 
-  // Border
-  border?: string;
-  borderWidth?: string | number;
-  borderStyle?: string;
-  borderRadius?: string | number;
-  borderTop?: string;
-  borderRight?: string;
-  borderBottom?: string;
-  borderLeft?: string;
-
-  // Typography
-  fontSize?: React.CSSProperties['fontSize'];
-  fontWeight?: React.CSSProperties['fontWeight'];
-  fontStyle?: React.CSSProperties['fontStyle'];
-  lineHeight?: React.CSSProperties['lineHeight'];
-  letterSpacing?: React.CSSProperties['letterSpacing'];
+  // Text
   textAlign?: React.CSSProperties['textAlign'];
   textTransform?: React.CSSProperties['textTransform'];
   textDecoration?: React.CSSProperties['textDecoration'];
   textOverflow?: React.CSSProperties['textOverflow'];
   whiteSpace?: React.CSSProperties['whiteSpace'];
-  fontFamily?: React.CSSProperties['fontFamily'];
-
-  // Effects
-  boxShadow?: React.CSSProperties['boxShadow'];
-  opacity?: React.CSSProperties['opacity'];
-  cursor?: React.CSSProperties['cursor'];
-  overflow?: React.CSSProperties['overflow'];
-  overflowX?: React.CSSProperties['overflowX'];
-  overflowY?: React.CSSProperties['overflowY'];
-  transition?: React.CSSProperties['transition'];
-  transform?: React.CSSProperties['transform'];
+  letterSpacing?: React.CSSProperties['letterSpacing'];
 }
 
-/**
- * Convert value to pixels if it's a number
- */
-const convertToPixels = (value: string | number): string => {
-  if (typeof value === 'number') {
-    return `${value}px`;
-  }
-  return value;
-};
-
-/**
- * Convert token path or value to CSS variable or direct value
- * @param value - Can be a token path (e.g., "spacing.4"), token key (e.g., "4"), or raw value (e.g., "10px")
- * @param tokenType - Type of token (spacing, color, etc.)
- * @returns CSS variable reference or direct value
- */
-const resolveTokenValue = (value: string | number, tokenType: 'spacing' | 'color' = 'spacing'): string => {
-  if (typeof value === 'number') {
-    return `${value}px`;
-  }
-
-  // Check if it's a semantic token path (contains dots)
-  if (value.includes('.')) {
-    // Convert path to CSS variable name
-    // e.g., "surface.background" -> "var(--mond-surface-background)"
-    const cssVarName = `--mond-${value.replace(/\./g, '-')}`;
-    return `var(${cssVarName})`;
-  }
-
-  // Check if it's a numeric spacing token key (0, 1, 2, 3, 4, etc.)
-  if (tokenType === 'spacing' && /^\d+$/.test(value)) {
-    // Access spacing tokens to verify it exists
-    const spacingValue = (tokens.spacing as Record<string, string>)[value];
-    if (spacingValue) {
-      // Use CSS variable for spacing
-      return `var(--mond-spacing-${value})`;
-    }
-    // Fallback to pixels
-    return `${value}px`;
-  }
-
-  // Raw value (e.g., "10px", "#ff0000", "auto", etc.)
-  return value;
-};
-
-/**
- * Box Component
- *
- * A fundamental primitive component for layout and styling.
- * Provides shorthand props for common CSS properties.
- *
- * **SSR-Compatible**: Uses CSS variables instead of runtime theme resolution.
- * **Theme-Aware**: Automatically responds to data-theme attribute changes.
- *
- * @example
- * // Semantic token (responds to theme changes)
- * <Box bg="surface.background" color="text.primary" p="4">
- *   Content
- * </Box>
- *
- * @example
- * // Numeric spacing token
- * <Box p={4} m={2}>Content</Box>
- * // Renders: padding: var(--mond-spacing-4); margin: var(--mond-spacing-2);
- *
- * @example
- * // Raw values
- * <Box bg="#ff0000" p="20px">
- *   Content
- * </Box>
- *
- * @example
- * // Complex layout
- * <Box
- *   display="flex"
- *   flexDirection="column"
- *   gap={4}
- *   p={6}
- *   borderRadius={8}
- *   boxShadow="md"
- * >
- *   <Box>Item 1</Box>
- *   <Box>Item 2</Box>
- * </Box>
- */
-export const Box = forwardRef<HTMLElement, BoxProps>(({
-  as = 'div',
-  children,
-  className = '',
-
-  // Spacing props
-  p, px, py, pt, pr, pb, pl,
-  m, mx, my, mt, mr, mb, ml,
-
-  // Color props
-  bg, color, borderColor,
-
-  // Layout props
-  display, position, top, right, bottom, left, zIndex,
-
+// List of Box style props that should not be forwarded to the DOM
+const styleProps = new Set([
+  'backgroundColor',
+  'color',
+  'border',
+  'borderTop',
+  'borderRight',
+  'borderBottom',
+  'borderLeft',
+  'borderColor',
+  'borderTopColor',
+  'borderRightColor',
+  'borderBottomColor',
+  'borderLeftColor',
+  'borderStyle',
+  'borderTopStyle',
+  'borderRightStyle',
+  'borderBottomStyle',
+  'borderLeftStyle',
+  'borderWidth',
+  'borderTopWidth',
+  'borderRightWidth',
+  'borderBottomWidth',
+  'borderLeftWidth',
+  'borderRadius',
+  'boxShadow',
+  'fontFamily',
+  'fontSize',
+  'fontWeight',
+  'fontStyle',
+  'lineHeight',
+  'margin',
+  'marginTop',
+  'marginRight',
+  'marginBottom',
+  'marginLeft',
+  'padding',
+  'paddingTop',
+  'paddingRight',
+  'paddingBottom',
+  'paddingLeft',
+  'gap',
+  'gridGap',
+  'gridRowGap',
+  'gridColumnGap',
+  // Layout and positioning props
+  'zIndex',
+  'minWidth',
+  'maxWidth',
+  'minHeight',
+  'maxHeight',
   // Flexbox props
-  flex, flexDirection, flexWrap, alignItems, justifyContent,
-  alignContent, alignSelf, justifySelf,
-
+  'flexDirection',
+  'flexWrap',
+  'alignItems',
+  'justifyContent',
+  'alignContent',
+  'alignSelf',
+  'justifySelf',
   // Grid props
-  gridArea, gridColumn, gridRow, gridAutoFlow, gridTemplate,
-  gridTemplateColumns, gridTemplateRows, gap, rowGap, columnGap,
+  'gridArea',
+  'gridColumn',
+  'gridRow',
+  'gridAutoFlow',
+  'gridTemplate',
+  'gridTemplateColumns',
+  'gridTemplateRows',
+  // Text props
+  'textAlign',
+  'textTransform',
+  'textDecoration',
+  'textOverflow',
+  'whiteSpace',
+  'letterSpacing',
+]);
 
-  // Size props
-  width, height, minWidth, minHeight, maxWidth, maxHeight,
+/**
+ * Box - A fundamental utility component for layout and styling
+ *
+ * Provides system-style props that map to theme tokens for type-safe,
+ * consistent styling across your application.
+ *
+ * @example
+ * <Box
+ *   backgroundColor="brandPrimary600"
+ *   padding="4"
+ *   borderRadius="md"
+ * >
+ *   Content
+ * </Box>
+ */
+const StyledBox = styled.div.withConfig({
+  shouldForwardProp: (prop) => !styleProps.has(prop),
+})<BoxProps>`
+  box-sizing: border-box;
 
-  // Border props
-  border, borderWidth, borderStyle, borderRadius,
-  borderTop, borderRight, borderBottom, borderLeft,
+  /* Colors */
+  ${({ backgroundColor, theme }) =>
+    backgroundColor && `background-color: ${theme.colors[backgroundColor as string] || backgroundColor};`}
+  ${({ color, theme }) => {
+    if (!color || color === 'currentcolor' || color === 'inherit') {
+      return color ? `color: ${color};` : '';
+    }
+    return `color: ${theme?.colors?.[color as string] || color};`;
+  }}
 
-  // Typography props
-  fontSize, fontWeight, fontStyle, lineHeight, letterSpacing, textAlign, textTransform, textDecoration,
-  textOverflow, whiteSpace, fontFamily,
+  /* Border Shorthand */
+  ${({ border }) => border && `border: ${border};`}
+  ${({ borderTop }) => borderTop && `border-top: ${borderTop};`}
+  ${({ borderRight }) => borderRight && `border-right: ${borderRight};`}
+  ${({ borderBottom }) => borderBottom && `border-bottom: ${borderBottom};`}
+  ${({ borderLeft }) => borderLeft && `border-left: ${borderLeft};`}
 
-  // Effect props
-  boxShadow, opacity, cursor, overflow, overflowX, overflowY, transition, transform,
+  /* Border Colors */
+  ${({ borderColor, theme }) =>
+    borderColor && `border-color: ${theme.colors[borderColor as string] || borderColor};`}
+  ${({ borderTopColor, theme }) =>
+    borderTopColor && `border-top-color: ${theme.colors[borderTopColor as string] || borderTopColor};`}
+  ${({ borderRightColor, theme }) =>
+    borderRightColor && `border-right-color: ${theme.colors[borderRightColor as string] || borderRightColor};`}
+  ${({ borderBottomColor, theme }) =>
+    borderBottomColor && `border-bottom-color: ${theme.colors[borderBottomColor as string] || borderBottomColor};`}
+  ${({ borderLeftColor, theme }) =>
+    borderLeftColor && `border-left-color: ${theme.colors[borderLeftColor as string] || borderLeftColor};`}
 
-  ...rest
-}, ref) => {
-  const Element = as as React.ElementType;
+  /* Border Styles */
+  ${({ borderStyle }) => borderStyle && `border-style: ${borderStyle};`}
+  ${({ borderTopStyle }) => borderTopStyle && `border-top-style: ${borderTopStyle};`}
+  ${({ borderRightStyle }) => borderRightStyle && `border-right-style: ${borderRightStyle};`}
+  ${({ borderBottomStyle }) => borderBottomStyle && `border-bottom-style: ${borderBottomStyle};`}
+  ${({ borderLeftStyle }) => borderLeftStyle && `border-left-style: ${borderLeftStyle};`}
 
-  const styles: React.CSSProperties = {
-    // Spacing
-    ...(p !== undefined && { padding: resolveTokenValue(p, 'spacing') }),
-    ...(px !== undefined && {
-      paddingLeft: resolveTokenValue(px, 'spacing'),
-      paddingRight: resolveTokenValue(px, 'spacing')
-    }),
-    ...(py !== undefined && {
-      paddingTop: resolveTokenValue(py, 'spacing'),
-      paddingBottom: resolveTokenValue(py, 'spacing')
-    }),
-    ...(pt !== undefined && { paddingTop: resolveTokenValue(pt, 'spacing') }),
-    ...(pr !== undefined && { paddingRight: resolveTokenValue(pr, 'spacing') }),
-    ...(pb !== undefined && { paddingBottom: resolveTokenValue(pb, 'spacing') }),
-    ...(pl !== undefined && { paddingLeft: resolveTokenValue(pl, 'spacing') }),
+  /* Border Widths */
+  ${({ borderWidth }) =>
+    borderWidth && `border-width: ${typeof borderWidth === 'number' ? `${borderWidth}px` : borderWidth};`}
+  ${({ borderTopWidth }) =>
+    borderTopWidth && `border-top-width: ${typeof borderTopWidth === 'number' ? `${borderTopWidth}px` : borderTopWidth};`}
+  ${({ borderRightWidth }) =>
+    borderRightWidth && `border-right-width: ${typeof borderRightWidth === 'number' ? `${borderRightWidth}px` : borderRightWidth};`}
+  ${({ borderBottomWidth }) =>
+    borderBottomWidth && `border-bottom-width: ${typeof borderBottomWidth === 'number' ? `${borderBottomWidth}px` : borderBottomWidth};`}
+  ${({ borderLeftWidth }) =>
+    borderLeftWidth && `border-left-width: ${typeof borderLeftWidth === 'number' ? `${borderLeftWidth}px` : borderLeftWidth};`}
 
-    ...(m !== undefined && { margin: resolveTokenValue(m, 'spacing') }),
-    ...(mx !== undefined && {
-      marginLeft: resolveTokenValue(mx, 'spacing'),
-      marginRight: resolveTokenValue(mx, 'spacing')
-    }),
-    ...(my !== undefined && {
-      marginTop: resolveTokenValue(my, 'spacing'),
-      marginBottom: resolveTokenValue(my, 'spacing')
-    }),
-    ...(mt !== undefined && { marginTop: resolveTokenValue(mt, 'spacing') }),
-    ...(mr !== undefined && { marginRight: resolveTokenValue(mr, 'spacing') }),
-    ...(mb !== undefined && { marginBottom: resolveTokenValue(mb, 'spacing') }),
-    ...(ml !== undefined && { marginLeft: resolveTokenValue(ml, 'spacing') }),
+  /* Border Radius */
+  ${({ borderRadius, theme }) =>
+    borderRadius && `border-radius: ${
+      typeof borderRadius === 'number'
+        ? `${borderRadius}px`
+        : theme.radii[borderRadius as string] || borderRadius
+    };`}
 
-    // Colors - convert semantic tokens to CSS variables
-    ...(bg && { backgroundColor: resolveTokenValue(bg, 'color') }),
-    ...(color && { color: resolveTokenValue(color, 'color') }),
-    ...(borderColor && { borderColor: resolveTokenValue(borderColor, 'color') }),
+  /* Box Shadow */
+  ${({ boxShadow, theme }) =>
+    boxShadow && boxShadow !== 'none' && `box-shadow: ${theme.shadows[boxShadow as string] || boxShadow};`}
+  ${({ boxShadow }) => boxShadow === 'none' && `box-shadow: none;`}
 
-    // Layout
-    ...(display && { display }),
-    ...(position && { position }),
-    ...(top !== undefined && { top: convertToPixels(top) }),
-    ...(right !== undefined && { right: convertToPixels(right) }),
-    ...(bottom !== undefined && { bottom: convertToPixels(bottom) }),
-    ...(left !== undefined && { left: convertToPixels(left) }),
-    ...(zIndex !== undefined && { zIndex }),
+  /* Typography */
+  ${({ fontFamily, theme }) =>
+    fontFamily && fontFamily !== 'inherit' && `font-family: ${(theme.fonts as Record<string, string>)[fontFamily as string] || fontFamily};`}
+  ${({ fontFamily }) => fontFamily === 'inherit' && `font-family: inherit;`}
+  ${({ fontSize, theme }) =>
+    fontSize && fontSize !== 'inherit' && `font-size: ${
+      typeof fontSize === 'number'
+        ? `${fontSize}px`
+        : theme.fontSizes[fontSize as keyof typeof theme.fontSizes] || fontSize
+    };`}
+  ${({ fontSize }) => fontSize === 'inherit' && `font-size: inherit;`}
+  ${({ fontWeight, theme }) =>
+    fontWeight && fontWeight !== 'inherit' && `font-weight: ${theme.fontWeights[fontWeight as keyof typeof theme.fontWeights] || fontWeight};`}
+  ${({ fontWeight }) => fontWeight === 'inherit' && `font-weight: inherit;`}
+  ${({ fontStyle }) => fontStyle && `font-style: ${fontStyle};`}
+  ${({ lineHeight, theme }) =>
+    lineHeight && lineHeight !== 'inherit' && `line-height: ${theme.lineHeights[lineHeight as keyof typeof theme.lineHeights] || lineHeight};`}
+  ${({ lineHeight }) => lineHeight === 'inherit' && `line-height: inherit;`}
 
-    // Flexbox
-    ...(flex !== undefined && { flex }),
-    ...(flexDirection && { flexDirection }),
-    ...(flexWrap && { flexWrap }),
-    ...(alignItems && { alignItems }),
-    ...(justifyContent && { justifyContent }),
-    ...(alignContent && { alignContent }),
-    ...(alignSelf && { alignSelf }),
-    ...(justifySelf && { justifySelf }),
+  /* Margin */
+  ${({ margin, theme }) =>
+    margin !== undefined && `margin: ${typeof margin === 'number' ? `${margin}px` : theme.space[margin as string] || margin};`}
+  ${({ marginTop, theme }) =>
+    marginTop !== undefined && `margin-top: ${typeof marginTop === 'number' ? `${marginTop}px` : theme.space[marginTop as string] || marginTop};`}
+  ${({ marginRight, theme }) =>
+    marginRight !== undefined && marginRight !== 'auto' && `margin-right: ${typeof marginRight === 'number' ? `${marginRight}px` : theme.space[marginRight as string] || marginRight};`}
+  ${({ marginRight }) => marginRight === 'auto' && `margin-right: auto;`}
+  ${({ marginBottom, theme }) =>
+    marginBottom !== undefined && `margin-bottom: ${typeof marginBottom === 'number' ? `${marginBottom}px` : theme.space[marginBottom as string] || marginBottom};`}
+  ${({ marginLeft, theme }) =>
+    marginLeft !== undefined && marginLeft !== 'auto' && `margin-left: ${typeof marginLeft === 'number' ? `${marginLeft}px` : theme.space[marginLeft as string] || marginLeft};`}
+  ${({ marginLeft }) => marginLeft === 'auto' && `margin-left: auto;`}
 
-    // Grid
-    ...(gridArea && { gridArea }),
-    ...(gridColumn && { gridColumn }),
-    ...(gridRow && { gridRow }),
-    ...(gridAutoFlow && { gridAutoFlow }),
-    ...(gridTemplate && { gridTemplate }),
-    ...(gridTemplateColumns && { gridTemplateColumns }),
-    ...(gridTemplateRows && { gridTemplateRows }),
-    ...(gap !== undefined && { gap: resolveTokenValue(gap, 'spacing') }),
-    ...(rowGap !== undefined && { rowGap: resolveTokenValue(rowGap, 'spacing') }),
-    ...(columnGap !== undefined && { columnGap: resolveTokenValue(columnGap, 'spacing') }),
+  /* Padding */
+  ${({ padding, theme }) =>
+    padding !== undefined && `padding: ${typeof padding === 'number' ? `${padding}px` : theme.space[padding as string] || padding};`}
+  ${({ paddingTop, theme }) =>
+    paddingTop !== undefined && `padding-top: ${typeof paddingTop === 'number' ? `${paddingTop}px` : theme.space[paddingTop as string] || paddingTop};`}
+  ${({ paddingRight, theme }) =>
+    paddingRight !== undefined && `padding-right: ${typeof paddingRight === 'number' ? `${paddingRight}px` : theme.space[paddingRight as string] || paddingRight};`}
+  ${({ paddingBottom, theme }) =>
+    paddingBottom !== undefined && `padding-bottom: ${typeof paddingBottom === 'number' ? `${paddingBottom}px` : theme.space[paddingBottom as string] || paddingBottom};`}
+  ${({ paddingLeft, theme }) =>
+    paddingLeft !== undefined && `padding-left: ${typeof paddingLeft === 'number' ? `${paddingLeft}px` : theme.space[paddingLeft as string] || paddingLeft};`}
 
-    // Size
-    ...(width !== undefined && { width: convertToPixels(width) }),
-    ...(height !== undefined && { height: convertToPixels(height) }),
-    ...(minWidth !== undefined && { minWidth: convertToPixels(minWidth) }),
-    ...(minHeight !== undefined && { minHeight: convertToPixels(minHeight) }),
-    ...(maxWidth !== undefined && { maxWidth: convertToPixels(maxWidth) }),
-    ...(maxHeight !== undefined && { maxHeight: convertToPixels(maxHeight) }),
+  /* Gaps */
+  ${({ gap, theme }) =>
+    gap !== undefined && `gap: ${typeof gap === 'number' ? `${gap}px` : theme.space[gap as string] || gap};`}
+  ${({ gridGap, theme }) =>
+    gridGap !== undefined && `grid-gap: ${typeof gridGap === 'number' ? `${gridGap}px` : theme.space[gridGap as string] || gridGap};`}
+  ${({ gridRowGap, theme }) =>
+    gridRowGap !== undefined && `grid-row-gap: ${typeof gridRowGap === 'number' ? `${gridRowGap}px` : theme.space[gridRowGap as string] || gridRowGap};`}
+  ${({ gridColumnGap, theme }) =>
+    gridColumnGap !== undefined && `grid-column-gap: ${typeof gridColumnGap === 'number' ? `${gridColumnGap}px` : theme.space[gridColumnGap as string] || gridColumnGap};`}
 
-    // Border
-    ...(border && { border }),
-    ...(borderWidth !== undefined && { borderWidth: convertToPixels(borderWidth) }),
-    ...(borderStyle && { borderStyle }),
-    ...(borderRadius !== undefined && { borderRadius: convertToPixels(borderRadius) }),
-    ...(borderTop && { borderTop }),
-    ...(borderRight && { borderRight }),
-    ...(borderBottom && { borderBottom }),
-    ...(borderLeft && { borderLeft }),
+  /* Z-Index */
+  ${({ zIndex }) => zIndex !== undefined && `z-index: ${zIndex};`}
 
-    // Typography
-    ...(fontSize !== undefined && { fontSize: convertToPixels(fontSize) }),
-    ...(fontWeight !== undefined && { fontWeight }),
-    ...(fontStyle && { fontStyle }),
-    ...(lineHeight !== undefined && { lineHeight }),
-    ...(letterSpacing && { letterSpacing }),
-    ...(textAlign && { textAlign }),
-    ...(textTransform && { textTransform }),
-    ...(textDecoration && { textDecoration }),
-    ...(textOverflow && { textOverflow }),
-    ...(whiteSpace && { whiteSpace }),
-    ...(fontFamily && { fontFamily }),
+  /* Layout */
+  ${({ display }) => display && `display: ${display};`}
+  ${({ position }) => position && `position: ${position};`}
+  ${({ top }) => top !== undefined && `top: ${typeof top === 'number' ? `${top}px` : top};`}
+  ${({ right }) => right !== undefined && `right: ${typeof right === 'number' ? `${right}px` : right};`}
+  ${({ bottom }) => bottom !== undefined && `bottom: ${typeof bottom === 'number' ? `${bottom}px` : bottom};`}
+  ${({ left }) => left !== undefined && `left: ${typeof left === 'number' ? `${left}px` : left};`}
+  ${({ width }) => width !== undefined && `width: ${typeof width === 'number' ? `${width}px` : width};`}
+  ${({ height }) => height !== undefined && `height: ${typeof height === 'number' ? `${height}px` : height};`}
+  ${({ minWidth }) => minWidth !== undefined && `min-width: ${typeof minWidth === 'number' ? `${minWidth}px` : minWidth};`}
+  ${({ minHeight }) => minHeight !== undefined && `min-height: ${typeof minHeight === 'number' ? `${minHeight}px` : minHeight};`}
+  ${({ maxWidth }) => maxWidth !== undefined && `max-width: ${typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth};`}
+  ${({ maxHeight }) => maxHeight !== undefined && `max-height: ${typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight};`}
 
-    // Effects
-    ...(boxShadow && { boxShadow }),
-    ...(opacity !== undefined && { opacity }),
-    ...(cursor && { cursor }),
-    ...(overflow && { overflow }),
-    ...(overflowX && { overflowX }),
-    ...(overflowY && { overflowY }),
-    ...(transition && { transition }),
-    ...(transform && { transform }),
-  };
+  /* Flexbox */
+  ${({ flex }) => flex !== undefined && `flex: ${flex};`}
+  ${({ flexDirection }) => flexDirection && `flex-direction: ${flexDirection};`}
+  ${({ flexWrap }) => flexWrap && `flex-wrap: ${flexWrap};`}
+  ${({ alignItems }) => alignItems && `align-items: ${alignItems};`}
+  ${({ justifyContent }) => justifyContent && `justify-content: ${justifyContent};`}
+  ${({ alignContent }) => alignContent && `align-content: ${alignContent};`}
+  ${({ alignSelf }) => alignSelf && `align-self: ${alignSelf};`}
+  ${({ justifySelf }) => justifySelf && `justify-self: ${justifySelf};`}
 
-  return (
-    <Element
-      ref={ref}
-      className={className}
-      style={styles}
-      {...rest}
-    >
-      {children}
-    </Element>
-  );
-});
+  /* Grid */
+  ${({ gridArea }) => gridArea && `grid-area: ${gridArea};`}
+  ${({ gridColumn }) => gridColumn && `grid-column: ${gridColumn};`}
+  ${({ gridRow }) => gridRow && `grid-row: ${gridRow};`}
+  ${({ gridAutoFlow }) => gridAutoFlow && `grid-auto-flow: ${gridAutoFlow};`}
+  ${({ gridTemplate }) => gridTemplate && `grid-template: ${gridTemplate};`}
+  ${({ gridTemplateColumns }) => gridTemplateColumns && `grid-template-columns: ${gridTemplateColumns};`}
+  ${({ gridTemplateRows }) => gridTemplateRows && `grid-template-rows: ${gridTemplateRows};`}
+
+  /* Effects */
+  ${({ opacity }) => opacity !== undefined && `opacity: ${opacity};`}
+  ${({ overflow }) => overflow && `overflow: ${overflow};`}
+  ${({ overflowX }) => overflowX && `overflow-x: ${overflowX};`}
+  ${({ overflowY }) => overflowY && `overflow-y: ${overflowY};`}
+  ${({ cursor }) => cursor && `cursor: ${cursor};`}
+  ${({ transition }) => transition && `transition: ${transition};`}
+  ${({ transform }) => transform && `transform: ${transform};`}
+
+  /* Text */
+  ${({ textAlign }) => textAlign && `text-align: ${textAlign};`}
+  ${({ textTransform }) => textTransform && `text-transform: ${textTransform};`}
+  ${({ textDecoration }) => textDecoration && `text-decoration: ${textDecoration};`}
+  ${({ textOverflow }) => textOverflow && `text-overflow: ${textOverflow};`}
+  ${({ whiteSpace }) => whiteSpace && `white-space: ${whiteSpace};`}
+  ${({ letterSpacing }) => letterSpacing && `letter-spacing: ${letterSpacing};`}
+`;
+
+export const Box = forwardRef<HTMLElement, BoxProps>(
+  ({ as = 'div', children, ...props }, ref) => {
+    return (
+      <StyledBox as={as} ref={ref} {...props}>
+        {children}
+      </StyledBox>
+    );
+  }
+);
 
 Box.displayName = 'Box';

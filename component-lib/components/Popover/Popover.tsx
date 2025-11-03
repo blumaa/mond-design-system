@@ -1,5 +1,6 @@
-'use client';
 import { useState, useRef, useEffect, useCallback } from 'react';
+import styled, { css } from 'styled-components';
+import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
 
 export type PopoverPlacement =
@@ -86,6 +87,118 @@ export interface PopoverProps {
    */
   'aria-label'?: string;
 }
+
+const StyledPopoverContainer = styled(Box)`
+  position: relative;
+  display: inline-block;
+`;
+
+const StyledPopover = styled(Box)<{
+  $placement: PopoverPlacement;
+  $offset?: number;
+}>`
+  position: absolute;
+  z-index: 1000;
+  padding: ${({ theme }) => theme.space[3]};
+  background-color: ${({ theme }) => theme.colors.surfaceElevated};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  border: 1px solid ${({ theme }) => theme.colors.borderDefault};
+  border-radius: ${({ theme }) => theme.radii.md};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.normal};
+  font-family: ${({ theme }) => theme.fonts.sans};
+  min-width: 200px;
+  max-width: 320px;
+  line-height: 1.5;
+  box-shadow: ${({ theme }) => theme.shadows.lg};
+
+  /* Placement - Top */
+  ${({ $placement, $offset = 8 }) => $placement === 'top' && css`
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: ${$offset}px;
+  `}
+
+  ${({ $placement, $offset = 8 }) => $placement === 'top-start' && css`
+    bottom: 100%;
+    left: 0;
+    margin-bottom: ${$offset}px;
+  `}
+
+  ${({ $placement, $offset = 8 }) => $placement === 'top-end' && css`
+    bottom: 100%;
+    right: 0;
+    margin-bottom: ${$offset}px;
+  `}
+
+  /* Placement - Bottom */
+  ${({ $placement, $offset = 8 }) => $placement === 'bottom' && css`
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: ${$offset}px;
+  `}
+
+  ${({ $placement, $offset = 8 }) => $placement === 'bottom-start' && css`
+    top: 100%;
+    left: 0;
+    margin-top: ${$offset}px;
+  `}
+
+  ${({ $placement, $offset = 8 }) => $placement === 'bottom-end' && css`
+    top: 100%;
+    right: 0;
+    margin-top: ${$offset}px;
+  `}
+
+  /* Placement - Left */
+  ${({ $placement, $offset = 8 }) => $placement === 'left' && css`
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: ${$offset}px;
+  `}
+
+  ${({ $placement, $offset = 8 }) => $placement === 'left-start' && css`
+    right: 100%;
+    top: 0;
+    margin-right: ${$offset}px;
+  `}
+
+  ${({ $placement, $offset = 8 }) => $placement === 'left-end' && css`
+    right: 100%;
+    bottom: 0;
+    margin-right: ${$offset}px;
+  `}
+
+  /* Placement - Right */
+  ${({ $placement, $offset = 8 }) => $placement === 'right' && css`
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: ${$offset}px;
+  `}
+
+  ${({ $placement, $offset = 8 }) => $placement === 'right-start' && css`
+    left: 100%;
+    top: 0;
+    margin-left: ${$offset}px;
+  `}
+
+  ${({ $placement, $offset = 8 }) => $placement === 'right-end' && css`
+    left: 100%;
+    bottom: 0;
+    margin-left: ${$offset}px;
+  `}
+`;
+
+const StyledCloseContainer = styled(Box)`
+  position: absolute;
+  top: 0;
+  right: ${({ theme }) => theme.space[1]};
+  z-index: 1;
+`;
 
 export const Popover: React.FC<PopoverProps> = ({
   children,
@@ -208,27 +321,15 @@ export const Popover: React.FC<PopoverProps> = ({
     };
   }, [isOpen]);
 
-  // Build class names
-  const containerClassNames = ['mond-popover-container', className].filter(Boolean).join(' ');
-
-  const popoverClassNames = [
-    'mond-popover',
-    `mond-popover--${placement}`,
-    contentClassName,
-  ].filter(Boolean).join(' ');
-
-  // Build inline style for offset (using CSS custom property)
-  const popoverStyle = offset !== 8 ? { '--mond-popover-offset': `${offset}px` } as React.CSSProperties : undefined;
-
   return (
-    <div
+    <StyledPopoverContainer
       ref={containerRef}
-      className={containerClassNames}
+      className={className}
       data-testid={dataTestId}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div
+      <Box
         onClick={handleToggle}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -242,20 +343,22 @@ export const Popover: React.FC<PopoverProps> = ({
         aria-expanded={isOpen}
       >
         {children}
-      </div>
+      </Box>
 
       {isOpen && (
-        <div
+        <StyledPopover
           ref={contentRef}
-          className={popoverClassNames}
-          style={popoverStyle}
+          className={contentClassName}
+          $placement={placement}
+          $offset={offset}
           role="dialog"
           aria-modal="false"
           aria-label={ariaLabel}
           data-testid={`${dataTestId || 'popover'}-content`}
+          data-placement={placement}
         >
           {trigger === 'hover' && (
-            <div className="mond-popover__close-container">
+            <StyledCloseContainer>
               <Button
                 variant="ghost"
                 size="sm"
@@ -266,12 +369,12 @@ export const Popover: React.FC<PopoverProps> = ({
               >
                 ×
               </Button>
-            </div>
+            </StyledCloseContainer>
           )}
           {content}
-        </div>
+        </StyledPopover>
       )}
-    </div>
+    </StyledPopoverContainer>
   );
 };
 

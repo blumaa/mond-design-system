@@ -1,6 +1,4 @@
-'use client';
 import React, { useState, useCallback, useEffect } from 'react';
-import { spacing } from '../../tokens';
 import { Box } from '../Box/Box';
 import { Toast, ToastAction, ToastVariant } from './Toast';
 
@@ -61,7 +59,7 @@ const getPositionStyles = (position: ToastPosition) => {
     zIndex: 1000,
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: spacing[2],
+    gap: '0.5rem', // spacing[2]
     maxWidth: '420px',
     width: 'auto',
   };
@@ -70,33 +68,33 @@ const getPositionStyles = (position: ToastPosition) => {
     case 'top-right':
       return {
         ...baseStyles,
-        top: spacing[4],
-        right: spacing[4],
+        top: '1rem', // spacing[4]
+        right: '1rem', // spacing[4]
       };
     case 'top-left':
       return {
         ...baseStyles,
-        top: spacing[4],
-        left: spacing[4],
+        top: '1rem', // spacing[4]
+        left: '1rem', // spacing[4]
       };
     case 'bottom-right':
       return {
         ...baseStyles,
-        bottom: spacing[4],
-        right: spacing[4],
+        bottom: '1rem', // spacing[4]
+        right: '1rem', // spacing[4]
         flexDirection: 'column-reverse' as const,
       };
     case 'bottom-left':
       return {
         ...baseStyles,
-        bottom: spacing[4],
-        left: spacing[4],
+        bottom: '1rem', // spacing[4]
+        left: '1rem', // spacing[4]
         flexDirection: 'column-reverse' as const,
       };
     case 'top-center':
       return {
         ...baseStyles,
-        top: spacing[4],
+        top: '1rem', // spacing[4]
         left: '50%',
         transform: 'translateX(-50%)',
         alignItems: 'center',
@@ -104,7 +102,7 @@ const getPositionStyles = (position: ToastPosition) => {
     case 'bottom-center':
       return {
         ...baseStyles,
-        bottom: spacing[4],
+        bottom: '1rem', // spacing[4]
         left: '50%',
         transform: 'translateX(-50%)',
         alignItems: 'center',

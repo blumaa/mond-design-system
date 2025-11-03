@@ -1,5 +1,5 @@
-'use client';
 import React, { useEffect, useRef, useState } from 'react';
+import styled, { css } from 'styled-components';
 import { Button } from '../Button/Button';
 
 export type ToastVariant = 'success' | 'error' | 'warning' | 'info';
@@ -25,6 +25,173 @@ export interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
   onResume?: () => void;
   'data-testid'?: string;
 }
+
+interface StyledToastProps {
+  $type: ToastVariant;
+  $animationState: 'entering' | 'visible' | 'exiting';
+}
+
+const StyledToast = styled.div<StyledToastProps>`
+  display: flex;
+  gap: ${({ theme }) => theme.space[3]};
+  padding: ${({ theme }) => theme.space[4]};
+  border-radius: ${({ theme }) => theme.radii.md};
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: ${({ theme }) => theme.shadows.lg};
+  min-width: 320px;
+  max-width: 500px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  position: relative;
+
+  /* Animation states */
+  ${({ $animationState }) =>
+    $animationState === 'entering' &&
+    css`
+      transform: translateX(100%) scale(0.9);
+      opacity: 0;
+      transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    `}
+
+  ${({ $animationState }) =>
+    $animationState === 'visible' &&
+    css`
+      transform: translateX(0%) scale(1);
+      opacity: 1;
+      transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    `}
+
+  ${({ $animationState }) =>
+    $animationState === 'exiting' &&
+    css`
+      transform: translateX(100%) scale(0.9);
+      opacity: 0;
+      transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    `}
+
+  /* Variant styles - background and border colors */
+  ${({ $type, theme }) =>
+    $type === 'success' &&
+    css`
+      background-color: ${theme.colors.brandSuccess50};
+      border-color: ${theme.colors.brandSuccess200};
+    `}
+
+  ${({ $type, theme }) =>
+    $type === 'warning' &&
+    css`
+      background-color: ${theme.colors.brandWarning50};
+      border-color: ${theme.colors.brandWarning200};
+    `}
+
+  ${({ $type, theme }) =>
+    $type === 'error' &&
+    css`
+      background-color: ${theme.colors.brandError50};
+      border-color: ${theme.colors.brandError200};
+    `}
+
+  ${({ $type, theme }) =>
+    $type === 'info' &&
+    css`
+      background-color: ${theme.colors.brandPrimary50};
+      border-color: ${theme.colors.brandPrimary200};
+    `}
+`;
+
+interface StyledIconProps {
+  $type: ToastVariant;
+}
+
+const StyledIcon = styled.div<StyledIconProps>`
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: ${({ theme }) => theme.fontSizes.xl};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  line-height: 1;
+
+  /* Icon color variants */
+  ${({ $type, theme }) =>
+    $type === 'success' &&
+    css`
+      color: ${theme.colors.textSuccess};
+    `}
+
+  ${({ $type, theme }) =>
+    $type === 'warning' &&
+    css`
+      color: ${theme.colors.textWarning};
+    `}
+
+  ${({ $type, theme }) =>
+    $type === 'error' &&
+    css`
+      color: ${theme.colors.textError};
+    `}
+
+  ${({ $type, theme }) =>
+    $type === 'info' &&
+    css`
+      color: ${theme.colors.brandPrimary600};
+    `}
+`;
+
+const StyledContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space[1]};
+`;
+
+const StyledTitle = styled.div`
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  line-height: ${({ theme }) => theme.lineHeights.tight};
+`;
+
+const StyledMessage = styled.div`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: ${({ theme }) => theme.lineHeights.normal};
+`;
+
+const StyledActions = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.space[2]};
+  margin-top: ${({ theme }) => theme.space[2]};
+`;
+
+const StyledCloseButton = styled.button`
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.textTertiary};
+  transition: color 150ms ease;
+  font-size: ${({ theme }) => theme.fontSizes.lg};
+  line-height: 1;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.textPrimary};
+  }
+
+  &:focus {
+    outline: 2px solid ${({ theme }) => theme.colors.borderFocused};
+    outline-offset: 2px;
+    border-radius: ${({ theme }) => theme.radii.sm};
+  }
+`;
 
 const getDefaultIcon = (type: ToastVariant) => {
   switch (type) {
@@ -112,23 +279,13 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       }
     };
 
-    const toastClassNames = [
-      'mond-toast',
-      `mond-toast--${type}`,
-      `mond-toast--${animationState}`,
-      className,
-    ].filter(Boolean).join(' ');
-
-    const iconClassNames = [
-      'mond-toast__icon',
-      `mond-toast__icon--${type}`,
-    ].filter(Boolean).join(' ');
-
     return (
       /* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */
-      <div
+      <StyledToast
         ref={ref}
-        className={toastClassNames}
+        $type={type}
+        $animationState={animationState}
+        className={className}
         data-testid={dataTestId}
         role="alert"
         aria-live="polite"
@@ -140,25 +297,25 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         {...props}
       >
         {/* Icon */}
-        <div className={iconClassNames}>
+        <StyledIcon $type={type}>
           {icon || getDefaultIcon(type)}
-        </div>
+        </StyledIcon>
 
         {/* Content */}
-        <div className="mond-toast__content">
-          <div className="mond-toast__title">
+        <StyledContent>
+          <StyledTitle>
             {title}
-          </div>
+          </StyledTitle>
 
           {message && (
-            <div className="mond-toast__message">
+            <StyledMessage>
               {message}
-            </div>
+            </StyledMessage>
           )}
 
           {/* Actions */}
           {actions && actions.length > 0 && (
-            <div className="mond-toast__actions">
+            <StyledActions>
               {actions.map((action, index) => (
                 <Button
                   key={index}
@@ -169,21 +326,20 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
                   {action.label}
                 </Button>
               ))}
-            </div>
+            </StyledActions>
           )}
-        </div>
+        </StyledContent>
 
         {/* Dismiss Button */}
         {dismissible && (
-          <button
-            className="mond-toast__close"
+          <StyledCloseButton
             onClick={handleDismiss}
             aria-label="Close toast"
           >
             ×
-          </button>
+          </StyledCloseButton>
         )}
-      </div>
+      </StyledToast>
       /* eslint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */
     );
   }

@@ -90,50 +90,73 @@ const ColorGroup = ({ name, colors }: { name: string; colors: Record<string, unk
   );
 };
 
+// Helper to group colors by prefix
+const groupColorsByPrefix = (colors: Record<string, string>): Record<string, Record<string, string>> => {
+  const grouped: Record<string, Record<string, string>> = {};
+
+  for (const [key, value] of Object.entries(colors)) {
+    // Extract prefix (e.g., 'blue' from 'blue50')
+    const prefix = key.replace(/\d+$/, '');
+
+    if (!grouped[prefix]) {
+      grouped[prefix] = {};
+    }
+
+    grouped[prefix][key] = value;
+  }
+
+  return grouped;
+};
+
+const colorGroups = groupColorsByPrefix(colors);
+
 // Individual color group stories to avoid exceeding Chromatic's size limit
 export const Blue = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="blue" colors={colors.blue as Record<string, unknown>} />
+    <ColorGroup name="blue" colors={colorGroups.blue || {}} />
   </div>
 );
 
 export const Gray = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="gray" colors={colors.gray as Record<string, unknown>} />
+    <ColorGroup name="gray" colors={colorGroups.gray || {}} />
   </div>
 );
 
 export const Red = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="red" colors={colors.red as Record<string, unknown>} />
+    <ColorGroup name="red" colors={colorGroups.red || {}} />
   </div>
 );
 
 export const Green = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="green" colors={colors.green as Record<string, unknown>} />
+    <ColorGroup name="green" colors={colorGroups.green || {}} />
   </div>
 );
 
 export const Amber = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="amber" colors={colors.amber as Record<string, unknown>} />
+    <ColorGroup name="amber" colors={colorGroups.amber || {}} />
   </div>
 );
 
 export const BrandColors = () => (
   <div style={{ padding: '2rem' }}>
-    <ColorGroup name="brand" colors={colors.brand as Record<string, unknown>} />
+    <ColorGroup name="brand" colors={colorGroups.brand || {}} />
   </div>
 );
 
-export const BaseColors = () => (
-  <div style={{ padding: '2rem' }}>
-    <h2 style={{ marginBottom: '1rem', fontFamily: fontFamilies.sans }}>Base Colors</h2>
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
-      <ColorSwatch color={colors.white['50']} name="white" />
-      <ColorSwatch color={colors.black['900']} name="black" />
-      <ColorSwatch color={colors.slate['900']} name="slate" />
+export const BaseColors = () => {
+  const colorsByPrefix = groupColorsByPrefix(colors);
+  return (
+    <div style={{ padding: '2rem' }}>
+      <h2 style={{ marginBottom: '1rem', fontFamily: fontFamilies.sans }}>Base Colors</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+        <ColorSwatch color={colorsByPrefix.white?.['white50'] || colors.white50} name="white" />
+        <ColorSwatch color={colorsByPrefix.black?.['black900'] || colors.black900} name="black" />
+        <ColorSwatch color={colorsByPrefix.slate?.['slate900'] || colors.slate900} name="slate" />
+      </div>
     </div>
-  </div>
-);
+  );
+};

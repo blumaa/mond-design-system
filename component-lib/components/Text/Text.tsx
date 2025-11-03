@@ -1,6 +1,5 @@
 import { forwardRef } from 'react';
-import { Box, type BoxProps } from '../Box/Box';
-import { tokens } from '../../tokens';
+import styled, { css } from 'styled-components';
 
 export type TextVariant =
   | 'display'
@@ -16,7 +15,7 @@ export type TextVariant =
   | 'body-lg'
   | 'body-md';
 
-export type TextWeight = keyof typeof tokens.fontWeights;
+export type TextWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
 export type TextAlign = 'left' | 'center' | 'right' | 'justify';
 
@@ -32,7 +31,7 @@ export type TextSemantic =
   | 'error'
   | 'accent';
 
-export interface TextProps extends Omit<BoxProps, 'as'> {
+export interface TextProps {
   /**
    * Text variant that controls size and line height
    * @default 'body-md'
@@ -91,19 +90,228 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
    */
   children: React.ReactNode;
 
-  // Allow additional props like framer-motion's variants
+  /**
+   * Custom className
+   */
+  className?: string;
+
+  /**
+   * Custom color override
+   */
+  color?: string;
+
+  // Allow additional props
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
+
+interface StyledTextProps {
+  $variant: TextVariant;
+  $weight: TextWeight;
+  $align?: TextAlign;
+  $semantic: TextSemantic;
+  $italic: boolean;
+  $underline: boolean;
+  $strikethrough: boolean;
+  $truncate: boolean;
+  $color?: string;
+}
+
+const StyledText = styled.span<StyledTextProps>`
+  /* Reset */
+  margin: 0;
+  padding: 0;
+
+  /* Base Styles */
+  font-family: ${({ theme, $variant }) =>
+    $variant === 'code' ? theme.fonts.mono : theme.fonts.sans};
+  font-style: ${({ $italic }) => ($italic ? 'italic' : 'normal')};
+  text-align: ${({ $align }) => $align || 'left'};
+
+  /* Text Decorations */
+  text-decoration: ${({ $underline, $strikethrough }) => {
+    const decorations = [];
+    if ($underline) decorations.push('underline');
+    if ($strikethrough) decorations.push('line-through');
+    return decorations.length > 0 ? decorations.join(' ') : 'none';
+  }};
+
+  /* Truncation */
+  ${({ $truncate }) =>
+    $truncate &&
+    css`
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    `}
+
+  /* === VARIANT STYLES === */
+
+  ${({ $variant, theme }) =>
+    $variant === 'display' &&
+    css`
+      font-size: ${theme.fontSizes['4xl']};
+      line-height: ${theme.lineHeights.tight};
+      font-weight: ${theme.fontWeights.bold};
+      letter-spacing: ${theme.letterSpacings.tight};
+    `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'headline' &&
+    css`
+      font-size: ${theme.fontSizes['3xl']};
+      line-height: ${theme.lineHeights.tight};
+      font-weight: ${theme.fontWeights.bold};
+      letter-spacing: ${theme.letterSpacings.tight};
+    `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'title' &&
+    css`
+      font-size: ${theme.fontSizes['2xl']};
+      line-height: ${theme.lineHeights.normal};
+      font-weight: ${theme.fontWeights.semibold};
+      letter-spacing: ${theme.letterSpacings.normal};
+    `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'subtitle' &&
+    css`
+      font-size: ${theme.fontSizes.xl};
+      line-height: ${theme.lineHeights.normal};
+      font-weight: ${theme.fontWeights.medium};
+      letter-spacing: ${theme.letterSpacings.normal};
+    `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'body' &&
+    css`
+      font-size: ${theme.fontSizes.base};
+      line-height: ${theme.lineHeights.relaxed};
+      font-weight: ${theme.fontWeights.normal};
+      letter-spacing: ${theme.letterSpacings.normal};
+    `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'body-sm' &&
+    css`
+      font-size: ${theme.fontSizes.sm};
+      line-height: ${theme.lineHeights.relaxed};
+      font-weight: ${theme.fontWeights.normal};
+      letter-spacing: ${theme.letterSpacings.normal};
+    `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'caption' &&
+    css`
+      font-size: ${theme.fontSizes.xs};
+      line-height: ${theme.lineHeights.normal};
+      font-weight: ${theme.fontWeights.normal};
+      letter-spacing: ${theme.letterSpacings.wide};
+    `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'overline' &&
+    css`
+      font-size: ${theme.fontSizes.xs};
+      line-height: ${theme.lineHeights.normal};
+      font-weight: ${theme.fontWeights.semibold};
+      letter-spacing: ${theme.letterSpacings.wide};
+      text-transform: uppercase;
+    `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'code' &&
+    css`
+      font-size: ${theme.fontSizes.sm};
+      line-height: ${theme.lineHeights.normal};
+      font-weight: ${theme.fontWeights.normal};
+      letter-spacing: ${theme.letterSpacings.normal};
+      font-family: ${theme.fonts.mono};
+    `}
+
+  /* Legacy Variants */
+  ${({ $variant }) =>
+    $variant === 'body-lg' &&
+    css`
+      font-size: 1.125rem; /* 18px */
+      line-height: 1.625;
+      font-weight: 400;
+      letter-spacing: normal;
+    `}
+
+  ${({ $variant }) =>
+    $variant === 'body-md' &&
+    css`
+      font-size: 1rem; /* 16px */
+      line-height: 1.5;
+      font-weight: 400;
+      letter-spacing: normal;
+    `}
+
+  /* === SEMANTIC COLORS === */
+
+  ${({ $semantic, $color, theme }) =>
+    $color
+      ? css`
+          color: ${$color};
+        `
+      : $semantic === 'primary'
+      ? css`
+          color: ${theme.colors.textPrimary};
+        `
+      : $semantic === 'secondary'
+      ? css`
+          color: ${theme.colors.textSecondary};
+        `
+      : $semantic === 'tertiary'
+      ? css`
+          color: ${theme.colors.textTertiary};
+        `
+      : $semantic === 'disabled'
+      ? css`
+          color: ${theme.colors.textDisabled};
+        `
+      : $semantic === 'inverse'
+      ? css`
+          color: ${theme.colors.textInverse};
+        `
+      : $semantic === 'link'
+      ? css`
+          color: ${theme.colors.textLink};
+        `
+      : $semantic === 'success'
+      ? css`
+          color: ${theme.colors.textSuccess};
+        `
+      : $semantic === 'warning'
+      ? css`
+          color: ${theme.colors.textWarning};
+        `
+      : $semantic === 'error'
+      ? css`
+          color: ${theme.colors.textError};
+        `
+      : $semantic === 'accent'
+      ? css`
+          color: ${theme.colors.textAccent};
+        `
+      : css`
+          color: ${theme.colors.textPrimary};
+        `}
+
+  /* Font Weight - Applied last to override variant styles */
+  font-weight: ${({ theme, $weight }) => theme.fontWeights[$weight]};
+`;
 
 /**
  * Text Component
  *
  * A flexible text component that supports multiple variants, semantic colors,
- * and text modifiers. Uses CSS variables for theming.
+ * and text modifiers. Uses styled-components for theming.
  *
- * **SSR-Compatible**: Uses CSS classes and CSS variables instead of runtime theme resolution.
- * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
+ * **Theme-Aware**: Uses theme object from styled-components ThemeProvider
+ * **SSR-Compatible**: Styles are generated at build time
  *
  * @example
  * // Display text
@@ -121,59 +329,47 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
  * // Custom element type
  * <Text as="p" variant="body">Paragraph text</Text>
  */
-export const Text = forwardRef<HTMLElement, TextProps>(({
-  variant = 'body-md',
-  weight = 'normal',
-  align,
-  semantic = 'primary',
-  italic = false,
-  underline = false,
-  strikethrough = false,
-  truncate = false,
-  as = 'span',
-  children,
-  className,
-  color,
-  ...props
-}, ref) => {
-  // Build CSS class names
-  const classNames = [
-    `mond-text--${variant}`,
-    `mond-text--${semantic}`,
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  const textDecorations = [];
-  if (underline) textDecorations.push('underline');
-  if (strikethrough) textDecorations.push('line-through');
-  const textDecoration = textDecorations.length > 0
-    ? textDecorations.join(' ')
-    : 'none';
-
-  return (
-    <Box
-      as={as}
-      ref={ref}
-      className={classNames}
-      fontFamily={tokens.fontFamilies.sans}
-      fontWeight={tokens.fontWeights[weight as TextWeight]}
-      fontStyle={italic ? 'italic' : 'normal'}
-      textAlign={align}
-      textDecoration={textDecoration}
-      color={color} // Allow custom color to override semantic
-      {...(truncate && {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      })}
-      {...props}
-    >
-      {children}
-    </Box>
-  );
-});
+export const Text = forwardRef<HTMLElement, TextProps>(
+  (
+    {
+      variant = 'body-md',
+      weight = 'normal',
+      align,
+      semantic = 'primary',
+      italic = false,
+      underline = false,
+      strikethrough = false,
+      truncate = false,
+      as = 'span',
+      children,
+      className,
+      color,
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <StyledText
+        ref={ref}
+        as={as}
+        $variant={variant}
+        $weight={weight}
+        $align={align}
+        $semantic={semantic}
+        $italic={italic}
+        $underline={underline}
+        $strikethrough={strikethrough}
+        $truncate={truncate}
+        $color={color}
+        className={className}
+        data-variant={variant}
+        data-semantic={semantic}
+        {...props}
+      >
+        {children}
+      </StyledText>
+    );
+  },
+);
 
 Text.displayName = 'Text';
-

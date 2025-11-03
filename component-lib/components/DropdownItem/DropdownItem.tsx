@@ -1,8 +1,7 @@
-'use client';
 import { forwardRef } from 'react';
-import { Box, BoxProps } from '../Box/Box';
+import styled, { css } from 'styled-components';
 
-export interface DropdownItemProps extends Omit<BoxProps, 'onClick' | 'children' | 'onMouseEnter' | 'onFocus' | 'onSelect'> {
+export interface DropdownItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect' | 'onMouseEnter' | 'onFocus'> {
   /**
    * Unique value for the dropdown item
    */
@@ -70,6 +69,88 @@ export interface DropdownItemProps extends Omit<BoxProps, 'onClick' | 'children'
   expansionIndicator?: React.ReactNode;
 }
 
+interface StyledDropdownItemProps {
+  $focused: boolean;
+  $disabled: boolean;
+  $divider: boolean;
+  $hasChildren: boolean;
+  $depth: number;
+}
+
+const StyledDropdownItem = styled.div<StyledDropdownItemProps>`
+  display: flex;
+  align-items: center;
+  cursor: ${({ $disabled, $divider }) => ($disabled || $divider ? 'not-allowed' : 'pointer')};
+  transition: background-color 150ms ease;
+  font-family: ${({ theme }) => theme.fonts.sans};
+
+  /* Divider variant */
+  ${({ $divider, theme }) =>
+    $divider &&
+    css`
+      height: 1px;
+      background-color: ${theme.colors.borderDefault};
+      margin: ${theme.space[1]} 0;
+      padding: 0;
+      cursor: default;
+    `}
+
+  /* Regular item styles (not divider) */
+  ${({ $divider, theme }) =>
+    !$divider &&
+    css`
+      padding: ${theme.space[2]} ${theme.space[3]};
+      color: ${theme.colors.textPrimary};
+      background-color: transparent;
+      font-size: ${theme.fontSizes.sm};
+      border-radius: ${theme.radii.sm};
+      margin: 0 ${theme.space[1]};
+    `}
+
+  /* Focused state */
+  ${({ $focused, $disabled, $divider, theme }) =>
+    $focused && !$disabled && !$divider &&
+    css`
+      background-color: ${theme.colors.gray100};
+    `}
+
+  /* Disabled state */
+  ${({ $disabled, $divider, theme }) =>
+    $disabled && !$divider &&
+    css`
+      cursor: not-allowed;
+      color: ${theme.colors.textDisabled};
+    `}
+
+  /* Has children (submenu) */
+  ${({ $hasChildren, theme }) =>
+    $hasChildren &&
+    css`
+      font-weight: ${theme.fontWeights.medium};
+    `}
+
+  /* Depth indentation */
+  ${({ $depth }) =>
+    $depth > 0 &&
+    css`
+      padding-left: ${0.75 + ($depth * 1)}rem;
+    `}
+`;
+
+const StyledIcon = styled.div`
+  margin-right: ${({ theme }) => theme.space[2]};
+  flex-shrink: 0;
+`;
+
+const StyledLabel = styled.div`
+  flex: 1;
+`;
+
+const StyledExpansion = styled.div`
+  margin-left: ${({ theme }) => theme.space[2]};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+`;
+
 export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(({
   value,
   label,
@@ -90,9 +171,14 @@ export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(({
   // Render divider
   if (divider) {
     return (
-      <div
+      <StyledDropdownItem
         ref={ref}
-        className={`mond-dropdown-item mond-dropdown-item--divider ${className}`}
+        $focused={false}
+        $disabled={false}
+        $divider={true}
+        $hasChildren={false}
+        $depth={0}
+        className={className}
         style={style}
         {...props}
       />
@@ -117,28 +203,19 @@ export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(({
     }
   };
 
-  const itemClassNames = [
-    'mond-dropdown-item',
-    focused && 'mond-dropdown-item--focused',
-    disabled && 'mond-dropdown-item--disabled',
-    hasChildren && 'mond-dropdown-item--has-children',
-    className,
-  ].filter(Boolean).join(' ');
-
-  // Calculate padding for indentation
-  const paddingLeft = depth > 0 ? `${0.75 + (depth * 1)}rem` : undefined;
-
   return (
-    <Box
+    <StyledDropdownItem
       ref={ref}
-      className={itemClassNames}
+      $focused={focused}
+      $disabled={disabled}
+      $divider={false}
+      $hasChildren={hasChildren}
+      $depth={depth}
+      className={className}
       tabIndex={disabled ? -1 : 0}
       role="menuitem"
       aria-disabled={disabled}
-      style={{
-        paddingLeft,
-        ...style,
-      }}
+      style={style}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onFocus={handleFocus}
@@ -146,21 +223,21 @@ export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(({
       {...props}
     >
       {icon && (
-        <div className="mond-dropdown-item__icon">
+        <StyledIcon>
           {icon}
-        </div>
+        </StyledIcon>
       )}
 
-      <div className="mond-dropdown-item__label">
+      <StyledLabel>
         {label}
-      </div>
+      </StyledLabel>
 
       {hasChildren && (
-        <div className="mond-dropdown-item__expansion">
+        <StyledExpansion>
           {expansionIndicator}
-        </div>
+        </StyledExpansion>
       )}
-    </Box>
+    </StyledDropdownItem>
   );
 });
 
