@@ -1,0 +1,174 @@
+{
+  "color": {
+    "text": {
+      "primary": {
+        "value": "{color.gray.600}",
+        "attributes": { "category": "text" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.gray.600}",
+            "dark": "{color.gray.100}"
+          }
+        }
+      },
+      "secondary": {
+        "value": "{color.gray.500}",
+        "attributes": { "category": "text" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.gray.500}",
+            "dark": "{color.gray.400}"
+          }
+        }
+      },
+      "tertiary": {
+        "value": "{color.gray.400}",
+        "attributes": { "category": "text" }
+      },
+      "disabled": {
+        "value": "{color.gray.400}",
+        "attributes": { "category": "text" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.gray.400}",
+            "dark": "{color.gray.600}"
+          }
+        }
+      },
+      "inverse": {
+        "value": "{color.white.50}",
+        "attributes": { "category": "text" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.white.50}",
+            "dark": "{color.black.900}"
+          }
+        }
+      },
+      "link": {
+        "value": "{color.brand.primary.600}",
+        "attributes": { "category": "text" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.brand.primary.600}",
+            "dark": "{color.brand.primary.400}"
+          }
+        }
+      },
+      "success": {
+        "value": "{color.brand.success.600}",
+        "attributes": { "category": "text" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.brand.success.600}",
+            "dark": "{color.brand.success.400}"
+          }
+        }
+      },
+      "warning": {
+        "value": "{color.brand.warning.600}",
+        "attributes": { "category": "text" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.brand.warning.600}",
+            "dark": "{color.brand.warning.400}"
+          }
+        }
+      },
+      "error": {
+        "value": "{color.brand.error.600}",
+        "attributes": { "category": "text" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.brand.error.600}",
+            "dark": "{color.brand.error.400}"
+          }
+        }
+      }
+    },
+    "surface": {
+      "background": {
+        "value": "{color.white.100}",
+        "attributes": { "category": "surface" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.white.100}",
+            "dark": "{color.slate.800}"
+          }
+        }
+      },
+      "elevated": {
+        "value": "{color.white.50}",
+        "attributes": { "category": "surface" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.white.50}",
+            "dark": "{color.black.100}"
+          }
+        }
+      },
+      "card": {
+        "value": "{color.white.50}",
+        "attributes": { "category": "surface" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.white.50}",
+            "dark": "{color.black.100}"
+          }
+        }
+      },
+      "input": {
+        "value": "{color.white.50}",
+        "attributes": { "category": "surface" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.white.50}",
+            "dark": "{color.black.100}"
+          }
+        }
+      }
+    },
+    "border": {
+      "default": {
+        "value": "{color.gray.300}",
+        "attributes": { "category": "border" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.gray.300}",
+            "dark": "{color.gray.600}"
+          }
+        }
+      },
+      "subtle": {
+        "value": "{color.gray.200}",
+        "attributes": { "category": "border" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.gray.200}",
+            "dark": "{color.gray.700}"
+          }
+        }
+      },
+      "strong": {
+        "value": "{color.gray.400}",
+        "attributes": { "category": "border" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.gray.400}",
+            "dark": "{color.gray.500}"
+          }
+        }
+      },
+      "focused": {
+        "value": "{color.brand.primary.500}",
+        "attributes": { "category": "border" },
+        "$extensions": {
+          "mode": {
+            "light": "{color.brand.primary.500}",
+            "dark": "{color.brand.primary.400}"
+          }
+        }
+      }
+    }
+  }
+}

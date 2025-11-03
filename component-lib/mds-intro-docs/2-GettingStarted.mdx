@@ -38,24 +38,24 @@ Create proper content hierarchy with semantic headings and text:
 ```tsx
 function Article() {
   return (
-    <Box maxWidth="600px" m="auto" p="6">
-      <Heading level={1} size="4xl" mb="2">
+    <Box maxWidth="600px" margin="auto" padding="6">
+      <Heading level={1} size="4xl" marginBottom="2">
         Main Article Title
       </Heading>
-      
-      <Text variant="body-lg" semantic="secondary" mb="4">
+
+      <Text variant="body-lg" semantic="secondary" marginBottom="4">
         Published on March 15, 2024
       </Text>
-      
-      <Heading level={2} size="2xl" mb="3">
+
+      <Heading level={2} size="2xl" marginBottom="3">
         Section Heading
       </Heading>
-      
-      <Text variant="body-md" mb="4">
-        This is the main content of your article. The Text component 
+
+      <Text variant="body-md" marginBottom="4">
+        This is the main content of your article. The Text component
         provides consistent typography with semantic meaning.
       </Text>
-      
+
       <Text variant="caption" semantic="tertiary">
         Caption or helper text using smaller variant
       </Text>
@@ -71,7 +71,7 @@ Use layout components to organize content:
 ```tsx
 function UserProfile() {
   return (
-    <Card p="6">
+    <Card padding="6">
       <Stack spacing="4">
         <Box display="flex" alignItems="center" gap="3">
           <Avatar size="lg" src="/user.jpg" name="John Doe" />
@@ -80,11 +80,11 @@ function UserProfile() {
             <Text semantic="secondary">Software Engineer</Text>
           </Stack>
         </Box>
-        
+
         <Text variant="body-md">
           Building amazing user interfaces with modern web technologies.
         </Text>
-        
+
         <Box display="flex" gap="2">
           <Button variant="primary" size="sm">Follow</Button>
           <Button variant="secondary" size="sm">Message</Button>
@@ -138,9 +138,9 @@ function App() {
   return (
     <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
       <Box
-        bg="surface.background"
-        color="text.primary"
-        p="4"
+        backgroundColor="surfaceBackground"
+        color="textPrimary"
+        padding="4"
         borderRadius="md"
       >
         <Heading level={2} semantic="primary">
@@ -168,13 +168,13 @@ Use semantic colors that adapt to themes:
 
 ```tsx
 // Semantic colors (recommended)
-<Text color="text.primary">Main text</Text>
-<Text color="text.secondary">Supporting text</Text>
-<Box bg="surface.card">Card background</Box>
+<Text color="textPrimary">Main text</Text>
+<Text color="textSecondary">Supporting text</Text>
+<Box backgroundColor="surfaceCard">Card background</Box>
 
 // Direct color tokens
-<Text color="blue.600">Blue text</Text>
-<Box bg="gray.100">Gray background</Box>
+<Text color="blue600">Blue text</Text>
+<Box backgroundColor="gray100">Gray background</Box>
 ```
 
 ### Spacing
@@ -182,11 +182,11 @@ Use semantic colors that adapt to themes:
 Use the spacing scale for consistent layouts:
 
 ```tsx
-<Box 
-  p="4"        // padding: 1rem
-  m="2"        // margin: 0.5rem
-  mb="6"       // margin-bottom: 1.5rem
-  gap="3"      // gap: 0.75rem
+<Box
+  padding="4"        // padding: 1rem
+  margin="2"         // margin: 0.5rem
+  marginBottom="6"   // margin-bottom: 1.5rem
+  gap="3"            // gap: 0.75rem
 >
   Content
 </Box>
@@ -213,25 +213,25 @@ Control typography with design tokens:
 ```tsx
 function ContactForm() {
   return (
-    <Box maxWidth="400px" m="auto">
+    <Box maxWidth="400px" margin="auto">
       <Stack spacing="4">
-        <Heading level={2} mb="2">Contact Us</Heading>
-        
+        <Heading level={2} marginBottom="2">Contact Us</Heading>
+
         <FormField label="Name" required>
           <Input placeholder="Your full name" />
         </FormField>
-        
+
         <FormField label="Email" required>
           <Input type="email" placeholder="your@email.com" />
         </FormField>
-        
+
         <FormField label="Message" required>
-          <Textarea 
+          <Textarea
             placeholder="Tell us how we can help..."
             rows={4}
           />
         </FormField>
-        
+
         <Box display="flex" gap="2" justifyContent="flex-end">
           <Button variant="secondary">Cancel</Button>
           <Button variant="primary">Send Message</Button>

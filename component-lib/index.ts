@@ -1,8 +1,5 @@
 // Export all tokens
-export * from './tokens';
-
-// Export brand themes
-export * from './brands';
+export * from './src/tokens';
 
 // Export all components
-export * from './components';
+export * from './src/components';

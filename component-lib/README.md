@@ -14,21 +14,12 @@ pnpm add @mond-design-system/theme
 
 ## Quick Start
 
-First, import the base styles in your app entry point:
-
-```tsx
-// In your main app file (e.g., App.tsx, _app.tsx, or index.tsx)
-import '@mond-design-system/theme/styles.css';
-```
-
-Then use the components:
-
 ```tsx
 import { Text, Heading, Icon, Button, Box } from '@mond-design-system/theme';
 
 function MyComponent() {
   return (
-    <Box p={4}>
+    <Box padding={4}>
       <Heading level={1}>Welcome to Mond Design System</Heading>
       <Text variant="body" semantic="secondary">
         Modern, accessible components with TypeScript support
@@ -102,11 +93,200 @@ function MyComponent() {
 - ✅ **TypeScript First** - Full type safety and IntelliSense support
 - ✅ **Polymorphic Components** - Render components as different elements (Button, Box, Text)
 - ✅ **Accessibility** - WCAG 2.1 AA compliant components with full keyboard support
-- ✅ **Design Tokens** - Semantic color system with light/dark themes
+- ✅ **Design Tokens** - Semantic color system with light/dark themes and multi-brand support
 - ✅ **Consistent API** - Similar props across all components
 - ✅ **Tree Shakeable** - Import only what you need
 - ✅ **SSR Compatible** - Works with Next.js, Remix, and other SSR frameworks
 - ✅ **Responsive Design** - Mobile-first responsive components
+
+## Theming & Design Tokens
+
+The Mond Design System uses a sophisticated token system built with Style Dictionary, offering:
+
+- **Light/Dark Mode** - Automatic theme switching via CSS variables
+- **Multi-Brand Support** - Switch between brand themes (default with blue, BSF with green)
+- **Type-Safe Tokens** - TypeScript types for all design tokens
+- **Semantic Tokens** - Context-aware tokens that adapt to themes
+- **CSS Variable Based** - No JavaScript runtime overhead
+
+### Theme Provider
+
+Use the `ThemeProvider` to enable theming in your app:
+
+```tsx
+import { ThemeProvider } from '@mond-design-system/theme';
+
+// Static theming (SSR-safe)
+function App() {
+  return (
+    <ThemeProvider colorScheme="light" brand="default">
+      <YourApp />
+    </ThemeProvider>
+  );
+}
+
+// Dynamic theming with hooks (client-side)
+function App() {
+  return (
+    <ThemeProvider enableHooks colorScheme="light" brand="default">
+      <YourApp />
+    </ThemeProvider>
+  );
+}
+```
+
+### Runtime Theme Switching
+
+When `enableHooks` is enabled, use the `useTheme` hook for runtime theme switching:
+
+```tsx
+import { useTheme } from '@mond-design-system/theme';
+
+function ThemeSwitcher() {
+  const { mode, brand, setMode, setBrand, toggleMode } = useTheme();
+
+  return (
+    <div>
+      <button onClick={toggleMode}>
+        Switch to {mode === 'light' ? 'dark' : 'light'} mode
+      </button>
+
+      <select value={brand} onChange={(e) => setBrand(e.target.value)}>
+        <option value="default">Default Brand (Blue)</option>
+        <option value="bsf">BSF Brand (Green)</option>
+      </select>
+
+      <p>Current: {mode} mode, {brand} brand</p>
+    </div>
+  );
+}
+```
+
+### Using Design Tokens
+
+#### Option 1: CSS Variables (Recommended)
+
+CSS variables automatically adapt to theme changes:
+
+```css
+.my-component {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border-default);
+}
+
+.my-button {
+  background-color: var(--color-brand-primary-500);
+  color: var(--color-text-inverse);
+}
+```
+
+#### Option 2: TypeScript Tokens
+
+For component props that accept token values:
+
+```tsx
+import * as tokens from '@mond-design-system/theme';
+import type { ColorToken } from '@mond-design-system/theme';
+
+// Type-safe color token
+const primaryColor: ColorToken = 'ColorBrandPrimary500';
+
+// Resolve token to value
+const colorValue = tokens[primaryColor]; // "#0ea5e9" or "#22c55e" depending on brand
+```
+
+### Available Token Categories
+
+**Color Tokens:**
+- `ColorBlue*`, `ColorGray*`, `ColorGreen*`, `ColorRed*`, `ColorAmber*` - Primitive colors
+- `ColorBrandPrimary*`, `ColorBrandSecondary*`, etc. - Brand colors (change per brand)
+- `ColorText*`, `ColorSurface*`, `ColorBorder*` - Semantic colors (change per theme)
+
+**Spacing Tokens:**
+- `Spacing0` to `Spacing64` - Consistent spacing scale
+
+**Typography Tokens:**
+- `FontSizeXs` to `FontSize6xl` - Font sizes
+- `FontWeightThin` to `FontWeightBlack` - Font weights
+- `LineHeight*`, `LetterSpacing*` - Typography modifiers
+
+**Border Radius Tokens:**
+- `RadiiNone` to `RadiiFull` - Border radius values
+
+**Shadow Tokens:**
+- `ShadowSm` to `Shadow3xl` - Box shadows
+- `ShadowGlow*`, `ShadowElevated`, `ShadowFloating` - Special effects
+
+### Theme-Aware Component Example
+
+```tsx
+function ThemedCard() {
+  return (
+    <Box
+      padding={6}
+      backgroundColor="surfaceElevated"
+      borderColor="borderDefault"
+      style={{
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderRadius: 'var(--radii-lg)',
+      }}
+    >
+      <Heading variant="h2" color="textPrimary">
+        Card Title
+      </Heading>
+      <Text semantic="secondary">
+        This card automatically adapts to light/dark mode and brand changes!
+      </Text>
+      <Button variant="primary">
+        Primary button uses brand colors
+      </Button>
+    </Box>
+  );
+}
+```
+
+### Brand-Specific Tokens
+
+The system supports multiple brand themes. Use the ThemeProvider to switch brands dynamically:
+
+```tsx
+<ThemeProvider brand="default">  {/* Default theme (blue primary) */}
+<ThemeProvider brand="bsf">      {/* BSF theme (green primary) */}
+```
+
+### Dark Mode Implementation
+
+Dark mode works automatically when you set the theme:
+
+```tsx
+// Static dark mode
+<ThemeProvider colorScheme="dark">
+
+// Dynamic dark mode
+const { mode, setMode } = useTheme();
+setMode('dark');
+
+// Toggle between modes
+const { toggleMode } = useTheme();
+toggleMode();
+```
+
+The theme provider sets `data-theme="dark"` or `data-theme="light"` on the root element, and CSS variables update automatically.
+
+### localStorage Persistence
+
+Theme preferences are automatically saved to localStorage when using `enableHooks`:
+
+```tsx
+<ThemeProvider
+  enableHooks
+  enablePersistence={true}  // default
+  storageKeyMode="my-theme-mode"
+  storageKeyBrand="my-brand"
+>
+```
 
 ## Polymorphic Rendering
 
@@ -147,7 +327,7 @@ Some components (Button, Box, Text) support polymorphic rendering via the `as` p
 
 ```tsx
 // Render Box as a section
-<Box as="section" p={4}>
+<Box as="section" padding={4}>
   <Heading level={2}>Section Title</Heading>
 </Box>
 
@@ -158,7 +338,7 @@ Some components (Button, Box, Text) support polymorphic rendering via the `as` p
 </Box>
 
 // Render Box as an article
-<Box as="article" maxWidth="800px" mx="auto">
+<Box as="article" maxWidth="800px" marginLeft="auto" marginRight="auto">
   <Text>Article content...</Text>
 </Box>
 ```
@@ -241,30 +421,12 @@ Some components (Button, Box, Text) support polymorphic rendering via the `as` p
 
 The design system uses CSS variables for all styling, ensuring consistent theming across components.
 
-### Using Semantic Color Tokens
-
-Use semantic token paths for theme-aware colors:
-
-```tsx
-// Text colors
-<Text color="text.primary">Primary text</Text>
-<Text color="text.secondary">Secondary text</Text>
-<Text color="text.error">Error message</Text>
-
-// Surface/background colors
-<Box bg="surface.elevated">Elevated surface</Box>
-<Box bg="surface.background">Background</Box>
-
-// Border colors
-<Box borderColor="border.default">Default border</Box>
-```
-
 **Available semantic token categories:**
-- `text.*` - Text colors (primary, secondary, tertiary, error, success, warning, link, inverse, disabled, accent)
-- `surface.*` - Background surfaces (background, elevated, card, input, primary, secondary)
-- `border.*` - Border colors (default, subtle, strong, focused, error, success, warning)
-- `interactive.*` - Interactive elements (used internally by components)
-- `icon.*` - Icon colors (primary, secondary, tertiary, disabled)
+- `text*` - Text colors (textPrimary, textSecondary, textTertiary, textError, textSuccess, textWarning, textLink, textInverse, textDisabled, textAccent)
+- `surface*` - Background surfaces (surfaceBackground, surfaceElevated, surfaceCard, surfaceInput, surfacePrimary, surfaceSecondary)
+- `border*` - Border colors (borderDefault, borderSubtle, borderStrong, borderFocused, borderError, borderSuccess, borderWarning)
+- `interactive*` - Interactive elements (used internally by components)
+- `icon*` - Icon colors (iconPrimary, iconSecondary, iconTertiary, iconDisabled)
 
 ### Using Design Tokens in Custom CSS
 
@@ -299,13 +461,14 @@ Typography props can be used on Box, Text, and Heading components:
 
 ### Spacing System
 
-Spacing props accept numbers (converted to pixels) or strings. Use numbers for consistency:
+Spacing props accept numbers (converted to pixels) or strings. Use full property names:
 
 ```tsx
-<Box p={4}>        {/* Padding: 1rem */}
-<Box m={8}>        {/* Margin: 2rem */}
-<Box gap={2}>      {/* Gap: 0.5rem */}
-<Box mx="auto">    {/* Horizontal margin: auto */}
+<Box padding={4}>                              {/* Padding: 1rem */}
+<Box margin={8}>                               {/* Margin: 2rem */}
+<Box gap={2}>                                  {/* Gap: 0.5rem */}
+<Box marginLeft="auto" marginRight="auto">     {/* Horizontal margin: auto */}
+<Box paddingLeft={6} paddingRight={6}>         {/* Horizontal padding: 1.5rem */}
 ```
 
 ## Theme Support
@@ -313,13 +476,13 @@ Spacing props accept numbers (converted to pixels) or strings. Use numbers for c
 All components support light and dark themes via the `ThemeProvider`. Themes are controlled globally at the provider level.
 
 ```tsx
-import { ThemeProvider, mondTheme } from '@mond-design-system/theme';
+import { ThemeProvider } from '@mond-design-system/theme';
 
 function App() {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
 
   return (
-    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+    <ThemeProvider brand="default" colorScheme={colorScheme}>
       {/* All components automatically use the theme */}
       <Text semantic="primary">Automatically themed text</Text>
       <Heading level={1} semantic="secondary">Automatically themed heading</Heading>
@@ -331,18 +494,19 @@ function App() {
 
 ### Brand Theme Support
 
-The design system supports multiple brand themes (Mond, CYPHER, FLUX):
+The design system supports multiple brand themes. Available brands are **'default'** (blue primary) and **'bsf'** (green primary):
 
 ```tsx
-import { ThemeProvider, cypherTheme, fluxTheme } from '@mond-design-system/theme';
+import { ThemeProvider } from '@mond-design-system/theme';
 
-// Switch between brand themes
-<ThemeProvider brandTheme={cypherTheme} colorScheme="dark">
-  <Button variant="primary">CYPHER Styled Button</Button>
+// Default brand theme (blue)
+<ThemeProvider brand="default" colorScheme="light">
+  <Button variant="primary">Default Brand Button</Button>
 </ThemeProvider>
 
-<ThemeProvider brandTheme={fluxTheme} colorScheme="light">
-  <Button variant="primary">FLUX Styled Button</Button>
+// BSF brand theme (green)
+<ThemeProvider brand="bsf" colorScheme="dark">
+  <Button variant="primary">BSF Brand Button</Button>
 </ThemeProvider>
 ```
 
@@ -397,9 +561,9 @@ import type {
 const MyHeading = (props: HeadingProps) => <Heading {...props} />;
 
 // Polymorphic component types are fully supported
-<Button as="a" href="/link" />  // TypeScript validates anchor props
-<Box as="section" p={4} />       // Full type safety with Box props
-<Text as="label" htmlFor="id">   // Label props are available
+<Button as="a" href="/link" />              // TypeScript validates anchor props
+<Box as="section" padding={4} />            // Full type safety with Box props
+<Text as="label" htmlFor="id">Label</Text>  // Label props are available
 ```
 
 ## Development

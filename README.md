@@ -27,14 +27,7 @@ pnpm add @mond-design-system/theme
 
 ## 🚀 Quick Start
 
-First, import the base styles:
-
-```tsx
-// In your main app file
-import '@mond-design-system/theme/styles.css';
-```
-
-Then use the components:
+Use the components:
 
 ```tsx
 import { Text, Heading, Button } from '@mond-design-system/theme';
@@ -152,10 +145,10 @@ Foundational layout primitive with design system props.
 import { Box } from '@mond-design-system/theme';
 
 <Box
-  p={4}              // padding from spacing scale
-  m={2}              // margin from spacing scale
-  bg="surface.elevated" // semantic background color
-  color="text.primary" // semantic text color
+  padding={4}              // padding from spacing scale
+  margin={2}              // margin from spacing scale
+  backgroundColor="surfaceElevated" // semantic background color
+  color="textPrimary" // semantic text color
   borderRadius="8px"  // border radius
   display="flex"
   alignItems="center"
@@ -198,19 +191,19 @@ Use semantic color tokens for theme-aware styling:
 
 ```tsx
 // Semantic text colors
-color="text.primary"        // Main text color
-color="text.secondary"      // Supporting text
-color="text.error"          // Error messages
-color="text.success"        // Success messages
+color="textPrimary"        // Main text color
+color="textSecondary"      // Supporting text
+color="textError"          // Error messages
+color="textSuccess"        // Success messages
 
 // Semantic surface colors
-bg="surface.background"     // Background surfaces
-bg="surface.elevated"       // Elevated surfaces
-bg="surface.card"           // Card backgrounds
+backgroundColor="surfaceBackground"     // Background surfaces
+backgroundColor="surfaceElevated"       // Elevated surfaces
+backgroundColor="surfaceCard"           // Card backgrounds
 
 // Semantic border colors
-borderColor="border.default"  // Default borders
-borderColor="border.focused"  // Focused state
+borderColor="borderDefault"  // Default borders
+borderColor="borderFocused"  // Focused state
 ```
 
 ### Typography
@@ -223,8 +216,8 @@ fontFamily="sans"    // DM Sans font stack
 
 ### Spacing
 ```tsx
-p={4}      // padding: 1rem
-m={8}      // margin: 2rem
+padding={4}      // padding: 1rem
+margin={8}      // margin: 2rem
 gap={2}    // gap: 0.5rem
 ```
 
@@ -233,13 +226,13 @@ gap={2}    // gap: 0.5rem
 All components support light and dark themes through the `ThemeProvider`:
 
 ```tsx
-import { ThemeProvider, mondTheme } from '@mond-design-system/theme';
+import { ThemeProvider } from '@mond-design-system/theme';
 
 function App() {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
 
   return (
-    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+    <ThemeProvider brand="default" colorScheme={colorScheme}>
       <Text semantic="primary">Automatically themed text</Text>
       <Heading level={1} semantic="secondary">Automatically themed heading</Heading>
       <Button variant="primary">Automatically themed button</Button>
