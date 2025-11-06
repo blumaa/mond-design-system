@@ -1,3 +1,7 @@
+## <small>1.26.1 (2025-11-06)</small>
+
+* fix: button with href props ([6abe8e7](https://github.com/blumaa/mond-design-system/commit/6abe8e7))
+
 ## 1.26.0 (2025-11-03)
 
 * feat: clean up tokens folder ([0eab3a0](https://github.com/blumaa/mond-design-system/commit/0eab3a0))
