@@ -427,6 +427,11 @@ const StyledButton = styled.button<StyledButtonProps>`
  * @example
  * // Link styled as button
  * <Button as="a" href="/about">About</Button>
+ *
+ * @example
+ * // Next.js Link (custom component)
+ * import Link from 'next/link';
+ * <Button as={Link} href="/dashboard">Dashboard</Button>
  */
 export const Button = React.forwardRef<HTMLElement, ButtonProps>(
   (
@@ -452,6 +457,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
       href,
       target,
       rel,
+      ...rest
     },
     ref,
   ) => {
@@ -509,11 +515,13 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
       );
     }
 
-    // Custom element
+    // Custom element - pass through all additional props (e.g., href for Next.js Link)
     return (
       <StyledButton
         {...baseProps}
+        {...rest}
         as={as}
+        href={disabled ? undefined : href}
         aria-disabled={disabled ? 'true' : undefined}
         ref={ref as React.Ref<HTMLElement>}
       >
