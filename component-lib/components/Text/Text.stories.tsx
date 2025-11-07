@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Text } from './Text';
+import { Box } from '../Box';
+import '../stories.css';
 
 const meta: Meta<typeof Text> = {
   title: 'Components/Text',
@@ -15,7 +17,7 @@ import { Text } from '@mond-design-system/theme';
 
 function MyComponent() {
   return (
-    <Text variant="body-md" semantic="primary">
+    <Text variant="body" semantic="primary">
       Your text content here
     </Text>
   );
@@ -25,7 +27,7 @@ function MyComponent() {
 A flexible Text component for displaying text content with semantic variants, typography options, and accessibility features. Perfect for body text, captions, labels, and any text-based content.
 
 **Key Features:**
-- 📝 Five text variants (body-lg, body-md, body-sm, caption, overline)
+- 📝 Nine text variants (display, headline, title, subtitle, body, body-sm, caption, overline, code)
 - 🎨 Semantic color variants for consistent theming
 - 🔤 Complete font weight support (thin to black)
 - 📐 Text alignment options (left, center, right, justify)
@@ -33,6 +35,12 @@ A flexible Text component for displaying text content with semantic variants, ty
 - 🏷️ Flexible HTML element rendering (span, p, div, label, etc.)
 - ♿ Full accessibility support
 - 🌙 Dark mode support
+
+**Breaking Changes:**
+- ⚠️ Removed \`body-lg\` and \`body-md\` variants - use \`body\` instead
+- ⚠️ Default variant changed from \`body-md\` to \`body\`
+- ✅ New variants added: \`display\`, \`headline\`, \`title\`, \`subtitle\`, \`code\`
+- ✅ New semantic color: \`accent\`
 `
       }
     }
@@ -41,7 +49,7 @@ A flexible Text component for displaying text content with semantic variants, ty
   argTypes: {
     variant: {
       control: 'select',
-      options: ['body-lg', 'body-md', 'body-sm', 'caption', 'overline'],
+      options: ['display', 'headline', 'title', 'subtitle', 'body', 'body-sm', 'caption', 'overline', 'code'],
     },
     weight: {
       control: 'select',
@@ -53,7 +61,7 @@ A flexible Text component for displaying text content with semantic variants, ty
     },
     semantic: {
       control: 'select',
-      options: ['primary', 'secondary', 'tertiary', 'disabled', 'inverse', 'link', 'success', 'warning', 'error'],
+      options: ['primary', 'secondary', 'tertiary', 'disabled', 'inverse', 'link', 'success', 'warning', 'error', 'accent'],
     },
     as: {
       control: 'select',
@@ -73,7 +81,7 @@ A flexible Text component for displaying text content with semantic variants, ty
     },
   },
   args: {
-    variant: 'body-md',
+    variant: 'body',
     weight: 'normal',
     semantic: 'primary',
     as: 'span',
@@ -95,28 +103,40 @@ export const Default: Story = {
 
 export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '600px' }}>
-      <Text variant="body-lg">
-        Large body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    <Box className="story-flex-column story-gap-16 story-max-width-600">
+      <Text variant="display">
+        Display text - Largest text variant for hero sections
       </Text>
-      <Text variant="body-md">
-        Medium body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      <Text variant="headline">
+        Headline text - Large prominent text for page headers
+      </Text>
+      <Text variant="title">
+        Title text - Section titles and important labels
+      </Text>
+      <Text variant="subtitle">
+        Subtitle text - Supporting titles and subheadings
+      </Text>
+      <Text variant="body">
+        Body text - Default text for main content and paragraphs
       </Text>
       <Text variant="body-sm">
-        Small body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Small body text - Smaller text for secondary content
       </Text>
       <Text variant="caption">
-        Caption text - Small descriptive text for labels and captions.
+        Caption text - Small descriptive text for labels and captions
       </Text>
       <Text variant="overline">
         Overline text - Used for section headers
       </Text>
-    </div>
+      <Text variant="code">
+        Code text - Monospace text for code snippets
+      </Text>
+    </Box>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Text comes in five different variants: body-lg, body-md, body-sm, caption, and overline. Each variant has predefined font sizes and line heights optimized for their use case.'
+        story: 'Text comes in nine different variants: display, headline, title, subtitle, body, body-sm, caption, overline, and code. Each variant has predefined font sizes and line heights optimized for their use case.'
       }
     }
   }
@@ -124,7 +144,7 @@ export const Variants: Story = {
 
 export const SemanticColors: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <Box className="story-flex-column story-gap-12">
       <Text semantic="primary">Primary text - Main content text</Text>
       <Text semantic="secondary">Secondary text - Supporting information</Text>
       <Text semantic="tertiary">Tertiary text - Less important details</Text>
@@ -133,7 +153,8 @@ export const SemanticColors: Story = {
       <Text semantic="success">Success text - Positive feedback</Text>
       <Text semantic="warning">Warning text - Cautionary information</Text>
       <Text semantic="error">Error text - Problem notifications</Text>
-    </div>
+      <Text semantic="accent">Accent text - Highlighted content</Text>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -146,7 +167,7 @@ export const SemanticColors: Story = {
 
 export const FontWeights: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <Box className="story-flex-column story-gap-12">
       <Text weight="thin">Thin weight (100) - Very light text</Text>
       <Text weight="light">Light weight (300) - Lighter than normal</Text>
       <Text weight="normal">Normal weight (400) - Default weight</Text>
@@ -154,7 +175,7 @@ export const FontWeights: Story = {
       <Text weight="semibold">Semibold weight (600) - Emphasis weight</Text>
       <Text weight="bold">Bold weight (700) - Strong emphasis</Text>
       <Text weight="extrabold">Extra bold weight (800) - Very strong</Text>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -167,7 +188,7 @@ export const FontWeights: Story = {
 
 export const TextAlignment: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '400px' }}>
+    <Box className="story-flex-column story-gap-16 story-width-400">
       <Text align="left">
         Left aligned text - This text is aligned to the left side of its container.
       </Text>
@@ -180,7 +201,7 @@ export const TextAlignment: Story = {
       <Text align="justify">
         Justified text - This longer text content will be justified to fill the entire width of the container, creating even spacing between words.
       </Text>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -193,14 +214,14 @@ export const TextAlignment: Story = {
 
 export const TextDecorations: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <Box className="story-flex-column story-gap-12">
       <Text>Normal text without decoration</Text>
       <Text italic>Italic text for emphasis</Text>
       <Text underline>Underlined text for links</Text>
       <Text strikethrough>Strikethrough text for deletions</Text>
       <Text underline strikethrough>Combined decorations</Text>
       <Text italic weight="bold" underline>Multiple styles combined</Text>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -213,20 +234,24 @@ export const TextDecorations: Story = {
 
 export const TruncatedText: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '200px' }}>
-      <div>
-        <Text as="p" style={{ marginBottom: '8px', fontWeight: '600' }}>Normal text:</Text>
+    <Box className="story-flex-column story-gap-16 story-max-width-200">
+      <Box>
+        <Box marginBottom="2">
+          <Text as="p" weight="semibold">Normal text:</Text>
+        </Box>
         <Text>
           This is a very long text that would normally wrap to multiple lines in a narrow container.
         </Text>
-      </div>
-      <div>
-        <Text as="p" style={{ marginBottom: '8px', fontWeight: '600' }}>Truncated text:</Text>
+      </Box>
+      <Box>
+        <Box marginBottom="2">
+          <Text as="p" weight="semibold">Truncated text:</Text>
+        </Box>
         <Text truncate>
           This is a very long text that would normally wrap to multiple lines in a narrow container.
         </Text>
-      </div>
-    </div>
+      </Box>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -239,7 +264,7 @@ export const TruncatedText: Story = {
 
 export const HTMLElements: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <Box className="story-flex-column story-gap-12">
       <Text as="span">Span element (inline)</Text>
       <Text as="p">Paragraph element (block)</Text>
       <Text as="div">Div element (block)</Text>
@@ -247,7 +272,7 @@ export const HTMLElements: Story = {
       <Text as="strong">Strong element (inline, semantic bold)</Text>
       <Text as="em">Em element (inline, semantic emphasis)</Text>
       <Text as="small">Small element (inline, fine print)</Text>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -260,22 +285,14 @@ export const HTMLElements: Story = {
 
 export const DarkMode: Story = {
   render: () => (
-    <div style={{ 
-      backgroundColor: '#1a1a1a', 
-      color: '#ffffff', 
-      padding: '24px', 
-      borderRadius: '8px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '12px'
-    }}>
+    <Box padding="6" className="story-bg-dark story-flex-column story-gap-12">
       <Text semantic="primary">Primary text in dark mode</Text>
       <Text semantic="secondary">Secondary text in dark mode</Text>
       <Text semantic="tertiary">Tertiary text in dark mode</Text>
       <Text semantic="success">Success text in dark mode</Text>
       <Text semantic="warning">Warning text in dark mode</Text>
       <Text semantic="error">Error text in dark mode</Text>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -288,23 +305,25 @@ export const DarkMode: Story = {
 
 export const RealWorldExample: Story = {
   render: () => (
-    <div style={{ maxWidth: '600px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <Box className="story-max-width-600 story-flex-column story-gap-16">
       <Text variant="overline" semantic="tertiary">ARTICLE</Text>
-      <Text as="div" variant="body-lg" weight="bold" semantic="primary">
+      <Text as="div" variant="title" weight="bold" semantic="primary">
         Design System Best Practices
       </Text>
-      <Text semantic="secondary" style={{ marginBottom: '16px' }}>
-        Published on March 15, 2024 by Design Team
-      </Text>
-      <Text variant="body-md" semantic="primary">
-        A well-designed design system serves as the foundation for consistent, 
-        scalable user experiences across all product touchpoints. This article 
+      <Box marginBottom="4">
+        <Text variant="body-sm" semantic="secondary">
+          Published on March 15, 2024 by Design Team
+        </Text>
+      </Box>
+      <Text variant="body" semantic="primary">
+        A well-designed design system serves as the foundation for consistent,
+        scalable user experiences across all product touchpoints. This article
         explores the fundamental principles that make design systems effective.
       </Text>
-      <Text variant="body-sm" semantic="tertiary">
+      <Text variant="caption" semantic="tertiary">
         <Text as="span" italic>Reading time: 5 minutes</Text>
       </Text>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {

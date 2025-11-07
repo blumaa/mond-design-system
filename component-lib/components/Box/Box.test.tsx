@@ -1,414 +1,295 @@
 import React from 'react';
-import { render, renderWithDarkMode, screen } from '../../test-utils';
+import { render, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Box } from './Box';
 
-describe('Box Component', () => {
-  it('renders as div by default', () => {
-    render(<Box data-testid="box">Content</Box>);
-    const boxElement = screen.getByTestId('box');
-    expect(boxElement).toBeInTheDocument();
-    expect(boxElement.tagName).toBe('DIV');
-    expect(boxElement).toHaveTextContent('Content');
+describe('Box Component - Minimal Design', () => {
+  describe('Basic Rendering', () => {
+    it('renders as div by default', () => {
+      render(<Box data-testid="box">Content</Box>);
+      const boxElement = screen.getByTestId('box');
+      expect(boxElement).toBeInTheDocument();
+      expect(boxElement.tagName).toBe('DIV');
+      expect(boxElement).toHaveTextContent('Content');
+    });
+
+    it('renders as different element when as prop is provided', () => {
+      render(<Box as="section" data-testid="section-box">Section content</Box>);
+      const boxElement = screen.getByTestId('section-box');
+      expect(boxElement.tagName).toBe('SECTION');
+    });
+
+    it('renders as article element', () => {
+      render(<Box as="article" data-testid="article-box">Article content</Box>);
+      const boxElement = screen.getByTestId('article-box');
+      expect(boxElement.tagName).toBe('ARTICLE');
+    });
+
+    it('renders without any props', () => {
+      render(<Box data-testid="minimal-box">Minimal</Box>);
+      const boxElement = screen.getByTestId('minimal-box');
+      expect(boxElement).toBeInTheDocument();
+      expect(boxElement).toHaveTextContent('Minimal');
+    });
+
+    it('renders with empty content', () => {
+      render(<Box data-testid="empty-box" />);
+      const boxElement = screen.getByTestId('empty-box');
+      expect(boxElement).toBeInTheDocument();
+    });
   });
 
-  it('renders as different element when as prop is provided', () => {
-    render(<Box as="section" data-testid="section-box">Section content</Box>);
-    const boxElement = screen.getByTestId('section-box');
-    expect(boxElement.tagName).toBe('SECTION');
-  });
-
-  describe('spacing props', () => {
-    it('applies padding props correctly with numeric values', () => {
-      render(
-        <Box
-          pt={8}
-          pr={12}
-          pb={20}
-          pl={14}
-          data-testid="padding-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('padding-box');
-
-      // Individual sides should be applied as pixel values
-      expect(boxElement).toHaveStyle('padding-top: 8px');
-      expect(boxElement).toHaveStyle('padding-right: 12px');
-      expect(boxElement).toHaveStyle('padding-bottom: 20px');
-      expect(boxElement).toHaveStyle('padding-left: 14px');
-    });
-
-    it('applies margin props correctly with numeric values', () => {
-      render(
-        <Box
-          m={16}
-          mx={24}
-          my={32}
-          mt={8}
-          mr={12}
-          mb={20}
-          ml={14}
-          data-testid="margin-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('margin-box');
-
-      // Individual sides should override mx/my
-      expect(boxElement).toHaveStyle('margin-top: 8px');
-      expect(boxElement).toHaveStyle('margin-right: 12px');
-      expect(boxElement).toHaveStyle('margin-bottom: 20px');
-      expect(boxElement).toHaveStyle('margin-left: 14px');
-    });
-
-    it('handles string spacing values', () => {
-      render(<Box p="1rem" m="2em" data-testid="string-spacing">Content</Box>);
-      const boxElement = screen.getByTestId('string-spacing');
-      expect(boxElement).toHaveStyle('padding: 1rem');
-      expect(boxElement).toHaveStyle('margin: 2em');
-    });
-
-    describe('CSS Variable Integration - Spacing Tokens', () => {
-      it('converts numeric spacing token keys to CSS variables', () => {
-        render(<Box p="4" m="2" data-testid="token-spacing">Content</Box>);
-        const boxElement = screen.getByTestId('token-spacing');
-
-        // Should use CSS variables for spacing tokens
-        expect(boxElement).toHaveStyle('padding: var(--mond-spacing-4)');
-        expect(boxElement).toHaveStyle('margin: var(--mond-spacing-2)');
+  describe('Spacing Props - CSS Class Mapping', () => {
+    describe('Padding', () => {
+      it('applies padding class correctly', () => {
+        render(<Box padding="4" data-testid="padding-box">Content</Box>);
+        const boxElement = screen.getByTestId('padding-box');
+        expect(boxElement).toHaveClass('p-4');
       });
 
-      it('handles compound spacing props with tokens', () => {
+      it('applies paddingTop class correctly', () => {
+        render(<Box paddingTop="2" data-testid="pt-box">Content</Box>);
+        const boxElement = screen.getByTestId('pt-box');
+        expect(boxElement).toHaveClass('pt-2');
+      });
+
+      it('applies paddingRight class correctly', () => {
+        render(<Box paddingRight="6" data-testid="pr-box">Content</Box>);
+        const boxElement = screen.getByTestId('pr-box');
+        expect(boxElement).toHaveClass('pr-6');
+      });
+
+      it('applies paddingBottom class correctly', () => {
+        render(<Box paddingBottom="8" data-testid="pb-box">Content</Box>);
+        const boxElement = screen.getByTestId('pb-box');
+        expect(boxElement).toHaveClass('pb-8');
+      });
+
+      it('applies paddingLeft class correctly', () => {
+        render(<Box paddingLeft="10" data-testid="pl-box">Content</Box>);
+        const boxElement = screen.getByTestId('pl-box');
+        expect(boxElement).toHaveClass('pl-10');
+      });
+
+      it('applies multiple padding classes correctly', () => {
         render(
           <Box
-            px="4"
-            py="2"
-            data-testid="compound-spacing"
+            paddingTop="2"
+            paddingRight="4"
+            paddingBottom="6"
+            paddingLeft="8"
+            data-testid="multi-padding-box"
           >
             Content
           </Box>
         );
-        const boxElement = screen.getByTestId('compound-spacing');
-
-        expect(boxElement).toHaveStyle('padding-left: var(--mond-spacing-4)');
-        expect(boxElement).toHaveStyle('padding-right: var(--mond-spacing-4)');
-        expect(boxElement).toHaveStyle('padding-top: var(--mond-spacing-2)');
-        expect(boxElement).toHaveStyle('padding-bottom: var(--mond-spacing-2)');
+        const boxElement = screen.getByTestId('multi-padding-box');
+        expect(boxElement).toHaveClass('pt-2', 'pr-4', 'pb-6', 'pl-8');
       });
-    });
-  });
 
-  describe('color props', () => {
-    it('applies background color with raw values', () => {
-      render(<Box bg="#ff0000" data-testid="bg-box">Content</Box>);
-      const boxElement = screen.getByTestId('bg-box');
-      expect(boxElement).toHaveStyle('background-color: #ff0000');
-    });
-
-    it('applies text color with raw values', () => {
-      render(<Box color="#00ff00" data-testid="color-box">Content</Box>);
-      const boxElement = screen.getByTestId('color-box');
-      expect(boxElement).toHaveStyle('color: #00ff00');
-    });
-
-    it('applies border color with raw values', () => {
-      render(<Box borderColor="#0000ff" data-testid="border-color-box">Content</Box>);
-      const boxElement = screen.getByTestId('border-color-box');
-      expect(boxElement).toHaveStyle('border-color: #0000ff');
-    });
-
-    describe('CSS Variable Integration - Semantic Tokens', () => {
-      it('converts semantic token paths to CSS variables for background', () => {
+      it('individual padding props override padding prop', () => {
         render(
           <Box
-            bg="surface.background"
-            data-testid="semantic-bg-box"
+            padding="4"
+            paddingTop="8"
+            data-testid="override-padding-box"
           >
             Content
           </Box>
         );
-        const boxElement = screen.getByTestId('semantic-bg-box');
-        // Should use CSS variable instead of resolved value
-        expect(boxElement).toHaveStyle('background-color: var(--mond-surface-background)');
+        const boxElement = screen.getByTestId('override-padding-box');
+        expect(boxElement).toHaveClass('p-4', 'pt-8');
+      });
+    });
+
+    describe('Margin', () => {
+      it('applies margin class correctly', () => {
+        render(<Box margin="4" data-testid="margin-box">Content</Box>);
+        const boxElement = screen.getByTestId('margin-box');
+        expect(boxElement).toHaveClass('m-4');
       });
 
-      it('converts semantic token paths to CSS variables for color', () => {
+      it('applies marginTop class correctly', () => {
+        render(<Box marginTop="2" data-testid="mt-box">Content</Box>);
+        const boxElement = screen.getByTestId('mt-box');
+        expect(boxElement).toHaveClass('mt-2');
+      });
+
+      it('applies marginRight class correctly', () => {
+        render(<Box marginRight="6" data-testid="mr-box">Content</Box>);
+        const boxElement = screen.getByTestId('mr-box');
+        expect(boxElement).toHaveClass('mr-6');
+      });
+
+      it('applies marginBottom class correctly', () => {
+        render(<Box marginBottom="8" data-testid="mb-box">Content</Box>);
+        const boxElement = screen.getByTestId('mb-box');
+        expect(boxElement).toHaveClass('mb-8');
+      });
+
+      it('applies marginLeft class correctly', () => {
+        render(<Box marginLeft="10" data-testid="ml-box">Content</Box>);
+        const boxElement = screen.getByTestId('ml-box');
+        expect(boxElement).toHaveClass('ml-10');
+      });
+
+      it('applies multiple margin classes correctly', () => {
         render(
           <Box
-            color="text.primary"
-            data-testid="semantic-color-box"
+            marginTop="2"
+            marginRight="4"
+            marginBottom="6"
+            marginLeft="8"
+            data-testid="multi-margin-box"
           >
             Content
           </Box>
         );
-        const boxElement = screen.getByTestId('semantic-color-box');
-        expect(boxElement).toHaveStyle('color: var(--mond-text-primary)');
+        const boxElement = screen.getByTestId('multi-margin-box');
+        expect(boxElement).toHaveClass('mt-2', 'mr-4', 'mb-6', 'ml-8');
       });
 
-      it('converts semantic token paths to CSS variables for border color', () => {
+      it('individual margin props override margin prop', () => {
         render(
           <Box
-            borderColor="border.default"
-            data-testid="semantic-border-box"
+            margin="4"
+            marginTop="8"
+            data-testid="override-margin-box"
           >
             Content
           </Box>
         );
-        const boxElement = screen.getByTestId('semantic-border-box');
-        expect(boxElement).toHaveStyle('border-color: var(--mond-border-default)');
+        const boxElement = screen.getByTestId('override-margin-box');
+        expect(boxElement).toHaveClass('m-4', 'mt-8');
       });
+    });
 
-      it('handles multiple semantic tokens correctly', () => {
+    describe('Combined Spacing', () => {
+      it('applies both margin and padding classes correctly', () => {
         render(
           <Box
-            bg="surface.background"
-            color="text.primary"
-            borderColor="border.default"
-            data-testid="multi-semantic-box"
+            margin="8"
+            padding="4"
+            data-testid="combined-box"
           >
             Content
           </Box>
         );
-        const boxElement = screen.getByTestId('multi-semantic-box');
-        expect(boxElement).toHaveStyle('background-color: var(--mond-surface-background)');
-        expect(boxElement).toHaveStyle('color: var(--mond-text-primary)');
-        expect(boxElement).toHaveStyle('border-color: var(--mond-border-default)');
+        const boxElement = screen.getByTestId('combined-box');
+        expect(boxElement).toHaveClass('m-8', 'p-4');
       });
 
-      it('passes through non-semantic color values unchanged', () => {
+      it('applies complex spacing combination', () => {
         render(
           <Box
-            bg="red"
-            color="#00ff00"
-            borderColor="rgb(0, 0, 255)"
-            data-testid="direct-color-box"
+            marginTop="2"
+            paddingLeft="6"
+            paddingRight="4"
+            marginBottom="8"
+            data-testid="complex-spacing-box"
           >
             Content
           </Box>
         );
-        const boxElement = screen.getByTestId('direct-color-box');
-        expect(boxElement).toHaveStyle('background-color: red');
-        expect(boxElement).toHaveStyle('color: #00ff00');
-        expect(boxElement).toHaveStyle('border-color: rgb(0, 0, 255)');
+        const boxElement = screen.getByTestId('complex-spacing-box');
+        expect(boxElement).toHaveClass('mt-2', 'pl-6', 'pr-4', 'mb-8');
+      });
+    });
+
+    describe('All Spacing Token Values', () => {
+      const spacingTokens = ['0', '1', '2', '3', '4', '5', '6', '8', '10', '12', '16', '20', '24', '32', '40', '48', '56', '64'] as const;
+
+      spacingTokens.forEach((token) => {
+        it(`applies padding="${token}" as p-${token} class`, () => {
+          render(<Box padding={token} data-testid={`p-${token}-box`}>Content</Box>);
+          const boxElement = screen.getByTestId(`p-${token}-box`);
+          expect(boxElement).toHaveClass(`p-${token}`);
+        });
+
+        it(`applies margin="${token}" as m-${token} class`, () => {
+          render(<Box margin={token} data-testid={`m-${token}-box`}>Content</Box>);
+          const boxElement = screen.getByTestId(`m-${token}-box`);
+          expect(boxElement).toHaveClass(`m-${token}`);
+        });
       });
     });
   });
 
-  describe('layout props', () => {
-    it('applies display property', () => {
-      render(<Box display="flex" data-testid="flex-box">Content</Box>);
-      const boxElement = screen.getByTestId('flex-box');
-      expect(boxElement).toHaveStyle('display: flex');
+  describe('TypeScript Type Safety', () => {
+    it('accepts valid spacing token for padding', () => {
+      // This test ensures TypeScript compilation succeeds with valid tokens
+      render(<Box padding="4" data-testid="valid-padding">Content</Box>);
+      expect(screen.getByTestId('valid-padding')).toBeInTheDocument();
     });
 
-    it('applies position properties', () => {
+    it('accepts valid spacing token for margin', () => {
+      // This test ensures TypeScript compilation succeeds with valid tokens
+      render(<Box margin="8" data-testid="valid-margin">Content</Box>);
+      expect(screen.getByTestId('valid-margin')).toBeInTheDocument();
+    });
+
+    it('accepts all valid spacing tokens', () => {
+      // This test ensures TypeScript compilation succeeds with all valid tokens
       render(
         <Box
-          position="absolute"
-          top={10}
-          right="20px"
-          bottom={30}
-          left="40px"
-          zIndex={5}
-          data-testid="position-box"
+          padding="0"
+          margin="1"
+          paddingTop="2"
+          marginRight="3"
+          paddingBottom="64"
+          marginLeft="56"
+          data-testid="all-valid"
         >
           Content
         </Box>
       );
-      const boxElement = screen.getByTestId('position-box');
-      expect(boxElement).toHaveStyle('position: absolute');
-      expect(boxElement).toHaveStyle('top: 10px');
-      expect(boxElement).toHaveStyle('right: 20px');
-      expect(boxElement).toHaveStyle('bottom: 30px');
-      expect(boxElement).toHaveStyle('left: 40px');
-      expect(boxElement).toHaveStyle('z-index: 5');
+      expect(screen.getByTestId('all-valid')).toBeInTheDocument();
     });
   });
 
-  describe('flexbox props', () => {
-    it('applies flexbox properties', () => {
+  describe('className Prop', () => {
+    it('applies custom className', () => {
+      render(<Box className="custom-class" data-testid="class-box">Content</Box>);
+      const boxElement = screen.getByTestId('class-box');
+      expect(boxElement).toHaveClass('custom-class');
+    });
+
+    it('combines spacing classes with custom className', () => {
       render(
         <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="space-between"
-          flex={1}
-          data-testid="flexbox-box"
+          padding="4"
+          margin="2"
+          className="custom-class"
+          data-testid="combined-class-box"
         >
           Content
         </Box>
       );
-      const boxElement = screen.getByTestId('flexbox-box');
-      expect(boxElement).toHaveStyle('display: flex');
-      expect(boxElement).toHaveStyle('flex-direction: column');
-      expect(boxElement).toHaveStyle('align-items: center');
-      expect(boxElement).toHaveStyle('justify-content: space-between');
-      expect(boxElement).toHaveStyle('flex: 1');
+      const boxElement = screen.getByTestId('combined-class-box');
+      expect(boxElement).toHaveClass('p-4', 'm-2', 'custom-class');
+    });
+
+    it('handles multiple custom classes', () => {
+      render(
+        <Box
+          className="custom-1 custom-2 custom-3"
+          data-testid="multi-class-box"
+        >
+          Content
+        </Box>
+      );
+      const boxElement = screen.getByTestId('multi-class-box');
+      expect(boxElement).toHaveClass('custom-1', 'custom-2', 'custom-3');
     });
   });
 
-  describe('grid props', () => {
-    it('applies grid properties', () => {
-      render(
-        <Box
-          display="grid"
-          gridTemplateColumns="1fr 1fr"
-          gap={16}
-          gridArea="header"
-          data-testid="grid-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('grid-box');
-      expect(boxElement).toHaveStyle('display: grid');
-      expect(boxElement).toHaveStyle('grid-template-columns: 1fr 1fr');
-      expect(boxElement).toHaveStyle('gap: 16px');
-      expect(boxElement).toHaveStyle('grid-area: header');
-    });
-
-    it('converts token gap values to CSS variables', () => {
-      render(
-        <Box
-          display="grid"
-          gap="4"
-          rowGap="2"
-          columnGap="6"
-          data-testid="token-gap-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('token-gap-box');
-      expect(boxElement).toHaveStyle('gap: var(--mond-spacing-4)');
-      expect(boxElement).toHaveStyle('row-gap: var(--mond-spacing-2)');
-      expect(boxElement).toHaveStyle('column-gap: var(--mond-spacing-6)');
-    });
-  });
-
-  describe('size props', () => {
-    it('applies size properties', () => {
-      render(
-        <Box
-          width={200}
-          height="150px"
-          minWidth={100}
-          maxHeight="300px"
-          data-testid="size-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('size-box');
-      expect(boxElement).toHaveStyle('width: 200px');
-      expect(boxElement).toHaveStyle('height: 150px');
-      expect(boxElement).toHaveStyle('min-width: 100px');
-      expect(boxElement).toHaveStyle('max-height: 300px');
-    });
-  });
-
-  describe('border props', () => {
-    it('applies border properties', () => {
-      render(
-        <Box
-          border="1px solid #000"
-          borderRadius={8}
-          borderWidth={2}
-          borderStyle="dashed"
-          data-testid="border-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('border-box');
-      expect(boxElement).toHaveStyle('border: 1px solid #000');
-      expect(boxElement).toHaveStyle('border-radius: 8px');
-      expect(boxElement).toHaveStyle('border-width: 2px');
-      expect(boxElement).toHaveStyle('border-style: dashed');
-    });
-
-    it('applies individual border sides', () => {
-      render(
-        <Box
-          borderTop="1px solid red"
-          borderRight="2px dashed blue"
-          borderBottom="3px dotted green"
-          borderLeft="4px solid purple"
-          data-testid="border-sides-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('border-sides-box');
-      expect(boxElement).toHaveStyle('border-top: 1px solid red');
-      expect(boxElement).toHaveStyle('border-right: 2px dashed blue');
-      expect(boxElement).toHaveStyle('border-bottom: 3px dotted green');
-      expect(boxElement).toHaveStyle('border-left: 4px solid purple');
-    });
-  });
-
-  describe('typography props', () => {
-    it('applies typography properties', () => {
-      render(
-        <Box
-          fontSize={16}
-          fontWeight="bold"
-          fontStyle="italic"
-          lineHeight="1.5"
-          letterSpacing="0.1em"
-          textAlign="center"
-          textTransform="uppercase"
-          data-testid="typography-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('typography-box');
-      expect(boxElement).toHaveStyle('font-size: 16px');
-      expect(boxElement).toHaveStyle('font-weight: bold');
-      expect(boxElement).toHaveStyle('font-style: italic');
-      expect(boxElement).toHaveStyle('line-height: 1.5');
-      expect(boxElement).toHaveStyle('letter-spacing: 0.1em');
-      expect(boxElement).toHaveStyle('text-align: center');
-      expect(boxElement).toHaveStyle('text-transform: uppercase');
-    });
-  });
-
-  describe('effect props', () => {
-    it('applies effect properties', () => {
-      render(
-        <Box
-          boxShadow="0 2px 4px rgba(0,0,0,0.1)"
-          opacity={0.8}
-          cursor="pointer"
-          overflow="hidden"
-          transition="all 0.3s ease"
-          data-testid="effects-box"
-        >
-          Content
-        </Box>
-      );
-      const boxElement = screen.getByTestId('effects-box');
-      expect(boxElement).toHaveStyle('box-shadow: 0 2px 4px rgba(0,0,0,0.1)');
-      expect(boxElement).toHaveStyle('opacity: 0.8');
-      expect(boxElement).toHaveStyle('cursor: pointer');
-      expect(boxElement).toHaveStyle('overflow: hidden');
-      expect(boxElement).toHaveStyle('transition: all 0.3s ease');
-    });
-  });
-
-  describe('SSR compatibility', () => {
+  describe('SSR Compatibility', () => {
     it('renders correctly without client-side hooks', () => {
       // Box should not depend on useTheme or any client-side hooks
       render(
         <Box
-          bg="surface.background"
-          color="text.primary"
-          p="4"
+          padding="4"
+          margin="2"
           data-testid="ssr-box"
         >
           SSR Content
@@ -417,38 +298,89 @@ describe('Box Component', () => {
       const boxElement = screen.getByTestId('ssr-box');
       expect(boxElement).toBeInTheDocument();
       expect(boxElement).toHaveTextContent('SSR Content');
-
-      // Should use CSS variables (SSR-compatible)
-      expect(boxElement).toHaveStyle('background-color: var(--mond-surface-background)');
-      expect(boxElement).toHaveStyle('color: var(--mond-text-primary)');
-      expect(boxElement).toHaveStyle('padding: var(--mond-spacing-4)');
+      expect(boxElement).toHaveClass('p-4', 'm-2');
     });
 
     it('does not require ThemeProvider context', () => {
       // Render without ThemeProvider wrapper
       const { getByTestId } = render(
         <Box
-          bg="surface.background"
-          p={4}
+          padding="4"
+          margin="2"
           data-testid="no-provider-box"
         >
           No Provider
         </Box>,
-        { themeProviderProps: undefined } // Explicitly no provider
+        { themeProviderProps: undefined }
       );
 
       const boxElement = getByTestId('no-provider-box');
       expect(boxElement).toBeInTheDocument();
-      // CSS variables should still be applied (they'll be defined in CSS)
-      expect(boxElement).toHaveStyle('background-color: var(--mond-surface-background)');
+      expect(boxElement).toHaveClass('p-4', 'm-2');
+    });
+
+    it('uses pure CSS classes without inline styles', () => {
+      render(
+        <Box
+          padding="4"
+          margin="8"
+          data-testid="no-inline-styles"
+        >
+          Content
+        </Box>
+      );
+      const boxElement = screen.getByTestId('no-inline-styles');
+
+      // Should only have classes, no style attribute (or empty style)
+      const styleAttr = boxElement.getAttribute('style');
+      expect(styleAttr).toBeNull();
     });
   });
 
-  describe('accessibility', () => {
+  describe('Theme Compatibility', () => {
+    it('works with light theme (CSS variables handle theme switching)', () => {
+      render(
+        <div data-theme="light">
+          <Box padding="4" data-testid="light-theme-box">Light theme content</Box>
+        </div>
+      );
+      const boxElement = screen.getByTestId('light-theme-box');
+      expect(boxElement).toHaveClass('p-4');
+    });
+
+    it('works with dark theme (CSS variables handle theme switching)', () => {
+      render(
+        <div data-theme="dark">
+          <Box padding="4" data-testid="dark-theme-box">Dark theme content</Box>
+        </div>
+      );
+      const boxElement = screen.getByTestId('dark-theme-box');
+      expect(boxElement).toHaveClass('p-4');
+    });
+
+    it('supports brand switching (runtime CSS variable overrides)', () => {
+      render(
+        <div data-theme="light" data-brand="custom">
+          <Box padding="8" margin="4" data-testid="brand-box">Brand content</Box>
+        </div>
+      );
+      const boxElement = screen.getByTestId('brand-box');
+      expect(boxElement).toHaveClass('p-8', 'm-4');
+    });
+  });
+
+  describe('Accessibility', () => {
     it('forwards ref correctly', () => {
       const ref = React.createRef<HTMLDivElement>();
       render(<Box ref={ref}>Content</Box>);
       expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it('forwards ref with custom element type', () => {
+      const ref = React.createRef<HTMLElement>();
+      render(<Box as="section" ref={ref}>Content</Box>);
+      expect(ref.current).toBeInstanceOf(HTMLElement);
+      expect(ref.current?.tagName).toBe('SECTION');
     });
 
     it('supports custom props and event handlers', () => {
@@ -472,95 +404,138 @@ describe('Box Component', () => {
       expect(handleClick).toHaveBeenCalled();
     });
 
-    it('applies custom className', () => {
-      render(<Box className="custom-class" data-testid="class-box">Content</Box>);
-      const boxElement = screen.getByTestId('class-box');
-      expect(boxElement).toHaveClass('custom-class');
+    it('supports ARIA attributes', () => {
+      render(
+        <Box
+          role="region"
+          aria-labelledby="heading-id"
+          aria-describedby="desc-id"
+          data-testid="aria-box"
+        >
+          Content
+        </Box>
+      );
+      const boxElement = screen.getByTestId('aria-box');
+      expect(boxElement).toHaveAttribute('role', 'region');
+      expect(boxElement).toHaveAttribute('aria-labelledby', 'heading-id');
+      expect(boxElement).toHaveAttribute('aria-describedby', 'desc-id');
     });
   });
 
-  describe('edge cases', () => {
-    it('handles zero values correctly', () => {
+  describe('HTML Attributes', () => {
+    it('forwards data attributes', () => {
       render(
         <Box
-          p={0}
-          m={0}
-          width={0}
-          height={0}
-          opacity={0}
+          data-testid="data-box"
+          data-custom="custom-value"
+          data-analytics="track-this"
+        >
+          Content
+        </Box>
+      );
+      const boxElement = screen.getByTestId('data-box');
+      expect(boxElement).toHaveAttribute('data-custom', 'custom-value');
+      expect(boxElement).toHaveAttribute('data-analytics', 'track-this');
+    });
+
+    it('forwards id attribute', () => {
+      render(<Box id="unique-box" data-testid="id-box">Content</Box>);
+      const boxElement = screen.getByTestId('id-box');
+      expect(boxElement).toHaveAttribute('id', 'unique-box');
+    });
+
+    it('forwards title attribute', () => {
+      render(<Box title="Box title" data-testid="title-box">Content</Box>);
+      const boxElement = screen.getByTestId('title-box');
+      expect(boxElement).toHaveAttribute('title', 'Box title');
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('handles zero spacing token', () => {
+      render(
+        <Box
+          padding="0"
+          margin="0"
           data-testid="zero-box"
         >
           Content
         </Box>
       );
       const boxElement = screen.getByTestId('zero-box');
-      expect(boxElement).toHaveStyle('padding: 0px');
-      expect(boxElement).toHaveStyle('margin: 0px');
-      expect(boxElement).toHaveStyle('width: 0px');
-      expect(boxElement).toHaveStyle('height: 0px');
-      expect(boxElement).toHaveStyle('opacity: 0');
+      expect(boxElement).toHaveClass('p-0', 'm-0');
     });
 
-    it('renders without any props', () => {
-      render(<Box data-testid="minimal-box">Minimal</Box>);
-      const boxElement = screen.getByTestId('minimal-box');
-      expect(boxElement).toBeInTheDocument();
-      expect(boxElement).toHaveTextContent('Minimal');
-    });
-
-    it('renders with empty content', () => {
-      render(<Box data-testid="empty-box" />);
-      const boxElement = screen.getByTestId('empty-box');
-      expect(boxElement).toBeInTheDocument();
-    });
-  });
-
-  describe('responsive and complex values', () => {
-    it('handles percentage values', () => {
-      render(<Box width="50%" height="100%" data-testid="percentage-box">Content</Box>);
-      const boxElement = screen.getByTestId('percentage-box');
-      expect(boxElement).toHaveStyle('width: 50%');
-      expect(boxElement).toHaveStyle('height: 100%');
-    });
-
-    it('handles CSS custom properties', () => {
-      render(<Box color="var(--custom-color)" data-testid="custom-prop-box">Content</Box>);
-      const boxElement = screen.getByTestId('custom-prop-box');
-      expect(boxElement).toHaveStyle('color: var(--custom-color)');
-    });
-  });
-
-  describe('Token value resolution logic', () => {
-    it('correctly identifies and converts token paths with dots', () => {
+    it('handles largest spacing token', () => {
       render(
         <Box
-          bg="interactive.primary.background"
-          color="text.secondary"
-          data-testid="dotted-paths"
+          padding="64"
+          margin="64"
+          data-testid="large-box"
         >
           Content
         </Box>
       );
-      const boxElement = screen.getByTestId('dotted-paths');
-      expect(boxElement).toHaveStyle('background-color: var(--mond-interactive-primary-background)');
-      expect(boxElement).toHaveStyle('color: var(--mond-text-secondary)');
+      const boxElement = screen.getByTestId('large-box');
+      expect(boxElement).toHaveClass('p-64', 'm-64');
     });
 
-    it('correctly differentiates between token keys and raw values', () => {
+    it('handles no spacing props', () => {
+      render(<Box data-testid="no-spacing">Content</Box>);
+      const boxElement = screen.getByTestId('no-spacing');
+      // Should have no spacing classes
+      const className = boxElement.className;
+      expect(className).not.toMatch(/[mp][tlrb]?-/);
+    });
+
+    it('does not render className attribute if no classes are applied', () => {
+      render(<Box data-testid="no-classes">Content</Box>);
+      const boxElement = screen.getByTestId('no-classes');
+      expect(boxElement.hasAttribute('class')).toBe(false);
+    });
+  });
+
+  describe('Nested Box Components', () => {
+    it('allows nesting Box components', () => {
       render(
-        <Box
-          p="4"        // Token key -> CSS variable
-          m="10px"     // Raw value -> Direct value
-          width="50%"  // Raw value -> Direct value
-          data-testid="mixed-values"
-        >
-          Content
+        <Box padding="4" data-testid="outer-box">
+          <Box margin="2" data-testid="inner-box">
+            Nested content
+          </Box>
         </Box>
       );
-      const boxElement = screen.getByTestId('mixed-values');
-      expect(boxElement).toHaveStyle('padding: var(--mond-spacing-4)');
-      expect(boxElement).toHaveStyle('margin: 10px');
-      expect(boxElement).toHaveStyle('width: 50%');
+      const outerBox = screen.getByTestId('outer-box');
+      const innerBox = screen.getByTestId('inner-box');
+
+      expect(outerBox).toHaveClass('p-4');
+      expect(innerBox).toHaveClass('m-2');
+      expect(innerBox).toHaveTextContent('Nested content');
+    });
+
+    it('maintains proper DOM hierarchy with nested boxes', () => {
+      render(
+        <Box as="article" padding="8" data-testid="article">
+          <Box as="header" padding="4" data-testid="header">
+            Header
+          </Box>
+          <Box as="main" padding="4" data-testid="main">
+            Main
+          </Box>
+          <Box as="footer" padding="4" data-testid="footer">
+            Footer
+          </Box>
+        </Box>
+      );
+
+      const article = screen.getByTestId('article');
+      const header = screen.getByTestId('header');
+      const main = screen.getByTestId('main');
+      const footer = screen.getByTestId('footer');
+
+      expect(article.tagName).toBe('ARTICLE');
+      expect(header.tagName).toBe('HEADER');
+      expect(main.tagName).toBe('MAIN');
+      expect(footer.tagName).toBe('FOOTER');
     });
   });
 });

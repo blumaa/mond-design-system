@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import './avatar.css';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 

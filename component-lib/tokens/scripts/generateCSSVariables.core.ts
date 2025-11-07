@@ -14,7 +14,7 @@ export interface CSSVariables {
  * Recursively traverse semantic tokens and collect CSS variable definitions
  */
 export function traverseSemanticTokens(
-  obj: any,
+  obj: Record<string, unknown>,
   path: string[] = [],
   cssVars: CSSVariables,
   theme: Theme
@@ -23,7 +23,7 @@ export function traverseSemanticTokens(
     const currentPath = [...path, key];
     const tokenPath = currentPath.join('.');
 
-    if (value && typeof value === 'object') {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
       // Check if this object has light/dark theme variants
       if ('light' in value && 'dark' in value) {
         // This is a theme-aware semantic token - resolve it
@@ -41,7 +41,7 @@ export function traverseSemanticTokens(
         }
       } else {
         // Keep traversing nested objects
-        traverseSemanticTokens(value, currentPath, cssVars, theme);
+        traverseSemanticTokens(value as Record<string, unknown>, currentPath, cssVars, theme);
       }
     } else if (typeof value === 'string') {
       // Direct string value (non-theme-aware token)
@@ -62,6 +62,22 @@ export function traverseSemanticTokens(
 }
 
 /**
+ * Generate base brand color CSS variables
+ * These are the foundational brand colors that can be overridden at runtime
+ */
+function generateBrandColorVariables(cssVars: CSSVariables): void {
+  const brandColors = tokens.colors.brand as Record<string, Record<string, string>>;
+
+  Object.entries(brandColors).forEach(([colorType, colorScale]) => {
+    Object.entries(colorScale).forEach(([shade, value]) => {
+      const cssVarName = `--mond-color-brand-${colorType}-${shade}`;
+      // Add to light theme (these are base values that can be overridden)
+      cssVars.light.set(cssVarName, value);
+    });
+  });
+}
+
+/**
  * Generate CSS variables from all token types
  */
 export function generateAllCSSVariables(): CSSVariables {
@@ -69,6 +85,10 @@ export function generateAllCSSVariables(): CSSVariables {
     light: new Map(),
     dark: new Map(),
   };
+
+  // FIRST: Generate base brand color variables
+  // These must be defined before semantic tokens so they can be referenced
+  generateBrandColorVariables(cssVars);
 
   // Process semantic tokens for both themes
   traverseSemanticTokens(tokens.semantic, [], cssVars, 'light');

@@ -1,0 +1,164 @@
+/**
+ * Heading Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Automatically responds to data-theme attribute changes.
+ */
+
+/* Heading Size Styles */
+
+.mond-heading--xs {
+  font-size: var(--mond-font-size-xs);
+  line-height: var(--mond-line-height-tight);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--sm {
+  font-size: var(--mond-font-size-sm);
+  line-height: var(--mond-line-height-tight);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--md {
+  font-size: var(--mond-font-size-base);
+  line-height: var(--mond-line-height-tight);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--lg {
+  font-size: var(--mond-font-size-lg);
+  line-height: var(--mond-line-height-tight);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--xl {
+  font-size: var(--mond-font-size-xl);
+  line-height: var(--mond-line-height-tight);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--2xl {
+  font-size: var(--mond-font-size-2xl);
+  line-height: var(--mond-line-height-tight);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--3xl {
+  font-size: var(--mond-font-size-3xl);
+  line-height: var(--mond-line-height-tight);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--4xl {
+  font-size: var(--mond-font-size-4xl);
+  line-height: var(--mond-line-height-none);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--5xl {
+  font-size: var(--mond-font-size-5xl);
+  line-height: var(--mond-line-height-none);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--6xl {
+  font-size: var(--mond-font-size-6xl);
+  line-height: var(--mond-line-height-none);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+/* ============================================
+   SEMANTIC COLORS
+   ============================================ */
+
+.mond-heading--primary {
+  color: var(--heading-color-override, var(--mond-text-primary));
+}
+
+.mond-heading--secondary {
+  color: var(--heading-color-override, var(--mond-text-secondary));
+}
+
+.mond-heading--tertiary {
+  color: var(--heading-color-override, var(--mond-text-tertiary));
+}
+
+.mond-heading--inverse {
+  color: var(--heading-color-override, var(--mond-text-inverse));
+}
+
+/* ============================================
+   FONT WEIGHTS
+   ============================================ */
+
+.mond-heading--weight-thin {
+  font-weight: var(--mond-font-weight-thin);
+}
+
+.mond-heading--weight-extralight {
+  font-weight: var(--mond-font-weight-extralight);
+}
+
+.mond-heading--weight-light {
+  font-weight: var(--mond-font-weight-light);
+}
+
+.mond-heading--weight-normal {
+  font-weight: var(--mond-font-weight-normal);
+}
+
+.mond-heading--weight-medium {
+  font-weight: var(--mond-font-weight-medium);
+}
+
+.mond-heading--weight-semibold {
+  font-weight: var(--mond-font-weight-semibold);
+}
+
+.mond-heading--weight-bold {
+  font-weight: var(--mond-font-weight-bold);
+}
+
+.mond-heading--weight-extrabold {
+  font-weight: var(--mond-font-weight-extrabold);
+}
+
+.mond-heading--weight-black {
+  font-weight: var(--mond-font-weight-black);
+}
+
+/* ============================================
+   TEXT ALIGNMENT
+   ============================================ */
+
+.mond-heading--align-left {
+  text-align: left;
+}
+
+.mond-heading--align-center {
+  text-align: center;
+}
+
+.mond-heading--align-right {
+  text-align: right;
+}
+
+/* ============================================
+   TEXT MODIFIERS
+   ============================================ */
+
+.mond-heading--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

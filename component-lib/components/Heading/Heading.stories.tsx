@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Heading } from './Heading';
+import { Box } from '../Box';
+import '../stories.css';
 
 const meta: Meta<typeof Heading> = {
   title: 'Components/Heading',
@@ -33,6 +35,10 @@ A flexible Heading component for creating semantic headings (h1-h6) with consist
 - ✂️ Text truncation with ellipsis
 - ♿ Full accessibility and screen reader support
 - 🌙 Dark mode support
+
+**Breaking Changes:**
+- ⚠️ Removed \`color\` prop - use \`semantic\` prop instead for colored headings
+- ⚠️ Removed custom prop escape hatch - component now uses strict typing
 `
       }
     }
@@ -85,14 +91,14 @@ export const Default: Story = {
 
 export const HeadingLevels: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '600px' }}>
+    <Box className="story-flex-column story-gap-16 story-max-width-600">
       <Heading level={1}>Heading 1 - Main page title</Heading>
       <Heading level={2}>Heading 2 - Major section</Heading>
       <Heading level={3}>Heading 3 - Sub-section</Heading>
       <Heading level={4}>Heading 4 - Sub-sub-section</Heading>
       <Heading level={5}>Heading 5 - Minor heading</Heading>
       <Heading level={6}>Heading 6 - Smallest heading</Heading>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -105,14 +111,14 @@ export const HeadingLevels: Story = {
 
 export const CustomSizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '600px' }}>
+    <Box className="story-flex-column story-gap-16 story-max-width-600">
       <Heading level={1} size="6xl">H1 with 6xl size</Heading>
       <Heading level={2} size="4xl">H2 with 4xl size</Heading>
       <Heading level={3} size="2xl">H3 with 2xl size</Heading>
       <Heading level={4} size="lg">H4 with lg size</Heading>
       <Heading level={5} size="sm">H5 with sm size</Heading>
       <Heading level={6} size="xs">H6 with xs size</Heading>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -125,7 +131,7 @@ export const CustomSizes: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
+    <Box className="story-flex-column story-gap-12 story-max-width-600">
       <Heading size="6xl">6XL Size - Largest heading</Heading>
       <Heading size="5xl">5XL Size - Extra large heading</Heading>
       <Heading size="4xl">4XL Size - Very large heading</Heading>
@@ -136,7 +142,7 @@ export const AllSizes: Story = {
       <Heading size="md">Medium Size - Small heading</Heading>
       <Heading size="sm">Small Size - Very small heading</Heading>
       <Heading size="xs">Extra Small Size - Tiny heading</Heading>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -149,7 +155,7 @@ export const AllSizes: Story = {
 
 export const FontWeights: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
+    <Box className="story-flex-column story-gap-12 story-max-width-600">
       <Heading level={2} weight="light">Light Weight (300)</Heading>
       <Heading level={2} weight="normal">Normal Weight (400)</Heading>
       <Heading level={2} weight="medium">Medium Weight (500)</Heading>
@@ -157,7 +163,7 @@ export const FontWeights: Story = {
       <Heading level={2} weight="bold">Bold Weight (700) - Default</Heading>
       <Heading level={2} weight="extrabold">Extra Bold Weight (800)</Heading>
       <Heading level={2} weight="black">Black Weight (900)</Heading>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -170,11 +176,11 @@ export const FontWeights: Story = {
 
 export const SemanticColors: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
+    <Box className="story-flex-column story-gap-12 story-max-width-600">
       <Heading semantic="primary">Primary Heading - Main content</Heading>
       <Heading semantic="secondary">Secondary Heading - Supporting content</Heading>
       <Heading semantic="tertiary">Tertiary Heading - Less important</Heading>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -187,11 +193,11 @@ export const SemanticColors: Story = {
 
 export const TextAlignment: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '400px' }}>
+    <Box className="story-flex-column story-gap-16 story-width-400">
       <Heading align="left">Left Aligned Heading</Heading>
       <Heading align="center">Center Aligned Heading</Heading>
       <Heading align="right">Right Aligned Heading</Heading>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -204,24 +210,28 @@ export const TextAlignment: Story = {
 
 export const TruncatedHeading: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '250px' }}>
-      <div>
-        <Heading level={3} style={{ marginBottom: '8px', fontSize: '14px', fontWeight: '600' }}>
-          Normal heading:
-        </Heading>
+    <Box className="story-flex-column story-gap-16 story-max-width-250">
+      <Box>
+        <Box marginBottom="2">
+          <Heading level={3} size="sm" weight="semibold">
+            Normal heading:
+          </Heading>
+        </Box>
         <Heading level={2}>
           This is a very long heading that would normally wrap to multiple lines
         </Heading>
-      </div>
-      <div>
-        <Heading level={3} style={{ marginBottom: '8px', fontSize: '14px', fontWeight: '600' }}>
-          Truncated heading:
-        </Heading>
+      </Box>
+      <Box>
+        <Box marginBottom="2">
+          <Heading level={3} size="sm" weight="semibold">
+            Truncated heading:
+          </Heading>
+        </Box>
         <Heading level={2} truncate>
           This is a very long heading that would normally wrap to multiple lines
         </Heading>
-      </div>
-    </div>
+      </Box>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -232,20 +242,17 @@ export const TruncatedHeading: Story = {
   }
 };
 
-export const CustomColors: Story = {
+export const InverseHeading: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
-      <Heading color="currentColor">Default Color</Heading>
-      <Heading color="red">Red Custom Color</Heading>
-      <Heading color="blue">Blue Custom Color</Heading>
-      <Heading color="green">Green Custom Color</Heading>
-      <Heading color="#8B5CF6">Purple Custom Color</Heading>
-    </div>
+    <Box padding="6" className="story-bg-dark story-flex-column story-gap-12 story-max-width-600">
+      <Heading semantic="inverse">Inverse Heading - Light text on dark background</Heading>
+      <Heading level={2} semantic="inverse">Use for headings on dark surfaces</Heading>
+    </Box>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'You can override semantic colors with custom color values for special use cases.'
+        story: 'Use the semantic="inverse" variant for headings on dark backgrounds. This ensures proper contrast and readability.'
       }
     }
   }
@@ -253,20 +260,12 @@ export const CustomColors: Story = {
 
 export const DarkMode: Story = {
   render: () => (
-    <div style={{ 
-      backgroundColor: '#1a1a1a', 
-      color: '#ffffff', 
-      padding: '24px', 
-      borderRadius: '8px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '16px'
-    }}>
+    <Box padding="6" className="story-bg-dark story-flex-column story-gap-16">
       <Heading level={1}>Primary Heading in Dark Mode</Heading>
       <Heading level={2} semantic="secondary">Secondary Heading in Dark Mode</Heading>
       <Heading level={3} semantic="tertiary">Tertiary Heading in Dark Mode</Heading>
       <Heading level={4} semantic="inverse">Inverse Heading in Dark Mode</Heading>
-    </div>
+    </Box>
   ),
   parameters: {
     docs: {
@@ -279,33 +278,33 @@ export const DarkMode: Story = {
 
 export const ContentHierarchy: Story = {
   render: () => (
-    <div style={{ maxWidth: '600px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <Box className="story-max-width-600 story-flex-column story-gap-16">
       <Heading level={1} size="4xl">Design System Guide</Heading>
-      
+
       <Heading level={2} size="2xl" semantic="secondary">
         Getting Started
       </Heading>
-      <p style={{ margin: '0 0 16px 0', color: '#64748b' }}>
+      <Box as="p" marginBottom="4" className="story-paragraph">
         This section covers the basics of using our design system components.
-      </p>
-      
+      </Box>
+
       <Heading level={3} size="xl">Installation</Heading>
-      <p style={{ margin: '0 0 16px 0', color: '#64748b' }}>
+      <Box as="p" marginBottom="4" className="story-paragraph">
         Install the component library using your preferred package manager.
-      </p>
-      
+      </Box>
+
       <Heading level={4} size="lg">Package Managers</Heading>
-      <p style={{ margin: '0 0 16px 0', color: '#64748b' }}>
+      <Box as="p" marginBottom="4" className="story-paragraph">
         We support npm, yarn, and pnpm for installation.
-      </p>
-      
+      </Box>
+
       <Heading level={2} size="2xl" semantic="secondary">
         Components
       </Heading>
-      <p style={{ margin: '0', color: '#64748b' }}>
+      <Box as="p" className="story-paragraph-no-margin">
         Explore our comprehensive collection of reusable components.
-      </p>
-    </div>
+      </Box>
+    </Box>
   ),
   parameters: {
     docs: {

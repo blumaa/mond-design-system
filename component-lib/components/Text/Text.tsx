@@ -1,6 +1,5 @@
 import React, { forwardRef } from 'react';
-import { Box, type BoxProps } from '../Box/Box';
-import { tokens } from '../../tokens';
+import './text.css';
 
 export type TextVariant =
   | 'display'
@@ -11,12 +10,9 @@ export type TextVariant =
   | 'body-sm'
   | 'caption'
   | 'overline'
-  | 'code'
-  // Legacy variants (for backward compatibility)
-  | 'body-lg'
-  | 'body-md';
+  | 'code';
 
-export type TextWeight = keyof typeof tokens.fontWeights;
+export type TextWeight = 'thin' | 'extralight' | 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
 
 export type TextAlign = 'left' | 'center' | 'right' | 'justify';
 
@@ -32,10 +28,10 @@ export type TextSemantic =
   | 'error'
   | 'accent';
 
-export interface TextProps extends Omit<BoxProps, 'as'> {
+export interface TextProps {
   /**
    * Text variant that controls size and line height
-   * @default 'body-md'
+   * @default 'body'
    */
   variant?: TextVariant;
 
@@ -55,6 +51,14 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
    * @default 'primary'
    */
   semantic?: TextSemantic;
+
+  /**
+   * Direct color token for custom colors
+   * Format: 'blue.500' | 'gray.600' | 'brand.primary.700' | etc.
+   * Overrides semantic color if both are provided
+   * Use semantic colors when possible for theme consistency
+   */
+  color?: string;
 
   /**
    * Whether text is italic
@@ -91,9 +95,20 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
    */
   children: React.ReactNode;
 
-  // Allow additional props like framer-motion's variants
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
+  /**
+   * Accessible label for screen readers
+   */
+  'aria-label'?: string;
+
+  /**
+   * Test ID for testing purposes
+   */
+  'data-testid'?: string;
+
+  /**
+   * HTML title attribute
+   */
+  title?: string;
 }
 
 /**
@@ -114,6 +129,11 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
  * <Text semantic="error" weight="bold">Error Message</Text>
  *
  * @example
+ * // Custom color using design tokens
+ * <Text color="blue.500">Custom blue text</Text>
+ * <Text color="brand.primary.700">Brand color text</Text>
+ *
+ * @example
  * // Text with modifiers
  * <Text variant="body" italic underline>Italic Underlined</Text>
  *
@@ -122,56 +142,55 @@ export interface TextProps extends Omit<BoxProps, 'as'> {
  * <Text as="p" variant="body">Paragraph text</Text>
  */
 export const Text = forwardRef<HTMLElement, TextProps>(({
-  variant = 'body-md',
+  variant = 'body',
   weight = 'normal',
   align,
   semantic = 'primary',
+  color,
   italic = false,
   underline = false,
   strikethrough = false,
   truncate = false,
   as = 'span',
   children,
-  className,
-  color,
+  'aria-label': ariaLabel,
+  'data-testid': dataTestId,
+  title,
   ...props
 }, ref) => {
+  const Element = as as React.ElementType;
+
+  // Convert color token to CSS variable if provided
+  const colorStyle = color ? {
+    '--text-color-override': `var(--mond-color-${color.replace(/\./g, '-')})`,
+  } as React.CSSProperties : undefined;
+
   // Build CSS class names
   const classNames = [
     `mond-text--${variant}`,
-    `mond-text--${semantic}`,
-    className,
+    !color && `mond-text--${semantic}`, // Only apply semantic if no color prop
+    weight && `mond-text--weight-${weight}`,
+    align && `mond-text--align-${align}`,
+    italic && 'mond-text--italic',
+    underline && 'mond-text--underline',
+    strikethrough && 'mond-text--strikethrough',
+    truncate && 'mond-text--truncate',
   ]
     .filter(Boolean)
     .join(' ');
 
-  const textDecorations = [];
-  if (underline) textDecorations.push('underline');
-  if (strikethrough) textDecorations.push('line-through');
-  const textDecoration = textDecorations.length > 0
-    ? textDecorations.join(' ')
-    : 'none';
-
   return (
-    <Box
-      as={as}
+    <Element
       ref={ref}
       className={classNames}
-      fontFamily={tokens.fontFamilies.sans}
-      fontWeight={tokens.fontWeights[weight as TextWeight]}
-      fontStyle={italic ? 'italic' : 'normal'}
-      textAlign={align}
-      textDecoration={textDecoration}
-      color={color} // Allow custom color to override semantic
-      {...(truncate && {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      })}
+      style={colorStyle}
+      aria-label={ariaLabel}
+      data-testid={dataTestId}
+      title={title}
       {...props}
     >
       {children}
-    </Box>
+    </Element>
   );
 });
 

@@ -12,6 +12,7 @@
   line-height: var(--mond-line-height-tight);
   font-weight: var(--mond-font-weight-bold);
   letter-spacing: var(--mond-letter-spacing-tight);
+  font-family: var(--mond-font-family-sans);
 }
 
 .mond-text--headline {
@@ -19,6 +20,7 @@
   line-height: var(--mond-line-height-tight);
   font-weight: var(--mond-font-weight-bold);
   letter-spacing: var(--mond-letter-spacing-tight);
+  font-family: var(--mond-font-family-sans);
 }
 
 .mond-text--title {
@@ -26,6 +28,7 @@
   line-height: var(--mond-line-height-normal);
   font-weight: var(--mond-font-weight-semibold);
   letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
 }
 
 .mond-text--subtitle {
@@ -33,6 +36,7 @@
   line-height: var(--mond-line-height-normal);
   font-weight: var(--mond-font-weight-medium);
   letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
 }
 
 .mond-text--body {
@@ -40,6 +44,7 @@
   line-height: var(--mond-line-height-relaxed);
   font-weight: var(--mond-font-weight-normal);
   letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
 }
 
 .mond-text--body-sm {
@@ -47,6 +52,7 @@
   line-height: var(--mond-line-height-relaxed);
   font-weight: var(--mond-font-weight-normal);
   letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
 }
 
 .mond-text--caption {
@@ -54,6 +60,7 @@
   line-height: var(--mond-line-height-normal);
   font-weight: var(--mond-font-weight-normal);
   letter-spacing: var(--mond-letter-spacing-wide);
+  font-family: var(--mond-font-family-sans);
 }
 
 .mond-text--overline {
@@ -62,6 +69,7 @@
   font-weight: var(--mond-font-weight-semibold);
   letter-spacing: var(--mond-letter-spacing-wider);
   text-transform: uppercase;
+  font-family: var(--mond-font-family-sans);
 }
 
 .mond-text--code {
@@ -72,60 +80,128 @@
   font-family: var(--mond-font-family-mono);
 }
 
-/* Legacy Variants - For Backward Compatibility */
-
-.mond-text--body-lg {
-  font-size: 1.125rem; /* 18px */
-  line-height: 1.625;
-  font-weight: var(--mond-font-weight-normal);
-  letter-spacing: var(--mond-letter-spacing-normal);
-}
-
-.mond-text--body-md {
-  font-size: 1rem; /* 16px */
-  line-height: 1.5;
-  font-weight: var(--mond-font-weight-normal);
-  letter-spacing: var(--mond-letter-spacing-normal);
-}
-
-/* Semantic Text Colors */
+/* ============================================
+   SEMANTIC COLORS
+   ============================================ */
 
 .mond-text--primary {
-  color: var(--mond-text-primary);
+  color: var(--text-color-override, var(--mond-text-primary));
 }
 
 .mond-text--secondary {
-  color: var(--mond-text-secondary);
+  color: var(--text-color-override, var(--mond-text-secondary));
 }
 
 .mond-text--tertiary {
-  color: var(--mond-text-tertiary);
+  color: var(--text-color-override, var(--mond-text-tertiary));
 }
 
 .mond-text--disabled {
-  color: var(--mond-text-disabled);
+  color: var(--text-color-override, var(--mond-text-disabled));
 }
 
 .mond-text--inverse {
-  color: var(--mond-text-inverse);
+  color: var(--text-color-override, var(--mond-text-inverse));
 }
 
 .mond-text--link {
-  color: var(--mond-text-link);
+  color: var(--text-color-override, var(--mond-text-link));
 }
 
 .mond-text--success {
-  color: var(--mond-text-success);
+  color: var(--text-color-override, var(--mond-text-success));
 }
 
 .mond-text--warning {
-  color: var(--mond-text-warning);
+  color: var(--text-color-override, var(--mond-text-warning));
 }
 
 .mond-text--error {
-  color: var(--mond-text-error);
+  color: var(--text-color-override, var(--mond-text-error));
 }
 
 .mond-text--accent {
-  color: var(--mond-text-accent);
+  color: var(--text-color-override, var(--mond-text-accent));
+}
+
+/* ============================================
+   FONT WEIGHTS
+   ============================================ */
+
+.mond-text--weight-thin {
+  font-weight: var(--mond-font-weight-thin);
+}
+
+.mond-text--weight-extralight {
+  font-weight: var(--mond-font-weight-extralight);
+}
+
+.mond-text--weight-light {
+  font-weight: var(--mond-font-weight-light);
+}
+
+.mond-text--weight-normal {
+  font-weight: var(--mond-font-weight-normal);
+}
+
+.mond-text--weight-medium {
+  font-weight: var(--mond-font-weight-medium);
+}
+
+.mond-text--weight-semibold {
+  font-weight: var(--mond-font-weight-semibold);
+}
+
+.mond-text--weight-bold {
+  font-weight: var(--mond-font-weight-bold);
+}
+
+.mond-text--weight-extrabold {
+  font-weight: var(--mond-font-weight-extrabold);
+}
+
+.mond-text--weight-black {
+  font-weight: var(--mond-font-weight-black);
+}
+
+/* ============================================
+   TEXT ALIGNMENT
+   ============================================ */
+
+.mond-text--align-left {
+  text-align: left;
+}
+
+.mond-text--align-center {
+  text-align: center;
+}
+
+.mond-text--align-right {
+  text-align: right;
+}
+
+.mond-text--align-justify {
+  text-align: justify;
+}
+
+/* ============================================
+   TEXT MODIFIERS
+   ============================================ */
+
+.mond-text--italic {
+  font-style: italic;
+}
+
+.mond-text--underline {
+  text-decoration: underline;
+}
+
+.mond-text--strikethrough {
+  text-decoration: line-through;
+}
+
+.mond-text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

@@ -13,7 +13,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Text } from './Text';
-import type { TextProps } from './Text';
 
 describe('Text Component - SSR Compatible', () => {
   describe('SSR Compatibility', () => {
@@ -98,18 +97,6 @@ describe('Text Component - SSR Compatible', () => {
       render(<Text variant="code">Code</Text>);
       const text = screen.getByText('Code');
       expect(text).toHaveClass('mond-text--code');
-    });
-
-    it('applies body-md variant class (legacy)', () => {
-      render(<Text variant="body-md">Body MD</Text>);
-      const text = screen.getByText('Body MD');
-      expect(text).toHaveClass('mond-text--body-md');
-    });
-
-    it('applies body-lg variant class (legacy)', () => {
-      render(<Text variant="body-lg">Body LG</Text>);
-      const text = screen.getByText('Body LG');
-      expect(text).toHaveClass('mond-text--body-lg');
     });
   });
 
@@ -196,93 +183,107 @@ describe('Text Component - SSR Compatible', () => {
   });
 
   describe('Text Modifiers', () => {
-    it('applies italic style', () => {
+    it('applies italic class', () => {
       render(<Text italic>Italic</Text>);
       const text = screen.getByText('Italic');
-      expect(text).toHaveStyle('font-style: italic');
+      expect(text).toHaveClass('mond-text--italic');
     });
 
-    it('applies underline decoration', () => {
+    it('applies underline class', () => {
       render(<Text underline>Underline</Text>);
       const text = screen.getByText('Underline');
-      expect(text).toHaveStyle('text-decoration: underline');
+      expect(text).toHaveClass('mond-text--underline');
     });
 
-    it('applies strikethrough decoration', () => {
+    it('applies strikethrough class', () => {
       render(<Text strikethrough>Strikethrough</Text>);
       const text = screen.getByText('Strikethrough');
-      expect(text).toHaveStyle('text-decoration: line-through');
+      expect(text).toHaveClass('mond-text--strikethrough');
     });
 
-    it('applies both underline and strikethrough', () => {
+    it('applies both underline and strikethrough classes', () => {
       render(<Text underline strikethrough>Both</Text>);
       const text = screen.getByText('Both');
-      expect(text).toHaveStyle('text-decoration: underline line-through');
+      expect(text).toHaveClass('mond-text--underline');
+      expect(text).toHaveClass('mond-text--strikethrough');
     });
 
-    it('applies truncate styles', () => {
+    it('applies truncate class', () => {
       render(<Text truncate>Truncated text</Text>);
       const text = screen.getByText('Truncated text');
-      expect(text).toHaveStyle({
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      });
+      expect(text).toHaveClass('mond-text--truncate');
     });
   });
 
   describe('Font Weight', () => {
-    it('applies normal weight by default', () => {
+    it('applies normal weight class by default', () => {
       render(<Text>Normal</Text>);
       const text = screen.getByText('Normal');
-      expect(text).toHaveStyle('font-weight: 400');
+      expect(text).toHaveClass('mond-text--weight-normal');
     });
 
-    it('applies bold weight', () => {
+    it('applies bold weight class', () => {
       render(<Text weight="bold">Bold</Text>);
       const text = screen.getByText('Bold');
-      expect(text).toHaveStyle('font-weight: 700');
+      expect(text).toHaveClass('mond-text--weight-bold');
     });
 
-    it('applies medium weight', () => {
+    it('applies medium weight class', () => {
       render(<Text weight="medium">Medium</Text>);
       const text = screen.getByText('Medium');
-      expect(text).toHaveStyle('font-weight: 500');
+      expect(text).toHaveClass('mond-text--weight-medium');
     });
   });
 
   describe('Text Alignment', () => {
-    it('applies left alignment', () => {
+    it('applies left alignment class', () => {
       render(<Text align="left">Left</Text>);
       const text = screen.getByText('Left');
-      expect(text).toHaveStyle('text-align: left');
+      expect(text).toHaveClass('mond-text--align-left');
     });
 
-    it('applies center alignment', () => {
+    it('applies center alignment class', () => {
       render(<Text align="center">Center</Text>);
       const text = screen.getByText('Center');
-      expect(text).toHaveStyle('text-align: center');
+      expect(text).toHaveClass('mond-text--align-center');
     });
 
-    it('applies right alignment', () => {
+    it('applies right alignment class', () => {
       render(<Text align="right">Right</Text>);
       const text = screen.getByText('Right');
-      expect(text).toHaveStyle('text-align: right');
+      expect(text).toHaveClass('mond-text--align-right');
     });
 
-    it('applies justify alignment', () => {
+    it('applies justify alignment class', () => {
       render(<Text align="justify">Justify</Text>);
       const text = screen.getByText('Justify');
-      expect(text).toHaveStyle('text-align: justify');
+      expect(text).toHaveClass('mond-text--align-justify');
     });
   });
 
-  describe('Custom ClassName', () => {
-    it('applies custom className alongside variant class', () => {
-      render(<Text className="custom-class">Custom</Text>);
-      const text = screen.getByText('Custom');
-      expect(text).toHaveClass('mond-text--body-md'); // default variant
-      expect(text).toHaveClass('custom-class');
+  describe('Color Token Support', () => {
+    it('applies color token via CSS custom property', () => {
+      render(<Text color="blue.500">Blue Text</Text>);
+      const text = screen.getByText('Blue Text');
+      expect(text).toHaveStyle({
+        '--text-color-override': 'var(--mond-color-blue-500)',
+      });
+    });
+
+    it('does not apply semantic class when color prop is provided', () => {
+      render(<Text semantic="primary" color="red.500">Custom Color</Text>);
+      const text = screen.getByText('Custom Color');
+      expect(text).not.toHaveClass('mond-text--primary');
+      expect(text).toHaveStyle({
+        '--text-color-override': 'var(--mond-color-red-500)',
+      });
+    });
+
+    it('applies semantic class when no color prop is provided', () => {
+      render(<Text semantic="primary">Primary Color</Text>);
+      const text = screen.getByText('Primary Color');
+      expect(text).toHaveClass('mond-text--primary');
+      expect(text).not.toHaveAttribute('style');
     });
   });
 
@@ -297,7 +298,7 @@ describe('Text Component - SSR Compatible', () => {
 
   describe('Backward Compatibility', () => {
     it('does NOT accept isDarkMode prop (removed)', () => {
-      const props = { children: 'Test', isDarkMode: true } as any;
+      const props = { children: 'Test', isDarkMode: true } as unknown;
       render(<Text {...props} />);
       const text = screen.getByText('Test');
       expect(text).toBeInTheDocument();

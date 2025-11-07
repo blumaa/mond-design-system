@@ -305,51 +305,56 @@ export const Popover: React.FC<PopoverProps> = ({
 
   const placementStyles = getPlacementStyles(placement, offset);
 
+  const contentStyle = {
+    position: 'absolute' as const,
+    zIndex: 1000,
+    padding: '10px',
+    backgroundColor: theme('surface.elevated'),
+    color: theme('text.primary'),
+    border: `1px solid ${theme('border.default')}`,
+    borderRadius: radii.md,
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.normal,
+    fontFamily: fontFamilies.sans,
+    minWidth: '200px',
+    maxWidth: '320px',
+    lineHeight: '1.5',
+    boxShadow: shadows.lg,
+    ...placementStyles,
+  };
+
+  const closeButtonStyle = {
+    position: 'absolute' as const,
+    top: 0,
+    right: '4px',
+    zIndex: 1,
+  };
+
   return (
-    <Box
+    <div
       ref={containerRef}
       className={className}
-      position="relative"
-      display="inline-block"
+      style={{ position: 'relative', display: 'inline-block' }}
       data-testid={dataTestId}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Box onClick={handleToggle}>
+      <div onClick={handleToggle}>
         {children}
-      </Box>
+      </div>
 
       {isOpen && (
-        <Box
+        <div
           ref={contentRef}
           className={contentClassName}
+          style={contentStyle}
           role="dialog"
           aria-modal="false"
           aria-label={ariaLabel}
           data-testid={`${dataTestId || 'popover'}-content`}
-          position="absolute"
-          zIndex={1000}
-          p={10}
-          bg="surface.elevated"
-          color="text.primary"
-          border={`1px solid ${theme('border.default')}`}
-          borderRadius={radii.md}
-          fontSize={fontSizes.sm}
-          fontWeight={fontWeights.normal}
-          fontFamily={fontFamilies.sans}
-          minWidth="200px"
-          maxWidth="320px"
-          lineHeight="1.5"
-          boxShadow={shadows.lg}
-          {...placementStyles}
         >
           {trigger === 'hover' && (
-            <Box
-              position="absolute"
-              top={0}
-              right={4}
-              zIndex={1}
-            >
+            <div style={closeButtonStyle}>
               <Button
                 variant="ghost"
                 size="sm"
@@ -360,12 +365,12 @@ export const Popover: React.FC<PopoverProps> = ({
               >
                 ×
               </Button>
-            </Box>
+            </div>
           )}
           {content}
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 

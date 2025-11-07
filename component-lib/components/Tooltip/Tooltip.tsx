@@ -240,45 +240,46 @@ export const Tooltip: React.FC<TooltipProps> = ({
     },
   });
 
+  const tooltipStyle = {
+    position: 'absolute' as const,
+    zIndex: 1000,
+    padding: `${spacing[2]} ${spacing[3]}`,
+    backgroundColor: theme('surface.elevated'),
+    color: theme('text.primary'),
+    border: `1px solid ${theme('border.default')}`,
+    borderRadius: radii.md,
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.normal,
+    fontFamily: fontFamilies.sans,
+    maxWidth: '200px',
+    ...getPlacementStyles(placement),
+    lineHeight: '1.4',
+    wordWrap: 'break-word' as const,
+    boxShadow: shadows.md,
+    opacity: isVisible ? 1 : 0,
+    visibility: (isVisible ? 'visible' : 'hidden') as React.CSSProperties['visibility'],
+    transition: 'opacity 150ms ease, visibility 150ms ease',
+    pointerEvents: 'none' as const,
+  };
+
   return (
-    <Box 
+    <div
       ref={containerRef}
       className={className}
-      position="relative"
-      display="inline-block"
+      style={{ position: 'relative', display: 'inline-block' }}
       data-testid={dataTestId}
     >
       {childElement}
-      <Box
-        style={{
-          position: 'absolute',
-          zIndex: 1000,
-          padding: `${spacing[2]} ${spacing[3]}`,
-          backgroundColor: theme('surface.elevated'),
-          color: theme('text.primary'),
-          border: `1px solid ${theme('border.default')}`,
-          borderRadius: radii.md,
-          fontSize: fontSizes.sm,
-          fontWeight: fontWeights.normal,
-          fontFamily: fontFamilies.sans,
-          maxWidth: '200px',
-          ...getPlacementStyles(placement),
-          lineHeight: '1.4',
-          wordWrap: 'break-word',
-          boxShadow: shadows.md,
-          opacity: isVisible ? 1 : 0,
-          visibility: (isVisible ? 'visible' : 'hidden') as React.CSSProperties['visibility'],
-          transition: 'opacity 150ms ease, visibility 150ms ease',
-          pointerEvents: 'none',
-        }}
+      <div
+        style={tooltipStyle}
         data-testid={`${dataTestId || 'tooltip'}-content`}
         role="tooltip"
         aria-hidden={!isVisible}
       >
         {content}
-        <Box style={arrowStyles} data-testid={`${dataTestId || 'tooltip'}-arrow`} />
-      </Box>
-    </Box>
+        <div style={arrowStyles} data-testid={`${dataTestId || 'tooltip'}-arrow`} />
+      </div>
+    </div>
   );
 };
 

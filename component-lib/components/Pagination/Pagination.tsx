@@ -90,7 +90,7 @@ const getSizeStyles = (size: PaginationSize) => {
       return {
         buttonSize: 'md' as const,
         selectSize: 'md' as const,
-        textVariant: 'body-md' as const,
+        textVariant: 'body' as const,
         gap: spacing[2],
         containerPadding: spacing[3],
       };
@@ -98,7 +98,7 @@ const getSizeStyles = (size: PaginationSize) => {
       return {
         buttonSize: 'lg' as const,
         selectSize: 'lg' as const,
-        textVariant: 'body-lg' as const,
+        textVariant: 'body' as const,
         gap: spacing[3],
         containerPadding: spacing[4],
       };
@@ -106,7 +106,7 @@ const getSizeStyles = (size: PaginationSize) => {
       return {
         buttonSize: 'md' as const,
         selectSize: 'md' as const,
-        textVariant: 'body-md' as const,
+        textVariant: 'body' as const,
         gap: spacing[2],
         containerPadding: spacing[3],
       };
@@ -243,13 +243,12 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
       >
         {/* Items per page selector and info */}
         {(showItemsPerPage || showTotalInfo) && (
-          <Box style={infoStyles}>
+          <div style={infoStyles}>
             {showItemsPerPage && onItemsPerPageChange && (
-              <Box display="flex" alignItems="center" gap="4px">
-                <Text 
-                  variant={sizeStyles.textVariant} 
-                  semantic="secondary" 
-                  
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Text
+                  variant={sizeStyles.textVariant}
+                  semantic="secondary"
                 >
                   Show
                 </Text>
@@ -261,36 +260,33 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                     value: option.toString(),
                     label: option.toString(),
                   }))}
-                  
                 />
-                <Text 
-                  variant={sizeStyles.textVariant} 
-                  semantic="secondary" 
-                  
+                <Text
+                  variant={sizeStyles.textVariant}
+                  semantic="secondary"
                 >
                   items
                 </Text>
-              </Box>
+              </div>
             )}
-            
+
             {showTotalInfo && (
-              <Text 
-                variant={sizeStyles.textVariant} 
-                semantic="secondary" 
-                
+              <Text
+                variant={sizeStyles.textVariant}
+                semantic="secondary"
               >
-                {totalItems === 0 
+                {totalItems === 0
                   ? 'No items'
                   : `${startItem}-${endItem} of ${totalItems} items`
                 }
               </Text>
             )}
-          </Box>
+          </div>
         )}
 
         {/* Navigation controls */}
         {totalPages > 1 && (
-          <Box style={navigationStyles}>
+          <div style={navigationStyles}>
             {/* Previous button */}
             <Button
               variant="outline"
@@ -320,22 +316,17 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
             </Button>
 
             {/* Page numbers */}
-            <Box 
-              display="flex" 
-              alignItems="center" 
-              gap="4px"
-            >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               {pageNumbers.map((page, index) => (
                 page === 'ellipsis' ? (
-                  <Box key={`ellipsis-${index}`} px="8px">
-                    <Text 
-                      variant={sizeStyles.textVariant} 
-                      semantic="secondary" 
-                      
+                  <div key={`ellipsis-${index}`} style={{ paddingLeft: '8px', paddingRight: '8px' }}>
+                    <Text
+                      variant={sizeStyles.textVariant}
+                      semantic="secondary"
                     >
                       ...
                     </Text>
-                  </Box>
+                  </div>
                 ) : (
                   <Button
                     key={page}
@@ -344,13 +335,12 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                     onClick={() => onPageChange(page)}
                     aria-label={`Go to page ${page}`}
                     aria-current={page === currentPage ? 'page' : undefined}
-                    
                   >
                     {page}
                   </Button>
                 )
               ))}
-            </Box>
+            </div>
 
             {/* Last page button */}
             <Button
@@ -379,7 +369,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                 <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
               </Icon>
             </Button>
-          </Box>
+          </div>
         )}
       </Box>
     );

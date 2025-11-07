@@ -1,8 +1,8 @@
-'use client';
 import React from 'react';
-import { radii, fontSizes, fontFamilies } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
-import { Box } from '../Box/Box';
+import { Box } from '../Box';
+import { Label } from '../Label';
+import { Text } from '../Text';
+import './checkbox.css';
 
 export type CheckboxSize = 'sm' | 'md' | 'lg';
 
@@ -13,18 +13,17 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
    * @default 'md'
    */
   size?: CheckboxSize;
-  
-  
+
   /**
    * Label text
    */
   label?: string;
-  
+
   /**
    * Error message to display
    */
   error?: string;
-  
+
   /**
    * Helper text
    */
@@ -37,33 +36,29 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
   indeterminate?: boolean;
 }
 
-const getSizeStyles = (size: CheckboxSize) => {
-  switch (size) {
-    case 'sm':
-      return {
-        width: '16px',
-        height: '16px',
-        fontSize: fontSizes.sm,
-      };
-    case 'md':
-      return {
-        width: '20px',
-        height: '20px',
-        fontSize: fontSizes.base,
-      };
-    case 'lg':
-      return {
-        width: '24px',
-        height: '24px',
-        fontSize: fontSizes.lg,
-      };
-    default:
-      return {};
-  }
-};
-
+/**
+ * Checkbox Component
+ *
+ * A versatile, SSR-compatible checkbox component that uses CSS variables for theming.
+ * Supports multiple sizes, error states, and indeterminate state.
+ *
+ * **SSR-Compatible**: Uses CSS classes and CSS variables instead of runtime theme resolution.
+ * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
+ *
+ * @example
+ * // Basic checkbox
+ * <Checkbox label="Accept terms" />
+ *
+ * @example
+ * // Checkbox with error
+ * <Checkbox label="Required field" error="This field is required" />
+ *
+ * @example
+ * // Indeterminate checkbox
+ * <Checkbox label="Select all" indeterminate />
+ */
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ 
+  ({
     size = 'md',
     label,
     error,
@@ -71,11 +66,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     indeterminate = false,
     className,
     checked,
+    disabled,
     'data-testid': dataTestId,
-    ...props 
+    ...props
   }, ref) => {
-    const theme = useTheme();
-    const sizeStyles = getSizeStyles(size);
     const checkboxId = props.id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
 
     // Handle indeterminate state
@@ -88,124 +82,56 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       }
     }, [indeterminate]);
 
-    const checkboxStyles = {
-      width: sizeStyles.width,
-      height: sizeStyles.height,
-      borderRadius: radii.sm,
-      border: `1px solid ${error ? theme('border.error') : theme('border.default')}`,
-      backgroundColor: checked || indeterminate ? theme('interactive.primary.background') : theme('surface.input'),
-      cursor: props.disabled ? 'not-allowed' : 'pointer',
-      outline: 'none',
-      transition: 'background-color 150ms ease, border-color 150ms ease',
-      contain: 'layout style',
-      position: 'relative' as const,
-      flexShrink: 0,
-    };
-
-    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-      props.onFocus?.(e);
-    };
-
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      props.onBlur?.(e);
-    };
+    // Build CSS class names
+    const classNames = [
+      'mond-checkbox',
+      `mond-checkbox--${size}`,
+      disabled && 'mond-checkbox--disabled',
+      error && 'mond-checkbox--error',
+      indeterminate && 'mond-checkbox--indeterminate',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     return (
-      <Box className={className} data-testid={dataTestId} style={{ contain: 'layout' }}>
-        <Box as="label" display="flex" alignItems="center">
-          <Box 
-            position="relative" 
-            style={{ 
-              flexShrink: 0,
-              width: sizeStyles.width,
-              height: sizeStyles.height,
-              minWidth: sizeStyles.width,
-              minHeight: sizeStyles.height
-            }}
-          >
+      <div className={classNames} data-testid={dataTestId}>
+        <label className="mond-checkbox__label">
+          <div className="mond-checkbox__input-container">
             <input
               ref={inputRef}
               type="checkbox"
               id={checkboxId}
               checked={checked}
-              style={{
-                position: 'absolute',
-                opacity: 0,
-                width: '100%',
-                height: '100%',
-                margin: 0,
-                cursor: props.disabled ? 'not-allowed' : 'pointer',
-              }}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              disabled={disabled}
+              className="mond-checkbox__input"
               {...props}
             />
-            <Box data-checkbox style={checkboxStyles}>
-              {/* Always render both icons to prevent layout shift */}
-              <Box
-                as="span"
-                position="absolute"
-                top="50%"
-                left="50%"
-                style={{
-                  transform: 'translate(-50%, -50%)',
-                  color: theme('interactive.primary.text'),
-                  fontSize: size === 'sm' ? '10px' : size === 'md' ? '12px' : '14px',
-                  lineHeight: 1,
-                  opacity: checked && !indeterminate ? 1 : 0,
-                  transition: 'opacity 150ms ease',
-                }}
-              >
+            <div className="mond-checkbox__box" data-checkbox>
+              {/* Check icon (visible when checked and not indeterminate) */}
+              <span className="mond-checkbox__icon mond-checkbox__icon--check">
                 ✓
-              </Box>
-              <Box
-                as="span"
-                position="absolute"
-                top="50%"
-                left="50%"
-                style={{
-                  transform: 'translate(-50%, -50%)',
-                  color: theme('interactive.primary.text'),
-                  fontSize: size === 'sm' ? '10px' : size === 'md' ? '12px' : '14px',
-                  lineHeight: 1,
-                  opacity: indeterminate ? 1 : 0,
-                  transition: 'opacity 150ms ease',
-                }}
-              >
+              </span>
+              {/* Indeterminate icon (visible when indeterminate) */}
+              <span className="mond-checkbox__icon mond-checkbox__icon--indeterminate">
                 −
-              </Box>
-            </Box>
-          </Box>
+              </span>
+            </div>
+          </div>
           {label && (
-            <Box ml={2}>
-              <Box
-                as="span"
-                fontSize={sizeStyles.fontSize}
-                fontWeight="normal"
-                color={props.disabled ? theme('text.disabled') : theme('text.primary')}
-                style={{
-                  fontFamily: fontFamilies.sans,
-                  cursor: props.disabled ? 'not-allowed' : 'pointer',
-                  userSelect: 'none',
-                }}
-              >
+            <Box>
+              <Label size={size} disabled={disabled} required={props.required}>
                 {label}
-              </Box>
+              </Label>
               {(error || helperText) && (
-                <Box
-                  as="span"
-                  display="block"
-                  mt={1}
-                  fontSize={12}
-                  color={error ? theme('text.error') : theme('text.secondary')}
-                >
+                <Text variant="caption" semantic={error ? "error" : "secondary"}>
                   {error || helperText}
-                </Box>
+                </Text>
               )}
             </Box>
           )}
-        </Box>
-      </Box>
+        </label>
+      </div>
     );
   }
 );

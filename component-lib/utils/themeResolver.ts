@@ -34,18 +34,18 @@ function isRawValue(value: string): boolean {
  *
  * @param semanticTokenPath - Path to semantic token (e.g., 'text.primary')
  * @param theme - Current theme ('light' or 'dark')
- * @param brandTheme - Optional brand theme for overrides
- * @returns Resolved hex color value
+ * @param _brandTheme - (Deprecated) Optional brand theme for overrides - no longer used as brand colors are now CSS variables
+ * @returns Resolved hex color value or CSS variable reference for brand colors
  *
  * @example
  * resolveSemanticToken('text.primary', 'light') // returns '#0f172a' (gray.900)
- * resolveSemanticToken('interactive.primary.background', 'dark') // returns '#0ea5e9' (blue.500)
- * resolveSemanticToken('interactive.primary.background', 'light', cypherTheme) // returns brand primary
+ * resolveSemanticToken('interactive.primary.background', 'dark') // returns 'var(--mond-color-brand-primary-500)'
+ * resolveSemanticToken('interactive.primary.background', 'light') // returns 'var(--mond-color-brand-primary-600)'
  */
 export function resolveSemanticToken(
   semanticTokenPath: string,
   theme: Theme = 'light',
-  brandTheme?: BrandTheme
+  _brandTheme?: BrandTheme
 ): string {
   // Check if it's a raw value (not a token path)
   if (isRawValue(semanticTokenPath)) {
@@ -137,20 +137,18 @@ export function resolveSemanticToken(
   }
 
   // Check if this is a brand color reference (e.g., 'brand.primary.600')
-  if (colorReference.startsWith('brand.') && brandTheme) {
+  // Return a CSS variable reference so brand colors can be overridden at runtime
+  if (colorReference.startsWith('brand.')) {
     const brandPath = colorReference.replace('brand.', '');
     const [colorType, shade] = brandPath.split('.');
-    
-    if (colorType && shade && brandTheme.colors.brand[colorType as keyof typeof brandTheme.colors.brand]) {
-      const brandColorScale = brandTheme.colors.brand[colorType as keyof typeof brandTheme.colors.brand];
-      const brandColor = (brandColorScale as unknown as Record<string, string>)?.[shade];
-      
-      if (brandColor) {
-        return brandColor;
-      }
+
+    if (colorType && shade) {
+      // Return CSS variable reference for brand colors
+      // This allows runtime brand switching via CSS variable overrides
+      return `var(--mond-color-brand-${colorType}-${shade})`;
     }
   }
-  
+
   // Resolve the color reference from base tokens (e.g., 'gray.900' -> '#0f172a')
   const resolvedColor = getNestedValue(tokens.colors, colorReference) as string;
 

@@ -1,4 +1,4 @@
-import { render, screen, renderWithDarkMode } from '../../test-utils';
+import { render, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Label } from './Label';
 
@@ -41,109 +41,75 @@ describe('Label', () => {
   it('applies size variants correctly', () => {
     const { rerender } = render(<Label size="sm">Username</Label>);
     let label = screen.getByText('Username');
-    expect(label).toHaveStyle('font-size: 0.75rem'); // xs
     expect(label).toHaveClass('mond-label--sm');
 
     rerender(<Label size="lg">Username</Label>);
     label = screen.getByText('Username');
-    expect(label).toHaveStyle('font-size: 1rem'); // base
     expect(label).toHaveClass('mond-label--lg');
   });
 
   it('applies weight variants correctly', () => {
     const { rerender } = render(<Label weight="normal">Username</Label>);
     let label = screen.getByText('Username');
-    expect(label).toHaveStyle('font-weight: 400'); // normal
+    expect(label).toHaveClass('mond-label--weight-normal');
 
     rerender(<Label weight="semibold">Username</Label>);
     label = screen.getByText('Username');
-    expect(label).toHaveStyle('font-weight: 600'); // semibold
+    expect(label).toHaveClass('mond-label--weight-semibold');
   });
 
-  it('applies semantic colors in light mode', () => {
-    const { rerender } = render(<Label semantic="default" >Username</Label>);
+  it('applies semantic color classes', () => {
+    const { rerender } = render(<Label semantic="default">Username</Label>);
     let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #414A4C'); // text.primary (gray.900)
+    expect(label).toHaveClass('mond-label--default');
 
-    rerender(<Label semantic="error" >Username</Label>);
+    rerender(<Label semantic="error">Username</Label>);
     label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #dc2626'); // red.600
+    expect(label).toHaveClass('mond-label--error');
 
-    rerender(<Label semantic="success" >Username</Label>);
+    rerender(<Label semantic="success">Username</Label>);
     label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #16a34a'); // green.600
-  });
-
-  it('applies semantic colors in dark mode', () => {
-    const { rerender } = renderWithDarkMode(<Label semantic="default" >Username</Label>);
-    let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #DDE6ED'); // text.primary (gray.100)
-
-    rerender(<Label semantic="error" >Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #f87171'); // red.400
-
-    rerender(<Label semantic="success" >Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #4ade80'); // green.400
+    expect(label).toHaveClass('mond-label--success');
   });
 
   it('applies disabled state correctly', () => {
-    const { rerender } = render(<Label disabled >Username</Label>);
-    let label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #94a3b8'); // gray.400
-    expect(label).toHaveStyle('cursor: not-allowed');
+    render(<Label disabled>Username</Label>);
+    const label = screen.getByText('Username');
     expect(label).toHaveClass('mond-label--disabled');
-
-    rerender(<Label disabled >Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #94a3b8'); // text.disabled (gray.400)
   });
 
   it('disabled state overrides semantic colors', () => {
-    render(<Label disabled semantic="error" >Username</Label>);
-    
+    render(<Label disabled semantic="error">Username</Label>);
+
     const label = screen.getByText('Username');
-    expect(label).toHaveStyle('color: #94a3b8'); // gray.400, not red
+    expect(label).toHaveClass('mond-label--disabled');
+    expect(label).not.toHaveClass('mond-label--error');
   });
 
-  it('applies custom className', () => {
-    render(<Label className="custom-label">Username</Label>);
-    
+  it('applies custom color token', () => {
+    render(<Label color="blue.500">Username</Label>);
+
     const label = screen.getByText('Username');
-    expect(label).toHaveClass('mond-label', 'custom-label');
+    expect(label).toHaveStyle('--label-color-override: var(--mond-color-blue-500)');
   });
 
-  it('forwards additional props to Box', () => {
-    render(<Label data-testid="custom-label" p="2">Username</Label>);
-    
-    const label = screen.getByTestId('custom-label');
-    expect(label).toBeInTheDocument();
-  });
+  it('color prop overrides semantic color', () => {
+    render(<Label semantic="error" color="blue.500">Username</Label>);
 
-  it('applies custom styles', () => {
-    render(<Label style={{ textTransform: 'uppercase' }}>Username</Label>);
-    
     const label = screen.getByText('Username');
-    expect(label).toHaveStyle('text-transform: uppercase');
+    // Should have color override style
+    expect(label).toHaveStyle('--label-color-override: var(--mond-color-blue-500)');
+    // Should NOT have semantic color class when color prop is provided
+    expect(label).not.toHaveClass('mond-label--error');
   });
 
-  it('has proper cursor styles', () => {
-    const { rerender } = render(<Label>Username</Label>);
-    let label = screen.getByText('Username');
-    expect(label).toHaveStyle('cursor: pointer');
+  it('applies semantic color when no color prop provided', () => {
+    render(<Label semantic="error">Username</Label>);
 
-    rerender(<Label disabled>Username</Label>);
-    label = screen.getByText('Username');
-    expect(label).toHaveStyle('cursor: not-allowed');
-  });
-
-  it('applies default margin bottom', () => {
-    render(<Label>Username</Label>);
-    
     const label = screen.getByText('Username');
-    expect(label).toHaveStyle('margin-bottom: 0.25rem');
+    expect(label).toHaveClass('mond-label--error');
   });
+
 
   it('renders complex children', () => {
     render(
@@ -160,18 +126,10 @@ describe('Label', () => {
     expect(optional).toBeInTheDocument();
   });
 
-  it('required indicator has proper styling', () => {
-    render(<Label required >Username</Label>);
-    
-    const required = screen.getByText('*');
-    expect(required).toHaveStyle('color: #dc2626'); // text.error (red.600)
-    expect(required).toHaveStyle('margin-left: 0.25rem');
-  });
+  it('required indicator has proper class', () => {
+    render(<Label required>Username</Label>);
 
-  it('required indicator adapts to dark mode', () => {
-    renderWithDarkMode(<Label required >Username</Label>);
-    
     const required = screen.getByText('*');
-    expect(required).toHaveStyle('color: #f87171'); // red.400 in dark mode
+    expect(required).toHaveClass('mond-label__required');
   });
 });

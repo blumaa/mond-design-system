@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useGlobals } from 'storybook/internal/preview-api';
 import { Link } from './Link';
+import { Box } from '../Box';
+import '../stories.css';
 
 // Example icon component for stories
 const ExampleIcon = () => (
@@ -86,23 +88,20 @@ A semantic link component that maintains consistent styling and accessibility ac
     (Story, context) => {
       const [globals] = useGlobals();
       const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
-      
+
       // Override the prop based on Storybook theme
       const storyArgs = {
         ...context.args,
         isDarkMode: isDark,
       };
-      
+
       return (
-        <div
-          style={{
-            padding: '3rem',
-            backgroundColor: isDark ? '#27374D' : '#F2F3F4',
-            borderRadius: '8px',
-          }}
+        <Box
+          padding="12"
+          className={isDark ? 'story-bg-medium' : 'story-bg-light'}
         >
           <Story args={storyArgs} />
-        </div>
+        </Box>
       );
     },
   ],

@@ -1,9 +1,5 @@
-/* Import Design System Styles */
+/* Import CSS Variables from Design System */
 @import '../dist/theme.css';
-@import '../dist/button.css';
-@import '../dist/badge.css';
-@import '../dist/avatar.css';
-@import '../dist/text.css';
 
 /* Global font family - ensure DM Sans is used everywhere */
 *, *::before, *::after {

@@ -1,50 +1,92 @@
 import { forwardRef } from 'react';
-import { Box, BoxProps } from '../Box/Box';
-import { tokens } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
+import './label.css';
 
-export interface LabelProps extends Omit<BoxProps, 'as' | 'children'> {
+export type LabelSize = 'sm' | 'md' | 'lg';
+export type LabelWeight = 'normal' | 'medium' | 'semibold';
+export type LabelSemantic = 'default' | 'error' | 'success';
+
+export interface LabelProps {
+  /**
+   * Label content
+   */
   children: React.ReactNode;
+
+  /**
+   * Associates label with form element
+   */
   htmlFor?: string;
+
+  /**
+   * Shows required indicator
+   * @default false
+   */
   required?: boolean;
+
+  /**
+   * Disables the label
+   * @default false
+   */
   disabled?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  weight?: 'normal' | 'medium' | 'semibold';
-  semantic?: 'default' | 'error' | 'success';
+
+  /**
+   * Label size
+   * @default 'md'
+   */
+  size?: LabelSize;
+
+  /**
+   * Font weight
+   * @default 'medium'
+   */
+  weight?: LabelWeight;
+
+  /**
+   * Semantic color variant
+   * @default 'default'
+   */
+  semantic?: LabelSemantic;
+
+  /**
+   * Direct color token for custom colors
+   * Format: 'blue.500' | 'gray.600' | 'brand.primary.700' | etc.
+   * Overrides semantic color if both are provided
+   * Use semantic colors when possible for theme consistency
+   */
+  color?: string;
+
+  /**
+   * Custom required indicator
+   * @default '*'
+   */
   requiredIndicator?: string;
+
+  /**
+   * Test ID for testing purposes
+   */
+  'data-testid'?: string;
 }
 
-const getSizeStyles = (size: string) => {
-  const sizeMap = {
-    sm: {
-      fontSize: tokens.fontSizes.xs,
-      lineHeight: tokens.lineHeights.tight,
-    },
-    md: {
-      fontSize: tokens.fontSizes.sm, 
-      lineHeight: tokens.lineHeights.snug,
-    },
-    lg: {
-      fontSize: tokens.fontSizes.base,
-      lineHeight: tokens.lineHeights.normal,
-    },
-  };
-  return sizeMap[size as keyof typeof sizeMap];
-};
-
-const getSemanticColor = (semantic: string, theme: ReturnType<typeof useTheme>, disabled: boolean) => {
-  if (disabled) {
-    return theme('text.disabled');
-  }
-
-  const colorMap = {
-    default: theme('text.primary'),
-    error: theme('text.error'),
-    success: theme('text.success'),
-  };
-  return colorMap[semantic as keyof typeof colorMap];
-};
-
+/**
+ * Label Component
+ *
+ * A flexible label component that uses CSS variables for theming.
+ * Supports multiple sizes, weights, and semantic colors.
+ *
+ * **SSR-Compatible**: Uses CSS classes and CSS variables instead of runtime theme resolution.
+ * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
+ *
+ * @example
+ * // Basic label
+ * <Label htmlFor="email">Email</Label>
+ *
+ * @example
+ * // Label with required indicator
+ * <Label htmlFor="password" required>Password</Label>
+ *
+ * @example
+ * // Label with semantic color
+ * <Label semantic="error">Error Field</Label>
+ */
 export const Label = forwardRef<HTMLLabelElement, LabelProps>(({
   children,
   htmlFor,
@@ -53,54 +95,43 @@ export const Label = forwardRef<HTMLLabelElement, LabelProps>(({
   size = 'md',
   weight = 'medium',
   semantic = 'default',
+  color,
   requiredIndicator = '*',
-  className = '',
-  style,
-  ...props
+  'data-testid': dataTestId,
 }, ref) => {
-  const theme = useTheme();
-  const sizeStyles = getSizeStyles(size);
-  const textColor = getSemanticColor(semantic, theme, disabled);
-  const fontWeight = tokens.fontWeights[weight as keyof typeof tokens.fontWeights];
+  // Convert color token to CSS variable if provided
+  const colorStyle = color ? {
+    '--label-color-override': `var(--mond-color-${color.replace(/\./g, '-')})`,
+  } as React.CSSProperties : undefined;
 
-  const labelStyle = {
-    display: 'inline-block',
-    fontFamily: tokens.fontFamilies.sans,
-    fontSize: sizeStyles.fontSize,
-    lineHeight: sizeStyles.lineHeight,
-    fontWeight,
-    color: textColor,
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    marginBottom: tokens.spacing['1'], // 0.25rem
-    ...style,
-  };
-
-  const requiredStyle = {
-    color: theme('text.error'),
-    marginLeft: tokens.spacing['1'], // 0.25rem
-    fontSize: 'inherit',
-  };
+  // Build CSS class names
+  const classNames = [
+    'mond-label',
+    `mond-label--${size}`,
+    `mond-label--weight-${weight}`,
+    disabled ? 'mond-label--disabled' : (!color && `mond-label--${semantic}`), // Only apply semantic if no color prop
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <Box
+    <label
       ref={ref}
-      as="label"
-      className={`mond-label mond-label--${size} ${disabled ? 'mond-label--disabled' : ''} ${className}`}
-      style={labelStyle}
-      {...(htmlFor && { htmlFor })}
-      {...props}
+      className={classNames}
+      style={colorStyle}
+      htmlFor={htmlFor}
+      data-testid={dataTestId}
     >
       {children}
       {required && (
-        <span 
+        <span
           className="mond-label__required"
-          style={requiredStyle}
           aria-label="required"
         >
           {requiredIndicator}
         </span>
       )}
-    </Box>
+    </label>
   );
 });
 

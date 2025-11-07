@@ -1,0 +1,167 @@
+/**
+ * Checkbox Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base Checkbox Container */
+.mond-checkbox {
+  /* Reset */
+  margin: 0;
+
+  /* Layout */
+  display: inline-flex;
+  box-sizing: border-box;
+  contain: layout;
+}
+
+/* Label Container */
+.mond-checkbox__label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: var(--mond-spacing-2);
+}
+
+.mond-checkbox--disabled .mond-checkbox__label {
+  cursor: not-allowed;
+}
+
+/* Input Container - maintains consistent size */
+.mond-checkbox__input-container {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hidden Native Input */
+.mond-checkbox__input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.mond-checkbox--disabled .mond-checkbox__input {
+  cursor: not-allowed;
+}
+
+/* Visual Checkbox Box */
+.mond-checkbox__box {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: var(--mond-radii-sm);
+  border: 1px solid var(--mond-border-default);
+  background-color: var(--mond-surface-input);
+  transition: background-color 150ms ease, border-color 150ms ease, opacity 150ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Checked State */
+.mond-checkbox__input:checked + .mond-checkbox__box,
+.mond-checkbox--indeterminate .mond-checkbox__box {
+  background-color: var(--mond-brand-interactive-background);
+  border-color: var(--mond-brand-interactive-background);
+}
+
+/* Hover State */
+.mond-checkbox__input:hover:not(:disabled) + .mond-checkbox__box {
+  border-color: var(--mond-border-strong);
+}
+
+.mond-checkbox__input:checked:hover:not(:disabled) + .mond-checkbox__box,
+.mond-checkbox--indeterminate .mond-checkbox__input:hover:not(:disabled) + .mond-checkbox__box {
+  background-color: var(--mond-brand-interactive-backgroundHover);
+  border-color: var(--mond-brand-interactive-backgroundHover);
+}
+
+/* Focus State */
+.mond-checkbox__input:focus-visible + .mond-checkbox__box {
+  outline: 2px solid var(--mond-border-focused);
+  outline-offset: 2px;
+}
+
+/* Disabled State */
+.mond-checkbox--disabled .mond-checkbox__box {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Error State */
+.mond-checkbox--error .mond-checkbox__box {
+  border-color: var(--mond-feedback-error-border);
+}
+
+/* Check Icon (always rendered, controlled by opacity) */
+.mond-checkbox__icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--mond-brand-interactive-text);
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  user-select: none;
+}
+
+.mond-checkbox__input:checked + .mond-checkbox__box .mond-checkbox__icon--check {
+  opacity: 1;
+}
+
+.mond-checkbox--indeterminate .mond-checkbox__icon--indeterminate {
+  opacity: 1;
+}
+
+/* Label and Helper Text are now handled by MDS Label and Text components */
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+/* Small Size */
+.mond-checkbox--sm .mond-checkbox__input-container,
+.mond-checkbox--sm .mond-checkbox__box {
+  width: var(--mond-spacing-4);
+  height: var(--mond-spacing-4);
+  min-width: var(--mond-spacing-4);
+  min-height: var(--mond-spacing-4);
+}
+
+.mond-checkbox--sm .mond-checkbox__icon {
+  font-size: 10px;
+}
+
+/* Medium Size (Default) */
+.mond-checkbox--md .mond-checkbox__input-container,
+.mond-checkbox--md .mond-checkbox__box {
+  width: var(--mond-spacing-5);
+  height: var(--mond-spacing-5);
+  min-width: var(--mond-spacing-5);
+  min-height: var(--mond-spacing-5);
+}
+
+.mond-checkbox--md .mond-checkbox__icon {
+  font-size: 12px;
+}
+
+/* Large Size */
+.mond-checkbox--lg .mond-checkbox__input-container,
+.mond-checkbox--lg .mond-checkbox__box {
+  width: var(--mond-spacing-6);
+  height: var(--mond-spacing-6);
+  min-width: var(--mond-spacing-6);
+  min-height: var(--mond-spacing-6);
+}
+
+.mond-checkbox--lg .mond-checkbox__icon {
+  font-size: 14px;
+}

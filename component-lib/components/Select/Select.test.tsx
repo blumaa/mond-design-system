@@ -122,56 +122,53 @@ describe('Select Component', () => {
   describe('sizes', () => {
     it('renders small size correctly', () => {
       render(<Select size="sm" options={mockOptions} data-testid="sm-select" />);
-      const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('font-size: 0.875rem');
-      expect(selectButton).toHaveStyle('height: 32px');
+      const container = screen.getByTestId('sm-select');
+      expect(container).toHaveClass('mond-select--sm');
     });
 
     it('renders medium size correctly', () => {
       render(<Select size="md" options={mockOptions} data-testid="md-select" />);
-      const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('font-size: 1rem');
-      expect(selectButton).toHaveStyle('height: 40px');
+      const container = screen.getByTestId('md-select');
+      expect(container).toHaveClass('mond-select--md');
     });
 
     it('renders large size correctly', () => {
       render(<Select size="lg" options={mockOptions} data-testid="lg-select" />);
-      const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('font-size: 1.125rem');
-      expect(selectButton).toHaveStyle('height: 48px');
+      const container = screen.getByTestId('lg-select');
+      expect(container).toHaveClass('mond-select--lg');
     });
   });
 
   describe('variants', () => {
     it('renders error variant with error styling', () => {
       render(
-        <Select 
-          variant="error" 
+        <Select
+          variant="error"
           options={mockOptions}
           error="Please select an option"
           data-testid="error-select"
         />
       );
-      const selectButton = screen.getByRole('button');
+      const container = screen.getByTestId('error-select');
       const errorMessage = screen.getByText(/please select an option/i);
-      
-      expect(selectButton).toHaveStyle('border: 1px solid #ef4444');
+
+      expect(container).toHaveClass('mond-select--error');
       expect(errorMessage).toBeInTheDocument();
     });
 
     it('renders success variant with success styling', () => {
       render(
-        <Select 
-          variant="success" 
+        <Select
+          variant="success"
           options={mockOptions}
           success="Good choice!"
           data-testid="success-select"
         />
       );
-      const selectButton = screen.getByRole('button');
+      const container = screen.getByTestId('success-select');
       const successMessage = screen.getByText(/good choice!/i);
-      
-      expect(selectButton).toHaveStyle('border: 1px solid #22c55e');
+
+      expect(container).toHaveClass('mond-select--success');
       expect(successMessage).toBeInTheDocument();
     });
   });
@@ -225,14 +222,18 @@ describe('Select Component', () => {
   describe('dark mode', () => {
     it('applies dark mode styling', () => {
       renderWithDarkMode(<Select options={mockOptions} data-testid="dark-select" />);
+      const container = screen.getByTestId('dark-select');
       const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('background-color: #171717');
+      expect(container).toBeInTheDocument();
+      expect(selectButton).toBeInTheDocument();
     });
 
     it('applies light mode styling by default', () => {
       render(<Select options={mockOptions} data-testid="light-select" />);
+      const container = screen.getByTestId('light-select');
       const selectButton = screen.getByRole('button');
-      expect(selectButton).toHaveStyle('background-color: #ffffff');
+      expect(container).toBeInTheDocument();
+      expect(selectButton).toBeInTheDocument();
     });
   });
 

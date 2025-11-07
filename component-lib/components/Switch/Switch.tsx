@@ -1,7 +1,8 @@
-'use client';
 import React, { useId } from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies } from '../../tokens';
+import { radii, spacing } from '../../tokens';
 import { useTheme } from '../providers/ThemeProvider';
+import { Label } from '../Label';
+import { Text } from '../Text';
 
 export type SwitchSize = 'sm' | 'md' | 'lg';
 
@@ -94,7 +95,6 @@ const getSizeStyles = (size: SwitchSize) => {
         height: '18px',
         thumbSize: '14px',
         thumbOffset: '2px',
-        fontSize: fontSizes.sm,
       };
     case 'md':
       return {
@@ -102,7 +102,6 @@ const getSizeStyles = (size: SwitchSize) => {
         height: '24px',
         thumbSize: '20px',
         thumbOffset: '2px',
-        fontSize: fontSizes.base,
       };
     case 'lg':
       return {
@@ -110,7 +109,6 @@ const getSizeStyles = (size: SwitchSize) => {
         height: '32px',
         thumbSize: '28px',
         thumbOffset: '2px',
-        fontSize: fontSizes.lg,
       };
   }
 };
@@ -205,21 +203,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       pointerEvents: 'none',
     };
 
-    // Label text styles
-    const labelTextStyles: React.CSSProperties = {
-      fontSize: sizeStyles.fontSize,
-      fontWeight: fontWeights.normal,
-      fontFamily: fontFamilies.sans,
-      color: disabled ? theme('text.disabled') : theme('text.primary'),
-    };
-
-    // Message (helper text or error) styles
-    const messageStyles: React.CSSProperties = {
-      display: 'block',
-      marginTop: spacing[1],
-      fontSize: fontSizes.sm,
-      color: error ? theme('text.error') : theme('text.secondary'),
-    };
 
     // Focus visible styles - applied via CSS
     const focusVisibleStyles = `
@@ -262,9 +245,13 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
           {/* Label text and messages */}
           {label && (
             <span>
-              <span style={labelTextStyles}>{label}</span>
+              <Label size={size} disabled={disabled}>
+                {label}
+              </Label>
               {(error || helperText) && (
-                <span style={messageStyles}>{error || helperText}</span>
+                <Text variant="caption" semantic={error ? "error" : "secondary"}>
+                  {error || helperText}
+                </Text>
               )}
             </span>
           )}

@@ -1,144 +1,97 @@
-import { render, screen, renderWithDarkMode } from '../../test-utils';
+import { render, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Divider } from './Divider';
 
 describe('Divider', () => {
   it('renders horizontal divider by default', () => {
     render(<Divider />);
-    
+
     const divider = screen.getByRole('separator');
     expect(divider).toBeInTheDocument();
     expect(divider.tagName).toBe('HR');
+    expect(divider).toHaveClass('mond-divider');
     expect(divider).toHaveClass('mond-divider--horizontal');
+    expect(divider).toHaveClass('mond-divider--default');
+    expect(divider).toHaveClass('mond-divider--md');
   });
 
   it('renders vertical divider', () => {
     render(<Divider orientation="vertical" />);
-    
+
     const divider = screen.getByRole('separator');
     expect(divider).toBeInTheDocument();
     expect(divider.tagName).toBe('DIV');
+    expect(divider).toHaveClass('mond-divider');
     expect(divider).toHaveClass('mond-divider--vertical');
     expect(divider).toHaveAttribute('aria-orientation', 'vertical');
   });
 
-  it('applies variant styles correctly', () => {
-    const { rerender } = render(<Divider variant="default"  />);
+  it('applies variant classes correctly', () => {
+    const { rerender } = render(<Divider variant="default" />);
     let divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('background-color: #cbd5e1'); // gray.300
+    expect(divider).toHaveClass('mond-divider--default');
 
-    rerender(<Divider variant="subtle"  />);
+    rerender(<Divider variant="subtle" />);
     divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('background-color: #e2e8f0'); // gray.200
+    expect(divider).toHaveClass('mond-divider--subtle');
 
-    rerender(<Divider variant="strong"  />);
+    rerender(<Divider variant="strong" />);
     divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('background-color: #94a3b8'); // gray.400
+    expect(divider).toHaveClass('mond-divider--strong');
   });
 
-  it('applies dark mode colors correctly', () => {
-    const { rerender } = renderWithDarkMode(<Divider variant="default"  />);
-    let divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('background-color: #414A4C'); // gray.600
-
-    rerender(<Divider variant="subtle"  />);
-    divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('background-color: #334155'); // gray.700
-
-    rerender(<Divider variant="strong"  />);
-    divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('background-color: #64748b'); // gray.500
-  });
-
-  it('applies size variants correctly', () => {
+  it('applies size classes correctly', () => {
     const { rerender } = render(<Divider size="sm" />);
     let divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('height: 1px');
+    expect(divider).toHaveClass('mond-divider--sm');
+
+    rerender(<Divider size="md" />);
+    divider = screen.getByRole('separator');
+    expect(divider).toHaveClass('mond-divider--md');
 
     rerender(<Divider size="lg" />);
     divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('height: 2px');
-
-    rerender(<Divider orientation="vertical" size="lg" />);
-    divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('width: 2px');
-  });
-
-  it('renders divider with text content', () => {
-    render(<Divider>OR</Divider>);
-    
-    const divider = screen.getByRole('separator');
-    expect(divider).toBeInTheDocument();
-    expect(screen.getByText('OR')).toBeInTheDocument();
-    
-    // Should render as flex container with text
-    expect(divider).toHaveStyle('display: flex');
-    expect(divider).toHaveStyle('align-items: center');
+    expect(divider).toHaveClass('mond-divider--lg');
   });
 
   it('applies default margins correctly', () => {
     render(<Divider />);
-    
+
     const divider = screen.getByRole('separator');
-    // Check that the divider renders (margins are applied via Box component)
     expect(divider).toBeInTheDocument();
     expect(divider).toHaveAttribute('role', 'separator');
+    expect(divider).toHaveClass('mt-4');
+    expect(divider).toHaveClass('mb-4');
   });
 
   it('applies custom margins', () => {
-    render(<Divider my="2" mx="6" />);
-    
+    render(<Divider marginTop="2" marginBottom="8" />);
+
     const divider = screen.getByRole('separator');
-    // Check that the divider renders with custom props
     expect(divider).toBeInTheDocument();
-    expect(divider).toHaveAttribute('role', 'separator');
+    expect(divider).toHaveClass('mt-2');
+    expect(divider).toHaveClass('mb-8');
   });
 
-  it('applies custom className', () => {
-    render(<Divider className="custom-divider" />);
-    
+  it('applies vertical divider margins correctly', () => {
+    render(<Divider orientation="vertical" />);
+
     const divider = screen.getByRole('separator');
-    expect(divider).toHaveClass('mond-divider', 'mond-divider--horizontal', 'custom-divider');
+    expect(divider).toHaveClass('ml-4');
+    expect(divider).toHaveClass('mr-4');
   });
 
   it('forwards additional props to Box', () => {
     render(<Divider data-testid="custom-divider" />);
-    
+
     const divider = screen.getByTestId('custom-divider');
     expect(divider).toBeInTheDocument();
   });
 
   it('applies custom styles', () => {
     render(<Divider style={{ opacity: 0.5 }} />);
-    
+
     const divider = screen.getByRole('separator');
     expect(divider).toHaveStyle('opacity: 0.5');
-  });
-
-  it('renders vertical divider with minimum height', () => {
-    render(<Divider orientation="vertical" />);
-    
-    const divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('min-height: 24px');
-    expect(divider).toHaveStyle('height: 100%');
-  });
-
-  it('renders text divider with proper styling', () => {
-    render(<Divider >Section</Divider>);
-    
-    const divider = screen.getByRole('separator');
-    const text = screen.getByText('Section');
-    
-    expect(divider).toHaveStyle('font-size: 0.875rem'); // sm
-    expect(divider).toHaveStyle('color: #414A4C'); // gray.600 in light mode
-    expect(divider).toHaveStyle('font-weight: 500'); // medium
-    expect(text).toBeInTheDocument();
-  });
-
-  it('renders text divider in dark mode with correct colors', () => {
-    renderWithDarkMode(<Divider >Section</Divider>);
-    
-    const divider = screen.getByRole('separator');
-    expect(divider).toHaveStyle('color: #94a3b8'); // gray.400 in dark mode
   });
 });

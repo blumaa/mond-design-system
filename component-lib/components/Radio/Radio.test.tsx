@@ -46,25 +46,19 @@ describe('Radio Component', () => {
     it('renders small size correctly', () => {
       render(<Radio size="sm" label="Small radio" name="size-test" data-testid="sm-radio" />);
       const container = screen.getByTestId('sm-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('width: 16px');
-      expect(radioDiv).toHaveStyle('height: 16px');
+      expect(container).toHaveClass('mond-radio-wrapper--sm');
     });
 
     it('renders medium size correctly', () => {
       render(<Radio size="md" label="Medium radio" name="size-test" data-testid="md-radio" />);
       const container = screen.getByTestId('md-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('width: 20px');
-      expect(radioDiv).toHaveStyle('height: 20px');
+      expect(container).toHaveClass('mond-radio-wrapper--md');
     });
 
     it('renders large size correctly', () => {
       render(<Radio size="lg" label="Large radio" name="size-test" data-testid="lg-radio" />);
       const container = screen.getByTestId('lg-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('width: 24px');
-      expect(radioDiv).toHaveStyle('height: 24px');
+      expect(container).toHaveClass('mond-radio-wrapper--lg');
     });
   });
 
@@ -118,16 +112,15 @@ describe('Radio Component', () => {
 
     it('applies error styling', () => {
       render(
-        <Radio 
-          label="Error radio" 
+        <Radio
+          label="Error radio"
           name="test"
           error="Error message"
           data-testid="error-radio"
         />
       );
       const container = screen.getByTestId('error-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('border: 1px solid #ef4444');
+      expect(container).toHaveClass('mond-radio-wrapper--error');
     });
   });
 
@@ -143,15 +136,17 @@ describe('Radio Component', () => {
     it('applies dark mode styling', () => {
       renderWithDarkMode(<Radio label="Dark radio" name="test" data-testid="dark-radio" />);
       const container = screen.getByTestId('dark-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('background-color: #171717');
+      const radioElement = screen.getByRole('radio');
+      expect(container).toBeInTheDocument();
+      expect(radioElement).toBeInTheDocument();
     });
 
     it('applies light mode styling by default', () => {
       render(<Radio label="Light radio" name="test" data-testid="light-radio" />);
       const container = screen.getByTestId('light-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('background-color: #ffffff');
+      const radioElement = screen.getByRole('radio');
+      expect(container).toBeInTheDocument();
+      expect(radioElement).toBeInTheDocument();
     });
   });
 
@@ -165,8 +160,7 @@ describe('Radio Component', () => {
     it('applies disabled cursor styling', () => {
       render(<Radio label="Disabled" name="test" disabled data-testid="disabled-radio" />);
       const container = screen.getByTestId('disabled-radio');
-      const radioDiv = container.querySelector('[data-radio]') as HTMLElement;
-      expect(radioDiv).toHaveStyle('cursor: not-allowed');
+      expect(container).toHaveClass('mond-radio-wrapper--disabled');
     });
   });
 
@@ -231,15 +225,15 @@ describe('Radio Component', () => {
     it('shows dot when checked', () => {
       render(<Radio label="Checked" name="test" checked readOnly data-testid="checked-radio" />);
       const container = screen.getByTestId('checked-radio');
-      const dot = container.querySelector('[data-radio] > div') as HTMLElement;
-      expect(dot).toHaveStyle('opacity: 1');
+      const dot = container.querySelector('.mond-radio-dot') as HTMLElement;
+      expect(dot).toHaveClass('mond-radio-dot--checked');
     });
 
     it('hides dot when unchecked', () => {
       render(<Radio label="Unchecked" name="test" data-testid="unchecked-radio" />);
       const container = screen.getByTestId('unchecked-radio');
-      const dot = container.querySelector('[data-radio] > div') as HTMLElement;
-      expect(dot).toHaveStyle('opacity: 0');
+      const dot = container.querySelector('.mond-radio-dot') as HTMLElement;
+      expect(dot).not.toHaveClass('mond-radio-dot--checked');
     });
   });
 

@@ -1,0 +1,272 @@
+/**
+ * Radio Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Wrapper */
+.mond-radio-wrapper {
+  contain: layout;
+}
+
+/* Base Radio Container */
+.mond-radio {
+  /* Reset */
+  margin: 0;
+
+  /* Layout */
+  display: inline-flex;
+  box-sizing: border-box;
+  contain: layout;
+}
+
+/* Radio Label */
+.mond-radio-label {
+  display: flex;
+  align-items: center;
+  gap: var(--mond-spacing-2);
+  cursor: pointer;
+}
+
+/* Radio Input Container */
+.mond-radio-container {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Radio Input */
+.mond-radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.mond-radio-wrapper--disabled .mond-radio-input {
+  cursor: not-allowed;
+}
+
+/* Radio Circle */
+.mond-radio-circle {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: var(--mond-radii-full);
+  border: 1px solid var(--mond-border-default);
+  background-color: var(--mond-surface-input);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 150ms ease, border-color 150ms ease;
+  contain: layout style;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mond-radio-wrapper--error .mond-radio-circle {
+  border-color: var(--mond-feedback-error-border);
+}
+
+.mond-radio-wrapper--disabled .mond-radio-circle {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.mond-radio-input:checked + .mond-radio-circle {
+  border-color: var(--mond-brand-interactive-background);
+}
+
+.mond-radio-input:focus-visible + .mond-radio-circle {
+  outline: var(--mond-spacing-1) solid var(--mond-border-focused);
+  outline-offset: var(--mond-spacing-1);
+}
+
+/* Radio Dot */
+.mond-radio-dot {
+  border-radius: var(--mond-radii-full);
+  background-color: var(--mond-brand-interactive-background);
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.mond-radio-dot--checked {
+  opacity: 1;
+}
+
+/* Content */
+.mond-radio-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label Container */
+.mond-radio__label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: var(--mond-spacing-2);
+  user-select: none;
+}
+
+.mond-radio--disabled .mond-radio__label {
+  cursor: not-allowed;
+}
+
+/* Input Container - maintains consistent size */
+.mond-radio__input-container {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hidden Native Input */
+.mond-radio__input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.mond-radio--disabled .mond-radio__input {
+  cursor: not-allowed;
+}
+
+/* Visual Radio Circle */
+.mond-radio__circle {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: var(--mond-radii-full);
+  border: 1px solid var(--mond-border-default);
+  background-color: var(--mond-surface-input);
+  transition: background-color 150ms ease, border-color 150ms ease, opacity 150ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Checked State */
+.mond-radio__input:checked + .mond-radio__circle {
+  border-color: var(--mond-brand-interactive-background);
+}
+
+/* Hover State */
+.mond-radio__input:hover:not(:disabled) + .mond-radio__circle {
+  border-color: var(--mond-border-strong);
+}
+
+.mond-radio__input:checked:hover:not(:disabled) + .mond-radio__circle {
+  border-color: var(--mond-brand-interactive-backgroundHover);
+}
+
+/* Focus State */
+.mond-radio__input:focus-visible + .mond-radio__circle {
+  outline: var(--mond-spacing-1) solid var(--mond-border-focused);
+  outline-offset: var(--mond-spacing-1);
+}
+
+/* Disabled State */
+.mond-radio--disabled .mond-radio__circle {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Error State */
+.mond-radio--error .mond-radio__circle {
+  border-color: var(--mond-feedback-error-border);
+}
+
+/* Inner Dot (always rendered, controlled by opacity) */
+.mond-radio__dot {
+  border-radius: var(--mond-radii-full);
+  background-color: var(--mond-brand-interactive-background);
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.mond-radio__input:checked + .mond-radio__circle .mond-radio__dot {
+  opacity: 1;
+}
+
+.mond-radio__input:checked:hover:not(:disabled) + .mond-radio__circle .mond-radio__dot {
+  background-color: var(--mond-brand-interactive-backgroundHover);
+}
+
+/* Label Text */
+.mond-radio__label-text {
+  font-family: var(--mond-font-family-sans);
+  font-weight: var(--mond-font-weight-normal);
+  color: var(--mond-text-primary);
+  user-select: none;
+}
+
+.mond-radio--disabled .mond-radio__label-text {
+  color: var(--mond-text-disabled);
+}
+
+/* Helper/Error Text */
+.mond-radio__helper-text {
+  display: block;
+  margin-top: var(--mond-spacing-1);
+  font-size: var(--mond-font-size-sm);
+  color: var(--mond-text-secondary);
+}
+
+.mond-radio--error .mond-radio__helper-text {
+  color: var(--mond-feedback-error-text);
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+/* Small Size */
+.mond-radio-container--sm,
+.mond-radio-circle--sm {
+  width: var(--mond-spacing-4);
+  height: var(--mond-spacing-4);
+  min-width: var(--mond-spacing-4);
+  min-height: var(--mond-spacing-4);
+}
+
+.mond-radio-dot--sm {
+  width: calc(var(--mond-spacing-4) * 0.375);
+  height: calc(var(--mond-spacing-4) * 0.375);
+}
+
+/* Medium Size (Default) */
+.mond-radio-container--md,
+.mond-radio-circle--md {
+  width: var(--mond-spacing-5);
+  height: var(--mond-spacing-5);
+  min-width: var(--mond-spacing-5);
+  min-height: var(--mond-spacing-5);
+}
+
+.mond-radio-dot--md {
+  width: calc(var(--mond-spacing-5) * 0.4);
+  height: calc(var(--mond-spacing-5) * 0.4);
+}
+
+/* Large Size */
+.mond-radio-container--lg,
+.mond-radio-circle--lg {
+  width: var(--mond-spacing-6);
+  height: var(--mond-spacing-6);
+  min-width: var(--mond-spacing-6);
+  min-height: var(--mond-spacing-6);
+}
+
+.mond-radio-dot--lg {
+  width: calc(var(--mond-spacing-6) * 0.4167);
+  height: calc(var(--mond-spacing-6) * 0.4167);
+}

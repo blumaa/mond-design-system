@@ -82,19 +82,19 @@ describe('Input Component', () => {
     it('applies small size styles', () => {
       render(<Input inputSize="sm" data-testid="small-input" />);
       const inputElement = screen.getByTestId('small-input');
-      expect(inputElement).toHaveStyle('height: 32px');
+      expect(inputElement).toHaveClass('mond-input--sm');
     });
 
     it('applies medium size styles by default', () => {
       render(<Input data-testid="medium-input" />);
       const inputElement = screen.getByTestId('medium-input');
-      expect(inputElement).toHaveStyle('height: 40px');
+      expect(inputElement).toHaveClass('mond-input--md');
     });
 
     it('applies large size styles', () => {
       render(<Input inputSize="lg" data-testid="large-input" />);
       const inputElement = screen.getByTestId('large-input');
-      expect(inputElement).toHaveStyle('height: 48px');
+      expect(inputElement).toHaveClass('mond-input--lg');
     });
   });
 
@@ -102,56 +102,60 @@ describe('Input Component', () => {
     it('applies default variant styles', () => {
       render(<Input variant="default" data-testid="default-input" />);
       const inputElement = screen.getByTestId('default-input');
-      // Check that it has basic styling (border, background, etc.)
-      expect(inputElement).toHaveStyle('border: 1px solid #cbd5e1');
+      // Check that it has the base class (default variant doesn't add additional class)
+      expect(inputElement).toHaveClass('mond-input');
+      expect(inputElement).not.toHaveClass('mond-input--error');
+      expect(inputElement).not.toHaveClass('mond-input--success');
     });
 
     it('renders error variant with error styling', () => {
       render(
-        <Input 
-          variant="error" 
+        <Input
+          variant="error"
           error="Error message"
-          data-testid="error-input" 
+          data-testid="error-input"
         />
       );
       const inputElement = screen.getByTestId('error-input');
       const errorMessage = screen.getByText(/error message/i);
-      
-      expect(inputElement).toHaveStyle('border: 1px solid #ef4444');
+
+      expect(inputElement).toHaveClass('mond-input--error');
       expect(errorMessage).toBeInTheDocument();
     });
 
     it('renders success variant with success styling', () => {
       render(
-        <Input 
-          variant="success" 
+        <Input
+          variant="success"
           success="Success message"
-          data-testid="success-input" 
+          data-testid="success-input"
         />
       );
       const inputElement = screen.getByTestId('success-input');
       const successMessage = screen.getByText(/success message/i);
-      
-      expect(inputElement).toHaveStyle('border: 1px solid #22c55e');
+
+      expect(inputElement).toHaveClass('mond-input--success');
       expect(successMessage).toBeInTheDocument();
     });
   });
 
   describe('dark mode', () => {
     it('applies dark mode styling when is true', () => {
-      renderWithDarkMode(<Input  data-testid="dark-input" />);
+      const { container } = renderWithDarkMode(<Input data-testid="dark-input" />);
       const inputElement = screen.getByTestId('dark-input');
-      
-      // Check for dark background color (semantic: surface.input in dark mode -> black.100)
-      expect(inputElement).toHaveStyle('background-color: #171717');
+
+      // Check that the component renders and has base class
+      expect(inputElement).toHaveClass('mond-input');
+      // Dark mode is controlled by data-theme attribute on a parent element
+      expect(container.querySelector('[data-theme="dark"]')).toBeInTheDocument();
     });
 
     it('applies light mode styling by default', () => {
       render(<Input data-testid="light-input" />);
       const inputElement = screen.getByTestId('light-input');
-      
-      // Check for light background color (semantic: surface.input in light mode -> white.50) 
-      expect(inputElement).toHaveStyle('background-color: #ffffff');
+
+      // Check that it has the base class (light mode is default via CSS variables)
+      expect(inputElement).toHaveClass('mond-input');
     });
   });
 });

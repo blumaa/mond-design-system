@@ -72,8 +72,8 @@ describe('CSS Variable Generator', () => {
         const textPrimary = result.light.get('--mond-text-primary');
         expect(textPrimary).toBeDefined();
         expect(typeof textPrimary).toBe('string');
-        // Should be a resolved color value (hex or rgba)
-        expect(textPrimary).toMatch(/^(#[0-9a-fA-F]{6}|rgba?\()/);
+        // Should be a resolved color value (hex, rgba, or CSS var reference for brand colors)
+        expect(textPrimary).toMatch(/^(#[0-9a-fA-F]{6}|rgba?\(|var\(--mond-)/);
       });
 
       it('resolves semantic tokens for dark theme', () => {
@@ -82,7 +82,7 @@ describe('CSS Variable Generator', () => {
         const textPrimary = result.dark.get('--mond-text-primary');
         expect(textPrimary).toBeDefined();
         expect(typeof textPrimary).toBe('string');
-        expect(textPrimary).toMatch(/^(#[0-9a-fA-F]{6}|rgba?\()/);
+        expect(textPrimary).toMatch(/^(#[0-9a-fA-F]{6}|rgba?\(|var\(--mond-)/);
       });
 
       it('generates different values for light and dark themes', () => {
@@ -292,6 +292,29 @@ describe('CSS Variable Generator', () => {
         // Feedback tokens
         expect(lightVarNames.some(name => name.startsWith('--mond-feedback-'))).toBe(true);
       });
+
+      it('generates base brand color CSS variables', () => {
+        const result = generateAllCSSVariables();
+        const lightVarNames = Array.from(result.light.keys());
+
+        // Check that base brand color variables are generated
+        expect(lightVarNames.some(name => name.startsWith('--mond-color-brand-primary-'))).toBe(true);
+        expect(lightVarNames.some(name => name.startsWith('--mond-color-brand-error-'))).toBe(true);
+        expect(lightVarNames.some(name => name.startsWith('--mond-color-brand-success-'))).toBe(true);
+
+        // Verify specific brand color variables exist
+        expect(result.light.has('--mond-color-brand-primary-500')).toBe(true);
+        expect(result.light.has('--mond-color-brand-primary-600')).toBe(true);
+      });
+
+      it('semantic tokens reference brand color CSS variables', () => {
+        const result = generateAllCSSVariables();
+
+        // Check that semantic tokens that reference brand colors use CSS variables
+        const brandInteractiveBg = result.light.get('--mond-brand-interactive-background');
+        expect(brandInteractiveBg).toBeDefined();
+        expect(brandInteractiveBg).toContain('var(--mond-color-brand-primary-');
+      });
     });
   });
 
@@ -424,6 +447,7 @@ describe('CSS Variable Generator', () => {
         expect(cssContent).toMatch(/:\s*#[0-9a-fA-F]{6}/); // Hex colors
         expect(cssContent).toMatch(/:\s*rgba?\(/); // RGBA colors
         expect(cssContent).toMatch(/:\s*\d+\.?\d*rem/); // Rem values
+        expect(cssContent).toMatch(/:\s*var\(--mond-color-brand-/); // Brand color CSS variables
       });
 
       it('does not contain [object Object] strings', () => {

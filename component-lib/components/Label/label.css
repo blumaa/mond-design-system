@@ -1,0 +1,90 @@
+/**
+ * Label Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Automatically responds to data-theme attribute changes.
+ */
+
+/* Base Label Styles */
+.mond-label {
+  display: inline-block;
+  font-family: var(--mond-font-family-sans);
+  cursor: pointer;
+  margin-bottom: var(--mond-spacing-1);
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+/* Small Size */
+.mond-label--sm {
+  font-size: var(--mond-font-size-xs);
+  line-height: var(--mond-line-height-tight);
+}
+
+/* Medium Size (Default) */
+.mond-label--md {
+  font-size: var(--mond-font-size-sm);
+  line-height: var(--mond-line-height-snug);
+}
+
+/* Large Size */
+.mond-label--lg {
+  font-size: var(--mond-font-size-base);
+  line-height: var(--mond-line-height-normal);
+}
+
+/* ============================================
+   FONT WEIGHTS
+   ============================================ */
+
+.mond-label--weight-normal {
+  font-weight: var(--mond-font-weight-normal);
+}
+
+.mond-label--weight-medium {
+  font-weight: var(--mond-font-weight-medium);
+}
+
+.mond-label--weight-semibold {
+  font-weight: var(--mond-font-weight-semibold);
+}
+
+/* ============================================
+   SEMANTIC COLORS
+   ============================================ */
+
+/* Default Semantic */
+.mond-label--default {
+  color: var(--label-color-override, var(--mond-text-primary));
+}
+
+/* Error Semantic */
+.mond-label--error {
+  color: var(--label-color-override, var(--mond-text-error));
+}
+
+/* Success Semantic */
+.mond-label--success {
+  color: var(--label-color-override, var(--mond-text-success));
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.mond-label--disabled {
+  color: var(--mond-text-disabled);
+  cursor: not-allowed;
+}
+
+/* ============================================
+   REQUIRED INDICATOR
+   ============================================ */
+
+.mond-label__required {
+  color: var(--mond-text-error);
+  margin-left: var(--mond-spacing-1);
+  font-size: inherit;
+}
