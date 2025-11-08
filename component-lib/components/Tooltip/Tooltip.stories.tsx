@@ -46,9 +46,6 @@ A flexible tooltip component that provides contextual information on hover, focu
       control: 'select',
       options: ['hover', 'focus', 'click'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     disabled: {
       control: 'boolean',
     },
@@ -123,19 +120,19 @@ export const WithIcons: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '2rem' }}>
       <Tooltip content="This is helpful information">
-        <Button variant="outline" size="sm" style={{ borderRadius: '50%', width: '32px', height: '32px', padding: '4px' }}>
+        <Button variant="outline" size="sm" iconOnly>
           ℹ️
         </Button>
       </Tooltip>
-      
+
       <Tooltip content="Warning: This action cannot be undone">
-        <Button variant="outline" size="sm" style={{ borderRadius: '50%', width: '32px', height: '32px', padding: '4px' }}>
+        <Button variant="outline" size="sm" iconOnly>
           ⚠️
         </Button>
       </Tooltip>
-      
+
       <Tooltip content="Error: Something went wrong">
-        <Button variant="outline" size="sm" style={{ borderRadius: '50%', width: '32px', height: '32px', padding: '4px' }}>
+        <Button variant="outline" size="sm" iconOnly>
           ❌
         </Button>
       </Tooltip>

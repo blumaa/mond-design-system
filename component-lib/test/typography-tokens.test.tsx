@@ -17,91 +17,88 @@ const renderWithTheme = (component: React.ReactElement, brandTheme: BrandTheme) 
 
 describe('Typography Components with Semantic Tokens', () => {
   describe('Text Component Typography Variants', () => {
-    it('should render display variant with typography tokens', () => {
+    it('should render display variant with correct CSS classes', () => {
       const { container } = renderWithTheme(
         <Text variant="display" data-testid="display-text">
           Display Text
         </Text>,
         cypherTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="display-text"]');
-      expect(textElement).toHaveStyle('font-weight: 800');
-      expect(textElement).toHaveStyle('line-height: 1.1');
-      expect(textElement).toHaveStyle('letter-spacing: -0.02em');
-      // fontSize uses clamp, so we just check it exists
-      expect(textElement).toHaveAttribute('style');
+      expect(textElement).toHaveClass('mond-text--display');
+      expect(textElement).toHaveClass('mond-text--primary');
+      expect(textElement).toHaveClass('mond-text--weight-normal');
     });
 
-    it('should render headline variant with typography tokens', () => {
+    it('should render headline variant with correct CSS classes', () => {
       const { container } = renderWithTheme(
         <Text variant="headline" data-testid="headline-text">
           Headline Text
         </Text>,
         fluxTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="headline-text"]');
-      expect(textElement).toHaveStyle('font-weight: 700');
-      expect(textElement).toHaveStyle('line-height: 1.2');
-      expect(textElement).toHaveStyle('letter-spacing: -0.01em');
+      expect(textElement).toHaveClass('mond-text--headline');
+      expect(textElement).toHaveClass('mond-text--primary');
+      expect(textElement).toHaveClass('mond-text--weight-normal');
     });
 
-    it('should render title variant with typography tokens', () => {
+    it('should render title variant with correct CSS classes', () => {
       const { container } = renderWithTheme(
         <Text variant="title" data-testid="title-text">
           Title Text
         </Text>,
         mondTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="title-text"]');
-      expect(textElement).toHaveStyle('font-size: 1.5rem');
-      expect(textElement).toHaveStyle('font-weight: 600');
-      expect(textElement).toHaveStyle('line-height: 1.3');
+      expect(textElement).toHaveClass('mond-text--title');
+      expect(textElement).toHaveClass('mond-text--primary');
+      expect(textElement).toHaveClass('mond-text--weight-normal');
     });
 
-    it('should render body variant with typography tokens', () => {
+    it('should render body variant with correct CSS classes', () => {
       const { container } = renderWithTheme(
         <Text variant="body" data-testid="body-text">
           Body Text
         </Text>,
         cypherTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="body-text"]');
-      expect(textElement).toHaveStyle('font-size: 1rem');
-      expect(textElement).toHaveStyle('font-weight: 400');
-      expect(textElement).toHaveStyle('line-height: 1.5');
+      expect(textElement).toHaveClass('mond-text--body');
+      expect(textElement).toHaveClass('mond-text--primary');
+      expect(textElement).toHaveClass('mond-text--weight-normal');
     });
 
-    it('should render code variant with monospace font', () => {
+    it('should render code variant with correct CSS classes', () => {
       const { container } = renderWithTheme(
         <Text variant="code" data-testid="code-text">
           const code = true;
         </Text>,
         cypherTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="code-text"]');
-      expect(textElement).toHaveStyle('font-size: 0.875rem');
-      expect(textElement).toHaveStyle('font-family: monospace');
-      expect(textElement).toHaveStyle('line-height: 1.4');
+      expect(textElement).toHaveClass('mond-text--code');
+      expect(textElement).toHaveClass('mond-text--primary');
+      expect(textElement).toHaveClass('mond-text--weight-normal');
     });
 
-    it('should render overline variant with uppercase transform', () => {
+    it('should render overline variant with correct CSS classes', () => {
       const { container } = renderWithTheme(
         <Text variant="overline" data-testid="overline-text">
           Overline Text
         </Text>,
         fluxTheme
       );
-      
+
       const textElement = container.querySelector('[data-testid="overline-text"]');
-      expect(textElement).toHaveStyle('font-size: 0.75rem');
-      expect(textElement).toHaveStyle('text-transform: uppercase');
-      expect(textElement).toHaveStyle('letter-spacing: 0.1em');
-      expect(textElement).toHaveStyle('font-weight: 600');
+      expect(textElement).toHaveClass('mond-text--overline');
+      expect(textElement).toHaveClass('mond-text--primary');
+      expect(textElement).toHaveClass('mond-text--weight-normal');
     });
   });
 
@@ -109,46 +106,84 @@ describe('Typography Components with Semantic Tokens', () => {
     it('should render same typography hierarchy across different brands', () => {
       const TestTypography = () => (
         <>
-          <Text variant="headline">Headline</Text>
-          <Text variant="body">Body text</Text>
-          <Text variant="caption">Caption</Text>
+          <Text variant="headline" data-testid="headline">Headline</Text>
+          <Text variant="body" data-testid="body">Body text</Text>
+          <Text variant="caption" data-testid="caption">Caption</Text>
         </>
       );
-      
-      // Test with different brands - typography should be consistent
+
+      // Test with different brands - typography CSS classes should be consistent
       const { container: cypherContainer } = renderWithTheme(<TestTypography />, cypherTheme);
       const { container: fluxContainer } = renderWithTheme(<TestTypography />, fluxTheme);
       const { container: mondContainer } = renderWithTheme(<TestTypography />, mondTheme);
-      
-      // All headlines should have same font size/weight (consistent typography hierarchy)
-      const cypherHeadline = cypherContainer.querySelector('span');
-      const fluxHeadline = fluxContainer.querySelector('span');
-      const mondHeadline = mondContainer.querySelector('span');
-      
-      expect(cypherHeadline).toHaveStyle('font-weight: 700');
-      expect(fluxHeadline).toHaveStyle('font-weight: 700');
-      expect(mondHeadline).toHaveStyle('font-weight: 700');
-      
-      // Typography hierarchy is consistent, but colors might differ per brand
-      // This demonstrates semantic consistency with brand-adaptive colors
+
+      // All headlines should have same CSS classes (consistent typography hierarchy)
+      const cypherHeadline = cypherContainer.querySelector('[data-testid="headline"]');
+      const fluxHeadline = fluxContainer.querySelector('[data-testid="headline"]');
+      const mondHeadline = mondContainer.querySelector('[data-testid="headline"]');
+
+      expect(cypherHeadline).toHaveClass('mond-text--headline');
+      expect(fluxHeadline).toHaveClass('mond-text--headline');
+      expect(mondHeadline).toHaveClass('mond-text--headline');
+
+      // Body text should be consistent across brands
+      const cypherBody = cypherContainer.querySelector('[data-testid="body"]');
+      const fluxBody = fluxContainer.querySelector('[data-testid="body"]');
+      const mondBody = mondContainer.querySelector('[data-testid="body"]');
+
+      expect(cypherBody).toHaveClass('mond-text--body');
+      expect(fluxBody).toHaveClass('mond-text--body');
+      expect(mondBody).toHaveClass('mond-text--body');
+
+      // Typography hierarchy is consistent via CSS classes
+      // Colors are theme-dependent via CSS variables
     });
   });
 
-  describe('Legacy Variant Support', () => {
-    it('should support legacy body-lg and body-md variants', () => {
+  describe('Additional Typography Variants', () => {
+    it('should render body-sm variant with correct CSS classes', () => {
       const { container } = renderWithTheme(
-        <>
-          <Text variant="body-lg" data-testid="body-lg">Large body</Text>
-          <Text variant="body-md" data-testid="body-md">Medium body</Text>
-        </>,
+        <Text variant="body-sm" data-testid="body-sm">
+          Small body text
+        </Text>,
         cypherTheme
       );
-      
-      const bodyLg = container.querySelector('[data-testid="body-lg"]');
-      const bodyMd = container.querySelector('[data-testid="body-md"]');
-      
-      expect(bodyLg).toHaveStyle('font-size: 1.125rem');
-      expect(bodyMd).toHaveStyle('font-size: 1rem');
+
+      const bodySm = container.querySelector('[data-testid="body-sm"]');
+
+      expect(bodySm).toHaveClass('mond-text--body-sm');
+      expect(bodySm).toHaveClass('mond-text--primary');
+      expect(bodySm).toHaveClass('mond-text--weight-normal');
+    });
+
+    it('should render subtitle variant with correct CSS classes', () => {
+      const { container } = renderWithTheme(
+        <Text variant="subtitle" data-testid="subtitle-text">
+          Subtitle text
+        </Text>,
+        fluxTheme
+      );
+
+      const subtitleElement = container.querySelector('[data-testid="subtitle-text"]');
+
+      expect(subtitleElement).toHaveClass('mond-text--subtitle');
+      expect(subtitleElement).toHaveClass('mond-text--primary');
+      expect(subtitleElement).toHaveClass('mond-text--weight-normal');
+    });
+
+    it('should render caption variant with correct CSS classes', () => {
+      const { container } = renderWithTheme(
+        <Text variant="caption" data-testid="caption-text">
+          Caption text
+        </Text>,
+        mondTheme
+      );
+
+      const captionElement = container.querySelector('[data-testid="caption-text"]');
+
+      expect(captionElement).toHaveClass('mond-text--caption');
+      expect(captionElement).toHaveClass('mond-text--primary');
+      expect(captionElement).toHaveClass('mond-text--weight-normal');
     });
   });
 });

@@ -1,6 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Popover } from './Popover';
 import { Button } from '../Button/Button';
+import { Box } from '../Box/Box';
+import { Text } from '../Text/Text';
+import { Heading } from '../Heading/Heading';
+import { Avatar } from '../Avatar/Avatar';
+import { Icon } from '../Icon/Icon';
+import { Input } from '../Input/Input';
+import { Label } from '../Label/Label';
+import { Divider } from '../Divider/Divider';
 import { useState } from 'react';
 
 const meta: Meta<typeof Popover> = {
@@ -69,9 +77,6 @@ A versatile popover component for displaying rich interactive content triggered 
         'right-end',
       ],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     closeOnClickOutside: {
       control: 'boolean',
     },
@@ -109,7 +114,7 @@ export const Placements: Story = {
         justifyItems: 'center',
       }}
     >
-      <div></div>
+      <div />
       <Popover content="Top Start" placement="top-start">
         <Button size="sm">Top Start</Button>
       </Popover>
@@ -119,14 +124,14 @@ export const Placements: Story = {
       <Popover content="Top End" placement="top-end">
         <Button size="sm">Top End</Button>
       </Popover>
-      <div></div>
+      <div />
 
       <Popover content="Left Start" placement="left-start">
         <Button size="sm">Left Start</Button>
       </Popover>
-      <div></div>
-      <div></div>
-      <div></div>
+      <div />
+      <div />
+      <div />
       <Popover content="Right Start" placement="right-start">
         <Button size="sm">Right Start</Button>
       </Popover>
@@ -134,9 +139,9 @@ export const Placements: Story = {
       <Popover content="Left" placement="left">
         <Button size="sm">Left</Button>
       </Popover>
-      <div></div>
-      <div></div>
-      <div></div>
+      <div />
+      <div />
+      <div />
       <Popover content="Right" placement="right">
         <Button size="sm">Right</Button>
       </Popover>
@@ -144,14 +149,14 @@ export const Placements: Story = {
       <Popover content="Left End" placement="left-end">
         <Button size="sm">Left End</Button>
       </Popover>
-      <div></div>
-      <div></div>
-      <div></div>
+      <div />
+      <div />
+      <div />
       <Popover content="Right End" placement="right-end">
         <Button size="sm">Right End</Button>
       </Popover>
 
-      <div></div>
+      <div />
       <Popover content="Bottom Start" placement="bottom-start">
         <Button size="sm">Bottom Start</Button>
       </Popover>
@@ -161,7 +166,7 @@ export const Placements: Story = {
       <Popover content="Bottom End" placement="bottom-end">
         <Button size="sm">Bottom End</Button>
       </Popover>
-      <div></div>
+      <div />
     </div>
   ),
 };
@@ -171,67 +176,45 @@ export const UserMenu: Story = {
     <Popover
       content={
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ padding: '8px', borderBottom: '1px solid #e2e8f0' }}>
-            <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>John Doe</div>
-            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>
+          <div style={{ padding: '8px', borderBottom: '1px solid var(--mond-border-subtle)' }}>
+            <Text variant="body-sm" weight="semibold">John Doe</Text>
+            <Text variant="caption" semantic="secondary" as="div">
               john.doe@example.com
-            </div>
+            </Text>
           </div>
-          <button
-            style={{
-              padding: '8px 12px',
-              border: 'none',
-              background: 'transparent',
-              cursor: 'pointer',
-              textAlign: 'left',
-              borderRadius: '4px',
-              fontSize: '0.875rem',
-            }}
+          <Button
+            variant="ghost"
+            size="sm"
+            alignContent="left"
+            fullWidth
           >
             Profile
-          </button>
-          <button
-            style={{
-              padding: '8px 12px',
-              border: 'none',
-              background: 'transparent',
-              cursor: 'pointer',
-              textAlign: 'left',
-              borderRadius: '4px',
-              fontSize: '0.875rem',
-            }}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            alignContent="left"
+            fullWidth
           >
             Settings
-          </button>
-          <button
-            style={{
-              padding: '8px 12px',
-              border: 'none',
-              background: 'transparent',
-              cursor: 'pointer',
-              textAlign: 'left',
-              borderRadius: '4px',
-              fontSize: '0.875rem',
-            }}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            alignContent="left"
+            fullWidth
           >
             Billing
-          </button>
-          <div style={{ borderTop: '1px solid #e2e8f0', marginTop: '4px', paddingTop: '4px' }}>
-            <button
-              style={{
-                padding: '8px 12px',
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer',
-                textAlign: 'left',
-                borderRadius: '4px',
-                fontSize: '0.875rem',
-                color: '#ef4444',
-                width: '100%',
-              }}
+          </Button>
+          <div style={{ borderTop: '1px solid var(--mond-border-subtle)', marginTop: '4px', paddingTop: '4px' }}>
+            <Button
+              variant="destructive"
+              size="sm"
+              alignContent="left"
+              fullWidth
             >
               Logout
-            </button>
+            </Button>
           </div>
         </div>
       }
@@ -243,38 +226,17 @@ export const UserMenu: Story = {
           alignItems: 'center',
           gap: '8px',
           padding: '8px 12px',
-          border: '1px solid #cbd5e1',
+          border: '1px solid var(--mond-border-default)',
           borderRadius: '6px',
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--mond-surface-default)',
           cursor: 'pointer',
         }}
       >
-        <div
-          style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            backgroundColor: '#3b82f6',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '0.875rem',
-            fontWeight: '500',
-            color: '#ffffff',
-          }}
-        >
-          JD
-        </div>
-        <span style={{ fontSize: '0.875rem' }}>John Doe</span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          style={{ marginLeft: '4px' }}
-        >
-          <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" />
-        </svg>
+        <Avatar size="xs" fallback="John Doe" />
+        <Text variant="body-sm">John Doe</Text>
+        <Icon size="sm" decorative>
+          <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" />
+        </Icon>
       </div>
     </Popover>
   ),
@@ -305,8 +267,10 @@ export const ColorPicker: Story = {
       <Popover
         content={
           <div>
-            <div style={{ fontWeight: 600, marginBottom: '12px', fontSize: '0.875rem' }}>
-              Choose a color
+            <div style={{ marginBottom: '12px' }}>
+              <Text variant="body-sm" weight="semibold" as="div">
+                Choose a color
+              </Text>
             </div>
             <div
               style={{
@@ -346,7 +310,7 @@ export const ColorPicker: Story = {
                 border: '1px solid #cbd5e1',
               }}
             />
-            <span>Color</span>
+            <Text>Color</Text>
           </div>
         </Button>
       </Popover>
@@ -360,53 +324,19 @@ export const WithForm: Story = {
       content={
         <form style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div>
-            <label
-              htmlFor="name"
-              style={{
-                display: 'block',
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                marginBottom: '4px',
-              }}
-            >
-              Name
-            </label>
-            <input
+            <Label htmlFor="name">Name</Label>
+            <Input
               id="name"
               type="text"
               placeholder="Enter your name"
-              style={{
-                width: '100%',
-                padding: '6px 10px',
-                border: '1px solid #cbd5e1',
-                borderRadius: '4px',
-                fontSize: '0.875rem',
-              }}
             />
           </div>
           <div>
-            <label
-              htmlFor="email"
-              style={{
-                display: 'block',
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                marginBottom: '4px',
-              }}
-            >
-              Email
-            </label>
-            <input
+            <Label htmlFor="email">Email</Label>
+            <Input
               id="email"
               type="email"
               placeholder="Enter your email"
-              style={{
-                width: '100%',
-                padding: '6px 10px',
-                border: '1px solid #cbd5e1',
-                borderRadius: '4px',
-                fontSize: '0.875rem',
-              }}
             />
           </div>
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '4px' }}>
@@ -474,18 +404,12 @@ export const NotificationCenter: Story = {
               }}
             >
               <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: 600 }}>Notifications</h4>
-              <button
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  color: '#3b82f6',
-                  fontSize: '0.75rem',
-                  cursor: 'pointer',
-                  fontWeight: 500,
-                }}
+              <Button
+                variant="ghost"
+                size="sm"
               >
                 Mark all as read
-              </button>
+              </Button>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {notifications.map((notif) => (
@@ -493,17 +417,17 @@ export const NotificationCenter: Story = {
                   key={notif.id}
                   style={{
                     padding: '12px',
-                    backgroundColor: '#f8fafc',
+                    backgroundColor: 'var(--mond-color-surface-secondary)',
                     borderRadius: '6px',
                     cursor: 'pointer',
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid var(--mond-color-border-default)',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
                     <div style={{ fontWeight: 600, fontSize: '0.75rem' }}>{notif.title}</div>
-                    <div style={{ fontSize: '0.625rem', color: '#64748b' }}>{notif.time}</div>
+                    <div style={{ fontSize: '0.625rem', color: 'var(--mond-color-text-secondary)' }}>{notif.time}</div>
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: '#475569', marginTop: '4px' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--mond-color-text-secondary)', marginTop: '4px' }}>
                     {notif.message}
                   </div>
                 </div>
@@ -513,32 +437,28 @@ export const NotificationCenter: Story = {
         }
         placement="bottom-end"
       >
-        <button
-          style={{
-            position: 'relative',
-            padding: '8px',
-            border: '1px solid #cbd5e1',
-            borderRadius: '6px',
-            backgroundColor: '#ffffff',
-            cursor: 'pointer',
-          }}
-        >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path
-              d="M15 6.66667C15 5.34058 14.4732 4.06881 13.5355 3.13113C12.5979 2.19345 11.3261 1.66667 10 1.66667C8.67392 1.66667 7.40215 2.19345 6.46447 3.13113C5.52678 4.06881 5 5.34058 5 6.66667C5 12.5 2.5 14.1667 2.5 14.1667H17.5C17.5 14.1667 15 12.5 15 6.66667Z"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M11.4417 17.5C11.2952 17.7526 11.0849 17.9622 10.8319 18.1079C10.5789 18.2537 10.292 18.3304 10 18.3304C9.70802 18.3304 9.42113 18.2537 9.16814 18.1079C8.91515 17.9622 8.70484 17.7526 8.55833 17.5"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+        <div style={{ position: 'relative', display: 'inline-block' }}>
+          <Button
+            variant="outline"
+            iconOnly
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M15 6.66667C15 5.34058 14.4732 4.06881 13.5355 3.13113C12.5979 2.19345 11.3261 1.66667 10 1.66667C8.67392 1.66667 7.40215 2.19345 6.46447 3.13113C5.52678 4.06881 5 5.34058 5 6.66667C5 12.5 2.5 14.1667 2.5 14.1667H17.5C17.5 14.1667 15 12.5 15 6.66667Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M11.4417 17.5C11.2952 17.7526 11.0849 17.9622 10.8319 18.1079C10.5789 18.2537 10.292 18.3304 10 18.3304C9.70802 18.3304 9.42113 18.2537 9.16814 18.1079C8.91515 17.9622 8.70484 17.7526 8.55833 17.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Button>
           <div
             style={{
               position: 'absolute',
@@ -547,11 +467,11 @@ export const NotificationCenter: Story = {
               width: '8px',
               height: '8px',
               borderRadius: '50%',
-              backgroundColor: '#ef4444',
-              border: '2px solid #ffffff',
+              backgroundColor: 'var(--mond-error-default)',
+              border: '2px solid var(--mond-surface-default)',
             }}
           />
-        </button>
+        </div>
       </Popover>
     );
   },
@@ -573,29 +493,23 @@ export const ShareDialog: Story = {
               style={{
                 flex: 1,
                 padding: '6px 10px',
-                border: '1px solid #cbd5e1',
+                border: '1px solid var(--mond-color-border-default)',
                 borderRadius: '4px',
                 fontSize: '0.75rem',
-                backgroundColor: '#f8fafc',
+                backgroundColor: 'var(--mond-color-surface-secondary)',
               }}
             />
             <Button size="sm">Copy</Button>
           </div>
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
             {['Twitter', 'Facebook', 'LinkedIn'].map((platform) => (
-              <button
+              <Button
                 key={platform}
-                style={{
-                  padding: '8px 12px',
-                  border: '1px solid #cbd5e1',
-                  borderRadius: '4px',
-                  backgroundColor: '#ffffff',
-                  cursor: 'pointer',
-                  fontSize: '0.75rem',
-                }}
+                variant="outline"
+                size="sm"
               >
                 {platform}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -603,25 +517,23 @@ export const ShareDialog: Story = {
       placement="top"
     >
       <Button variant="outline">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M5.33333 8.66667L2 8.66667L2 14L5.33333 14L5.33333 8.66667Z"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M14 5.99999L10.6667 2.66666L10.6667 5.33332C7.33333 5.33332 5.33333 6.66666 5.33333 8.66666C5.33333 9.99999 6 11.3333 7.33333 12C6.66667 11.3333 6.66667 9.99999 6.66667 9.33332C6.66667 7.33332 8 5.99999 10.6667 5.99999L10.6667 8.66666L14 5.99999Z"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          Share
-        </div>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ marginRight: '8px' }}>
+          <path
+            d="M5.33333 8.66667L2 8.66667L2 14L5.33333 14L5.33333 8.66667Z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M14 5.99999L10.6667 2.66666L10.6667 5.33332C7.33333 5.33332 5.33333 6.66666 5.33333 8.66666C5.33333 9.99999 6 11.3333 7.33333 12C6.66667 11.3333 6.66667 9.99999 6.66667 9.33332C6.66667 7.33332 8 5.99999 10.6667 5.99999L10.6667 8.66666L14 5.99999Z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        Share
       </Button>
     </Popover>
   ),

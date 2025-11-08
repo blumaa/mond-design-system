@@ -1,8 +1,8 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
-import { radii, spacing, fontSizes, fontWeights, fontFamilies, shadows } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
 import { Box } from '../Box/Box';
+import { Button } from '../Button/Button';
+import './modal.css';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
@@ -41,12 +41,6 @@ export interface ModalProps {
   closeOnEscapeKey?: boolean;
   
   /**
-   * Dark mode
-   * @default false
-   */
-  isDarkMode?: boolean;
-  
-  /**
    * Custom className for modal content
    */
   className?: string;
@@ -62,90 +56,37 @@ export interface ModalProps {
   'data-testid'?: string;
 }
 
-const getSizeStyles = (size: ModalSize) => {
-  switch (size) {
-    case 'sm':
-      return {
-        maxWidth: '400px',
-        width: '90vw',
-      };
-    case 'md':
-      return {
-        maxWidth: '500px',
-        width: '90vw',
-      };
-    case 'lg':
-      return {
-        maxWidth: '700px',
-        width: '90vw',
-      };
-    case 'xl':
-      return {
-        maxWidth: '900px',
-        width: '90vw',
-      };
-    case 'full':
-      return {
-        maxWidth: '95vw',
-        width: '95vw',
-        maxHeight: '95vh',
-      };
-    default:
-      return {};
-  }
-};
 
 export const ModalHeader: React.FC<{
   children: React.ReactNode;
   onClose?: () => void;
   showCloseButton?: boolean;
   className?: string;
-}> = ({ 
-  children, 
-  onClose, 
-  showCloseButton = true, 
-  className 
+}> = ({
+  children,
+  onClose,
+  showCloseButton = true,
+  className
 }) => {
-  const theme = useTheme();
-  
-  const headerStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: `${spacing[4]} ${spacing[6]}`,
-    borderBottom: `1px solid ${theme('border.subtle')}`,
-    fontSize: fontSizes.lg,
-    fontWeight: fontWeights.semibold,
-    fontFamily: fontFamilies.sans,
-  };
-
-  const closeButtonStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '32px',
-    height: '32px',
-    border: 'none',
-    backgroundColor: 'transparent',
-    cursor: 'pointer',
-    borderRadius: radii.sm,
-    fontSize: fontSizes.lg,
-    color: theme('text.secondary'),
-    transition: 'all 150ms ease',
-  };
+  const headerClassName = ['mond-modal-header', className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <Box className={className} style={headerStyles}>
+    <Box className={headerClassName}>
       <Box>{children}</Box>
       {showCloseButton && onClose && (
-        <button
-          style={closeButtonStyles}
-          onClick={onClose}
-          aria-label="Close modal"
-          data-testid="modal-close-button"
-        >
-          ×
-        </button>
+        <Box className="mond-modal-header__close-button">
+          <Button
+            variant="ghost"
+            iconOnly
+            onClick={onClose}
+            aria-label="Close modal"
+            data-testid="modal-close-button"
+          >
+            ×
+          </Button>
+        </Box>
       )}
     </Box>
   );
@@ -155,17 +96,12 @@ export const ModalBody: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => {
-  const bodyStyles = {
-    padding: `${spacing[4]} ${spacing[6]}`,
-    fontSize: fontSizes.base,
-    fontFamily: fontFamilies.sans,
-    lineHeight: '1.6',
-    maxHeight: '60vh',
-    overflowY: 'auto' as const,
-  };
+  const bodyClassName = ['mond-modal-body', className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <Box className={className} style={bodyStyles}>
+    <Box className={bodyClassName}>
       {children}
     </Box>
   );
@@ -175,19 +111,12 @@ export const ModalFooter: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => {
-  const theme = useTheme();
-  
-  const footerStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: spacing[3],
-    padding: `${spacing[4]} ${spacing[6]}`,
-    borderTop: `1px solid ${theme('border.subtle')}`,
-  };
+  const footerClassName = ['mond-modal-footer', className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <Box className={className} style={footerStyles}>
+    <Box className={footerClassName}>
       {children}
     </Box>
   );
@@ -200,12 +129,10 @@ export const Modal: React.FC<ModalProps> = ({
   size = 'md',
   closeOnOverlayClick = true,
   closeOnEscapeKey = true,
-  isDarkMode,
   className,
   children,
   'data-testid': dataTestId,
 }) => {
-  const theme = useTheme(isDarkMode);
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
@@ -289,31 +216,9 @@ export const Modal: React.FC<ModalProps> = ({
 
   if (!isOpen) return null;
 
-  const overlayStyles = {
-    position: 'fixed' as const,
-    inset: 0,
-    backgroundColor: theme('surface.overlay'),
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: spacing[4],
-    zIndex: 1000,
-    backdropFilter: 'blur(4px)',
-  };
-
-  const sizeStyles = getSizeStyles(size);
-  
-  const modalStyles = {
-    backgroundColor: theme('surface.elevated'),
-    color: theme('text.primary'),
-    borderRadius: radii.lg,
-    boxShadow: shadows['2xl'],
-    position: 'relative' as const,
-    maxHeight: size === 'full' ? '95vh' : '90vh',
-    overflow: 'hidden' as const,
-    outline: 'none',
-    ...sizeStyles,
-  };
+  const modalClassName = ['mond-modal', `mond-modal--${size}`, className]
+    .filter(Boolean)
+    .join(' ');
 
   const handleOverlayClick = (event: React.MouseEvent) => {
     if (closeOnOverlayClick && event.target === event.currentTarget) {
@@ -323,7 +228,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <Box
-      style={overlayStyles}
+      className="mond-modal-overlay"
       onClick={handleOverlayClick}
       data-testid={`${dataTestId || 'modal'}-overlay`}
       role="dialog"
@@ -332,8 +237,7 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <Box
         ref={modalRef}
-        className={className}
-        style={modalStyles}
+        className={modalClassName}
         data-testid={dataTestId}
         tabIndex={-1}
       >
@@ -342,7 +246,7 @@ export const Modal: React.FC<ModalProps> = ({
             <Box id={`${dataTestId || 'modal'}-title`}>{title}</Box>
           </ModalHeader>
         )}
-        
+
         {typeof children === 'string' || React.isValidElement(children) ? (
           <ModalBody>{children}</ModalBody>
         ) : (

@@ -2,12 +2,13 @@ import React from 'react';
 import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Popover } from './Popover';
+import { Button } from '../Button/Button';
 
 describe('Popover Component', () => {
   it('renders trigger element', () => {
     render(
       <Popover content="Popover content" data-testid="popover">
-        <button>Click me</button>
+        <Button>Click me</Button>
       </Popover>
     );
 
@@ -18,7 +19,7 @@ describe('Popover Component', () => {
   it('does not show content by default', () => {
     render(
       <Popover content="Popover content" data-testid="popover">
-        <button>Click me</button>
+        <Button>Click me</Button>
       </Popover>
     );
 
@@ -29,7 +30,7 @@ describe('Popover Component', () => {
   it('shows content when defaultOpen is true', () => {
     render(
       <Popover content="Popover content" defaultOpen data-testid="popover">
-        <button>Click me</button>
+        <Button>Click me</Button>
       </Popover>
     );
 
@@ -42,7 +43,7 @@ describe('Popover Component', () => {
     it('opens popover on click', () => {
       render(
         <Popover content="Popover content" data-testid="popover">
-          <button>Click me</button>
+          <Button>Click me</Button>
         </Popover>
       );
 
@@ -59,7 +60,7 @@ describe('Popover Component', () => {
     it('closes popover on second click', () => {
       render(
         <Popover content="Popover content" data-testid="popover">
-          <button>Click me</button>
+          <Button>Click me</Button>
         </Popover>
       );
 
@@ -85,7 +86,7 @@ describe('Popover Component', () => {
           onOpenChange={handleOpenChange}
           data-testid="popover"
         >
-          <button>Click me</button>
+          <Button>Click me</Button>
         </Popover>
       );
 
@@ -104,7 +105,7 @@ describe('Popover Component', () => {
           onOpenChange={handleOpenChange}
           data-testid="popover"
         >
-          <button>Click me</button>
+          <Button>Click me</Button>
         </Popover>
       );
 
@@ -117,7 +118,7 @@ describe('Popover Component', () => {
       render(
         <div>
           <Popover content="Popover content" defaultOpen data-testid="popover">
-            <button>Click me</button>
+            <Button>Click me</Button>
           </Popover>
           <div data-testid="outside">Outside</div>
         </div>
@@ -143,7 +144,7 @@ describe('Popover Component', () => {
             closeOnClickOutside={false}
             data-testid="popover"
           >
-            <button>Click me</button>
+            <Button>Click me</Button>
           </Popover>
           <div data-testid="outside">Outside</div>
         </div>
@@ -164,7 +165,7 @@ describe('Popover Component', () => {
     it('closes popover when pressing Escape', async () => {
       render(
         <Popover content="Popover content" defaultOpen data-testid="popover">
-          <button>Click me</button>
+          <Button>Click me</Button>
         </Popover>
       );
 
@@ -187,7 +188,7 @@ describe('Popover Component', () => {
           closeOnEscape={false}
           data-testid="popover"
         >
-          <button>Click me</button>
+          <Button>Click me</Button>
         </Popover>
       );
 
@@ -203,7 +204,7 @@ describe('Popover Component', () => {
   });
 
   describe('placements', () => {
-    it('applies top placement styles', () => {
+    it('applies top placement class', () => {
       render(
         <Popover content="Popover content" placement="top" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -211,12 +212,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('bottom: 100%');
-      expect(content).toHaveStyle('left: 50%');
-      expect(content).toHaveStyle('transform: translateX(-50%)');
+      expect(content).toHaveClass('popover-content', 'placement-top');
     });
 
-    it('applies top-start placement styles', () => {
+    it('applies top-start placement class', () => {
       render(
         <Popover content="Popover content" placement="top-start" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -224,11 +223,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('bottom: 100%');
-      expect(content).toHaveStyle('left: 0');
+      expect(content).toHaveClass('popover-content', 'placement-top-start');
     });
 
-    it('applies top-end placement styles', () => {
+    it('applies top-end placement class', () => {
       render(
         <Popover content="Popover content" placement="top-end" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -236,11 +234,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('bottom: 100%');
-      expect(content).toHaveStyle('right: 0');
+      expect(content).toHaveClass('popover-content', 'placement-top-end');
     });
 
-    it('applies bottom placement styles', () => {
+    it('applies bottom placement class', () => {
       render(
         <Popover content="Popover content" placement="bottom" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -248,12 +245,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('top: 100%');
-      expect(content).toHaveStyle('left: 50%');
-      expect(content).toHaveStyle('transform: translateX(-50%)');
+      expect(content).toHaveClass('popover-content', 'placement-bottom');
     });
 
-    it('applies bottom-start placement styles', () => {
+    it('applies bottom-start placement class', () => {
       render(
         <Popover content="Popover content" placement="bottom-start" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -261,11 +256,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('top: 100%');
-      expect(content).toHaveStyle('left: 0');
+      expect(content).toHaveClass('popover-content', 'placement-bottom-start');
     });
 
-    it('applies bottom-end placement styles', () => {
+    it('applies bottom-end placement class', () => {
       render(
         <Popover content="Popover content" placement="bottom-end" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -273,11 +267,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('top: 100%');
-      expect(content).toHaveStyle('right: 0');
+      expect(content).toHaveClass('popover-content', 'placement-bottom-end');
     });
 
-    it('applies left placement styles', () => {
+    it('applies left placement class', () => {
       render(
         <Popover content="Popover content" placement="left" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -285,12 +278,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('right: 100%');
-      expect(content).toHaveStyle('top: 50%');
-      expect(content).toHaveStyle('transform: translateY(-50%)');
+      expect(content).toHaveClass('popover-content', 'placement-left');
     });
 
-    it('applies left-start placement styles', () => {
+    it('applies left-start placement class', () => {
       render(
         <Popover content="Popover content" placement="left-start" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -298,11 +289,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('right: 100%');
-      expect(content).toHaveStyle('top: 0');
+      expect(content).toHaveClass('popover-content', 'placement-left-start');
     });
 
-    it('applies left-end placement styles', () => {
+    it('applies left-end placement class', () => {
       render(
         <Popover content="Popover content" placement="left-end" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -310,11 +300,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('right: 100%');
-      expect(content).toHaveStyle('bottom: 0');
+      expect(content).toHaveClass('popover-content', 'placement-left-end');
     });
 
-    it('applies right placement styles', () => {
+    it('applies right placement class', () => {
       render(
         <Popover content="Popover content" placement="right" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -322,12 +311,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('left: 100%');
-      expect(content).toHaveStyle('top: 50%');
-      expect(content).toHaveStyle('transform: translateY(-50%)');
+      expect(content).toHaveClass('popover-content', 'placement-right');
     });
 
-    it('applies right-start placement styles', () => {
+    it('applies right-start placement class', () => {
       render(
         <Popover content="Popover content" placement="right-start" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -335,11 +322,10 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('left: 100%');
-      expect(content).toHaveStyle('top: 0');
+      expect(content).toHaveClass('popover-content', 'placement-right-start');
     });
 
-    it('applies right-end placement styles', () => {
+    it('applies right-end placement class', () => {
       render(
         <Popover content="Popover content" placement="right-end" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -347,13 +333,12 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('left: 100%');
-      expect(content).toHaveStyle('bottom: 0');
+      expect(content).toHaveClass('popover-content', 'placement-right-end');
     });
   });
 
   describe('offset', () => {
-    it('applies custom offset', () => {
+    it('applies custom offset via CSS variable', () => {
       render(
         <Popover content="Popover content" placement="top" offset={16} defaultOpen data-testid="popover">
           <button>Button</button>
@@ -361,7 +346,7 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('margin-bottom: 16px');
+      expect(content.style.getPropertyValue('--popover-offset')).toBe('16px');
     });
   });
 
@@ -400,7 +385,7 @@ describe('Popover Component', () => {
   });
 
   describe('dark mode', () => {
-    it('applies dark mode styling', () => {
+    it('renders in dark mode context', () => {
       renderWithDarkMode(
         <Popover content="Dark popover" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -408,11 +393,11 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('background-color: #171717');
-      expect(content).toHaveStyle('color: #DDE6ED');
+      expect(content).toBeInTheDocument();
+      expect(content).toHaveClass('popover-content');
     });
 
-    it('applies light mode styling by default', () => {
+    it('renders in light mode by default', () => {
       render(
         <Popover content="Light popover" defaultOpen data-testid="popover">
           <button>Button</button>
@@ -420,8 +405,8 @@ describe('Popover Component', () => {
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveStyle('background-color: #ffffff');
-      expect(content).toHaveStyle('color: #414A4C');
+      expect(content).toBeInTheDocument();
+      expect(content).toHaveClass('popover-content');
     });
   });
 
@@ -429,7 +414,7 @@ describe('Popover Component', () => {
     it('has correct ARIA attributes', () => {
       render(
         <Popover content="Accessible popover" aria-label="User menu" defaultOpen data-testid="popover">
-          <button>Button</button>
+          <Button>Button</Button>
         </Popover>
       );
 
@@ -444,15 +429,15 @@ describe('Popover Component', () => {
         <Popover
           content={
             <div>
-              <button>First</button>
-              <button>Second</button>
-              <button>Last</button>
+              <Button>First</Button>
+              <Button>Second</Button>
+              <Button>Last</Button>
             </div>
           }
           defaultOpen
           data-testid="popover"
         >
-          <button>Trigger</button>
+          <Button>Trigger</Button>
         </Popover>
       );
 
@@ -474,28 +459,21 @@ describe('Popover Component', () => {
   });
 
   describe('styling', () => {
-    it('applies correct base styles', () => {
+    it('applies correct base class', () => {
       render(
         <Popover content="Styled popover" defaultOpen data-testid="popover">
-          <button>Button</button>
+          <Button>Button</Button>
         </Popover>
       );
 
       const content = screen.getByTestId('popover-content');
-
-      expect(content).toHaveStyle('position: absolute');
-      expect(content).toHaveStyle('z-index: 1000');
-      expect(content).toHaveStyle('border-radius: 0.25rem');
-      expect(content).toHaveStyle('font-size: 0.875rem');
-      expect(content).toHaveStyle('min-width: 200px');
-      expect(content).toHaveStyle('max-width: 320px');
-      expect(content).toHaveStyle('line-height: 1.5');
+      expect(content).toHaveClass('popover-content');
     });
 
     it('applies custom className to container', () => {
       render(
         <Popover content="Content" className="custom-class" data-testid="popover">
-          <button>Button</button>
+          <Button>Button</Button>
         </Popover>
       );
 
@@ -506,12 +484,12 @@ describe('Popover Component', () => {
     it('applies custom className to content', () => {
       render(
         <Popover content="Content" contentClassName="custom-content" defaultOpen data-testid="popover">
-          <button>Button</button>
+          <Button>Button</Button>
         </Popover>
       );
 
       const content = screen.getByTestId('popover-content');
-      expect(content).toHaveClass('custom-content');
+      expect(content).toHaveClass('popover-content', 'custom-content');
     });
   });
 
@@ -520,7 +498,7 @@ describe('Popover Component', () => {
 
     render(
       <Popover content="Popover content" data-testid="popover">
-        <button onClick={handleClick}>Button</button>
+        <Button onClick={handleClick}>Button</Button>
       </Popover>
     );
 

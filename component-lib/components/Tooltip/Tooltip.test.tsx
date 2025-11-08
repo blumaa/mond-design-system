@@ -11,7 +11,7 @@ describe('Tooltip Component', () => {
         <button>Hover me</button>
       </Tooltip>
     );
-    
+
     const buttonElement = screen.getByText('Hover me');
     expect(buttonElement).toBeInTheDocument();
   });
@@ -22,7 +22,7 @@ describe('Tooltip Component', () => {
         <button>Hover me</button>
       </Tooltip>
     );
-    
+
     const tooltipContent = screen.getByTestId('tooltip-content');
     expect(tooltipContent).toBeInTheDocument();
     expect(tooltipContent).toHaveAttribute('aria-hidden', 'true');
@@ -40,13 +40,13 @@ describe('Tooltip Component', () => {
       const tooltipContent = screen.getByTestId('tooltip-content');
 
       // Initially hidden
-      expect(tooltipContent).toHaveStyle('opacity: 0');
+      expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
 
       // Hover over button
       fireEvent.mouseEnter(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 1');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
         expect(tooltipContent).toHaveAttribute('aria-hidden', 'false');
       });
     });
@@ -65,14 +65,14 @@ describe('Tooltip Component', () => {
       fireEvent.mouseEnter(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 1');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
       });
 
       // Hide tooltip
       fireEvent.mouseLeave(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 0');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
       });
     });
   });
@@ -91,7 +91,7 @@ describe('Tooltip Component', () => {
       fireEvent.focus(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 1');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
       });
     });
 
@@ -109,14 +109,14 @@ describe('Tooltip Component', () => {
       fireEvent.focus(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 1');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
       });
 
       // Hide tooltip
       fireEvent.blur(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 0');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
       });
     });
   });
@@ -133,20 +133,20 @@ describe('Tooltip Component', () => {
       const tooltipContent = screen.getByTestId('tooltip-content');
 
       // Initially hidden
-      expect(tooltipContent).toHaveStyle('opacity: 0');
+      expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
 
       // Show tooltip
       fireEvent.click(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 1');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
       });
 
       // Hide tooltip
       fireEvent.click(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 0');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
       });
     });
 
@@ -168,95 +168,85 @@ describe('Tooltip Component', () => {
       fireEvent.click(buttonElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 1');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
       });
 
       // Click outside
       fireEvent.mouseDown(outsideElement);
 
       await waitFor(() => {
-        expect(tooltipContent).toHaveStyle('opacity: 0');
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
       });
     });
   });
 
   describe('placement', () => {
-    it('applies top placement styles', () => {
+    it('applies top placement class', () => {
       render(
         <Tooltip content="Tooltip content" placement="top" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveStyle('bottom: 100%');
-      expect(tooltipContent).toHaveStyle('left: 50%');
-      expect(tooltipContent).toHaveStyle('transform: translateX(-50%)');
+      expect(tooltipContent).toHaveClass('mond-tooltip-content--top');
     });
 
-    it('applies bottom placement styles', () => {
+    it('applies bottom placement class', () => {
       render(
         <Tooltip content="Tooltip content" placement="bottom" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveStyle('top: 100%');
-      expect(tooltipContent).toHaveStyle('left: 50%');
-      expect(tooltipContent).toHaveStyle('transform: translateX(-50%)');
+      expect(tooltipContent).toHaveClass('mond-tooltip-content--bottom');
     });
 
-    it('applies left placement styles', () => {
+    it('applies left placement class', () => {
       render(
         <Tooltip content="Tooltip content" placement="left" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveStyle('right: 100%');
-      expect(tooltipContent).toHaveStyle('top: 50%');
-      expect(tooltipContent).toHaveStyle('transform: translateY(-50%)');
+      expect(tooltipContent).toHaveClass('mond-tooltip-content--left');
     });
 
-    it('applies right placement styles', () => {
+    it('applies right placement class', () => {
       render(
         <Tooltip content="Tooltip content" placement="right" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveStyle('left: 100%');
-      expect(tooltipContent).toHaveStyle('top: 50%');
-      expect(tooltipContent).toHaveStyle('transform: translateY(-50%)');
+      expect(tooltipContent).toHaveClass('mond-tooltip-content--right');
     });
   });
 
-  describe('dark mode', () => {
-    it('applies dark mode styling', () => {
+  describe('theme support', () => {
+    it('applies correct base classes', () => {
+      render(
+        <Tooltip content="Tooltip" data-testid="tooltip">
+          <button>Button</button>
+        </Tooltip>
+      );
+
+      const tooltipContent = screen.getByTestId('tooltip-content');
+      expect(tooltipContent).toHaveClass('mond-tooltip-content');
+    });
+
+    it('works in dark mode', () => {
       renderWithDarkMode(
         <Tooltip content="Dark tooltip" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
-      
-      const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveStyle('background-color: #171717');
-      expect(tooltipContent).toHaveStyle('color: #DDE6ED');
-    });
 
-    it('applies light mode styling by default', () => {
-      render(
-        <Tooltip content="Light tooltip" data-testid="tooltip">
-          <button>Button</button>
-        </Tooltip>
-      );
-      
       const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveStyle('background-color: #ffffff');
-      expect(tooltipContent).toHaveStyle('color: #414A4C');
+      expect(tooltipContent).toHaveClass('mond-tooltip-content');
     });
   });
 
@@ -274,7 +264,7 @@ describe('Tooltip Component', () => {
       fireEvent.mouseEnter(buttonElement);
 
       // Should remain hidden
-      expect(tooltipContent).toHaveStyle('opacity: 0');
+      expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
     });
   });
 
@@ -285,61 +275,30 @@ describe('Tooltip Component', () => {
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toHaveTextContent('Simple text tooltip');
     });
 
     it('renders JSX content', () => {
       render(
-        <Tooltip 
+        <Tooltip
           content={
             <div>
               <strong>Bold text</strong>
               <br />
               <span>Regular text</span>
             </div>
-          } 
+          }
           data-testid="tooltip"
         >
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toContainHTML('<strong>Bold text</strong>');
       expect(tooltipContent).toContainHTML('<span>Regular text</span>');
-    });
-  });
-
-  describe('styling', () => {
-    it('applies correct base styles', () => {
-      render(
-        <Tooltip content="Styled tooltip" data-testid="tooltip">
-          <button>Button</button>
-        </Tooltip>
-      );
-      
-      const tooltipContent = screen.getByTestId('tooltip-content');
-      
-      expect(tooltipContent).toHaveStyle('position: absolute');
-      expect(tooltipContent).toHaveStyle('z-index: 1000');
-      expect(tooltipContent).toHaveStyle('border-radius: 0.25rem');
-      expect(tooltipContent).toHaveStyle('font-size: 0.875rem');
-      expect(tooltipContent).toHaveStyle('max-width: 200px');
-      expect(tooltipContent).toHaveStyle('word-wrap: break-word');
-      expect(tooltipContent).toHaveStyle('pointer-events: none');
-    });
-
-    it('applies font family', () => {
-      render(
-        <Tooltip content="Font test" data-testid="tooltip">
-          <button>Button</button>
-        </Tooltip>
-      );
-      
-      const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveStyle("font-family: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif");
     });
   });
 
@@ -350,7 +309,7 @@ describe('Tooltip Component', () => {
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toHaveAttribute('role', 'tooltip');
       expect(tooltipContent).toHaveAttribute('aria-hidden', 'true');
@@ -359,7 +318,7 @@ describe('Tooltip Component', () => {
     it('preserves child element event handlers', () => {
       const handleClick = jest.fn();
       const handleMouseEnter = jest.fn();
-      
+
       render(
         <Tooltip content="Tooltip content" data-testid="tooltip">
           <button onClick={handleClick} onMouseEnter={handleMouseEnter}>
@@ -367,12 +326,12 @@ describe('Tooltip Component', () => {
           </button>
         </Tooltip>
       );
-      
+
       const buttonElement = screen.getByText('Button');
-      
+
       fireEvent.click(buttonElement);
       expect(handleClick).toHaveBeenCalled();
-      
+
       fireEvent.mouseEnter(buttonElement);
       expect(handleMouseEnter).toHaveBeenCalled();
     });
@@ -385,9 +344,20 @@ describe('Tooltip Component', () => {
           <button>Button</button>
         </Tooltip>
       );
-      
+
       const arrowElement = screen.getByTestId('tooltip-arrow');
       expect(arrowElement).toBeInTheDocument();
+    });
+
+    it('applies correct arrow placement class', () => {
+      render(
+        <Tooltip content="Tooltip" placement="top" data-testid="tooltip">
+          <button>Button</button>
+        </Tooltip>
+      );
+
+      const arrowElement = screen.getByTestId('tooltip-arrow');
+      expect(arrowElement).toHaveClass('mond-tooltip-arrow--top');
     });
   });
 

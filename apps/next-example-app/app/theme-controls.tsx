@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@mond-design-system/theme/Button';
-import type { BrandTheme } from '@mond-design-system/theme/ThemeProvider';
+import { Button, type BrandTheme } from '@mond-design-system/theme';
 
 interface ThemeControlsProps {
   onThemeChange: (theme: 'light' | 'dark') => void;

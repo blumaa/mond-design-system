@@ -1,0 +1,195 @@
+/**
+ * Switch Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base Switch Container */
+.mond-switch {
+  /* Reset */
+  margin: 0;
+
+  /* Layout */
+  display: inline-flex;
+  box-sizing: border-box;
+  contain: layout;
+}
+
+/* Label Container */
+.mond-switch__label {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--mond-spacing-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.mond-switch--disabled .mond-switch__label {
+  cursor: not-allowed;
+}
+
+/* Track Wrapper - maintains consistent size */
+.mond-switch__track-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Hidden Native Input */
+.mond-switch__input {
+  position: absolute;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.mond-switch--disabled .mond-switch__input {
+  cursor: not-allowed;
+}
+
+/* Visual Track */
+.mond-switch__track {
+  border-radius: var(--mond-radii-full);
+  border: calc(var(--mond-spacing-1) / 4) solid transparent;
+  background-color: var(--mond-border-default);
+  transition: background-color 200ms ease, border-color 200ms ease;
+  position: relative;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+/* Checked State */
+.mond-switch__input:checked ~ .mond-switch__track {
+  background-color: var(--mond-brand-interactive-background);
+}
+
+/* Hover State */
+.mond-switch__input:hover:not(:disabled) ~ .mond-switch__track {
+  opacity: 0.9;
+}
+
+.mond-switch__input:checked:hover:not(:disabled) ~ .mond-switch__track {
+  background-color: var(--mond-brand-interactive-backgroundHover);
+}
+
+/* Focus State */
+.mond-switch__input:focus-visible ~ .mond-switch__track {
+  outline: calc(var(--mond-spacing-1) / 2) solid var(--mond-border-focused);
+  outline-offset: calc(var(--mond-spacing-1) / 2);
+}
+
+/* Disabled State */
+.mond-switch--disabled .mond-switch__track {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Error State */
+.mond-switch--error .mond-switch__track {
+  border-color: var(--mond-feedback-error-border);
+}
+
+/* Visual Thumb */
+.mond-switch__thumb {
+  border-radius: var(--mond-radii-full);
+  background-color: var(--mond-surface-background);
+  box-shadow: var(--mond-effects-shadow-base);
+  transition: transform 200ms ease, background-color 200ms ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.mond-switch__input:checked ~ .mond-switch__track .mond-switch__thumb {
+  background-color: var(--mond-brand-interactive-text);
+}
+
+/* Content Container */
+.mond-switch__content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+/* Small Size */
+.mond-switch--sm .mond-switch__track-wrapper {
+  width: var(--mond-spacing-8);
+  height: calc(var(--mond-spacing-4) + var(--mond-spacing-1) / 2);
+}
+
+.mond-switch--sm .mond-switch__input {
+  width: var(--mond-spacing-8);
+  height: calc(var(--mond-spacing-4) + var(--mond-spacing-1) / 2);
+}
+
+.mond-switch--sm .mond-switch__track {
+  width: var(--mond-spacing-8);
+  height: calc(var(--mond-spacing-4) + var(--mond-spacing-1) / 2);
+}
+
+.mond-switch--sm .mond-switch__thumb {
+  width: calc(var(--mond-spacing-3) + var(--mond-spacing-1) / 2);
+  height: calc(var(--mond-spacing-3) + var(--mond-spacing-1) / 2);
+  left: calc(var(--mond-spacing-1) / 2);
+}
+
+.mond-switch--sm .mond-switch__input:checked ~ .mond-switch__track .mond-switch__thumb {
+  transform: translateY(-50%) translateX(calc(var(--mond-spacing-3) + var(--mond-spacing-1) / 2));
+}
+
+/* Medium Size (Default) */
+.mond-switch--md .mond-switch__track-wrapper {
+  width: calc(var(--mond-spacing-10) + var(--mond-spacing-1));
+  height: var(--mond-spacing-6);
+}
+
+.mond-switch--md .mond-switch__input {
+  width: calc(var(--mond-spacing-10) + var(--mond-spacing-1));
+  height: var(--mond-spacing-6);
+}
+
+.mond-switch--md .mond-switch__track {
+  width: calc(var(--mond-spacing-10) + var(--mond-spacing-1));
+  height: var(--mond-spacing-6);
+}
+
+.mond-switch--md .mond-switch__thumb {
+  width: var(--mond-spacing-5);
+  height: var(--mond-spacing-5);
+  left: calc(var(--mond-spacing-1) / 2);
+}
+
+.mond-switch--md .mond-switch__input:checked ~ .mond-switch__track .mond-switch__thumb {
+  transform: translateY(-50%) translateX(calc(var(--mond-spacing-5) + var(--mond-spacing-1) / 2));
+}
+
+/* Large Size */
+.mond-switch--lg .mond-switch__track-wrapper {
+  width: calc(var(--mond-spacing-12) + var(--mond-spacing-2));
+  height: var(--mond-spacing-8);
+}
+
+.mond-switch--lg .mond-switch__input {
+  width: calc(var(--mond-spacing-12) + var(--mond-spacing-2));
+  height: var(--mond-spacing-8);
+}
+
+.mond-switch--lg .mond-switch__track {
+  width: calc(var(--mond-spacing-12) + var(--mond-spacing-2));
+  height: var(--mond-spacing-8);
+}
+
+.mond-switch--lg .mond-switch__thumb {
+  width: calc(var(--mond-spacing-6) + var(--mond-spacing-2) - var(--mond-spacing-1));
+  height: calc(var(--mond-spacing-6) + var(--mond-spacing-2) - var(--mond-spacing-1));
+  left: calc(var(--mond-spacing-1) / 2);
+}
+
+.mond-switch--lg .mond-switch__input:checked ~ .mond-switch__track .mond-switch__thumb {
+  transform: translateY(-50%) translateX(calc(var(--mond-spacing-6) + var(--mond-spacing-1) / 2));
+}

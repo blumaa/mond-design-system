@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ThemeProvider, type BrandTheme } from '@mond-design-system/theme/ThemeProvider';
+import { ThemeProvider, type BrandTheme } from '@mond-design-system/theme';
 import { ThemeControls } from './theme-controls';
 
 interface ThemeWrapperProps {

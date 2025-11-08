@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "@mond-design-system/theme/styles.css";
-import "@mond-design-system/theme/button.css";
-import "@mond-design-system/theme/badge.css";
-import "@mond-design-system/theme/avatar.css";
-import "@mond-design-system/theme/text.css";
+import { ThemeScript } from "./theme-script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <ThemeScript />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -1,8 +1,7 @@
 import React, { useId } from 'react';
-import { radii, spacing } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
 import { Label } from '../Label';
 import { Text } from '../Text';
+import './switch.css';
 
 export type SwitchSize = 'sm' | 'md' | 'lg';
 
@@ -23,12 +22,6 @@ export interface SwitchProps {
    * @default 'md'
    */
   size?: SwitchSize;
-
-  /**
-   * Dark mode control for theme resolution
-   * @default false
-   */
-  isDarkMode?: boolean;
 
   /**
    * Label text
@@ -87,39 +80,12 @@ export interface SwitchProps {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-const getSizeStyles = (size: SwitchSize) => {
-  switch (size) {
-    case 'sm':
-      return {
-        width: '32px',
-        height: '18px',
-        thumbSize: '14px',
-        thumbOffset: '2px',
-      };
-    case 'md':
-      return {
-        width: '44px',
-        height: '24px',
-        thumbSize: '20px',
-        thumbOffset: '2px',
-      };
-    case 'lg':
-      return {
-        width: '56px',
-        height: '32px',
-        thumbSize: '28px',
-        thumbOffset: '2px',
-      };
-  }
-};
-
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       id,
       'data-testid': dataTestId,
       size = 'md',
-      isDarkMode,
       label,
       helperText,
       error,
@@ -134,95 +100,28 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     },
     ref
   ) => {
-    const theme = useTheme(isDarkMode);
-    const sizeStyles = getSizeStyles(size);
     const generatedId = useId();
     const switchId = id || `switch-${generatedId}`;
 
-    // Container styles
-    const containerStyles: React.CSSProperties = {
-      display: 'inline-flex',
-      alignItems: 'flex-start',
-      gap: spacing[2],
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      userSelect: 'none',
-    };
-
-    // Hidden checkbox styles - sized exactly to track dimensions
-    const checkboxStyles: React.CSSProperties = {
-      position: 'absolute',
-      opacity: 0,
-      width: sizeStyles.width,
-      height: sizeStyles.height,
-      margin: 0,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      zIndex: 1,
-    };
-
-    // Visual track wrapper
-    const trackWrapperStyles: React.CSSProperties = {
-      position: 'relative',
-      flexShrink: 0,
-      width: sizeStyles.width,
-      height: sizeStyles.height,
-    };
-
-    // Visual track styles
-    const trackStyles: React.CSSProperties = {
-      width: sizeStyles.width,
-      height: sizeStyles.height,
-      borderRadius: radii.full,
-      backgroundColor: checked
-        ? theme('interactive.primary.background')
-        : theme('border.default'),
-      border: `1px solid ${error ? theme('border.error') : 'transparent'}`,
-      transition: 'all 200ms ease',
-      position: 'relative',
-      pointerEvents: 'none',
-      opacity: disabled ? 0.6 : 1,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-    };
-
-    // Visual thumb styles
-    const thumbStyles: React.CSSProperties = {
-      width: sizeStyles.thumbSize,
-      height: sizeStyles.thumbSize,
-      borderRadius: radii.full,
-      backgroundColor: checked
-        ? theme('interactive.primary.text')
-        : theme('surface.background'),
-      boxShadow: theme('effects.shadow.base'),
-      transition: 'all 200ms ease',
-      position: 'absolute',
-      top: '50%',
-      transform: `translateY(-50%) translateX(${
-        checked
-          ? `calc(${sizeStyles.width} - ${sizeStyles.thumbSize} - ${sizeStyles.thumbOffset})`
-          : sizeStyles.thumbOffset
-      })`,
-      pointerEvents: 'none',
-    };
-
-
-    // Focus visible styles - applied via CSS
-    const focusVisibleStyles = `
-      #${switchId}:focus-visible + span {
-        box-shadow: 0 0 0 3px ${theme('feedback.info.background')};
-      }
-    `;
+    // Build CSS class names
+    const switchClasses = [
+      'mond-switch',
+      `mond-switch--${size}`,
+      disabled && 'mond-switch--disabled',
+      error && 'mond-switch--error',
+    ].filter(Boolean).join(' ');
 
     return (
-      <div data-testid={dataTestId}>
-        <style>{focusVisibleStyles}</style>
-
-        <label htmlFor={switchId} style={containerStyles}>
+      <div className={switchClasses} data-testid={dataTestId}>
+        <label htmlFor={switchId} className="mond-switch__label">
           {/* Switch visual container */}
-          <span style={trackWrapperStyles}>
+          <span className="mond-switch__track-wrapper">
             {/* Hidden checkbox - the actual form control */}
             <input
               ref={ref}
               type="checkbox"
               id={switchId}
+              className="mond-switch__input"
               checked={checked}
               defaultChecked={defaultChecked}
               readOnly={readOnly}
@@ -231,20 +130,19 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
               onClick={onClick}
               onFocus={onFocus}
               onBlur={onBlur}
-              style={checkboxStyles}
               aria-label={label || 'Switch'}
             />
 
             {/* Visual track */}
-            <div data-switch-track style={trackStyles}>
+            <div className="mond-switch__track" data-switch-track>
               {/* Visual thumb */}
-              <div style={thumbStyles} />
+              <div className="mond-switch__thumb" />
             </div>
           </span>
 
           {/* Label text and messages */}
           {label && (
-            <span>
+            <span className="mond-switch__content">
               <Label size={size} disabled={disabled}>
                 {label}
               </Label>

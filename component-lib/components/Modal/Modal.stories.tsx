@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from './Modal';
+import { Button } from '../Button/Button';
 import { useState } from 'react';
 
 const meta: Meta<typeof Modal> = {
@@ -12,20 +13,20 @@ const meta: Meta<typeof Modal> = {
         component: `
 ### Quick Start
 \`\`\`tsx
-import { Modal, ModalHeader, ModalBody, ModalFooter } from '@mond-design-system/theme';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from '@mond-design-system/theme';
 import { useState } from 'react';
 
 function MyComponent() {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>
+      <Button onClick={() => setIsOpen(true)}>
         Open Modal
-      </button>
-      
-      <Modal 
-        isOpen={isOpen} 
+      </Button>
+
+      <Modal
+        isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         title="My Modal"
         size="md"
@@ -34,7 +35,7 @@ function MyComponent() {
           <p>Your content here</p>
         </ModalBody>
         <ModalFooter>
-          <button onClick={() => setIsOpen(false)}>Close</button>
+          <Button onClick={() => setIsOpen(false)}>Close</Button>
         </ModalFooter>
       </Modal>
     </>
@@ -61,9 +62,6 @@ A flexible modal component for dialogs, confirmations, forms, and content overla
       control: 'select',
       options: ['sm', 'md', 'lg', 'xl', 'full'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     closeOnOverlayClick: {
       control: 'boolean',
     },
@@ -79,18 +77,15 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
-    
+
     return (
       <div>
-        <button 
-          onClick={() => setIsOpen(true)}
-          style={{ padding: '8px 16px', cursor: 'pointer' }}
-        >
+        <Button onClick={() => setIsOpen(true)}>
           Open Modal
-        </button>
-        
-        <Modal 
-          isOpen={isOpen} 
+        </Button>
+
+        <Modal
+          isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           title="Default Modal"
         >
@@ -111,13 +106,12 @@ export const Sizes: Story = {
     return (
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {sizes.map((size) => (
-          <button 
+          <Button
             key={size}
             onClick={() => setOpenModal(size)}
-            style={{ padding: '8px 16px', cursor: 'pointer', textTransform: 'uppercase' }}
           >
             {size} Modal
-          </button>
+          </Button>
         ))}
         
         {sizes.map((size) => (
@@ -143,24 +137,21 @@ export const WithCustomStructure: Story = {
     
     return (
       <div>
-        <button 
-          onClick={() => setIsOpen(true)}
-          style={{ padding: '8px 16px', cursor: 'pointer' }}
-        >
+        <Button onClick={() => setIsOpen(true)}>
           Open Custom Modal
-        </button>
-        
+        </Button>
+
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <ModalHeader onClose={() => setIsOpen(false)}>
             🚀 Custom Modal Header
           </ModalHeader>
-          
+
           <ModalBody>
             <h3>Welcome to our platform!</h3>
             <p>This modal uses custom components for better control over the layout and styling.</p>
-            <div style={{ 
-              padding: '1rem', 
-              backgroundColor: '#f0f9ff', 
+            <div style={{
+              padding: '1rem',
+              backgroundColor: '#f0f9ff',
               borderRadius: '6px',
               border: '1px solid #bae6fd',
               marginTop: '1rem'
@@ -168,33 +159,17 @@ export const WithCustomStructure: Story = {
               <strong>Pro tip:</strong> You can use ModalHeader, ModalBody, and ModalFooter for better structure.
             </div>
           </ModalBody>
-          
+
           <ModalFooter>
-            <button 
+            <Button
+              variant="secondary"
               onClick={() => setIsOpen(false)}
-              style={{ 
-                padding: '8px 16px', 
-                border: '1px solid #d1d5db',
-                backgroundColor: 'white',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
             >
               Cancel
-            </button>
-            <button 
-              onClick={() => setIsOpen(false)}
-              style={{ 
-                padding: '8px 16px', 
-                border: '1px solid #2563eb',
-                backgroundColor: '#2563eb',
-                color: 'white',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
+            </Button>
+            <Button onClick={() => setIsOpen(false)}>
               Get Started
-            </button>
+            </Button>
           </ModalFooter>
         </Modal>
       </div>
@@ -213,22 +188,15 @@ export const ConfirmationModal: Story = {
     
     return (
       <div>
-        <button 
+        <Button
+          variant="destructive"
           onClick={() => setIsOpen(true)}
-          style={{ 
-            padding: '8px 16px', 
-            cursor: 'pointer',
-            backgroundColor: '#ef4444',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px'
-          }}
         >
           Delete Item
-        </button>
-        
-        <Modal 
-          isOpen={isOpen} 
+        </Button>
+
+        <Modal
+          isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           title="⚠️ Confirm Deletion"
           size="sm"
@@ -237,33 +205,20 @@ export const ConfirmationModal: Story = {
             <p><strong>Are you sure you want to delete this item?</strong></p>
             <p>This action cannot be undone. The item will be permanently removed from your account.</p>
           </ModalBody>
-          
+
           <ModalFooter>
-            <button 
+            <Button
+              variant="secondary"
               onClick={() => setIsOpen(false)}
-              style={{ 
-                padding: '8px 16px', 
-                border: '1px solid #d1d5db',
-                backgroundColor: 'white',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
             >
               Cancel
-            </button>
-            <button 
+            </Button>
+            <Button
+              variant="destructive"
               onClick={handleDelete}
-              style={{ 
-                padding: '8px 16px', 
-                border: '1px solid #ef4444',
-                backgroundColor: '#ef4444',
-                color: 'white',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
             >
               Delete
-            </button>
+            </Button>
           </ModalFooter>
         </Modal>
       </div>
@@ -283,15 +238,12 @@ export const FormModal: Story = {
     
     return (
       <div>
-        <button 
-          onClick={() => setIsOpen(true)}
-          style={{ padding: '8px 16px', cursor: 'pointer' }}
-        >
+        <Button onClick={() => setIsOpen(true)}>
           Add New User
-        </button>
-        
-        <Modal 
-          isOpen={isOpen} 
+        </Button>
+
+        <Modal
+          isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           title="Add New User"
           size="md"
@@ -303,9 +255,9 @@ export const FormModal: Story = {
                   <label htmlFor="fullname" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
                     Full Name
                   </label>
-                  <input 
+                  <input
                     id="fullname"
-                    type="text" 
+                    type="text"
                     required
                     style={{
                       width: '100%',
@@ -316,14 +268,14 @@ export const FormModal: Story = {
                     placeholder="Enter full name"
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="email" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
                     Email Address
                   </label>
-                  <input 
+                  <input
                     id="email"
-                    type="email" 
+                    type="email"
                     required
                     style={{
                       width: '100%',
@@ -334,13 +286,13 @@ export const FormModal: Story = {
                     placeholder="Enter email address"
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="role" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
                     Role
                   </label>
-                  <select 
-                    id="role" 
+                  <select
+                    id="role"
                     style={{
                       width: '100%',
                       padding: '8px 12px',
@@ -353,7 +305,7 @@ export const FormModal: Story = {
                     <option value="moderator">Moderator</option>
                   </select>
                 </div>
-                
+
                 <div>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <input type="checkbox" />
@@ -362,34 +314,18 @@ export const FormModal: Story = {
                 </div>
               </div>
             </ModalBody>
-            
+
             <ModalFooter>
-              <button 
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={() => setIsOpen(false)}
-                style={{ 
-                  padding: '8px 16px', 
-                  border: '1px solid #d1d5db',
-                  backgroundColor: 'white',
-                  borderRadius: '4px',
-                  cursor: 'pointer'
-                }}
               >
                 Cancel
-              </button>
-              <button 
-                type="submit"
-                style={{ 
-                  padding: '8px 16px', 
-                  border: '1px solid #16a34a',
-                  backgroundColor: '#16a34a',
-                  color: 'white',
-                  borderRadius: '4px',
-                  cursor: 'pointer'
-                }}
-              >
+              </Button>
+              <Button type="submit">
                 Add User
-              </button>
+              </Button>
             </ModalFooter>
           </form>
         </Modal>
@@ -412,15 +348,12 @@ export const ScrollableContent: Story = {
     
     return (
       <div>
-        <button 
-          onClick={() => setIsOpen(true)}
-          style={{ padding: '8px 16px', cursor: 'pointer' }}
-        >
+        <Button onClick={() => setIsOpen(true)}>
           Open Scrollable Modal
-        </button>
-        
-        <Modal 
-          isOpen={isOpen} 
+        </Button>
+
+        <Modal
+          isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           title="📜 Long Content Modal"
           size="lg"
@@ -429,20 +362,11 @@ export const ScrollableContent: Story = {
             <p><strong>This modal has scrollable content.</strong></p>
             {longContent}
           </ModalBody>
-          
+
           <ModalFooter>
-            <button 
-              onClick={() => setIsOpen(false)}
-              style={{ 
-                padding: '8px 16px', 
-                border: '1px solid #d1d5db',
-                backgroundColor: 'white',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
+            <Button onClick={() => setIsOpen(false)}>
               Close
-            </button>
+            </Button>
           </ModalFooter>
         </Modal>
       </div>
@@ -456,15 +380,12 @@ export const NonDismissible: Story = {
     
     return (
       <div>
-        <button 
-          onClick={() => setIsOpen(true)}
-          style={{ padding: '8px 16px', cursor: 'pointer' }}
-        >
+        <Button onClick={() => setIsOpen(true)}>
           Open Non-Dismissible Modal
-        </button>
-        
-        <Modal 
-          isOpen={isOpen} 
+        </Button>
+
+        <Modal
+          isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           closeOnOverlayClick={false}
           closeOnEscapeKey={false}
@@ -475,20 +396,11 @@ export const NonDismissible: Story = {
             <p>You must explicitly click one of the buttons below to close it.</p>
             <p>This is useful for critical confirmations or when you need to ensure the user makes a choice.</p>
           </ModalBody>
-          
+
           <ModalFooter>
-            <button 
-              onClick={() => setIsOpen(false)}
-              style={{ 
-                padding: '8px 16px', 
-                border: '1px solid #d1d5db',
-                backgroundColor: 'white',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
+            <Button onClick={() => setIsOpen(false)}>
               I Understand
-            </button>
+            </Button>
           </ModalFooter>
         </Modal>
       </div>
@@ -502,32 +414,18 @@ export const WithoutHeader: Story = {
     
     return (
       <div>
-        <button 
-          onClick={() => setIsOpen(true)}
-          style={{ padding: '8px 16px', cursor: 'pointer' }}
-        >
+        <Button onClick={() => setIsOpen(true)}>
           Open Modal Without Header
-        </button>
-        
+        </Button>
+
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <ModalBody>
             <h2 style={{ margin: '0 0 1rem 0' }}>Custom Content</h2>
             <p>This modal doesn't use the standard header. Instead, the content is completely custom.</p>
             <p>You can still close it by clicking outside or pressing Escape.</p>
-            <button 
-              onClick={() => setIsOpen(false)}
-              style={{ 
-                marginTop: '1rem',
-                padding: '8px 16px', 
-                border: '1px solid #2563eb',
-                backgroundColor: '#2563eb',
-                color: 'white',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
+            <Button onClick={() => setIsOpen(false)}>
               Close Modal
-            </button>
+            </Button>
           </ModalBody>
         </Modal>
       </div>
@@ -541,18 +439,14 @@ export const DarkMode: Story = {
     
     return (
       <div>
-        <button 
-          onClick={() => setIsOpen(true)}
-          style={{ padding: '8px 16px', cursor: 'pointer' }}
-        >
+        <Button onClick={() => setIsOpen(true)}>
           Open Dark Mode Modal
-        </button>
-        
-        <Modal 
-          isOpen={isOpen} 
+        </Button>
+
+        <Modal
+          isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           title="🌙 Dark Mode Modal"
-          
         >
           <p>This modal is rendered in dark mode with appropriate theming.</p>
           <p>The background, text colors, and borders are all adjusted for the dark theme.</p>

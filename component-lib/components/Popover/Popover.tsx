@@ -1,9 +1,8 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { radii, fontSizes, fontWeights, fontFamilies, shadows } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
 import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
+import './popover.css';
 
 export type PopoverPlacement =
   | 'top' | 'bottom' | 'left' | 'right'
@@ -80,12 +79,6 @@ export interface PopoverProps {
   contentClassName?: string;
 
   /**
-   * Dark mode
-   * @default false
-   */
-  isDarkMode?: boolean;
-
-  /**
    * Test ID for the popover
    */
   'data-testid'?: string;
@@ -95,89 +88,6 @@ export interface PopoverProps {
    */
   'aria-label'?: string;
 }
-
-const getPlacementStyles = (placement: PopoverPlacement, offset: number = 8) => {
-  switch (placement) {
-    case 'top':
-      return {
-        bottom: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        mb: offset,
-      };
-    case 'top-start':
-      return {
-        bottom: '100%',
-        left: 0,
-        mb: offset,
-      };
-    case 'top-end':
-      return {
-        bottom: '100%',
-        right: 0,
-        mb: offset,
-      };
-    case 'bottom':
-      return {
-        top: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        mt: offset,
-      };
-    case 'bottom-start':
-      return {
-        top: '100%',
-        left: 0,
-        mt: offset,
-      };
-    case 'bottom-end':
-      return {
-        top: '100%',
-        right: 0,
-        mt: offset,
-      };
-    case 'left':
-      return {
-        right: '100%',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        mr: offset,
-      };
-    case 'left-start':
-      return {
-        right: '100%',
-        top: 0,
-        mr: offset,
-      };
-    case 'left-end':
-      return {
-        right: '100%',
-        bottom: 0,
-        mr: offset,
-      };
-    case 'right':
-      return {
-        left: '100%',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        ml: offset,
-      };
-    case 'right-start':
-      return {
-        left: '100%',
-        top: 0,
-        ml: offset,
-      };
-    case 'right-end':
-      return {
-        left: '100%',
-        bottom: 0,
-        ml: offset,
-      };
-    default:
-      return {};
-  }
-};
 
 export const Popover: React.FC<PopoverProps> = ({
   children,
@@ -192,15 +102,12 @@ export const Popover: React.FC<PopoverProps> = ({
   closeOnEscape = true,
   className,
   contentClassName,
-  isDarkMode,
   'data-testid': dataTestId,
   'aria-label': ariaLabel,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(defaultOpen);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const theme = useTheme(isDarkMode);
 
   // Controlled vs uncontrolled state
   const isControlled = controlledIsOpen !== undefined;
@@ -303,50 +210,43 @@ export const Popover: React.FC<PopoverProps> = ({
     };
   }, [isOpen]);
 
-  const placementStyles = getPlacementStyles(placement, offset);
+  // Build class names
+  const contentClasses = [
+    'popover-content',
+    `placement-${placement}`,
+    contentClassName,
+  ].filter(Boolean).join(' ');
 
-  const contentStyle = {
-    position: 'absolute' as const,
-    zIndex: 1000,
-    padding: '10px',
-    backgroundColor: theme('surface.elevated'),
-    color: theme('text.primary'),
-    border: `1px solid ${theme('border.default')}`,
-    borderRadius: radii.md,
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.normal,
-    fontFamily: fontFamilies.sans,
-    minWidth: '200px',
-    maxWidth: '320px',
-    lineHeight: '1.5',
-    boxShadow: shadows.lg,
-    ...placementStyles,
-  };
-
-  const closeButtonStyle = {
-    position: 'absolute' as const,
-    top: 0,
-    right: '4px',
-    zIndex: 1,
-  };
+  // Custom CSS variable for offset
+  const contentStyle = offset !== 8 ? { '--popover-offset': `${offset}px` } as React.CSSProperties : undefined;
 
   return (
-    <div
+    <Box
       ref={containerRef}
-      className={className}
-      style={{ position: 'relative', display: 'inline-block' }}
+      className={`popover-container ${className || ''}`}
       data-testid={dataTestId}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div onClick={handleToggle}>
+      <Box
+        className="popover-trigger"
+        onClick={handleToggle}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleToggle();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+      >
         {children}
-      </div>
+      </Box>
 
       {isOpen && (
-        <div
+        <Box
           ref={contentRef}
-          className={contentClassName}
+          className={contentClasses}
           style={contentStyle}
           role="dialog"
           aria-modal="false"
@@ -354,7 +254,7 @@ export const Popover: React.FC<PopoverProps> = ({
           data-testid={`${dataTestId || 'popover'}-content`}
         >
           {trigger === 'hover' && (
-            <div style={closeButtonStyle}>
+            <Box className="popover-close-button">
               <Button
                 variant="ghost"
                 size="sm"
@@ -365,12 +265,12 @@ export const Popover: React.FC<PopoverProps> = ({
               >
                 ×
               </Button>
-            </div>
+            </Box>
           )}
           {content}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

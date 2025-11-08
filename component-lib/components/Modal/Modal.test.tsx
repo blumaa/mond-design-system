@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../test-utils';
+import { render, screen, fireEvent, waitFor } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from './Modal';
 
@@ -134,9 +134,9 @@ describe('Modal Component', () => {
           Modal content
         </Modal>
       );
-      
+
       const modal = screen.getByTestId('modal');
-      expect(modal).toHaveStyle('max-width: 400px');
+      expect(modal).toHaveClass('mond-modal--sm');
     });
 
     it('renders medium size correctly', () => {
@@ -145,9 +145,9 @@ describe('Modal Component', () => {
           Modal content
         </Modal>
       );
-      
+
       const modal = screen.getByTestId('modal');
-      expect(modal).toHaveStyle('max-width: 500px');
+      expect(modal).toHaveClass('mond-modal--md');
     });
 
     it('renders large size correctly', () => {
@@ -156,9 +156,9 @@ describe('Modal Component', () => {
           Modal content
         </Modal>
       );
-      
+
       const modal = screen.getByTestId('modal');
-      expect(modal).toHaveStyle('max-width: 700px');
+      expect(modal).toHaveClass('mond-modal--lg');
     });
 
     it('renders extra large size correctly', () => {
@@ -167,9 +167,9 @@ describe('Modal Component', () => {
           Modal content
         </Modal>
       );
-      
+
       const modal = screen.getByTestId('modal');
-      expect(modal).toHaveStyle('max-width: 900px');
+      expect(modal).toHaveClass('mond-modal--xl');
     });
 
     it('renders full size correctly', () => {
@@ -178,36 +178,22 @@ describe('Modal Component', () => {
           Modal content
         </Modal>
       );
-      
+
       const modal = screen.getByTestId('modal');
-      expect(modal).toHaveStyle('max-width: 95vw');
-      expect(modal).toHaveStyle('max-height: 95vh');
+      expect(modal).toHaveClass('mond-modal--full');
     });
   });
 
-  describe('dark mode', () => {
-    it('applies dark mode styling', () => {
-      renderWithDarkMode(
-        <Modal isOpen={true} onClose={mockOnClose} data-testid="modal">
-          Modal content
-        </Modal>
-      );
-      
-      const modal = screen.getByTestId('modal');
-      expect(modal).toHaveStyle('background-color: #171717');
-      expect(modal).toHaveStyle('color: #DDE6ED');
-    });
-
-    it('applies light mode styling by default', () => {
+  describe('theming', () => {
+    it('applies base modal classes', () => {
       render(
         <Modal isOpen={true} onClose={mockOnClose} data-testid="modal">
           Modal content
         </Modal>
       );
-      
+
       const modal = screen.getByTestId('modal');
-      expect(modal).toHaveStyle('background-color: #ffffff');
-      expect(modal).toHaveStyle('color: #414A4C');
+      expect(modal).toHaveClass('mond-modal');
     });
   });
 
@@ -339,26 +325,18 @@ describe('Modal Component', () => {
   });
 
   describe('styling', () => {
-    it('applies correct base styles', () => {
+    it('applies correct CSS classes', () => {
       render(
         <Modal isOpen={true} onClose={mockOnClose} data-testid="modal">
           Modal content
         </Modal>
       );
-      
+
       const modal = screen.getByTestId('modal');
       const overlay = screen.getByTestId('modal-overlay');
-      
-      expect(modal).toHaveStyle('border-radius: 0.5rem');
-      expect(modal).toHaveStyle('position: relative');
-      expect(modal).toHaveStyle('overflow: hidden');
-      expect(modal).toHaveStyle('outline: none');
-      
-      expect(overlay).toHaveStyle('position: fixed');
-      expect(overlay).toHaveStyle('inset: 0');
-      expect(overlay).toHaveStyle('z-index: 1000');
-      // backdrop-filter may not be fully supported in test environment
-      expect(overlay).toHaveStyle('background-color: rgb(242, 243, 244)');
+
+      expect(modal).toHaveClass('mond-modal');
+      expect(overlay).toHaveClass('mond-modal-overlay');
     });
   });
 
