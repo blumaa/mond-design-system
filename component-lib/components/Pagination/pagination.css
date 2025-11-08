@@ -1,0 +1,104 @@
+/**
+ * Pagination Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base Pagination Container */
+.mond-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-pagination:focus {
+  outline: none;
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+.mond-pagination--sm {
+  gap: var(--mond-spacing-1);
+  padding: var(--mond-spacing-2);
+}
+
+.mond-pagination--md {
+  gap: var(--mond-spacing-2);
+  padding: var(--mond-spacing-3);
+}
+
+.mond-pagination--lg {
+  gap: var(--mond-spacing-3);
+  padding: var(--mond-spacing-4);
+}
+
+/* ============================================
+   INFO SECTION
+   ============================================ */
+
+.mond-pagination__info {
+  display: flex;
+  align-items: center;
+  min-width: fit-content;
+}
+
+.mond-pagination--sm .mond-pagination__info {
+  gap: var(--mond-spacing-1);
+}
+
+.mond-pagination--md .mond-pagination__info {
+  gap: var(--mond-spacing-2);
+}
+
+.mond-pagination--lg .mond-pagination__info {
+  gap: var(--mond-spacing-3);
+}
+
+.mond-pagination__items-per-page {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ============================================
+   NAVIGATION SECTION
+   ============================================ */
+
+.mond-pagination__navigation {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.mond-pagination--sm .mond-pagination__navigation {
+  gap: var(--mond-spacing-1);
+}
+
+.mond-pagination--md .mond-pagination__navigation {
+  gap: var(--mond-spacing-2);
+}
+
+.mond-pagination--lg .mond-pagination__navigation {
+  gap: var(--mond-spacing-3);
+}
+
+/* ============================================
+   PAGE NUMBERS
+   ============================================ */
+
+.mond-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mond-pagination__ellipsis {
+  padding-left: 8px;
+  padding-right: 8px;
+}

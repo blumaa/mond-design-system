@@ -3,61 +3,53 @@ import { render, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Icon, IconSize } from './Icon';
 
-const TestPath = () => (
-  <path 
-    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
-    fill="currentColor"
-  />
+const TestSvg = () => (
+  <svg viewBox="0 0 24 24" fill="none">
+    <path
+      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
+      fill="currentColor"
+    />
+  </svg>
 );
 
 describe('Icon', () => {
   it('renders correctly with default props', () => {
     render(
       <Icon>
-        <TestPath />
+        <TestSvg />
       </Icon>
     );
-    
+
     const icon = screen.getByRole('img');
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute('width', '20px');
-    expect(icon).toHaveAttribute('height', '20px');
-    expect(icon).toHaveAttribute('viewBox', '0 0 24 24');
+    expect(icon).toHaveClass('mond-icon');
+    expect(icon).toHaveClass('mond-icon--md');
   });
 
   it('renders with custom size', () => {
     render(
       <Icon size="lg">
-        <TestPath />
+        <TestSvg />
       </Icon>
     );
-    
+
     const icon = screen.getByRole('img');
-    expect(icon).toHaveAttribute('width', '24px');
-    expect(icon).toHaveAttribute('height', '24px');
+    expect(icon).toHaveClass('mond-icon--lg');
   });
 
   it('applies correct sizes for all size variants', () => {
-    const sizes = {
-      xs: '12px',
-      sm: '16px',
-      md: '20px',
-      lg: '24px',
-      xl: '32px',
-      '2xl': '40px'
-    };
+    const sizes: IconSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 
-    Object.entries(sizes).forEach(([size, expectedSize]) => {
+    sizes.forEach((size) => {
       const { unmount } = render(
-        <Icon size={size as IconSize}>
-          <TestPath />
+        <Icon size={size}>
+          <TestSvg />
         </Icon>
       );
-      
+
       const icon = screen.getByRole('img');
-      expect(icon).toHaveAttribute('width', expectedSize);
-      expect(icon).toHaveAttribute('height', expectedSize);
-      
+      expect(icon).toHaveClass(`mond-icon--${size}`);
+
       unmount();
     });
   });
@@ -65,10 +57,10 @@ describe('Icon', () => {
   it('renders with accessibility label', () => {
     render(
       <Icon label="Test icon">
-        <TestPath />
+        <TestSvg />
       </Icon>
     );
-    
+
     const icon = screen.getByRole('img');
     expect(icon).toHaveAttribute('aria-label', 'Test icon');
     expect(icon).not.toHaveAttribute('aria-hidden');
@@ -77,80 +69,73 @@ describe('Icon', () => {
   it('renders as decorative when specified', () => {
     render(
       <Icon decorative data-testid="decorative-icon">
-        <TestPath />
+        <TestSvg />
       </Icon>
     );
-    
+
     const icon = screen.getByTestId('decorative-icon');
     expect(icon).toHaveAttribute('aria-hidden', 'true');
     expect(icon).toHaveAttribute('role', 'presentation');
     expect(icon).not.toHaveAttribute('aria-label');
   });
 
-  it('renders with custom color', () => {
+  it('renders with custom color via inline style', () => {
     render(
-      <Icon color="red">
-        <TestPath />
+      <Icon color="red" data-testid="colored-icon">
+        <TestSvg />
       </Icon>
     );
-    
-    const icon = screen.getByRole('img');
+
+    const icon = screen.getByTestId('colored-icon');
     expect(icon).toHaveStyle({ color: 'red' });
   });
 
   it('passes through additional props', () => {
     render(
       <Icon className="custom-class" data-testid="custom-icon">
-        <TestPath />
+        <TestSvg />
       </Icon>
     );
-    
+
     const icon = screen.getByTestId('custom-icon');
     expect(icon).toHaveClass('custom-class');
+    expect(icon).toHaveClass('mond-icon');
   });
 
   it('forwards ref correctly', () => {
-    const ref = React.createRef<SVGSVGElement>();
-    
+    const ref = React.createRef<HTMLSpanElement>();
+
     render(
       <Icon ref={ref}>
-        <TestPath />
+        <TestSvg />
       </Icon>
     );
-    
-    expect(ref.current).toBeInstanceOf(SVGSVGElement);
+
+    expect(ref.current).toBeInstanceOf(HTMLSpanElement);
   });
 
-  it('has flexShrink set to 0 to prevent shrinking', () => {
+  it('has proper CSS classes applied', () => {
     render(
-      <Icon data-testid="icon">
-        <TestPath />
+      <Icon data-testid="icon" size="md">
+        <TestSvg />
       </Icon>
     );
-    
+
     const icon = screen.getByTestId('icon');
-    expect(icon).toHaveStyle({ flexShrink: '0' });
+    expect(icon).toHaveClass('mond-icon');
+    expect(icon).toHaveClass('mond-icon--md');
   });
 
-  it('is inline-block by default', () => {
+  it('renders children SVG correctly', () => {
     render(
       <Icon data-testid="icon">
-        <TestPath />
+        <TestSvg />
       </Icon>
     );
-    
-    const icon = screen.getByTestId('icon');
-    expect(icon).toHaveStyle({ display: 'inline-block' });
-  });
 
-  it('supports dark mode', () => {
-    render(
-      <Icon data-testid="icon">
-        <TestPath />
-      </Icon>
-    );
-    
     const icon = screen.getByTestId('icon');
-    expect(icon).toBeInTheDocument();
+    const svg = icon.querySelector('svg');
+    expect(svg).toBeInTheDocument();
+    expect(svg).toHaveAttribute('viewBox', '0 0 24 24');
   });
 });

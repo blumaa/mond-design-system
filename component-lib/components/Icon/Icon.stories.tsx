@@ -1,48 +1,56 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from './Icon';
 
-// Sample SVG paths for demonstration
+// Sample SVG icons for demonstration
 const HeartIcon = () => (
-  <path
-    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-    fill="currentColor"
-  />
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+      fill="currentColor"
+    />
+  </svg>
 );
 
 const StarIcon = () => (
-  <path
-    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-    fill="currentColor"
-  />
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+      fill="currentColor"
+    />
+  </svg>
 );
 
 const CheckIcon = () => (
-  <path
-    d="M20 6L9 17l-5-5"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    fill="none"
-  />
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M20 6L9 17l-5-5"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+  </svg>
 );
 
 const SearchIcon = () => (
-  <>
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
     <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </>
+  </svg>
 );
 
 const ArrowRightIcon = () => (
-  <path
-    d="M5 12h14M12 5l7 7-7 7"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    fill="none"
-  />
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M5 12h14M12 5l7 7-7 7"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+  </svg>
 );
 
 const meta: Meta<typeof Icon> = {
@@ -59,9 +67,11 @@ import { Icon } from '@mond-design-system/theme';
 
 function MyComponent() {
   return (
-    <Icon size="md" label="Search" color="currentColor">
-      <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" />
-      <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
+    <Icon size="md" label="Search">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
+        <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     </Icon>
   );
 }
@@ -257,28 +267,30 @@ export const InText: Story = {
 export const CustomStyling: Story = {
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-      <Icon
-        size="lg"
-        color="red"
-        style={{ padding: '8px', backgroundColor: '#fef2f2', borderRadius: '8px' }}
-        label="Heart with background"
-      >
-        <HeartIcon />
-      </Icon>
-      <Icon
-        size="lg"
-        color="blue"
-        style={{ border: '2px solid currentColor', borderRadius: '50%', padding: '8px' }}
-        label="Star with border"
-      >
-        <StarIcon />
-      </Icon>
+      <div style={{ padding: '8px', backgroundColor: '#fef2f2', borderRadius: '8px', display: 'inline-flex' }}>
+        <Icon
+          size="lg"
+          color="red"
+          label="Heart with background"
+        >
+          <HeartIcon />
+        </Icon>
+      </div>
+      <div style={{ border: '2px solid blue', borderRadius: '50%', padding: '8px', display: 'inline-flex' }}>
+        <Icon
+          size="lg"
+          color="blue"
+          label="Star with border"
+        >
+          <StarIcon />
+        </Icon>
+      </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Icons support custom styling through the style prop and standard SVG attributes.'
+        story: 'Icons can be wrapped in containers for custom styling like backgrounds and borders.'
       }
     }
   }

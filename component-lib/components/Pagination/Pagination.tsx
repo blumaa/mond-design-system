@@ -1,11 +1,9 @@
-'use client';
 import React from 'react';
-import { spacing, fontFamilies } from '../../tokens';
-import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
 import { Select } from '../Select/Select';
 import { Text } from '../Text/Text';
 import { Icon } from '../Icon/Icon';
+import './pagination.css';
 
 export type PaginationSize = 'sm' | 'md' | 'lg';
 
@@ -76,39 +74,31 @@ export interface PaginationProps {
   className?: string;
 }
 
-const getSizeStyles = (size: PaginationSize) => {
+const getSizeConfig = (size: PaginationSize) => {
   switch (size) {
     case 'sm':
       return {
         buttonSize: 'sm' as const,
         selectSize: 'sm' as const,
         textVariant: 'body-sm' as const,
-        gap: spacing[1],
-        containerPadding: spacing[2],
       };
     case 'md':
       return {
         buttonSize: 'md' as const,
         selectSize: 'md' as const,
         textVariant: 'body' as const,
-        gap: spacing[2],
-        containerPadding: spacing[3],
       };
     case 'lg':
       return {
         buttonSize: 'lg' as const,
         selectSize: 'lg' as const,
         textVariant: 'body' as const,
-        gap: spacing[3],
-        containerPadding: spacing[4],
       };
     default:
       return {
         buttonSize: 'md' as const,
         selectSize: 'md' as const,
         textVariant: 'body' as const,
-        gap: spacing[2],
-        containerPadding: spacing[3],
       };
   }
 };
@@ -128,9 +118,8 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
     
     className,
   }, ref) => {
-    // theme variable removed - not used in current implementation
-    const sizeStyles = getSizeStyles(size);
-    
+    const sizeConfig = getSizeConfig(size);
+
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startItem = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
     const endItem = Math.min(currentPage * itemsPerPage, totalItems);
@@ -202,58 +191,33 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
       }
     };
 
-    const containerStyles = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      flexWrap: 'wrap' as const,
-      gap: sizeStyles.gap,
-      padding: sizeStyles.containerPadding,
-      fontFamily: fontFamilies.sans,
-    };
-
-    const navigationStyles = {
-      display: 'flex',
-      alignItems: 'center',
-      gap: sizeStyles.gap,
-      flex: 1,
-      justifyContent: 'center',
-    };
-
-    const infoStyles = {
-      display: 'flex',
-      alignItems: 'center',
-      gap: sizeStyles.gap,
-      minWidth: 'fit-content',
-    };
-
-    // Handle responsive design for mobile (simplified for testing)
-    // Note: Mobile responsive styles would be implemented here if needed
+    const containerClassName = `mond-pagination mond-pagination--${size} ${className || ''}`.trim();
 
     return (
-      <Box
+      /* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */
+      <div
         ref={ref}
-        className={className}
-        style={containerStyles}
+        className={containerClassName}
         onKeyDown={handleKeyDown}
         tabIndex={0}
         role="navigation"
         aria-label="Pagination navigation"
         data-mond-pagination
       >
+      {/* eslint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
         {/* Items per page selector and info */}
         {(showItemsPerPage || showTotalInfo) && (
-          <div style={infoStyles}>
+          <div className="mond-pagination__info">
             {showItemsPerPage && onItemsPerPageChange && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <div className="mond-pagination__items-per-page">
                 <Text
-                  variant={sizeStyles.textVariant}
+                  variant={sizeConfig.textVariant}
                   semantic="secondary"
                 >
                   Show
                 </Text>
                 <Select
-                  size={sizeStyles.selectSize}
+                  size={sizeConfig.selectSize}
                   value={itemsPerPage.toString()}
                   onChange={(value) => onItemsPerPageChange(parseInt(value, 10))}
                   options={itemsPerPageOptions.map(option => ({
@@ -262,7 +226,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                   }))}
                 />
                 <Text
-                  variant={sizeStyles.textVariant}
+                  variant={sizeConfig.textVariant}
                   semantic="secondary"
                 >
                   items
@@ -272,7 +236,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
 
             {showTotalInfo && (
               <Text
-                variant={sizeStyles.textVariant}
+                variant={sizeConfig.textVariant}
                 semantic="secondary"
               >
                 {totalItems === 0
@@ -286,42 +250,44 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
 
         {/* Navigation controls */}
         {totalPages > 1 && (
-          <div style={navigationStyles}>
+          <div className="mond-pagination__navigation">
             {/* Previous button */}
             <Button
               variant="outline"
-              size={sizeStyles.buttonSize}
+              size={sizeConfig.buttonSize}
               disabled={currentPage <= 1}
               onClick={() => onPageChange(currentPage - 1)}
               aria-label="Go to previous page"
-              
             >
               <Icon size="sm" decorative>
-                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </Icon>
             </Button>
 
             {/* First page button */}
             <Button
               variant="outline"
-              size={sizeStyles.buttonSize}
+              size={sizeConfig.buttonSize}
               disabled={currentPage <= 1}
               onClick={() => onPageChange(1)}
               aria-label="Go to first page"
-              
             >
               <Icon size="sm" decorative>
-                <path d="M11 6L5 12L11 18M17 6L11 12L17 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M11 6L5 12L11 18M17 6L11 12L17 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </Icon>
             </Button>
 
             {/* Page numbers */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <div className="mond-pagination__pages">
               {pageNumbers.map((page, index) => (
                 page === 'ellipsis' ? (
-                  <div key={`ellipsis-${index}`} style={{ paddingLeft: '8px', paddingRight: '8px' }}>
+                  <div key={`ellipsis-${index}`} className="mond-pagination__ellipsis">
                     <Text
-                      variant={sizeStyles.textVariant}
+                      variant={sizeConfig.textVariant}
                       semantic="secondary"
                     >
                       ...
@@ -331,7 +297,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                   <Button
                     key={page}
                     variant={page === currentPage ? 'primary' : 'ghost'}
-                    size={sizeStyles.buttonSize}
+                    size={sizeConfig.buttonSize}
                     onClick={() => onPageChange(page)}
                     aria-label={`Go to page ${page}`}
                     aria-current={page === currentPage ? 'page' : undefined}
@@ -345,33 +311,35 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
             {/* Last page button */}
             <Button
               variant="outline"
-              size={sizeStyles.buttonSize}
+              size={sizeConfig.buttonSize}
               disabled={currentPage >= totalPages}
               onClick={() => onPageChange(totalPages)}
               aria-label="Go to last page"
-              
             >
               <Icon size="sm" decorative>
-                <path d="M13 6L19 12L13 18M7 6L13 12L7 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M13 6L19 12L13 18M7 6L13 12L7 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </Icon>
             </Button>
 
             {/* Next button */}
             <Button
               variant="outline"
-              size={sizeStyles.buttonSize}
+              size={sizeConfig.buttonSize}
               disabled={currentPage >= totalPages}
               onClick={() => onPageChange(currentPage + 1)}
               aria-label="Go to next page"
-              
             >
               <Icon size="sm" decorative>
-                <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </Icon>
             </Button>
           </div>
         )}
-      </Box>
+      </div>
     );
   }
 );

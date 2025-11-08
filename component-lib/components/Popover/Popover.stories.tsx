@@ -1,14 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Popover } from './Popover';
 import { Button } from '../Button/Button';
-import { Box } from '../Box/Box';
 import { Text } from '../Text/Text';
-import { Heading } from '../Heading/Heading';
 import { Avatar } from '../Avatar/Avatar';
 import { Icon } from '../Icon/Icon';
 import { Input } from '../Input/Input';
 import { Label } from '../Label/Label';
-import { Divider } from '../Divider/Divider';
 import { useState } from 'react';
 
 const meta: Meta<typeof Popover> = {

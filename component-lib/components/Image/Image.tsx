@@ -1,11 +1,11 @@
 'use client';
 import { forwardRef, useState } from 'react';
-import { Box, BoxProps } from '../Box/Box';
 import { Spinner } from '../Spinner/Spinner';
+import { Icon } from '../Icon/Icon';
 import { tokens } from '../../tokens';
-import { useTheme } from '../providers/ThemeProvider';
+import './image.css';
 
-export interface ImageProps extends Omit<BoxProps, 'as' | 'children'> {
+export interface ImageProps extends React.HTMLAttributes<HTMLDivElement> {
   src: string;
   alt: string;
   width?: string | number;
@@ -19,22 +19,17 @@ export interface ImageProps extends Omit<BoxProps, 'as' | 'children'> {
   onError?: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   loading?: 'eager' | 'lazy';
   crossOrigin?: 'anonymous' | 'use-credentials';
-  /**
-   * Dark mode
-   * @default undefined - falls back to provider colorScheme
-   */
-  isDarkMode?: boolean;
 }
 
-const getAspectRatioStyle = (aspectRatio: string) => {
+const getAspectRatioClass = (aspectRatio: string) => {
   const ratioMap = {
-    '1:1': '1 / 1',
-    '4:3': '4 / 3', 
-    '16:9': '16 / 9',
-    '3:2': '3 / 2',
-    'auto': 'auto',
+    '1:1': 'mond-image--ratio-1-1',
+    '4:3': 'mond-image--ratio-4-3',
+    '16:9': 'mond-image--ratio-16-9',
+    '3:2': 'mond-image--ratio-3-2',
+    'auto': 'mond-image--ratio-auto',
   };
-  return ratioMap[aspectRatio as keyof typeof ratioMap] || 'auto';
+  return ratioMap[aspectRatio as keyof typeof ratioMap] || 'mond-image--ratio-auto';
 };
 
 export const Image = forwardRef<HTMLImageElement, ImageProps>(({
@@ -51,13 +46,10 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(({
   onError,
   loading = 'lazy',
   crossOrigin,
-  isDarkMode,
   className = '',
   style,
   ...props
 }, ref) => {
-  const theme = useTheme(isDarkMode);
-  
   const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>('loading');
   const [currentSrc, setCurrentSrc] = useState(src);
 
@@ -76,101 +68,62 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(({
     onError?.(event);
   };
 
-  const imageContainerStyle = {
-    position: 'relative' as const,
-    display: 'inline-block',
-    overflow: 'hidden',
-    aspectRatio: getAspectRatioStyle(aspectRatio),
+  const aspectRatioClass = getAspectRatioClass(aspectRatio);
+  const containerClassName = `mond-image ${aspectRatioClass} ${imageState === 'loading' ? 'mond-image--loading' : ''} ${imageState === 'error' ? 'mond-image--error' : ''} ${className}`.trim();
+
+  const containerStyle = {
     borderRadius: tokens.radii[borderRadius],
     width: width || (aspectRatio !== 'auto' ? '100%' : undefined),
     height: height || (aspectRatio !== 'auto' ? 'auto' : undefined),
     ...style,
   };
 
-  const imageStyle = {
-    width: '100%',
-    height: '100%',
-    objectFit: fit,
-    display: imageState === 'loaded' ? 'block' : 'none',
-  };
-
-  const spinnerContainerStyle = {
-    position: 'absolute' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    display: imageState === 'loading' && showLoadingSpinner ? 'flex' : 'none',
-  };
-
-  const errorContainerStyle = {
-    position: 'absolute' as const,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    display: imageState === 'error' ? 'flex' : 'none',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme('surface.elevated'),
-    color: theme('text.tertiary'),
-    fontSize: tokens.fontSizes.sm,
-    textAlign: 'center' as const,
-    padding: tokens.spacing['4'],
-  };
-
-  const placeholderStyle = {
-    width: '100%',
-    height: '100%',
-    minHeight: height || '120px',
-    backgroundColor: theme('surface.elevated'),
-    display: imageState === 'loading' && !showLoadingSpinner ? 'block' : 'none',
-  };
-
   return (
-    <Box
-      className={`mond-image ${imageState === 'loading' ? 'mond-image--loading' : ''} ${imageState === 'error' ? 'mond-image--error' : ''} ${className}`}
-      style={imageContainerStyle}
+    <div
+      className={containerClassName}
+      style={containerStyle}
       {...props}
     >
       <img
         ref={ref}
         src={currentSrc}
         alt={alt}
-        style={imageStyle}
+        className={`mond-image__img mond-image__img--${fit}`}
         onLoad={handleLoad}
         onError={handleError}
         loading={loading}
         crossOrigin={crossOrigin}
       />
-      
-      {/* Loading state */}
-      <Box style={placeholderStyle} />
-      
+
+      {/* Loading placeholder */}
+      {!showLoadingSpinner && (
+        <div
+          className="mond-image__placeholder mond-image__placeholder--visible"
+          style={{ minHeight: height || '120px' }}
+        />
+      )}
+
       {/* Loading spinner */}
-      <Box style={spinnerContainerStyle}>
-        <Spinner size="md" label="Loading image..." />
-      </Box>
+      {showLoadingSpinner && (
+        <div className="mond-image__spinner mond-image__spinner--visible">
+          <Spinner size="md" label="Loading image..." />
+        </div>
+      )}
 
       {/* Error state */}
-      <Box style={errorContainerStyle}>
+      <div className="mond-image__error">
         <div>
-          <div style={{ marginBottom: tokens.spacing['2'] }}>
-            <svg 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              style={{ opacity: 0.5 }}
-            >
+          <Icon size="lg" decorative>
+            <svg viewBox="0 0 24 24" fill="none">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2" />
               <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
               <polyline points="21,15 16,10 5,21" stroke="currentColor" strokeWidth="2" />
             </svg>
-          </div>
+          </Icon>
           <div>Failed to load image</div>
         </div>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 });
 

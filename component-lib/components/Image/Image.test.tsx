@@ -1,4 +1,4 @@
-import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../test-utils';
+import { render, screen, fireEvent, waitFor } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Image } from './Image';
 
@@ -46,32 +46,31 @@ describe('Image', () => {
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 
-  it('applies object-fit styles correctly', () => {
+  it('applies object-fit classes correctly', () => {
     const { rerender } = render(<Image src="https://example.com/image.jpg" alt="Test image" fit="contain" />);
     let image = screen.getByRole('img', { hidden: true });
-    expect(image).toHaveStyle('object-fit: contain');
+    expect(image).toHaveClass('mond-image__img--contain');
 
     rerender(<Image src="https://example.com/image.jpg" alt="Test image" fit="cover" />);
     image = screen.getByRole('img', { hidden: true });
-    expect(image).toHaveStyle('object-fit: cover');
+    expect(image).toHaveClass('mond-image__img--cover');
   });
 
-  it('applies aspect ratio correctly', () => {
+  it('applies aspect ratio classes correctly', () => {
     const { container } = render(
       <Image src="https://example.com/image.jpg" alt="Test image" aspectRatio="16:9" />
     );
-    
-    // Check the style attribute directly since aspect-ratio isn't supported in jsdom
-    const imageContainer = container.firstChild as HTMLElement;
-    expect(imageContainer.style.aspectRatio).toBe('16 / 9');
+
+    const imageContainer = container.querySelector('.mond-image');
+    expect(imageContainer).toHaveClass('mond-image--ratio-16-9');
   });
 
   it('applies border radius from tokens', () => {
     const { container } = render(
       <Image src="https://example.com/image.jpg" alt="Test image" borderRadius="lg" />
     );
-    
-    const imageContainer = container.firstChild;
+
+    const imageContainer = container.querySelector('.mond-image');
     expect(imageContainer).toHaveStyle('border-radius: 0.5rem'); // lg = 0.5rem
   });
 
@@ -79,21 +78,23 @@ describe('Image', () => {
     const { container } = render(
       <Image src="https://example.com/image.jpg" alt="Test image" width="200px" height="150px" />
     );
-    
-    const imageContainer = container.firstChild;
+
+    const imageContainer = container.querySelector('.mond-image');
     expect(imageContainer).toHaveStyle('width: 200px; height: 150px');
   });
 
   it('handles successful image load', async () => {
     const onLoad = jest.fn();
-    render(<Image src="https://example.com/valid.jpg" alt="Test image" onLoad={onLoad} />);
-    
+    const { container } = render(<Image src="https://example.com/valid.jpg" alt="Test image" onLoad={onLoad} />);
+
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.load(image);
-    
+
     await waitFor(() => {
       expect(onLoad).toHaveBeenCalled();
-      expect(image).toHaveStyle('display: block');
+      const imageContainer = container.firstChild as HTMLElement;
+      // After load, the container should not have loading class
+      expect(imageContainer).not.toHaveClass('mond-image--loading');
     });
   });
 
@@ -151,102 +152,102 @@ describe('Image', () => {
     const { container } = render(
       <Image src="https://example.com/image.jpg" alt="Test image" className="custom-image" />
     );
-    
-    expect(container.firstChild).toHaveClass('mond-image', 'mond-image--loading', 'custom-image');
+
+    const imageContainer = container.querySelector('.mond-image');
+    expect(imageContainer).toHaveClass('mond-image', 'mond-image--loading', 'custom-image');
   });
 
   it('applies loading state class', () => {
     const { container } = render(<Image src="https://example.com/image.jpg" alt="Test image" />);
-    
-    expect(container.firstChild).toHaveClass('mond-image--loading');
+
+    const imageContainer = container.querySelector('.mond-image');
+    expect(imageContainer).toHaveClass('mond-image--loading');
   });
 
   it('applies error state class', async () => {
     const { container } = render(<Image src="https://example.com/error.jpg" alt="Test image" />);
-    
+
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
-    
+
     await waitFor(() => {
-      expect(container.firstChild).toHaveClass('mond-image--error');
+      const imageContainer = container.querySelector('.mond-image');
+      expect(imageContainer).toHaveClass('mond-image--error');
     });
   });
 
-  it('forwards additional props to Box', () => {
+  it('forwards additional props to container div', () => {
     render(<Image src="https://example.com/image.jpg" alt="Test image" data-testid="custom-image" />);
-    
+
     const imageContainer = screen.getByTestId('custom-image');
     expect(imageContainer).toBeInTheDocument();
+    expect(imageContainer).toHaveClass('mond-image');
   });
 
   it('applies custom styles', () => {
     const { container } = render(
       <Image src="https://example.com/image.jpg" alt="Test image" style={{ opacity: 0.8 }} />
     );
-    
-    expect(container.firstChild).toHaveStyle('opacity: 0.8');
+
+    const imageContainer = container.querySelector('.mond-image');
+    expect(imageContainer).toHaveStyle('opacity: 0.8');
   });
 
-  it('shows placeholder in light mode when spinner disabled', () => {
+  it('shows placeholder when spinner disabled', () => {
     const { container } = render(
-      <Image 
-        src="https://example.com/image.jpg" 
-        alt="Test image" 
+      <Image
+        src="https://example.com/image.jpg"
+        alt="Test image"
         showLoadingSpinner={false}
-        
       />
     );
-    
-    // Look for placeholder div with light mode background
-    const placeholder = container.querySelector('[style*="background-color: rgb(255, 255, 255)"]'); // surface.elevated (light)
+
+    const placeholder = container.querySelector('.mond-image__placeholder');
     expect(placeholder).toBeInTheDocument();
+    expect(placeholder).toHaveClass('mond-image__placeholder--visible');
   });
 
-  it('shows error state in dark mode', async () => {
-    renderWithDarkMode(<Image src="https://example.com/error.jpg" alt="Test image"  />);
-    
+  it('shows error state with CSS classes', async () => {
+    render(<Image src="https://example.com/error.jpg" alt="Test image" />);
+
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
-    
+
     await waitFor(() => {
       const errorContainer = screen.getByText('Failed to load image').parentElement?.parentElement;
-      expect(errorContainer).toHaveStyle('background-color: #171717'); // surface.elevated (dark)
-      expect(errorContainer).toHaveStyle('color: #64748b'); // text.tertiary (dark)
+      expect(errorContainer).toHaveClass('mond-image__error');
     });
   });
 
-  it('shows error state in light mode', async () => {
-    render(<Image src="https://example.com/error.jpg" alt="Test image"  />);
-    
+  it('shows error message when image fails to load', async () => {
+    render(<Image src="https://example.com/error.jpg" alt="Test image" />);
+
     const image = screen.getByRole('img', { hidden: true });
     fireEvent.error(image);
-    
+
     await waitFor(() => {
-      const errorContainer = screen.getByText('Failed to load image').parentElement?.parentElement;
-      expect(errorContainer).toHaveStyle('background-color: #ffffff'); // surface.elevated (light)
-      expect(errorContainer).toHaveStyle('color: #64748b'); // text.tertiary (light)
+      expect(screen.getByText('Failed to load image')).toBeInTheDocument();
     });
   });
 
   it('applies min-height to placeholder', () => {
     const { container } = render(
-      <Image 
-        src="https://example.com/image.jpg" 
-        alt="Test image" 
+      <Image
+        src="https://example.com/image.jpg"
+        alt="Test image"
         height="200px"
         showLoadingSpinner={false}
       />
     );
-    
-    const placeholder = container.querySelector('[style*="min-height"]');
+
+    const placeholder = container.querySelector('.mond-image__placeholder');
     expect(placeholder).toHaveStyle('min-height: 200px');
   });
 
-  it('shows spinner in dark mode', () => {
-    render(<Image src="https://example.com/image.jpg" alt="Test image"  />);
-    
+  it('shows spinner when enabled', () => {
+    render(<Image src="https://example.com/image.jpg" alt="Test image" />);
+
     const spinner = screen.getByRole('status');
-    // The spinner should be rendered with isDarkMode=true
     expect(spinner).toBeInTheDocument();
   });
 

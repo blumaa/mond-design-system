@@ -174,7 +174,7 @@ export const ObjectFit: Story = {
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Cover</div>
       </div>
       
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: 'center', backgroundColor: '#f3f4f6' }}>
         <Image
           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop"
           alt="Contain fit"
@@ -182,11 +182,10 @@ export const ObjectFit: Story = {
           aspectRatio="1:1"
           width="150px"
           borderRadius="md"
-          style={{ backgroundColor: '#f3f4f6' }}
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Contain</div>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <Image
           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop"
@@ -198,8 +197,8 @@ export const ObjectFit: Story = {
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Fill</div>
       </div>
-      
-      <div style={{ textAlign: 'center' }}>
+
+      <div style={{ textAlign: 'center', backgroundColor: '#f3f4f6' }}>
         <Image
           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop"
           alt="Scale-down fit"
@@ -207,7 +206,6 @@ export const ObjectFit: Story = {
           aspectRatio="1:1"
           width="150px"
           borderRadius="md"
-          style={{ backgroundColor: '#f3f4f6' }}
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Scale Down</div>
       </div>
