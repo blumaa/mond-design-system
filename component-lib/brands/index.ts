@@ -1,5 +1,5 @@
 export { mondTheme } from './mond';
-export { cypherTheme } from './cypher';
-export { fluxTheme } from './flux';
+export { brand1Theme } from './brand-1';
+export { brand2Theme } from './brand-2';
 
 export type { BrandTheme } from '../components/providers/ThemeProvider';

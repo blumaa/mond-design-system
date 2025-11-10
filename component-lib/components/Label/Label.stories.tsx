@@ -415,7 +415,7 @@ export const FormExamples: Story = {
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <input type="checkbox" id="terms" />
-          <Label htmlFor="terms" size="sm" style={{ marginBottom: 0 }}>
+          <Label htmlFor="terms" size="sm">
             I agree to the terms and conditions
           </Label>
         </div>

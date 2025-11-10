@@ -320,7 +320,7 @@ describe('Button Component - SSR Compatible', () => {
   describe('Backward Compatibility', () => {
     it('does NOT accept isDarkMode prop (removed)', () => {
       // TypeScript should prevent this, but at runtime it should be ignored
-      const props = { children: 'Test', isDarkMode: true } as unknown;
+      const props = { children: 'Test', isDarkMode: true } as any;
       render(<Button {...props} />);
       const button = screen.getByRole('button');
       // Should render successfully, just ignoring isDarkMode

@@ -162,7 +162,7 @@ export const WithCustomStructure: Story = {
 
           <ModalFooter>
             <Button
-              variant="secondary"
+              variant="outline"
               onClick={() => setIsOpen(false)}
             >
               Cancel
@@ -208,7 +208,7 @@ export const ConfirmationModal: Story = {
 
           <ModalFooter>
             <Button
-              variant="secondary"
+              variant="outline"
               onClick={() => setIsOpen(false)}
             >
               Cancel
@@ -318,7 +318,7 @@ export const FormModal: Story = {
             <ModalFooter>
               <Button
                 type="button"
-                variant="secondary"
+                variant="outline"
                 onClick={() => setIsOpen(false)}
               >
                 Cancel

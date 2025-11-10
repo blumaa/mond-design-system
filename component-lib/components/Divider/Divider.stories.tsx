@@ -66,10 +66,6 @@ A visual separator component that can be horizontal or vertical, with optional t
       options: ['sm', 'md', 'lg'],
       description: 'Thickness of the divider line',
     },
-    children: {
-      control: 'text',
-      description: 'Optional text content to display in the center',
-    },
   },
 };
 
@@ -170,7 +166,9 @@ export const WithText: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', maxWidth: '400px' }}>
       <div>
         <p style={{ margin: '0 0 16px 0', textAlign: 'center' }}>Create your account</p>
-        <Divider>OR</Divider>
+        <Divider />
+        <div style={{ textAlign: 'center', margin: '8px 0', fontSize: '14px', color: '#6b7280' }}>OR</div>
+        <Divider />
         <p style={{ margin: '16px 0 0 0', textAlign: 'center' }}>Sign in with existing account</p>
       </div>
       
@@ -183,9 +181,10 @@ export const WithText: Story = {
         <p style={{ margin: '0', fontSize: '14px', color: '#6b7280' }}>
           Content for the first section
         </p>
-        
-        <Divider variant="subtle" my="6">Section B</Divider>
-        
+
+        <Divider variant="subtle" marginTop="6" marginBottom="6" />
+        <h3 style={{ margin: '16px 0' }}>Section B</h3>
+
         <p style={{ margin: '0', fontSize: '14px', color: '#6b7280' }}>
           Content for the second section
         </p>
@@ -212,11 +211,11 @@ export const ThemeVariants: Story = {
         minWidth: '200px'
       }}>
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center' }}>Light Theme</h4>
-        <Divider variant="subtle"  />
-        <div style={{ margin: '16px 0' }}>
-          <Divider >OR</Divider>
+        <Divider variant="subtle" />
+        <div style={{ margin: '16px 0', textAlign: 'center', fontSize: '14px', color: '#6b7280' }}>
+          OR
         </div>
-        <Divider variant="strong"  />
+        <Divider variant="strong" />
       </div>
       
       <div style={{ 
@@ -227,11 +226,11 @@ export const ThemeVariants: Story = {
         minWidth: '200px'
       }}>
         <h4 style={{ margin: '0 0 16px 0', textAlign: 'center', color: '#f9fafb' }}>Dark Theme</h4>
-        <Divider variant="subtle"  />
-        <div style={{ margin: '16px 0' }}>
-          <Divider >OR</Divider>
+        <Divider variant="subtle" />
+        <div style={{ margin: '16px 0', textAlign: 'center', fontSize: '14px', color: '#9ca3af' }}>
+          OR
         </div>
-        <Divider variant="strong"  />
+        <Divider variant="strong" />
       </div>
     </div>
   ),
@@ -256,19 +255,20 @@ export const VerticalInForms: Story = {
       maxWidth: '400px'
     }}>
       <div style={{ flex: 1, textAlign: 'center' }}>
-        <Button style={{ width: '100%' }}>
+        <Button fullWidth>
           Sign In
         </Button>
       </div>
-      
-      <Divider 
-        orientation="vertical" 
-        mx="4" 
-        style={{ height: '48px' }} 
+
+      <Divider
+        orientation="vertical"
+        marginLeft="4"
+        marginRight="4"
+        style={{ height: '48px' }}
       />
-      
+
       <div style={{ flex: 1, textAlign: 'center' }}>
-        <Button variant="outline" style={{ width: '100%' }}>
+        <Button variant="outline" fullWidth>
           Register
         </Button>
       </div>

@@ -151,7 +151,7 @@ describe('Badge Component - SSR Compatible', () => {
 
   describe('Backward Compatibility', () => {
     it('does NOT accept isDarkMode prop (removed)', () => {
-      const props = { children: 'Test', isDarkMode: true } as unknown;
+      const props = { children: 'Test', isDarkMode: true } as any;
       render(<Badge {...props} />);
       const badge = screen.getByText('Test');
       expect(badge).toBeInTheDocument();

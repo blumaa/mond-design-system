@@ -4,41 +4,41 @@ import { ThemeProvider } from '../ThemeProvider';
 import { Button } from '../../Button/Button';
 import { Badge } from '../../Badge/Badge';
 import { Text } from '../../Text/Text';
-import { cypherTheme } from '../../../brands/cypher';
-import { fluxTheme } from '../../../brands/flux';
+import { brand1Theme } from '../../../brands/brand-1';
+import { brand2Theme } from '../../../brands/brand-2';
 
 describe('Brand System - Multiple Components', () => {
-  it('should apply CYPHER brand to multiple components', () => {
+  it('should apply Brand 1 to multiple components', () => {
     const { getByRole, getByText } = render(
-      <ThemeProvider brandTheme={cypherTheme} colorScheme="light">
-        <Button variant="primary">CYPHER Button</Button>
-        <Badge variant="primary">CYPHER Badge</Badge>
-        <Text semantic="link">CYPHER Link Text</Text>
+      <ThemeProvider brandTheme={brand1Theme} colorScheme="light">
+        <Button variant="primary">Brand 1 Button</Button>
+        <Badge variant="primary">Brand 1 Badge</Badge>
+        <Text semantic="link">Brand 1 Link Text</Text>
       </ThemeProvider>
     );
-    
+
     const button = getByRole('button');
-    const badge = getByText('CYPHER Badge');
-    const linkText = getByText('CYPHER Link Text');
-    
+    const badge = getByText('Brand 1 Badge');
+    const linkText = getByText('Brand 1 Link Text');
+
     expect(button).toBeInTheDocument();
     expect(badge).toBeInTheDocument();
     expect(linkText).toBeInTheDocument();
   });
 
-  it('should apply FLUX brand to multiple components', () => {
+  it('should apply Brand 2 to multiple components', () => {
     const { getByRole, getByText } = render(
-      <ThemeProvider brandTheme={fluxTheme} colorScheme="light">
-        <Button variant="primary">FLUX Button</Button>
-        <Badge variant="primary">FLUX Badge</Badge>
-        <Text semantic="link">FLUX Link Text</Text>
+      <ThemeProvider brandTheme={brand2Theme} colorScheme="light">
+        <Button variant="primary">Brand 2 Button</Button>
+        <Badge variant="primary">Brand 2 Badge</Badge>
+        <Text semantic="link">Brand 2 Link Text</Text>
       </ThemeProvider>
     );
-    
+
     const button = getByRole('button');
-    const badge = getByText('FLUX Badge');
-    const linkText = getByText('FLUX Link Text');
-    
+    const badge = getByText('Brand 2 Badge');
+    const linkText = getByText('Brand 2 Link Text');
+
     expect(button).toBeInTheDocument();
     expect(badge).toBeInTheDocument();
     expect(linkText).toBeInTheDocument();
@@ -46,8 +46,8 @@ describe('Brand System - Multiple Components', () => {
 
   it('should work with dark mode and brand switching', () => {
     const { getByRole } = render(
-      <ThemeProvider brandTheme={cypherTheme} colorScheme="dark">
-        <Button variant="primary">Dark CYPHER Button</Button>
+      <ThemeProvider brandTheme={brand1Theme} colorScheme="dark">
+        <Button variant="primary">Dark Brand 1 Button</Button>
       </ThemeProvider>
     );
     

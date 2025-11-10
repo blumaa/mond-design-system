@@ -351,7 +351,7 @@ describe('Heading Component - SSR Compatible', () => {
 
   describe('Backward Compatibility', () => {
     it('does NOT accept isDarkMode prop (removed)', () => {
-      const props = { children: 'Test', isDarkMode: true } as unknown;
+      const props = { children: 'Test', isDarkMode: true } as any;
       render(<Heading {...props} />);
       const heading = screen.getByText('Test');
       expect(heading).toBeInTheDocument();
