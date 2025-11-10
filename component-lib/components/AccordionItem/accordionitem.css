@@ -1,0 +1,191 @@
+/**
+ * AccordionItem Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base AccordionItem */
+.mond-accordion-item {
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* Variant: Default */
+.mond-accordion-item--default {
+  background-color: transparent;
+  border: none;
+}
+
+/* Variant: Bordered */
+.mond-accordion-item--bordered {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+/* Variant: Filled */
+.mond-accordion-item--filled {
+  background-color: var(--mond-surface-elevated);
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+/* Header/Trigger Button */
+.mond-accordion-item__header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--mond-font-family-sans);
+  font-weight: var(--mond-font-weight-medium);
+  color: var(--mond-text-primary);
+  transition: background-color 0.2s ease;
+}
+
+.mond-accordion-item__header:hover:not(:disabled) {
+  background-color: var(--mond-surface-card);
+}
+
+.mond-accordion-item__header:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  color: var(--mond-text-secondary);
+}
+
+.mond-accordion-item__header:focus-visible {
+  outline: 2px solid var(--mond-border-focused);
+  outline-offset: -2px;
+}
+
+/* Header - Filled Variant */
+.mond-accordion-item--filled .mond-accordion-item__header {
+  background-color: var(--mond-surface-elevated);
+}
+
+.mond-accordion-item--filled .mond-accordion-item__header:hover:not(:disabled) {
+  background-color: var(--mond-surface-card);
+}
+
+/* Size: Small */
+.mond-accordion-item--sm .mond-accordion-item__header {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-sm);
+  min-height: 40px;
+}
+
+.mond-accordion-item--sm .mond-accordion-item__content-inner {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-sm);
+}
+
+.mond-accordion-item--sm .mond-accordion-item__icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Size: Medium (default) */
+.mond-accordion-item--md .mond-accordion-item__header {
+  padding: var(--mond-spacing-3) var(--mond-spacing-4);
+  font-size: var(--mond-font-size-base);
+  min-height: 48px;
+}
+
+.mond-accordion-item--md .mond-accordion-item__content-inner {
+  padding: var(--mond-spacing-3) var(--mond-spacing-4);
+  font-size: var(--mond-font-size-base);
+}
+
+.mond-accordion-item--md .mond-accordion-item__icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Size: Large */
+.mond-accordion-item--lg .mond-accordion-item__header {
+  padding: var(--mond-spacing-4) var(--mond-spacing-6);
+  font-size: var(--mond-font-size-lg);
+  min-height: 56px;
+}
+
+.mond-accordion-item--lg .mond-accordion-item__content-inner {
+  padding: var(--mond-spacing-4) var(--mond-spacing-6);
+  font-size: var(--mond-font-size-lg);
+}
+
+.mond-accordion-item--lg .mond-accordion-item__icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Header Title */
+.mond-accordion-item__title {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Icon Container */
+.mond-accordion-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.mond-accordion-item__icon--left {
+  margin-right: var(--mond-spacing-2);
+}
+
+.mond-accordion-item__icon--right {
+  margin-left: var(--mond-spacing-2);
+}
+
+.mond-accordion-item--expanded .mond-accordion-item__icon {
+  transform: rotate(180deg);
+}
+
+.mond-accordion-item--no-animation .mond-accordion-item__icon {
+  transition: none;
+}
+
+/* Content Container */
+.mond-accordion-item__content {
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 0;
+  opacity: 0;
+}
+
+.mond-accordion-item--expanded .mond-accordion-item__content {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.mond-accordion-item--no-animation .mond-accordion-item__content {
+  transition: none;
+}
+
+/* Content Inner */
+.mond-accordion-item__content-inner {
+  color: var(--mond-text-primary);
+  line-height: 1.6;
+}
+
+.mond-accordion-item--filled .mond-accordion-item__content-inner {
+  background-color: var(--mond-surface-background);
+}
+
+/* Disabled State */
+.mond-accordion-item--disabled {
+  opacity: 0.6;
+}
+
+.mond-accordion-item--disabled .mond-accordion-item__header {
+  cursor: not-allowed;
+  color: var(--mond-text-secondary);
+}

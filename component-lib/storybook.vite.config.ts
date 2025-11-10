@@ -22,6 +22,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', '@storybook/addon-docs'],
+    include: ['react', 'react-dom', '@storybook/blocks', '@storybook/addon-docs'],
   },
 });

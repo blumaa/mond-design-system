@@ -1,0 +1,87 @@
+/**
+ * Spinner Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Provides smooth rotation animation for loading states.
+ */
+
+/* Keyframe Animation */
+@keyframes mond-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Base Spinner Styles */
+.mond-spinner {
+  border: 2px solid transparent;
+  border-radius: 50%;
+  position: relative;
+  animation: mond-spin 1s linear infinite;
+}
+
+/* ============================================
+   SIZE VARIANTS
+   ============================================ */
+
+.mond-spinner--xs {
+  width: var(--mond-spacing-4);
+  height: var(--mond-spacing-4);
+}
+
+.mond-spinner--sm {
+  width: var(--mond-spacing-5);
+  height: var(--mond-spacing-5);
+}
+
+.mond-spinner--md {
+  width: var(--mond-spacing-6);
+  height: var(--mond-spacing-6);
+}
+
+.mond-spinner--lg {
+  width: var(--mond-spacing-8);
+  height: var(--mond-spacing-8);
+}
+
+.mond-spinner--xl {
+  width: var(--mond-spacing-10);
+  height: var(--mond-spacing-10);
+}
+
+/* ============================================
+   COLOR VARIANTS
+   ============================================ */
+
+/* Default color (theme-aware blue) */
+.mond-spinner--default {
+  border-top-color: var(--mond-color-brand-primary-600);
+}
+
+[data-theme="dark"] .mond-spinner--default {
+  border-top-color: var(--mond-color-brand-primary-400);
+}
+
+/* Custom color support via CSS custom property */
+.mond-spinner--custom {
+  border-top-color: var(--spinner-custom-color);
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.mond-spinner__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

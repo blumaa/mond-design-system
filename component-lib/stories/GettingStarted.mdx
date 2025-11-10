@@ -1,0 +1,174 @@
+# Getting Started
+
+This guide will help you start using the Mond Design System in your React application.
+
+## Installation
+
+Install the package using your preferred package manager:
+
+```bash
+npm install @mond-design-system/theme
+# or
+yarn add @mond-design-system/theme
+# or
+pnpm add @mond-design-system/theme
+```
+
+## Setup
+
+### Wrap Your App with ThemeProvider
+
+Wrap your application with the ThemeProvider to enable theming:
+
+```tsx
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme/brands';
+import { useState } from 'react';
+
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <YourComponents />
+    </ThemeProvider>
+  );
+}
+```
+
+### Import Components
+
+Import the components you need from the main package:
+
+```tsx
+import {
+  Button,
+  Text,
+  Heading,
+  Box
+} from '@mond-design-system/theme';
+```
+
+### Next.js App Router
+
+For Next.js applications, use the appropriate import path:
+
+**Server Components (no hooks):**
+```tsx
+// Import from main entry point
+import { Button, Text, Heading, Badge } from '@mond-design-system/theme';
+```
+
+**Client Components (with hooks):**
+```tsx
+'use client';
+
+import { Button, Text } from '@mond-design-system/theme';
+import { ToastContainer, Input, Select } from '@mond-design-system/theme/client';
+```
+
+See the README for the complete list of server-safe vs client components.
+
+## Basic Usage
+
+### Typography
+
+Use Heading and Text components for typography:
+
+```tsx
+function Article() {
+  return (
+    <div>
+      <Heading level={1} size="4xl">
+        Main Article Title
+      </Heading>
+
+      <Text variant="body" semantic="secondary">
+        Published on March 15, 2024
+      </Text>
+
+      <Heading level={2} size="2xl">
+        Section Heading
+      </Heading>
+
+      <Text variant="body">
+        This is the main content of your article.
+      </Text>
+
+      <Text variant="caption" semantic="tertiary">
+        Caption or helper text
+      </Text>
+    </div>
+  );
+}
+```
+
+### Spacing with Box
+
+Use Box for spacing only:
+
+```tsx
+function SpacedContent() {
+  return (
+    <Box padding="4" margin="2">
+      <Box marginBottom="4">
+        <Heading level={2}>Title</Heading>
+      </Box>
+      <Box paddingTop="2">
+        <Text>Content with spacing</Text>
+      </Box>
+    </Box>
+  );
+}
+```
+
+### Buttons
+
+Use Button component for actions:
+
+```tsx
+function ActionButtons() {
+  return (
+    <div>
+      <Button variant="primary" size="md">
+        Primary Action
+      </Button>
+      <Button variant="outline" size="md">
+        Secondary Action
+      </Button>
+      <Button variant="ghost" size="sm">
+        Tertiary Action
+      </Button>
+    </div>
+  );
+}
+```
+
+## Theme Switching
+
+Toggle between light and dark themes:
+
+```tsx
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
+
+  const toggleTheme = () => {
+    setColorScheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <Button onClick={toggleTheme}>
+        Toggle to {colorScheme === 'light' ? 'Dark' : 'Light'} Mode
+      </Button>
+      <YourComponents />
+    </ThemeProvider>
+  );
+}
+```
+
+## Next Steps
+
+1. **Explore Components**: Browse the component library in the sidebar
+2. **Check Examples**: Each component has multiple usage examples
+3. **Design Tokens**: See the Design Tokens page for available CSS variables

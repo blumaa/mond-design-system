@@ -1,0 +1,229 @@
+/**
+ * Select Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base Select Container */
+.mond-select {
+  /* Reset */
+  margin: 0;
+
+  /* Layout */
+  display: inline-flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  gap: var(--mond-spacing-1);
+}
+
+/* Select Trigger Container */
+.mond-select__trigger-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Select Trigger Button */
+.mond-select__trigger {
+  /* Reset */
+  margin: 0;
+  border: 1px solid var(--mond-border-default);
+  text-decoration: none;
+
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 100%;
+  gap: var(--mond-spacing-2);
+
+  /* Typography */
+  font-family: var(--mond-font-family-sans);
+  font-weight: var(--mond-font-weight-normal);
+  color: var(--mond-text-primary);
+  text-align: left;
+
+  /* Appearance */
+  background-color: var(--mond-surface-input);
+  border-radius: var(--mond-radii-md);
+
+  /* State */
+  cursor: pointer;
+  opacity: 1;
+  transition: all 150ms ease;
+  outline: none;
+}
+
+/* Placeholder text */
+.mond-select__trigger--placeholder {
+  color: var(--mond-text-secondary);
+}
+
+/* Hover State */
+.mond-select__trigger:hover:not(:disabled):not(.mond-select__trigger--disabled) {
+  border-color: var(--mond-border-strong);
+}
+
+/* Focus State */
+.mond-select__trigger:focus-visible {
+  border-color: var(--mond-border-focused);
+  box-shadow: 0 0 0 3px var(--mond-feedback-info-background);
+}
+
+/* Disabled State */
+.mond-select__trigger--disabled,
+.mond-select__trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Error State */
+.mond-select--error .mond-select__trigger {
+  border-color: var(--mond-feedback-error-border);
+}
+
+.mond-select--error .mond-select__trigger:focus-visible {
+  border-color: var(--mond-feedback-error-border);
+  box-shadow: 0 0 0 3px var(--mond-feedback-error-background);
+}
+
+/* Success State */
+.mond-select--success .mond-select__trigger {
+  border-color: var(--mond-feedback-success-border);
+}
+
+.mond-select--success .mond-select__trigger:focus-visible {
+  border-color: var(--mond-feedback-success-border);
+  box-shadow: 0 0 0 3px var(--mond-feedback-success-background);
+}
+
+/* Chevron Icon */
+.mond-select__chevron {
+  flex-shrink: 0;
+  color: var(--mond-text-secondary);
+  transition: transform 150ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mond-select--open .mond-select__chevron {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.mond-select__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  margin-top: var(--mond-spacing-1);
+  background-color: var(--mond-surface-elevated);
+  border: 1px solid var(--mond-border-default);
+  border-radius: var(--mond-radii-md);
+  box-shadow: var(--mond-shadow-lg);
+  max-height: var(--mond-spacing-48);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Option Button */
+.mond-select__option {
+  /* Reset */
+  margin: 0;
+  border: none;
+  text-decoration: none;
+
+  /* Layout */
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+
+  /* Typography */
+  font-family: var(--mond-font-family-sans);
+  font-weight: var(--mond-font-weight-normal);
+  color: var(--mond-text-primary);
+  text-align: left;
+
+  /* Appearance */
+  background-color: transparent;
+
+  /* State */
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.mond-select__option:hover:not(:disabled):not(.mond-select__option--disabled) {
+  background-color: var(--mond-surface-overlay);
+}
+
+.mond-select__option--focused {
+  background-color: var(--mond-surface-overlay);
+}
+
+.mond-select__option--disabled,
+.mond-select__option:disabled {
+  cursor: not-allowed;
+  color: var(--mond-text-disabled);
+  opacity: 0.6;
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+/* Small Size */
+.mond-select--sm .mond-select__trigger {
+  padding: var(--mond-spacing-1) var(--mond-spacing-2);
+  font-size: var(--mond-font-size-sm);
+  height: var(--mond-spacing-8);
+}
+
+.mond-select--sm .mond-select__option {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-sm);
+}
+
+.mond-select--sm .mond-select__chevron {
+  width: var(--mond-font-size-sm);
+  height: var(--mond-font-size-sm);
+}
+
+/* Medium Size (Default) */
+.mond-select--md .mond-select__trigger {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-base);
+  height: var(--mond-spacing-10);
+}
+
+.mond-select--md .mond-select__option {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-base);
+}
+
+.mond-select--md .mond-select__chevron {
+  width: var(--mond-font-size-base);
+  height: var(--mond-font-size-base);
+}
+
+/* Large Size */
+.mond-select--lg .mond-select__trigger {
+  padding: var(--mond-spacing-3) var(--mond-spacing-4);
+  font-size: var(--mond-font-size-lg);
+  height: var(--mond-spacing-12);
+}
+
+.mond-select--lg .mond-select__option {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-lg);
+}
+
+.mond-select--lg .mond-select__chevron {
+  width: var(--mond-font-size-lg);
+  height: var(--mond-font-size-lg);
+}

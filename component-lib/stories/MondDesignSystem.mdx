@@ -1,0 +1,150 @@
+# Mond Design System
+
+[![npm version](https://badge.fury.io/js/@mond-design-system%2Ftheme.svg)](https://www.npmjs.com/package/@mond-design-system/theme)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+A modern, accessible design system built with React, TypeScript, and design tokens following Atomic Design principles. Built for scale, consistency, and developer experience.
+
+## ✨ Features
+
+- **🎨 Design Tokens** - Semantic color system with light/dark theme support via CSS variables
+- **⚛️ React Components** - Type-safe, accessible components with consistent API
+- **🎯 TypeScript First** - Full type safety and IntelliSense support
+- **⚡ Next.js Ready** - Full support for Server Components and Client Components
+- **📚 Storybook Documentation** - Interactive component playground
+- **♿ Accessibility** - WCAG 2.1 AA compliant components
+- **🌙 Theme Support** - Built-in light and dark mode
+- **🔧 Developer Experience** - Simple APIs with sensible defaults
+
+## 📦 Installation
+
+```bash
+npm install @mond-design-system/theme
+# or
+yarn add @mond-design-system/theme
+# or
+pnpm add @mond-design-system/theme
+```
+
+## 🚀 Quick Start
+
+```tsx
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme/brands';
+import { Text, Heading, Button } from '@mond-design-system/theme';
+
+function App() {
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme="light">
+      <div>
+        <Heading level={1}>Welcome to Mond Design System</Heading>
+        <Text variant="body" semantic="secondary">
+          A modern design system for building consistent user interfaces.
+        </Text>
+        <Button variant="primary">Get Started</Button>
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
+## 🧱 Component Categories
+
+### Typography
+- **Heading** - Semantic heading elements (h1-h6) with flexible sizing
+- **Text** - Flexible text component with semantic variants and styling options
+
+### Layout
+- **Box** - Spacing primitive for margin and padding
+
+### Buttons & Links
+- **Button** - Primary, outline, ghost, destructive, and warning variants
+- **Link** - Styled anchor elements with hover states
+
+### Form Controls
+- **Input** - Text input with validation states
+- **Textarea** - Multi-line text input
+- **Checkbox** - Custom styled checkboxes
+- **Radio** - Radio button input
+- **Select** - Dropdown selection
+- **Switch** - Toggle switch control
+- **Label** - Form labels
+
+### Other Components
+- **Badge** - Status indicators and labels
+- **Divider** - Visual separators
+- **Modal** - Dialog overlays
+- **Tooltip** - Contextual information overlays
+- **Tabs** - Tab navigation interface
+- **Spinner** - Loading indicators
+- **Toast** - Notification messages
+
+## 🎨 Design Tokens
+
+All design tokens are available as CSS variables:
+
+```css
+/* Semantic Colors */
+var(--mond-text-primary)
+var(--mond-text-secondary)
+var(--mond-surface-background)
+var(--mond-interactive-primary-background)
+
+/* Typography */
+var(--mond-font-size-lg)
+var(--mond-font-weight-semibold)
+var(--mond-line-height-relaxed)
+
+/* Spacing */
+var(--mond-spacing-4)
+var(--mond-spacing-8)
+```
+
+See the Design Tokens page for the complete reference.
+
+## 🌙 Theme Support
+
+Components automatically support light and dark themes:
+
+```tsx
+import { useState } from 'react';
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme/brands';
+import { Text, Heading, Button } from '@mond-design-system/theme';
+
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <div>
+        <Heading level={1}>Welcome</Heading>
+        <Text semantic="secondary">
+          Content automatically adapts to the current theme
+        </Text>
+        <Button onClick={() => setColorScheme(prev => prev === 'light' ? 'dark' : 'light')}>
+          Toggle Theme
+        </Button>
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
+## 🏗️ Explore the Components
+
+Use the sidebar to browse all available components. Each component includes:
+- **Interactive examples** with customizable controls
+- **Code snippets** you can copy and use
+- **Design specifications** and usage guidelines
+- **Accessibility information** and best practices
+
+## 🔗 Links
+
+- **NPM Package**: [@mond-design-system/theme](https://www.npmjs.com/package/@mond-design-system/theme)
+- **GitHub Repository**: [mond-design-system](https://github.com/yourusername/mond-design-system)
+- **Documentation**: This Storybook instance
+
+---
+
+*Built with ❤️ using React, TypeScript, and Storybook*

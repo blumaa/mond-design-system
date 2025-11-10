@@ -18,13 +18,18 @@
   },
   "include": [
     "index.ts",
-    "src/**/*"
+    "client.ts",
+    "components/**/*",
+    "tokens/**/*",
+    "brands/**/*",
+    "utils/**/*"
   ],
   "exclude": [
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.stories.ts",
     "**/*.stories.tsx",
+    "tokens/scripts/**/*",
     "node_modules",
     "dist"
   ]

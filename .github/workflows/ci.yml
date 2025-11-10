@@ -27,10 +27,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build tokens
-        run: yarn build:tokens
-        working-directory: component-lib
-
       - name: Lint code
         run: yarn lint
         working-directory: component-lib
@@ -43,8 +39,12 @@ jobs:
         run: yarn test
         working-directory: component-lib
 
+      - name: Build tokens
+        run: yarn build:tokens
+        working-directory: component-lib
+
       - name: Build library
-        run: yarn build:lib
+        run: yarn build
         working-directory: component-lib
 
       - name: Build Storybook

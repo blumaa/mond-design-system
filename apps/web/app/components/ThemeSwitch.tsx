@@ -35,6 +35,7 @@ export const ThemeSwitch = () => {
         iconOnly
         corners="rounded"
         onClick={toggleTheme}
+        isDarkMode={isDarkMode}
       >
         <LightBulbIcon size={20} isLightOn={isDarkMode} />
       </Button>

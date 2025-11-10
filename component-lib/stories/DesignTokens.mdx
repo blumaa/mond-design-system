@@ -1,0 +1,254 @@
+# Design Tokens
+
+Design tokens are the visual design atoms of the Mond Design System. They store visual design attributes like colors, spacing, typography, and more. These tokens ensure consistency across all components and make theming straightforward.
+
+## 🎨 Colors
+
+### Semantic Colors
+Semantic colors automatically adapt to light and dark themes, providing consistent meaning across your application.
+
+#### Text Colors (CSS Variables)
+```css
+var(--mond-text-primary)    /* Main content text */
+var(--mond-text-secondary)  /* Supporting information */
+var(--mond-text-tertiary)   /* Less important details */
+var(--mond-text-disabled)   /* Inactive content */
+var(--mond-text-inverse)    /* Text on dark backgrounds */
+var(--mond-text-link)       /* Interactive links */
+var(--mond-text-success)    /* Positive feedback */
+var(--mond-text-warning)    /* Cautionary information */
+var(--mond-text-error)      /* Problem notifications */
+var(--mond-text-accent)     /* Brand accent text */
+```
+
+#### Surface Colors (CSS Variables)
+```css
+var(--mond-surface-background)  /* Main background */
+var(--mond-surface-elevated)    /* Elevated surfaces */
+var(--mond-surface-overlay)     /* Modal overlays */
+var(--mond-surface-card)        /* Card backgrounds */
+var(--mond-surface-input)       /* Form input backgrounds */
+var(--mond-surface-disabled)    /* Disabled element backgrounds */
+var(--mond-surface-primary)     /* Primary surface */
+var(--mond-surface-secondary)   /* Secondary surface */
+```
+
+#### Interactive Colors (CSS Variables)
+```css
+/* Primary Actions */
+var(--mond-interactive-primary-background)         /* Button background */
+var(--mond-interactive-primary-backgroundHover)    /* Button hover state */
+var(--mond-interactive-primary-backgroundPressed)  /* Button pressed state */
+var(--mond-interactive-primary-text)               /* Button text */
+
+/* Secondary Actions */
+var(--mond-interactive-secondary-background)       /* Secondary button */
+var(--mond-interactive-secondary-border)           /* Secondary button border */
+var(--mond-interactive-secondary-text)             /* Secondary button text */
+
+/* Ghost Actions */
+var(--mond-interactive-ghost-background)           /* Ghost button */
+var(--mond-interactive-ghost-backgroundHover)      /* Ghost button hover */
+var(--mond-interactive-ghost-text)                 /* Ghost button text */
+```
+
+#### Using Semantic Colors in Components
+The Text component provides a `semantic` prop for semantic text colors:
+```tsx
+<Text semantic="primary">Main content text</Text>
+<Text semantic="secondary">Supporting information</Text>
+<Text semantic="tertiary">Less important details</Text>
+<Text semantic="disabled">Inactive content</Text>
+<Text semantic="inverse">Text on dark backgrounds</Text>
+<Text semantic="link">Interactive links</Text>
+<Text semantic="success">Positive feedback</Text>
+<Text semantic="warning">Cautionary information</Text>
+<Text semantic="error">Problem notifications</Text>
+<Text semantic="accent">Brand accent text</Text>
+```
+
+### Brand Color Tokens
+Brand colors are available as CSS variables with shades from 50-900:
+
+```css
+/* Brand Primary Colors */
+var(--mond-color-brand-primary-50)   /* Lightest primary */
+var(--mond-color-brand-primary-500)  /* Medium primary */
+var(--mond-color-brand-primary-900)  /* Darkest primary */
+
+/* Brand Secondary Colors */
+var(--mond-color-brand-secondary-100)  /* Light gray */
+var(--mond-color-brand-secondary-500)  /* Medium gray */
+var(--mond-color-brand-secondary-800)  /* Dark gray */
+
+/* Status Colors */
+var(--mond-color-brand-error-500)    /* Error red */
+var(--mond-color-brand-success-500)  /* Success green */
+var(--mond-color-brand-warning-500)  /* Warning amber */
+```
+
+## 📏 Spacing
+
+The spacing scale provides consistent spacing throughout your application (based on 0.25rem = 4px):
+
+### CSS Variables
+```css
+var(--mond-spacing-0)   /* 0px */
+var(--mond-spacing-1)   /* 4px (0.25rem) */
+var(--mond-spacing-2)   /* 8px (0.5rem) */
+var(--mond-spacing-3)   /* 12px (0.75rem) */
+var(--mond-spacing-4)   /* 16px (1rem) - base spacing unit */
+var(--mond-spacing-5)   /* 20px (1.25rem) */
+var(--mond-spacing-6)   /* 24px (1.5rem) */
+var(--mond-spacing-8)   /* 32px (2rem) */
+var(--mond-spacing-10)  /* 40px (2.5rem) */
+var(--mond-spacing-12)  /* 48px (3rem) */
+var(--mond-spacing-16)  /* 64px (4rem) */
+var(--mond-spacing-20)  /* 80px (5rem) */
+var(--mond-spacing-24)  /* 96px (6rem) */
+```
+
+### Using with Box Component
+The Box component provides spacing props that map to these tokens:
+```tsx
+<Box
+  padding="4"          // padding: var(--mond-spacing-4) -> 1rem
+  margin="2"           // margin: var(--mond-spacing-2) -> 0.5rem
+  paddingTop="3"       // padding-top: var(--mond-spacing-3) -> 0.75rem
+  marginBottom="5"     // margin-bottom: var(--mond-spacing-5) -> 1.25rem
+>
+  Content
+</Box>
+```
+
+### Using in Custom CSS
+```css
+.custom-component {
+  padding: var(--mond-spacing-4);
+  margin-bottom: var(--mond-spacing-6);
+  gap: var(--mond-spacing-2);
+}
+```
+
+## 🔤 Typography
+
+### Font Sizes (CSS Variables)
+```css
+var(--mond-font-size-xs)    /* 12px (0.75rem) */
+var(--mond-font-size-sm)    /* 14px (0.875rem) */
+var(--mond-font-size-base)  /* 16px (1rem) - base size */
+var(--mond-font-size-lg)    /* 18px (1.125rem) */
+var(--mond-font-size-xl)    /* 20px (1.25rem) */
+var(--mond-font-size-2xl)   /* 24px (1.5rem) */
+var(--mond-font-size-3xl)   /* 30px (1.875rem) */
+var(--mond-font-size-4xl)   /* 36px (2.25rem) */
+var(--mond-font-size-5xl)   /* 48px (3rem) */
+var(--mond-font-size-6xl)   /* 60px (3.75rem) */
+```
+
+### Font Weights (CSS Variables)
+```css
+var(--mond-font-weight-thin)       /* 100 */
+var(--mond-font-weight-extralight) /* 200 */
+var(--mond-font-weight-light)      /* 300 */
+var(--mond-font-weight-normal)     /* 400 - default */
+var(--mond-font-weight-medium)     /* 500 */
+var(--mond-font-weight-semibold)   /* 600 */
+var(--mond-font-weight-bold)       /* 700 */
+var(--mond-font-weight-extrabold)  /* 800 */
+var(--mond-font-weight-black)      /* 900 */
+```
+
+### Using Typography in Text Component
+The Text component provides `variant` and `weight` props:
+```tsx
+{/* Text variants control size and line height */}
+<Text variant="display">Large Display Text</Text>
+<Text variant="headline">Headline Text</Text>
+<Text variant="title">Title Text</Text>
+<Text variant="body">Body Text (default)</Text>
+<Text variant="caption">Caption Text</Text>
+
+{/* Font weights */}
+<Text weight="thin">Thin weight</Text>
+<Text weight="normal">Normal weight (default)</Text>
+<Text weight="semibold">Semibold weight</Text>
+<Text weight="bold">Bold weight</Text>
+```
+
+### Line Heights (CSS Variables)
+```css
+var(--mond-line-height-none)     /* 1 - tight spacing */
+var(--mond-line-height-tight)    /* 1.25 - headings */
+var(--mond-line-height-snug)     /* 1.375 - compact text */
+var(--mond-line-height-normal)   /* 1.5 - body text default */
+var(--mond-line-height-relaxed)  /* 1.625 - comfortable reading */
+var(--mond-line-height-loose)    /* 2 - very spacious */
+```
+
+### Font Family (CSS Variables)
+```css
+var(--mond-font-family-sans)  /* 'DM Sans', system sans-serif stack */
+```
+
+## 🔄 Border Radius
+
+CSS Variables for border radius:
+```css
+var(--mond-radii-none)  /* 0px - sharp corners */
+var(--mond-radii-sm)    /* 2px (0.125rem) - subtle rounding */
+var(--mond-radii-md)    /* 4px (0.25rem) - standard rounding */
+var(--mond-radii-lg)    /* 8px (0.5rem) - prominent rounding */
+var(--mond-radii-xl)    /* 12px (0.75rem) - very round */
+var(--mond-radii-2xl)   /* 16px (1rem) - extra round */
+var(--mond-radii-3xl)   /* 24px (1.5rem) - maximum practical */
+var(--mond-radii-full)  /* 9999px - perfect circle/pill */
+```
+
+Usage in custom CSS:
+```css
+.custom-card {
+  border-radius: var(--mond-radii-lg);
+}
+```
+
+## ☂️ Shadows
+
+CSS Variables for box shadows:
+```css
+var(--mond-shadow-sm)    /* Subtle depth */
+var(--mond-shadow-md)    /* Standard cards */
+var(--mond-shadow-lg)    /* Prominent elements */
+var(--mond-shadow-xl)    /* Floating elements */
+var(--mond-shadow-2xl)   /* Maximum elevation */
+var(--mond-shadow-inner) /* Inset shadow */
+var(--mond-shadow-none)  /* No shadow */
+```
+
+Usage in custom CSS:
+```css
+.custom-card {
+  box-shadow: var(--mond-shadow-md);
+}
+```
+
+## 🌙 Theme Integration
+
+### Using ThemeProvider
+Wrap your application with ThemeProvider to enable automatic theme switching via CSS variables:
+
+```tsx
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme/brands';
+
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <YourComponents />
+    </ThemeProvider>
+  );
+}
+```
+
