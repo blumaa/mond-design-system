@@ -1,3 +1,8 @@
+## <small>2.1.1 (2025-11-10)</small>
+
+* Merge pull request #13 from blumaa/feat-card-component ([f7b55d0](https://github.com/blumaa/mond-design-system/commit/f7b55d0)), closes [#13](https://github.com/blumaa/mond-design-system/issues/13)
+* fix: image loading ([8ed4efa](https://github.com/blumaa/mond-design-system/commit/8ed4efa))
+
 ## 2.1.0 (2025-11-10)
 
 * Merge pull request #12 from blumaa/feat-card-component ([83b2a98](https://github.com/blumaa/mond-design-system/commit/83b2a98)), closes [#12](https://github.com/blumaa/mond-design-system/issues/12)
