@@ -1,3 +1,10 @@
+## <small>2.0.1 (2025-11-10)</small>
+
+* fix: add-on docs ([93f6ccc](https://github.com/blumaa/mond-design-system/commit/93f6ccc))
+* fix: storybook dependency ([24d47a5](https://github.com/blumaa/mond-design-system/commit/24d47a5))
+* fix: vercel build ([0866eec](https://github.com/blumaa/mond-design-system/commit/0866eec))
+* fix: yarn.lock ([487f158](https://github.com/blumaa/mond-design-system/commit/487f158))
+
 ## 2.0.0 (2025-11-10)
 
 * fix: chromatic build ([c669e0c](https://github.com/blumaa/mond-design-system/commit/c669e0c))
