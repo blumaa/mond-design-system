@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
-import { Switch, Box } from "@mond-design-system/theme";
+import { Box } from "@mond-design-system/theme";
+import { Switch } from "@mond-design-system/theme/client";
 import { useTheme } from './ThemeWrapper';
 
 export function DarkModeToggle() {
@@ -8,32 +9,26 @@ export function DarkModeToggle() {
 
   return (
     <Box
-      style={{ 
-        position: 'fixed', 
-        top: '1rem', 
-        left: '1rem', 
+      padding="2"
+      style={{
+        position: 'fixed',
+        top: '1rem',
+        left: '1rem',
         zIndex: 1000,
         backdropFilter: 'blur(10px)',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-        transition: 'all 0.3s ease'
+        transition: 'all 0.3s ease',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        borderRadius: '0.5rem',
+        border: '1px solid var(--border-default)'
       }}
-      display="flex"
-      alignItems="center"
-      gap={2}
-      p={2}
-      bg="surface.elevated"
-      borderRadius="md"
-      border="1px solid"
-      borderColor="border.default"
     >
-      <Box
-        fontSize={14}
-        fontWeight="medium"
-        color="text.primary"
-      >
+      <span style={{ fontSize: 14, fontWeight: 500 }}>
         {isDarkMode ? '🌙' : '☀️'}
-      </Box>
-      <Switch 
+      </span>
+      <Switch
         checked={isDarkMode}
         onChange={toggleDarkMode}
         size="sm"

@@ -1,16 +1,15 @@
 import type { BrandTheme } from '../components/providers/ThemeProvider';
 
 /**
- * CYPHER Brand Theme - Cyberpunk Developer Tools
- * 
- * External brand configuration for the CYPHER cyberpunk identity.
- * Dark, neon-focused design with high contrast for developer tools
- * and technical interfaces.
+ * Brand 1 Theme - Neon Green
+ *
+ * Example brand configuration with dark, neon-focused design.
+ * Dark theme with high contrast neon green accents.
  */
-export const cypherTheme: BrandTheme = {
-  id: 'cypher',
-  name: 'CYPHER Cyberpunk',
-  description: 'Dark, neon cyberpunk design for developer tools and technical interfaces',
+export const brand1Theme: BrandTheme = {
+  id: 'brand-1',
+  name: 'Brand 1',
+  description: 'Dark theme with neon green accents and high contrast design',
   colors: {
     brand: {
       primary: {

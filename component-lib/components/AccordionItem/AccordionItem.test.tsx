@@ -222,10 +222,10 @@ describe('AccordionItem', () => {
 
   describe('Dark Mode', () => {
     it('applies dark mode styling', () => {
-      renderAccordionItem({ isDarkMode: true });
-      
-      // Dark mode styling is applied via CSS-in-JS, 
-      // so we just verify the prop is handled without errors
+      renderAccordionItem({} as any);
+
+      // Dark mode styling is now handled via ThemeProvider and CSS variables
+      // so we just verify the component renders without errors
       expect(screen.getByRole('button')).toBeInTheDocument();
     });
   });

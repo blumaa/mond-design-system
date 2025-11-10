@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ThemeProvider as MdsThemeProvider } from '@mond-design-system/theme';
 import { violetBrand } from '../theme/violet-brand';
 
@@ -14,7 +14,7 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 interface AppThemeProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 /**
@@ -62,7 +62,7 @@ export function AppThemeProvider({ children }: AppThemeProviderProps) {
   return (
     <ThemeContext.Provider value={{ colorScheme, toggleTheme }}>
       <MdsThemeProvider colorScheme={colorScheme} brandTheme={violetBrand}>
-        {children}
+        {children as any}
       </MdsThemeProvider>
     </ThemeContext.Provider>
   );

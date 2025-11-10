@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ThemeProvider } from '../components/providers/ThemeProvider';
 import { Text } from '../components';
-import { cypherTheme, fluxTheme, mondTheme } from '../brands';
+import { brand1Theme, brand2Theme, mondTheme } from '../brands';
 import type { BrandTheme } from '../components/providers/ThemeProvider';
 
 // Test helper to render with different brand themes
@@ -22,7 +22,7 @@ describe('Typography Components with Semantic Tokens', () => {
         <Text variant="display" data-testid="display-text">
           Display Text
         </Text>,
-        cypherTheme
+        brand1Theme
       );
 
       const textElement = container.querySelector('[data-testid="display-text"]');
@@ -36,7 +36,7 @@ describe('Typography Components with Semantic Tokens', () => {
         <Text variant="headline" data-testid="headline-text">
           Headline Text
         </Text>,
-        fluxTheme
+        brand2Theme
       );
 
       const textElement = container.querySelector('[data-testid="headline-text"]');
@@ -64,7 +64,7 @@ describe('Typography Components with Semantic Tokens', () => {
         <Text variant="body" data-testid="body-text">
           Body Text
         </Text>,
-        cypherTheme
+        brand1Theme
       );
 
       const textElement = container.querySelector('[data-testid="body-text"]');
@@ -78,7 +78,7 @@ describe('Typography Components with Semantic Tokens', () => {
         <Text variant="code" data-testid="code-text">
           const code = true;
         </Text>,
-        cypherTheme
+        brand1Theme
       );
 
       const textElement = container.querySelector('[data-testid="code-text"]');
@@ -92,7 +92,7 @@ describe('Typography Components with Semantic Tokens', () => {
         <Text variant="overline" data-testid="overline-text">
           Overline Text
         </Text>,
-        fluxTheme
+        brand2Theme
       );
 
       const textElement = container.querySelector('[data-testid="overline-text"]');
@@ -113,26 +113,26 @@ describe('Typography Components with Semantic Tokens', () => {
       );
 
       // Test with different brands - typography CSS classes should be consistent
-      const { container: cypherContainer } = renderWithTheme(<TestTypography />, cypherTheme);
-      const { container: fluxContainer } = renderWithTheme(<TestTypography />, fluxTheme);
+      const { container: brand1Container } = renderWithTheme(<TestTypography />, brand1Theme);
+      const { container: brand2Container } = renderWithTheme(<TestTypography />, brand2Theme);
       const { container: mondContainer } = renderWithTheme(<TestTypography />, mondTheme);
 
       // All headlines should have same CSS classes (consistent typography hierarchy)
-      const cypherHeadline = cypherContainer.querySelector('[data-testid="headline"]');
-      const fluxHeadline = fluxContainer.querySelector('[data-testid="headline"]');
+      const brand1Headline = brand1Container.querySelector('[data-testid="headline"]');
+      const brand2Headline = brand2Container.querySelector('[data-testid="headline"]');
       const mondHeadline = mondContainer.querySelector('[data-testid="headline"]');
 
-      expect(cypherHeadline).toHaveClass('mond-text--headline');
-      expect(fluxHeadline).toHaveClass('mond-text--headline');
+      expect(brand1Headline).toHaveClass('mond-text--headline');
+      expect(brand2Headline).toHaveClass('mond-text--headline');
       expect(mondHeadline).toHaveClass('mond-text--headline');
 
       // Body text should be consistent across brands
-      const cypherBody = cypherContainer.querySelector('[data-testid="body"]');
-      const fluxBody = fluxContainer.querySelector('[data-testid="body"]');
+      const brand1Body = brand1Container.querySelector('[data-testid="body"]');
+      const brand2Body = brand2Container.querySelector('[data-testid="body"]');
       const mondBody = mondContainer.querySelector('[data-testid="body"]');
 
-      expect(cypherBody).toHaveClass('mond-text--body');
-      expect(fluxBody).toHaveClass('mond-text--body');
+      expect(brand1Body).toHaveClass('mond-text--body');
+      expect(brand2Body).toHaveClass('mond-text--body');
       expect(mondBody).toHaveClass('mond-text--body');
 
       // Typography hierarchy is consistent via CSS classes
@@ -146,7 +146,7 @@ describe('Typography Components with Semantic Tokens', () => {
         <Text variant="body-sm" data-testid="body-sm">
           Small body text
         </Text>,
-        cypherTheme
+        brand1Theme
       );
 
       const bodySm = container.querySelector('[data-testid="body-sm"]');
@@ -161,7 +161,7 @@ describe('Typography Components with Semantic Tokens', () => {
         <Text variant="subtitle" data-testid="subtitle-text">
           Subtitle text
         </Text>,
-        fluxTheme
+        brand2Theme
       );
 
       const subtitleElement = container.querySelector('[data-testid="subtitle-text"]');

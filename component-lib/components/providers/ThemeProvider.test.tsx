@@ -261,7 +261,7 @@ describe('ThemeProvider Component', () => {
 
   describe('Edge Cases', () => {
     it('handles empty children', () => {
-      const { container } = render(<ThemeProvider />);
+      const { container } = render(<ThemeProvider>{null}</ThemeProvider>);
       expect(container.firstChild).toBeInTheDocument();
     });
 

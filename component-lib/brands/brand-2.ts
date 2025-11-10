@@ -1,16 +1,15 @@
 import type { BrandTheme } from '../components/providers/ThemeProvider';
 
 /**
- * FLUX Brand Theme - Music Festival Platform
- * 
- * External brand configuration for the FLUX music festival identity.
- * Vibrant, energetic design with bold colors for music and
- * entertainment platforms.
+ * Brand 2 Theme - Electric Purple
+ *
+ * Example brand configuration with vibrant, energetic design.
+ * Bright theme with bold purple and yellow colors.
  */
-export const fluxTheme: BrandTheme = {
-  id: 'flux',
-  name: 'FLUX Festival',
-  description: 'Vibrant, energetic design for music festivals and entertainment platforms',
+export const brand2Theme: BrandTheme = {
+  id: 'brand-2',
+  name: 'Brand 2',
+  description: 'Vibrant theme with electric purple and yellow accents',
   colors: {
     brand: {
       primary: {

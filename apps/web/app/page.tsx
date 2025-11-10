@@ -25,12 +25,12 @@ export default function Home() {
           transition: "all 0.3s ease",
         }}
       >
-        <Heading level={1} size="4xl" weight="bold" isDarkMode={isDarkMode}>
+        <Heading level={1} size="4xl" weight="bold">
           Mond Design System
         </Heading>
 
-        <Box width="50%" mb="2rem">
-          <Divider size="sm" isDarkMode={isDarkMode} variant="subtle" />
+        <Box marginBottom="8" style={{ width: '50%' }}>
+          <Divider size="sm" variant="subtle" />
         </Box>
 
         <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>

@@ -298,7 +298,7 @@ describe('Text Component - SSR Compatible', () => {
 
   describe('Backward Compatibility', () => {
     it('does NOT accept isDarkMode prop (removed)', () => {
-      const props = { children: 'Test', isDarkMode: true } as unknown;
+      const props = { children: 'Test', isDarkMode: true } as any;
       render(<Text {...props} />);
       const text = screen.getByText('Test');
       expect(text).toBeInTheDocument();

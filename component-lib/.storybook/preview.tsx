@@ -2,7 +2,7 @@ import React from 'react';
 import type { Preview } from "@storybook/react";
 import { withThemeByClassName } from '@storybook/addon-themes';
 import { ThemeProvider } from '../components/providers/ThemeProvider';
-import { mondTheme, cypherTheme, fluxTheme } from '../brands';
+import { mondTheme, brand1Theme, brand2Theme } from '../brands';
 import './styles.css';
 
 const preview: Preview = {
@@ -37,8 +37,8 @@ const preview: Preview = {
         icon: 'paintbrush',
         items: [
           { value: 'mond', title: 'MOND', left: '🏢' },
-          { value: 'cypher', title: 'CYPHER', left: '🔋' },
-          { value: 'flux', title: 'FLUX', left: '🎉' },
+          { value: 'brand-1', title: 'Brand 1', left: '🎨' },
+          { value: 'brand-2', title: 'Brand 2', left: '🎨' },
         ],
         dynamicTitle: true,
       },
@@ -59,8 +59,8 @@ const preview: Preview = {
       // Map brand IDs to brand theme objects
       const brandThemes = {
         mond: mondTheme,
-        cypher: cypherTheme,
-        flux: fluxTheme,
+        'brand-1': brand1Theme,
+        'brand-2': brand2Theme,
       };
       
       const brandTheme = brandThemes[selectedBrandId as keyof typeof brandThemes] || mondTheme;
