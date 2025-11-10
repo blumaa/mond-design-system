@@ -170,8 +170,5 @@
         "statements": 80
       }
     }
-  },
-  "dependencies": {
-    "@storybook/addon-docs": "^9.1.5"
   }
 }
