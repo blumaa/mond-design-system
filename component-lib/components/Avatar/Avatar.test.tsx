@@ -170,7 +170,7 @@ describe('Avatar Component - SSR Compatible', () => {
 
   describe('Backward Compatibility', () => {
     it('does NOT accept isDarkMode prop (removed)', () => {
-      const props = { fallback: 'Test', isDarkMode: true } as any;
+      const props: { fallback: string; isDarkMode?: boolean } = { fallback: 'Test', isDarkMode: true };
       const { container } = render(<Avatar {...props} />);
       expect(container.firstChild).toBeInTheDocument();
     });

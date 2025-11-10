@@ -309,7 +309,7 @@ describe('Link Component - SSR Compatible', () => {
 
   describe('Backward Compatibility', () => {
     it('does NOT accept isDarkMode prop (removed)', () => {
-      const props = { children: 'Test', href: '/test', isDarkMode: true } as any;
+      const props: { children: string; href: string; isDarkMode?: boolean } = { children: 'Test', href: '/test', isDarkMode: true };
       render(<Link {...props} />);
       const link = screen.getByText('Test');
       expect(link).toBeInTheDocument();

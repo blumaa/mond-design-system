@@ -222,7 +222,7 @@ describe('AccordionItem', () => {
 
   describe('Dark Mode', () => {
     it('applies dark mode styling', () => {
-      renderAccordionItem({} as any);
+      renderAccordionItem({});
 
       // Dark mode styling is now handled via ThemeProvider and CSS variables
       // so we just verify the component renders without errors
