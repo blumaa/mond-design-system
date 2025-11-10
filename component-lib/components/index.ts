@@ -21,6 +21,7 @@ export * from './Divider';
 export * from './Label';
 export * from './Image';
 export * from './Tag';
+export * from './Card';
 
 // Internal Components (used by other components)
 export { AccordionItem } from './AccordionItem';
