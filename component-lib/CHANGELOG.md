@@ -1,3 +1,8 @@
+## 2.1.0 (2025-11-10)
+
+* Merge pull request #12 from blumaa/feat-card-component ([83b2a98](https://github.com/blumaa/mond-design-system/commit/83b2a98)), closes [#12](https://github.com/blumaa/mond-design-system/issues/12)
+* feat: Card ([b1990c4](https://github.com/blumaa/mond-design-system/commit/b1990c4))
+
 ## <small>2.0.1 (2025-11-10)</small>
 
 * fix: add-on docs ([93f6ccc](https://github.com/blumaa/mond-design-system/commit/93f6ccc))
