@@ -1,0 +1,60 @@
+/**
+ * Dropdown Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Automatically responds to data-theme attribute changes.
+ */
+
+/* ============================================
+   DROPDOWN CONTAINER
+   ============================================ */
+
+.mond-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* ============================================
+   DROPDOWN MENU
+   ============================================ */
+
+.mond-dropdown__menu {
+  position: absolute;
+  z-index: 1000;
+  min-width: 200px;
+  background-color: var(--mond-surface-overlay);
+  border: 1px solid var(--mond-border-default);
+  border-radius: var(--mond-radii-md);
+  box-shadow: var(--mond-effects-shadow-md);
+  padding: var(--mond-spacing-1);
+}
+
+/* Placement Variants */
+.mond-dropdown__menu--bottom-start {
+  top: 100%;
+  left: 0;
+  margin-top: var(--mond-spacing-1);
+}
+
+.mond-dropdown__menu--bottom-end {
+  top: 100%;
+  right: 0;
+  margin-top: var(--mond-spacing-1);
+}
+
+.mond-dropdown__menu--top-start {
+  bottom: 100%;
+  left: 0;
+  margin-bottom: var(--mond-spacing-1);
+}
+
+.mond-dropdown__menu--top-end {
+  bottom: 100%;
+  right: 0;
+  margin-bottom: var(--mond-spacing-1);
+}
+
+/* Dark Mode Support - handled automatically by CSS variables */
+[data-theme="dark"] .mond-dropdown__menu {
+  /* Variables automatically switch, no overrides needed */
+}

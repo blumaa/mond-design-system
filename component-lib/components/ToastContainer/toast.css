@@ -1,0 +1,163 @@
+/**
+ * Toast Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Automatically responds to data-theme attribute changes.
+ */
+
+/* Base Toast Styles */
+.mond-toast {
+  display: flex;
+  padding: var(--mond-spacing-4);
+  margin-bottom: var(--mond-spacing-2);
+  border-radius: var(--mond-radii-lg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  gap: var(--mond-spacing-3);
+  min-width: 320px;
+  max-width: 420px;
+  position: relative;
+  cursor: default;
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================
+   VARIANTS
+   ============================================ */
+
+.mond-toast--success {
+  background-color: var(--mond-feedback-success-background);
+  border: 1px solid var(--mond-feedback-success-border);
+}
+
+.mond-toast--error {
+  background-color: var(--mond-feedback-error-background);
+  border: 1px solid var(--mond-feedback-error-border);
+}
+
+.mond-toast--warning {
+  background-color: var(--mond-feedback-warning-background);
+  border: 1px solid var(--mond-feedback-warning-border);
+}
+
+.mond-toast--info {
+  background-color: var(--mond-feedback-info-background);
+  border: 1px solid var(--mond-feedback-info-border);
+}
+
+/* ============================================
+   ANIMATION STATES
+   ============================================ */
+
+.mond-toast--entering {
+  transform: translateX(100%) scale(0.9);
+  opacity: 0;
+}
+
+.mond-toast--visible {
+  transform: translateX(0%) scale(1);
+  opacity: 1;
+}
+
+.mond-toast--exiting {
+  transform: translateX(100%) scale(0.9);
+  opacity: 0;
+}
+
+/* ============================================
+   TOAST CONTENT
+   ============================================ */
+
+.mond-toast__icon {
+  flex-shrink: 0;
+  font-size: var(--mond-font-size-lg);
+  font-weight: var(--mond-font-weight-bold);
+  line-height: 1;
+}
+
+.mond-toast--success .mond-toast__icon {
+  color: var(--mond-feedback-success-text);
+}
+
+.mond-toast--error .mond-toast__icon {
+  color: var(--mond-feedback-error-text);
+}
+
+.mond-toast--warning .mond-toast__icon {
+  color: var(--mond-feedback-warning-text);
+}
+
+.mond-toast--info .mond-toast__icon {
+  color: var(--mond-feedback-info-text);
+}
+
+/* Adjust icon alignment when message exists */
+.mond-toast--has-message .mond-toast__icon {
+  margin-top: 2px;
+}
+
+.mond-toast__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.mond-toast__title {
+  margin: 0;
+  font-family: var(--mond-font-family-sans);
+  font-size: var(--mond-font-size-sm);
+  font-weight: var(--mond-font-weight-semibold);
+  color: var(--mond-text-primary);
+  line-height: 1.4;
+}
+
+.mond-toast__title--has-message {
+  margin-bottom: var(--mond-spacing-1);
+}
+
+.mond-toast__message {
+  margin: 0;
+  font-family: var(--mond-font-family-sans);
+  font-size: var(--mond-font-size-sm);
+  color: var(--mond-text-primary);
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+.mond-toast__actions {
+  display: flex;
+  gap: var(--mond-spacing-2);
+  margin-top: var(--mond-spacing-3);
+  flex-wrap: wrap;
+}
+
+
+/* ============================================
+   PROGRESS INDICATOR
+   ============================================ */
+
+.mond-toast__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  opacity: 0.3;
+  border-radius: var(--mond-radii-lg) var(--mond-radii-lg) 0 0;
+  transform-origin: left;
+  transition: transform 100ms linear;
+}
+
+.mond-toast--success .mond-toast__progress {
+  background-color: var(--mond-feedback-success-text);
+}
+
+.mond-toast--error .mond-toast__progress {
+  background-color: var(--mond-feedback-error-text);
+}
+
+.mond-toast--warning .mond-toast__progress {
+  background-color: var(--mond-feedback-warning-text);
+}
+
+.mond-toast--info .mond-toast__progress {
+  background-color: var(--mond-feedback-info-text);
+}

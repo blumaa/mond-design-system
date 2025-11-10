@@ -1,0 +1,149 @@
+/**
+ * Tabs Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Automatically responds to data-theme attribute changes.
+ */
+
+/* ============================================
+   TABS CONTAINER
+   ============================================ */
+
+.mond-tabs {
+  width: 100%;
+}
+
+/* ============================================
+   TABS LIST
+   ============================================ */
+
+.mond-tabs__list {
+  display: flex;
+  position: relative;
+}
+
+/* Line Variant */
+.mond-tabs__list--line {
+  border-bottom: 1px solid var(--mond-border-default);
+  background-color: transparent;
+}
+
+/* Card Variant */
+.mond-tabs__list--card {
+  background-color: var(--mond-surface-elevated);
+  border-radius: var(--mond-radii-md);
+  border: 1px solid var(--mond-border-default);
+  overflow: hidden;
+}
+
+/* ============================================
+   TAB TRIGGER
+   ============================================ */
+
+.mond-tabs__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mond-font-family-sans);
+  color: var(--mond-text-secondary);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 150ms ease;
+  position: relative;
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.mond-tabs__trigger:hover:not(:disabled) {
+  color: var(--mond-text-primary);
+}
+
+/* Active State */
+.mond-tabs__trigger--active {
+  color: var(--mond-text-primary);
+  font-weight: var(--mond-font-weight-semibold);
+}
+
+/* Disabled State */
+.mond-tabs__trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ============================================
+   SIZE VARIANTS
+   ============================================ */
+
+.mond-tabs__trigger--sm {
+  font-size: var(--mond-font-size-sm);
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  min-height: 32px;
+}
+
+.mond-tabs__trigger--md {
+  font-size: var(--mond-font-size-base);
+  padding: var(--mond-spacing-3) var(--mond-spacing-4);
+  min-height: 40px;
+}
+
+.mond-tabs__trigger--lg {
+  font-size: var(--mond-font-size-lg);
+  padding: var(--mond-spacing-4) var(--mond-spacing-6);
+  min-height: 48px;
+}
+
+/* ============================================
+   LINE VARIANT SPECIFIC
+   ============================================ */
+
+.mond-tabs__trigger--line:hover:not(:disabled):not(.mond-tabs__trigger--active) {
+  background-color: var(--mond-interactive-ghost-backgroundHover);
+}
+
+/* Active Indicator for Line Variant */
+.mond-tabs__indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: transparent;
+  transition: background-color 150ms ease;
+}
+
+.mond-tabs__trigger--active .mond-tabs__indicator {
+  background-color: var(--mond-interactive-primary-background);
+}
+
+/* ============================================
+   CARD VARIANT SPECIFIC
+   ============================================ */
+
+.mond-tabs__trigger--card {
+  border-radius: var(--mond-radii-md);
+}
+
+.mond-tabs__trigger--card.mond-tabs__trigger--active {
+  background-color: var(--mond-interactive-secondary-background);
+}
+
+/* ============================================
+   TAB CONTENT
+   ============================================ */
+
+.mond-tabs__content {
+  padding: var(--mond-spacing-4);
+  color: var(--mond-text-primary);
+  outline: none;
+}
+
+.mond-tabs__content--hidden {
+  display: none;
+}
+
+/* Dark Mode Support - handled automatically by CSS variables */
+[data-theme="dark"] .mond-tabs__list {
+  /* Variables automatically switch, no overrides needed */
+}

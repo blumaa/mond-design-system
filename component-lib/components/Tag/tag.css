@@ -1,0 +1,328 @@
+/**
+ * Tag Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base Tag Styles */
+.mond-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mond-spacing-1);
+  font-weight: var(--mond-font-weight-medium);
+  font-family: var(--mond-font-family-sans);
+  white-space: nowrap;
+  max-width: 100%;
+  cursor: default;
+}
+
+.mond-tag__content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* Disabled State */
+.mond-tag--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+.mond-tag--sm {
+  font-size: var(--mond-font-size-xs);
+  padding: var(--mond-spacing-1) var(--mond-spacing-2);
+  border-radius: var(--mond-radii-sm);
+  height: 24px;
+}
+
+.mond-tag--sm.mond-tag--removable {
+  padding-right: var(--mond-spacing-1);
+}
+
+.mond-tag--md {
+  font-size: var(--mond-font-size-sm);
+  padding: var(--mond-spacing-1) var(--mond-spacing-3);
+  border-radius: var(--mond-radii-md);
+  height: 28px;
+}
+
+.mond-tag--md.mond-tag--removable {
+  padding-right: var(--mond-spacing-1);
+}
+
+.mond-tag--lg {
+  font-size: var(--mond-font-size-base);
+  padding: var(--mond-spacing-2) var(--mond-spacing-4);
+  border-radius: var(--mond-radii-lg);
+  height: 36px;
+}
+
+.mond-tag--lg.mond-tag--removable {
+  padding-right: var(--mond-spacing-1);
+}
+
+/* ============================================
+   VARIANTS & SEMANTIC COLORS
+   These use theme-aware CSS variables that
+   automatically respond to data-theme changes
+   ============================================ */
+
+/* Default Filled */
+.mond-tag--filled.mond-tag--default {
+  background-color: var(--mond-color-brand-secondary-100);
+  color: var(--mond-color-brand-secondary-800);
+  border: none;
+}
+
+/* Default Outlined */
+.mond-tag--outlined.mond-tag--default {
+  background-color: transparent;
+  color: var(--mond-text-primary);
+  border: 1px solid var(--mond-border-default);
+}
+
+/* Default Ghost */
+.mond-tag--ghost.mond-tag--default {
+  background-color: transparent;
+  color: var(--mond-text-primary);
+  border: none;
+}
+
+/* Primary Filled */
+.mond-tag--filled.mond-tag--primary {
+  background-color: var(--mond-color-brand-primary-500);
+  color: var(--mond-text-inverse);
+  border: none;
+}
+
+/* Primary Outlined */
+.mond-tag--outlined.mond-tag--primary {
+  background-color: transparent;
+  color: var(--mond-color-brand-primary-600);
+  border: 1px solid var(--mond-color-brand-primary-500);
+}
+
+/* Primary Ghost */
+.mond-tag--ghost.mond-tag--primary {
+  background-color: var(--mond-color-brand-primary-50);
+  color: var(--mond-color-brand-primary-700);
+  border: none;
+}
+
+/* Success Filled */
+.mond-tag--filled.mond-tag--success {
+  background-color: var(--mond-color-brand-success-500);
+  color: var(--mond-text-inverse);
+  border: none;
+}
+
+/* Success Outlined */
+.mond-tag--outlined.mond-tag--success {
+  background-color: transparent;
+  color: var(--mond-color-brand-success-600);
+  border: 1px solid var(--mond-color-brand-success-500);
+}
+
+/* Success Ghost */
+.mond-tag--ghost.mond-tag--success {
+  background-color: var(--mond-color-brand-success-50);
+  color: var(--mond-color-brand-success-700);
+  border: none;
+}
+
+/* Warning Filled */
+.mond-tag--filled.mond-tag--warning {
+  background-color: var(--mond-color-brand-warning-500);
+  color: var(--mond-text-inverse);
+  border: none;
+}
+
+/* Warning Outlined */
+.mond-tag--outlined.mond-tag--warning {
+  background-color: transparent;
+  color: var(--mond-color-brand-warning-600);
+  border: 1px solid var(--mond-color-brand-warning-500);
+}
+
+/* Warning Ghost */
+.mond-tag--ghost.mond-tag--warning {
+  background-color: var(--mond-color-brand-warning-50);
+  color: var(--mond-color-brand-warning-700);
+  border: none;
+}
+
+/* Error Filled */
+.mond-tag--filled.mond-tag--error {
+  background-color: var(--mond-color-brand-error-500);
+  color: var(--mond-text-inverse);
+  border: none;
+}
+
+/* Error Outlined */
+.mond-tag--outlined.mond-tag--error {
+  background-color: transparent;
+  color: var(--mond-color-brand-error-600);
+  border: 1px solid var(--mond-color-brand-error-500);
+}
+
+/* Error Ghost */
+.mond-tag--ghost.mond-tag--error {
+  background-color: var(--mond-color-brand-error-50);
+  color: var(--mond-color-brand-error-700);
+  border: none;
+}
+
+/* Info Filled */
+.mond-tag--filled.mond-tag--info {
+  background-color: var(--mond-color-brand-primary-500);
+  color: var(--mond-text-inverse);
+  border: none;
+}
+
+/* Info Outlined */
+.mond-tag--outlined.mond-tag--info {
+  background-color: transparent;
+  color: var(--mond-color-brand-primary-600);
+  border: 1px solid var(--mond-color-brand-primary-500);
+}
+
+/* Info Ghost */
+.mond-tag--ghost.mond-tag--info {
+  background-color: var(--mond-color-brand-primary-50);
+  color: var(--mond-color-brand-primary-700);
+  border: none;
+}
+
+/* ============================================
+   DARK MODE OVERRIDES
+   ============================================ */
+
+[data-theme="dark"] .mond-tag--filled.mond-tag--default {
+  background-color: var(--mond-color-brand-secondary-700);
+  color: var(--mond-color-brand-secondary-200);
+}
+
+[data-theme="dark"] .mond-tag--outlined.mond-tag--default {
+  color: var(--mond-text-primary);
+  border-color: var(--mond-border-default);
+}
+
+[data-theme="dark"] .mond-tag--ghost.mond-tag--default {
+  color: var(--mond-text-primary);
+}
+
+[data-theme="dark"] .mond-tag--filled.mond-tag--primary {
+  background-color: var(--mond-color-brand-primary-600);
+}
+
+[data-theme="dark"] .mond-tag--outlined.mond-tag--primary {
+  color: var(--mond-color-brand-primary-400);
+  border-color: var(--mond-color-brand-primary-400);
+}
+
+[data-theme="dark"] .mond-tag--ghost.mond-tag--primary {
+  background-color: var(--mond-color-brand-primary-900);
+  color: var(--mond-color-brand-primary-300);
+}
+
+[data-theme="dark"] .mond-tag--filled.mond-tag--success {
+  background-color: var(--mond-color-brand-success-600);
+}
+
+[data-theme="dark"] .mond-tag--outlined.mond-tag--success {
+  color: var(--mond-color-brand-success-400);
+  border-color: var(--mond-color-brand-success-400);
+}
+
+[data-theme="dark"] .mond-tag--ghost.mond-tag--success {
+  background-color: var(--mond-color-brand-success-900);
+  color: var(--mond-color-brand-success-300);
+}
+
+[data-theme="dark"] .mond-tag--filled.mond-tag--warning {
+  background-color: var(--mond-color-brand-warning-600);
+}
+
+[data-theme="dark"] .mond-tag--outlined.mond-tag--warning {
+  color: var(--mond-color-brand-warning-400);
+  border-color: var(--mond-color-brand-warning-400);
+}
+
+[data-theme="dark"] .mond-tag--ghost.mond-tag--warning {
+  background-color: var(--mond-color-brand-warning-900);
+  color: var(--mond-color-brand-warning-300);
+}
+
+[data-theme="dark"] .mond-tag--filled.mond-tag--error {
+  background-color: var(--mond-color-brand-error-600);
+}
+
+[data-theme="dark"] .mond-tag--outlined.mond-tag--error {
+  color: var(--mond-color-brand-error-400);
+  border-color: var(--mond-color-brand-error-400);
+}
+
+[data-theme="dark"] .mond-tag--ghost.mond-tag--error {
+  background-color: var(--mond-color-brand-error-900);
+  color: var(--mond-color-brand-error-300);
+}
+
+[data-theme="dark"] .mond-tag--filled.mond-tag--info {
+  background-color: var(--mond-color-brand-primary-600);
+}
+
+[data-theme="dark"] .mond-tag--outlined.mond-tag--info {
+  color: var(--mond-color-brand-primary-400);
+  border-color: var(--mond-color-brand-primary-400);
+}
+
+[data-theme="dark"] .mond-tag--ghost.mond-tag--info {
+  background-color: var(--mond-color-brand-primary-900);
+  color: var(--mond-color-brand-primary-300);
+}
+
+/* Disabled State Dark Mode */
+[data-theme="dark"] .mond-tag--disabled.mond-tag--filled {
+  background-color: var(--mond-color-brand-secondary-800);
+  color: var(--mond-color-brand-secondary-600);
+}
+
+[data-theme="dark"] .mond-tag--disabled.mond-tag--outlined {
+  border-color: var(--mond-color-brand-secondary-700);
+  color: var(--mond-color-brand-secondary-600);
+}
+
+/* ============================================
+   REMOVE BUTTON
+   ============================================ */
+
+.mond-tag__remove-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: currentColor;
+  opacity: 0.7;
+  padding: 0;
+  margin-left: var(--mond-spacing-1);
+  transition: opacity 0.2s ease;
+}
+
+.mond-tag__remove-button:hover {
+  opacity: 1;
+}
+
+.mond-tag--disabled .mond-tag__remove-button {
+  cursor: not-allowed;
+}

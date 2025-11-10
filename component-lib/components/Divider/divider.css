@@ -1,0 +1,110 @@
+/**
+ * Divider Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base Divider */
+.mond-divider {
+  box-sizing: border-box;
+}
+
+/* Horizontal Divider (default) */
+.mond-divider--horizontal {
+  width: 100%;
+  border: none;
+}
+
+/* Vertical Divider */
+.mond-divider--vertical {
+  height: 100%;
+  min-height: 24px;
+  border: none;
+}
+
+/* Divider with Text Content */
+.mond-divider--with-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: var(--mond-font-size-sm);
+  font-weight: var(--mond-font-weight-medium);
+  color: var(--mond-text-secondary);
+}
+
+.mond-divider--with-text .mond-divider__line {
+  flex: 1;
+}
+
+.mond-divider--with-text .mond-divider__text {
+  padding-left: var(--mond-spacing-3);
+  padding-right: var(--mond-spacing-3);
+  font-size: var(--mond-font-size-sm);
+}
+
+/* Size Variants - SM (1px) */
+.mond-divider--horizontal.mond-divider--sm {
+  height: 1px;
+}
+
+.mond-divider--vertical.mond-divider--sm {
+  width: 1px;
+}
+
+.mond-divider--with-text.mond-divider--sm .mond-divider__line {
+  height: 1px;
+}
+
+/* Size Variants - MD (1px, default) */
+.mond-divider--horizontal.mond-divider--md {
+  height: 1px;
+}
+
+.mond-divider--vertical.mond-divider--md {
+  width: 1px;
+}
+
+.mond-divider--with-text.mond-divider--md .mond-divider__line {
+  height: 1px;
+}
+
+/* Size Variants - LG (2px) */
+.mond-divider--horizontal.mond-divider--lg {
+  height: 2px;
+}
+
+.mond-divider--vertical.mond-divider--lg {
+  width: 2px;
+}
+
+.mond-divider--with-text.mond-divider--lg .mond-divider__line {
+  height: 2px;
+}
+
+/* Color Variants - Default */
+.mond-divider--default {
+  background-color: var(--mond-border-default);
+}
+
+.mond-divider--with-text.mond-divider--default .mond-divider__line {
+  background-color: var(--mond-border-default);
+}
+
+/* Color Variants - Subtle */
+.mond-divider--subtle {
+  background-color: var(--mond-border-subtle);
+}
+
+.mond-divider--with-text.mond-divider--subtle .mond-divider__line {
+  background-color: var(--mond-border-subtle);
+}
+
+/* Color Variants - Strong */
+.mond-divider--strong {
+  background-color: var(--mond-border-strong);
+}
+
+.mond-divider--with-text.mond-divider--strong .mond-divider__line {
+  background-color: var(--mond-border-strong);
+}

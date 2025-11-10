@@ -1,0 +1,134 @@
+/**
+ * Image Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base Image Container */
+.mond-image {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+/* Image Element */
+.mond-image__img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Loading State */
+.mond-image--loading .mond-image__img {
+  display: none;
+}
+
+/* Error State */
+.mond-image--error .mond-image__img {
+  display: none;
+}
+
+/* ============================================
+   OBJECT FIT
+   ============================================ */
+
+.mond-image__img--cover {
+  object-fit: cover;
+}
+
+.mond-image__img--contain {
+  object-fit: contain;
+}
+
+.mond-image__img--fill {
+  object-fit: fill;
+}
+
+.mond-image__img--none {
+  object-fit: none;
+}
+
+.mond-image__img--scale-down {
+  object-fit: scale-down;
+}
+
+/* ============================================
+   ASPECT RATIOS
+   ============================================ */
+
+.mond-image--ratio-1-1 {
+  aspect-ratio: 1 / 1;
+}
+
+.mond-image--ratio-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+.mond-image--ratio-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.mond-image--ratio-3-2 {
+  aspect-ratio: 3 / 2;
+}
+
+.mond-image--ratio-auto {
+  aspect-ratio: auto;
+}
+
+/* ============================================
+   LOADING PLACEHOLDER
+   ============================================ */
+
+.mond-image__placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  background-color: var(--mond-surface-elevated);
+  display: none;
+}
+
+.mond-image--loading .mond-image__placeholder--visible {
+  display: block;
+}
+
+/* ============================================
+   SPINNER CONTAINER
+   ============================================ */
+
+.mond-image__spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.mond-image--loading .mond-image__spinner--visible {
+  display: flex;
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.mond-image__error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--mond-surface-elevated);
+  color: var(--mond-text-tertiary);
+  font-size: var(--mond-font-size-sm);
+  text-align: center;
+  padding: var(--mond-spacing-4);
+}
+
+.mond-image--error .mond-image__error {
+  display: flex;
+}

@@ -1,0 +1,112 @@
+/* Popover Component Styles */
+
+.popover-container {
+  position: relative;
+  display: inline-block;
+}
+
+.popover-trigger {
+  display: inline-block;
+}
+
+.popover-content {
+  position: absolute;
+  z-index: 1000;
+  padding: var(--mond-spacing-sm);
+  background-color: var(--mond-color-surface-elevated);
+  color: var(--mond-color-text-primary);
+  border: 1px solid var(--mond-color-border-default);
+  border-radius: var(--mond-radius-md);
+  font-size: var(--mond-font-size-sm);
+  font-weight: var(--mond-font-weight-normal);
+  font-family: var(--mond-font-family-sans);
+  min-width: 200px;
+  max-width: 320px;
+  line-height: 1.5;
+  box-shadow: var(--mond-shadow-lg);
+}
+
+/* Placement Styles */
+.placement-top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-top-start {
+  bottom: 100%;
+  left: 0;
+  margin-bottom: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-top-end {
+  bottom: 100%;
+  right: 0;
+  margin-bottom: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-bottom-start {
+  top: 100%;
+  left: 0;
+  margin-top: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-bottom-end {
+  top: 100%;
+  right: 0;
+  margin-top: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-left-start {
+  right: 100%;
+  top: 0;
+  margin-right: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-left-end {
+  right: 100%;
+  bottom: 0;
+  margin-right: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-right-start {
+  left: 100%;
+  top: 0;
+  margin-left: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+.placement-right-end {
+  left: 100%;
+  bottom: 0;
+  margin-left: var(--popover-offset, var(--mond-spacing-xs));
+}
+
+/* Close Button Container */
+.popover-close-button {
+  position: absolute;
+  top: 0;
+  right: var(--mond-spacing-xxs);
+  z-index: 1;
+}

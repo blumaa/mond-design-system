@@ -1,0 +1,73 @@
+/**
+ * Common utility classes for Storybook stories
+ * These classes are used across story files to maintain consistent layouts
+ * without using inline styles.
+ */
+
+/* Flex containers */
+.story-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.story-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Gap utilities */
+.story-gap-12 {
+  gap: 12px;
+}
+
+.story-gap-16 {
+  gap: 16px;
+}
+
+/* Width constraints */
+.story-max-width-200 {
+  max-width: 200px;
+}
+
+.story-max-width-250 {
+  max-width: 250px;
+}
+
+.story-max-width-400 {
+  max-width: 400px;
+}
+
+.story-max-width-600 {
+  max-width: 600px;
+}
+
+.story-width-400 {
+  width: 400px;
+}
+
+/* Background colors */
+.story-bg-dark {
+  background-color: var(--mond-bg-primary, #1a1a1a);
+  border-radius: 8px;
+}
+
+.story-bg-light {
+  background-color: #F2F3F4;
+  border-radius: 8px;
+}
+
+.story-bg-medium {
+  background-color: #27374D;
+  border-radius: 8px;
+}
+
+/* Paragraph reset */
+.story-paragraph {
+  margin: 0 0 16px 0;
+  color: var(--mond-text-secondary, #64748b);
+}
+
+.story-paragraph-no-margin {
+  margin: 0;
+  color: var(--mond-text-secondary, #64748b);
+}

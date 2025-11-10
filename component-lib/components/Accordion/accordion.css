@@ -1,0 +1,82 @@
+/**
+ * Accordion Component Styles
+ *
+ * Uses CSS variables from the design system tokens.
+ * All colors automatically respond to data-theme attribute changes.
+ */
+
+/* Base Accordion Container */
+.mond-accordion {
+  box-sizing: border-box;
+  font-family: var(--mond-font-family-sans);
+  overflow: hidden;
+}
+
+/* Variant: Default */
+.mond-accordion--default {
+  border: none;
+  border-radius: 0;
+}
+
+.mond-accordion--default .mond-accordion-item {
+  border-top: 1px solid var(--mond-border-default);
+  border-bottom: none;
+}
+
+.mond-accordion--default .mond-accordion-item:last-child {
+  border-bottom: none;
+}
+
+/* Variant: Bordered */
+.mond-accordion--bordered {
+  border: 1px solid var(--mond-border-default);
+  border-radius: var(--mond-border-radius-md);
+  overflow: hidden;
+}
+
+.mond-accordion--bordered .mond-accordion-item {
+  border-top: none;
+  border-bottom: 1px solid var(--mond-border-default);
+}
+
+.mond-accordion--bordered .mond-accordion-item:last-child {
+  border-bottom: none;
+}
+
+/* Variant: Filled */
+.mond-accordion--filled {
+  border: none;
+  border-radius: 0;
+}
+
+.mond-accordion--filled .mond-accordion-item {
+  border: none;
+  border-bottom: none;
+}
+
+/* Accordion Item Wrapper */
+.mond-accordion-item-wrapper {
+  border: inherit;
+}
+
+.mond-accordion--default .mond-accordion-item-wrapper {
+  border: 1px solid var(--mond-border-default);
+  border-bottom: none;
+}
+
+.mond-accordion--default .mond-accordion-item-wrapper:last-child {
+  border-bottom: none;
+}
+
+.mond-accordion--bordered .mond-accordion-item-wrapper {
+  border: none;
+  border-bottom: 1px solid var(--mond-border-default);
+}
+
+.mond-accordion--bordered .mond-accordion-item-wrapper:last-child {
+  border-bottom: none;
+}
+
+.mond-accordion--filled .mond-accordion-item-wrapper {
+  border: none;
+}

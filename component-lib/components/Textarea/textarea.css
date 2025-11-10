@@ -1,0 +1,120 @@
+/**
+ * Textarea Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Automatically responds to data-theme attribute changes.
+ */
+
+/* Base Textarea Styles */
+.mond-textarea {
+  /* Reset */
+  margin: 0;
+  border: none;
+
+  /* Layout */
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+
+  /* Typography */
+  font-family: var(--mond-font-family-sans);
+  font-weight: var(--mond-font-weight-normal);
+
+  /* Appearance */
+  background-color: var(--mond-surface-input);
+  border: 1px solid var(--mond-border-default);
+  border-radius: var(--mond-radii-md);
+  color: var(--mond-text-primary);
+
+  /* State */
+  outline: none;
+  transition: all 150ms ease;
+}
+
+.mond-textarea::placeholder {
+  color: var(--mond-text-secondary);
+}
+
+/* Focus State */
+.mond-textarea:focus {
+  border-color: var(--mond-border-focused);
+  box-shadow: 0 0 0 3px var(--mond-feedback-info-background);
+}
+
+/* Disabled State */
+.mond-textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+/* Small Size */
+.mond-textarea--sm {
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  font-size: var(--mond-font-size-sm);
+  min-height: 80px;
+}
+
+/* Medium Size (Default) */
+.mond-textarea--md {
+  padding: var(--mond-spacing-3) var(--mond-spacing-4);
+  font-size: var(--mond-font-size-base);
+  min-height: 100px;
+}
+
+/* Large Size */
+.mond-textarea--lg {
+  padding: var(--mond-spacing-4) var(--mond-spacing-5);
+  font-size: var(--mond-font-size-lg);
+  min-height: 120px;
+}
+
+/* ============================================
+   VARIANTS
+   ============================================ */
+
+/* Error Variant */
+.mond-textarea--error {
+  border-color: var(--mond-border-error);
+}
+
+.mond-textarea--error:focus {
+  border-color: var(--mond-border-error);
+  box-shadow: 0 0 0 3px var(--mond-feedback-error-background);
+}
+
+/* Success Variant */
+.mond-textarea--success {
+  border-color: var(--mond-border-success);
+}
+
+.mond-textarea--success:focus {
+  border-color: var(--mond-border-success);
+  box-shadow: 0 0 0 3px var(--mond-feedback-success-background);
+}
+
+/* ============================================
+   HELPER TEXT / ERROR / SUCCESS MESSAGES
+   ============================================ */
+
+.mond-textarea__message {
+  display: block;
+  margin-top: var(--mond-spacing-1);
+  font-size: var(--mond-font-size-sm);
+}
+
+.mond-textarea__message--default {
+  color: var(--mond-text-secondary);
+}
+
+.mond-textarea__message--error {
+  color: var(--mond-text-error);
+}
+
+.mond-textarea__message--success {
+  color: var(--mond-text-success);
+}

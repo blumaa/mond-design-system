@@ -1,0 +1,207 @@
+/**
+ * Text Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Automatically responds to data-theme attribute changes.
+ */
+
+/* Text Variant Styles - Typography Scale */
+
+.mond-text--display {
+  font-size: var(--mond-font-size-4xl);
+  line-height: var(--mond-line-height-tight);
+  font-weight: var(--mond-font-weight-bold);
+  letter-spacing: var(--mond-letter-spacing-tight);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--headline {
+  font-size: var(--mond-font-size-3xl);
+  line-height: var(--mond-line-height-tight);
+  font-weight: var(--mond-font-weight-bold);
+  letter-spacing: var(--mond-letter-spacing-tight);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--title {
+  font-size: var(--mond-font-size-2xl);
+  line-height: var(--mond-line-height-normal);
+  font-weight: var(--mond-font-weight-semibold);
+  letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--subtitle {
+  font-size: var(--mond-font-size-xl);
+  line-height: var(--mond-line-height-normal);
+  font-weight: var(--mond-font-weight-medium);
+  letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--body {
+  font-size: var(--mond-font-size-base);
+  line-height: var(--mond-line-height-relaxed);
+  font-weight: var(--mond-font-weight-normal);
+  letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--body-sm {
+  font-size: var(--mond-font-size-sm);
+  line-height: var(--mond-line-height-relaxed);
+  font-weight: var(--mond-font-weight-normal);
+  letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--caption {
+  font-size: var(--mond-font-size-xs);
+  line-height: var(--mond-line-height-normal);
+  font-weight: var(--mond-font-weight-normal);
+  letter-spacing: var(--mond-letter-spacing-wide);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--overline {
+  font-size: var(--mond-font-size-xs);
+  line-height: var(--mond-line-height-normal);
+  font-weight: var(--mond-font-weight-semibold);
+  letter-spacing: var(--mond-letter-spacing-wider);
+  text-transform: uppercase;
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--code {
+  font-size: var(--mond-font-size-sm);
+  line-height: var(--mond-line-height-normal);
+  font-weight: var(--mond-font-weight-normal);
+  letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-mono);
+}
+
+/* ============================================
+   SEMANTIC COLORS
+   ============================================ */
+
+.mond-text--primary {
+  color: var(--text-color-override, var(--mond-text-primary));
+}
+
+.mond-text--secondary {
+  color: var(--text-color-override, var(--mond-text-secondary));
+}
+
+.mond-text--tertiary {
+  color: var(--text-color-override, var(--mond-text-tertiary));
+}
+
+.mond-text--disabled {
+  color: var(--text-color-override, var(--mond-text-disabled));
+}
+
+.mond-text--inverse {
+  color: var(--text-color-override, var(--mond-text-inverse));
+}
+
+.mond-text--link {
+  color: var(--text-color-override, var(--mond-text-link));
+}
+
+.mond-text--success {
+  color: var(--text-color-override, var(--mond-text-success));
+}
+
+.mond-text--warning {
+  color: var(--text-color-override, var(--mond-text-warning));
+}
+
+.mond-text--error {
+  color: var(--text-color-override, var(--mond-text-error));
+}
+
+.mond-text--accent {
+  color: var(--text-color-override, var(--mond-text-accent));
+}
+
+/* ============================================
+   FONT WEIGHTS
+   ============================================ */
+
+.mond-text--weight-thin {
+  font-weight: var(--mond-font-weight-thin);
+}
+
+.mond-text--weight-extralight {
+  font-weight: var(--mond-font-weight-extralight);
+}
+
+.mond-text--weight-light {
+  font-weight: var(--mond-font-weight-light);
+}
+
+.mond-text--weight-normal {
+  font-weight: var(--mond-font-weight-normal);
+}
+
+.mond-text--weight-medium {
+  font-weight: var(--mond-font-weight-medium);
+}
+
+.mond-text--weight-semibold {
+  font-weight: var(--mond-font-weight-semibold);
+}
+
+.mond-text--weight-bold {
+  font-weight: var(--mond-font-weight-bold);
+}
+
+.mond-text--weight-extrabold {
+  font-weight: var(--mond-font-weight-extrabold);
+}
+
+.mond-text--weight-black {
+  font-weight: var(--mond-font-weight-black);
+}
+
+/* ============================================
+   TEXT ALIGNMENT
+   ============================================ */
+
+.mond-text--align-left {
+  text-align: left;
+}
+
+.mond-text--align-center {
+  text-align: center;
+}
+
+.mond-text--align-right {
+  text-align: right;
+}
+
+.mond-text--align-justify {
+  text-align: justify;
+}
+
+/* ============================================
+   TEXT MODIFIERS
+   ============================================ */
+
+.mond-text--italic {
+  font-style: italic;
+}
+
+.mond-text--underline {
+  text-decoration: underline;
+}
+
+.mond-text--strikethrough {
+  text-decoration: line-through;
+}
+
+.mond-text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

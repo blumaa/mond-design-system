@@ -21,11 +21,14 @@
   },
   "include": [
     "**/*.ts",
-    "**/*.tsx",
-    "src/types/**/*.d.ts"
+    "**/*.tsx"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx"
   ]
 }
