@@ -1,3 +1,23 @@
+## 2.0.0 (2025-11-10)
+
+* fix: chromatic build ([c669e0c](https://github.com/blumaa/mond-design-system/commit/c669e0c))
+* fix: tsc errors ([5ddb1a6](https://github.com/blumaa/mond-design-system/commit/5ddb1a6))
+* fix: tsc errors ([c0b0fc5](https://github.com/blumaa/mond-design-system/commit/c0b0fc5))
+* fix icon image pagination tag ([cd2a181](https://github.com/blumaa/mond-design-system/commit/cd2a181))
+* fix modal popover tooltip with migration. ([98b65f3](https://github.com/blumaa/mond-design-system/commit/98b65f3))
+* Merge box-csr-ssr-problems into revert-to-css-variables (keeping current branch changes) ([f9f6a97](https://github.com/blumaa/mond-design-system/commit/f9f6a97))
+* Merge pull request #10 from blumaa/box-csr-ssr-problems ([a380467](https://github.com/blumaa/mond-design-system/commit/a380467)), closes [#10](https://github.com/blumaa/mond-design-system/issues/10)
+* Merge pull request #11 from blumaa/remove-cypher-and-flux-apps ([9de01bd](https://github.com/blumaa/mond-design-system/commit/9de01bd)), closes [#11](https://github.com/blumaa/mond-design-system/issues/11)
+* Merge pull request #9 from blumaa/revert-to-css-variables ([d0909dd](https://github.com/blumaa/mond-design-system/commit/d0909dd)), closes [#9](https://github.com/blumaa/mond-design-system/issues/9)
+* Merge remote-tracking branch 'origin/main' into box-csr-ssr-problems ([cf41073](https://github.com/blumaa/mond-design-system/commit/cf41073))
+* MVP migration css variables and ssr csr POC ([d384314](https://github.com/blumaa/mond-design-system/commit/d384314))
+* feat: add tsup and refactor components with css approach to tokens. ([fdc7f75](https://github.com/blumaa/mond-design-system/commit/fdc7f75))
+
+
+### BREAKING CHANGE
+
+* mcp css variable migration with csr ssr demo poc
+
 ## <small>1.26.1 (2025-11-06)</small>
 
 * fix: button with href props ([6abe8e7](https://github.com/blumaa/mond-design-system/commit/6abe8e7))
