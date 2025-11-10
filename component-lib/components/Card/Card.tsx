@@ -221,6 +221,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(({
             aspectRatio={imagePosition === 'top' ? '16:9' : '1:1'}
             fit="cover"
             borderRadius="none"
+            loading="eager"
           />
         </div>
       )}
