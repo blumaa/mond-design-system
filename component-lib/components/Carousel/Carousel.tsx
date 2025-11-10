@@ -1,119 +1,103 @@
-'use client';
 import React, { useState, useEffect, useRef, useCallback, ReactNode } from 'react';
-import { Box, BoxProps } from '../Box/Box';
-import { tokens } from '../../tokens';
-import { useThemeContext } from '../providers/ThemeProvider';
+import { Box } from '../Box/Box';
+import { Button } from '../Button/Button';
+import { Icon } from '../Icon/Icon';
+import './carousel.css';
 
 export interface CarouselItem {
   id: string;
   content: ReactNode;
 }
 
-export interface CarouselProps extends Omit<BoxProps, 'children'> {
+export interface CarouselProps {
   /**
    * Array of carousel items to display
    */
   items: CarouselItem[];
-  
+
   /**
    * Whether to show navigation arrows
    * @default true
    */
   showArrows?: boolean;
-  
+
   /**
    * Whether to show dot indicators
    * @default true
    */
   showIndicators?: boolean;
-  
+
   /**
    * Whether to auto-play the carousel
    * @default false
    */
   autoPlay?: boolean;
-  
+
   /**
    * Auto-play interval in milliseconds
    * @default 5000
    */
   autoPlayInterval?: number;
-  
+
   /**
    * Whether to pause auto-play on hover
    * @default true
    */
   pauseOnHover?: boolean;
-  
+
   /**
    * Whether the carousel should loop infinitely
    * @default true
    */
   infinite?: boolean;
-  
+
   /**
    * Number of items to show at once (for multi-item carousel)
    * @default 1
    */
   itemsToShow?: number;
-  
+
   /**
    * Gap between items when showing multiple
    * @default 'md'
    */
   itemGap?: 'none' | 'xs' | 'sm' | 'md' | 'lg';
-  
+
   /**
    * Animation duration in milliseconds
    * @default 300
    */
   animationDuration?: number;
-  
+
   /**
    * Custom arrow icons
    */
   prevArrowIcon?: ReactNode;
   nextArrowIcon?: ReactNode;
-  
+
   /**
    * Arrow position
    * @default 'sides'
    */
   arrowPosition?: 'sides' | 'bottom';
-  
+
   /**
    * Indicator position
    * @default 'bottom-center'
    */
   indicatorPosition?: 'bottom-center' | 'bottom-left' | 'bottom-right';
-  
-  /**
-   * Dark mode styling
-   * @default false
-   */
-  
+
   /**
    * Callback when slide changes
    */
   onSlideChange?: (currentIndex: number) => void;
-  
+
   /**
    * Initial slide index
    * @default 0
    */
   initialSlide?: number;
 }
-
-const getGapSize = (gap: string) => {
-  const gapMap = {
-    none: '0',
-    xs: tokens.spacing['1'],
-    sm: tokens.spacing['2'],
-    md: tokens.spacing['4'],
-    lg: tokens.spacing['6'],
-  };
-  return gapMap[gap as keyof typeof gapMap];
-};
 
 export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
   items,
@@ -128,17 +112,11 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
   animationDuration = 300,
   prevArrowIcon,
   nextArrowIcon,
+  arrowPosition = 'sides',
   indicatorPosition = 'bottom-center',
-  
   onSlideChange,
   initialSlide = 0,
-  className = '',
-  style,
-  ...props
 }, ref) => {
-  const { colorScheme } = useThemeContext();
-  const isDark = colorScheme === 'dark';
-  
   const [currentIndex, setCurrentIndex] = useState(initialSlide);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -146,14 +124,13 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
 
   const totalItems = items.length;
   const maxIndex = Math.max(0, totalItems - itemsToShow);
-  const gap = getGapSize(itemGap);
 
   const goToSlide = useCallback((index: number) => {
     if (isTransitioning || index === currentIndex) return;
-    
+
     setIsTransitioning(true);
     setCurrentIndex(index);
-    
+
     setTimeout(() => {
       setIsTransitioning(false);
     }, animationDuration);
@@ -165,7 +142,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
 
     const goToNext = () => {
       if (isTransitioning) return;
-      
+
       if (currentIndex < maxIndex) {
         goToSlide(currentIndex + 1);
       } else if (infinite) {
@@ -191,7 +168,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
 
   const goToPrevious = () => {
     if (isTransitioning) return;
-    
+
     if (currentIndex > 0) {
       goToSlide(currentIndex - 1);
     } else if (infinite) {
@@ -201,7 +178,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
 
   const goToNext = () => {
     if (isTransitioning) return;
-    
+
     if (currentIndex < maxIndex) {
       goToSlide(currentIndex + 1);
     } else if (infinite) {
@@ -231,189 +208,179 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
     }
   };
 
-  const containerStyle = {
-    position: 'relative' as const,
-    width: '100%',
-    overflow: 'hidden',
-    borderRadius: tokens.radii.lg,
-    ...style,
-  };
+  const DefaultPrevIcon = () => (
+    <Icon size="sm" decorative>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="15,18 9,12 15,6"/>
+      </svg>
+    </Icon>
+  );
 
-  const trackStyle = {
-    display: 'flex',
-    transition: isTransitioning ? `transform ${animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1)` : 'none',
-    transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)`,
-    gap,
-  };
-
-  const slideStyle = {
-    flex: `0 0 ${100 / itemsToShow}%`,
-    minWidth: 0,
-  };
-
-  const arrowButtonStyle = {
-    position: 'absolute' as const,
-    top: '50%',
-    transform: 'translateY(-50%)',
-    zIndex: 10,
-    backgroundColor: isDark
-      ? 'rgba(255, 255, 255, 0.9)' 
-      : 'rgba(0, 0, 0, 0.7)',
-    border: 'none',
-    borderRadius: '50%',
-    width: '40px',
-    height: '40px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    color: isDark ? tokens.colors.gray['900'] : tokens.colors.white['50'],
-    transition: 'all 0.2s ease',
-    opacity: 0.8,
-  };
-
-  const prevButtonStyle = {
-    ...arrowButtonStyle,
-    left: tokens.spacing['4'],
-  };
-
-  const nextButtonStyle = {
-    ...arrowButtonStyle,
-    right: tokens.spacing['4'],
-  };
-
-  const indicatorContainerStyle = {
-    position: 'absolute' as const,
-    bottom: tokens.spacing['4'],
-    display: 'flex',
-    gap: tokens.spacing['2'],
-    zIndex: 10,
-    ...(indicatorPosition === 'bottom-center' && {
-      left: '50%',
-      transform: 'translateX(-50%)',
-    }),
-    ...(indicatorPosition === 'bottom-left' && {
-      left: tokens.spacing['4'],
-    }),
-    ...(indicatorPosition === 'bottom-right' && {
-      right: tokens.spacing['4'],
-    }),
-  };
-
-  const getIndicatorStyle = (index: number) => ({
-    width: '10px',
-    height: '10px',
-    borderRadius: '50%',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    backgroundColor: index === currentIndex 
-      ? (isDark ? tokens.colors.white['50'] : tokens.colors.gray['900'])
-      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.3)'),
-  });
+  const DefaultNextIcon = () => (
+    <Icon size="sm" decorative>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="9,18 15,12 9,6"/>
+      </svg>
+    </Icon>
+  );
 
   const canGoPrev = currentIndex > 0 || infinite;
   const canGoNext = currentIndex < maxIndex || infinite;
 
-  const DefaultPrevIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <polyline points="15,18 9,12 15,6"/>
-    </svg>
-  );
+  const carouselClasses = [
+    'mond-carousel',
+    totalItems === 0 && 'mond-carousel--empty',
+    itemsToShow > 1 && 'mond-carousel--multi-item',
+  ].filter(Boolean).join(' ');
 
-  const DefaultNextIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <polyline points="9,18 15,12 9,6"/>
-    </svg>
-  );
+  const trackClasses = [
+    'mond-carousel__track',
+    itemsToShow > 1 && `mond-carousel__track--gap-${itemGap}`,
+  ].filter(Boolean).join(' ');
 
   if (totalItems === 0) {
     return (
       <Box
         ref={ref}
-        className={`mond-carousel mond-carousel--empty ${className}`}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '200px',
-          backgroundColor: isDark ? tokens.colors.gray['800'] : tokens.colors.gray['100'],
-          color: isDark ? tokens.colors.gray['400'] : tokens.colors.gray['500'],
-          borderRadius: tokens.radii.lg,
-          ...style,
-        }}
-        {...props}
+        className={carouselClasses}
       >
         No items to display
       </Box>
     );
   }
 
+  // Calculate gap values for multi-item carousels
+  const gapValues: Record<typeof itemGap, string> = {
+    none: '0px',
+    xs: 'var(--mond-spacing-1)',
+    sm: 'var(--mond-spacing-2)',
+    md: 'var(--mond-spacing-4)',
+    lg: 'var(--mond-spacing-6)',
+  };
+
+  const slideStyle = itemsToShow > 1
+    ? {
+        flex: `0 0 calc((100% - (${gapValues[itemGap]} * ${itemsToShow - 1})) / ${itemsToShow})`,
+        maxWidth: `calc((100% - (${gapValues[itemGap]} * ${itemsToShow - 1})) / ${itemsToShow})`
+      }
+    : {
+        flex: '0 0 100%',
+        maxWidth: '100%'
+      };
+
+  // Calculate transform based on current index
+  // For single item: move by 100% per slide
+  // For multiple items: move by (100% / itemsToShow) per slide, accounting for gaps
+  const transformPercent = itemsToShow === 1
+    ? currentIndex * 100
+    : currentIndex * (100 / itemsToShow);
+
+  const trackStyle = { transform: `translateX(-${transformPercent}%)` };
+
   return (
     <Box
       ref={ref}
-      className={`mond-carousel ${className}`}
-      style={containerStyle}
+      className={carouselClasses}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="region"
       aria-label="Carousel"
-      {...props}
     >
       {/* Main carousel track */}
-      <Box style={trackStyle}>
+      <div className={trackClasses} style={trackStyle}>
         {items.map((item) => (
-          <Box key={item.id} style={slideStyle}>
+          <div key={item.id} className="mond-carousel__slide" style={slideStyle}>
             {item.content}
-          </Box>
+          </div>
         ))}
-      </Box>
+      </div>
 
       {/* Navigation arrows */}
       {showArrows && totalItems > itemsToShow && (
         <>
-          {canGoPrev && (
-            <button
-              type="button"
-              onClick={goToPrevious}
-              style={prevButtonStyle}
-              aria-label="Previous slide"
-              disabled={isTransitioning}
-            >
-              {prevArrowIcon || <DefaultPrevIcon />}
-            </button>
-          )}
-          
-          {canGoNext && (
-            <button
-              type="button"
-              onClick={goToNext}
-              style={nextButtonStyle}
-              aria-label="Next slide"
-              disabled={isTransitioning}
-            >
-              {nextArrowIcon || <DefaultNextIcon />}
-            </button>
+          {arrowPosition === 'sides' ? (
+            <>
+              {canGoPrev && (
+                <div className="mond-carousel__arrow mond-carousel__arrow--prev">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={goToPrevious}
+                    disabled={isTransitioning}
+                    aria-label="Previous slide"
+                  >
+                    {prevArrowIcon || <DefaultPrevIcon />}
+                  </Button>
+                </div>
+              )}
+
+              {canGoNext && (
+                <div className="mond-carousel__arrow mond-carousel__arrow--next">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={goToNext}
+                    disabled={isTransitioning}
+                    aria-label="Next slide"
+                  >
+                    {nextArrowIcon || <DefaultNextIcon />}
+                  </Button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="mond-carousel__arrows--bottom">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={goToPrevious}
+                disabled={isTransitioning || !canGoPrev}
+                aria-label="Previous slide"
+              >
+                {prevArrowIcon || <DefaultPrevIcon />}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={goToNext}
+                disabled={isTransitioning || !canGoNext}
+                aria-label="Next slide"
+              >
+                {nextArrowIcon || <DefaultNextIcon />}
+              </Button>
+            </div>
           )}
         </>
       )}
 
       {/* Dot indicators */}
       {showIndicators && totalItems > itemsToShow && (
-        <Box style={indicatorContainerStyle}>
+        <div className={`mond-carousel__indicators mond-carousel__indicators--${indicatorPosition}`}>
           {Array.from({ length: maxIndex + 1 }, (_, index) => (
-            <button
+            <div
               key={index}
-              type="button"
-              onClick={() => goToSlide(index)}
-              style={getIndicatorStyle(index)}
-              aria-label={`Go to slide ${index + 1}`}
-              disabled={isTransitioning}
-            />
+              className={`mond-carousel__indicator ${index === currentIndex ? 'mond-carousel__indicator--active' : ''}`}
+            >
+              <Button
+                variant="ghost"
+                size="sm"
+                iconOnly
+                onClick={() => goToSlide(index)}
+                disabled={isTransitioning}
+                aria-label={`Go to slide ${index + 1}`}
+                aria-current={index === currentIndex ? 'true' : undefined}
+              >
+                <Icon size="xs" decorative>
+                  <svg viewBox="0 0 8 8" fill="currentColor">
+                    <circle cx="4" cy="4" r="3" />
+                  </svg>
+                </Icon>
+              </Button>
+            </div>
           ))}
-        </Box>
+        </div>
       )}
     </Box>
   );

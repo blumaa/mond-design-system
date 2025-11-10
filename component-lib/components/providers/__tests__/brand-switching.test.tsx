@@ -38,28 +38,24 @@ describe('Brand Switching', () => {
     expect(computedStyle.backgroundColor).not.toBe('transparent');
   });
 
-  it('should apply different colors for different brands', () => {
-    const { rerender, getByRole } = render(
+  it('should apply correct data-theme attribute for different brands', () => {
+    const { rerender, container } = render(
       <ThemeProvider brandTheme={mondTheme} colorScheme="light">
         <Button variant="primary">Test Button</Button>
       </ThemeProvider>
     );
-    
-    const defaultButton = getByRole('button');
-    const defaultStyle = window.getComputedStyle(defaultButton);
-    const defaultColor = defaultStyle.backgroundColor;
-    
+
+    const themeDiv = container.firstChild;
+    expect(themeDiv).toHaveAttribute('data-theme', 'light');
+    expect(themeDiv).toHaveAttribute('data-brand', 'mond');
+
     rerender(
       <ThemeProvider brandTheme={cypherTheme} colorScheme="light">
         <Button variant="primary">Test Button</Button>
       </ThemeProvider>
     );
-    
-    const cypherButton = getByRole('button');
-    const cypherStyle = window.getComputedStyle(cypherButton);
-    const cypherColor = cypherStyle.backgroundColor;
-    
-    // The colors should be different between brands
-    expect(defaultColor).not.toBe(cypherColor);
+
+    expect(themeDiv).toHaveAttribute('data-theme', 'light');
+    expect(themeDiv).toHaveAttribute('data-brand', 'cypher');
   });
 });

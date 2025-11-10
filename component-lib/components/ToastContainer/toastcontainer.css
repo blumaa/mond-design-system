@@ -1,0 +1,58 @@
+/**
+ * ToastContainer Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Handles positioning and layout for toast notifications.
+ */
+
+/* Base Container Styles */
+.mond-toast-container {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mond-spacing-2);
+  max-width: 420px;
+  width: auto;
+}
+
+/* ============================================
+   POSITION VARIANTS
+   ============================================ */
+
+.mond-toast-container--top-right {
+  top: var(--mond-spacing-4);
+  right: var(--mond-spacing-4);
+}
+
+.mond-toast-container--top-left {
+  top: var(--mond-spacing-4);
+  left: var(--mond-spacing-4);
+}
+
+.mond-toast-container--bottom-right {
+  bottom: var(--mond-spacing-4);
+  right: var(--mond-spacing-4);
+  flex-direction: column-reverse;
+}
+
+.mond-toast-container--bottom-left {
+  bottom: var(--mond-spacing-4);
+  left: var(--mond-spacing-4);
+  flex-direction: column-reverse;
+}
+
+.mond-toast-container--top-center {
+  top: var(--mond-spacing-4);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.mond-toast-container--bottom-center {
+  bottom: var(--mond-spacing-4);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  flex-direction: column-reverse;
+}

@@ -54,9 +54,6 @@ A flexible textarea component for multi-line text input. Perfect for comments, d
       control: 'select',
       options: ['default', 'error', 'success'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
   },
 };
 
@@ -105,7 +102,7 @@ export const DarkMode: Story = {
     helperText: 'This is how it looks in dark mode',
   },
   parameters: {
-    theme: 'dark',
+    backgrounds: { default: 'dark' },
   },
 };
 

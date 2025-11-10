@@ -48,9 +48,6 @@ A smooth toggle switch component for binary choices and settings. Perfect for en
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     checked: {
       control: 'boolean',
     },
@@ -149,7 +146,7 @@ export const DarkMode: Story = {
   render: () => {
     const [checked, setChecked] = useState(true);
     return (
-      <Switch 
+      <Switch
         label="Dark mode setting"
         checked={checked}
         onChange={(e) => setChecked(e.target.checked)}
@@ -158,7 +155,7 @@ export const DarkMode: Story = {
     );
   },
   parameters: {
-    theme: 'dark',
+    backgrounds: { default: 'dark' },
   },
 };
 

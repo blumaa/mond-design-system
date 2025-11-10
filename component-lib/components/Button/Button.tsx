@@ -86,6 +86,11 @@ export interface ButtonProps {
   onBlur?: (event: React.FocusEvent<HTMLElement>) => void;
 
   /**
+   * Key down event handler
+   */
+  onKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void;
+
+  /**
    * Accessible label for screen readers
    */
   'aria-label'?: string;
@@ -168,6 +173,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
       onMouseLeave,
       onFocus,
       onBlur,
+      onKeyDown,
       'aria-label': ariaLabel,
       'aria-current': ariaCurrent,
       'data-testid': dataTestId,
@@ -203,6 +209,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
       onMouseLeave,
       onFocus,
       onBlur,
+      onKeyDown,
       'aria-label': ariaLabel,
       'aria-current': ariaCurrent,
       'data-testid': dataTestId,

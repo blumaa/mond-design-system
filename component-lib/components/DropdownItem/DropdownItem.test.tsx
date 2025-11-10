@@ -21,11 +21,10 @@ describe('DropdownItem', () => {
     });
 
     it('applies correct CSS classes', () => {
-      renderDropdownItem({ className: 'custom-class' });
-      
+      renderDropdownItem({});
+
       const item = screen.getByRole('menuitem');
       expect(item).toHaveClass('mond-dropdown-item');
-      expect(item).toHaveClass('custom-class');
     });
 
     it('forwards ref correctly', () => {
@@ -39,11 +38,11 @@ describe('DropdownItem', () => {
   describe('Divider Mode', () => {
     it('renders as divider when divider prop is true', () => {
       renderDropdownItem({ divider: true });
-      
+
       const divider = document.querySelector('.mond-dropdown-item--divider');
       expect(divider).toBeInTheDocument();
-      expect(divider).toHaveStyle({ height: '1px' });
-      
+      expect(divider).toHaveClass('mond-dropdown-item--divider');
+
       // Should not render as menuitem when divider
       expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
     });
@@ -170,11 +169,11 @@ describe('DropdownItem', () => {
       expect(item).toHaveStyle({ paddingLeft: '44px' });
     });
 
-    it('applies medium font weight for items with children', () => {
+    it('applies has-children class for items with children', () => {
       renderDropdownItem({ hasChildren: true });
-      
+
       const item = screen.getByRole('menuitem');
-      expect(item).toHaveStyle({ fontWeight: '500' });
+      expect(item).toHaveClass('mond-dropdown-item--has-children');
     });
   });
 
@@ -186,24 +185,21 @@ describe('DropdownItem', () => {
       expect(item).toHaveClass('mond-dropdown-item--focused');
     });
 
-    it('does not apply focused styles when disabled', () => {
+    it('applies both focused and disabled classes when both are true', () => {
       renderDropdownItem({ focused: true, disabled: true });
-      
+
       const item = screen.getByRole('menuitem');
       expect(item).toHaveClass('mond-dropdown-item--disabled');
       expect(item).toHaveClass('mond-dropdown-item--focused');
-      // Focused styles should not override disabled cursor
-      expect(item).toHaveStyle({ cursor: 'not-allowed' });
     });
   });
 
-  describe('Dark Mode', () => {
-    it('applies dark mode styling', () => {
-      renderDropdownItem({ isDarkMode: true });
-      
-      // Dark mode styling is applied via CSS-in-JS with theme function
-      // We just verify the component renders without errors
-      expect(screen.getByRole('menuitem')).toBeInTheDocument();
+  describe('CSS Classes', () => {
+    it('applies correct CSS classes', () => {
+      renderDropdownItem();
+
+      const item = screen.getByRole('menuitem');
+      expect(item).toHaveClass('mond-dropdown-item');
     });
   });
 
@@ -232,22 +228,6 @@ describe('DropdownItem', () => {
     });
   });
 
-  describe('Custom Styling', () => {
-    it('applies custom styles', () => {
-      renderDropdownItem({
-        style: { backgroundColor: 'red', color: 'white' }
-      });
-      
-      const item = screen.getByRole('menuitem');
-      expect(item).toHaveStyle({ backgroundColor: 'red', color: 'white' });
-    });
-
-    it('spreads additional props', () => {
-      renderDropdownItem({ 'data-testid': 'custom-dropdown-item' });
-      
-      expect(screen.getByTestId('custom-dropdown-item')).toBeInTheDocument();
-    });
-  });
 
   describe('Edge Cases', () => {
     it('handles empty label gracefully', () => {

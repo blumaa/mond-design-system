@@ -47,9 +47,6 @@ A versatile checkbox component with support for labels, helper text, error state
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     checked: {
       control: 'boolean',
     },
@@ -186,17 +183,16 @@ export const DarkMode: Story = {
   render: () => {
     const [checked, setChecked] = useState(false);
     return (
-      <Checkbox 
+      <Checkbox
         label="Dark mode checkbox"
         helperText="This is how it looks in dark mode"
-        isDarkMode
         checked={checked}
         onChange={(e) => setChecked(e.target.checked)}
       />
     );
   },
   parameters: {
-    theme: 'dark',
+    backgrounds: { default: 'dark' },
   },
 };
 

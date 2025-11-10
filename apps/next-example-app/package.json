@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint app --ext .ts,.tsx --max-warnings 0",
+    "test": "echo \"Tests will be added with a testing framework\" && exit 0",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@mond-design-system/theme": "*",

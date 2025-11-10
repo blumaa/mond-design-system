@@ -50,7 +50,7 @@ describe('ToastContainer', () => {
   describe('Rendering', () => {
     it('renders toast container with toasts', () => {
       render(<ToastContainer {...defaultProps} />);
-      
+
       expect(screen.getByRole('region', { name: 'Toast notifications' })).toBeInTheDocument();
       expect(screen.getByText('Test Toast')).toBeInTheDocument();
       expect(screen.getByText('Success Toast')).toBeInTheDocument();
@@ -59,45 +59,37 @@ describe('ToastContainer', () => {
 
     it('does not render container when no toasts are provided', () => {
       render(<ToastContainer {...defaultProps} toasts={[]} />);
-      
+
       expect(screen.queryByRole('region')).not.toBeInTheDocument();
     });
 
-    it('renders with custom position styles', () => {
+    it('renders with custom position class', () => {
       render(<ToastContainer {...defaultProps} position="bottom-left" />);
-      
-      const container = screen.getByRole('region');
-      expect(container).toHaveStyle({ bottom: '1rem', left: '1rem' });
-    });
 
-    it('renders with dark mode', () => {
-      render(<ToastContainer {...defaultProps} />);
-      
-      expect(screen.getByRole('region')).toBeInTheDocument();
+      const container = screen.getByRole('region');
+      expect(container).toHaveClass('mond-toast-container--bottom-left');
     });
 
     it('renders with custom test id', () => {
       render(<ToastContainer {...defaultProps} data-testid="custom-toast-container" />);
-      
+
       expect(screen.getByTestId('custom-toast-container')).toBeInTheDocument();
     });
   });
 
   describe('Toast Positioning', () => {
     it.each([
-      ['top-right', { top: '1rem', right: '1rem' }],
-      ['top-left', { top: '1rem', left: '1rem' }],
-      ['bottom-right', { bottom: '1rem', right: '1rem' }],
-      ['bottom-left', { bottom: '1rem', left: '1rem' }],
-      ['top-center', { top: '1rem', left: '50%', transform: 'translateX(-50%)' }],
-      ['bottom-center', { bottom: '1rem', left: '50%', transform: 'translateX(-50%)' }],
-    ] as const)('positions container correctly for %s', (position, expectedStyles) => {
+      ['top-right', 'mond-toast-container--top-right'],
+      ['top-left', 'mond-toast-container--top-left'],
+      ['bottom-right', 'mond-toast-container--bottom-right'],
+      ['bottom-left', 'mond-toast-container--bottom-left'],
+      ['top-center', 'mond-toast-container--top-center'],
+      ['bottom-center', 'mond-toast-container--bottom-center'],
+    ] as const)('positions container correctly for %s', (position, expectedClass) => {
       render(<ToastContainer {...defaultProps} position={position} />);
-      
+
       const container = screen.getByRole('region');
-      Object.entries(expectedStyles).forEach(([property, value]) => {
-        expect(container).toHaveStyle({ [property]: value });
-      });
+      expect(container).toHaveClass(expectedClass);
     });
   });
 
@@ -135,8 +127,8 @@ describe('ToastContainer', () => {
       const onDismiss = jest.fn();
       render(<ToastContainer {...defaultProps} onDismiss={onDismiss} />);
 
-      const toast = screen.getAllByRole('alert')[0];
-      fireEvent.keyDown(toast, { key: 'Escape' });
+      const dismissButton = screen.getAllByLabelText('Close toast')[0];
+      fireEvent.keyDown(dismissButton, { key: 'Escape' });
 
       await waitFor(() => {
         expect(onDismiss).toHaveBeenCalledWith('1');
@@ -147,7 +139,7 @@ describe('ToastContainer', () => {
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
       render(<ToastContainer {...defaultProps} />);
-      
+
       const container = screen.getByRole('region', { name: 'Toast notifications' });
       expect(container).toHaveAttribute('aria-live', 'polite');
 
@@ -155,7 +147,6 @@ describe('ToastContainer', () => {
       toasts.forEach(toast => {
         expect(toast).toHaveAttribute('aria-live', 'polite');
         expect(toast).toHaveAttribute('aria-atomic', 'true');
-        expect(toast).toHaveAttribute('tabIndex', '0');
       });
     });
   });
@@ -321,8 +312,8 @@ describe('Toast', () => {
     it('dismisses on Escape key when dismissible', () => {
       render(<Toast {...defaultToastProps} dismissible />);
 
-      const toast = screen.getByRole('alert');
-      fireEvent.keyDown(toast, { key: 'Escape' });
+      const dismissButton = screen.getByLabelText('Close toast');
+      fireEvent.keyDown(dismissButton, { key: 'Escape' });
 
       expect(mockOnDismiss).toHaveBeenCalledWith('test-toast');
     });
@@ -330,10 +321,7 @@ describe('Toast', () => {
     it('does not dismiss on Escape key when not dismissible', () => {
       render(<Toast {...defaultToastProps} dismissible={false} />);
 
-      const toast = screen.getByRole('alert');
-      fireEvent.keyDown(toast, { key: 'Escape' });
-
-      expect(mockOnDismiss).not.toHaveBeenCalled();
+      expect(screen.queryByLabelText('Close toast')).not.toBeInTheDocument();
     });
 
     it('calls action onClick when action button is clicked', () => {
@@ -350,30 +338,21 @@ describe('Toast', () => {
   });
 
   describe('Animation States', () => {
-    it('applies correct styles for different animation states', () => {
+    it('applies correct classes for different animation states', () => {
       const { rerender } = render(
         <Toast {...defaultToastProps} animationState="entering" />
       );
 
       let toast = screen.getByRole('alert');
-      expect(toast).toHaveStyle({ 
-        transform: 'translateX(100%) scale(0.9)', 
-        opacity: '0' 
-      });
+      expect(toast).toHaveClass('mond-toast--entering');
 
       rerender(<Toast {...defaultToastProps} animationState="visible" />);
       toast = screen.getByRole('alert');
-      expect(toast).toHaveStyle({ 
-        transform: 'translateX(0%) scale(1)', 
-        opacity: '1' 
-      });
+      expect(toast).toHaveClass('mond-toast--visible');
 
       rerender(<Toast {...defaultToastProps} animationState="exiting" />);
       toast = screen.getByRole('alert');
-      expect(toast).toHaveStyle({ 
-        transform: 'translateX(100%) scale(0.9)', 
-        opacity: '0' 
-      });
+      expect(toast).toHaveClass('mond-toast--exiting');
     });
   });
 
@@ -384,7 +363,6 @@ describe('Toast', () => {
       const toast = screen.getByRole('alert');
       expect(toast).toHaveAttribute('aria-live', 'polite');
       expect(toast).toHaveAttribute('aria-atomic', 'true');
-      expect(toast).toHaveAttribute('tabIndex', '0');
     });
 
     it('dismiss button has proper aria-label', () => {

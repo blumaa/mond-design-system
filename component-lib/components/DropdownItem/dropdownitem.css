@@ -1,0 +1,81 @@
+/**
+ * DropdownItem Component Styles
+ *
+ * SSR-compatible styles using CSS variables for theming.
+ * Automatically responds to data-theme attribute changes.
+ */
+
+/* ============================================
+   DROPDOWN ITEM
+   ============================================ */
+
+.mond-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: var(--mond-spacing-2) var(--mond-spacing-3);
+  cursor: pointer;
+  color: var(--mond-text-primary);
+  background-color: transparent;
+  transition: background-color 150ms ease;
+  font-size: var(--mond-font-size-sm);
+  font-family: var(--mond-font-family-sans);
+  border-radius: var(--mond-radii-sm);
+  margin: 0 var(--mond-spacing-1);
+}
+
+.mond-dropdown-item:hover {
+  background-color: var(--mond-interactive-secondary-backgroundHover);
+}
+
+/* Disabled State */
+.mond-dropdown-item--disabled {
+  cursor: not-allowed;
+  color: var(--mond-text-disabled);
+}
+
+.mond-dropdown-item--disabled:hover {
+  background-color: transparent;
+}
+
+/* Focused State */
+.mond-dropdown-item--focused:not(.mond-dropdown-item--disabled) {
+  background-color: var(--mond-interactive-secondary-backgroundHover);
+}
+
+/* Has Children */
+.mond-dropdown-item--has-children {
+  font-weight: var(--mond-font-weight-medium);
+}
+
+/* Divider */
+.mond-dropdown-item--divider {
+  height: 1px;
+  background-color: var(--mond-border-default);
+  margin: var(--mond-spacing-1) 0;
+  padding: 0;
+  cursor: default;
+}
+
+/* Icon Container */
+.mond-dropdown-item__icon {
+  margin-right: var(--mond-spacing-2);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Label Container */
+.mond-dropdown-item__label {
+  flex: 1;
+}
+
+/* Expansion Indicator */
+.mond-dropdown-item__expansion {
+  margin-left: var(--mond-spacing-2);
+  font-size: var(--mond-font-size-xs);
+}
+
+/* Dark Mode Support - handled automatically by CSS variables */
+[data-theme="dark"] .mond-dropdown-item {
+  /* Variables automatically switch, no overrides needed */
+}

@@ -68,9 +68,6 @@ A flexible Heading component for creating semantic headings (h1-h6) with consist
     truncate: {
       control: 'boolean',
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
   },
   args: {
     level: 1,

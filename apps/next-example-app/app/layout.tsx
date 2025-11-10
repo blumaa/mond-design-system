@@ -1,21 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeScript } from "./theme-script";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { AppThemeProvider } from "./providers/theme-provider";
 
 export const metadata: Metadata = {
-  title: "MDS Next.js 16 Example",
-  description: "Testing Mond Design System with Next.js 16 Server Components",
+  title: "MDS Next.js POC",
+  description: "Proof of Concept for Mond Design System with CSS Variables API",
 };
 
 export default function RootLayout({
@@ -25,13 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <ThemeScript />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body>
+        <AppThemeProvider>{children}</AppThemeProvider>
       </body>
     </html>
   );

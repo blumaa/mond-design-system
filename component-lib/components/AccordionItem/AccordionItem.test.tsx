@@ -29,23 +29,25 @@ describe('AccordionItem', () => {
     });
 
     it('applies correct CSS classes', () => {
-      renderAccordionItem({ className: 'custom-class' });
-      
+      renderAccordionItem({ variant: 'default', size: 'md' });
+
       const accordion = screen.getByRole('button').parentElement;
       expect(accordion).toHaveClass('mond-accordion-item');
-      expect(accordion).toHaveClass('custom-class');
+      expect(accordion).toHaveClass('mond-accordion-item--default');
+      expect(accordion).toHaveClass('mond-accordion-item--md');
     });
   });
 
   describe('Expansion State', () => {
     it('is collapsed by default', () => {
       renderAccordionItem();
-      
+
       const trigger = screen.getByRole('button');
       expect(trigger).toHaveAttribute('aria-expanded', 'false');
-      
-      const content = screen.getByText('Test Content');
-      expect(content.parentElement).toHaveStyle({ maxHeight: '0px' });
+
+      const content = screen.getByText('Test Content').parentElement;
+      expect(content).toHaveClass('mond-accordion-item__content');
+      expect(content).toHaveAttribute('aria-hidden', 'true');
     });
 
     it('can be expanded by default', () => {
@@ -261,10 +263,11 @@ describe('AccordionItem', () => {
       expect(ref.current).toBeInstanceOf(HTMLDivElement);
     });
 
-    it('spreads additional props', () => {
-      renderAccordionItem({ 'data-testid': 'accordion-item' });
-      
-      expect(screen.getByTestId('accordion-item')).toBeInTheDocument();
+    it('renders with all props correctly', () => {
+      renderAccordionItem({ itemId: 'test-item' });
+
+      const trigger = screen.getByRole('button');
+      expect(trigger).toHaveAttribute('data-accordion-header', 'test-item');
     });
   });
 });

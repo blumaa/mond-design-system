@@ -90,10 +90,6 @@ A single dropdown menu item component. Internal component used by the Dropdown c
       control: 'boolean',
       description: 'Whether this item is currently focused'
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Dark mode support'
-    },
     expansionIndicator: {
       control: 'text',
       description: 'Custom expansion indicator for items with children'
@@ -262,7 +258,6 @@ export const CompleteDropdownMenu: Story = {
 
 export const DarkMode: Story = {
   args: {
-    isDarkMode: true,
     label: 'Dark Mode Item',
     icon: <span>🌙</span>
   },

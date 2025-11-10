@@ -89,10 +89,6 @@ An enhanced image component with loading states, error handling, fallback suppor
       options: ['eager', 'lazy'],
       description: 'Loading behavior for the image',
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Whether to use dark theme colors for loading and error states',
-    },
   },
 };
 
@@ -383,28 +379,26 @@ export const ThemeVariants: Story = {
               alt="Loading state light"
               aspectRatio="4:3"
               showLoadingSpinner={false}
-              
               borderRadius="md"
             />
             <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Loading</div>
           </div>
-          
+
           <div style={{ width: '150px' }}>
             <Image
               src="https://nonexistent-url.com/image.jpg"
               alt="Error state light"
               aspectRatio="4:3"
-              
               borderRadius="md"
             />
             <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Error</div>
           </div>
         </div>
       </div>
-      
-      <div style={{ 
-        padding: '24px', 
-        backgroundColor: '#1f2937', 
+
+      <div style={{
+        padding: '24px',
+        backgroundColor: '#1f2937',
         borderRadius: '8px',
         color: '#f9fafb',
         textAlign: 'center'
@@ -417,18 +411,16 @@ export const ThemeVariants: Story = {
               alt="Loading state dark"
               aspectRatio="4:3"
               showLoadingSpinner={false}
-              
               borderRadius="md"
             />
             <div style={{ marginTop: '8px', fontSize: '12px', color: '#9ca3af' }}>Loading</div>
           </div>
-          
+
           <div style={{ width: '150px' }}>
             <Image
               src="https://nonexistent-url.com/image.jpg"
               alt="Error state dark"
               aspectRatio="4:3"
-              
               borderRadius="md"
             />
             <div style={{ marginTop: '8px', fontSize: '12px', color: '#9ca3af' }}>Error</div>

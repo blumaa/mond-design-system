@@ -43,11 +43,11 @@ describe('Accordion Component', () => {
       expect(screen.getByText('Third Item')).toBeInTheDocument();
     });
 
-    it('renders with custom className', () => {
-      render(<Accordion items={mockItems} className="custom-accordion" />);
-      
+    it('renders with default classes', () => {
+      render(<Accordion items={mockItems} variant="default" />);
+
       const accordion = screen.getByRole('region', { name: /accordion/i });
-      expect(accordion).toHaveClass('custom-accordion');
+      expect(accordion).toHaveClass('mond-accordion', 'mond-accordion--default');
     });
 
     it('renders with proper ARIA attributes', () => {

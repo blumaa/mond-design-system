@@ -47,10 +47,6 @@ A loading indicator component with customizable size and color options. Provides
       control: 'color',
       description: 'Custom color for the spinner. If not provided, uses theme-based color.',
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Whether to use dark theme colors',
-    },
     label: {
       control: 'text',
       description: 'Accessible label for screen readers',

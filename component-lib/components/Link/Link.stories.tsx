@@ -85,22 +85,16 @@ A semantic link component that maintains consistent styling and accessibility ac
     },
   },
   decorators: [
-    (Story, context) => {
+    (Story, _context) => {
       const [globals] = useGlobals();
       const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
-
-      // Override the prop based on Storybook theme
-      const storyArgs = {
-        ...context.args,
-        isDarkMode: isDark,
-      };
 
       return (
         <Box
           padding="12"
           className={isDark ? 'story-bg-medium' : 'story-bg-light'}
         >
-          <Story args={storyArgs} />
+          <Story />
         </Box>
       );
     },

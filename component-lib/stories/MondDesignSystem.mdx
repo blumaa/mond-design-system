@@ -7,10 +7,11 @@ A modern, accessible design system built with React, TypeScript, and design toke
 
 ## ✨ Features
 
-- **🎨 Design Tokens** - Semantic color system with light/dark theme support
+- **🎨 Design Tokens** - Semantic color system with light/dark theme support via CSS variables
 - **⚛️ React Components** - Type-safe, accessible components with consistent API
-- **🎯 TypeScript First** - Full type safety and IntelliSense support  
-- **Storybook Documentation** - Interactive component playground
+- **🎯 TypeScript First** - Full type safety and IntelliSense support
+- **⚡ Next.js Ready** - Full support for Server Components and Client Components
+- **📚 Storybook Documentation** - Interactive component playground
 - **♿ Accessibility** - WCAG 2.1 AA compliant components
 - **🌙 Theme Support** - Built-in light and dark mode
 - **🔧 Developer Experience** - Simple APIs with sensible defaults
@@ -28,17 +29,21 @@ pnpm add @mond-design-system/theme
 ## 🚀 Quick Start
 
 ```tsx
-import { Text, Heading, Icon, Button } from '@mond-design-system/theme';
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme/brands';
+import { Text, Heading, Button } from '@mond-design-system/theme';
 
 function App() {
   return (
-    <div>
-      <Heading level={1}>Welcome to Mond Design System</Heading>
-      <Text variant="body-lg" semantic="secondary">
-        A modern design system for building consistent user interfaces.
-      </Text>
-      <Button variant="primary">Get Started</Button>
-    </div>
+    <ThemeProvider brandTheme={mondTheme} colorScheme="light">
+      <div>
+        <Heading level={1}>Welcome to Mond Design System</Heading>
+        <Text variant="body" semantic="secondary">
+          A modern design system for building consistent user interfaces.
+        </Text>
+        <Button variant="primary">Get Started</Button>
+      </div>
+    </ThemeProvider>
   );
 }
 ```
@@ -46,82 +51,84 @@ function App() {
 ## 🧱 Component Categories
 
 ### Typography
-The foundation of readable, scannable content with semantic meaning.
 - **Heading** - Semantic heading elements (h1-h6) with flexible sizing
 - **Text** - Flexible text component with semantic variants and styling options
 
-### Icons & Graphics  
-Consistent iconography with accessibility built-in.
-- **Icon** - SVG icon wrapper with consistent sizing and accessibility features
+### Layout
+- **Box** - Spacing primitive for margin and padding
 
-### Layout & Containers
-Building blocks for organizing content and creating structure.
-- **Box** - Foundational layout primitive with design system props
-- **Stack** - Vertical layout container for consistent spacing
-- **Grid** - CSS Grid layout wrapper with responsive features
-- **Card** - Content container with elevation and padding
+### Buttons & Links
+- **Button** - Primary, outline, ghost, destructive, and warning variants
+- **Link** - Styled anchor elements with hover states
 
 ### Form Controls
-Interactive elements for user input with validation and accessibility.
-- **Button** - Primary, secondary, and ghost variants
-- **Input** - Text input with validation states and icons
-- **Textarea** - Multi-line text input with resizing options
-- **Checkbox** - Custom styled checkboxes with labels
-- **Radio** - Radio button input with consistent styling
-- **Select** - Dropdown selection with custom styling
-- **Switch** - Toggle switch control for boolean states
-- **FormField** - Form field wrapper with labels and validation
-- **FormGroup** - Form section grouping
+- **Input** - Text input with validation states
+- **Textarea** - Multi-line text input
+- **Checkbox** - Custom styled checkboxes
+- **Radio** - Radio button input
+- **Select** - Dropdown selection
+- **Switch** - Toggle switch control
+- **Label** - Form labels
 
-### Interactive Components
-Rich interactive elements that enhance user experience.
-- **Badge** - Status indicators and labels with semantic colors
-- **Avatar** - User profile images with fallbacks and sizing
+### Other Components
+- **Badge** - Status indicators and labels
+- **Divider** - Visual separators
+- **Modal** - Dialog overlays
 - **Tooltip** - Contextual information overlays
-- **Modal** - Dialog overlays with backdrop and focus management
-- **Tabs** - Tab navigation interface with keyboard support
-- **Link** - Styled anchor elements with hover states
+- **Tabs** - Tab navigation interface
+- **Spinner** - Loading indicators
+- **Toast** - Notification messages
 
 ## 🎨 Design Tokens
 
-### Semantic Colors
-Colors that automatically adapt to light and dark themes:
-```tsx
-color="text.primary"           // Main text color
-color="text.secondary"         // Supporting text
-color="surface.background"     // Background surfaces
-color="interactive.primary.background" // Primary buttons
+All design tokens are available as CSS variables:
+
+```css
+/* Semantic Colors */
+var(--mond-text-primary)
+var(--mond-text-secondary)
+var(--mond-surface-background)
+var(--mond-interactive-primary-background)
+
+/* Typography */
+var(--mond-font-size-lg)
+var(--mond-font-weight-semibold)
+var(--mond-line-height-relaxed)
+
+/* Spacing */
+var(--mond-spacing-4)
+var(--mond-spacing-8)
 ```
 
-### Typography Scale
-Consistent typography with design tokens:
-```tsx
-fontSize="lg"          // 1.125rem
-fontWeight="semibold"  // 600
-lineHeight="relaxed"   // 1.625
-fontFamily="sans"      // DM Sans font stack
-```
-
-### Spacing System
-Uniform spacing for consistent layouts:
-```tsx
-padding="4"    // 1rem
-margin="8"     // 2rem
-gap="2"        // 0.5rem
-```
+See the Design Tokens page for the complete reference.
 
 ## 🌙 Theme Support
 
-All components support light and dark themes through the `isDarkMode` prop:
+Components automatically support light and dark themes:
 
 ```tsx
-<Text isDarkMode={true} semantic="primary">
-  Dark theme text
-</Text>
+import { useState } from 'react';
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme/brands';
+import { Text, Heading, Button } from '@mond-design-system/theme';
 
-<Heading isDarkMode={darkMode} semantic="secondary">
-  Responsive theme heading
-</Heading>
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <div>
+        <Heading level={1}>Welcome</Heading>
+        <Text semantic="secondary">
+          Content automatically adapts to the current theme
+        </Text>
+        <Button onClick={() => setColorScheme(prev => prev === 'light' ? 'dark' : 'light')}>
+          Toggle Theme
+        </Button>
+      </div>
+    </ThemeProvider>
+  );
+}
 ```
 
 ## 🏗️ Explore the Components

@@ -15,27 +15,137 @@ pnpm add @mond-design-system/theme
 ## Quick Start
 
 ```tsx
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme/brands';
 import { Text, Heading, Icon, Button, Box } from '@mond-design-system/theme';
 
 function MyComponent() {
   return (
-    <Box p={4}>
-      <Heading level={1}>Welcome to Mond Design System</Heading>
-      <Text variant="body-lg" semantic="secondary">
-        Modern, accessible components with TypeScript support
+    <ThemeProvider brandTheme={mondTheme} colorScheme="light">
+      <Box p={4}>
+        <Heading level={1}>Welcome to Mond Design System</Heading>
+        <Text variant="body-lg" semantic="secondary">
+          Modern, accessible components with TypeScript support
+        </Text>
+
+        <Icon size="md" label="Heart icon">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0..." fill="currentColor" />
+        </Icon>
+
+        <Button variant="primary">Get Started</Button>
+
+        {/* Button as a link */}
+        <Button as="a" href="/docs" variant="outline">
+          View Documentation
+        </Button>
+      </Box>
+    </ThemeProvider>
+  );
+}
+```
+
+## Next.js App Router Support
+
+The Mond Design System fully supports Next.js 13+ App Router with both Server Components and Client Components.
+
+### Server Components (SSR)
+
+Server-safe components (without React hooks) can be imported from the main entry point:
+
+```tsx
+// app/page.tsx - Server Component (no 'use client')
+import { Button, Text, Heading, Badge, Avatar, Link } from '@mond-design-system/theme';
+
+export default function HomePage() {
+  return (
+    <main>
+      <Heading level={1} size="4xl">
+        Server-Rendered Page
+      </Heading>
+      <Text variant="body">
+        This page is rendered on the server for optimal performance and SEO.
       </Text>
+      <Button variant="primary">Server-rendered Button</Button>
+    </main>
+  );
+}
+```
 
-      <Icon size="md" label="Heart icon">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0..." fill="currentColor" />
-      </Icon>
+**Server-Safe Components:**
+- Button, Text, Heading, Link
+- Badge, Avatar, Icon, Image
+- Box, Divider, Label, Tag, Spinner
 
-      <Button variant="primary">Get Started</Button>
+### Client Components (CSR)
 
-      {/* Button as a link */}
-      <Button as="a" href="/docs" variant="outline">
-        View Documentation
-      </Button>
-    </Box>
+Interactive components that use React hooks must be imported from `/client`:
+
+```tsx
+// app/components/toast-demo.tsx
+'use client';
+
+import { useState } from 'react';
+import { Button, Text, Heading } from '@mond-design-system/theme';
+import { ToastContainer, ToastData } from '@mond-design-system/theme/client';
+
+export function ToastDemo() {
+  const [toasts, setToasts] = useState<ToastData[]>([]);
+
+  const showToast = () => {
+    setToasts([...toasts, {
+      id: Date.now().toString(),
+      type: 'success',
+      title: 'Success!',
+      message: 'Action completed'
+    }]);
+  };
+
+  return (
+    <>
+      <Button onClick={showToast}>Show Toast</Button>
+      <ToastContainer toasts={toasts} onDismiss={(id) =>
+        setToasts(toasts.filter(t => t.id !== id))
+      } />
+    </>
+  );
+}
+```
+
+**Client Components (from `/client`):**
+- Form components: Input, Textarea, Checkbox, Radio, Select, Switch
+- Interactive components: ToastContainer, Modal, Tooltip, Popover, Tabs, Accordion, Dropdown, Carousel, Pagination
+
+### Theme Provider in Next.js
+
+Wrap your app with ThemeProvider in a Client Component:
+
+```tsx
+// app/providers/theme-provider.tsx
+'use client';
+
+import { ThemeProvider } from '@mond-design-system/theme';
+import { violetBrand } from './violet-brand';
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider brandTheme={violetBrand} colorScheme="light">
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+```tsx
+// app/layout.tsx - Server Component
+import { Providers } from './providers/theme-provider';
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
   );
 }
 ```
@@ -94,7 +204,8 @@ function MyComponent() {
 - ✅ **TypeScript First** - Full type safety and IntelliSense support
 - ✅ **Polymorphic Components** - Render components as different elements (Button, Box, Text as links, divs, etc.)
 - ✅ **Accessibility** - WCAG 2.1 AA compliant components with full keyboard support
-- ✅ **Design Tokens** - Semantic color system with light/dark themes
+- ✅ **CSS Variables** - Modern theming with CSS custom properties
+- ✅ **Design Tokens** - Semantic color system with light/dark themes via ThemeProvider
 - ✅ **Consistent API** - Similar props across all components
 - ✅ **Tree Shakeable** - Import only what you need
 - ✅ **Zero Runtime Dependencies** - No external dependencies
@@ -233,7 +344,7 @@ Many components support polymorphic rendering via the `as` prop, allowing you to
 
 ### Semantic Colors
 ```tsx
-// Semantic colors that adapt to light/dark themes
+// Semantic colors that adapt to light/dark themes automatically
 color="text.primary"                    // Main text
 color="text.secondary"                  // Supporting text
 color="surface.background"              // Background
@@ -259,27 +370,61 @@ p={4}          // Shorthand padding
 mx="auto"      // Horizontal margin auto
 ```
 
+### CSS Variables
+All design tokens are available as CSS variables:
+```css
+.custom-component {
+  color: var(--mond-color-text-primary);
+  background: var(--mond-color-surface-background);
+  padding: var(--mond-spacing-4);
+  font-size: var(--mond-fontSize-lg);
+}
+```
+
 ## Theme Support
 
-All components support light and dark themes:
+Wrap your application with ThemeProvider to enable automatic theme switching:
 
 ```tsx
-<Text isDarkMode={true} semantic="primary">
-  Dark theme text
-</Text>
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme/brands';
 
-<Heading isDarkMode={darkMode} semantic="secondary">
-  Responsive theme heading
-</Heading>
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
 
-<Button isDarkMode={isDark} variant="primary">
-  Themed button
-</Button>
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      {/* All components automatically adapt to the theme */}
+      <Text semantic="primary">
+        This text adapts to the current theme
+      </Text>
 
-<Box isDarkMode bg="surface.elevated" p={4}>
-  Themed container
-</Box>
+      <Heading semantic="secondary">
+        This heading also adapts automatically
+      </Heading>
+
+      <Button variant="primary">
+        Themed button
+      </Button>
+
+      <Box bg="surface.elevated" p={4}>
+        Themed container
+      </Box>
+
+      {/* Toggle theme */}
+      <button onClick={() => setColorScheme(prev => prev === 'light' ? 'dark' : 'light')}>
+        Toggle Theme
+      </button>
+    </ThemeProvider>
+  );
+}
 ```
+
+### How Theming Works
+- ThemeProvider sets a `data-theme` attribute on the root element
+- CSS variables automatically update based on the `colorScheme` prop
+- Components use CSS variables internally for all themed values
+- No prop drilling or manual theme management needed
 
 ## Form Examples
 

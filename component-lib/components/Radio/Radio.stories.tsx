@@ -59,9 +59,6 @@ A radio button component for single-choice selections within a group. Essential 
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     checked: {
       control: 'boolean',
     },
@@ -133,7 +130,7 @@ export const DarkMode: Story = {
     name: 'dark-radio',
   },
   parameters: {
-    theme: 'dark',
+    backgrounds: { default: 'dark' },
   },
 };
 

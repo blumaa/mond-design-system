@@ -10,8 +10,11 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js"
     },
     "./Box": {
       "types": "./dist/components/Box/index.d.ts",
@@ -66,15 +69,16 @@
     "design-tokens"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:tokens && yarn build:css && yarn build:lib",
+    "build": "yarn clean && yarn build:tokens && yarn build:css && yarn build:lib && yarn build:styles",
     "build:tokens": "node --import tsx tokens/scripts/build.ts",
     "build:css": "node --import tsx tokens/scripts/generateCSSVariables.ts",
-    "build:lib": "tsup",
+    "build:lib": "tsc --project tsconfig.build.json",
+    "build:styles": "find components -name '*.css' -exec sh -c 'mkdir -p dist/$(dirname {}) && cp {} dist/{}' \\;",
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn build",
     "dev": "concurrently \"yarn dev:tokens\" \"yarn dev:components\" \"yarn storybook\"",
     "dev:tokens": "nodemon --watch tokens/tokens -e json --exec 'yarn build:tokens'",
-    "dev:components": "tsup --watch",
+    "dev:components": "tsc --watch --project tsconfig.build.json",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --watchAll=false",
@@ -131,7 +135,6 @@
     "terser": "^5.40.0",
     "ts-jest": "^29.0.0",
     "ts-node": "^10.9.2",
-    "tsup": "^8.5.0",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.8"

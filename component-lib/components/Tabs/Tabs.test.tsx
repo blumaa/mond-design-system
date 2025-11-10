@@ -33,27 +33,35 @@ describe('Tabs Component', () => {
 
   it('shows first tab content by default', () => {
     render(<Tabs tabs={mockTabs} />);
-    
-    expect(screen.getByText('Content 1')).toBeInTheDocument();
-    expect(screen.queryByText('Content 2')).not.toBeVisible();
-    expect(screen.queryByText('Content 3')).not.toBeVisible();
+
+    const content1 = screen.getByText('Content 1').closest('.mond-tabs__content');
+    const content2 = screen.getByText('Content 2').closest('.mond-tabs__content');
+
+    expect(content1).not.toHaveClass('mond-tabs__content--hidden');
+    expect(content2).toHaveClass('mond-tabs__content--hidden');
   });
 
   it('switches content when tab is clicked', () => {
     render(<Tabs tabs={mockTabs} />);
-    
+
     // Click on second tab
     fireEvent.click(screen.getByText('Tab 2'));
-    
-    expect(screen.queryByText('Content 1')).not.toBeVisible();
-    expect(screen.getByText('Content 2')).toBeInTheDocument();
+
+    const content1 = screen.getByText('Content 1').closest('.mond-tabs__content');
+    const content2 = screen.getByText('Content 2').closest('.mond-tabs__content');
+
+    expect(content1).toHaveClass('mond-tabs__content--hidden');
+    expect(content2).not.toHaveClass('mond-tabs__content--hidden');
   });
 
   it('respects defaultActiveTab prop', () => {
     render(<Tabs tabs={mockTabs} defaultActiveTab="tab2" />);
-    
-    expect(screen.queryByText('Content 1')).not.toBeVisible();
-    expect(screen.getByText('Content 2')).toBeInTheDocument();
+
+    const content1 = screen.getByText('Content 1').closest('.mond-tabs__content');
+    const content2 = screen.getByText('Content 2').closest('.mond-tabs__content');
+
+    expect(content1).toHaveClass('mond-tabs__content--hidden');
+    expect(content2).not.toHaveClass('mond-tabs__content--hidden');
   });
 
   it('works as controlled component', () => {
@@ -85,82 +93,79 @@ describe('Tabs Component', () => {
 
     it('does not switch to disabled tab when clicked', () => {
       render(<Tabs tabs={mockTabs} />);
-      
+
       fireEvent.click(screen.getByText('Tab 3'));
-      
+
       // Should still show first tab content
-      expect(screen.getByText('Content 1')).toBeInTheDocument();
-      expect(screen.queryByText('Content 3')).not.toBeVisible();
+      const content1 = screen.getByText('Content 1').closest('.mond-tabs__content');
+      const content3 = screen.getByText('Content 3').closest('.mond-tabs__content');
+
+      expect(content1).not.toHaveClass('mond-tabs__content--hidden');
+      expect(content3).toHaveClass('mond-tabs__content--hidden');
     });
 
-    it('applies disabled styling', () => {
+    it('applies disabled attribute', () => {
       render(<Tabs tabs={mockTabs} />);
-      
+
       const disabledTab = screen.getByText('Tab 3').closest('button');
-      expect(disabledTab).toHaveStyle('opacity: 0.5');
-      expect(disabledTab).toHaveStyle('cursor: not-allowed');
+      expect(disabledTab).toBeDisabled();
     });
   });
 
   describe('variants', () => {
     it('renders line variant correctly', () => {
       render(<Tabs tabs={mockTabs} variant="line" data-testid="tabs" />);
-      
+
       const tabList = screen.getByRole('tablist');
-      expect(tabList).toHaveStyle('background-color: transparent');
+      expect(tabList).toHaveClass('mond-tabs__list--line');
     });
 
     it('renders card variant correctly', () => {
       render(<Tabs tabs={mockTabs} variant="card" data-testid="tabs" />);
-      
+
       const tabList = screen.getByRole('tablist');
-      expect(tabList).toHaveStyle('background-color: #ffffff');
-      expect(tabList).toHaveStyle('border: 1px solid #cbd5e1');
-      expect(tabList).toHaveStyle('border-radius: 0.25rem');
+      expect(tabList).toHaveClass('mond-tabs__list--card');
     });
   });
 
   describe('sizes', () => {
     it('renders small size correctly', () => {
       render(<Tabs tabs={mockTabs} size="sm" />);
-      
+
       const firstTab = screen.getByText('Tab 1').closest('button');
-      expect(firstTab).toHaveStyle('font-size: 0.875rem');
-      expect(firstTab).toHaveStyle('min-height: 32px');
+      expect(firstTab).toHaveClass('mond-tabs__trigger--sm');
     });
 
     it('renders medium size correctly', () => {
       render(<Tabs tabs={mockTabs} size="md" />);
-      
+
       const firstTab = screen.getByText('Tab 1').closest('button');
-      expect(firstTab).toHaveStyle('font-size: 1rem');
-      expect(firstTab).toHaveStyle('min-height: 40px');
+      expect(firstTab).toHaveClass('mond-tabs__trigger--md');
     });
 
     it('renders large size correctly', () => {
       render(<Tabs tabs={mockTabs} size="lg" />);
-      
+
       const firstTab = screen.getByText('Tab 1').closest('button');
-      expect(firstTab).toHaveStyle('font-size: 1.125rem');
-      expect(firstTab).toHaveStyle('min-height: 48px');
+      expect(firstTab).toHaveClass('mond-tabs__trigger--lg');
     });
   });
 
-  describe('dark mode', () => {
-    it('applies dark mode styling', () => {
-      renderWithDarkMode(<Tabs tabs={mockTabs} data-testid="tabs" />);
-      
+  describe('theming', () => {
+    it('renders correctly in light mode', () => {
+      render(<Tabs tabs={mockTabs} data-testid="tabs" />);
+
       const tabList = screen.getByRole('tablist');
-      // Test that dark mode component exists rather than specific border color
       expect(tabList).toBeInTheDocument();
+      expect(tabList).toHaveClass('mond-tabs__list');
     });
 
-    it('applies light mode styling by default', () => {
-      render(<Tabs tabs={mockTabs} data-testid="tabs" />);
-      
+    it('renders correctly in dark mode', () => {
+      renderWithDarkMode(<Tabs tabs={mockTabs} data-testid="tabs" />);
+
       const tabList = screen.getByRole('tablist');
-      // Test that light mode component exists rather than specific border color
       expect(tabList).toBeInTheDocument();
+      expect(tabList).toHaveClass('mond-tabs__list');
     });
   });
 
@@ -224,34 +229,23 @@ describe('Tabs Component', () => {
   });
 
   describe('styling', () => {
-    it('applies correct base styles', () => {
+    it('applies correct base classes', () => {
       render(<Tabs tabs={mockTabs} />);
-      
+
       const firstTab = screen.getByText('Tab 1').closest('button');
-      expect(firstTab).toHaveStyle('display: flex');
-      expect(firstTab).toHaveStyle('align-items: center');
-      expect(firstTab).toHaveStyle('justify-content: center');
-      // Skip border test as it may render differently in test environment
-      expect(firstTab).toHaveStyle('cursor: pointer');
-      expect(firstTab).toHaveStyle('user-select: none');
-      expect(firstTab).toHaveStyle('white-space: nowrap');
+      expect(firstTab).toHaveClass('mond-tabs__trigger');
+      expect(firstTab).toHaveClass('mond-tabs__trigger--line');
+      expect(firstTab).toHaveClass('mond-tabs__trigger--md');
     });
 
-    it('applies active styling', () => {
+    it('applies active styling class', () => {
       render(<Tabs tabs={mockTabs} />);
-      
+
       const activeTab = screen.getByText('Tab 1').closest('button');
       const inactiveTab = screen.getByText('Tab 2').closest('button');
-      
-      expect(activeTab).toHaveStyle('font-weight: 600'); // semibold
-      expect(inactiveTab).toHaveStyle('font-weight: 400'); // normal
-    });
 
-    it('applies font family', () => {
-      render(<Tabs tabs={mockTabs} />);
-      
-      const firstTab = screen.getByText('Tab 1').closest('button');
-      expect(firstTab).toHaveStyle("font-family: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif");
+      expect(activeTab).toHaveClass('mond-tabs__trigger--active');
+      expect(inactiveTab).not.toHaveClass('mond-tabs__trigger--active');
     });
   });
 

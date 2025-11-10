@@ -338,21 +338,22 @@ describe('Dropdown Component', () => {
     });
   });
 
-  it('applies dark mode styling', async () => {
+  it('renders menu with correct styling', async () => {
     render(
       <Dropdown
         options={mockOptions}
         trigger={<Button>Open Menu</Button>}
-        isDarkMode
         data-testid="dropdown"
       />
     );
-    
+
     const trigger = screen.getByText('Open Menu');
     fireEvent.click(trigger);
-    
+
     await waitFor(() => {
-      expect(screen.getByRole('menu')).toBeInTheDocument();
+      const menu = screen.getByRole('menu');
+      expect(menu).toBeInTheDocument();
+      expect(menu).toHaveClass('mond-dropdown__menu');
     });
   });
 

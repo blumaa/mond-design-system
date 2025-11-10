@@ -102,10 +102,6 @@ A highly customizable toast notification component with support for different ty
       options: ['entering', 'visible', 'exiting'],
       description: 'Animation state for enter/exit transitions',
     },
-    isDarkMode: {
-      control: 'boolean',
-      description: 'Whether to use dark theme colors',
-    },
     onDismiss: {
       description: 'Callback when toast is dismissed',
       action: 'dismissed',
@@ -128,6 +124,7 @@ export const Default: Story = {
   args: {
     id: 'toast-1',
     title: 'Default Toast',
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -138,6 +135,7 @@ export const Success: Story = {
     type: 'success',
     title: 'Success!',
     message: 'Your action was completed successfully.',
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -148,6 +146,7 @@ export const Error: Story = {
     type: 'error',
     title: 'Error occurred',
     message: 'Something went wrong. Please try again.',
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -158,6 +157,7 @@ export const Warning: Story = {
     type: 'warning',
     title: 'Warning',
     message: 'Please review your input before proceeding.',
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -168,6 +168,7 @@ export const Info: Story = {
     type: 'info',
     title: 'Information',
     message: 'Here is some helpful information for you.',
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -179,6 +180,7 @@ export const WithActions: Story = {
     title: 'Confirm Action',
     message: 'Are you sure you want to delete this item?',
     duration: 0, // Don't auto-dismiss
+    animationState: 'visible',
     actions: [
       {
         label: 'Cancel',
@@ -202,6 +204,7 @@ export const CustomIcon: Story = {
     title: 'Custom Icon',
     message: 'This toast uses a custom icon instead of the default.',
     icon: '🎉',
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -214,6 +217,7 @@ export const NonDismissible: Story = {
     message: 'This toast cannot be dismissed by the user.',
     dismissible: false,
     duration: 0,
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -225,6 +229,7 @@ export const NoAutoDismiss: Story = {
     title: 'Persistent Toast',
     message: 'This toast will not auto-dismiss but can be closed manually.',
     duration: 0,
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -236,6 +241,7 @@ export const FastDismiss: Story = {
     title: 'Quick Toast',
     message: 'This toast will dismiss quickly.',
     duration: 2000,
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -246,6 +252,7 @@ export const LongContent: Story = {
     type: 'warning',
     title: 'Toast with Long Content',
     message: 'This is a toast with a much longer message to demonstrate how the component handles longer content. It should wrap appropriately and maintain good readability.',
+    animationState: 'visible',
     onDismiss: () => {},
   },
 };
@@ -426,11 +433,11 @@ export const DarkMode: Story = {
     type: 'info',
     title: 'Dark Mode Toast',
     message: 'This toast is displayed in dark mode with appropriate theming.',
-    isDarkMode: true,
+    animationState: 'visible',
     onDismiss: () => {},
   },
   parameters: {
-    theme: 'dark',
+    backgrounds: { default: 'dark' },
   },
 };
 
@@ -444,6 +451,7 @@ export const AllVariants: Story = {
         message="Operation completed successfully."
         onDismiss={() => {}}
         duration={0}
+        animationState="visible"
       />
       <Toast
         id="all-error"
@@ -452,6 +460,7 @@ export const AllVariants: Story = {
         message="An error occurred during the operation."
         onDismiss={() => {}}
         duration={0}
+        animationState="visible"
       />
       <Toast
         id="all-warning"
@@ -460,6 +469,7 @@ export const AllVariants: Story = {
         message="Please review before proceeding."
         onDismiss={() => {}}
         duration={0}
+        animationState="visible"
       />
       <Toast
         id="all-info"
@@ -468,6 +478,7 @@ export const AllVariants: Story = {
         message="Here is some helpful information."
         onDismiss={() => {}}
         duration={0}
+        animationState="visible"
       />
     </div>
   ),

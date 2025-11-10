@@ -61,9 +61,6 @@ A dropdown select component for choosing from predefined options. Perfect for fo
       control: 'select',
       options: ['default', 'error', 'success'],
     },
-    isDarkMode: {
-      control: 'boolean',
-    },
     disabled: {
       control: 'boolean',
     },
@@ -230,7 +227,7 @@ export const DarkMode: Story = {
   render: () => {
     const [value, setValue] = useState('ca');
     return (
-      <Select 
+      <Select
         label="Country"
         options={countryOptions}
         value={value}
@@ -240,7 +237,7 @@ export const DarkMode: Story = {
     );
   },
   parameters: {
-    theme: 'dark',
+    backgrounds: { default: 'dark' },
   },
 };
 

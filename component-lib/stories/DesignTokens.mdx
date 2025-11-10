@@ -7,274 +7,248 @@ Design tokens are the visual design atoms of the Mond Design System. They store 
 ### Semantic Colors
 Semantic colors automatically adapt to light and dark themes, providing consistent meaning across your application.
 
-#### Text Colors
-```tsx
-color="text.primary"    // Main content text
-color="text.secondary"  // Supporting information  
-color="text.tertiary"   // Less important details
-color="text.disabled"   // Inactive content
-color="text.inverse"    // Text on dark backgrounds
-color="text.link"       // Interactive links
-color="text.success"    // Positive feedback
-color="text.warning"    // Cautionary information
-color="text.error"      // Problem notifications
+#### Text Colors (CSS Variables)
+```css
+var(--mond-text-primary)    /* Main content text */
+var(--mond-text-secondary)  /* Supporting information */
+var(--mond-text-tertiary)   /* Less important details */
+var(--mond-text-disabled)   /* Inactive content */
+var(--mond-text-inverse)    /* Text on dark backgrounds */
+var(--mond-text-link)       /* Interactive links */
+var(--mond-text-success)    /* Positive feedback */
+var(--mond-text-warning)    /* Cautionary information */
+var(--mond-text-error)      /* Problem notifications */
+var(--mond-text-accent)     /* Brand accent text */
 ```
 
-#### Surface Colors
-```tsx
-color="surface.background"  // Main background
-color="surface.elevated"    // Elevated surfaces
-color="surface.overlay"     // Modal overlays
-color="surface.card"        // Card backgrounds
-color="surface.input"       // Form input backgrounds
-color="surface.disabled"    // Disabled element backgrounds
+#### Surface Colors (CSS Variables)
+```css
+var(--mond-surface-background)  /* Main background */
+var(--mond-surface-elevated)    /* Elevated surfaces */
+var(--mond-surface-overlay)     /* Modal overlays */
+var(--mond-surface-card)        /* Card backgrounds */
+var(--mond-surface-input)       /* Form input backgrounds */
+var(--mond-surface-disabled)    /* Disabled element backgrounds */
+var(--mond-surface-primary)     /* Primary surface */
+var(--mond-surface-secondary)   /* Secondary surface */
 ```
 
-#### Interactive Colors
-```tsx
-// Primary Actions
-color="interactive.primary.background"        // Button background
-color="interactive.primary.backgroundHover"   // Button hover state
-color="interactive.primary.backgroundPressed" // Button pressed state
-color="interactive.primary.text"             // Button text
+#### Interactive Colors (CSS Variables)
+```css
+/* Primary Actions */
+var(--mond-interactive-primary-background)         /* Button background */
+var(--mond-interactive-primary-backgroundHover)    /* Button hover state */
+var(--mond-interactive-primary-backgroundPressed)  /* Button pressed state */
+var(--mond-interactive-primary-text)               /* Button text */
 
-// Secondary Actions  
-color="interactive.secondary.background"      // Secondary button
-color="interactive.secondary.border"          // Secondary button border
-color="interactive.secondary.text"           // Secondary button text
+/* Secondary Actions */
+var(--mond-interactive-secondary-background)       /* Secondary button */
+var(--mond-interactive-secondary-border)           /* Secondary button border */
+var(--mond-interactive-secondary-text)             /* Secondary button text */
+
+/* Ghost Actions */
+var(--mond-interactive-ghost-background)           /* Ghost button */
+var(--mond-interactive-ghost-backgroundHover)      /* Ghost button hover */
+var(--mond-interactive-ghost-text)                 /* Ghost button text */
 ```
 
-### Direct Color Tokens
-Use specific color values when semantic colors don't apply:
-
+#### Using Semantic Colors in Components
+The Text component provides a `semantic` prop for semantic text colors:
 ```tsx
-// Blue palette
-color="blue.50"    // Lightest blue
-color="blue.500"   // Medium blue  
-color="blue.900"   // Darkest blue
+<Text semantic="primary">Main content text</Text>
+<Text semantic="secondary">Supporting information</Text>
+<Text semantic="tertiary">Less important details</Text>
+<Text semantic="disabled">Inactive content</Text>
+<Text semantic="inverse">Text on dark backgrounds</Text>
+<Text semantic="link">Interactive links</Text>
+<Text semantic="success">Positive feedback</Text>
+<Text semantic="warning">Cautionary information</Text>
+<Text semantic="error">Problem notifications</Text>
+<Text semantic="accent">Brand accent text</Text>
+```
 
-// Gray palette
-color="gray.100"   // Light gray
-color="gray.500"   // Medium gray
-color="gray.800"   // Dark gray
+### Brand Color Tokens
+Brand colors are available as CSS variables with shades from 50-900:
 
-// Status colors
-color="red.500"    // Error red
-color="green.500"  // Success green
-color="amber.500"  // Warning amber
+```css
+/* Brand Primary Colors */
+var(--mond-color-brand-primary-50)   /* Lightest primary */
+var(--mond-color-brand-primary-500)  /* Medium primary */
+var(--mond-color-brand-primary-900)  /* Darkest primary */
+
+/* Brand Secondary Colors */
+var(--mond-color-brand-secondary-100)  /* Light gray */
+var(--mond-color-brand-secondary-500)  /* Medium gray */
+var(--mond-color-brand-secondary-800)  /* Dark gray */
+
+/* Status Colors */
+var(--mond-color-brand-error-500)    /* Error red */
+var(--mond-color-brand-success-500)  /* Success green */
+var(--mond-color-brand-warning-500)  /* Warning amber */
 ```
 
 ## 📏 Spacing
 
-The spacing scale provides consistent spacing throughout your application:
+The spacing scale provides consistent spacing throughout your application (based on 0.25rem = 4px):
 
-```tsx
-// Spacing tokens (based on 0.25rem = 4px)
-spacing="0"   // 0px
-spacing="1"   // 4px (0.25rem)
-spacing="2"   // 8px (0.5rem)  
-spacing="3"   // 12px (0.75rem)
-spacing="4"   // 16px (1rem) - base spacing unit
-spacing="5"   // 20px (1.25rem)
-spacing="6"   // 24px (1.5rem)
-spacing="8"   // 32px (2rem)
-spacing="10"  // 40px (2.5rem)
-spacing="12"  // 48px (3rem)
-spacing="16"  // 64px (4rem)
-spacing="20"  // 80px (5rem)
-spacing="24"  // 96px (6rem)
+### CSS Variables
+```css
+var(--mond-spacing-0)   /* 0px */
+var(--mond-spacing-1)   /* 4px (0.25rem) */
+var(--mond-spacing-2)   /* 8px (0.5rem) */
+var(--mond-spacing-3)   /* 12px (0.75rem) */
+var(--mond-spacing-4)   /* 16px (1rem) - base spacing unit */
+var(--mond-spacing-5)   /* 20px (1.25rem) */
+var(--mond-spacing-6)   /* 24px (1.5rem) */
+var(--mond-spacing-8)   /* 32px (2rem) */
+var(--mond-spacing-10)  /* 40px (2.5rem) */
+var(--mond-spacing-12)  /* 48px (3rem) */
+var(--mond-spacing-16)  /* 64px (4rem) */
+var(--mond-spacing-20)  /* 80px (5rem) */
+var(--mond-spacing-24)  /* 96px (6rem) */
 ```
 
-### Usage Examples
+### Using with Box Component
+The Box component provides spacing props that map to these tokens:
 ```tsx
-<Box 
-  p="4"        // padding: 1rem
-  m="2"        // margin: 0.5rem  
-  px="6"       // padding-left & padding-right: 1.5rem
-  my="8"       // margin-top & margin-bottom: 2rem
-  pt="3"       // padding-top: 0.75rem
-  mb="5"       // margin-bottom: 1.25rem
-  gap="4"      // gap: 1rem (for flexbox/grid)
+<Box
+  padding="4"          // padding: var(--mond-spacing-4) -> 1rem
+  margin="2"           // margin: var(--mond-spacing-2) -> 0.5rem
+  paddingTop="3"       // padding-top: var(--mond-spacing-3) -> 0.75rem
+  marginBottom="5"     // margin-bottom: var(--mond-spacing-5) -> 1.25rem
 >
   Content
 </Box>
 ```
 
+### Using in Custom CSS
+```css
+.custom-component {
+  padding: var(--mond-spacing-4);
+  margin-bottom: var(--mond-spacing-6);
+  gap: var(--mond-spacing-2);
+}
+```
+
 ## 🔤 Typography
 
-### Font Sizes
-```tsx
-fontSize="xs"    // 12px (0.75rem)
-fontSize="sm"    // 14px (0.875rem)
-fontSize="base"  // 16px (1rem) - base size
-fontSize="lg"    // 18px (1.125rem)
-fontSize="xl"    // 20px (1.25rem)
-fontSize="2xl"   // 24px (1.5rem)
-fontSize="3xl"   // 30px (1.875rem)
-fontSize="4xl"   // 36px (2.25rem)
-fontSize="5xl"   // 48px (3rem)
-fontSize="6xl"   // 60px (3.75rem)
+### Font Sizes (CSS Variables)
+```css
+var(--mond-font-size-xs)    /* 12px (0.75rem) */
+var(--mond-font-size-sm)    /* 14px (0.875rem) */
+var(--mond-font-size-base)  /* 16px (1rem) - base size */
+var(--mond-font-size-lg)    /* 18px (1.125rem) */
+var(--mond-font-size-xl)    /* 20px (1.25rem) */
+var(--mond-font-size-2xl)   /* 24px (1.5rem) */
+var(--mond-font-size-3xl)   /* 30px (1.875rem) */
+var(--mond-font-size-4xl)   /* 36px (2.25rem) */
+var(--mond-font-size-5xl)   /* 48px (3rem) */
+var(--mond-font-size-6xl)   /* 60px (3.75rem) */
 ```
 
-### Font Weights
-```tsx
-fontWeight="thin"       // 100
-fontWeight="extralight" // 200  
-fontWeight="light"      // 300
-fontWeight="normal"     // 400 - default
-fontWeight="medium"     // 500
-fontWeight="semibold"   // 600
-fontWeight="bold"       // 700
-fontWeight="extrabold"  // 800
-fontWeight="black"      // 900
+### Font Weights (CSS Variables)
+```css
+var(--mond-font-weight-thin)       /* 100 */
+var(--mond-font-weight-extralight) /* 200 */
+var(--mond-font-weight-light)      /* 300 */
+var(--mond-font-weight-normal)     /* 400 - default */
+var(--mond-font-weight-medium)     /* 500 */
+var(--mond-font-weight-semibold)   /* 600 */
+var(--mond-font-weight-bold)       /* 700 */
+var(--mond-font-weight-extrabold)  /* 800 */
+var(--mond-font-weight-black)      /* 900 */
 ```
 
-### Line Heights
+### Using Typography in Text Component
+The Text component provides `variant` and `weight` props:
 ```tsx
-lineHeight="none"     // 1 - tight spacing
-lineHeight="tight"    // 1.25 - headings
-lineHeight="snug"     // 1.375 - compact text
-lineHeight="normal"   // 1.5 - body text default
-lineHeight="relaxed"  // 1.625 - comfortable reading
-lineHeight="loose"    // 2 - very spacious
+{/* Text variants control size and line height */}
+<Text variant="display">Large Display Text</Text>
+<Text variant="headline">Headline Text</Text>
+<Text variant="title">Title Text</Text>
+<Text variant="body">Body Text (default)</Text>
+<Text variant="caption">Caption Text</Text>
+
+{/* Font weights */}
+<Text weight="thin">Thin weight</Text>
+<Text weight="normal">Normal weight (default)</Text>
+<Text weight="semibold">Semibold weight</Text>
+<Text weight="bold">Bold weight</Text>
 ```
 
-### Font Family
-```tsx
-fontFamily="sans"  // 'DM Sans', system sans-serif stack
+### Line Heights (CSS Variables)
+```css
+var(--mond-line-height-none)     /* 1 - tight spacing */
+var(--mond-line-height-tight)    /* 1.25 - headings */
+var(--mond-line-height-snug)     /* 1.375 - compact text */
+var(--mond-line-height-normal)   /* 1.5 - body text default */
+var(--mond-line-height-relaxed)  /* 1.625 - comfortable reading */
+var(--mond-line-height-loose)    /* 2 - very spacious */
+```
+
+### Font Family (CSS Variables)
+```css
+var(--mond-font-family-sans)  /* 'DM Sans', system sans-serif stack */
 ```
 
 ## 🔄 Border Radius
 
-```tsx
-borderRadius="none"  // 0px - sharp corners
-borderRadius="sm"    // 2px (0.125rem) - subtle rounding
-borderRadius="md"    // 4px (0.25rem) - standard rounding
-borderRadius="lg"    // 8px (0.5rem) - prominent rounding
-borderRadius="xl"    // 12px (0.75rem) - very round
-borderRadius="2xl"   // 16px (1rem) - extra round
-borderRadius="3xl"   // 24px (1.5rem) - maximum practical
-borderRadius="full"  // 9999px - perfect circle/pill
+CSS Variables for border radius:
+```css
+var(--mond-radii-none)  /* 0px - sharp corners */
+var(--mond-radii-sm)    /* 2px (0.125rem) - subtle rounding */
+var(--mond-radii-md)    /* 4px (0.25rem) - standard rounding */
+var(--mond-radii-lg)    /* 8px (0.5rem) - prominent rounding */
+var(--mond-radii-xl)    /* 12px (0.75rem) - very round */
+var(--mond-radii-2xl)   /* 16px (1rem) - extra round */
+var(--mond-radii-3xl)   /* 24px (1.5rem) - maximum practical */
+var(--mond-radii-full)  /* 9999px - perfect circle/pill */
+```
+
+Usage in custom CSS:
+```css
+.custom-card {
+  border-radius: var(--mond-radii-lg);
+}
 ```
 
 ## ☂️ Shadows
 
-```tsx
-boxShadow="sm"    // Subtle depth
-boxShadow="md"    // Standard cards  
-boxShadow="lg"    // Prominent elements
-boxShadow="xl"    // Floating elements
-boxShadow="2xl"   // Maximum elevation
-boxShadow="inner" // Inset shadow
-boxShadow="none"  // No shadow
+CSS Variables for box shadows:
+```css
+var(--mond-shadow-sm)    /* Subtle depth */
+var(--mond-shadow-md)    /* Standard cards */
+var(--mond-shadow-lg)    /* Prominent elements */
+var(--mond-shadow-xl)    /* Floating elements */
+var(--mond-shadow-2xl)   /* Maximum elevation */
+var(--mond-shadow-inner) /* Inset shadow */
+var(--mond-shadow-none)  /* No shadow */
+```
+
+Usage in custom CSS:
+```css
+.custom-card {
+  box-shadow: var(--mond-shadow-md);
+}
 ```
 
 ## 🌙 Theme Integration
 
-### Using Semantic Tokens
-The recommended approach is to use semantic tokens that automatically adapt:
+### Using ThemeProvider
+Wrap your application with ThemeProvider to enable automatic theme switching via CSS variables:
 
 ```tsx
-// ✅ Recommended - adapts to theme
-<Box 
-  bg="surface.background"
-  color="text.primary"
-  borderColor="border.default"
-  isDarkMode={isDarkMode}
->
-  Themed content
-</Box>
+import { ThemeProvider } from '@mond-design-system/theme';
+import { mondTheme } from '@mond-design-system/theme/brands';
 
-// ❌ Not recommended - static colors
-<Box bg="white" color="black">
-  Static content
-</Box>
+function App() {
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+      <YourComponents />
+    </ThemeProvider>
+  );
+}
 ```
 
-### Component Theme Props
-Most components accept an `isDarkMode` prop for theme switching:
-
-```tsx
-<Text isDarkMode={isDarkMode} semantic="primary">
-  This text adapts to the theme
-</Text>
-
-<Heading isDarkMode={isDarkMode} semantic="secondary">
-  This heading also adapts
-</Heading>
-```
-
-## 📖 Token Usage in Components
-
-### Text Component
-```tsx
-<Text 
-  variant="body-lg"        // Uses fontSize and lineHeight tokens
-  weight="semibold"        // Uses fontWeight tokens
-  semantic="primary"       // Uses semantic color tokens
-  isDarkMode={isDarkMode}  // Enables theme adaptation
->
-  Styled with design tokens
-</Text>
-```
-
-### Box Component
-```tsx
-<Box
-  p="4"                    // Uses spacing tokens
-  bg="surface.card"        // Uses semantic color tokens  
-  borderRadius="md"        // Uses radius tokens
-  boxShadow="sm"           // Uses shadow tokens
-  isDarkMode={isDarkMode}  // Enables theme adaptation
->
-  Layout with design tokens
-</Box>
-```
-
-## 🎯 Best Practices
-
-### 1. Prefer Semantic Tokens
-```tsx
-// ✅ Good - semantic meaning
-color="text.primary"
-bg="surface.background"
-
-// ❌ Avoid - hardcoded values
-color="gray.900" 
-bg="white"
-```
-
-### 2. Use Consistent Spacing
-```tsx
-// ✅ Good - uses spacing scale
-<Stack spacing="4">
-  <Box mb="2">Item 1</Box>
-  <Box mb="2">Item 2</Box>
-</Stack>
-
-// ❌ Avoid - arbitrary values
-<div style={{ marginBottom: '13px' }}>
-  Item 1
-</div>
-```
-
-### 3. Follow Typography Scale
-```tsx
-// ✅ Good - uses type scale
-<Heading size="2xl" weight="bold">Title</Heading>
-<Text fontSize="lg">Large body text</Text>
-
-// ❌ Avoid - custom sizes
-<h1 style={{ fontSize: '28px' }}>Title</h1>
-```
-
-### 4. Theme Consistency
-```tsx
-// ✅ Good - passes theme prop
-<MyComponent isDarkMode={isDarkMode} />
-
-// ❌ Inconsistent - missing theme awareness
-<MyComponent />
-```
-
-Design tokens ensure your application maintains visual consistency and makes theming effortless. Always refer to these tokens when building custom components to maintain design system coherence.

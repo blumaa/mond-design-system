@@ -71,16 +71,10 @@ A flexible input component with built-in validation states, helper text, and ful
     },
   },
   decorators: [
-    (Story, context) => {
+    (Story, _context) => {
       const [globals] = useGlobals();
       const isDark = globals.backgrounds?.value === '#333333' || globals.theme === 'dark';
-      
-      // Override the prop based on Storybook theme
-      const storyArgs = {
-        ...context.args,
-        isDarkMode: isDark,
-      };
-      
+
       return (
         <div
           style={{
@@ -90,7 +84,7 @@ A flexible input component with built-in validation states, helper text, and ful
             minWidth: '300px',
           }}
         >
-          <Story args={storyArgs} />
+          <Story />
         </div>
       );
     },
