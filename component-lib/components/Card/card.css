@@ -1,0 +1,189 @@
+/* Card Component Styles - Mobile First with Design Tokens */
+
+.mond-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--mond-radii-lg);
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid var(--mond-border-default);
+  width: 100%;
+}
+
+/* Background variants */
+.mond-card--default {
+  background-color: var(--mond-surface-card);
+}
+
+.mond-card--subtle {
+  background-color: var(--mond-surface-elevated);
+}
+
+.mond-card--emphasized {
+  background-color: var(--mond-surface-primary);
+  border-color: var(--mond-border-strong);
+}
+
+/* Mobile-first: Always column on mobile */
+.mond-card--image-top,
+.mond-card--image-left {
+  flex-direction: column;
+}
+
+/* Desktop: Apply row layout for left-positioned images */
+@media (min-width: 768px) {
+  .mond-card--image-left {
+    flex-direction: row;
+  }
+}
+
+/* Image wrapper - Mobile first */
+.mond-card__image-wrapper {
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* Mobile: All images use 16:9 aspect ratio */
+.mond-card__image-wrapper {
+  aspect-ratio: 16 / 9;
+}
+
+/* Desktop: Left-positioned images become vertical */
+@media (min-width: 768px) {
+  .mond-card--image-left .mond-card__image-wrapper {
+    width: 280px;
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 240px;
+  }
+}
+
+/* Larger screens: Slightly wider left images */
+@media (min-width: 1024px) {
+  .mond-card--image-left .mond-card__image-wrapper {
+    width: 320px;
+    min-height: 280px;
+  }
+}
+
+/* Content section */
+.mond-card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Date with icon */
+.mond-card__date {
+  display: flex;
+  align-items: center;
+  gap: var(--mond-spacing-2);
+}
+
+/* Call to action */
+.mond-card__cta {
+  margin-top: auto;
+}
+
+/* Overlay elements - Mobile */
+.mond-card__top-left,
+.mond-card__top-right {
+  position: absolute;
+  z-index: 10;
+  top: var(--mond-spacing-3);
+}
+
+.mond-card__top-left {
+  left: var(--mond-spacing-3);
+}
+
+.mond-card__top-right {
+  right: var(--mond-spacing-3);
+}
+
+/* Overlay elements - Desktop */
+@media (min-width: 768px) {
+  .mond-card__top-left,
+  .mond-card__top-right {
+    top: var(--mond-spacing-4);
+  }
+
+  .mond-card__top-left {
+    left: var(--mond-spacing-4);
+  }
+
+  .mond-card__top-right {
+    right: var(--mond-spacing-4);
+  }
+}
+
+/* Hoverable state - Disabled on mobile for touch devices */
+.mond-card--hoverable {
+  cursor: pointer;
+}
+
+/* Desktop hover effects */
+@media (hover: hover) and (pointer: fine) {
+  .mond-card--hoverable:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--mond-shadow-lg);
+    border-color: var(--mond-border-primary);
+  }
+
+  .mond-card--hoverable:active {
+    transform: translateY(0);
+    box-shadow: var(--mond-shadow-md);
+  }
+}
+
+/* Focus state for all devices */
+.mond-card--hoverable:focus {
+  outline: 2px solid var(--mond-border-focused);
+  outline-offset: 2px;
+}
+
+/* Mobile touch feedback */
+@media (hover: none) and (pointer: coarse) {
+  .mond-card--hoverable:active {
+    opacity: 0.9;
+  }
+}
+
+/* Disabled state */
+.mond-card--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: var(--mond-surface-disabled);
+}
+
+/* Link wrapper */
+.mond-card__link-wrapper {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.mond-card__link-wrapper:focus {
+  outline: none;
+}
+
+.mond-card__link-wrapper:focus .mond-card {
+  outline: 2px solid var(--mond-border-focused);
+  outline-offset: 2px;
+}
+
+/* Ensure Box className doesn't break layout */
+.mond-card__content.mond-card__content {
+  display: flex;
+}
+
+/* Responsive spacing - Reduce padding on mobile */
+@media (max-width: 640px) {
+  .mond-card__content {
+    padding: var(--mond-spacing-4) !important;
+  }
+}
