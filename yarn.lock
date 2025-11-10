@@ -1447,13 +1447,6 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mdx-js/react@^3.0.0":
-  version "3.1.1"
-  resolved "https://registry.npmjs.org/@mdx-js/react/-/react-3.1.1.tgz"
-  integrity sha512-f++rKLQgUVYDAtECQ6fn/is15GkEH9+nZPM3MS0RcxVqoTfawHvDlSCH7JbMhAM6uJ32v3eXLvLmLvjGu7PTQw==
-  dependencies:
-    "@types/mdx" "^2.0.0"
-
 "@napi-rs/wasm-runtime@^0.2.11":
   version "0.2.12"
   resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.12.tgz#3e78a8b96e6c33a6c517e1894efbd5385a7cb6f2"
@@ -2219,19 +2212,6 @@
   resolved "https://registry.npmjs.org/@storybook/addon-actions/-/addon-actions-9.0.8.tgz"
   integrity sha512-LFePu7PPnWN0Il/uoUpmA5T0J0C7d6haJIbg0pXrjxW2MQVSYXE4S4LSUz8fOImltBDV3xAl6tLPYHFj6VcrOA==
 
-"@storybook/addon-docs@^9.1.5":
-  version "9.1.6"
-  resolved "https://registry.npmjs.org/@storybook/addon-docs/-/addon-docs-9.1.6.tgz"
-  integrity sha512-4ZE/T2Ayw77/v2ersAk/VM7vlvqV2zCNFwt0uvOzUR1VZ9VqZCHhsfy/IyBPeKt6Otax3EpfE1LkH4slfceB0g==
-  dependencies:
-    "@mdx-js/react" "^3.0.0"
-    "@storybook/csf-plugin" "9.1.6"
-    "@storybook/icons" "^1.4.0"
-    "@storybook/react-dom-shim" "9.1.6"
-    react "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
-    react-dom "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
-    ts-dedent "^2.0.0"
-
 "@storybook/addon-links@^9.1.5":
   version "9.1.6"
   resolved "https://registry.npmjs.org/@storybook/addon-links/-/addon-links-9.1.6.tgz"
@@ -2265,11 +2245,6 @@
   version "5.0.0"
   resolved "https://registry.npmjs.org/@storybook/global/-/global-5.0.0.tgz"
   integrity sha512-FcOqPAXACP0I3oJ/ws6/rrPT9WGhu915Cg8D02a9YxLo0DE9zI+a9A5gRGvmQ09fiWPukqI8ZAEoQEdWUKMQdQ==
-
-"@storybook/icons@^1.4.0":
-  version "1.5.0"
-  resolved "https://registry.npmjs.org/@storybook/icons/-/icons-1.5.0.tgz"
-  integrity sha512-cfrFaY+E8GG3G0z3j0WCpG2f1GPmSIlJYWOcheeFbtqA8jZhGAFhai0e7gpquauFC0GxWDpYvIomdZCWhZ28jA==
 
 "@storybook/react-dom-shim@9.1.6":
   version "9.1.6"
@@ -2532,11 +2507,6 @@
   version "0.0.29"
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
-
-"@types/mdx@^2.0.0":
-  version "2.0.13"
-  resolved "https://registry.npmjs.org/@types/mdx/-/mdx-2.0.13.tgz"
-  integrity sha512-+OWZQfAYyio6YkJb3HLxDrvnx6SWWDbC0zVPfBRzUk0/nqoDyf6dNxQi3eArPe8rJ473nobTMQ/8Zk+LxJ+Yuw==
 
 "@types/node@*":
   version "24.5.0"
@@ -8276,13 +8246,6 @@ react-dom@19.2.0:
   dependencies:
     scheduler "^0.27.0"
 
-"react-dom@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0":
-  version "19.1.1"
-  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.1.1.tgz"
-  integrity sha512-Dlq/5LAZgF0Gaz6yiqZCf6VCcZs1ghAJyrsu84Q/GT0gV+mCxbfmKNoGRKBYMJ8IEdGPqu49YWXD02GCknEDkw==
-  dependencies:
-    scheduler "^0.26.0"
-
 react-dom@^18.2.0:
   version "18.3.1"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.3.1.tgz"
@@ -8315,11 +8278,6 @@ react@19.2.0:
   version "19.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-19.2.0.tgz#d33dd1721698f4376ae57a54098cb47fc75d93a5"
   integrity sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==
-
-"react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0":
-  version "19.1.1"
-  resolved "https://registry.npmjs.org/react/-/react-19.1.1.tgz"
-  integrity sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ==
 
 react@^18.2.0:
   version "18.3.1"
@@ -8612,11 +8570,6 @@ scheduler@^0.23.2:
   integrity sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==
   dependencies:
     loose-envify "^1.1.0"
-
-scheduler@^0.26.0:
-  version "0.26.0"
-  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.26.0.tgz"
-  integrity sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==
 
 scheduler@^0.27.0:
   version "0.27.0"

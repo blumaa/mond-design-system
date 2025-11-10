@@ -33,8 +33,5 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "packageManager": "yarn@1.22.22",
-  "dependencies": {
-    "@mond-design-system/theme": "^1.13.0"
-  }
+  "packageManager": "yarn@1.22.22"
 }
