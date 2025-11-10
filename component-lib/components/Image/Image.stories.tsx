@@ -99,6 +99,7 @@ export const Default: Story = {
   args: {
     src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
     alt: 'Beautiful mountain landscape',
+    loading: 'eager',
   },
 };
 
@@ -107,40 +108,44 @@ export const AspectRatios: Story = {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
       <div style={{ textAlign: 'center' }}>
         <Image
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop"
+          src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=400&h=400&fit=crop"
           alt="Square aspect ratio"
           aspectRatio="1:1"
           borderRadius="lg"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '14px', color: '#6b7280' }}>1:1 (Square)</div>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <Image
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
+          src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop"
           alt="4:3 aspect ratio"
           aspectRatio="4:3"
           borderRadius="lg"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '14px', color: '#6b7280' }}>4:3 (Standard)</div>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <Image
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=225&fit=crop"
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=225&fit=crop"
           alt="16:9 aspect ratio"
           aspectRatio="16:9"
           borderRadius="lg"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '14px', color: '#6b7280' }}>16:9 (Widescreen)</div>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <Image
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=266&fit=crop"
+          src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=400&h=267&fit=crop"
           alt="3:2 aspect ratio"
           aspectRatio="3:2"
           borderRadius="lg"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '14px', color: '#6b7280' }}>3:2 (Photography)</div>
       </div>
@@ -166,10 +171,11 @@ export const ObjectFit: Story = {
           aspectRatio="1:1"
           width="150px"
           borderRadius="md"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Cover</div>
       </div>
-      
+
       <div style={{ textAlign: 'center', backgroundColor: '#f3f4f6' }}>
         <Image
           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop"
@@ -178,6 +184,7 @@ export const ObjectFit: Story = {
           aspectRatio="1:1"
           width="150px"
           borderRadius="md"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Contain</div>
       </div>
@@ -190,6 +197,7 @@ export const ObjectFit: Story = {
           aspectRatio="1:1"
           width="150px"
           borderRadius="md"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Fill</div>
       </div>
@@ -202,6 +210,7 @@ export const ObjectFit: Story = {
           aspectRatio="1:1"
           width="150px"
           borderRadius="md"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Scale Down</div>
       </div>
@@ -221,55 +230,60 @@ export const BorderRadius: Story = {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '16px' }}>
       <div style={{ textAlign: 'center' }}>
         <Image
-          src="https://images.unsplash.com/photo-1494790108755-2616c8faf9e5?w=150&h=150&fit=crop"
+          src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=150&h=150&fit=crop"
           alt="No radius"
           borderRadius="none"
           aspectRatio="1:1"
           width="100px"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>None</div>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <Image
-          src="https://images.unsplash.com/photo-1494790108755-2616c8faf9e5?w=150&h=150&fit=crop"
+          src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=150&h=150&fit=crop"
           alt="Small radius"
           borderRadius="sm"
           aspectRatio="1:1"
           width="100px"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Small</div>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <Image
-          src="https://images.unsplash.com/photo-1494790108755-2616c8faf9e5?w=150&h=150&fit=crop"
+          src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=150&h=150&fit=crop"
           alt="Medium radius"
           borderRadius="md"
           aspectRatio="1:1"
           width="100px"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Medium</div>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <Image
-          src="https://images.unsplash.com/photo-1494790108755-2616c8faf9e5?w=150&h=150&fit=crop"
+          src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=150&h=150&fit=crop"
           alt="Large radius"
           borderRadius="lg"
           aspectRatio="1:1"
           width="100px"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Large</div>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <Image
-          src="https://images.unsplash.com/photo-1494790108755-2616c8faf9e5?w=150&h=150&fit=crop"
+          src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=150&h=150&fit=crop"
           alt="Full radius"
           borderRadius="full"
           aspectRatio="1:1"
           width="100px"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>Full</div>
       </div>
@@ -345,6 +359,7 @@ export const ErrorHandling: Story = {
           alt="Image with fallback"
           aspectRatio="4:3"
           borderRadius="md"
+          loading="eager"
         />
         <div style={{ marginTop: '8px', fontSize: '14px', color: '#6b7280' }}>
           Failed Image (With Fallback)
@@ -448,11 +463,11 @@ export const ResponsiveGallery: Story = {
     }}>
       {[
         'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop',
-        'https://images.unsplash.com/photo-1494790108755-2616c8faf9e5?w=300&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300&h=200&fit=crop',
         'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=300&h=200&fit=crop',
-        'https://images.unsplash.com/photo-1466854076813-4aa9c1a7c0a6?w=300&h=200&fit=crop',
-        'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=300&h=200&fit=crop',
-        'https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?w=300&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=300&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1682687220923-c58b9a4592ae?w=300&h=200&fit=crop',
       ].map((src, index) => (
         <Image
           key={index}
@@ -460,7 +475,7 @@ export const ResponsiveGallery: Story = {
           alt={`Gallery image ${index + 1}`}
           aspectRatio="3:2"
           borderRadius="lg"
-          loading="lazy"
+          loading="eager"
         />
       ))}
     </div>
@@ -478,36 +493,40 @@ export const ProfileAvatars: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
       <Image
-        src="https://images.unsplash.com/photo-1494790108755-2616c8faf9e5?w=64&h=64&fit=crop"
+        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&h=64&fit=crop"
         alt="Profile avatar small"
         aspectRatio="1:1"
         borderRadius="full"
         width="64px"
+        loading="eager"
       />
-      
+
       <Image
-        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop"
+        src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=80&h=80&fit=crop"
         alt="Profile avatar medium"
         aspectRatio="1:1"
         borderRadius="full"
         width="80px"
+        loading="eager"
       />
-      
+
       <Image
-        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=96&h=96&fit=crop"
+        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=96&h=96&fit=crop"
         alt="Profile avatar large"
         aspectRatio="1:1"
         borderRadius="full"
         width="96px"
+        loading="eager"
       />
-      
+
       <Image
         src="https://nonexistent-url.com/avatar.jpg"
-        fallbackSrc="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=112&h=112&fit=crop"
+        fallbackSrc="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=112&h=112&fit=crop"
         alt="Profile avatar with fallback"
         aspectRatio="1:1"
         borderRadius="full"
         width="112px"
+        loading="eager"
       />
     </div>
   ),
@@ -528,7 +547,7 @@ export const Playground: Story = {
     fit: 'cover',
     borderRadius: 'none',
     showLoadingSpinner: true,
-    loading: 'lazy',
+    loading: 'eager',
     width: '300px',
   },
   parameters: {

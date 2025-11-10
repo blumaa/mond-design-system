@@ -78,7 +78,7 @@ export const Default: Story = {
   args: {
     title: 'Card Title',
     description: 'This is a description of the card content. It provides context about what the card represents.',
-    imageSrc: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=450&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop',
     imageAlt: 'Laptop on desk',
     tag: 'Technology',
     date: 'Jan 15, 2025',
@@ -118,7 +118,7 @@ export const ImageLeft: Story = {
   args: {
     title: 'Horizontal Card',
     description: 'This card has the image positioned on the left side, creating a horizontal layout.',
-    imageSrc: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=400&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop',
     imageAlt: 'City skyline',
     tag: 'Featured',
     date: 'Jan 12, 2025',
@@ -140,7 +140,7 @@ export const WithLink: Story = {
   args: {
     title: 'Clickable Card',
     description: 'This entire card is clickable and will navigate to the specified URL.',
-    imageSrc: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=450&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop',
     imageAlt: 'Team collaboration',
     tag: 'Guide',
     date: 'Jan 8, 2025',
@@ -162,7 +162,7 @@ export const WithCallToAction: Story = {
   args: {
     title: 'Get Started Today',
     description: 'Join thousands of users who are already benefiting from our platform.',
-    imageSrc: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=450&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop',
     imageAlt: 'Team meeting',
     callToAction: <Button variant="primary">Sign Up Now</Button>,
   },
@@ -182,7 +182,7 @@ export const WithSecondaryAction: Story = {
   args: {
     title: 'Learn More',
     description: 'Discover how our platform can help you achieve your goals.',
-    imageSrc: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&h=450&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop',
     imageAlt: 'Office workspace',
     tag: 'Tutorial',
     date: 'Jan 5, 2025',
@@ -204,7 +204,7 @@ export const WithBadge: Story = {
   args: {
     title: 'Featured Article',
     description: 'This card has a badge overlay in the top-left corner to highlight special content.',
-    imageSrc: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=450&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop',
     imageAlt: 'Business presentation',
     tag: 'Premium',
     date: 'Jan 14, 2025',
@@ -226,7 +226,7 @@ export const WithMultipleOverlays: Story = {
   args: {
     title: 'Special Offer',
     description: 'Limited time offer with special pricing and exclusive benefits.',
-    imageSrc: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=450&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop',
     imageAlt: 'Business team',
     tag: 'Promotion',
     date: 'Jan 16, 2025',
@@ -249,7 +249,7 @@ export const SubtleBackground: Story = {
   args: {
     title: 'Subtle Card',
     description: 'This card uses a subtle background variant for a softer appearance.',
-    imageSrc: 'https://images.unsplash.com/photo-1556155092-490a1ba16284?w=800&h=450&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop',
     imageAlt: 'Modern office',
     tag: 'Design',
     date: 'Jan 11, 2025',
@@ -271,7 +271,7 @@ export const EmphasizedBackground: Story = {
   args: {
     title: 'Emphasized Card',
     description: 'This card uses an emphasized background to stand out more prominently.',
-    imageSrc: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=450&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop',
     imageAlt: 'Team discussion',
     tag: 'Important',
     date: 'Jan 13, 2025',
@@ -293,7 +293,7 @@ export const Disabled: Story = {
   args: {
     title: 'Unavailable Content',
     description: 'This card is disabled and not interactive.',
-    imageSrc: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=450&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop',
     imageAlt: 'Workspace',
     tag: 'Archived',
     date: 'Dec 20, 2024',
@@ -340,7 +340,7 @@ export const CardGrid: Story = {
       <Card
         title="Design Systems"
         description="Building scalable and maintainable design systems for modern applications."
-        imageSrc="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=450&fit=crop"
+        imageSrc="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop"
         imageAlt="Design"
         tag="Tutorial"
         date="Jan 15, 2025"
@@ -349,7 +349,7 @@ export const CardGrid: Story = {
       <Card
         title="Component Architecture"
         description="Best practices for structuring React components in large applications."
-        imageSrc="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=450&fit=crop"
+        imageSrc="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop"
         imageAlt="Architecture"
         tag="Guide"
         date="Jan 14, 2025"
@@ -358,7 +358,7 @@ export const CardGrid: Story = {
       <Card
         title="TypeScript Tips"
         description="Advanced TypeScript techniques for type-safe React development."
-        imageSrc="https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=450&fit=crop"
+        imageSrc="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop"
         imageAlt="TypeScript"
         tag="Development"
         date="Jan 13, 2025"
@@ -368,7 +368,7 @@ export const CardGrid: Story = {
       <Card
         title="Accessibility First"
         description="Creating inclusive web experiences that work for everyone."
-        imageSrc="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=450&fit=crop"
+        imageSrc="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop"
         imageAlt="Accessibility"
         tag="A11y"
         date="Jan 12, 2025"
@@ -387,7 +387,7 @@ export const HorizontalList: Story = {
       <Card
         title="Latest Update"
         description="Check out our newest features and improvements."
-        imageSrc="https://images.unsplash.com/photo-1556155092-490a1ba16284?w=400&h=400&fit=crop"
+        imageSrc="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop"
         imageAlt="Update"
         imagePosition="left"
         tag="Release"
@@ -397,7 +397,7 @@ export const HorizontalList: Story = {
       <Card
         title="Community Spotlight"
         description="Featuring amazing work from our community members."
-        imageSrc="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&h=400&fit=crop"
+        imageSrc="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop"
         imageAlt="Community"
         imagePosition="left"
         tag="Community"
@@ -407,7 +407,7 @@ export const HorizontalList: Story = {
       <Card
         title="Developer Resources"
         description="Tools and resources to help you build better applications."
-        imageSrc="https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=400&fit=crop"
+        imageSrc="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop"
         imageAlt="Resources"
         imagePosition="left"
         tag="Resources"
