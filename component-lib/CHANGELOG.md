@@ -1,3 +1,7 @@
+## <small>2.2.2 (2025-11-11)</small>
+
+* fix: input placeholder color ([c369705](https://github.com/blumaa/mond-design-system/commit/c369705))
+
 ## <small>2.2.1 (2025-11-11)</small>
 
 * fix: button colors ([dfc4dd3](https://github.com/blumaa/mond-design-system/commit/dfc4dd3))
