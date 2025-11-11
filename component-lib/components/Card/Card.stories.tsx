@@ -208,7 +208,7 @@ export const WithBadge: Story = {
     imageAlt: 'Business presentation',
     tag: 'Premium',
     date: 'Jan 14, 2025',
-    topLeftElement: <Badge variant="solid" semantic="success" size="sm">New</Badge>,
+    topLeftElement: <Badge variant="success" size="sm">New</Badge>,
   },
   decorators: [
     (Story) => (
@@ -230,8 +230,8 @@ export const WithMultipleOverlays: Story = {
     imageAlt: 'Business team',
     tag: 'Promotion',
     date: 'Jan 16, 2025',
-    topLeftElement: <Badge variant="solid" semantic="error" size="sm">Sale</Badge>,
-    topRightElement: <Badge variant="solid" semantic="warning" size="sm">-50%</Badge>,
+    topLeftElement: <Badge variant="error" size="sm">Sale</Badge>,
+    topRightElement: <Badge variant="warning" size="sm">-50%</Badge>,
   },
   decorators: [
     (Story) => (
@@ -329,7 +329,7 @@ export const Minimal: Story = {
 /**
  * Grid of cards demonstrating responsive layout
  */
-export const CardGrid: Story = {
+export const CardGrid = {
   render: () => (
     <div style={{
       display: 'grid',
@@ -363,7 +363,7 @@ export const CardGrid: Story = {
         tag="Development"
         date="Jan 13, 2025"
         href="#"
-        topLeftElement={<Badge variant="solid" semantic="success" size="sm">New</Badge>}
+        topLeftElement={<Badge variant="success" size="sm">New</Badge>}
       />
       <Card
         title="Accessibility First"
@@ -381,7 +381,7 @@ export const CardGrid: Story = {
 /**
  * Horizontal cards in a list
  */
-export const HorizontalList: Story = {
+export const HorizontalList = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '800px' }}>
       <Card

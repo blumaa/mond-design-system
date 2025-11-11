@@ -538,4 +538,298 @@ describe('Box Component - Minimal Design', () => {
       expect(footer.tagName).toBe('FOOTER');
     });
   });
+
+  describe('Layout Props - Flexbox and Display', () => {
+    describe('Display', () => {
+      it('applies display="flex" class correctly', () => {
+        render(<Box display="flex" data-testid="flex-box">Content</Box>);
+        const boxElement = screen.getByTestId('flex-box');
+        expect(boxElement).toHaveClass('display-flex');
+      });
+
+      it('applies display="block" class correctly', () => {
+        render(<Box display="block" data-testid="block-box">Content</Box>);
+        const boxElement = screen.getByTestId('block-box');
+        expect(boxElement).toHaveClass('display-block');
+      });
+
+      it('applies display="inline-block" class correctly', () => {
+        render(<Box display="inline-block" data-testid="inline-block-box">Content</Box>);
+        const boxElement = screen.getByTestId('inline-block-box');
+        expect(boxElement).toHaveClass('display-inline-block');
+      });
+
+      it('applies display="grid" class correctly', () => {
+        render(<Box display="grid" data-testid="grid-box">Content</Box>);
+        const boxElement = screen.getByTestId('grid-box');
+        expect(boxElement).toHaveClass('display-grid');
+      });
+
+      it('applies display="none" class correctly', () => {
+        render(<Box display="none" data-testid="none-box">Content</Box>);
+        const boxElement = screen.getByTestId('none-box');
+        expect(boxElement).toHaveClass('display-none');
+      });
+    });
+
+    describe('Flex Direction', () => {
+      it('applies flexDirection="row" class correctly', () => {
+        render(<Box flexDirection="row" data-testid="row-box">Content</Box>);
+        const boxElement = screen.getByTestId('row-box');
+        expect(boxElement).toHaveClass('flex-direction-row');
+      });
+
+      it('applies flexDirection="column" class correctly', () => {
+        render(<Box flexDirection="column" data-testid="column-box">Content</Box>);
+        const boxElement = screen.getByTestId('column-box');
+        expect(boxElement).toHaveClass('flex-direction-column');
+      });
+
+      it('applies flexDirection="row-reverse" class correctly', () => {
+        render(<Box flexDirection="row-reverse" data-testid="row-reverse-box">Content</Box>);
+        const boxElement = screen.getByTestId('row-reverse-box');
+        expect(boxElement).toHaveClass('flex-direction-row-reverse');
+      });
+
+      it('applies flexDirection="column-reverse" class correctly', () => {
+        render(<Box flexDirection="column-reverse" data-testid="column-reverse-box">Content</Box>);
+        const boxElement = screen.getByTestId('column-reverse-box');
+        expect(boxElement).toHaveClass('flex-direction-column-reverse');
+      });
+    });
+
+    describe('Align Items', () => {
+      it('applies alignItems="flex-start" class correctly', () => {
+        render(<Box alignItems="flex-start" data-testid="align-start-box">Content</Box>);
+        const boxElement = screen.getByTestId('align-start-box');
+        expect(boxElement).toHaveClass('align-items-flex-start');
+      });
+
+      it('applies alignItems="center" class correctly', () => {
+        render(<Box alignItems="center" data-testid="align-center-box">Content</Box>);
+        const boxElement = screen.getByTestId('align-center-box');
+        expect(boxElement).toHaveClass('align-items-center');
+      });
+
+      it('applies alignItems="flex-end" class correctly', () => {
+        render(<Box alignItems="flex-end" data-testid="align-end-box">Content</Box>);
+        const boxElement = screen.getByTestId('align-end-box');
+        expect(boxElement).toHaveClass('align-items-flex-end');
+      });
+
+      it('applies alignItems="stretch" class correctly', () => {
+        render(<Box alignItems="stretch" data-testid="align-stretch-box">Content</Box>);
+        const boxElement = screen.getByTestId('align-stretch-box');
+        expect(boxElement).toHaveClass('align-items-stretch');
+      });
+
+      it('applies alignItems="baseline" class correctly', () => {
+        render(<Box alignItems="baseline" data-testid="align-baseline-box">Content</Box>);
+        const boxElement = screen.getByTestId('align-baseline-box');
+        expect(boxElement).toHaveClass('align-items-baseline');
+      });
+    });
+
+    describe('Justify Content', () => {
+      it('applies justifyContent="flex-start" class correctly', () => {
+        render(<Box justifyContent="flex-start" data-testid="justify-start-box">Content</Box>);
+        const boxElement = screen.getByTestId('justify-start-box');
+        expect(boxElement).toHaveClass('justify-content-flex-start');
+      });
+
+      it('applies justifyContent="center" class correctly', () => {
+        render(<Box justifyContent="center" data-testid="justify-center-box">Content</Box>);
+        const boxElement = screen.getByTestId('justify-center-box');
+        expect(boxElement).toHaveClass('justify-content-center');
+      });
+
+      it('applies justifyContent="flex-end" class correctly', () => {
+        render(<Box justifyContent="flex-end" data-testid="justify-end-box">Content</Box>);
+        const boxElement = screen.getByTestId('justify-end-box');
+        expect(boxElement).toHaveClass('justify-content-flex-end');
+      });
+
+      it('applies justifyContent="space-between" class correctly', () => {
+        render(<Box justifyContent="space-between" data-testid="justify-between-box">Content</Box>);
+        const boxElement = screen.getByTestId('justify-between-box');
+        expect(boxElement).toHaveClass('justify-content-space-between');
+      });
+
+      it('applies justifyContent="space-around" class correctly', () => {
+        render(<Box justifyContent="space-around" data-testid="justify-around-box">Content</Box>);
+        const boxElement = screen.getByTestId('justify-around-box');
+        expect(boxElement).toHaveClass('justify-content-space-around');
+      });
+
+      it('applies justifyContent="space-evenly" class correctly', () => {
+        render(<Box justifyContent="space-evenly" data-testid="justify-evenly-box">Content</Box>);
+        const boxElement = screen.getByTestId('justify-evenly-box');
+        expect(boxElement).toHaveClass('justify-content-space-evenly');
+      });
+    });
+
+    describe('Gap', () => {
+      it('applies gap="md" class correctly', () => {
+        render(<Box gap="md" data-testid="gap-box">Content</Box>);
+        const boxElement = screen.getByTestId('gap-box');
+        expect(boxElement).toHaveClass('gap-md');
+      });
+
+      it('applies gap with different size names', () => {
+        const { rerender } = render(<Box gap="xs" data-testid="gap-test">Content</Box>);
+        expect(screen.getByTestId('gap-test')).toHaveClass('gap-xs');
+
+        rerender(<Box gap="lg" data-testid="gap-test">Content</Box>);
+        expect(screen.getByTestId('gap-test')).toHaveClass('gap-lg');
+
+        rerender(<Box gap="xxl" data-testid="gap-test">Content</Box>);
+        expect(screen.getByTestId('gap-test')).toHaveClass('gap-xxl');
+      });
+
+      it('applies all gap size options correctly', () => {
+        (['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl'] as const).forEach((size) => {
+          const { container } = render(<Box gap={size} data-testid={`gap-${size}`}>Content</Box>);
+          const boxElement = container.querySelector(`[data-testid="gap-${size}"]`);
+          expect(boxElement).toHaveClass(`gap-${size}`);
+        });
+      });
+    });
+
+    describe('Flex', () => {
+      it('applies flex prop as inline style', () => {
+        render(<Box flex="1" data-testid="flex-1-box">Content</Box>);
+        const boxElement = screen.getByTestId('flex-1-box');
+        expect(boxElement).toHaveStyle({ flex: '1' });
+      });
+
+      it('applies flex="0 1 auto" as inline style', () => {
+        render(<Box flex="0 1 auto" data-testid="flex-auto-box">Content</Box>);
+        const boxElement = screen.getByTestId('flex-auto-box');
+        expect(boxElement).toHaveStyle({ flex: '0 1 auto' });
+      });
+
+      it('applies flex="1 1 200px" as inline style', () => {
+        render(<Box flex="1 1 200px" data-testid="flex-basis-box">Content</Box>);
+        const boxElement = screen.getByTestId('flex-basis-box');
+        expect(boxElement).toHaveStyle({ flex: '1 1 200px' });
+      });
+    });
+
+    describe('Combined Layout Props', () => {
+      it('applies multiple flex layout props correctly', () => {
+        render(
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="space-between"
+            gap="md"
+            data-testid="combined-flex-box"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('combined-flex-box');
+        expect(boxElement).toHaveClass(
+          'display-flex',
+          'flex-direction-column',
+          'align-items-center',
+          'justify-content-space-between',
+          'gap-md'
+        );
+      });
+
+      it('combines layout props with spacing props', () => {
+        render(
+          <Box
+            display="flex"
+            gap="lg"
+            padding="8"
+            margin="4"
+            data-testid="layout-spacing-box"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('layout-spacing-box');
+        expect(boxElement).toHaveClass('display-flex', 'gap-lg', 'p-8', 'm-4');
+      });
+
+      it('combines all layout props with custom className', () => {
+        render(
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            gap="sm"
+            flex="1"
+            className="custom-layout"
+            data-testid="full-layout-box"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('full-layout-box');
+        expect(boxElement).toHaveClass(
+          'display-flex',
+          'align-items-center',
+          'justify-content-center',
+          'gap-sm',
+          'custom-layout'
+        );
+        expect(boxElement).toHaveStyle({ flex: '1' });
+      });
+    });
+
+    describe('SSR Compatibility for Layout Props', () => {
+      it('renders layout props without client-side hooks', () => {
+        render(
+          <Box
+            display="flex"
+            flexDirection="column"
+            gap="md"
+            data-testid="ssr-layout-box"
+          >
+            SSR Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('ssr-layout-box');
+        expect(boxElement).toBeInTheDocument();
+        expect(boxElement).toHaveClass('display-flex', 'flex-direction-column', 'gap-md');
+      });
+
+      it('uses pure CSS classes for layout (except flex prop)', () => {
+        render(
+          <Box
+            display="flex"
+            alignItems="center"
+            gap="lg"
+            data-testid="pure-css-layout"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('pure-css-layout');
+
+        const styleAttr = boxElement.getAttribute('style');
+        expect(styleAttr).toBeNull();
+      });
+
+      it('applies flex prop as inline style only', () => {
+        render(
+          <Box
+            display="flex"
+            flex="1"
+            data-testid="flex-inline-style"
+          >
+            Content
+          </Box>
+        );
+        const boxElement = screen.getByTestId('flex-inline-style');
+
+        expect(boxElement).toHaveClass('display-flex');
+        expect(boxElement).toHaveStyle({ flex: '1' });
+      });
+    });
+  });
 });

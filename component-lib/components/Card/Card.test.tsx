@@ -337,7 +337,7 @@ describe('Card Component', () => {
         <Card
           title="Card"
           description="Description"
-          topLeftElement={<Badge variant="solid" size="sm">Featured</Badge>}
+          topLeftElement={<Badge variant="default" size="sm">Featured</Badge>}
         />
       );
 
@@ -349,7 +349,7 @@ describe('Card Component', () => {
         <Card
           title="Card"
           description="Description"
-          topRightElement={<Badge variant="solid" size="sm">New</Badge>}
+          topRightElement={<Badge variant="default" size="sm">New</Badge>}
         />
       );
 
@@ -361,8 +361,8 @@ describe('Card Component', () => {
         <Card
           title="Card"
           description="Description"
-          topLeftElement={<Badge variant="solid" size="sm">Left</Badge>}
-          topRightElement={<Badge variant="solid" size="sm">Right</Badge>}
+          topLeftElement={<Badge variant="default" size="sm">Left</Badge>}
+          topRightElement={<Badge variant="default" size="sm">Right</Badge>}
         />
       );
 

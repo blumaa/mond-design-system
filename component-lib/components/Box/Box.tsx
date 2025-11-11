@@ -17,6 +17,14 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   paddingRight?: SpacingToken;
   paddingBottom?: SpacingToken;
   paddingLeft?: SpacingToken;
+
+  // Layout props
+  display?: 'flex' | 'block' | 'inline-block' | 'inline-flex' | 'grid' | 'inline-grid' | 'none';
+  flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+  alignItems?: 'flex-start' | 'center' | 'flex-end' | 'stretch' | 'baseline';
+  justifyContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+  gap?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  flex?: string;
 }
 
 /**
@@ -61,12 +69,20 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   paddingBottom,
   paddingLeft,
 
+  // Layout props
+  display,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  gap,
+  flex,
+
   className,
   ...rest
 }, ref) => {
   const Element = as as React.ElementType;
 
-  // Build CSS class names from spacing props
+  // Build CSS class names from spacing and layout props
   const classNames = [
     // Margin classes
     margin && `m-${margin}`,
@@ -82,16 +98,27 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     paddingBottom && `pb-${paddingBottom}`,
     paddingLeft && `pl-${paddingLeft}`,
 
+    // Layout classes
+    display && `display-${display}`,
+    flexDirection && `flex-direction-${flexDirection}`,
+    alignItems && `align-items-${alignItems}`,
+    justifyContent && `justify-content-${justifyContent}`,
+    gap && `gap-${gap}`,
+
     // User-provided className
     className,
   ]
     .filter(Boolean)
     .join(' ');
 
+  // Build inline styles for flex prop (since it can have many values)
+  const inlineStyles = flex ? { flex } : undefined;
+
   return (
     <Element
       ref={ref}
       className={classNames || undefined}
+      style={inlineStyles}
       {...rest}
     >
       {children}
