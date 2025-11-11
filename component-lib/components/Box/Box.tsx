@@ -25,6 +25,10 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   justifyContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
   gap?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   flex?: string;
+
+  // Visual props
+  border?: 'subtle' | 'default' | 'strong';
+  corners?: 'default' | 'rounded';
 }
 
 /**
@@ -77,6 +81,10 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   gap,
   flex,
 
+  // Visual props
+  border,
+  corners,
+
   className,
   ...rest
 }, ref) => {
@@ -104,6 +112,10 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     alignItems && `align-items-${alignItems}`,
     justifyContent && `justify-content-${justifyContent}`,
     gap && `gap-${gap}`,
+
+    // Visual classes
+    border && `mond-box--border-${border}`,
+    corners && `mond-box--corners-${corners}`,
 
     // User-provided className
     className,

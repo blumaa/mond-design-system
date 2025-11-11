@@ -25,6 +25,7 @@ export * from './components/Divider';
 export * from './components/Label';
 export * from './components/Image';
 export * from './components/Tag';
+export * from './components/Card';
 
 // For components that use React hooks (forms, interactive components),
 // import from '@mond-design-system/theme/client' instead

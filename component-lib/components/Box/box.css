@@ -258,3 +258,31 @@
 .gap-lg { gap: var(--mond-spacing-6); }    /* 24px */
 .gap-xl { gap: var(--mond-spacing-8); }    /* 32px */
 .gap-xxl { gap: var(--mond-spacing-12); }  /* 48px */
+
+/* ============================================
+   BORDER UTILITIES
+   ============================================ */
+
+.mond-box--border-subtle {
+  border: 1px solid var(--mond-border-subtle);
+}
+
+.mond-box--border-default {
+  border: 1px solid var(--mond-border-default);
+}
+
+.mond-box--border-strong {
+  border: 1px solid var(--mond-border-strong);
+}
+
+/* ============================================
+   CORNERS UTILITIES
+   ============================================ */
+
+.mond-box--corners-default {
+  border-radius: var(--mond-radii-md);
+}
+
+.mond-box--corners-rounded {
+  border-radius: var(--mond-radii-full);
+}
