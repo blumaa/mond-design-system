@@ -1,3 +1,7 @@
+## 2.2.0 (2025-11-11)
+
+* feat: add flex props to box ([56fd25f](https://github.com/blumaa/mond-design-system/commit/56fd25f))
+
 ## <small>2.1.1 (2025-11-10)</small>
 
 * Merge pull request #13 from blumaa/feat-card-component ([f7b55d0](https://github.com/blumaa/mond-design-system/commit/f7b55d0)), closes [#13](https://github.com/blumaa/mond-design-system/issues/13)
