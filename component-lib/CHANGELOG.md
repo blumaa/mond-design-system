@@ -1,3 +1,7 @@
+## <small>2.2.1 (2025-11-11)</small>
+
+* fix: button colors ([dfc4dd3](https://github.com/blumaa/mond-design-system/commit/dfc4dd3))
+
 ## 2.2.0 (2025-11-11)
 
 * feat: add flex props to box ([56fd25f](https://github.com/blumaa/mond-design-system/commit/56fd25f))
