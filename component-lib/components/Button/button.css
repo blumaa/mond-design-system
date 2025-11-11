@@ -137,17 +137,17 @@
 
 /* Warning Variant */
 .mond-button--warning {
-  background-color: var(--mond-feedback-warning-border);
-  color: #000000;
+  background-color: var(--mond-feedback-warning-background);
+  color: #fff;
   border: none;
 }
 
 .mond-button--warning:hover:not(:disabled):not(.mond-button--disabled) {
-  filter: brightness(0.9);
+  filter: brightness(0.6);
 }
 
 .mond-button--warning:active:not(:disabled):not(.mond-button--disabled) {
-  filter: brightness(0.8);
+  filter: brightness(0.5);
 }
 
 .mond-button--warning:focus-visible {

@@ -439,8 +439,8 @@ export const tokens = {
       },
       "warning": {
         "background": {
-          "light": "amber.50",
-          "dark": "amber.900"
+          "light": "amber.500",
+          "dark": "amber.500"
         },
         "border": {
           "light": "amber.200",
@@ -457,12 +457,12 @@ export const tokens = {
           "dark": "red.900"
         },
         "border": {
-          "light": "red.200",
+          "light": "red.500",
           "dark": "red.700"
         },
         "text": {
           "light": "red.800",
-          "dark": "red.200"
+          "dark": "red.700"
         }
       },
       "info": {
