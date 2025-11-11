@@ -32,7 +32,8 @@
 }
 
 .mond-input::placeholder {
-  color: var(--mond-text-secondary);
+  color: var(--mond-text-tertiary);
+  opacity: 0.5;
 }
 
 /* Focus State */
