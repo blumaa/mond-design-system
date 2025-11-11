@@ -1,3 +1,7 @@
+## <small>2.2.3 (2025-11-11)</small>
+
+* fix: add box border props ([b49014c](https://github.com/blumaa/mond-design-system/commit/b49014c))
+
 ## <small>2.2.2 (2025-11-11)</small>
 
 * fix: input placeholder color ([c369705](https://github.com/blumaa/mond-design-system/commit/c369705))
