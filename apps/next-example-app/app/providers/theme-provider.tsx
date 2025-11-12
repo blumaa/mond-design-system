@@ -62,7 +62,7 @@ export function AppThemeProvider({ children }: AppThemeProviderProps) {
   return (
     <ThemeContext.Provider value={{ colorScheme, toggleTheme }}>
       <MdsThemeProvider colorScheme={colorScheme} brandTheme={violetBrand}>
-        {children as any}
+        {children}
       </MdsThemeProvider>
     </ThemeContext.Provider>
   );
