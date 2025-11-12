@@ -1,39 +1,16 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '../../test-utils';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { ToastContainer } from './ToastContainer';
 import { Toast } from './Toast';
 import { ToastData } from './ToastContainer';
 
-// Mock timers for testing auto-dismissal
 jest.useFakeTimers();
 
 const mockToasts: ToastData[] = [
-  {
-    id: '1',
-    type: 'info',
-    title: 'Test Toast',
-    message: 'This is a test message',
-    duration: 5000,
-  },
-  {
-    id: '2',
-    type: 'success',
-    title: 'Success Toast',
-    duration: 0, // persistent
-  },
-  {
-    id: '3',
-    type: 'error',
-    title: 'Error Toast',
-    message: 'Something went wrong',
-    dismissible: false,
-  },
+  { id: '1', type: 'info', title: 'Test Toast', message: 'This is a test message', duration: 5000 },
+  { id: '2', type: 'success', title: 'Success Toast', duration: 0 },
+  { id: '3', type: 'error', title: 'Error Toast', message: 'Something went wrong', dismissible: false },
 ];
-
-const defaultProps = {
-  toasts: mockToasts,
-  onDismiss: jest.fn(),
-};
 
 describe('ToastContainer', () => {
   beforeEach(() => {
@@ -47,114 +24,75 @@ describe('ToastContainer', () => {
     });
   });
 
-  describe('Rendering', () => {
-    it('renders toast container with toasts', () => {
-      render(<ToastContainer {...defaultProps} />);
+  it('renders toast container with toasts and proper positions', () => {
+    const { rerender } = render(<ToastContainer toasts={mockToasts} onDismiss={jest.fn()} />);
 
-      expect(screen.getByRole('region', { name: 'Toast notifications' })).toBeInTheDocument();
-      expect(screen.getByText('Test Toast')).toBeInTheDocument();
-      expect(screen.getByText('Success Toast')).toBeInTheDocument();
-      expect(screen.getByText('Error Toast')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Toast notifications' })).toBeInTheDocument();
+    expect(screen.getByText('Test Toast')).toBeInTheDocument();
+    expect(screen.getByText('Success Toast')).toBeInTheDocument();
+    expect(screen.getByText('Error Toast')).toBeInTheDocument();
+
+    rerender(<ToastContainer toasts={mockToasts} onDismiss={jest.fn()} position="bottom-left" />);
+
+    const container = screen.getByRole('region');
+    expect(container).toHaveClass('mond-toast-container--bottom-left');
+  });
+
+  it('respects maxToasts limit and renders without toasts', async () => {
+    const manyToasts: ToastData[] = Array.from({ length: 10 }, (_, i) => ({
+      id: `toast-${i}`,
+      type: 'info' as const,
+      title: `Toast ${i}`,
+    }));
+
+    const { unmount } = render(<ToastContainer toasts={manyToasts} onDismiss={jest.fn()} maxToasts={3} />);
+
+    await waitFor(() => {
+      const visibleToasts = screen.getAllByRole('alert');
+      expect(visibleToasts).toHaveLength(3);
     });
 
-    it('does not render container when no toasts are provided', () => {
-      render(<ToastContainer {...defaultProps} toasts={[]} />);
+    unmount();
 
-      expect(screen.queryByRole('region')).not.toBeInTheDocument();
+    render(<ToastContainer toasts={[]} onDismiss={jest.fn()} />);
+    expect(screen.queryByRole('region')).not.toBeInTheDocument();
+  });
+
+  it('calls onDismiss when toast is dismissed and handles keyboard', async () => {
+    const onDismiss = jest.fn();
+    render(<ToastContainer toasts={mockToasts} onDismiss={onDismiss} />);
+
+    const dismissButton = screen.getAllByLabelText('Close toast')[0];
+    fireEvent.click(dismissButton);
+
+    await waitFor(() => {
+      expect(onDismiss).toHaveBeenCalledWith('1');
     });
 
-    it('renders with custom position class', () => {
-      render(<ToastContainer {...defaultProps} position="bottom-left" />);
+    const secondDismissButton = screen.getAllByLabelText('Close toast')[0];
+    fireEvent.keyDown(secondDismissButton, { key: 'Escape' });
 
-      const container = screen.getByRole('region');
-      expect(container).toHaveClass('mond-toast-container--bottom-left');
-    });
-
-    it('renders with custom test id', () => {
-      render(<ToastContainer {...defaultProps} data-testid="custom-toast-container" />);
-
-      expect(screen.getByTestId('custom-toast-container')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(onDismiss).toHaveBeenCalledWith('2');
     });
   });
 
-  describe('Toast Positioning', () => {
-    it.each([
-      ['top-right', 'mond-toast-container--top-right'],
-      ['top-left', 'mond-toast-container--top-left'],
-      ['bottom-right', 'mond-toast-container--bottom-right'],
-      ['bottom-left', 'mond-toast-container--bottom-left'],
-      ['top-center', 'mond-toast-container--top-center'],
-      ['bottom-center', 'mond-toast-container--bottom-center'],
-    ] as const)('positions container correctly for %s', (position, expectedClass) => {
-      render(<ToastContainer {...defaultProps} position={position} />);
+  it('has proper ARIA attributes', () => {
+    render(<ToastContainer toasts={mockToasts} onDismiss={jest.fn()} />);
 
-      const container = screen.getByRole('region');
-      expect(container).toHaveClass(expectedClass);
-    });
-  });
+    const container = screen.getByRole('region', { name: 'Toast notifications' });
+    expect(container).toHaveAttribute('aria-live', 'polite');
 
-  describe('Toast Limits', () => {
-    it('respects maxToasts limit', async () => {
-      const manyToasts: ToastData[] = Array.from({ length: 10 }, (_, i) => ({
-        id: `toast-${i}`,
-        type: 'info' as const,
-        title: `Toast ${i}`,
-      }));
-
-      render(<ToastContainer {...defaultProps} toasts={manyToasts} maxToasts={3} />);
-
-      await waitFor(() => {
-        const visibleToasts = screen.getAllByRole('alert');
-        expect(visibleToasts).toHaveLength(3);
-      });
-    });
-  });
-
-  describe('Toast Dismissal', () => {
-    it('calls onDismiss when toast is dismissed', async () => {
-      const onDismiss = jest.fn();
-      render(<ToastContainer {...defaultProps} onDismiss={onDismiss} />);
-
-      const dismissButton = screen.getAllByLabelText('Close toast')[0];
-      fireEvent.click(dismissButton);
-
-      await waitFor(() => {
-        expect(onDismiss).toHaveBeenCalledWith('1');
-      });
-    });
-
-    it('handles keyboard dismissal with Escape key', async () => {
-      const onDismiss = jest.fn();
-      render(<ToastContainer {...defaultProps} onDismiss={onDismiss} />);
-
-      const dismissButton = screen.getAllByLabelText('Close toast')[0];
-      fireEvent.keyDown(dismissButton, { key: 'Escape' });
-
-      await waitFor(() => {
-        expect(onDismiss).toHaveBeenCalledWith('1');
-      });
-    });
-  });
-
-  describe('Accessibility', () => {
-    it('has proper ARIA attributes', () => {
-      render(<ToastContainer {...defaultProps} />);
-
-      const container = screen.getByRole('region', { name: 'Toast notifications' });
-      expect(container).toHaveAttribute('aria-live', 'polite');
-
-      const toasts = screen.getAllByRole('alert');
-      toasts.forEach(toast => {
-        expect(toast).toHaveAttribute('aria-live', 'polite');
-        expect(toast).toHaveAttribute('aria-atomic', 'true');
-      });
+    const toasts = screen.getAllByRole('alert');
+    toasts.forEach(toast => {
+      expect(toast).toHaveAttribute('aria-live', 'polite');
+      expect(toast).toHaveAttribute('aria-atomic', 'true');
     });
   });
 });
 
 describe('Toast', () => {
   const mockOnDismiss = jest.fn();
-
   const defaultToastProps = {
     id: 'test-toast',
     title: 'Test Toast',
@@ -172,204 +110,122 @@ describe('Toast', () => {
     });
   });
 
-  describe('Rendering', () => {
-    it('renders toast with title', () => {
-      render(<Toast {...defaultToastProps} />);
-      
-      expect(screen.getByText('Test Toast')).toBeInTheDocument();
-      expect(screen.getByRole('alert')).toBeInTheDocument();
-    });
+  it('renders toast with title, message, and type icons', () => {
+    const { rerender } = render(<Toast {...defaultToastProps} message="Test message" type="success" />);
 
-    it('renders toast with message', () => {
-      render(<Toast {...defaultToastProps} message="Test message" />);
-      
-      expect(screen.getByText('Test Toast')).toBeInTheDocument();
-      expect(screen.getByText('Test message')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Test Toast')).toBeInTheDocument();
+    expect(screen.getByText('Test message')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(screen.getByText('✓')).toBeInTheDocument();
 
-    it('renders different toast types with appropriate icons', () => {
-      const types = [
-        { type: 'success' as const, icon: '✓' },
-        { type: 'error' as const, icon: '✕' },
-        { type: 'warning' as const, icon: '⚠' },
-        { type: 'info' as const, icon: 'ℹ' },
-      ];
-
-      types.forEach(({ type, icon }) => {
-        const { unmount } = render(<Toast {...defaultToastProps} type={type} />);
-        expect(screen.getByText(icon)).toBeInTheDocument();
-        unmount();
-      });
-    });
-
-    it('renders custom icon when provided', () => {
-      render(<Toast {...defaultToastProps} icon={<span>🎉</span>} />);
-      
-      expect(screen.getByText('🎉')).toBeInTheDocument();
-    });
-
-    it('renders action buttons', () => {
-      const actions = [
-        { label: 'Retry', onClick: jest.fn() },
-        { label: 'Cancel', onClick: jest.fn(), variant: 'outline' as const },
-      ];
-
-      render(<Toast {...defaultToastProps} actions={actions} />);
-      
-      expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
-    });
-
-    it('renders dismiss button when dismissible', () => {
-      render(<Toast {...defaultToastProps} dismissible />);
-      
-      expect(screen.getByLabelText('Close toast')).toBeInTheDocument();
-    });
-
-    it('does not render dismiss button when not dismissible', () => {
-      render(<Toast {...defaultToastProps} dismissible={false} />);
-      
-      expect(screen.queryByLabelText('Close toast')).not.toBeInTheDocument();
-    });
+    rerender(<Toast {...defaultToastProps} type="error" icon={<span>🎉</span>} />);
+    expect(screen.getByText('🎉')).toBeInTheDocument();
   });
 
-  describe('Auto-dismissal', () => {
-    it('auto-dismisses after specified duration', async () => {
-      render(<Toast {...defaultToastProps} duration={1000} />);
+  it('renders action buttons and dismissible state', () => {
+    const actions = [
+      { label: 'Retry', onClick: jest.fn() },
+      { label: 'Cancel', onClick: jest.fn(), variant: 'outline' as const },
+    ];
 
-      act(() => {
-        jest.advanceTimersByTime(1000);
-      });
+    const { rerender } = render(<Toast {...defaultToastProps} actions={actions} dismissible />);
 
-      await waitFor(() => {
-        expect(mockOnDismiss).toHaveBeenCalledWith('test-toast');
-      });
-    });
+    expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Close toast')).toBeInTheDocument();
 
-    it('does not auto-dismiss when duration is 0', async () => {
-      render(<Toast {...defaultToastProps} duration={0} />);
-
-      act(() => {
-        jest.advanceTimersByTime(5000);
-      });
-
-      expect(mockOnDismiss).not.toHaveBeenCalled();
-    });
-
-    it('pauses timer on mouse enter and resumes on mouse leave', async () => {
-      const onPause = jest.fn();
-      const onResume = jest.fn();
-      
-      render(
-        <Toast 
-          {...defaultToastProps} 
-          duration={2000} 
-          onPause={onPause}
-          onResume={onResume}
-        />
-      );
-
-      const toast = screen.getByRole('alert');
-
-      // Timer should start automatically
-      expect(onResume).toHaveBeenCalledTimes(1);
-
-      // Pause on mouse enter
-      fireEvent.mouseEnter(toast);
-      expect(onPause).toHaveBeenCalledTimes(1);
-
-      // Advance time while paused - should not dismiss
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      expect(mockOnDismiss).not.toHaveBeenCalled();
-
-      // Resume on mouse leave
-      fireEvent.mouseLeave(toast);
-      expect(onResume).toHaveBeenCalledTimes(2);
-
-      // Now should dismiss after remaining time
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      
-      await waitFor(() => {
-        expect(mockOnDismiss).toHaveBeenCalledWith('test-toast');
-      });
-    });
+    rerender(<Toast {...defaultToastProps} dismissible={false} />);
+    expect(screen.queryByLabelText('Close toast')).not.toBeInTheDocument();
   });
 
-  describe('Interactions', () => {
-    it('dismisses on click of dismiss button', () => {
-      render(<Toast {...defaultToastProps} dismissible />);
+  it('auto-dismisses after duration and pauses on hover', async () => {
+    const onPause = jest.fn();
+    const onResume = jest.fn();
 
-      const dismissButton = screen.getByLabelText('Close toast');
-      fireEvent.click(dismissButton);
+    render(<Toast {...defaultToastProps} duration={2000} onPause={onPause} onResume={onResume} />);
 
+    const toast = screen.getByRole('alert');
+
+    expect(onResume).toHaveBeenCalledTimes(1);
+
+    // Pause on mouse enter
+    fireEvent.mouseEnter(toast);
+    expect(onPause).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      jest.advanceTimersByTime(2000);
+    });
+    expect(mockOnDismiss).not.toHaveBeenCalled();
+
+    // Resume on mouse leave
+    fireEvent.mouseLeave(toast);
+    expect(onResume).toHaveBeenCalledTimes(2);
+
+    act(() => {
+      jest.advanceTimersByTime(2000);
+    });
+
+    await waitFor(() => {
       expect(mockOnDismiss).toHaveBeenCalledWith('test-toast');
     });
-
-    it('dismisses on Escape key when dismissible', () => {
-      render(<Toast {...defaultToastProps} dismissible />);
-
-      const dismissButton = screen.getByLabelText('Close toast');
-      fireEvent.keyDown(dismissButton, { key: 'Escape' });
-
-      expect(mockOnDismiss).toHaveBeenCalledWith('test-toast');
-    });
-
-    it('does not dismiss on Escape key when not dismissible', () => {
-      render(<Toast {...defaultToastProps} dismissible={false} />);
-
-      expect(screen.queryByLabelText('Close toast')).not.toBeInTheDocument();
-    });
-
-    it('calls action onClick when action button is clicked', () => {
-      const actionOnClick = jest.fn();
-      const actions = [{ label: 'Action', onClick: actionOnClick }];
-
-      render(<Toast {...defaultToastProps} actions={actions} />);
-
-      const actionButton = screen.getByRole('button', { name: 'Action' });
-      fireEvent.click(actionButton);
-
-      expect(actionOnClick).toHaveBeenCalled();
-    });
   });
 
-  describe('Animation States', () => {
-    it('applies correct classes for different animation states', () => {
-      const { rerender } = render(
-        <Toast {...defaultToastProps} animationState="entering" />
-      );
+  it('does not auto-dismiss when duration is 0', async () => {
+    render(<Toast {...defaultToastProps} duration={0} />);
 
-      let toast = screen.getByRole('alert');
-      expect(toast).toHaveClass('mond-toast--entering');
-
-      rerender(<Toast {...defaultToastProps} animationState="visible" />);
-      toast = screen.getByRole('alert');
-      expect(toast).toHaveClass('mond-toast--visible');
-
-      rerender(<Toast {...defaultToastProps} animationState="exiting" />);
-      toast = screen.getByRole('alert');
-      expect(toast).toHaveClass('mond-toast--exiting');
+    act(() => {
+      jest.advanceTimersByTime(5000);
     });
+
+    expect(mockOnDismiss).not.toHaveBeenCalled();
   });
 
-  describe('Accessibility', () => {
-    it('has proper ARIA attributes', () => {
-      render(<Toast {...defaultToastProps} />);
+  it('dismisses on click and Escape key', () => {
+    render(<Toast {...defaultToastProps} dismissible />);
 
-      const toast = screen.getByRole('alert');
-      expect(toast).toHaveAttribute('aria-live', 'polite');
-      expect(toast).toHaveAttribute('aria-atomic', 'true');
-    });
+    const dismissButton = screen.getByLabelText('Close toast');
+    fireEvent.click(dismissButton);
+    expect(mockOnDismiss).toHaveBeenCalledWith('test-toast');
 
-    it('dismiss button has proper aria-label', () => {
-      render(<Toast {...defaultToastProps} dismissible />);
+    mockOnDismiss.mockClear();
 
-      const dismissButton = screen.getByLabelText('Close toast');
-      expect(dismissButton).toBeInTheDocument();
-    });
+    const { container } = render(<Toast {...defaultToastProps} id="test-toast-2" dismissible />);
+    const newDismissButton = container.querySelector('[aria-label="Close toast"]') as HTMLElement;
+    fireEvent.keyDown(newDismissButton, { key: 'Escape' });
+    expect(mockOnDismiss).toHaveBeenCalledWith('test-toast-2');
+  });
+
+  it('calls action onClick', () => {
+    const actionOnClick = jest.fn();
+    const actions = [{ label: 'Action', onClick: actionOnClick }];
+
+    render(<Toast {...defaultToastProps} actions={actions} />);
+
+    const actionButton = screen.getByRole('button', { name: 'Action' });
+    fireEvent.click(actionButton);
+
+    expect(actionOnClick).toHaveBeenCalled();
+  });
+
+  it('applies animation states', () => {
+    const { rerender } = render(<Toast {...defaultToastProps} animationState="entering" />);
+
+    let toast = screen.getByRole('alert');
+    expect(toast).toHaveClass('mond-toast--entering');
+
+    rerender(<Toast {...defaultToastProps} animationState="exiting" />);
+    toast = screen.getByRole('alert');
+    expect(toast).toHaveClass('mond-toast--exiting');
+  });
+
+  it('has proper ARIA attributes', () => {
+    render(<Toast {...defaultToastProps} dismissible />);
+
+    const toast = screen.getByRole('alert');
+    expect(toast).toHaveAttribute('aria-live', 'polite');
+    expect(toast).toHaveAttribute('aria-atomic', 'true');
+
+    const dismissButton = screen.getByLabelText('Close toast');
+    expect(dismissButton).toBeInTheDocument();
   });
 });

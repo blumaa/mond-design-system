@@ -22,14 +22,14 @@ Wrap your application with the ThemeProvider to enable theming:
 
 ```tsx
 import { ThemeProvider } from '@mond-design-system/theme';
-import { mondTheme } from '@mond-design-system/theme/brands';
+
 import { useState } from 'react';
 
 function App() {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
 
   return (
-    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+    <ThemeProvider colorScheme={colorScheme}>
       <YourComponents />
     </ThemeProvider>
   );
@@ -157,7 +157,7 @@ function App() {
   };
 
   return (
-    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+    <ThemeProvider colorScheme={colorScheme}>
       <Button onClick={toggleTheme}>
         Toggle to {colorScheme === 'light' ? 'Dark' : 'Light'} Mode
       </Button>

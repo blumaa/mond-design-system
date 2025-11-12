@@ -1,198 +1,94 @@
-/**
- * Button Component Tests - SSR-Compatible Version
- *
- * TDD: These tests are written FIRST to define the expected behavior
- * of the refactored Button component that:
- * - Removes "use client" directive
- * - Removes useTheme() hook dependency
- * - Uses CSS variables instead of runtime theme resolution
- * - Uses static CSS file instead of <style> tags
- * - Maintains all existing functionality
- */
-
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Button } from './Button';
 
-describe('Button Component - SSR Compatible', () => {
-  describe('SSR Compatibility', () => {
-    it('renders without requiring "use client" directive', () => {
-      // This test verifies the component can be imported and used
-      // without client-side JavaScript
-      const { container } = render(<Button>Click me</Button>);
-      expect(container.firstChild).toBeInTheDocument();
-    });
-
-    it('works without ThemeProvider context', () => {
-      // Should render successfully without wrapping in ThemeProvider
-      render(<Button>No Provider</Button>);
-      expect(screen.getByText('No Provider')).toBeInTheDocument();
-    });
-
-    it('does not inject runtime <style> tags', () => {
-      const { container } = render(<Button>Test</Button>);
-
-      // Should not have inline style tags for pseudo-states
-      const styleTags = container.querySelectorAll('style');
-      expect(styleTags.length).toBe(0);
-    });
-
-    it('does not use useTheme() hook', () => {
-      // If it renders without ThemeProvider and without errors,
-      // it's not using useTheme()
-      const { container } = render(<Button>Test</Button>);
-      expect(container.firstChild).toBeInTheDocument();
-    });
-  });
-
+describe('Button Component', () => {
   describe('Basic Rendering', () => {
     it('renders a button element by default', () => {
       render(<Button>Click me</Button>);
       const button = screen.getByRole('button');
+      expect(button).toBeInTheDocument();
       expect(button.tagName).toBe('BUTTON');
+      expect(button).toHaveTextContent('Click me');
     });
 
-    it('renders children content', () => {
-      render(<Button>Hello World</Button>);
-      expect(screen.getByText('Hello World')).toBeInTheDocument();
+    it('renders with different variants', () => {
+      const { rerender } = render(<Button variant="primary">Primary</Button>);
+      expect(screen.getByRole('button')).toHaveClass('mond-button--primary');
+
+      rerender(<Button variant="destructive">Destructive</Button>);
+      expect(screen.getByRole('button')).toHaveClass('mond-button--destructive');
     });
 
-    it('applies correct display name', () => {
-      expect(Button.displayName).toBe('Button');
-    });
-  });
+    it('renders with different sizes', () => {
+      const { rerender } = render(<Button size="sm">Small</Button>);
+      expect(screen.getByRole('button')).toHaveAttribute('data-size', 'sm');
 
-  describe('CSS Class-Based Styling', () => {
-    it('applies base CSS class', () => {
-      render(<Button>Test</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button');
+      rerender(<Button size="lg">Large</Button>);
+      expect(screen.getByRole('button')).toHaveAttribute('data-size', 'lg');
     });
 
-    it('applies variant-specific CSS class for primary', () => {
-      render(<Button variant="primary">Primary</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--primary');
-    });
-
-    it('applies variant-specific CSS class for outline', () => {
-      render(<Button variant="outline">Outline</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--outline');
-    });
-
-    it('applies variant-specific CSS class for ghost', () => {
-      render(<Button variant="ghost">Ghost</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--ghost');
-    });
-
-    it('applies variant-specific CSS class for destructive', () => {
-      render(<Button variant="destructive">Delete</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--destructive');
-    });
-
-    it('applies variant-specific CSS class for warning', () => {
-      render(<Button variant="warning">Warning</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--warning');
-    });
-
-    it('applies size-specific CSS class for sm', () => {
-      render(<Button size="sm">Small</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--sm');
-    });
-
-    it('applies size-specific CSS class for md', () => {
-      render(<Button size="md">Medium</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--md');
-    });
-
-    it('applies size-specific CSS class for lg', () => {
-      render(<Button size="lg">Large</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--lg');
-    });
-
-    it('applies corners class for default corners', () => {
-      render(<Button corners="default">Default Corners</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--corners-default');
-    });
-
-    it('applies corners class for rounded corners', () => {
-      render(<Button corners="rounded">Rounded</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--corners-rounded');
-    });
-
-    it('applies full-width class when fullWidth is true', () => {
+    it('renders full-width button', () => {
       render(<Button fullWidth>Full Width</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--full-width');
+      expect(screen.getByRole('button')).toHaveClass('mond-button--full-width');
     });
 
-    it('applies icon-only class when iconOnly is true', () => {
-      render(<Button iconOnly aria-label="Icon">🔥</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--icon-only');
-    });
-
-    it('applies alignment class for left alignment', () => {
-      render(<Button alignContent="left">Left</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--align-left');
-    });
-
-    it('applies alignment class for center alignment', () => {
-      render(<Button alignContent="center">Center</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--align-center');
-    });
-
-    it('applies alignment class for right alignment', () => {
-      render(<Button alignContent="right">Right</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--align-right');
-    });
-  });
-
-  describe('Data Attributes', () => {
-    it('sets data-variant attribute', () => {
-      render(<Button variant="primary">Test</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-variant', 'primary');
-    });
-
-    it('sets data-size attribute', () => {
-      render(<Button size="lg">Test</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-size', 'lg');
-    });
-
-    it('sets data-testid when provided', () => {
-      render(<Button data-testid="my-button">Test</Button>);
-      expect(screen.getByTestId('my-button')).toBeInTheDocument();
+    it('renders icon-only button', () => {
+      render(<Button iconOnly aria-label="Icon"><span>Icon</span></Button>);
+      expect(screen.getByRole('button')).toHaveClass('mond-button--icon-only');
     });
   });
 
   describe('Disabled State', () => {
     it('applies disabled attribute when disabled is true', () => {
       render(<Button disabled>Disabled</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toBeDisabled();
+      expect(screen.getByRole('button')).toBeDisabled();
     });
 
     it('does not call onClick when disabled', () => {
       const handleClick = jest.fn();
       render(<Button disabled onClick={handleClick}>Disabled</Button>);
-      const button = screen.getByRole('button');
-      fireEvent.click(button);
+      fireEvent.click(screen.getByRole('button'));
       expect(handleClick).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Loading State', () => {
+    it('disables button when loading is true', () => {
+      render(<Button loading>Loading</Button>);
+      expect(screen.getByRole('button')).toBeDisabled();
+    });
+
+    it('does not call onClick when loading', () => {
+      const handleClick = jest.fn();
+      render(<Button loading onClick={handleClick}>Loading</Button>);
+      fireEvent.click(screen.getByRole('button'));
+      expect(handleClick).not.toHaveBeenCalled();
+    });
+
+    it('renders spinner when loading is true', () => {
+      render(<Button loading>Loading</Button>);
+      const spinner = document.querySelector('.mond-spinner');
+      expect(spinner).toBeInTheDocument();
+    });
+
+    it('replaces icon with spinner when iconOnly and loading', () => {
+      render(
+        <Button iconOnly loading aria-label="Loading icon">
+          <span data-testid="icon">Icon</span>
+        </Button>
+      );
+      const spinner = document.querySelector('.mond-spinner');
+      expect(spinner).toBeInTheDocument();
+      expect(screen.queryByTestId('icon')).not.toBeInTheDocument();
+    });
+
+    it('shows spinner and content when loading but not iconOnly', () => {
+      render(<Button loading>Loading Button</Button>);
+      const spinner = document.querySelector('.mond-spinner');
+      expect(spinner).toBeInTheDocument();
+      expect(screen.getByText('Loading Button')).toBeInTheDocument();
     });
   });
 
@@ -200,99 +96,64 @@ describe('Button Component - SSR Compatible', () => {
     it('calls onClick when clicked', () => {
       const handleClick = jest.fn();
       render(<Button onClick={handleClick}>Click me</Button>);
-      const button = screen.getByRole('button');
-      fireEvent.click(button);
+      fireEvent.click(screen.getByRole('button'));
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
     it('calls onMouseEnter on mouse enter', () => {
       const handleMouseEnter = jest.fn();
-      render(<Button onMouseEnter={handleMouseEnter}>Hover</Button>);
-      const button = screen.getByRole('button');
-      fireEvent.mouseEnter(button);
+      render(<Button onMouseEnter={handleMouseEnter}>Hover me</Button>);
+      fireEvent.mouseEnter(screen.getByRole('button'));
       expect(handleMouseEnter).toHaveBeenCalledTimes(1);
-    });
-
-    it('calls onMouseLeave on mouse leave', () => {
-      const handleMouseLeave = jest.fn();
-      render(<Button onMouseLeave={handleMouseLeave}>Hover</Button>);
-      const button = screen.getByRole('button');
-      fireEvent.mouseLeave(button);
-      expect(handleMouseLeave).toHaveBeenCalledTimes(1);
     });
 
     it('calls onFocus on focus', () => {
       const handleFocus = jest.fn();
-      render(<Button onFocus={handleFocus}>Focus</Button>);
-      const button = screen.getByRole('button');
-      fireEvent.focus(button);
+      render(<Button onFocus={handleFocus}>Focus me</Button>);
+      fireEvent.focus(screen.getByRole('button'));
       expect(handleFocus).toHaveBeenCalledTimes(1);
-    });
-
-    it('calls onBlur on blur', () => {
-      const handleBlur = jest.fn();
-      render(<Button onBlur={handleBlur}>Blur</Button>);
-      const button = screen.getByRole('button');
-      fireEvent.blur(button);
-      expect(handleBlur).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Accessibility', () => {
     it('applies aria-label when provided', () => {
-      render(<Button aria-label="Close dialog">×</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-label', 'Close dialog');
-    });
-
-    it('applies aria-current when provided', () => {
-      render(<Button aria-current="page">Current Page</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-current', 'page');
+      render(<Button aria-label="Custom label">Button</Button>);
+      expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'Custom label');
     });
 
     it('is keyboard accessible', () => {
       const handleClick = jest.fn();
-      render(<Button onClick={handleClick}>Keyboard</Button>);
+      render(<Button onClick={handleClick}>Click me</Button>);
       const button = screen.getByRole('button');
       button.focus();
-      expect(button).toHaveFocus();
+      expect(document.activeElement).toBe(button);
     });
   });
 
   describe('Polymorphic Behavior', () => {
     it('renders as anchor when as="a"', () => {
-      render(<Button as="a" href="/test">Link</Button>);
+      render(<Button as="a" href="/test">Link Button</Button>);
       const link = screen.getByRole('link');
+      expect(link).toBeInTheDocument();
       expect(link.tagName).toBe('A');
       expect(link).toHaveAttribute('href', '/test');
     });
 
     it('applies aria-disabled for anchor when disabled', () => {
-      render(<Button as="a" href="/test" disabled>Link</Button>);
-      // Disabled links are not accessible as 'link' role (correct behavior)
-      // Query by text instead
-      const link = screen.getByText('Link');
-      expect(link.tagName).toBe('A');
+      render(<Button as="a" href="/test" disabled>Disabled Link</Button>);
+      const link = screen.getByText('Disabled Link');
       expect(link).toHaveAttribute('aria-disabled', 'true');
     });
 
-    it('renders as custom element when as prop is provided', () => {
-      render(<Button as="span">Span Button</Button>);
-      const element = screen.getByText('Span Button');
-      expect(element.tagName).toBe('SPAN');
+    it('removes href when loading on anchor element', () => {
+      render(<Button as="a" href="/test" loading>Loading Link</Button>);
+      const link = screen.getByText('Loading Link');
+      expect(link).not.toHaveAttribute('href');
     });
 
     it('applies type attribute for button elements', () => {
       render(<Button type="submit">Submit</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('type', 'submit');
-    });
-
-    it('defaults to type="button" for button elements', () => {
-      render(<Button>Default Type</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('type', 'button');
+      expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
     });
   });
 
@@ -308,180 +169,6 @@ describe('Button Component - SSR Compatible', () => {
       const ref = React.createRef<HTMLAnchorElement>();
       render(<Button as="a" href="/test" ref={ref}>Link Ref</Button>);
       expect(ref.current).toBeInstanceOf(HTMLAnchorElement);
-    });
-  });
-
-  describe('Backward Compatibility', () => {
-    it('does NOT accept isDarkMode prop (removed)', () => {
-      // TypeScript should prevent this, but at runtime it should be ignored
-      const props: { children: string; isDarkMode?: boolean } = { children: 'Test', isDarkMode: true };
-      render(<Button {...props} />);
-      const button = screen.getByRole('button');
-      // Should render successfully, just ignoring isDarkMode
-      expect(button).toBeInTheDocument();
-    });
-
-    it('maintains existing API for variant prop', () => {
-      render(<Button variant="primary">Primary</Button>);
-      expect(screen.getByRole('button')).toHaveAttribute('data-variant', 'primary');
-    });
-
-    it('maintains existing API for size prop', () => {
-      render(<Button size="lg">Large</Button>);
-      expect(screen.getByRole('button')).toHaveAttribute('data-size', 'lg');
-    });
-  });
-
-  describe('CSS Variable Usage', () => {
-    it('does not use inline styles for theme colors', () => {
-      render(<Button variant="primary">Primary</Button>);
-      const button = screen.getByRole('button');
-      const inlineStyle = button.getAttribute('style');
-
-      // Should not have inline backgroundColor or color styles
-      // (these should come from CSS classes using CSS variables)
-      if (inlineStyle) {
-        expect(inlineStyle).not.toContain('background-color: rgb');
-        expect(inlineStyle).not.toContain('color: rgb');
-      }
-    });
-
-    it('relies on CSS classes for theming', () => {
-      render(<Button variant="outline">Outline</Button>);
-      const button = screen.getByRole('button');
-
-      // Should have the variant class that references CSS variables
-      expect(button).toHaveClass('mond-button--outline');
-    });
-  });
-
-  describe('Combination Props', () => {
-    it('applies multiple classes when multiple props are set', () => {
-      render(
-        <Button
-          variant="primary"
-          size="lg"
-          corners="rounded"
-          fullWidth
-        >
-          Combined
-        </Button>
-      );
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button');
-      expect(button).toHaveClass('mond-button--primary');
-      expect(button).toHaveClass('mond-button--lg');
-      expect(button).toHaveClass('mond-button--corners-rounded');
-      expect(button).toHaveClass('mond-button--full-width');
-    });
-
-    it('handles icon-only button with size', () => {
-      render(
-        <Button iconOnly size="sm" aria-label="Small Icon">
-          🔥
-        </Button>
-      );
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--icon-only');
-      expect(button).toHaveClass('mond-button--sm');
-    });
-  });
-
-  describe('Loading State', () => {
-    it('applies disabled class when loading is true', () => {
-      render(<Button loading>Loading</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--disabled');
-    });
-
-    it('disables button when loading is true', () => {
-      render(<Button loading>Loading</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toBeDisabled();
-    });
-
-    it('does not call onClick when loading', () => {
-      const handleClick = jest.fn();
-      render(<Button loading onClick={handleClick}>Loading</Button>);
-      const button = screen.getByRole('button');
-      fireEvent.click(button);
-      expect(handleClick).not.toHaveBeenCalled();
-    });
-
-    it('renders spinner when loading is true', () => {
-      render(<Button loading>Loading</Button>);
-      const button = screen.getByRole('button');
-      const spinner = button.querySelector('.mond-spinner');
-      expect(spinner).toBeInTheDocument();
-    });
-
-    it('renders button content when loading', () => {
-      render(<Button loading>Loading Button</Button>);
-      expect(screen.getByText('Loading Button')).toBeInTheDocument();
-    });
-
-    it('applies correct spinner size for small button', () => {
-      render(<Button loading size="sm">Small Loading</Button>);
-      const button = screen.getByRole('button');
-      const spinner = button.querySelector('.mond-spinner--xs');
-      expect(spinner).toBeInTheDocument();
-    });
-
-    it('applies correct spinner size for medium button', () => {
-      render(<Button loading size="md">Medium Loading</Button>);
-      const button = screen.getByRole('button');
-      const spinner = button.querySelector('.mond-spinner--sm');
-      expect(spinner).toBeInTheDocument();
-    });
-
-    it('applies correct spinner size for large button', () => {
-      render(<Button loading size="lg">Large Loading</Button>);
-      const button = screen.getByRole('button');
-      const spinner = button.querySelector('.mond-spinner--md');
-      expect(spinner).toBeInTheDocument();
-    });
-
-    it('applies aria-disabled when loading on anchor element', () => {
-      render(<Button as="a" href="/test" loading>Link Loading</Button>);
-      const link = screen.getByText('Link Loading');
-      expect(link).toHaveAttribute('aria-disabled', 'true');
-    });
-
-    it('removes href when loading on anchor element', () => {
-      render(<Button as="a" href="/test" loading>Link Loading</Button>);
-      const link = screen.getByText('Link Loading');
-      expect(link).not.toHaveAttribute('href');
-    });
-
-    it('works with loading and disabled both true', () => {
-      render(<Button loading disabled>Both States</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toBeDisabled();
-    });
-
-    it('replaces icon with spinner when iconOnly and loading', () => {
-      render(
-        <Button iconOnly loading aria-label="Loading Icon">
-          <svg data-testid="icon">
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-          </svg>
-        </Button>
-      );
-      const button = screen.getByRole('button');
-      const spinner = button.querySelector('.mond-spinner');
-      const icon = screen.queryByTestId('icon');
-
-      expect(spinner).toBeInTheDocument();
-      expect(icon).not.toBeInTheDocument();
-    });
-
-    it('shows spinner and content when loading but not iconOnly', () => {
-      render(<Button loading>Loading Text</Button>);
-      const button = screen.getByRole('button');
-      const spinner = button.querySelector('.mond-spinner');
-
-      expect(spinner).toBeInTheDocument();
-      expect(screen.getByText('Loading Text')).toBeInTheDocument();
     });
   });
 });

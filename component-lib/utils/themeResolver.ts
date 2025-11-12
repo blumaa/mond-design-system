@@ -1,5 +1,4 @@
 import { tokens, shadows, spacing, radii } from '../tokens';
-import type { BrandTheme } from '../components/providers/ThemeProvider';
 
 export type Theme = 'light' | 'dark';
 
@@ -31,21 +30,19 @@ function isRawValue(value: string): boolean {
 
 /**
  * Resolves a semantic token to its actual color value based on the current theme
+ * Used by build scripts to generate CSS variables
  *
  * @param semanticTokenPath - Path to semantic token (e.g., 'text.primary')
  * @param theme - Current theme ('light' or 'dark')
- * @param _brandTheme - (Deprecated) Optional brand theme for overrides - no longer used as brand colors are now CSS variables
  * @returns Resolved hex color value or CSS variable reference for brand colors
  *
  * @example
  * resolveSemanticToken('text.primary', 'light') // returns '#0f172a' (gray.900)
  * resolveSemanticToken('interactive.primary.background', 'dark') // returns 'var(--mond-color-brand-primary-500)'
- * resolveSemanticToken('interactive.primary.background', 'light') // returns 'var(--mond-color-brand-primary-600)'
  */
 export function resolveSemanticToken(
   semanticTokenPath: string,
-  theme: Theme = 'light',
-  _brandTheme?: BrandTheme
+  theme: Theme = 'light'
 ): string {
   // Check if it's a raw value (not a token path)
   if (isRawValue(semanticTokenPath)) {
@@ -160,40 +157,3 @@ export function resolveSemanticToken(
   return resolvedColor;
 }
 
-/**
- * Creates a theme resolver function that automatically uses the specified theme
- * 
- * @param theme - The theme to use for all resolutions
- * @param brandTheme - Optional brand theme for color overrides
- * @returns Function that resolves semantic tokens for the specified theme
- * 
- * @example
- * const lightTheme = createThemeResolver('light');
- * const darkTheme = createThemeResolver('dark');
- * const cypherTheme = createThemeResolver('light', cypherBrandTheme);
- * 
- * const textColor = lightTheme('text.primary'); // '#0f172a'
- * const darkTextColor = darkTheme('text.primary'); // '#f1f5f9'
- * const brandedButton = cypherTheme('interactive.primary.background'); // '#00ff94'
- */
-export function createThemeResolver(theme: Theme, brandTheme?: BrandTheme) {
-  return (semanticTokenPath: string): string => {
-    return resolveSemanticToken(semanticTokenPath, theme, brandTheme);
-  };
-}
-
-
-/**
- * Basic theme hook without brand context (legacy/standalone usage)
- * For new components, use useTheme from ThemeProvider instead
- * 
- * @param isDarkMode - Whether dark mode is active
- * @returns Theme resolver function for current theme (no brand context)
- * @deprecated Use useTheme from ThemeProvider for brand-aware components
- */
-export function useBasicTheme(isDarkMode: boolean = false) {
-  const currentTheme: Theme = isDarkMode ? 'dark' : 'light';
-  
-  // For components outside of ThemeProvider, use default (no brand)
-  return createThemeResolver(currentTheme, undefined);
-}

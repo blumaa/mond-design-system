@@ -59,49 +59,6 @@ export interface ThemeProviderProps {
 }
 
 /**
- * Default brand theme (uses existing blue-based design system colors)
- */
-const defaultBrandTheme: BrandTheme = {
-  id: 'default',
-  name: 'Default Theme',
-  description: 'Default design system theme',
-  colors: {
-    brand: {
-      primary: {
-        50: '#f0f9ff',
-        100: '#e0f2fe',
-        200: '#bae6fd',
-        300: '#7dd3fc',
-        400: '#38bdf8',
-        500: '#0ea5e9',
-        600: '#0284c7',
-        700: '#0369a1',
-        800: '#075985',
-        900: '#0c4a6e',
-      },
-      success: {
-        500: '#22c55e',
-        600: '#16a34a',
-        700: '#15803d',
-        400: '#4ade80',
-      },
-      warning: {
-        500: '#f59e0b',
-        600: '#d97706',
-        700: '#b45309',
-        400: '#fbbf24',
-      },
-      error: {
-        500: '#ef4444',
-        600: '#dc2626',
-        700: '#b91c1c',
-        400: '#f87171',
-      },
-    },
-  },
-};
-
-/**
  * Generate inline CSS variable overrides for brand theme
  */
 function generateBrandCSSVariables(brandTheme: BrandTheme): React.CSSProperties {
@@ -174,58 +131,5 @@ export function ThemeProvider({
   );
 }
 
-// Export types for backward compatibility
+// Export types
 export type { Theme };
-
-/**
- * Backward compatibility: Deprecated hooks
- *
- * These hooks are provided for backward compatibility during migration.
- * They will be removed in a future major version.
- *
- * Migration guide:
- * - Instead of: const theme = useTheme(); const bg = theme('surface.background');
- * - Use: const bg = 'var(--mond-surface-background)';
- */
-
-import { createThemeResolver } from '../../utils/themeResolver';
-
-/**
- * @deprecated Use CSS variables directly instead
- * This hook now returns a static theme resolver with default values
- * Components using this hook should be migrated to use CSS variables
- */
-export function useTheme(isDarkMode?: boolean) {
-  // Return a static theme resolver for backward compatibility
-  // This allows components to build, but they should migrate to CSS variables
-  const theme = isDarkMode ? 'dark' : 'light';
-  return createThemeResolver(theme, defaultBrandTheme);
-}
-
-/**
- * @deprecated Use CSS variables directly instead
- */
-export interface ThemeContextValue {
-  theme: ReturnType<typeof createThemeResolver>;
-  colorScheme: Theme;
-  brandTheme: BrandTheme | null;
-}
-
-/**
- * @deprecated Use CSS variables directly instead
- * Returns default theme values for backward compatibility
- */
-export function useThemeContext(): ThemeContextValue {
-  return {
-    theme: createThemeResolver('light', defaultBrandTheme),
-    colorScheme: 'light',
-    brandTheme: defaultBrandTheme,
-  };
-}
-
-/**
- * @deprecated Use CSS variables directly instead
- */
-export function useThemeResolver() {
-  return createThemeResolver('light', defaultBrandTheme);
-}

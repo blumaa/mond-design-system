@@ -16,12 +16,12 @@ pnpm add @mond-design-system/theme
 
 ```tsx
 import { ThemeProvider } from '@mond-design-system/theme';
-import { mondTheme } from '@mond-design-system/theme/brands';
+
 import { Text, Heading, Icon, Button, Box } from '@mond-design-system/theme';
 
 function MyComponent() {
   return (
-    <ThemeProvider brandTheme={mondTheme} colorScheme="light">
+    <ThemeProvider colorScheme="light">
       <Box p={4}>
         <Heading level={1}>Welcome to Mond Design System</Heading>
         <Text variant="body-lg" semantic="secondary">
@@ -387,13 +387,13 @@ Wrap your application with ThemeProvider to enable automatic theme switching:
 
 ```tsx
 import { ThemeProvider } from '@mond-design-system/theme';
-import { mondTheme } from '@mond-design-system/theme/brands';
+
 
 function App() {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
 
   return (
-    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+    <ThemeProvider colorScheme={colorScheme}>
       {/* All components automatically adapt to the theme */}
       <Text semantic="primary">
         This text adapts to the current theme

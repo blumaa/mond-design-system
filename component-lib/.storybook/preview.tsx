@@ -2,7 +2,7 @@ import React from 'react';
 import type { Preview } from "@storybook/react";
 import { withThemeByClassName } from '@storybook/addon-themes';
 import { ThemeProvider } from '../components/providers/ThemeProvider';
-import { mondTheme, brand1Theme, brand2Theme } from '../brands';
+import { brand1Theme, brand2Theme } from '../brands';
 import './styles.css';
 
 const preview: Preview = {
@@ -58,12 +58,12 @@ const preview: Preview = {
       
       // Map brand IDs to brand theme objects
       const brandThemes = {
-        mond: mondTheme,
+        mond: undefined, // Use default theme
         'brand-1': brand1Theme,
         'brand-2': brand2Theme,
       };
-      
-      const brandTheme = brandThemes[selectedBrandId as keyof typeof brandThemes] || mondTheme;
+
+      const brandTheme = brandThemes[selectedBrandId as keyof typeof brandThemes];
       
       return (
         <ThemeProvider 

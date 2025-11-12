@@ -1,2 +1,2 @@
-export { ThemeProvider, useThemeContext, useThemeResolver, useTheme } from './ThemeProvider';
-export type { ThemeProviderProps, BrandTheme, ColorScale, ThemeContextValue } from './ThemeProvider';
+export { ThemeProvider } from './ThemeProvider';
+export type { ThemeProviderProps, BrandTheme, ColorScale, Theme } from './ThemeProvider';

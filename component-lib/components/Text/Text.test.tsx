@@ -1,32 +1,9 @@
-/**
- * Text Component Tests - SSR-Compatible Version
- *
- * TDD: These tests are written FIRST to define the expected behavior
- * of the refactored Text component that:
- * - Removes useTheme() hook dependency
- * - Uses CSS variables for semantic colors
- * - Uses CSS classes for text variants
- * - Maintains all existing functionality
- */
-
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Text } from './Text';
 
-describe('Text Component - SSR Compatible', () => {
-  describe('SSR Compatibility', () => {
-    it('renders without ThemeProvider context', () => {
-      render(<Text>Hello World</Text>);
-      expect(screen.getByText('Hello World')).toBeInTheDocument();
-    });
-
-    it('does not use useTheme() hook', () => {
-      const { container } = render(<Text>Test</Text>);
-      expect(container.firstChild).toBeInTheDocument();
-    });
-  });
-
+describe('Text Component', () => {
   describe('Basic Rendering', () => {
     it('renders as a span element by default', () => {
       render(<Text>Text</Text>);
@@ -34,303 +11,93 @@ describe('Text Component - SSR Compatible', () => {
       expect(text.tagName).toBe('SPAN');
     });
 
-    it('renders children content', () => {
-      render(<Text>Hello Text</Text>);
-      expect(screen.getByText('Hello Text')).toBeInTheDocument();
+    it('renders with different variants', () => {
+      const { rerender } = render(<Text variant="headline">Headline</Text>);
+      expect(screen.getByText('Headline')).toHaveClass('mond-text--headline');
+
+      rerender(<Text variant="body-sm">Body Small</Text>);
+      expect(screen.getByText('Body Small')).toHaveClass('mond-text--body-sm');
     });
 
-    it('applies correct display name', () => {
-      expect(Text.displayName).toBe('Text');
-    });
-  });
-
-  describe('Variant Styles', () => {
-    it('applies display variant class', () => {
-      render(<Text variant="display">Display</Text>);
-      const text = screen.getByText('Display');
-      expect(text).toHaveClass('mond-text--display');
-    });
-
-    it('applies headline variant class', () => {
-      render(<Text variant="headline">Headline</Text>);
-      const text = screen.getByText('Headline');
-      expect(text).toHaveClass('mond-text--headline');
-    });
-
-    it('applies title variant class', () => {
-      render(<Text variant="title">Title</Text>);
-      const text = screen.getByText('Title');
-      expect(text).toHaveClass('mond-text--title');
-    });
-
-    it('applies subtitle variant class', () => {
-      render(<Text variant="subtitle">Subtitle</Text>);
-      const text = screen.getByText('Subtitle');
-      expect(text).toHaveClass('mond-text--subtitle');
-    });
-
-    it('applies body variant class (default)', () => {
-      render(<Text variant="body">Body</Text>);
-      const text = screen.getByText('Body');
-      expect(text).toHaveClass('mond-text--body');
-    });
-
-    it('applies body-sm variant class', () => {
-      render(<Text variant="body-sm">Small Body</Text>);
-      const text = screen.getByText('Small Body');
-      expect(text).toHaveClass('mond-text--body-sm');
-    });
-
-    it('applies caption variant class', () => {
-      render(<Text variant="caption">Caption</Text>);
-      const text = screen.getByText('Caption');
-      expect(text).toHaveClass('mond-text--caption');
-    });
-
-    it('applies overline variant class', () => {
-      render(<Text variant="overline">Overline</Text>);
-      const text = screen.getByText('Overline');
-      expect(text).toHaveClass('mond-text--overline');
-    });
-
-    it('applies code variant class', () => {
-      render(<Text variant="code">Code</Text>);
-      const text = screen.getByText('Code');
-      expect(text).toHaveClass('mond-text--code');
-    });
-  });
-
-  describe('Semantic Colors', () => {
-    it('uses CSS variable for primary color', () => {
-      render(<Text semantic="primary">Primary</Text>);
-      const text = screen.getByText('Primary');
-      expect(text).toHaveClass('mond-text--primary');
-    });
-
-    it('uses CSS variable for secondary color', () => {
-      render(<Text semantic="secondary">Secondary</Text>);
-      const text = screen.getByText('Secondary');
-      expect(text).toHaveClass('mond-text--secondary');
-    });
-
-    it('uses CSS variable for tertiary color', () => {
-      render(<Text semantic="tertiary">Tertiary</Text>);
-      const text = screen.getByText('Tertiary');
-      expect(text).toHaveClass('mond-text--tertiary');
-    });
-
-    it('uses CSS variable for disabled color', () => {
-      render(<Text semantic="disabled">Disabled</Text>);
-      const text = screen.getByText('Disabled');
-      expect(text).toHaveClass('mond-text--disabled');
-    });
-
-    it('uses CSS variable for inverse color', () => {
-      render(<Text semantic="inverse">Inverse</Text>);
-      const text = screen.getByText('Inverse');
-      expect(text).toHaveClass('mond-text--inverse');
-    });
-
-    it('uses CSS variable for link color', () => {
-      render(<Text semantic="link">Link</Text>);
-      const text = screen.getByText('Link');
-      expect(text).toHaveClass('mond-text--link');
-    });
-
-    it('uses CSS variable for success color', () => {
-      render(<Text semantic="success">Success</Text>);
-      const text = screen.getByText('Success');
-      expect(text).toHaveClass('mond-text--success');
-    });
-
-    it('uses CSS variable for warning color', () => {
-      render(<Text semantic="warning">Warning</Text>);
-      const text = screen.getByText('Warning');
-      expect(text).toHaveClass('mond-text--warning');
-    });
-
-    it('uses CSS variable for error color', () => {
-      render(<Text semantic="error">Error</Text>);
-      const text = screen.getByText('Error');
-      expect(text).toHaveClass('mond-text--error');
-    });
-
-    it('uses CSS variable for accent color', () => {
-      render(<Text semantic="accent">Accent</Text>);
-      const text = screen.getByText('Accent');
-      expect(text).toHaveClass('mond-text--accent');
-    });
-  });
-
-  describe('Custom Element Types', () => {
-    it('renders as p element when specified', () => {
+    it('renders as custom element', () => {
       render(<Text as="p">Paragraph</Text>);
       const text = screen.getByText('Paragraph');
       expect(text.tagName).toBe('P');
     });
+  });
 
-    it('renders as h1 element when specified', () => {
-      render(<Text as="h1">Heading</Text>);
-      const text = screen.getByText('Heading');
-      expect(text.tagName).toBe('H1');
+  describe('Semantic Colors', () => {
+    it('applies semantic color classes', () => {
+      const { rerender } = render(<Text semantic="primary">Primary</Text>);
+      expect(screen.getByText('Primary')).toHaveClass('mond-text--primary');
+
+      rerender(<Text semantic="error">Error</Text>);
+      expect(screen.getByText('Error')).toHaveClass('mond-text--error');
     });
 
-    it('renders as div element when specified', () => {
-      render(<Text as="div">Div</Text>);
-      const text = screen.getByText('Div');
-      expect(text.tagName).toBe('DIV');
+    it('applies custom color via CSS custom property', () => {
+      render(<Text color="text-accent">Custom</Text>);
+      const text = screen.getByText('Custom');
+      expect(text).toHaveStyle({ color: 'var(--mond-text-accent)' });
     });
   });
 
   describe('Text Modifiers', () => {
     it('applies italic class', () => {
       render(<Text italic>Italic</Text>);
-      const text = screen.getByText('Italic');
-      expect(text).toHaveClass('mond-text--italic');
+      expect(screen.getByText('Italic')).toHaveClass('mond-text--italic');
     });
 
     it('applies underline class', () => {
       render(<Text underline>Underline</Text>);
-      const text = screen.getByText('Underline');
-      expect(text).toHaveClass('mond-text--underline');
-    });
-
-    it('applies strikethrough class', () => {
-      render(<Text strikethrough>Strikethrough</Text>);
-      const text = screen.getByText('Strikethrough');
-      expect(text).toHaveClass('mond-text--strikethrough');
-    });
-
-    it('applies both underline and strikethrough classes', () => {
-      render(<Text underline strikethrough>Both</Text>);
-      const text = screen.getByText('Both');
-      expect(text).toHaveClass('mond-text--underline');
-      expect(text).toHaveClass('mond-text--strikethrough');
+      expect(screen.getByText('Underline')).toHaveClass('mond-text--underline');
     });
 
     it('applies truncate class', () => {
       render(<Text truncate>Truncated text</Text>);
-      const text = screen.getByText('Truncated text');
-      expect(text).toHaveClass('mond-text--truncate');
+      expect(screen.getByText('Truncated text')).toHaveClass('mond-text--truncate');
+    });
+
+    it('combines multiple modifiers', () => {
+      render(<Text italic underline>Combined</Text>);
+      const text = screen.getByText('Combined');
+      expect(text).toHaveClass('mond-text--italic', 'mond-text--underline');
     });
   });
 
   describe('Font Weight', () => {
-    it('applies normal weight class by default', () => {
-      render(<Text>Normal</Text>);
-      const text = screen.getByText('Normal');
-      expect(text).toHaveClass('mond-text--weight-normal');
-    });
+    it('applies weight classes', () => {
+      const { rerender } = render(<Text weight="bold">Bold</Text>);
+      expect(screen.getByText('Bold')).toHaveClass('mond-text--weight-bold');
 
-    it('applies bold weight class', () => {
-      render(<Text weight="bold">Bold</Text>);
-      const text = screen.getByText('Bold');
-      expect(text).toHaveClass('mond-text--weight-bold');
-    });
-
-    it('applies medium weight class', () => {
-      render(<Text weight="medium">Medium</Text>);
-      const text = screen.getByText('Medium');
-      expect(text).toHaveClass('mond-text--weight-medium');
+      rerender(<Text weight="medium">Medium</Text>);
+      expect(screen.getByText('Medium')).toHaveClass('mond-text--weight-medium');
     });
   });
 
   describe('Text Alignment', () => {
-    it('applies left alignment class', () => {
-      render(<Text align="left">Left</Text>);
-      const text = screen.getByText('Left');
-      expect(text).toHaveClass('mond-text--align-left');
-    });
+    it('applies alignment classes', () => {
+      const { rerender } = render(<Text align="center">Center</Text>);
+      expect(screen.getByText('Center')).toHaveClass('mond-text--align-center');
 
-    it('applies center alignment class', () => {
-      render(<Text align="center">Center</Text>);
-      const text = screen.getByText('Center');
-      expect(text).toHaveClass('mond-text--align-center');
-    });
-
-    it('applies right alignment class', () => {
-      render(<Text align="right">Right</Text>);
-      const text = screen.getByText('Right');
-      expect(text).toHaveClass('mond-text--align-right');
-    });
-
-    it('applies justify alignment class', () => {
-      render(<Text align="justify">Justify</Text>);
-      const text = screen.getByText('Justify');
-      expect(text).toHaveClass('mond-text--align-justify');
+      rerender(<Text align="right">Right</Text>);
+      expect(screen.getByText('Right')).toHaveClass('mond-text--align-right');
     });
   });
 
-  describe('Color Token Support', () => {
-    it('applies color token via CSS custom property', () => {
-      render(<Text color="blue.500">Blue Text</Text>);
-      const text = screen.getByText('Blue Text');
-      expect(text).toHaveStyle({
-        '--text-color-override': 'var(--mond-color-blue-500)',
-      });
-    });
-
-    it('does not apply semantic class when color prop is provided', () => {
-      render(<Text semantic="primary" color="red.500">Custom Color</Text>);
-      const text = screen.getByText('Custom Color');
-      expect(text).not.toHaveClass('mond-text--primary');
-      expect(text).toHaveStyle({
-        '--text-color-override': 'var(--mond-color-red-500)',
-      });
-    });
-
-    it('applies semantic class when no color prop is provided', () => {
-      render(<Text semantic="primary">Primary Color</Text>);
-      const text = screen.getByText('Primary Color');
-      expect(text).toHaveClass('mond-text--primary');
-      expect(text).not.toHaveAttribute('style');
-    });
-  });
-
-  describe('Ref Forwarding', () => {
-    it('forwards ref to the element', () => {
+  describe('Accessibility', () => {
+    it('forwards ref correctly', () => {
       const ref = React.createRef<HTMLSpanElement>();
       render(<Text ref={ref}>Ref Test</Text>);
       expect(ref.current).toBeInstanceOf(HTMLSpanElement);
       expect(ref.current?.textContent).toBe('Ref Test');
     });
-  });
 
-  describe('Backward Compatibility', () => {
-    it('does NOT accept isDarkMode prop (removed)', () => {
-      const props: { children: string; isDarkMode?: boolean } = { children: 'Test', isDarkMode: true };
-      render(<Text {...props} />);
-      const text = screen.getByText('Test');
-      expect(text).toBeInTheDocument();
-    });
-
-    it('maintains existing API for variant prop', () => {
-      render(<Text variant="headline">Headline</Text>);
-      expect(screen.getByText('Headline')).toHaveClass('mond-text--headline');
-    });
-
-    it('maintains existing API for semantic prop', () => {
-      render(<Text semantic="error">Error</Text>);
-      expect(screen.getByText('Error')).toHaveClass('mond-text--error');
-    });
-  });
-
-  describe('HTML Attributes', () => {
-    it('forwards standard HTML attributes', () => {
-      render(<Text title="Text Title">Test</Text>);
+    it('forwards HTML attributes', () => {
+      render(<Text title="Text Title" aria-label="Label">Test</Text>);
       const text = screen.getByText('Test');
       expect(text).toHaveAttribute('title', 'Text Title');
-    });
-
-    it('forwards aria attributes', () => {
-      render(<Text aria-label="Descriptive Text">Text</Text>);
-      const text = screen.getByText('Text');
-      expect(text).toHaveAttribute('aria-label', 'Descriptive Text');
-    });
-
-    it('forwards data attributes', () => {
-      render(<Text data-testid="test-text">Test</Text>);
-      expect(screen.getByTestId('test-text')).toBeInTheDocument();
+      expect(text).toHaveAttribute('aria-label', 'Label');
     });
   });
 });

@@ -239,13 +239,13 @@ Wrap your application with ThemeProvider to enable automatic theme switching via
 
 ```tsx
 import { ThemeProvider } from '@mond-design-system/theme';
-import { mondTheme } from '@mond-design-system/theme/brands';
+
 
 function App() {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
 
   return (
-    <ThemeProvider brandTheme={mondTheme} colorScheme={colorScheme}>
+    <ThemeProvider colorScheme={colorScheme}>
       <YourComponents />
     </ThemeProvider>
   );

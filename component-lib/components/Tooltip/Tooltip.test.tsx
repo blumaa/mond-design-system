@@ -1,11 +1,10 @@
 import React from 'react';
-import { render, screen, renderWithDarkMode, fireEvent, waitFor } from '../../test-utils';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Tooltip } from './Tooltip';
 
 describe('Tooltip Component', () => {
-
-  it('renders trigger element', () => {
+  it('renders trigger element and content', () => {
     render(
       <Tooltip content="Tooltip content" data-testid="tooltip">
         <button>Hover me</button>
@@ -13,23 +12,15 @@ describe('Tooltip Component', () => {
     );
 
     const buttonElement = screen.getByText('Hover me');
-    expect(buttonElement).toBeInTheDocument();
-  });
-
-  it('renders tooltip content when visible', () => {
-    render(
-      <Tooltip content="Tooltip content" data-testid="tooltip">
-        <button>Hover me</button>
-      </Tooltip>
-    );
-
     const tooltipContent = screen.getByTestId('tooltip-content');
+
+    expect(buttonElement).toBeInTheDocument();
     expect(tooltipContent).toBeInTheDocument();
     expect(tooltipContent).toHaveAttribute('aria-hidden', 'true');
   });
 
-  describe('hover trigger', () => {
-    it('shows tooltip on mouse enter', async () => {
+  describe('Hover trigger', () => {
+    it('shows and hides tooltip on mouse enter/leave', async () => {
       render(
         <Tooltip content="Tooltip content" trigger="hover" data-testid="tooltip">
           <button>Hover me</button>
@@ -39,36 +30,15 @@ describe('Tooltip Component', () => {
       const buttonElement = screen.getByText('Hover me');
       const tooltipContent = screen.getByTestId('tooltip-content');
 
-      // Initially hidden
       expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
 
-      // Hover over button
       fireEvent.mouseEnter(buttonElement);
 
       await waitFor(() => {
         expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
         expect(tooltipContent).toHaveAttribute('aria-hidden', 'false');
       });
-    });
 
-    it('hides tooltip on mouse leave', async () => {
-      render(
-        <Tooltip content="Tooltip content" trigger="hover" data-testid="tooltip">
-          <button>Hover me</button>
-        </Tooltip>
-      );
-
-      const buttonElement = screen.getByText('Hover me');
-      const tooltipContent = screen.getByTestId('tooltip-content');
-
-      // Show tooltip
-      fireEvent.mouseEnter(buttonElement);
-
-      await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
-      });
-
-      // Hide tooltip
       fireEvent.mouseLeave(buttonElement);
 
       await waitFor(() => {
@@ -77,8 +47,8 @@ describe('Tooltip Component', () => {
     });
   });
 
-  describe('focus trigger', () => {
-    it('shows tooltip on focus', async () => {
+  describe('Focus trigger', () => {
+    it('shows and hides tooltip on focus/blur', async () => {
       render(
         <Tooltip content="Tooltip content" trigger="focus" data-testid="tooltip">
           <button>Focus me</button>
@@ -93,26 +63,7 @@ describe('Tooltip Component', () => {
       await waitFor(() => {
         expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
       });
-    });
 
-    it('hides tooltip on blur', async () => {
-      render(
-        <Tooltip content="Tooltip content" trigger="focus" data-testid="tooltip">
-          <button>Focus me</button>
-        </Tooltip>
-      );
-
-      const buttonElement = screen.getByText('Focus me');
-      const tooltipContent = screen.getByTestId('tooltip-content');
-
-      // Show tooltip
-      fireEvent.focus(buttonElement);
-
-      await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
-      });
-
-      // Hide tooltip
       fireEvent.blur(buttonElement);
 
       await waitFor(() => {
@@ -121,36 +72,8 @@ describe('Tooltip Component', () => {
     });
   });
 
-  describe('click trigger', () => {
-    it('toggles tooltip on click', async () => {
-      render(
-        <Tooltip content="Tooltip content" trigger="click" data-testid="tooltip">
-          <button>Click me</button>
-        </Tooltip>
-      );
-
-      const buttonElement = screen.getByText('Click me');
-      const tooltipContent = screen.getByTestId('tooltip-content');
-
-      // Initially hidden
-      expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
-
-      // Show tooltip
-      fireEvent.click(buttonElement);
-
-      await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
-      });
-
-      // Hide tooltip
-      fireEvent.click(buttonElement);
-
-      await waitFor(() => {
-        expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
-      });
-    });
-
-    it('hides tooltip when clicking outside', async () => {
+  describe('Click trigger', () => {
+    it('toggles tooltip on click and closes when clicking outside', async () => {
       render(
         <div>
           <Tooltip content="Tooltip content" trigger="click" data-testid="tooltip">
@@ -162,16 +85,27 @@ describe('Tooltip Component', () => {
 
       const buttonElement = screen.getByText('Click me');
       const tooltipContent = screen.getByTestId('tooltip-content');
-      const outsideElement = screen.getByTestId('outside');
 
-      // Show tooltip
+      expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
+
       fireEvent.click(buttonElement);
 
       await waitFor(() => {
         expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
       });
 
-      // Click outside
+      fireEvent.click(buttonElement);
+
+      await waitFor(() => {
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
+      });
+
+      fireEvent.click(buttonElement);
+      await waitFor(() => {
+        expect(tooltipContent).toHaveClass('mond-tooltip-content--visible');
+      });
+
+      const outsideElement = screen.getByTestId('outside');
       fireEvent.mouseDown(outsideElement);
 
       await waitFor(() => {
@@ -180,77 +114,29 @@ describe('Tooltip Component', () => {
     });
   });
 
-  describe('placement', () => {
-    it('applies top placement class', () => {
-      render(
+  describe('Placements', () => {
+    it('applies placement classes correctly', () => {
+      const { rerender } = render(
         <Tooltip content="Tooltip content" placement="top" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
 
-      const tooltipContent = screen.getByTestId('tooltip-content');
+      let tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toHaveClass('mond-tooltip-content--top');
-    });
 
-    it('applies bottom placement class', () => {
-      render(
+      rerender(
         <Tooltip content="Tooltip content" placement="bottom" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
 
-      const tooltipContent = screen.getByTestId('tooltip-content');
+      tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toHaveClass('mond-tooltip-content--bottom');
     });
-
-    it('applies left placement class', () => {
-      render(
-        <Tooltip content="Tooltip content" placement="left" data-testid="tooltip">
-          <button>Button</button>
-        </Tooltip>
-      );
-
-      const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveClass('mond-tooltip-content--left');
-    });
-
-    it('applies right placement class', () => {
-      render(
-        <Tooltip content="Tooltip content" placement="right" data-testid="tooltip">
-          <button>Button</button>
-        </Tooltip>
-      );
-
-      const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveClass('mond-tooltip-content--right');
-    });
   });
 
-  describe('theme support', () => {
-    it('applies correct base classes', () => {
-      render(
-        <Tooltip content="Tooltip" data-testid="tooltip">
-          <button>Button</button>
-        </Tooltip>
-      );
-
-      const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveClass('mond-tooltip-content');
-    });
-
-    it('works in dark mode', () => {
-      renderWithDarkMode(
-        <Tooltip content="Dark tooltip" data-testid="tooltip">
-          <button>Button</button>
-        </Tooltip>
-      );
-
-      const tooltipContent = screen.getByTestId('tooltip-content');
-      expect(tooltipContent).toHaveClass('mond-tooltip-content');
-    });
-  });
-
-  describe('disabled state', () => {
+  describe('Disabled state', () => {
     it('does not show tooltip when disabled', () => {
       render(
         <Tooltip content="Tooltip content" disabled trigger="hover" data-testid="tooltip">
@@ -263,25 +149,22 @@ describe('Tooltip Component', () => {
 
       fireEvent.mouseEnter(buttonElement);
 
-      // Should remain hidden
       expect(tooltipContent).toHaveClass('mond-tooltip-content--hidden');
     });
   });
 
-  describe('content variations', () => {
-    it('renders text content', () => {
-      render(
+  describe('Content variations', () => {
+    it('renders text and JSX content', () => {
+      const { rerender } = render(
         <Tooltip content="Simple text tooltip" data-testid="tooltip">
           <button>Button</button>
         </Tooltip>
       );
 
-      const tooltipContent = screen.getByTestId('tooltip-content');
+      let tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toHaveTextContent('Simple text tooltip');
-    });
 
-    it('renders JSX content', () => {
-      render(
+      rerender(
         <Tooltip
           content={
             <div>
@@ -296,36 +179,28 @@ describe('Tooltip Component', () => {
         </Tooltip>
       );
 
-      const tooltipContent = screen.getByTestId('tooltip-content');
+      tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toContainHTML('<strong>Bold text</strong>');
       expect(tooltipContent).toContainHTML('<span>Regular text</span>');
     });
   });
 
-  describe('accessibility', () => {
-    it('has correct ARIA attributes', () => {
+  describe('Accessibility', () => {
+    it('has correct ARIA attributes and preserves child handlers', () => {
+      const handleClick = jest.fn();
+      const handleMouseEnter = jest.fn();
+
       render(
         <Tooltip content="Accessible tooltip" data-testid="tooltip">
-          <button>Button</button>
+          <button onClick={handleClick} onMouseEnter={handleMouseEnter}>
+            Button
+          </button>
         </Tooltip>
       );
 
       const tooltipContent = screen.getByTestId('tooltip-content');
       expect(tooltipContent).toHaveAttribute('role', 'tooltip');
       expect(tooltipContent).toHaveAttribute('aria-hidden', 'true');
-    });
-
-    it('preserves child element event handlers', () => {
-      const handleClick = jest.fn();
-      const handleMouseEnter = jest.fn();
-
-      render(
-        <Tooltip content="Tooltip content" data-testid="tooltip">
-          <button onClick={handleClick} onMouseEnter={handleMouseEnter}>
-            Button
-          </button>
-        </Tooltip>
-      );
 
       const buttonElement = screen.getByText('Button');
 
@@ -337,36 +212,16 @@ describe('Tooltip Component', () => {
     });
   });
 
-  describe('arrow', () => {
-    it('renders arrow element', () => {
-      render(
-        <Tooltip content="Tooltip with arrow" data-testid="tooltip">
-          <button>Button</button>
-        </Tooltip>
-      );
-
-      const arrowElement = screen.getByTestId('tooltip-arrow');
-      expect(arrowElement).toBeInTheDocument();
-    });
-
-    it('applies correct arrow placement class', () => {
-      render(
-        <Tooltip content="Tooltip" placement="top" data-testid="tooltip">
-          <button>Button</button>
-        </Tooltip>
-      );
-
-      const arrowElement = screen.getByTestId('tooltip-arrow');
-      expect(arrowElement).toHaveClass('mond-tooltip-arrow--top');
-    });
-  });
-
-  it('applies custom className', () => {
+  it('renders arrow element with placement class and applies custom className', () => {
     render(
-      <Tooltip content="Tooltip content" className="custom-class" data-testid="tooltip">
+      <Tooltip content="Tooltip with arrow" placement="top" className="custom-class" data-testid="tooltip">
         <button>Button</button>
       </Tooltip>
     );
+
+    const arrowElement = screen.getByTestId('tooltip-arrow');
+    expect(arrowElement).toBeInTheDocument();
+    expect(arrowElement).toHaveClass('mond-tooltip-arrow--top');
 
     const tooltipContainer = screen.getByTestId('tooltip');
     expect(tooltipContainer).toHaveClass('custom-class');

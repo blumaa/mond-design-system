@@ -1,25 +1,29 @@
-import { render, screen } from '../../test-utils';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Spinner } from './Spinner';
 
 describe('Spinner', () => {
-  it('renders with default props', () => {
+  it('renders with default label and accessibility attributes', () => {
     render(<Spinner />);
-    
+
     const spinner = screen.getByRole('status');
     expect(spinner).toBeInTheDocument();
     expect(spinner).toHaveAttribute('aria-label', 'Loading...');
+    expect(spinner).toHaveAttribute('role', 'status');
+
+    const hiddenText = screen.getByText('Loading...');
+    expect(hiddenText).toHaveClass('mond-spinner__label');
   });
 
   it('renders with custom label', () => {
     render(<Spinner label="Processing..." />);
-    
+
     const spinner = screen.getByRole('status');
     expect(spinner).toHaveAttribute('aria-label', 'Processing...');
     expect(screen.getByText('Processing...')).toBeInTheDocument();
   });
 
-  it('applies size variants correctly', () => {
+  it('applies size variants using rerender', () => {
     const { rerender } = render(<Spinner size="xs" />);
     let spinner = screen.getByRole('status');
     expect(spinner).toHaveClass('mond-spinner--xs');
@@ -42,39 +46,14 @@ describe('Spinner', () => {
 
     const spinner = screen.getByRole('status');
     expect(spinner).toHaveClass('mond-spinner--default');
-  });
-
-  it('forwards additional props', () => {
-    render(<Spinner data-testid="custom-spinner" />);
-
-    const spinner = screen.getByTestId('custom-spinner');
-    expect(spinner).toBeInTheDocument();
-  });
-
-  it('applies spinning animation class', () => {
-    render(<Spinner />);
-
-    const spinner = screen.getByRole('status');
     expect(spinner).toHaveClass('mond-spinner');
   });
 
-  it('has proper accessibility attributes', () => {
-    render(<Spinner />);
+  it('forwards additional props and custom styles', () => {
+    render(<Spinner data-testid="custom-spinner" style={{ margin: '10px' }} />);
 
-    const spinner = screen.getByRole('status');
-    const hiddenText = screen.getByText('Loading...');
-
-    expect(spinner).toHaveAttribute('role', 'status');
-    expect(spinner).toHaveAttribute('aria-label', 'Loading...');
-
-    // Check that the text is visually hidden but available to screen readers
-    expect(hiddenText).toHaveClass('mond-spinner__label');
-  });
-
-  it('applies custom styles', () => {
-    render(<Spinner style={{ margin: '10px' }} />);
-    
-    const spinner = screen.getByRole('status');
+    const spinner = screen.getByTestId('custom-spinner');
+    expect(spinner).toBeInTheDocument();
     expect(spinner).toHaveStyle('margin: 10px');
   });
 });
