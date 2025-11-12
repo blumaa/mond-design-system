@@ -1,3 +1,7 @@
+## <small>2.3.1 (2025-11-12)</small>
+
+* fix: vercel warnings ([48b7cb1](https://github.com/blumaa/mond-design-system/commit/48b7cb1))
+
 ## 2.3.0 (2025-11-12)
 
 * fix: button tests ([160f13f](https://github.com/blumaa/mond-design-system/commit/160f13f))
