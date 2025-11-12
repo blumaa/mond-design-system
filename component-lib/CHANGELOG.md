@@ -1,3 +1,8 @@
+## 2.3.0 (2025-11-12)
+
+* fix: button tests ([160f13f](https://github.com/blumaa/mond-design-system/commit/160f13f))
+* feat: add loading state to button ([b09d3a8](https://github.com/blumaa/mond-design-system/commit/b09d3a8))
+
 ## <small>2.2.3 (2025-11-11)</small>
 
 * fix: add box border props ([b49014c](https://github.com/blumaa/mond-design-system/commit/b49014c))
