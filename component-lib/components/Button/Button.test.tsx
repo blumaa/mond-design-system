@@ -392,4 +392,87 @@ describe('Button Component - SSR Compatible', () => {
       expect(button).toHaveClass('mond-button--sm');
     });
   });
+
+  describe('Loading State', () => {
+    it('applies loading class when loading is true', () => {
+      render(<Button loading>Loading</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('mond-button--loading');
+    });
+
+    it('disables button when loading is true', () => {
+      render(<Button loading>Loading</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toBeDisabled();
+    });
+
+    it('does not call onClick when loading', () => {
+      const handleClick = jest.fn();
+      render(<Button loading onClick={handleClick}>Loading</Button>);
+      const button = screen.getByRole('button');
+      fireEvent.click(button);
+      expect(handleClick).not.toHaveBeenCalled();
+    });
+
+    it('renders spinner when loading is true', () => {
+      render(<Button loading>Loading</Button>);
+      const button = screen.getByRole('button');
+      const spinner = button.querySelector('.mond-button__spinner');
+      expect(spinner).toBeInTheDocument();
+    });
+
+    it('renders button content when loading', () => {
+      render(<Button loading>Loading Button</Button>);
+      expect(screen.getByText('Loading Button')).toBeInTheDocument();
+    });
+
+    it('applies correct spinner size for small button', () => {
+      render(<Button loading size="sm">Small Loading</Button>);
+      const button = screen.getByRole('button');
+      const spinner = button.querySelector('.mond-spinner--xs');
+      expect(spinner).toBeInTheDocument();
+    });
+
+    it('applies correct spinner size for medium button', () => {
+      render(<Button loading size="md">Medium Loading</Button>);
+      const button = screen.getByRole('button');
+      const spinner = button.querySelector('.mond-spinner--sm');
+      expect(spinner).toBeInTheDocument();
+    });
+
+    it('applies correct spinner size for large button', () => {
+      render(<Button loading size="lg">Large Loading</Button>);
+      const button = screen.getByRole('button');
+      const spinner = button.querySelector('.mond-spinner--md');
+      expect(spinner).toBeInTheDocument();
+    });
+
+    it('prevents onClick when loading on anchor element', () => {
+      const handleClick = jest.fn();
+      render(<Button as="a" href="/test" loading onClick={handleClick}>Link Loading</Button>);
+      const link = screen.getByText('Link Loading');
+      fireEvent.click(link);
+      expect(handleClick).not.toHaveBeenCalled();
+    });
+
+    it('applies aria-disabled when loading on anchor element', () => {
+      render(<Button as="a" href="/test" loading>Link Loading</Button>);
+      const link = screen.getByText('Link Loading');
+      expect(link).toHaveAttribute('aria-disabled', 'true');
+    });
+
+    it('removes href when loading on anchor element', () => {
+      render(<Button as="a" href="/test" loading>Link Loading</Button>);
+      const link = screen.getByText('Link Loading');
+      expect(link).not.toHaveAttribute('href');
+    });
+
+    it('works with loading and disabled both true', () => {
+      render(<Button loading disabled>Both States</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toBeDisabled();
+      expect(button).toHaveClass('mond-button--loading');
+      expect(button).toHaveClass('mond-button--disabled');
+    });
+  });
 });

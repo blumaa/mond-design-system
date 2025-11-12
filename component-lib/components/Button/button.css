@@ -39,12 +39,11 @@
   min-width: auto;
 }
 
-/* Disabled State */
+/* Disabled State - comes after loading to take precedence */
 .mond-button--disabled,
 .mond-button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
-  pointer-events: none;
 }
 
 /* ============================================

@@ -67,6 +67,10 @@ A versatile button component with multiple variants, sizes, and styling options.
     disabled: {
       control: { type: 'boolean' },
     },
+    loading: {
+      control: { type: 'boolean' },
+      description: 'Button in loading state with spinner',
+    },
     children: {
       control: { type: 'text' },
       description: 'Button content (text or icon)',
@@ -414,4 +418,91 @@ export const AsLink: Story = {
       </div>
     </div>
   ),
+};
+
+export const LoadingStates: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Loading Variants</h3>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <Button variant="primary" loading>Primary Loading</Button>
+          <Button variant="outline" loading>Outline Loading</Button>
+          <Button variant="ghost" loading>Ghost Loading</Button>
+          <Button variant="destructive" loading>Destructive Loading</Button>
+          <Button variant="warning" loading>Warning Loading</Button>
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Loading Sizes</h3>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button variant="primary" size="sm" loading>Small Loading</Button>
+          <Button variant="primary" size="md" loading>Medium Loading</Button>
+          <Button variant="primary" size="lg" loading>Large Loading</Button>
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Loading Icon-Only Buttons</h3>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button variant="primary" size="sm" iconOnly loading aria-label="Loading">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+            </svg>
+          </Button>
+          <Button variant="primary" size="md" iconOnly loading aria-label="Loading">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+            </svg>
+          </Button>
+          <Button variant="primary" size="lg" iconOnly loading aria-label="Loading">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+            </svg>
+          </Button>
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Loading with Full Width</h3>
+        <div style={{ width: '300px' }}>
+          <Button variant="primary" fullWidth loading>Full Width Loading</Button>
+        </div>
+      </div>
+    </div>
+  ),
+};
+
+export const Loading: Story = {
+  args: {
+    variant: 'primary',
+    size: 'md',
+    loading: true,
+    children: 'Loading Button',
+  },
 };

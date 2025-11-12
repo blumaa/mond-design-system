@@ -1,10 +1,16 @@
-import React from 'react';
-import './button.css';
+import React from "react";
+import { Spinner } from "../Spinner/Spinner";
+import "./button.css";
 
-export type ButtonVariant = 'primary' | 'outline' | 'ghost' | 'destructive' | 'warning';
-export type ButtonSize = 'sm' | 'md' | 'lg';
-export type ButtonCorners = 'default' | 'rounded';
-export type ButtonAlignContent = 'left' | 'center' | 'right';
+export type ButtonVariant =
+  | "primary"
+  | "outline"
+  | "ghost"
+  | "destructive"
+  | "warning";
+export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonCorners = "default" | "rounded";
+export type ButtonAlignContent = "left" | "center" | "right";
 
 export interface ButtonProps {
   /**
@@ -61,6 +67,12 @@ export interface ButtonProps {
   disabled?: boolean;
 
   /**
+   * Is button in loading state
+   * @default false
+   */
+  loading?: boolean;
+
+  /**
    * Click event handler
    */
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
@@ -93,23 +105,30 @@ export interface ButtonProps {
   /**
    * Accessible label for screen readers
    */
-  'aria-label'?: string;
+  "aria-label"?: string;
 
   /**
    * Indicates current item in navigation
    */
-  'aria-current'?: 'page' | 'step' | 'location' | 'date' | 'time' | 'true' | 'false';
+  "aria-current"?:
+    | "page"
+    | "step"
+    | "location"
+    | "date"
+    | "time"
+    | "true"
+    | "false";
 
   /**
    * Test ID for testing purposes
    */
-  'data-testid'?: string;
+  "data-testid"?: string;
 
   /**
    * Button type for form interaction (only applies when as='button')
    * @default "button"
    */
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
 
   /**
    * URL to link to (when as='a')
@@ -159,25 +178,26 @@ export interface ButtonProps {
 export const Button = React.forwardRef<HTMLElement, ButtonProps>(
   (
     {
-      as = 'button',
-      variant = 'primary',
-      size = 'md',
-      corners = 'default',
-      alignContent = 'center',
+      as = "button",
+      variant = "primary",
+      size = "md",
+      corners = "default",
+      alignContent = "center",
       children,
       iconOnly = false,
       fullWidth = false,
       disabled = false,
+      loading = false,
       onClick,
       onMouseEnter,
       onMouseLeave,
       onFocus,
       onBlur,
       onKeyDown,
-      'aria-label': ariaLabel,
-      'aria-current': ariaCurrent,
-      'data-testid': dataTestId,
-      type = 'button',
+      "aria-label": ariaLabel,
+      "aria-current": ariaCurrent,
+      "data-testid": dataTestId,
+      type = "button",
       href,
       target,
       rel,
@@ -186,19 +206,32 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
   ) => {
     const Element = as as React.ElementType;
 
+    // Determine spinner size based on button size
+    const spinnerSize = size === "sm" ? "xs" : size === "md" ? "sm" : "md";
+
+    // Determine spinner color based on variant
+    // Primary, destructive, and warning variants have colored backgrounds, so use white/light spinner
+    // Outline and ghost variants have transparent/light backgrounds, so use dark spinner
+    const spinnerColor =
+      variant === "primary" ||
+      variant === "destructive" ||
+      variant === "warning"
+        ? "var(--mond-brand-interactive-text)"
+        : "var(--mond-brand-interactive-background)";
+
     // Build CSS class names
     const classNames = [
-      'mond-button',
+      "mond-button",
       `mond-button--${variant}`,
       `mond-button--${size}`,
       `mond-button--corners-${corners}`,
       `mond-button--align-${alignContent}`,
-      fullWidth && 'mond-button--full-width',
-      iconOnly && 'mond-button--icon-only',
-      disabled && 'mond-button--disabled',
+      fullWidth && "mond-button--full-width",
+      iconOnly && "mond-button--icon-only",
+      disabled || loading && "mond-button--disabled",
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     // Base props common to all elements
     const baseProps = {
@@ -210,37 +243,48 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
       onFocus,
       onBlur,
       onKeyDown,
-      'aria-label': ariaLabel,
-      'aria-current': ariaCurrent,
-      'data-testid': dataTestId,
-      'data-variant': variant,
-      'data-size': size,
+      "aria-label": ariaLabel,
+      "aria-current": ariaCurrent,
+      "data-testid": dataTestId,
+      "data-variant": variant,
+      "data-size": size,
     };
 
+    // Button content with spinner
+    // For icon-only buttons, spinner replaces the icon; otherwise it's shown alongside
+    const buttonContent = loading && iconOnly ? (
+      <Spinner size={spinnerSize} color={spinnerColor} label="" />
+    ) : (
+      <>
+        {loading && <Spinner size={spinnerSize} color={spinnerColor} label="" />}
+        {children}
+      </>
+    );
+
     // Element-specific props based on 'as' prop
-    if (as === 'button') {
+    if (as === "button") {
       return (
-        <Element
-          {...baseProps}
-          type={type}
-          disabled={disabled}
-        >
-          {children}
+        <Element {...baseProps} type={type} disabled={disabled || loading}>
+          {buttonContent}
         </Element>
       );
     }
 
-    if (as === 'a') {
+    if (as === "a") {
       return (
         <Element
           {...baseProps}
-          href={disabled ? undefined : href}
+          href={disabled || loading ? undefined : href}
           target={target}
           rel={rel}
-          aria-disabled={disabled ? 'true' : undefined}
-          onClick={disabled ? (e: React.MouseEvent) => e.preventDefault() : onClick}
+          aria-disabled={disabled || loading ? "true" : undefined}
+          onClick={
+            disabled
+              ? (e: React.MouseEvent) => e.preventDefault()
+              : onClick
+          }
         >
-          {children}
+          {buttonContent}
         </Element>
       );
     }
@@ -249,14 +293,14 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
     return (
       <Element
         {...baseProps}
-        aria-disabled={disabled ? 'true' : undefined}
+        aria-disabled={disabled ? "true" : undefined}
       >
-        {children}
+        {buttonContent}
       </Element>
     );
   },
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";
 
 export default Button;
