@@ -97,6 +97,17 @@ export interface CarouselProps {
    * @default 0
    */
   initialSlide?: number;
+
+  /**
+   * Carousel size with 16:9 aspect ratio
+   * - sm: max-width 600px with 16:9 aspect ratio
+   * - md: max-width 900px with 16:9 aspect ratio
+   * - lg: max-width 1200px with 16:9 aspect ratio
+   * - full-width: 100% width with 16:9 aspect ratio
+   * - auto: No aspect ratio constraint (content defines height)
+   * @default 'auto'
+   */
+  size?: 'sm' | 'md' | 'lg' | 'full-width' | 'auto';
 }
 
 export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
@@ -116,6 +127,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
   indicatorPosition = 'bottom-center',
   onSlideChange,
   initialSlide = 0,
+  size = 'auto',
 }, ref) => {
   const [currentIndex, setCurrentIndex] = useState(initialSlide);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -229,6 +241,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(({
 
   const carouselClasses = [
     'mond-carousel',
+    size !== 'auto' && `mond-carousel--${size}`,
     totalItems === 0 && 'mond-carousel--empty',
     itemsToShow > 1 && 'mond-carousel--multi-item',
   ].filter(Boolean).join(' ');

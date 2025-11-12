@@ -118,6 +118,11 @@ A flexible carousel/slider component that supports single or multiple items, aut
       description: 'Initial slide index',
       control: 'number',
     },
+    size: {
+      description: 'Carousel size with 16:9 aspect ratio (sm: max 600px, md: max 900px, lg: max 1200px, full-width: 100%, auto: content height)',
+      control: 'select',
+      options: ['sm', 'md', 'lg', 'full-width', 'auto'],
+    },
     onSlideChange: {
       description: 'Callback when slide changes',
       action: 'slide-changed',
@@ -528,6 +533,158 @@ export const KeyboardNavigation: Story = {
     docs: {
       description: {
         story: 'Click on the carousel and use left/right arrow keys to navigate.',
+      },
+    },
+  },
+};
+
+// Image carousel items with actual images
+const imageCarouselItems: CarouselItem[] = [
+  {
+    id: '1',
+    content: (
+      <img
+        src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=675&fit=crop"
+        alt="Mountain landscape"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
+    )
+  },
+  {
+    id: '2',
+    content: (
+      <img
+        src="https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=1200&h=675&fit=crop"
+        alt="Beach sunset"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
+    )
+  },
+  {
+    id: '3',
+    content: (
+      <img
+        src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&h=675&fit=crop"
+        alt="Forest path"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
+    )
+  },
+  {
+    id: '4',
+    content: (
+      <img
+        src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&h=675&fit=crop"
+        alt="Desert landscape"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
+    )
+  },
+  {
+    id: '5',
+    content: (
+      <img
+        src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1200&h=675&fit=crop"
+        alt="Snow mountains"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
+    )
+  },
+];
+
+export const SmallSize: Story = {
+  args: {
+    items: imageCarouselItems,
+    size: 'sm',
+    autoPlay: true,
+    autoPlayInterval: 3000,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Small size carousel with 16:9 aspect ratio and max-width of 600px. Scales responsively with container width while maintaining aspect ratio. Perfect for sidebar or smaller content areas.',
+      },
+    },
+  },
+};
+
+export const MediumSize: Story = {
+  args: {
+    items: imageCarouselItems,
+    size: 'md',
+    autoPlay: true,
+    autoPlayInterval: 3000,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Medium size carousel with 16:9 aspect ratio and max-width of 900px. Scales responsively with container width while maintaining aspect ratio. Great for content sections and feature highlights.',
+      },
+    },
+  },
+};
+
+export const LargeSize: Story = {
+  args: {
+    items: imageCarouselItems,
+    size: 'lg',
+    autoPlay: true,
+    autoPlayInterval: 3000,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Large size carousel with 16:9 aspect ratio and max-width of 1200px. Scales responsively with container width while maintaining aspect ratio. Ideal for hero sections and prominent showcases.',
+      },
+    },
+  },
+};
+
+export const FullWidthSize: Story = {
+  args: {
+    items: imageCarouselItems,
+    size: 'full-width',
+    autoPlay: true,
+    autoPlayInterval: 3000,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Full-width carousel with 16:9 aspect ratio. Takes 100% of container width with no max-width constraint while maintaining aspect ratio. Perfect for full-width hero banners.',
+      },
+    },
+  },
+};
+
+export const SizeComparison: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <div>
+        <h4>Small (sm) - max 600px width</h4>
+        <Carousel items={imageCarouselItems} size="sm" />
+      </div>
+      <div>
+        <h4>Medium (md) - max 900px width</h4>
+        <Carousel items={imageCarouselItems} size="md" />
+      </div>
+      <div>
+        <h4>Large (lg) - max 1200px width</h4>
+        <Carousel items={imageCarouselItems} size="lg" />
+      </div>
+      <div>
+        <h4>Full Width - 100% container width</h4>
+        <Carousel items={imageCarouselItems} size="full-width" />
+      </div>
+      <div>
+        <h4>Auto (default - content defines height)</h4>
+        <Carousel items={imageItems} size="auto" />
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare all size variants side by side. All sized variants (sm/md/lg/full-width) maintain a 16:9 aspect ratio and scale with container width. The "auto" size has no aspect ratio constraint and relies on content to define its height.',
       },
     },
   },
