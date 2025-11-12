@@ -1,3 +1,9 @@
+## [2.4.1](https://github.com/blumaa/mond-design-system/compare/v2.4.0...v2.4.1) (2025-11-12)
+
+### 🐛 Bug Fixes
+
+* Carousel size props added ([9b75180](https://github.com/blumaa/mond-design-system/commit/9b7518078c1eb6e9399c05754bbe329b6f8ec89c))
+
 ## [2.4.0](https://github.com/blumaa/mond-design-system/compare/v2.3.1...v2.4.0) (2025-11-12)
 
 ### ✨ Features
