@@ -1,3 +1,14 @@
+## [2.4.0](https://github.com/blumaa/mond-design-system/compare/v2.3.1...v2.4.0) (2025-11-12)
+
+### ✨ Features
+
+* massive cleanup ([1fbd527](https://github.com/blumaa/mond-design-system/commit/1fbd52713d41d2ea7adb8d8f5228744f6dcc002a))
+
+### 🐛 Bug Fixes
+
+* apps ([ba25bc2](https://github.com/blumaa/mond-design-system/commit/ba25bc2420b85e8bfa207b92b4e041bef16706a8))
+* revert conventional changelog dependency ([69551fb](https://github.com/blumaa/mond-design-system/commit/69551fb2cbd25917cf84ac06d19949985cf4b06d))
+
 ## <small>2.3.1 (2025-11-12)</small>
 
 * fix: vercel warnings ([48b7cb1](https://github.com/blumaa/mond-design-system/commit/48b7cb1))
