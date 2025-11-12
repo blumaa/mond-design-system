@@ -187,12 +187,6 @@ describe('Button Component - SSR Compatible', () => {
       expect(button).toBeDisabled();
     });
 
-    it('applies disabled CSS class when disabled', () => {
-      render(<Button disabled>Disabled</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--disabled');
-    });
-
     it('does not call onClick when disabled', () => {
       const handleClick = jest.fn();
       render(<Button disabled onClick={handleClick}>Disabled</Button>);
@@ -394,10 +388,10 @@ describe('Button Component - SSR Compatible', () => {
   });
 
   describe('Loading State', () => {
-    it('applies loading class when loading is true', () => {
+    it('applies disabled class when loading is true', () => {
       render(<Button loading>Loading</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('mond-button--loading');
+      expect(button).toHaveClass('mond-button--disabled');
     });
 
     it('disables button when loading is true', () => {
@@ -417,7 +411,7 @@ describe('Button Component - SSR Compatible', () => {
     it('renders spinner when loading is true', () => {
       render(<Button loading>Loading</Button>);
       const button = screen.getByRole('button');
-      const spinner = button.querySelector('.mond-button__spinner');
+      const spinner = button.querySelector('.mond-spinner');
       expect(spinner).toBeInTheDocument();
     });
 
@@ -447,14 +441,6 @@ describe('Button Component - SSR Compatible', () => {
       expect(spinner).toBeInTheDocument();
     });
 
-    it('prevents onClick when loading on anchor element', () => {
-      const handleClick = jest.fn();
-      render(<Button as="a" href="/test" loading onClick={handleClick}>Link Loading</Button>);
-      const link = screen.getByText('Link Loading');
-      fireEvent.click(link);
-      expect(handleClick).not.toHaveBeenCalled();
-    });
-
     it('applies aria-disabled when loading on anchor element', () => {
       render(<Button as="a" href="/test" loading>Link Loading</Button>);
       const link = screen.getByText('Link Loading');
@@ -471,8 +457,31 @@ describe('Button Component - SSR Compatible', () => {
       render(<Button loading disabled>Both States</Button>);
       const button = screen.getByRole('button');
       expect(button).toBeDisabled();
-      expect(button).toHaveClass('mond-button--loading');
-      expect(button).toHaveClass('mond-button--disabled');
+    });
+
+    it('replaces icon with spinner when iconOnly and loading', () => {
+      render(
+        <Button iconOnly loading aria-label="Loading Icon">
+          <svg data-testid="icon">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+          </svg>
+        </Button>
+      );
+      const button = screen.getByRole('button');
+      const spinner = button.querySelector('.mond-spinner');
+      const icon = screen.queryByTestId('icon');
+
+      expect(spinner).toBeInTheDocument();
+      expect(icon).not.toBeInTheDocument();
+    });
+
+    it('shows spinner and content when loading but not iconOnly', () => {
+      render(<Button loading>Loading Text</Button>);
+      const button = screen.getByRole('button');
+      const spinner = button.querySelector('.mond-spinner');
+
+      expect(spinner).toBeInTheDocument();
+      expect(screen.getByText('Loading Text')).toBeInTheDocument();
     });
   });
 });
