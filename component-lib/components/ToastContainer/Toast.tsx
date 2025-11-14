@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button } from '../Button/Button';
-import './toast.css';
+import React, { useEffect, useRef, useState } from "react";
+import { Button } from "../Button/Button";
+import "./toast.css";
+import { Icon } from "../Icon";
 
-export type ToastVariant = 'success' | 'error' | 'warning' | 'info';
+export type ToastVariant = "success" | "error" | "warning" | "info";
 
 export interface ToastAction {
   label: string;
   onClick: () => void;
-  variant?: 'primary' | 'outline' | 'ghost';
+  variant?: "primary" | "outline" | "ghost";
 }
 
-export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'className'> {
+export interface ToastProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "className"> {
   /**
    * Unique identifier for the toast
    */
@@ -58,7 +60,7 @@ export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
    * Whether the toast is entering (mounting) or exiting (unmounting)
    * @default 'entering'
    */
-  animationState?: 'entering' | 'visible' | 'exiting';
+  animationState?: "entering" | "visible" | "exiting";
 
   /**
    * Callback when toast is dismissed
@@ -78,40 +80,43 @@ export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
   /**
    * Custom data testid for testing
    */
-  'data-testid'?: string;
+  "data-testid"?: string;
 }
 
 const getDefaultIcon = (variant: ToastVariant): string => {
   switch (variant) {
-    case 'success':
-      return '✓';
-    case 'warning':
-      return '⚠';
-    case 'error':
-      return '✕';
-    case 'info':
+    case "success":
+      return "✓";
+    case "warning":
+      return "⚠";
+    case "error":
+      return "✕";
+    case "info":
     default:
-      return 'ℹ';
+      return "ℹ";
   }
 };
 
 export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
-  ({
-    id,
-    type = 'info',
-    title,
-    message,
-    duration = 5000,
-    dismissible = true,
-    actions,
-    icon,
-    animationState = 'entering',
-    onDismiss,
-    onPause,
-    onResume,
-    'data-testid': dataTestId,
-    ...props
-  }, ref) => {
+  (
+    {
+      id,
+      type = "info",
+      title,
+      message,
+      duration = 5000,
+      dismissible = true,
+      actions,
+      icon,
+      animationState = "entering",
+      onDismiss,
+      onPause,
+      onResume,
+      "data-testid": dataTestId,
+      ...props
+    },
+    ref,
+  ) => {
     const [isPaused, setIsPaused] = useState(false);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const startTimeRef = useRef<number>(Date.now());
@@ -119,7 +124,7 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
 
     // Auto-dismissal logic
     useEffect(() => {
-      if (duration === 0 || animationState === 'exiting') return;
+      if (duration === 0 || animationState === "exiting") return;
 
       const startTimer = () => {
         const remainingTime = duration - pausedTimeRef.current;
@@ -147,7 +152,8 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
     }, [id, duration, isPaused, onDismiss, onPause, onResume, animationState]);
 
     // Progress calculation for potential progress indicator
-    const progress = duration > 0 ? ((Date.now() - startTimeRef.current) / duration) * 100 : 0;
+    const progress =
+      duration > 0 ? ((Date.now() - startTimeRef.current) / duration) * 100 : 0;
 
     const handleMouseEnter = () => {
       if (duration > 0) {
@@ -168,18 +174,20 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-      if (event.key === 'Escape' && dismissible) {
+      if (event.key === "Escape" && dismissible) {
         handleDismiss();
       }
     };
 
     // Build class names
     const toastClasses = [
-      'mond-toast',
+      "mond-toast",
       `mond-toast--${type}`,
       `mond-toast--${animationState}`,
-      message && 'mond-toast--has-message',
-    ].filter(Boolean).join(' ');
+      message && "mond-toast--has-message",
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div
@@ -204,21 +212,17 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         )}
 
         {/* Icon */}
-        <div className="mond-toast__icon">
-          {icon || getDefaultIcon(type)}
-        </div>
+        <Icon size="lg">{icon || getDefaultIcon(type)}</Icon>
 
         {/* Content */}
         <div className="mond-toast__content">
-          <h4 className={`mond-toast__title${message ? ' mond-toast__title--has-message' : ''}`}>
+          <h4
+            className={`mond-toast__title${message ? " mond-toast__title--has-message" : ""}`}
+          >
             {title}
           </h4>
 
-          {message && (
-            <p className="mond-toast__message">
-              {message}
-            </p>
-          )}
+          {message && <p className="mond-toast__message">{message}</p>}
 
           {/* Actions */}
           {actions && actions.length > 0 && (
@@ -227,7 +231,7 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
                 <Button
                   key={index}
                   size="sm"
-                  variant={action.variant || 'outline'}
+                  variant={action.variant || "outline"}
                   onClick={action.onClick}
                 >
                   {action.label}
@@ -252,9 +256,9 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
-Toast.displayName = 'Toast';
+Toast.displayName = "Toast";
 
 export default Toast;

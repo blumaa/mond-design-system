@@ -74,10 +74,6 @@
   line-height: 1;
 }
 
-.mond-toast--success .mond-toast__icon {
-  color: var(--mond-feedback-success-text);
-}
-
 .mond-toast--error .mond-toast__icon {
   color: var(--mond-feedback-error-text);
 }
