@@ -1,3 +1,10 @@
+## [2.4.3](https://github.com/blumaa/mond-design-system/compare/v2.4.2...v2.4.3) (2025-11-14)
+
+### 🐛 Bug Fixes
+
+* Card refactor and add Box wrap prop ([828cbf6](https://github.com/blumaa/mond-design-system/commit/828cbf67058c504c1313688731ffc07cbc2d57e2))
+* Card typescript ([ab55a27](https://github.com/blumaa/mond-design-system/commit/ab55a27b38bd556cfc6f6a211971d96f6ac38cfb))
+
 ## [2.4.2](https://github.com/blumaa/mond-design-system/compare/v2.4.1...v2.4.2) (2025-11-14)
 
 ### 🐛 Bug Fixes
