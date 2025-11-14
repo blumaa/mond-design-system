@@ -21,7 +21,9 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   // Layout props
   display?: 'flex' | 'block' | 'inline-block' | 'inline-flex' | 'grid' | 'inline-grid' | 'none';
   flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+  flexWrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
   alignItems?: 'flex-start' | 'center' | 'flex-end' | 'stretch' | 'baseline';
+  alignContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'stretch';
   justifyContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
   gap?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   flex?: string;
@@ -76,7 +78,9 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   // Layout props
   display,
   flexDirection,
+  flexWrap,
   alignItems,
+  alignContent,
   justifyContent,
   gap,
   flex,
@@ -109,7 +113,9 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     // Layout classes
     display && `display-${display}`,
     flexDirection && `flex-direction-${flexDirection}`,
+    flexWrap && `flex-wrap-${flexWrap}`,
     alignItems && `align-items-${alignItems}`,
+    alignContent && `align-content-${alignContent}`,
     justifyContent && `justify-content-${justifyContent}`,
     gap && `gap-${gap}`,
 

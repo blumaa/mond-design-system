@@ -9,6 +9,33 @@
   transition: all 0.2s ease-in-out;
   border: 1px solid var(--mond-border-default);
   width: 100%;
+  max-width: 100%;
+}
+
+/* Width modifiers */
+.mond-card--full-width {
+  width: 100%;
+  max-width: none;
+}
+
+.mond-card--max-width-sm {
+  max-width: 320px;
+}
+
+.mond-card--max-width-md {
+  max-width: 400px;
+}
+
+.mond-card--max-width-lg {
+  max-width: 600px;
+}
+
+.mond-card--max-width-xl {
+  max-width: 800px;
+}
+
+.mond-card--max-width-full {
+  max-width: none;
 }
 
 /* Background variants */
@@ -20,103 +47,84 @@
   background-color: var(--mond-surface-elevated);
 }
 
-.mond-card--emphasized {
-  background-color: var(--mond-surface-primary);
-  border-color: var(--mond-border-strong);
+.mond-card--elevated {
+  background-color: var(--mond-surface-card);
+  box-shadow: var(--mond-shadow-md);
+  border-color: transparent;
 }
 
-/* Mobile-first: Always column on mobile */
-.mond-card--image-top,
-.mond-card--image-left {
-  flex-direction: column;
+/* Card Header */
+.mond-card__header {
+  padding: var(--mond-spacing-4) var(--mond-spacing-4) var(--mond-spacing-3);
+  border-bottom: 1px solid var(--mond-border-default);
 }
 
-/* Desktop: Apply row layout for left-positioned images */
-@media (min-width: 768px) {
-  .mond-card--image-left {
-    flex-direction: row;
-  }
+.mond-card__header:last-child {
+  border-bottom: none;
+  padding-bottom: var(--mond-spacing-4);
 }
 
-/* Image wrapper - Mobile first */
-.mond-card__image-wrapper {
-  flex-shrink: 0;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
-
-/* Mobile: All images use 16:9 aspect ratio */
-.mond-card__image-wrapper {
-  aspect-ratio: 16 / 9;
-}
-
-/* Desktop: Left-positioned images become vertical */
-@media (min-width: 768px) {
-  .mond-card--image-left .mond-card__image-wrapper {
-    width: 280px;
-    aspect-ratio: auto;
-    height: 100%;
-    min-height: 240px;
-  }
-}
-
-/* Larger screens: Slightly wider left images */
-@media (min-width: 1024px) {
-  .mond-card--image-left .mond-card__image-wrapper {
-    width: 320px;
-    min-height: 280px;
-  }
-}
-
-/* Content section */
-.mond-card__content {
+/* Card Body */
+.mond-card__body {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  padding: var(--mond-spacing-4);
 }
 
-/* Date with icon */
-.mond-card__date {
-  display: flex;
-  align-items: center;
-  gap: var(--mond-spacing-2);
+.mond-card__header + .mond-card__body {
+  padding-top: var(--mond-spacing-3);
 }
 
-/* Call to action */
-.mond-card__cta {
-  margin-top: auto;
+.mond-card__body:last-child {
+  padding-bottom: var(--mond-spacing-4);
 }
 
-/* Overlay elements - Mobile */
-.mond-card__top-left,
-.mond-card__top-right {
-  position: absolute;
-  z-index: 10;
-  top: var(--mond-spacing-3);
+/* Card Footer */
+.mond-card__footer {
+  padding: var(--mond-spacing-3) var(--mond-spacing-4) var(--mond-spacing-4);
+  border-top: 1px solid var(--mond-border-default);
 }
 
-.mond-card__top-left {
-  left: var(--mond-spacing-3);
+.mond-card__footer:first-child {
+  border-top: none;
+  padding-top: var(--mond-spacing-4);
 }
 
-.mond-card__top-right {
-  right: var(--mond-spacing-3);
+.mond-card__body + .mond-card__footer {
+  padding-top: var(--mond-spacing-3);
 }
 
-/* Overlay elements - Desktop */
+/* Desktop spacing */
 @media (min-width: 768px) {
-  .mond-card__top-left,
-  .mond-card__top-right {
-    top: var(--mond-spacing-4);
+  .mond-card__header {
+    padding: var(--mond-spacing-6) var(--mond-spacing-6) var(--mond-spacing-4);
   }
 
-  .mond-card__top-left {
-    left: var(--mond-spacing-4);
+  .mond-card__header:last-child {
+    padding-bottom: var(--mond-spacing-6);
   }
 
-  .mond-card__top-right {
-    right: var(--mond-spacing-4);
+  .mond-card__body {
+    padding: var(--mond-spacing-6);
+  }
+
+  .mond-card__header + .mond-card__body {
+    padding-top: var(--mond-spacing-4);
+  }
+
+  .mond-card__body:last-child {
+    padding-bottom: var(--mond-spacing-6);
+  }
+
+  .mond-card__footer {
+    padding: var(--mond-spacing-4) var(--mond-spacing-6) var(--mond-spacing-6);
+  }
+
+  .mond-card__footer:first-child {
+    padding-top: var(--mond-spacing-6);
+  }
+
+  .mond-card__body + .mond-card__footer {
+    padding-top: var(--mond-spacing-4);
   }
 }
 
@@ -152,14 +160,6 @@
   }
 }
 
-/* Disabled state */
-.mond-card--disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
-  background-color: var(--mond-surface-disabled);
-}
-
 /* Link wrapper */
 .mond-card__link-wrapper {
   text-decoration: none;
@@ -174,16 +174,4 @@
 .mond-card__link-wrapper:focus .mond-card {
   outline: 2px solid var(--mond-border-focused);
   outline-offset: 2px;
-}
-
-/* Ensure Box className doesn't break layout */
-.mond-card__content.mond-card__content {
-  display: flex;
-}
-
-/* Responsive spacing - Reduce padding on mobile */
-@media (max-width: 640px) {
-  .mond-card__content {
-    padding: var(--mond-spacing-4) !important;
-  }
 }

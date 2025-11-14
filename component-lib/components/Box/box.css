@@ -235,12 +235,25 @@
 .flex-direction-row-reverse { flex-direction: row-reverse; }
 .flex-direction-column-reverse { flex-direction: column-reverse; }
 
+/* Flex Wrap */
+.flex-wrap-nowrap { flex-wrap: nowrap; }
+.flex-wrap-wrap { flex-wrap: wrap; }
+.flex-wrap-wrap-reverse { flex-wrap: wrap-reverse; }
+
 /* Align Items */
 .align-items-flex-start { align-items: flex-start; }
 .align-items-center { align-items: center; }
 .align-items-flex-end { align-items: flex-end; }
 .align-items-stretch { align-items: stretch; }
 .align-items-baseline { align-items: baseline; }
+
+/* Align Content (for multi-line flex containers) */
+.align-content-flex-start { align-content: flex-start; }
+.align-content-center { align-content: center; }
+.align-content-flex-end { align-content: flex-end; }
+.align-content-space-between { align-content: space-between; }
+.align-content-space-around { align-content: space-around; }
+.align-content-stretch { align-content: stretch; }
 
 /* Justify Content */
 .justify-content-flex-start { justify-content: flex-start; }
