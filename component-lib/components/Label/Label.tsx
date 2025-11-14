@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import './label.css';
 
 export type LabelSize = 'sm' | 'md' | 'lg';
@@ -9,7 +9,7 @@ export interface LabelProps {
   /**
    * Label content
    */
-  children: React.ReactNode;
+  children: ReactNode;
 
   /**
    * Associates label with form element

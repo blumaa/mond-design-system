@@ -153,20 +153,12 @@ const ToastDemo = ({
   }, []);
 
   return (
-    <Box style={{
-      padding: '2rem',
-      minHeight: '100vh',
-    }}>
-      <Box style={{ marginBottom: '2rem' }}>
+    <div style={{ padding: '2rem', minHeight: '100vh' }}>
+      <Box margin="0" padding="0">
         <h2>Toast Container Demo</h2>
         <p>Click the buttons below to add different types of toasts. Try hovering over toasts to pause auto-dismissal!</p>
 
-        <Box style={{
-          display: 'flex',
-          gap: '1rem',
-          flexWrap: 'wrap',
-          marginTop: '1rem'
-        }}>
+        <Box display="flex" gap="md" flexWrap="wrap" margin="4" padding="0">
           <Button onClick={() => addToast('success')} variant="primary">
             Add Success Toast
           </Button>
@@ -190,7 +182,7 @@ const ToastDemo = ({
           </Button>
         </Box>
 
-        <Box style={{ marginTop: '1rem' }}>
+        <Box margin="4" padding="0">
           <p><strong>Active Toasts:</strong> {toasts.length} / {maxToasts}</p>
           <p><strong>Position:</strong> {position}</p>
         </Box>
@@ -203,7 +195,7 @@ const ToastDemo = ({
         onDismiss={handleDismiss}
         data-testid="demo-toast-container"
       />
-    </Box>
+    </div>
   );
 };
 
@@ -239,55 +231,51 @@ export const Interactive: Story = {
 // Static examples showing different toast types
 export const ToastTypes: Story = {
   render: () => (
-    <Box style={{ 
-      padding: '2rem',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '1rem',
-      maxWidth: '400px',
-    }}>
-      <h3>Toast Types</h3>
-      
-      <Toast
-        id="success-toast"
-        type="success"
-        title="Success Toast"
-        message="Operation completed successfully"
-        onDismiss={() => {}}
-        animationState="visible"
-      />
-      
-      <Toast
-        id="error-toast"
-        type="error"
-        title="Error Toast"
-        message="Something went wrong"
-        onDismiss={() => {}}
-        animationState="visible"
-        actions={[
-          { label: 'Retry', onClick: () => {} },
-          { label: 'Cancel', onClick: () => {}, variant: 'outline' },
-        ]}
-      />
-      
-      <Toast
-        id="warning-toast"
-        type="warning"
-        title="Warning Toast"
-        message="Please review your input"
-        onDismiss={() => {}}
-        animationState="visible"
-      />
-      
-      <Toast
-        id="info-toast"
-        type="info"
-        title="Info Toast"
-        message="Here's some helpful information"
-        onDismiss={() => {}}
-        animationState="visible"
-      />
-    </Box>
+    <div style={{ padding: '2rem', maxWidth: '400px' }}>
+      <Box display="flex" flexDirection="column" gap="md" padding="0">
+        <h3>Toast Types</h3>
+
+        <Toast
+          id="success-toast"
+          type="success"
+          title="Success Toast"
+          message="Operation completed successfully"
+          onDismiss={() => {}}
+          animationState="visible"
+        />
+
+        <Toast
+          id="error-toast"
+          type="error"
+          title="Error Toast"
+          message="Something went wrong"
+          onDismiss={() => {}}
+          animationState="visible"
+          actions={[
+            { label: 'Retry', onClick: () => {} },
+            { label: 'Cancel', onClick: () => {}, variant: 'outline' },
+          ]}
+        />
+
+        <Toast
+          id="warning-toast"
+          type="warning"
+          title="Warning Toast"
+          message="Please review your input"
+          onDismiss={() => {}}
+          animationState="visible"
+        />
+
+        <Toast
+          id="info-toast"
+          type="info"
+          title="Info Toast"
+          message="Here's some helpful information"
+          onDismiss={() => {}}
+          animationState="visible"
+        />
+      </Box>
+    </div>
   ),
 };
 
@@ -308,38 +296,31 @@ export const Positions: Story = {
     ];
 
     return (
-      <Box style={{ 
-        padding: '2rem',
-        minHeight: '100vh',
-        position: 'relative',
-      }}>
-        <h3>Toast Positions</h3>
-        <p>Select a position to see how toasts are displayed:</p>
-        
-        <Box style={{ 
-          display: 'flex', 
-          gap: '0.5rem', 
-          flexWrap: 'wrap',
-          marginBottom: '2rem',
-        }}>
-          {(['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top-center', 'bottom-center'] as const).map(position => (
-            <Button
-              key={position}
-              variant={activePosition === position ? 'primary' : 'outline'}
-              size="sm"
-              onClick={() => setActivePosition(position)}
-            >
-              {position}
-            </Button>
-          ))}
-        </Box>
+      <div style={{ padding: '2rem', minHeight: '100vh', position: 'relative' }}>
+        <Box padding="0">
+          <h3>Toast Positions</h3>
+          <p>Select a position to see how toasts are displayed:</p>
 
-        <ToastContainer
-          toasts={sampleToasts}
-          position={activePosition}
-          onDismiss={() => {}}
-        />
-      </Box>
+          <Box display="flex" gap="xs" flexWrap="wrap" margin="8" padding="0">
+            {(['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top-center', 'bottom-center'] as const).map(position => (
+              <Button
+                key={position}
+                variant={activePosition === position ? 'primary' : 'outline'}
+                size="sm"
+                onClick={() => setActivePosition(position)}
+              >
+                {position}
+              </Button>
+            ))}
+          </Box>
+
+          <ToastContainer
+            toasts={sampleToasts}
+            position={activePosition}
+            onDismiss={() => {}}
+          />
+        </Box>
+      </div>
     );
   },
 };
@@ -360,19 +341,14 @@ export const DarkMode: Story = {
 export const AnimationStates: Story = {
   render: () => {
     const [animationState, setAnimationState] = useState<'entering' | 'visible' | 'exiting'>('entering');
-    
+
     return (
-      <Box style={{ 
-        padding: '2rem',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2rem',
-      }}>
+      <Box display="flex" flexDirection="column" gap="xxl" padding="8">
         <div>
           <h3>Animation States</h3>
           <p>See how toasts animate during their lifecycle:</p>
-          
-          <Box style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem' }}>
+
+          <Box display="flex" gap="xs" margin="8" padding="0">
             {(['entering', 'visible', 'exiting'] as const).map(state => (
               <Button
                 key={state}
@@ -385,8 +361,8 @@ export const AnimationStates: Story = {
             ))}
           </Box>
         </div>
-        
-        <Box style={{ maxWidth: '400px' }}>
+
+        <div style={{ maxWidth: '400px' }}>
           <Toast
             id="animation-toast"
             type="info"
@@ -395,7 +371,7 @@ export const AnimationStates: Story = {
             onDismiss={() => {}}
             animationState={animationState}
           />
-        </Box>
+        </div>
       </Box>
     );
   },
@@ -420,31 +396,33 @@ export const PerformanceTest: Story = {
     };
     
     const clearAll = () => setToasts([]);
-    
+
     return (
-      <Box style={{ padding: '2rem', minHeight: '100vh' }}>
-        <h3>Performance Test</h3>
-        <p>Test how the ToastContainer handles many toasts with queue management:</p>
-        
-        <Box style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-          <Button onClick={addManyToasts} variant="primary">
-            Add 20 Toasts
-          </Button>
-          <Button onClick={clearAll} variant="outline">
-            Clear All
-          </Button>
+      <div style={{ padding: '2rem', minHeight: '100vh' }}>
+        <Box padding="0">
+          <h3>Performance Test</h3>
+          <p>Test how the ToastContainer handles many toasts with queue management:</p>
+
+          <Box display="flex" gap="md" margin="4" padding="0">
+            <Button onClick={addManyToasts} variant="primary">
+              Add 20 Toasts
+            </Button>
+            <Button onClick={clearAll} variant="outline">
+              Clear All
+            </Button>
+          </Box>
+
+          <p><strong>Active Toasts:</strong> {toasts.length}</p>
+          <p><strong>Max Display:</strong> 5 (others queued)</p>
+
+          <ToastContainer
+            toasts={toasts}
+            position="top-right"
+            maxToasts={5}
+            onDismiss={(id) => setToasts(prev => prev.filter(t => t.id !== id))}
+          />
         </Box>
-        
-        <p><strong>Active Toasts:</strong> {toasts.length}</p>
-        <p><strong>Max Display:</strong> 5 (others queued)</p>
-        
-        <ToastContainer
-          toasts={toasts}
-          position="top-right"
-          maxToasts={5}
-          onDismiss={(id) => setToasts(prev => prev.filter(t => t.id !== id))}
-        />
-      </Box>
+      </div>
     );
   },
 };

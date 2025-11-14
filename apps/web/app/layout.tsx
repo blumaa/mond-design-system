@@ -1,8 +1,9 @@
 "use client";
+import { ReactNode } from 'react';
 import { ThemeWrapper } from './components/ThemeWrapper';
 import './globals.css';
 
-function ThemedBody({ children }: { children: React.ReactNode }) {
+function ThemedBody({ children }: { children: ReactNode }) {
   return (
     <ThemeWrapper>
       <div style={{ minHeight: '100vh' }}>
@@ -15,7 +16,7 @@ function ThemedBody({ children }: { children: React.ReactNode }) {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="en">

@@ -15,7 +15,7 @@ const meta = {
         component: `
 ### Minimal Box Component
 
-A primitive layout component focused exclusively on **spacing** (margin and padding). Box uses strict TypeScript typing with \`SpacingToken\` and generates pure CSS utility classes for optimal performance and SSR/RSC compatibility.
+A primitive component. Box uses strict TypeScript typing.
 
 ### Quick Start
 
@@ -34,74 +34,10 @@ function MyComponent() {
 
 ### Key Features
 
-- **Spacing Only**: Margin and padding props with full names (no abbreviations)
-- **Strict TypeScript**: \`SpacingToken\` type ensures only valid tokens ("0" | "1" | "2" | "3" | "4" | "5" | "6" | "8" | "10" | "12" | "16" | "20" | "24" | "32" | "40" | "48" | "56" | "64")
-- **Pure CSS Classes**: Props map to CSS utility classes (Pattern 1)
 - **SSR/RSC Compatible**: No runtime theme resolution, works with Server Components
 - **Theme-Aware**: Automatically responds to \`data-theme\` attribute changes
 - **Light/Dark Mode**: Supports theme switching via CSS variables
 - **Polymorphic**: Render as any HTML element via \`as\` prop
-
-### Design Philosophy
-
-Box is **minimal by design**. It does one thing well: spacing.
-
-**For layout** (flexbox, grid, positioning):
-- Use native HTML elements with \`className\` and CSS
-- Or create dedicated layout components
-
-**For colors and typography**:
-- Use semantic components (Text, Heading, Button, etc.)
-- Or apply styles via \`className\`
-
-**For additional styling**:
-- Use the \`className\` prop to add custom CSS classes
-- Box works seamlessly with utility CSS frameworks
-
-### IDE Autocomplete
-
-TypeScript provides autocomplete for spacing tokens:
-- Type \`padding="\` and see all valid tokens
-- Invalid tokens are caught at compile time
-- Token values: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 56, 64
-
-### Available Spacing Props
-
-All props use **full names** (not abbreviations) and accept \`SpacingToken\`:
-
-- \`margin\` - All sides
-- \`marginTop\` - Top side
-- \`marginRight\` - Right side
-- \`marginBottom\` - Bottom side
-- \`marginLeft\` - Left side
-- \`padding\` - All sides
-- \`paddingTop\` - Top side
-- \`paddingRight\` - Right side
-- \`paddingBottom\` - Bottom side
-- \`paddingLeft\` - Left side
-
-### Token Scale Reference
-
-| Token | Value | Pixels (16px base) |
-|-------|-------|--------------------|
-| "0"   | 0     | 0px               |
-| "1"   | 0.25rem | 4px             |
-| "2"   | 0.5rem  | 8px             |
-| "3"   | 0.75rem | 12px            |
-| "4"   | 1rem    | 16px            |
-| "5"   | 1.25rem | 20px            |
-| "6"   | 1.5rem  | 24px            |
-| "8"   | 2rem    | 32px            |
-| "10"  | 2.5rem  | 40px            |
-| "12"  | 3rem    | 48px            |
-| "16"  | 4rem    | 64px            |
-| "20"  | 5rem    | 80px            |
-| "24"  | 6rem    | 96px            |
-| "32"  | 8rem    | 128px           |
-| "40"  | 10rem   | 160px           |
-| "48"  | 12rem   | 192px           |
-| "56"  | 14rem   | 224px           |
-| "64"  | 16rem   | 256px           |
 `,
       },
     },
@@ -228,28 +164,13 @@ All props use **full names** (not abbreviations) and accept \`SpacingToken\`:
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Helper component for visual examples with theme-aware styling
-const VisualBox: React.FC<{ children: React.ReactNode; label?: string }> = ({ children, label }) => (
-  <Box display="inline-block" style={{ position: 'relative' }}>
-    {label && (
-      <Box marginBottom="1" style={{ fontFamily: 'monospace' }}>
-        <Text variant="caption" semantic="secondary">
-          {label}
-        </Text>
-      </Box>
-    )}
-    <Box display="inline-block" style={{ border: '2px dashed var(--mond-border-default)' }}>
-      {children}
-    </Box>
-  </Box>
-);
-
 export const Default: Story = {
   args: {
     padding: '4',
+    border: 'default',
   },
   render: (args) => (
-    <Box {...args} style={{ border: '1px solid var(--mond-border-default)', backgroundColor: 'var(--mond-surface-background)' }}>
+    <Box {...args}>
       <Text>Box with padding</Text>
     </Box>
   ),
@@ -263,35 +184,50 @@ export const AllSpacingProps: Story = {
           <Heading level={3} size="lg">Margin Props</Heading>
         </Box>
         <Box display="flex" flexDirection="column" gap="md">
-          <VisualBox label='margin="4"'>
-            <Box margin="4" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">margin="4"</Text>
+            </Box>
+            <Box margin="4" border="default" padding="2">
               <Text>All sides</Text>
             </Box>
-          </VisualBox>
+          </Box>
 
-          <VisualBox label='marginTop="6"'>
-            <Box marginTop="6" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">marginTop="6"</Text>
+            </Box>
+            <Box marginTop="6" border="default" padding="2">
               <Text>Top only</Text>
             </Box>
-          </VisualBox>
+          </Box>
 
-          <VisualBox label='marginRight="8"'>
-            <Box marginRight="8" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">marginRight="8"</Text>
+            </Box>
+            <Box marginRight="8" border="default" padding="2">
               <Text>Right only</Text>
             </Box>
-          </VisualBox>
+          </Box>
 
-          <VisualBox label='marginBottom="4"'>
-            <Box marginBottom="4" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">marginBottom="4"</Text>
+            </Box>
+            <Box marginBottom="4" border="default" padding="2">
               <Text>Bottom only</Text>
             </Box>
-          </VisualBox>
+          </Box>
 
-          <VisualBox label='marginLeft="10"'>
-            <Box marginLeft="10" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">marginLeft="10"</Text>
+            </Box>
+            <Box marginLeft="10" border="default" padding="2">
               <Text>Left only</Text>
             </Box>
-          </VisualBox>
+          </Box>
         </Box>
       </Box>
 
@@ -300,35 +236,50 @@ export const AllSpacingProps: Story = {
           <Heading level={3} size="lg">Padding Props</Heading>
         </Box>
         <Box display="flex" flexDirection="column" gap="md">
-          <VisualBox label='padding="4"'>
-            <Box padding="4" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">padding="4"</Text>
+            </Box>
+            <Box padding="4" border="default">
               <Text>All sides</Text>
             </Box>
-          </VisualBox>
+          </Box>
 
-          <VisualBox label='paddingTop="6"'>
-            <Box paddingTop="6" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">paddingTop="6"</Text>
+            </Box>
+            <Box paddingTop="6" border="default">
               <Text>Top only</Text>
             </Box>
-          </VisualBox>
+          </Box>
 
-          <VisualBox label='paddingRight="8"'>
-            <Box paddingRight="8" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">paddingRight="8"</Text>
+            </Box>
+            <Box paddingRight="8" border="default">
               <Text>Right only</Text>
             </Box>
-          </VisualBox>
+          </Box>
 
-          <VisualBox label='paddingBottom="4"'>
-            <Box paddingBottom="4" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">paddingBottom="4"</Text>
+            </Box>
+            <Box paddingBottom="4" border="default">
               <Text>Bottom only</Text>
             </Box>
-          </VisualBox>
+          </Box>
 
-          <VisualBox label='paddingLeft="10"'>
-            <Box paddingLeft="10" style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}>
+          <Box>
+            <Box marginBottom="1">
+              <Text variant="caption" semantic="secondary">paddingLeft="10"</Text>
+            </Box>
+            <Box paddingLeft="10" border="default">
               <Text>Left only</Text>
             </Box>
-          </VisualBox>
+          </Box>
         </Box>
       </Box>
 
@@ -336,15 +287,14 @@ export const AllSpacingProps: Story = {
         <Box marginBottom="4">
           <Heading level={3} size="lg">Combined Props</Heading>
         </Box>
-        <VisualBox label='margin="4" padding="6"'>
-          <Box
-            margin="4"
-            padding="6"
-            style={{ backgroundColor: 'var(--mond-surface-elevated)', border: '1px solid var(--mond-border-default)' }}
-          >
+        <Box>
+          <Box marginBottom="1">
+            <Text variant="caption" semantic="secondary">margin="4" padding="6"</Text>
+          </Box>
+          <Box margin="4" padding="6" border="default">
             <Text>Margin and padding together</Text>
           </Box>
-        </VisualBox>
+        </Box>
       </Box>
     </Box>
   ),
@@ -357,19 +307,20 @@ export const SpacingTokens: Story = {
         <Box marginBottom="4">
           <Heading level={3} size="lg">Small Scale (0-6)</Heading>
         </Box>
-        <Box display="flex" gap="md" style={{ flexWrap: 'wrap' }}>
+        <Box display="flex" gap="md" flexWrap="wrap">
           {(['0', '1', '2', '3', '4', '5', '6'] as const).map((token) => (
             <Box key={token} display="flex" flexDirection="column" alignItems="center" gap="xs">
               <Text variant="body-sm" semantic="secondary" as="code">"{token}"</Text>
-              <Box
-                padding={token}
+              <div
                 style={{
                   backgroundColor: 'var(--mond-surface-elevated)',
                   border: '2px solid var(--mond-border-default)',
                   minWidth: '40px',
                   minHeight: '40px',
                 }}
-              />
+              >
+                <Box padding={token} />
+              </div>
             </Box>
           ))}
         </Box>
@@ -379,19 +330,20 @@ export const SpacingTokens: Story = {
         <Box marginBottom="4">
           <Heading level={3} size="lg">Medium Scale (8-16)</Heading>
         </Box>
-        <Box display="flex" gap="md" style={{ flexWrap: 'wrap' }}>
+        <Box display="flex" gap="md" flexWrap="wrap">
           {(['8', '10', '12', '16'] as const).map((token) => (
             <Box key={token} display="flex" flexDirection="column" alignItems="center" gap="xs">
               <Text variant="body-sm" semantic="secondary" as="code">"{token}"</Text>
-              <Box
-                padding={token}
+              <div
                 style={{
                   backgroundColor: 'var(--mond-surface-elevated)',
                   border: '2px solid var(--mond-border-default)',
                   minWidth: '40px',
                   minHeight: '40px',
                 }}
-              />
+              >
+                <Box padding={token} />
+              </div>
             </Box>
           ))}
         </Box>
@@ -401,284 +353,22 @@ export const SpacingTokens: Story = {
         <Box marginBottom="4">
           <Heading level={3} size="lg">Large Scale (20-64)</Heading>
         </Box>
-        <Box display="flex" gap="md" style={{ flexWrap: 'wrap' }}>
+        <Box display="flex" gap="md" flexWrap="wrap">
           {(['20', '24', '32', '40', '48', '56', '64'] as const).map((token) => (
             <Box key={token} display="flex" flexDirection="column" alignItems="center" gap="xs">
               <Text variant="body-sm" semantic="secondary" as="code">"{token}"</Text>
-              <Box
-                padding={token}
+              <div
                 style={{
                   backgroundColor: 'var(--mond-surface-elevated)',
                   border: '2px solid var(--mond-border-default)',
                   minWidth: '40px',
                   minHeight: '40px',
                 }}
-              />
+              >
+                <Box padding={token} />
+              </div>
             </Box>
           ))}
-        </Box>
-      </Box>
-    </Box>
-  ),
-};
-
-export const PolymorphicElements: Story = {
-  render: () => (
-    <Box display="flex" flexDirection="column" gap="md">
-      <Box as="div" padding="4" style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
-        <Text variant="code" semantic="secondary">as="div"</Text> <Text>(default element)</Text>
-      </Box>
-
-      <Box as="section" padding="4" style={{ backgroundColor: '#fef3c7', border: '1px solid #f59e0b' }}>
-        <Text variant="code" semantic="secondary">as="section"</Text> <Text>(semantic sectioning)</Text>
-      </Box>
-
-      <Box as="article" padding="4" style={{ backgroundColor: '#dbeafe', border: '1px solid #3b82f6' }}>
-        <Text variant="code" semantic="secondary">as="article"</Text> <Text>(article content)</Text>
-      </Box>
-
-      <Box as="header" padding="4" style={{ backgroundColor: '#dcfce7', border: '1px solid #22c55e' }}>
-        <Text variant="code" semantic="secondary">as="header"</Text> <Text>(header element)</Text>
-      </Box>
-
-      <Box as="footer" padding="4" style={{ backgroundColor: '#fce7f3', border: '1px solid #ec4899' }}>
-        <Text variant="code" semantic="secondary">as="footer"</Text> <Text>(footer element)</Text>
-      </Box>
-
-      <Box as="span" padding="2" style={{ backgroundColor: '#f3e8ff', border: '1px solid #a855f7', display: 'inline-block' }}>
-        <Text variant="code" semantic="secondary">as="span"</Text> <Text>(inline element)</Text>
-      </Box>
-    </Box>
-  ),
-};
-
-export const NestedBoxes: Story = {
-  render: () => (
-    <Box
-      padding="8"
-      style={{
-        backgroundColor: '#1e293b',
-        border: '2px solid #334155',
-        borderRadius: '8px',
-      }}
-    >
-      <Box marginBottom="4" style={{ fontFamily: 'monospace' }}>
-        <Text variant="body-sm" semantic="inverse">
-          Outer Box: padding="8"
-        </Text>
-      </Box>
-
-      <Box
-        padding="6"
-        margin="4"
-        style={{
-          backgroundColor: '#334155',
-          border: '2px solid #475569',
-          borderRadius: '6px',
-        }}
-      >
-        <Box marginBottom="4" style={{ fontFamily: 'monospace' }}>
-          <Text variant="body-sm" semantic="inverse">
-            Middle Box: padding="6" margin="4"
-          </Text>
-        </Box>
-
-        <Box
-          padding="4"
-          margin="3"
-          style={{
-            backgroundColor: '#475569',
-            border: '2px solid #64748b',
-            borderRadius: '4px',
-          }}
-        >
-          <Box style={{ fontFamily: 'monospace' }}>
-            <Text variant="body-sm" semantic="inverse">
-              Inner Box: padding="4" margin="3"
-            </Text>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
-  ),
-};
-
-export const WithClassName: Story = {
-  render: () => (
-    <Box display="flex" flexDirection="column" gap="md">
-      <Box
-        padding="4"
-        className="custom-hover-effect"
-        style={{
-          backgroundColor: '#f8fafc',
-          border: '1px solid #e2e8f0',
-          borderRadius: '4px',
-          transition: 'all 0.2s',
-          cursor: 'pointer',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = '#e2e8f0';
-          e.currentTarget.style.borderColor = '#94a3b8';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = '#f8fafc';
-          e.currentTarget.style.borderColor = '#e2e8f0';
-        }}
-      >
-        <Text>Box with custom className and hover effect</Text>
-      </Box>
-
-      <Box
-        padding="6"
-        marginTop="4"
-        className="animated-gradient"
-        style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          borderRadius: '8px',
-        }}
-      >
-        <Text weight="semibold" semantic="inverse">Box with gradient background via inline style</Text>
-      </Box>
-
-      <Box
-        padding="4"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        className="flex-center"
-        style={{
-          backgroundColor: '#dbeafe',
-          border: '2px solid #3b82f6',
-          borderRadius: '4px',
-          minHeight: '100px',
-        }}
-      >
-        <Text>Box with flexbox layout using Box props</Text>
-      </Box>
-    </Box>
-  ),
-};
-
-export const AccessibilityExample: Story = {
-  render: () => (
-    <Box display="flex" flexDirection="column" gap="md">
-      <Box
-        as="nav"
-        padding="4"
-        aria-label="Main navigation"
-        role="navigation"
-        style={{
-          backgroundColor: '#f8fafc',
-          border: '1px solid #e2e8f0',
-          borderRadius: '4px',
-        }}
-      >
-        <Text>Navigation with ARIA label</Text>
-      </Box>
-
-      <Box
-        as="article"
-        padding="6"
-        aria-labelledby="article-title"
-        style={{
-          backgroundColor: '#fef3c7',
-          border: '1px solid #f59e0b',
-          borderRadius: '4px',
-        }}
-      >
-        <Box marginBottom="2" id="article-title">
-          <Heading level={4} size="md">
-            Article Title
-          </Heading>
-        </Box>
-        <Text>Article content with aria-labelledby reference</Text>
-      </Box>
-
-      <Box
-        as="section"
-        padding="4"
-        role="region"
-        aria-label="Alert section"
-        style={{
-          backgroundColor: '#fecaca',
-          border: '1px solid #ef4444',
-          borderRadius: '4px',
-        }}
-      >
-        <Text>Alert region with role and label</Text>
-      </Box>
-
-      <Box
-        as="button"
-        padding="4"
-        aria-pressed="false"
-        tabIndex={0}
-        style={{
-          backgroundColor: '#dbeafe',
-          border: '2px solid #3b82f6',
-          borderRadius: '4px',
-          cursor: 'pointer',
-        }}
-        onClick={() => {}}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-          }
-        }}
-      >
-        <Text weight="medium">Accessible button with aria-pressed</Text>
-      </Box>
-    </Box>
-  ),
-};
-
-export const RealWorldExample: Story = {
-  render: () => (
-    <Box style={{ maxWidth: '600px', margin: '0 auto' }}>
-      <Box
-        as="article"
-        padding="8"
-        style={{
-          backgroundColor: '#ffffff',
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-        }}
-      >
-        <Box as="header" marginBottom="6">
-          <Box marginBottom="2">
-            <Heading level={2} size="xl">
-              Card Header
-            </Heading>
-          </Box>
-          <Text variant="body-sm" semantic="secondary">
-            Subtitle text goes here
-          </Text>
-        </Box>
-
-        <Box as="section" marginBottom="6">
-          <Text as="p">
-            This example shows how Box is used for spacing only. All other styling
-            (colors, typography, borders, shadows) is applied via inline styles or className.
-            This keeps Box minimal and focused on its core purpose.
-          </Text>
-        </Box>
-
-        <Box
-          as="footer"
-          paddingTop="4"
-          display="flex"
-          gap="sm"
-          style={{
-            borderTop: '1px solid #e2e8f0',
-          }}
-        >
-          <Button variant="primary">
-            Primary Action
-          </Button>
-          <Button variant="outline">
-            Secondary Action
-          </Button>
         </Box>
       </Box>
     </Box>
@@ -694,27 +384,36 @@ export const FlexboxLayouts: Story = {
             Flex Row with Gap
           </Heading>
         </Box>
-        <Box
-          display="flex"
-          flexDirection="row"
-          gap="md"
-          padding="4"
+        <div
           style={{
             backgroundColor: 'var(--mond-surface-elevated)',
             border: '1px solid var(--mond-border-default)',
             borderRadius: '8px',
           }}
         >
-          <Box padding="4" style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
-            <Text>Item 1</Text>
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap="md"
+            padding="4"
+          >
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
+              <Box padding="4">
+                <Text>Item 1</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
+              <Box padding="4">
+                <Text>Item 2</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
+              <Box padding="4">
+                <Text>Item 3</Text>
+              </Box>
+            </div>
           </Box>
-          <Box padding="4" style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
-            <Text>Item 2</Text>
-          </Box>
-          <Box padding="4" style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
-            <Text>Item 3</Text>
-          </Box>
-        </Box>
+        </div>
       </Box>
 
       <Box>
@@ -723,27 +422,36 @@ export const FlexboxLayouts: Story = {
             Flex Column with Gap
           </Heading>
         </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          gap="sm"
-          padding="4"
+        <div
           style={{
             backgroundColor: 'var(--mond-surface-elevated)',
             border: '1px solid var(--mond-border-default)',
             borderRadius: '8px',
           }}
         >
-          <Box padding="4" style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
-            <Text>Item 1</Text>
+          <Box
+            display="flex"
+            flexDirection="column"
+            gap="sm"
+            padding="4"
+          >
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
+              <Box padding="4">
+                <Text>Item 1</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
+              <Box padding="4">
+                <Text>Item 2</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
+              <Box padding="4">
+                <Text>Item 3</Text>
+              </Box>
+            </div>
           </Box>
-          <Box padding="4" style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
-            <Text>Item 2</Text>
-          </Box>
-          <Box padding="4" style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
-            <Text>Item 3</Text>
-          </Box>
-        </Box>
+        </div>
       </Box>
 
       <Box>
@@ -752,11 +460,7 @@ export const FlexboxLayouts: Story = {
             Center Aligned
           </Heading>
         </Box>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          padding="8"
+        <div
           style={{
             backgroundColor: 'var(--mond-surface-elevated)',
             border: '1px solid var(--mond-border-default)',
@@ -764,8 +468,15 @@ export const FlexboxLayouts: Story = {
             minHeight: '150px',
           }}
         >
-          <Text>Centered Content</Text>
-        </Box>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            padding="8"
+          >
+            <Text>Centered Content</Text>
+          </Box>
+        </div>
       </Box>
 
       <Box>
@@ -774,21 +485,24 @@ export const FlexboxLayouts: Story = {
             Space Between
           </Heading>
         </Box>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          padding="4"
+        <div
           style={{
             backgroundColor: 'var(--mond-surface-elevated)',
             border: '1px solid var(--mond-border-default)',
             borderRadius: '8px',
           }}
         >
-          <Text>Left</Text>
-          <Text>Center</Text>
-          <Text>Right</Text>
-        </Box>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            padding="4"
+          >
+            <Text>Left</Text>
+            <Text>Center</Text>
+            <Text>Right</Text>
+          </Box>
+        </div>
       </Box>
     </Box>
   ),
@@ -799,35 +513,41 @@ export const GapSizes: Story = {
     <Box display="flex" flexDirection="column" gap="xl">
       {(['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl'] as const).map((size) => (
         <Box key={size}>
-          <Box marginBottom="2" style={{ fontFamily: 'monospace' }}>
-            <Text variant="body-sm" weight="semibold" semantic="secondary">
-              gap="{size}"
-            </Text>
-          </Box>
-          <Box
-            display="flex"
-            gap={size}
-            padding="4"
+          <div style={{ fontFamily: 'monospace' }}>
+            <Box marginBottom="2">
+              <Text variant="body-sm" weight="semibold" semantic="secondary">
+                gap="{size}"
+              </Text>
+            </Box>
+          </div>
+          <div
             style={{
               backgroundColor: 'var(--mond-surface-elevated)',
               border: '1px solid var(--mond-border-default)',
               borderRadius: '8px',
             }}
           >
-            {[1, 2, 3, 4].map((i) => (
-              <Box
-                key={i}
-                padding="3"
-                style={{
-                  backgroundColor: 'var(--mond-surface-background)',
-                  border: '1px solid var(--mond-border-default)',
-                  borderRadius: '4px',
-                }}
-              >
-                <Text variant="body-sm">{i}</Text>
-              </Box>
-            ))}
-          </Box>
+            <Box
+              display="flex"
+              gap={size}
+              padding="4"
+            >
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  style={{
+                    backgroundColor: 'var(--mond-surface-background)',
+                    border: '1px solid var(--mond-border-default)',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <Box padding="3">
+                    <Text variant="body-sm">{i}</Text>
+                  </Box>
+                </div>
+              ))}
+            </Box>
+          </div>
         </Box>
       ))}
     </Box>
@@ -843,10 +563,7 @@ export const FlexProp: Story = {
             Flex Grow Example
           </Heading>
         </Box>
-        <Box
-          display="flex"
-          gap="md"
-          padding="4"
+        <div
           style={{
             backgroundColor: 'var(--mond-surface-elevated)',
             border: '1px solid var(--mond-border-default)',
@@ -854,27 +571,37 @@ export const FlexProp: Story = {
           }}
         >
           <Box
-            flex="1"
+            display="flex"
+            gap="md"
             padding="4"
-            style={{
-              backgroundColor: 'var(--mond-surface-background)',
-              border: '1px solid var(--mond-border-default)',
-              borderRadius: '4px',
-            }}
           >
-            <Text>flex="1" (grows to fill space)</Text>
+            <div
+              style={{
+                backgroundColor: 'var(--mond-surface-background)',
+                border: '1px solid var(--mond-border-default)',
+                borderRadius: '4px',
+              }}
+            >
+              <Box
+                flex="1"
+                padding="4"
+              >
+                <Text>flex="1" (grows to fill space)</Text>
+              </Box>
+            </div>
+            <div
+              style={{
+                backgroundColor: 'var(--mond-surface-background)',
+                border: '1px solid var(--mond-border-default)',
+                borderRadius: '4px',
+              }}
+            >
+              <Box padding="4">
+                <Text>No flex (auto width)</Text>
+              </Box>
+            </div>
           </Box>
-          <Box
-            padding="4"
-            style={{
-              backgroundColor: 'var(--mond-surface-background)',
-              border: '1px solid var(--mond-border-default)',
-              borderRadius: '4px',
-            }}
-          >
-            <Text>No flex (auto width)</Text>
-          </Box>
-        </Box>
+        </div>
       </Box>
 
       <Box>
@@ -883,10 +610,7 @@ export const FlexProp: Story = {
             Multiple Flex Ratios
           </Heading>
         </Box>
-        <Box
-          display="flex"
-          gap="md"
-          padding="4"
+        <div
           style={{
             backgroundColor: 'var(--mond-surface-elevated)',
             border: '1px solid var(--mond-border-default)',
@@ -894,39 +618,265 @@ export const FlexProp: Story = {
           }}
         >
           <Box
-            flex="1"
+            display="flex"
+            gap="md"
             padding="4"
-            style={{
-              backgroundColor: 'var(--mond-surface-background)',
-              border: '1px solid var(--mond-border-default)',
-              borderRadius: '4px',
-            }}
           >
-            <Text>flex="1"</Text>
+            <div
+              style={{
+                backgroundColor: 'var(--mond-surface-background)',
+                border: '1px solid var(--mond-border-default)',
+                borderRadius: '4px',
+              }}
+            >
+              <Box
+                flex="1"
+                padding="4"
+              >
+                <Text>flex="1"</Text>
+              </Box>
+            </div>
+            <div
+              style={{
+                backgroundColor: 'var(--mond-surface-background)',
+                border: '1px solid var(--mond-border-default)',
+                borderRadius: '4px',
+              }}
+            >
+              <Box
+                flex="2"
+                padding="4"
+              >
+                <Text>flex="2" (2x wider)</Text>
+              </Box>
+            </div>
+            <div
+              style={{
+                backgroundColor: 'var(--mond-surface-background)',
+                border: '1px solid var(--mond-border-default)',
+                borderRadius: '4px',
+              }}
+            >
+              <Box
+                flex="1"
+                padding="4"
+              >
+                <Text>flex="1"</Text>
+              </Box>
+            </div>
           </Box>
-          <Box
-            flex="2"
-            padding="4"
-            style={{
-              backgroundColor: 'var(--mond-surface-background)',
-              border: '1px solid var(--mond-border-default)',
-              borderRadius: '4px',
-            }}
-          >
-            <Text>flex="2" (2x wider)</Text>
-          </Box>
-          <Box
-            flex="1"
-            padding="4"
-            style={{
-              backgroundColor: 'var(--mond-surface-background)',
-              border: '1px solid var(--mond-border-default)',
-              borderRadius: '4px',
-            }}
-          >
-            <Text>flex="1"</Text>
-          </Box>
+        </div>
+      </Box>
+    </Box>
+  ),
+};
+
+export const FlexWrap: Story = {
+  render: () => (
+    <Box display="flex" flexDirection="column" gap="xl">
+      <Box>
+        <Box marginBottom="4">
+          <Heading level={3} size="lg">
+            Flex Wrap - No Wrap (Default)
+          </Heading>
+          <Text variant="body-sm" semantic="secondary">
+            Items overflow the container when they don't fit
+          </Text>
         </Box>
+        <div
+          style={{
+            backgroundColor: 'var(--mond-surface-elevated)',
+            border: '1px solid var(--mond-border-default)',
+            borderRadius: '8px',
+          }}
+        >
+          <Box
+            display="flex"
+            flexWrap="nowrap"
+            gap="md"
+            padding="4"
+          >
+            {Array.from({ length: 8 }, (_, i) => i + 1).map((num) => (
+              <div
+                key={num}
+                style={{
+                  backgroundColor: 'var(--mond-surface-background)',
+                  border: '1px solid var(--mond-border-default)',
+                  borderRadius: '4px',
+                  minWidth: '100px',
+                }}
+              >
+                <Box padding="4">
+                  <Text>Item {num}</Text>
+                </Box>
+              </div>
+            ))}
+          </Box>
+        </div>
+      </Box>
+
+      <Box>
+        <Box marginBottom="4">
+          <Heading level={3} size="lg">
+            Flex Wrap - Wrap
+          </Heading>
+          <Text variant="body-sm" semantic="secondary">
+            Items wrap to next line when they don't fit
+          </Text>
+        </Box>
+        <div
+          style={{
+            backgroundColor: 'var(--mond-surface-elevated)',
+            border: '1px solid var(--mond-border-default)',
+            borderRadius: '8px',
+          }}
+        >
+          <Box
+            display="flex"
+            flexWrap="wrap"
+            gap="md"
+            padding="4"
+          >
+            {Array.from({ length: 8 }, (_, i) => i + 1).map((num) => (
+              <div
+                key={num}
+                style={{
+                  backgroundColor: 'var(--mond-surface-background)',
+                  border: '1px solid var(--mond-border-default)',
+                  borderRadius: '4px',
+                  width: '150px',
+                }}
+              >
+                <Box padding="4">
+                  <Text>Item {num}</Text>
+                </Box>
+              </div>
+            ))}
+          </Box>
+        </div>
+      </Box>
+
+      <Box>
+        <Box marginBottom="4">
+          <Heading level={3} size="lg">
+            Two Items Per Row
+          </Heading>
+          <Text variant="body-sm" semantic="secondary">
+            Using flex-basis to ensure exactly 2 items per row
+          </Text>
+        </Box>
+        <div
+          style={{
+            backgroundColor: 'var(--mond-surface-elevated)',
+            border: '1px solid var(--mond-border-default)',
+            borderRadius: '8px',
+          }}
+        >
+          <Box
+            display="flex"
+            flexWrap="wrap"
+            gap="md"
+            padding="4"
+          >
+            {Array.from({ length: 6 }, (_, i) => i + 1).map((num) => (
+              <div
+                key={num}
+                style={{
+                  backgroundColor: 'var(--mond-surface-background)',
+                  border: '1px solid var(--mond-border-default)',
+                  borderRadius: '4px',
+                  width: '48%',
+                }}
+              >
+                <Box padding="4">
+                  <Text>Item {num}</Text>
+                </Box>
+              </div>
+            ))}
+          </Box>
+        </div>
+      </Box>
+
+      <Box>
+        <Box marginBottom="4">
+          <Heading level={3} size="lg">
+            Three Items Per Row
+          </Heading>
+          <Text variant="body-sm" semantic="secondary">
+            Using flex-basis to ensure exactly 3 items per row
+          </Text>
+        </Box>
+        <div
+          style={{
+            backgroundColor: 'var(--mond-surface-elevated)',
+            border: '1px solid var(--mond-border-default)',
+            borderRadius: '8px',
+          }}
+        >
+          <Box
+            display="flex"
+            flexWrap="wrap"
+            gap="md"
+            padding="4"
+          >
+            {Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
+              <div
+                key={num}
+                style={{
+                  backgroundColor: 'var(--mond-surface-background)',
+                  border: '1px solid var(--mond-border-default)',
+                  borderRadius: '4px',
+                  width: '31%',
+                }}
+              >
+                <Box padding="4">
+                  <Text>Item {num}</Text>
+                </Box>
+              </div>
+            ))}
+          </Box>
+        </div>
+      </Box>
+
+      <Box>
+        <Box marginBottom="4">
+          <Heading level={3} size="lg">
+            Four Items Per Row
+          </Heading>
+          <Text variant="body-sm" semantic="secondary">
+            Using flex-basis to ensure exactly 4 items per row
+          </Text>
+        </Box>
+        <div
+          style={{
+            backgroundColor: 'var(--mond-surface-elevated)',
+            border: '1px solid var(--mond-border-default)',
+            borderRadius: '8px',
+          }}
+        >
+          <Box
+            display="flex"
+            flexWrap="wrap"
+            gap="md"
+            padding="4"
+          >
+            {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => (
+              <div
+                key={num}
+                style={{
+                  backgroundColor: 'var(--mond-surface-background)',
+                  border: '1px solid var(--mond-border-default)',
+                  borderRadius: '4px',
+                  width: '23%',
+                }}
+              >
+                <Box padding="4">
+                  <Text>Item {num}</Text>
+                </Box>
+              </div>
+            ))}
+          </Box>
+        </div>
       </Box>
     </Box>
   ),
@@ -934,11 +884,7 @@ export const FlexProp: Story = {
 
 export const ResponsiveCardExample: Story = {
   render: () => (
-    <Box
-      display="flex"
-      flexDirection="column"
-      gap="md"
-      padding="6"
+    <div
       style={{
         backgroundColor: 'var(--mond-surface-background)',
         border: '1px solid var(--mond-border-default)',
@@ -947,47 +893,60 @@ export const ResponsiveCardExample: Story = {
         boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
       }}
     >
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Heading level={3} size="xl">
-          Card Title
-        </Heading>
-        <Button variant="primary">
-          Action
-        </Button>
-      </Box>
-
-      <Box display="flex" gap="sm" flexDirection="column">
-        <Text as="p" semantic="secondary">
-          This card demonstrates using Box with layout props (display, flexDirection, gap, justifyContent, alignItems)
-          combined with spacing props (padding) to create clean, maintainable layouts without custom CSS.
-        </Text>
-      </Box>
-
       <Box
         display="flex"
-        gap="sm"
-        paddingTop="4"
-        style={{
-          borderTop: '1px solid var(--mond-border-default)',
-        }}
+        flexDirection="column"
+        gap="md"
+        padding="6"
       >
-        {['Tag 1', 'Tag 2', 'Tag 3'].map((tag) => (
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Heading level={3} size="xl">
+            Card Title
+          </Heading>
+          <Button variant="primary">
+            Action
+          </Button>
+        </Box>
+
+        <Box display="flex" gap="sm" flexDirection="column">
+          <Text as="p" semantic="secondary">
+            This card demonstrates using Box with layout props (display, flexDirection, gap, justifyContent, alignItems)
+            combined with spacing props (padding) to create clean, maintainable layouts without custom CSS.
+          </Text>
+        </Box>
+
+        <div
+          style={{
+            borderTop: '1px solid var(--mond-border-default)',
+          }}
+        >
           <Box
-            key={tag}
-            padding="1"
-            paddingLeft="3"
-            paddingRight="3"
-            style={{
-              backgroundColor: 'var(--mond-surface-elevated)',
-              border: '1px solid var(--mond-border-default)',
-              borderRadius: '9999px',
-            }}
+            display="flex"
+            gap="sm"
+            paddingTop="4"
           >
-            <Text variant="body-sm">{tag}</Text>
+            {['Tag 1', 'Tag 2', 'Tag 3'].map((tag) => (
+              <div
+                key={tag}
+                style={{
+                  backgroundColor: 'var(--mond-surface-elevated)',
+                  border: '1px solid var(--mond-border-default)',
+                  borderRadius: '9999px',
+                }}
+              >
+                <Box
+                  padding="1"
+                  paddingLeft="3"
+                  paddingRight="3"
+                >
+                  <Text variant="body-sm">{tag}</Text>
+                </Box>
+              </div>
+            ))}
           </Box>
-        ))}
+        </div>
       </Box>
-    </Box>
+    </div>
   ),
 };
 
@@ -1003,16 +962,14 @@ export const AlignmentOptions: Story = {
         <Box display="flex" flexDirection="column" gap="md">
           {(['flex-start', 'center', 'flex-end', 'stretch', 'baseline'] as const).map((align) => (
             <Box key={align}>
-              <Box marginBottom="1" style={{ fontFamily: 'monospace' }}>
-                <Text variant="caption" semantic="secondary">
-                  alignItems="{align}"
-                </Text>
-              </Box>
-              <Box
-                display="flex"
-                alignItems={align}
-                gap="sm"
-                padding="4"
+              <div style={{ fontFamily: 'monospace' }}>
+                <Box marginBottom="1">
+                  <Text variant="caption" semantic="secondary">
+                    alignItems="{align}"
+                  </Text>
+                </Box>
+              </div>
+              <div
                 style={{
                   backgroundColor: 'var(--mond-surface-elevated)',
                   border: '1px solid var(--mond-border-default)',
@@ -1020,16 +977,29 @@ export const AlignmentOptions: Story = {
                   minHeight: '100px',
                 }}
               >
-                <Box padding="2" style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
-                  <Text>Short</Text>
+                <Box
+                  display="flex"
+                  alignItems={align}
+                  gap="sm"
+                  padding="4"
+                >
+                  <div style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
+                    <Box padding="2">
+                      <Text>Short</Text>
+                    </Box>
+                  </div>
+                  <div style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
+                    <Box padding="4">
+                      <Text>Taller Item</Text>
+                    </Box>
+                  </div>
+                  <div style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
+                    <Box padding="2">
+                      <Text>Short</Text>
+                    </Box>
+                  </div>
                 </Box>
-                <Box padding="4" style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
-                  <Text>Taller Item</Text>
-                </Box>
-                <Box padding="2" style={{ backgroundColor: 'var(--mond-surface-background)', border: '1px solid var(--mond-border-default)', borderRadius: '4px' }}>
-                  <Text>Short</Text>
-                </Box>
-              </Box>
+              </div>
             </Box>
           ))}
         </Box>
@@ -1044,35 +1014,41 @@ export const AlignmentOptions: Story = {
         <Box display="flex" flexDirection="column" gap="md">
           {(['flex-start', 'center', 'flex-end', 'space-between', 'space-around', 'space-evenly'] as const).map((justify) => (
             <Box key={justify}>
-              <Box marginBottom="1" style={{ fontFamily: 'monospace' }}>
-                <Text variant="caption" semantic="secondary">
-                  justifyContent="{justify}"
-                </Text>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent={justify}
-                padding="4"
+              <div style={{ fontFamily: 'monospace' }}>
+                <Box marginBottom="1">
+                  <Text variant="caption" semantic="secondary">
+                    justifyContent="{justify}"
+                  </Text>
+                </Box>
+              </div>
+              <div
                 style={{
                   backgroundColor: 'var(--mond-surface-elevated)',
                   border: '1px solid var(--mond-border-default)',
                   borderRadius: '8px',
                 }}
               >
-                {[1, 2, 3].map((i) => (
-                  <Box
-                    key={i}
-                    padding="2"
-                    style={{
-                      backgroundColor: 'var(--mond-surface-background)',
-                      border: '1px solid var(--mond-border-default)',
-                      borderRadius: '4px',
-                    }}
-                  >
-                    <Text>{i}</Text>
-                  </Box>
-                ))}
-              </Box>
+                <Box
+                  display="flex"
+                  justifyContent={justify}
+                  padding="4"
+                >
+                  {[1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      style={{
+                        backgroundColor: 'var(--mond-surface-background)',
+                        border: '1px solid var(--mond-border-default)',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      <Box padding="2">
+                        <Text>{i}</Text>
+                      </Box>
+                    </div>
+                  ))}
+                </Box>
+              </div>
             </Box>
           ))}
         </Box>
@@ -1096,35 +1072,38 @@ export const BorderVariants: Story = {
         <Box display="flex" gap="lg">
           <Box display="flex" flexDirection="column" gap="sm">
             <Text variant="body-sm" semantic="secondary">Subtle Border</Text>
-            <Box
-              border="subtle"
-              padding="6"
-              style={{ backgroundColor: 'var(--mond-surface-background)' }}
-            >
-              <Text>border="subtle"</Text>
-            </Box>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
+              <Box
+                border="subtle"
+                padding="6"
+              >
+                <Text>border="subtle"</Text>
+              </Box>
+            </div>
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
             <Text variant="body-sm" semantic="secondary">Default Border</Text>
-            <Box
-              border="default"
-              padding="6"
-              style={{ backgroundColor: 'var(--mond-surface-background)' }}
-            >
-              <Text>border="default"</Text>
-            </Box>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
+              <Box
+                border="default"
+                padding="6"
+              >
+                <Text>border="default"</Text>
+              </Box>
+            </div>
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
             <Text variant="body-sm" semantic="secondary">Strong Border</Text>
-            <Box
-              border="strong"
-              padding="6"
-              style={{ backgroundColor: 'var(--mond-surface-background)' }}
-            >
-              <Text>border="strong"</Text>
-            </Box>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
+              <Box
+                border="strong"
+                padding="6"
+              >
+                <Text>border="strong"</Text>
+              </Box>
+            </div>
           </Box>
         </Box>
       </Box>
@@ -1147,26 +1126,28 @@ export const CornerVariants: Story = {
         <Box display="flex" gap="lg">
           <Box display="flex" flexDirection="column" gap="sm">
             <Text variant="body-sm" semantic="secondary">Default Corners</Text>
-            <Box
-              border="default"
-              corners="default"
-              padding="6"
-              style={{ backgroundColor: 'var(--mond-surface-background)' }}
-            >
-              <Text>corners="default"</Text>
-            </Box>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
+              <Box
+                border="default"
+                corners="default"
+                padding="6"
+              >
+                <Text>corners="default"</Text>
+              </Box>
+            </div>
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
             <Text variant="body-sm" semantic="secondary">Rounded Corners</Text>
-            <Box
-              border="default"
-              corners="rounded"
-              padding="6"
-              style={{ backgroundColor: 'var(--mond-surface-background)' }}
-            >
-              <Text>corners="rounded"</Text>
-            </Box>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
+              <Box
+                border="default"
+                corners="rounded"
+                padding="6"
+              >
+                <Text>corners="rounded"</Text>
+              </Box>
+            </div>
           </Box>
         </Box>
       </Box>
@@ -1188,60 +1169,66 @@ export const BorderCornerCombinations: Story = {
         </Box>
         <Box display="flex" flexDirection="column" gap="lg">
           <Box display="flex" gap="md">
-            <Box
-              border="subtle"
-              corners="default"
-              padding="4"
-              style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}
-            >
-              <Text variant="body-sm">Subtle + Default</Text>
-            </Box>
-            <Box
-              border="subtle"
-              corners="rounded"
-              padding="4"
-              style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}
-            >
-              <Text variant="body-sm">Subtle + Rounded</Text>
-            </Box>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
+              <Box
+                border="subtle"
+                corners="default"
+                padding="4"
+              >
+                <Text variant="body-sm">Subtle + Default</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
+              <Box
+                border="subtle"
+                corners="rounded"
+                padding="4"
+              >
+                <Text variant="body-sm">Subtle + Rounded</Text>
+              </Box>
+            </div>
           </Box>
 
           <Box display="flex" gap="md">
-            <Box
-              border="default"
-              corners="default"
-              padding="4"
-              style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}
-            >
-              <Text variant="body-sm">Default + Default</Text>
-            </Box>
-            <Box
-              border="default"
-              corners="rounded"
-              padding="4"
-              style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}
-            >
-              <Text variant="body-sm">Default + Rounded</Text>
-            </Box>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
+              <Box
+                border="default"
+                corners="default"
+                padding="4"
+              >
+                <Text variant="body-sm">Default + Default</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
+              <Box
+                border="default"
+                corners="rounded"
+                padding="4"
+              >
+                <Text variant="body-sm">Default + Rounded</Text>
+              </Box>
+            </div>
           </Box>
 
           <Box display="flex" gap="md">
-            <Box
-              border="strong"
-              corners="default"
-              padding="4"
-              style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}
-            >
-              <Text variant="body-sm">Strong + Default</Text>
-            </Box>
-            <Box
-              border="strong"
-              corners="rounded"
-              padding="4"
-              style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}
-            >
-              <Text variant="body-sm">Strong + Rounded</Text>
-            </Box>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
+              <Box
+                border="strong"
+                corners="default"
+                padding="4"
+              >
+                <Text variant="body-sm">Strong + Default</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
+              <Box
+                border="strong"
+                corners="rounded"
+                padding="4"
+              >
+                <Text variant="body-sm">Strong + Rounded</Text>
+              </Box>
+            </div>
           </Box>
         </Box>
       </Box>

@@ -244,15 +244,18 @@ export const Popover: React.FC<PopoverProps> = ({
       </Box>
 
       {isOpen && (
-        <Box
-          ref={contentRef}
-          className={contentClasses}
+        <div
+          ref={contentRef as React.RefObject<HTMLDivElement>}
           style={contentStyle}
-          role="dialog"
-          aria-modal="false"
-          aria-label={ariaLabel}
-          data-testid={`${dataTestId || 'popover'}-content`}
+          data-testid={`${dataTestId || 'popover'}-wrapper`}
         >
+          <Box
+            className={contentClasses}
+            role="dialog"
+            aria-modal="false"
+            aria-label={ariaLabel}
+            data-testid={`${dataTestId || 'popover'}-content`}
+          >
           {trigger === 'hover' && (
             <Box className="popover-close-button">
               <Button
@@ -268,7 +271,8 @@ export const Popover: React.FC<PopoverProps> = ({
             </Box>
           )}
           {content}
-        </Box>
+          </Box>
+        </div>
       )}
     </Box>
   );

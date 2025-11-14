@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react';
-import type { SpacingToken } from '../../tokens';
+import type { SpacingToken, SizeToken } from '../../tokens';
 import './box.css';
 
-export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface BoxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   as?: React.ElementType;
 
   // Spacing with FULL names (not abbreviations) using strict token keys
@@ -25,8 +25,11 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   alignItems?: 'flex-start' | 'center' | 'flex-end' | 'stretch' | 'baseline';
   alignContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'stretch';
   justifyContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
-  gap?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  gap?: SizeToken;
   flex?: string;
+  flexBasis?: string;
+  width?: SizeToken;
+  height?: SizeToken;
 
   // Visual props
   border?: 'subtle' | 'default' | 'strong';
@@ -84,6 +87,9 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   justifyContent,
   gap,
   flex,
+  flexBasis,
+  width,
+  height,
 
   // Visual props
   border,
@@ -118,6 +124,8 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     alignContent && `align-content-${alignContent}`,
     justifyContent && `justify-content-${justifyContent}`,
     gap && `gap-${gap}`,
+    width && `width-${width}`,
+    height && `height-${height}`,
 
     // Visual classes
     border && `mond-box--border-${border}`,
@@ -129,14 +137,16 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     .filter(Boolean)
     .join(' ');
 
-  // Build inline styles for flex prop (since it can have many values)
-  const inlineStyles = flex ? { flex } : undefined;
+  // Build inline styles for flex and flexBasis props (since they can have many values)
+  const inlineStyles: React.CSSProperties = {};
+  if (flex) inlineStyles.flex = flex;
+  if (flexBasis) inlineStyles.flexBasis = flexBasis;
 
   return (
     <Element
       ref={ref}
       className={classNames || undefined}
-      style={inlineStyles}
+      style={Object.keys(inlineStyles).length > 0 ? inlineStyles : undefined}
       {...rest}
     >
       {children}

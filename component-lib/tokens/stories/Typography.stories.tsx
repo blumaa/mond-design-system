@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Meta } from '@storybook/react';
 import { fontFamilies, fontSizes, fontWeights, lineHeights, letterSpacings } from '../index';
 
@@ -69,7 +70,7 @@ export default meta;
 
 const SampleText = "The quick brown fox jumps over the lazy dog";
 
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+const Section = ({ title, children }: { title: string; children: ReactNode }) => (
   <div style={{ marginBottom: '3rem' }}>
     <h2 style={{ marginBottom: '1rem', fontFamily: fontFamilies.sans }}>{title}</h2>
     {children}

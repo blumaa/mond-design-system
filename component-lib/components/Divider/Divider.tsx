@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { Box, BoxProps } from '../Box/Box';
 import './divider.css';
 
-export interface DividerProps extends Omit<BoxProps, 'children' | 'className'> {
+export interface DividerProps extends Omit<BoxProps, 'children'> {
   orientation?: 'horizontal' | 'vertical';
   variant?: 'default' | 'subtle' | 'strong';
   size?: 'sm' | 'md' | 'lg';
@@ -17,6 +17,7 @@ export const Divider = forwardRef<HTMLElement, DividerProps>(({
   marginBottom,
   marginLeft,
   marginRight,
+  className,
   ...props
 }, ref) => {
   const isHorizontal = orientation === 'horizontal';
@@ -38,6 +39,7 @@ export const Divider = forwardRef<HTMLElement, DividerProps>(({
     `mond-divider--${orientation}`,
     `mond-divider--${variant}`,
     `mond-divider--${size}`,
+    className,
   ]
     .filter(Boolean)
     .join(' ');

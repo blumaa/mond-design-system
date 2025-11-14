@@ -8,8 +8,7 @@ export function DarkModeToggle() {
   const { isDarkMode, toggleDarkMode } = useTheme();
 
   return (
-    <Box
-      padding="2"
+    <div
       style={{
         position: 'fixed',
         top: '1rem',
@@ -18,21 +17,26 @@ export function DarkModeToggle() {
         backdropFilter: 'blur(10px)',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
         transition: 'all 0.3s ease',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
         borderRadius: '0.5rem',
-        border: '1px solid var(--border-default)'
       }}
     >
-      <span style={{ fontSize: 14, fontWeight: 500 }}>
-        {isDarkMode ? '🌙' : '☀️'}
-      </span>
-      <Switch
-        checked={isDarkMode}
-        onChange={toggleDarkMode}
-        size="sm"
-      />
-    </Box>
+      <Box
+        padding="2"
+        display="flex"
+        alignItems="center"
+        gap="xs"
+        border="default"
+        corners="default"
+      >
+        <span style={{ fontSize: 14, fontWeight: 500 }}>
+          {isDarkMode ? '🌙' : '☀️'}
+        </span>
+        <Switch
+          checked={isDarkMode}
+          onChange={toggleDarkMode}
+          size="sm"
+        />
+      </Box>
+    </div>
   );
 }

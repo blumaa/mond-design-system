@@ -24,7 +24,7 @@ export default function Home() {
           Mond Design System
         </Heading>
 
-        <Box marginBottom="8" style={{ width: '50%' }}>
+        <Box marginBottom="8" width="half">
           <Divider size="sm" variant="subtle" />
         </Box>
 

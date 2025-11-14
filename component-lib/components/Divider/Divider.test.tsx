@@ -59,11 +59,11 @@ describe('Divider', () => {
     expect(divider).toHaveClass('mt-2', 'mb-8');
   });
 
-  it('forwards additional props and custom styles', () => {
-    render(<Divider data-testid="custom-divider" style={{ opacity: 0.5 }} />);
+  it('forwards additional props and custom className', () => {
+    render(<Divider data-testid="custom-divider" className="custom-opacity" />);
 
     const divider = screen.getByTestId('custom-divider');
     expect(divider).toBeInTheDocument();
-    expect(divider).toHaveStyle('opacity: 0.5');
+    expect(divider).toHaveClass('custom-opacity');
   });
 });

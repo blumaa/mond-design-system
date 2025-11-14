@@ -90,7 +90,9 @@ export const Orientations: Story = {
         <h4 style={{ margin: '0 0 16px 0' }}>Vertical</h4>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
           <span>Left content</span>
-          <Divider orientation="vertical" style={{ height: '40px' }} />
+          <div style={{ height: '40px' }}>
+            <Divider orientation="vertical" />
+          </div>
           <span>Right content</span>
         </div>
       </div>
@@ -260,12 +262,13 @@ export const VerticalInForms: Story = {
         </Button>
       </div>
 
-      <Divider
-        orientation="vertical"
-        marginLeft="4"
-        marginRight="4"
-        style={{ height: '48px' }}
-      />
+      <div style={{ height: '48px' }}>
+        <Divider
+          orientation="vertical"
+          marginLeft="4"
+          marginRight="4"
+        />
+      </div>
 
       <div style={{ flex: 1, textAlign: 'center' }}>
         <Button variant="outline" fullWidth>

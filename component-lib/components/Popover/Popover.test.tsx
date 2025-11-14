@@ -139,8 +139,8 @@ describe('Popover Component', () => {
         </Popover>
       );
 
-      const content = screen.getByTestId('popover-content');
-      expect(content.style.getPropertyValue('--popover-offset')).toBe('16px');
+      const wrapper = screen.getByTestId('popover-wrapper');
+      expect(wrapper.style.getPropertyValue('--popover-offset')).toBe('16px');
     });
   });
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import type { Theme } from '../../utils/themeResolver';
 
 /**
@@ -40,7 +40,7 @@ export interface ColorScale {
  * Props for the ThemeProvider
  */
 export interface ThemeProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
   /**
    * External brand theme configuration
    * Brand colors will be injected as CSS variables
