@@ -1,3 +1,9 @@
+## [2.5.1](https://github.com/blumaa/mond-design-system/compare/v2.5.0...v2.5.1) (2025-11-14)
+
+### 🐛 Bug Fixes
+
+* add grid prop to box ([6199545](https://github.com/blumaa/mond-design-system/commit/61995455002c770ece3fa15b487801dc6e16bd8d))
+
 ## [2.5.0](https://github.com/blumaa/mond-design-system/compare/v2.4.3...v2.5.0) (2025-11-14)
 
 ### ✨ Features
