@@ -1,3 +1,9 @@
+## [2.5.0](https://github.com/blumaa/mond-design-system/compare/v2.4.3...v2.5.0) (2025-11-14)
+
+### ✨ Features
+
+* fix Box props and add width and height ([02fa87f](https://github.com/blumaa/mond-design-system/commit/02fa87f7748f60503fe70519ba3fe9962b3c11f8))
+
 ## [2.4.3](https://github.com/blumaa/mond-design-system/compare/v2.4.2...v2.4.3) (2025-11-14)
 
 ### 🐛 Bug Fixes
