@@ -20,14 +20,23 @@ export interface BoxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'st
 
   // Layout props
   display?: 'flex' | 'block' | 'inline-block' | 'inline-flex' | 'grid' | 'inline-grid' | 'none';
+
+  // Flexbox props
   flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
   flexWrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
   alignItems?: 'flex-start' | 'center' | 'flex-end' | 'stretch' | 'baseline';
   alignContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'stretch';
   justifyContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
-  gap?: SizeToken;
   flex?: string;
-  flexBasis?: string;
+
+  // Grid props
+  gridTemplateColumns?: string;
+  gridTemplateRows?: string;
+  gridAutoRows?: string;
+  gridAutoColumns?: string;
+
+  // Common layout props
+  gap?: SizeToken;
   width?: SizeToken;
   height?: SizeToken;
 
@@ -87,7 +96,10 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   justifyContent,
   gap,
   flex,
-  flexBasis,
+  gridTemplateColumns,
+  gridTemplateRows,
+  gridAutoRows,
+  gridAutoColumns,
   width,
   height,
 
@@ -137,10 +149,13 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     .filter(Boolean)
     .join(' ');
 
-  // Build inline styles for flex and flexBasis props (since they can have many values)
+  // Build inline styles for props with many possible values
   const inlineStyles: React.CSSProperties = {};
   if (flex) inlineStyles.flex = flex;
-  if (flexBasis) inlineStyles.flexBasis = flexBasis;
+  if (gridTemplateColumns) inlineStyles.gridTemplateColumns = gridTemplateColumns;
+  if (gridTemplateRows) inlineStyles.gridTemplateRows = gridTemplateRows;
+  if (gridAutoRows) inlineStyles.gridAutoRows = gridAutoRows;
+  if (gridAutoColumns) inlineStyles.gridAutoColumns = gridAutoColumns;
 
   return (
     <Element

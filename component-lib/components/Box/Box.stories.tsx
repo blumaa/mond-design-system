@@ -755,14 +755,20 @@ export const FlexWrap: Story = {
           </Box>
         </div>
       </Box>
+    </Box>
+  ),
+};
 
+export const GridLayout: Story = {
+  render: () => (
+    <Box display="flex" flexDirection="column" gap="xl">
       <Box>
         <Box marginBottom="4">
           <Heading level={3} size="lg">
-            Two Items Per Row
+            Grid: Two Columns
           </Heading>
           <Text variant="body-sm" semantic="secondary">
-            Using flex-basis to ensure exactly 2 items per row
+            Using CSS Grid with repeat(2, 1fr) for exactly 2 items per row
           </Text>
         </Box>
         <div
@@ -773,25 +779,20 @@ export const FlexWrap: Story = {
           }}
         >
           <Box
-            display="flex"
-            flexWrap="wrap"
+            display="grid"
+            gridTemplateColumns="repeat(2, 1fr)"
             gap="md"
             padding="4"
           >
             {Array.from({ length: 6 }, (_, i) => i + 1).map((num) => (
-              <div
+              <Box
                 key={num}
-                style={{
-                  backgroundColor: 'var(--mond-surface-background)',
-                  border: '1px solid var(--mond-border-default)',
-                  borderRadius: '4px',
-                  width: '48%',
-                }}
+                padding="4"
+                border="default"
+                corners="default"
               >
-                <Box padding="4">
-                  <Text>Item {num}</Text>
-                </Box>
-              </div>
+                <Text>Item {num}</Text>
+              </Box>
             ))}
           </Box>
         </div>
@@ -800,10 +801,10 @@ export const FlexWrap: Story = {
       <Box>
         <Box marginBottom="4">
           <Heading level={3} size="lg">
-            Three Items Per Row
+            Grid: Three Columns
           </Heading>
           <Text variant="body-sm" semantic="secondary">
-            Using flex-basis to ensure exactly 3 items per row
+            Using CSS Grid with repeat(3, 1fr) for exactly 3 items per row
           </Text>
         </Box>
         <div
@@ -814,25 +815,20 @@ export const FlexWrap: Story = {
           }}
         >
           <Box
-            display="flex"
-            flexWrap="wrap"
+            display="grid"
+            gridTemplateColumns="repeat(3, 1fr)"
             gap="md"
             padding="4"
           >
             {Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
-              <div
+              <Box
                 key={num}
-                style={{
-                  backgroundColor: 'var(--mond-surface-background)',
-                  border: '1px solid var(--mond-border-default)',
-                  borderRadius: '4px',
-                  width: '31%',
-                }}
+                padding="4"
+                border="default"
+                corners="default"
               >
-                <Box padding="4">
-                  <Text>Item {num}</Text>
-                </Box>
-              </div>
+                <Text>Item {num}</Text>
+              </Box>
             ))}
           </Box>
         </div>
@@ -841,10 +837,10 @@ export const FlexWrap: Story = {
       <Box>
         <Box marginBottom="4">
           <Heading level={3} size="lg">
-            Four Items Per Row
+            Grid: Four Columns
           </Heading>
           <Text variant="body-sm" semantic="secondary">
-            Using flex-basis to ensure exactly 4 items per row
+            Using CSS Grid with repeat(4, 1fr) for exactly 4 items per row
           </Text>
         </Box>
         <div
@@ -855,25 +851,20 @@ export const FlexWrap: Story = {
           }}
         >
           <Box
-            display="flex"
-            flexWrap="wrap"
+            display="grid"
+            gridTemplateColumns="repeat(4, 1fr)"
             gap="md"
             padding="4"
           >
             {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => (
-              <div
+              <Box
                 key={num}
-                style={{
-                  backgroundColor: 'var(--mond-surface-background)',
-                  border: '1px solid var(--mond-border-default)',
-                  borderRadius: '4px',
-                  width: '23%',
-                }}
+                padding="4"
+                border="default"
+                corners="default"
               >
-                <Box padding="4">
-                  <Text>Item {num}</Text>
-                </Box>
-              </div>
+                <Text>Item {num}</Text>
+              </Box>
             ))}
           </Box>
         </div>
