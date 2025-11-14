@@ -1,3 +1,9 @@
+## [2.4.2](https://github.com/blumaa/mond-design-system/compare/v2.4.1...v2.4.2) (2025-11-14)
+
+### 🐛 Bug Fixes
+
+* toast icon color ([dd37dbc](https://github.com/blumaa/mond-design-system/commit/dd37dbc6c8bdf0fa03015357fd7c2068515f2978))
+
 ## [2.4.1](https://github.com/blumaa/mond-design-system/compare/v2.4.0...v2.4.1) (2025-11-12)
 
 ### 🐛 Bug Fixes
