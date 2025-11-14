@@ -85,6 +85,7 @@ type Story = StoryObj<typeof meta>;
  * Simple card with just children
  */
 export const Simple: Story = {
+  args: { children: "" },
   render: () => (
     <Card maxWidth="md">
       <Box padding="6">
@@ -98,6 +99,7 @@ export const Simple: Story = {
  * Card with Header, Body, and Footer structure
  */
 export const Structured: Story = {
+  args: { children: "" },
   render: () => (
     <Card maxWidth="md">
       <CardHeader>
@@ -114,7 +116,7 @@ export const Structured: Story = {
         </Text>
       </CardBody>
       <CardFooter>
-        <Box display="flex" gap="2">
+        <Box display="flex" gap="xs">
           <Button variant="primary">Primary Action</Button>
           <Button variant="outline">Secondary</Button>
         </Box>
@@ -127,6 +129,7 @@ export const Structured: Story = {
  * Card with just header and body
  */
 export const HeaderAndBody: Story = {
+  args: { children: "" },
   render: () => (
     <Card maxWidth="md">
       <CardHeader>
@@ -150,8 +153,9 @@ export const HeaderAndBody: Story = {
  * Card variants - default, subtle, elevated
  */
 export const Variants: Story = {
+  args: { children: "" },
   render: () => (
-    <Box display="flex" gap="4" flexWrap="wrap">
+    <Box display="flex" gap="lg" flexWrap="wrap">
       <Card variant="default" maxWidth="sm">
         <CardHeader>
           <Heading level={4} size="md">
@@ -192,6 +196,7 @@ export const Variants: Story = {
  * Clickable card with href
  */
 export const Clickable: Story = {
+  args: { children: "" },
   render: () => (
     <Card href="#" target="_blank" maxWidth="md">
       <CardHeader>
@@ -212,6 +217,7 @@ export const Clickable: Story = {
  * Card with onClick handler
  */
 export const WithOnClick: Story = {
+  args: { children: "" },
   render: () => (
     <Card onClick={() => alert('Card clicked!')} maxWidth="md">
       <CardHeader>
@@ -230,8 +236,9 @@ export const WithOnClick: Story = {
  * Card rendered as semantic HTML elements
  */
 export const SemanticHTML: Story = {
+  args: { children: "" },
   render: () => (
-    <Box display="flex" gap="4" flexDirection="column">
+    <Box display="flex" gap="lg" flexDirection="column">
       <Card as="article" maxWidth="md">
         <CardHeader>
           <Heading level={3} size="md">
@@ -267,6 +274,7 @@ export const SemanticHTML: Story = {
  * Product card example
  */
 export const ProductCard: Story = {
+  args: { children: "" },
   render: () => (
     <Card maxWidth="sm">
       <Box padding="4">
@@ -292,7 +300,7 @@ export const ProductCard: Story = {
             Short product description goes here to entice the customer.
           </Text>
         </Box>
-        <Text variant="body-lg" weight="bold">
+        <Text variant="body" weight="bold">
           $99.99
         </Text>
       </CardBody>
@@ -309,6 +317,7 @@ export const ProductCard: Story = {
  * User profile card
  */
 export const UserProfile: Story = {
+  args: { children: "" },
   render: () => (
     <Card variant="elevated" maxWidth="sm">
       <Box padding="6" display="flex" flexDirection="column" alignItems="center">
@@ -334,13 +343,17 @@ export const UserProfile: Story = {
         </Box>
       </Box>
       <CardFooter>
-        <Box display="flex" gap="2">
-          <Button variant="primary" flex="1">
-            Follow
-          </Button>
-          <Button variant="outline" flex="1">
-            Message
-          </Button>
+        <Box display="flex" gap="xs" flex="1">
+          <Box flex="1">
+            <Button variant="primary" fullWidth>
+              Follow
+            </Button>
+          </Box>
+          <Box flex="1">
+            <Button variant="outline" fullWidth>
+              Message
+            </Button>
+          </Box>
         </Box>
       </CardFooter>
     </Card>
@@ -351,6 +364,7 @@ export const UserProfile: Story = {
  * Stats card
  */
 export const StatsCard: Story = {
+  args: { children: "" },
   render: () => (
     <Card maxWidth="sm">
       <CardBody>
@@ -376,10 +390,11 @@ export const StatsCard: Story = {
  * Notification card
  */
 export const Notification: Story = {
+  args: { children: "" },
   render: () => (
     <Card maxWidth="md">
       <CardBody>
-        <Box display="flex" gap="3">
+        <Box display="flex" gap="sm">
           <Box corners="default">
             {/* Icon or avatar placeholder */}
           </Box>
@@ -408,8 +423,9 @@ export const Notification: Story = {
  * Grid of cards
  */
 export const CardGrid: Story = {
+  args: { children: "" },
   render: () => (
-    <Box display="grid" gap="4">
+    <Box display="grid" gap="lg">
       {[1, 2, 3, 4, 5, 6].map((num) => (
         <Card key={num} href="#" variant={num % 3 === 0 ? 'elevated' : 'default'}>
           <CardHeader>
@@ -432,13 +448,14 @@ export const CardGrid: Story = {
  * Complex content card
  */
 export const ComplexContent: Story = {
+  args: { children: "" },
   render: () => (
     <Card as="article" maxWidth="lg">
       <CardHeader>
         <Box display="flex" justifyContent="space-between" alignItems="flex-start">
           <Box>
             <Box marginBottom="2">
-              <Badge variant="info" size="sm">
+              <Badge variant="primary" size="sm">
                 Tutorial
               </Badge>
             </Box>
@@ -462,7 +479,7 @@ export const ComplexContent: Story = {
             Learn how to build and maintain a design system that scales with your organization. We&apos;ll cover token architecture, component design, documentation, and governance.
           </Text>
         </Box>
-        <Box display="flex" gap="2" flexWrap="wrap">
+        <Box display="flex" gap="xs" flexWrap="wrap">
           <Badge variant="default" size="sm">
             Design Systems
           </Badge>
@@ -478,9 +495,9 @@ export const ComplexContent: Story = {
         </Box>
       </CardBody>
       <CardFooter>
-        <Box display="flex" gap="2" justifyContent="space-between">
+        <Box display="flex" gap="xs" justifyContent="space-between">
           <Button variant="primary">Read Article</Button>
-          <Box display="flex" gap="2">
+          <Box display="flex" gap="xs">
             <Button variant="ghost" iconOnly aria-label="Bookmark">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
@@ -506,6 +523,7 @@ export const ComplexContent: Story = {
  * Minimal card - just body
  */
 export const MinimalCard: Story = {
+  args: { children: "" },
   render: () => (
     <Card variant="subtle" maxWidth="sm">
       <CardBody>
