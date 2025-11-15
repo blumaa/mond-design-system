@@ -1,16 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Card, CardHeader, CardBody, CardFooter } from './Card';
-import { Button } from '../Button/Button';
-import { Heading } from '../Heading/Heading';
-import { Text } from '../Text/Text';
-import { Badge } from '../Badge/Badge';
-import { Box } from '../Box/Box';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Card, CardHeader, CardBody, CardFooter } from "./Card";
+import { Button } from "../Button/Button";
+import { Heading } from "../Heading/Heading";
+import { Text } from "../Text/Text";
+import { Badge } from "../Badge/Badge";
+import { Box } from "../Box/Box";
 
 const meta = {
-  title: 'Components/Card',
+  title: "Components/Card",
   component: Card,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
     docs: {
       description: {
         component: `
@@ -51,29 +51,29 @@ A flexible container component for structured content. Compose with CardHeader, 
       },
     },
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: 'radio',
-      options: ['default', 'subtle', 'elevated'],
-      description: 'Visual style variant',
+      control: "radio",
+      options: ["default", "subtle", "elevated"],
+      description: "Visual style variant",
     },
     href: {
-      control: 'text',
-      description: 'Link URL - makes entire card clickable',
+      control: "text",
+      description: "Link URL - makes entire card clickable",
     },
     target: {
-      control: 'text',
-      description: 'Link target attribute',
+      control: "text",
+      description: "Link target attribute",
     },
     hoverable: {
-      control: 'boolean',
-      description: 'Show hover effect',
+      control: "boolean",
+      description: "Show hover effect",
     },
     as: {
-      control: 'radio',
-      options: ['div', 'article', 'section'],
-      description: 'HTML element to render as',
+      control: "radio",
+      options: ["div", "article", "section"],
+      description: "HTML element to render as",
     },
   },
 } satisfies Meta<typeof Card>;
@@ -88,9 +88,7 @@ export const Simple: Story = {
   args: { children: "" },
   render: () => (
     <Card maxWidth="md">
-      <Box padding="6">
-        <Text>Simple card with custom content. No structure required.</Text>
-      </Box>
+      <Text>Simple card with custom content. No structure required.</Text>
     </Card>
   ),
 };
@@ -112,7 +110,8 @@ export const Structured: Story = {
       </CardHeader>
       <CardBody>
         <Text>
-          This is the main content area of the card. Use CardBody for your primary content.
+          This is the main content area of the card. Use CardBody for your
+          primary content.
         </Text>
       </CardBody>
       <CardFooter>
@@ -142,7 +141,8 @@ export const HeaderAndBody: Story = {
       </CardHeader>
       <CardBody>
         <Text>
-          This card demonstrates header and body without a footer. Great for blog post previews, article cards, or informational content.
+          This card demonstrates header and body without a footer. Great for
+          blog post previews, article cards, or informational content.
         </Text>
       </CardBody>
     </Card>
@@ -206,7 +206,8 @@ export const Clickable: Story = {
       </CardHeader>
       <CardBody>
         <Text>
-          This entire card is clickable. Hover to see the effect. Opens in new tab.
+          This entire card is clickable. Hover to see the effect. Opens in new
+          tab.
         </Text>
       </CardBody>
     </Card>
@@ -219,7 +220,7 @@ export const Clickable: Story = {
 export const WithOnClick: Story = {
   args: { children: "" },
   render: () => (
-    <Card onClick={() => alert('Card clicked!')} maxWidth="md">
+    <Card onClick={() => alert("Card clicked!")} maxWidth="md">
       <CardHeader>
         <Heading level={3} size="lg">
           Interactive Card
@@ -249,7 +250,9 @@ export const SemanticHTML: Story = {
           </Text>
         </CardHeader>
         <CardBody>
-          <Text>Use the &quot;as&quot; prop to render as semantic HTML elements.</Text>
+          <Text>
+            Use the &quot;as&quot; prop to render as semantic HTML elements.
+          </Text>
         </CardBody>
       </Card>
 
@@ -320,7 +323,12 @@ export const UserProfile: Story = {
   args: { children: "" },
   render: () => (
     <Card variant="elevated" maxWidth="sm">
-      <Box padding="6" display="flex" flexDirection="column" alignItems="center">
+      <Box
+        padding="6"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+      >
         <Box
           corners="rounded"
           marginBottom="3"
@@ -338,7 +346,8 @@ export const UserProfile: Story = {
         </Box>
         <Box marginBottom="4">
           <Text variant="body-sm" align="center">
-            Building beautiful and accessible user interfaces with a focus on design systems.
+            Building beautiful and accessible user interfaces with a focus on
+            design systems.
           </Text>
         </Box>
       </Box>
@@ -395,9 +404,7 @@ export const Notification: Story = {
     <Card maxWidth="md">
       <CardBody>
         <Box display="flex" gap="sm">
-          <Box corners="default">
-            {/* Icon or avatar placeholder */}
-          </Box>
+          <Box corners="default">{/* Icon or avatar placeholder */}</Box>
           <Box flex="1">
             <Box marginBottom="1">
               <Heading level={4} size="sm">
@@ -406,7 +413,8 @@ export const Notification: Story = {
             </Box>
             <Box marginBottom="2">
               <Text variant="body-sm" semantic="secondary">
-                John Smith replied to your post &quot;Getting started with design systems&quot;
+                John Smith replied to your post &quot;Getting started with
+                design systems&quot;
               </Text>
             </Box>
             <Text variant="body-sm" semantic="tertiary">
@@ -427,7 +435,11 @@ export const CardGrid: Story = {
   render: () => (
     <Box display="grid" gap="lg">
       {[1, 2, 3, 4, 5, 6].map((num) => (
-        <Card key={num} href="#" variant={num % 3 === 0 ? 'elevated' : 'default'}>
+        <Card
+          key={num}
+          href="#"
+          variant={num % 3 === 0 ? "elevated" : "default"}
+        >
           <CardHeader>
             <Heading level={4} size="md">
               Card {num}
@@ -452,7 +464,11 @@ export const ComplexContent: Story = {
   render: () => (
     <Card as="article" maxWidth="lg">
       <CardHeader>
-        <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="flex-start"
+        >
           <Box>
             <Box marginBottom="2">
               <Badge variant="primary" size="sm">
@@ -476,7 +492,9 @@ export const ComplexContent: Story = {
       <CardBody>
         <Box marginBottom="4">
           <Text>
-            Learn how to build and maintain a design system that scales with your organization. We&apos;ll cover token architecture, component design, documentation, and governance.
+            Learn how to build and maintain a design system that scales with
+            your organization. We&apos;ll cover token architecture, component
+            design, documentation, and governance.
           </Text>
         </Box>
         <Box display="flex" gap="xs" flexWrap="wrap">
@@ -499,12 +517,26 @@ export const ComplexContent: Story = {
           <Button variant="primary">Read Article</Button>
           <Box display="flex" gap="xs">
             <Button variant="ghost" iconOnly aria-label="Bookmark">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
               </svg>
             </Button>
             <Button variant="ghost" iconOnly aria-label="Share">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <circle cx="18" cy="5" r="3" />
                 <circle cx="6" cy="12" r="3" />
                 <circle cx="18" cy="19" r="3" />
