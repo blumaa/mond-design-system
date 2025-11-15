@@ -1,3 +1,9 @@
+## [2.5.2](https://github.com/blumaa/mond-design-system/compare/v2.5.1...v2.5.2) (2025-11-15)
+
+### 🐛 Bug Fixes
+
+* export CardHeader CardBody CardFooter ([8a8b2c8](https://github.com/blumaa/mond-design-system/commit/8a8b2c80c47b8604514905f0deb5ec97c9cc8fde))
+
 ## [2.5.1](https://github.com/blumaa/mond-design-system/compare/v2.5.0...v2.5.1) (2025-11-14)
 
 ### 🐛 Bug Fixes
