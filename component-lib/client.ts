@@ -19,6 +19,7 @@ export * from './components/Switch';
 export * from './components/Tooltip';
 export * from './components/Popover';
 export * from './components/Modal';
+export * from './components/Drawer';
 export * from './components/Tabs';
 
 // Accordion exports - handle naming conflict between AccordionItem type and component
