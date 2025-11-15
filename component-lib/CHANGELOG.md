@@ -1,3 +1,9 @@
+## [2.6.0](https://github.com/blumaa/mond-design-system/compare/v2.5.2...v2.6.0) (2025-11-15)
+
+### ✨ Features
+
+* Drawer component ([d32323d](https://github.com/blumaa/mond-design-system/commit/d32323dc3263fb9526869560f8ea98a7e992853d))
+
 ## [2.5.2](https://github.com/blumaa/mond-design-system/compare/v2.5.1...v2.5.2) (2025-11-15)
 
 ### 🐛 Bug Fixes
