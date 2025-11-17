@@ -1,3 +1,9 @@
+## [2.6.2](https://github.com/blumaa/mond-design-system/compare/v2.6.1...v2.6.2) (2025-11-17)
+
+### 🐛 Bug Fixes
+
+* wrong variables and popover close button prop ([bcccd62](https://github.com/blumaa/mond-design-system/commit/bcccd621c9be722d358cc9b72e40f4eb96dc8d8d))
+
 ## [2.6.1](https://github.com/blumaa/mond-design-system/compare/v2.6.0...v2.6.1) (2025-11-17)
 
 ### 🐛 Bug Fixes
