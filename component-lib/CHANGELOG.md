@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/blumaa/mond-design-system/compare/v2.6.0...v2.6.1) (2025-11-17)
+
+### 🐛 Bug Fixes
+
+* avatar exports ([43a1295](https://github.com/blumaa/mond-design-system/commit/43a12959b23f7b70362beb287346ac9b8aba1de8))
+* Avatar loading and removed Image ([2f3e254](https://github.com/blumaa/mond-design-system/commit/2f3e254a749e361da25d84d9ea6bba0aab070c2e))
+
 ## [2.6.0](https://github.com/blumaa/mond-design-system/compare/v2.5.2...v2.6.0) (2025-11-15)
 
 ### ✨ Features
