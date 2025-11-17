@@ -13,10 +13,10 @@
   position: absolute;
   z-index: 1000;
   padding: var(--mond-spacing-sm);
-  background-color: var(--mond-color-surface-elevated);
-  color: var(--mond-color-text-primary);
-  border: 1px solid var(--mond-color-border-default);
-  border-radius: var(--mond-radius-md);
+  background-color: var(--mond-surface-elevated);
+  color: var(--mond-text-primary);
+  border: 1px solid var(--mond-border-default);
+  border-radius: var(--mond-radii-md);
   font-size: var(--mond-font-size-sm);
   font-weight: var(--mond-font-weight-normal);
   font-family: var(--mond-font-family-sans);
@@ -107,6 +107,6 @@
 .popover-close-button {
   position: absolute;
   top: 0;
-  right: var(--mond-spacing-xxs);
+  right: var(--mond-spacing-1);
   z-index: 1;
 }

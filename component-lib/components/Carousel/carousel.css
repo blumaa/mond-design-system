@@ -10,7 +10,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  border-radius: var(--mond-border-radius-lg);
+  border-radius: var(--mond-radii-lg);
   display: flex;
   flex-direction: column;
   aspect-ratio: 16 / 9;
@@ -189,7 +189,7 @@
   height: 200px;
   background-color: var(--mond-surface-elevated);
   color: var(--mond-text-secondary);
-  border-radius: var(--mond-border-radius-lg);
+  border-radius: var(--mond-radii-lg);
 }
 
 /* Size Variants with Max-Width Constraints */

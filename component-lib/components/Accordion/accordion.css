@@ -30,7 +30,7 @@
 /* Variant: Bordered */
 .mond-accordion--bordered {
   border: 1px solid var(--mond-border-default);
-  border-radius: var(--mond-border-radius-md);
+  border-radius: var(--mond-radii-md);
   overflow: hidden;
 }
 

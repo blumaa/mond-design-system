@@ -19,7 +19,7 @@
   max-width: 200px;
   line-height: 1.4;
   word-wrap: break-word;
-  box-shadow: var(--mond-shadows-md);
+  box-shadow: var(--mond-shadow-md);
   transition: opacity 150ms ease, visibility 150ms ease;
   pointer-events: none;
 }

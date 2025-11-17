@@ -68,6 +68,12 @@ export interface PopoverProps {
   closeOnEscape?: boolean;
 
   /**
+   * Show close button in popover
+   * @default false
+   */
+  showCloseButton?: boolean;
+
+  /**
    * Custom class for popover container
    */
   className?: string;
@@ -99,6 +105,7 @@ export const Popover: React.FC<PopoverProps> = ({
   trigger = 'click',
   closeOnClickOutside = true,
   closeOnEscape = true,
+  showCloseButton = false,
   className,
   contentClassName,
   'data-testid': dataTestId,
@@ -255,7 +262,7 @@ export const Popover: React.FC<PopoverProps> = ({
             aria-label={ariaLabel}
             data-testid={`${dataTestId || 'popover'}-content`}
           >
-          {trigger === 'hover' && (
+          {showCloseButton && (
             <Box className="popover-close-button">
               <Button
                 variant="ghost"

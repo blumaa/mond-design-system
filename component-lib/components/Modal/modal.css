@@ -16,7 +16,7 @@
   background-color: var(--mond-surface-elevated);
   color: var(--mond-text-primary);
   border-radius: var(--mond-radii-lg);
-  box-shadow: var(--mond-shadows-2xl);
+  box-shadow: var(--mond-shadow-2xl);
   position: relative;
   max-height: 90vh;
   overflow: hidden;

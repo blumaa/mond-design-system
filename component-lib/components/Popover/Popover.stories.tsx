@@ -543,6 +543,7 @@ export const HoverTrigger: Story = {
         content="This appears on hover (no delay)"
         placement="top"
         trigger="hover"
+        showCloseButton={true}
       >
         <Button size="sm">Hover Me</Button>
       </Popover>
@@ -557,6 +558,7 @@ export const HoverTrigger: Story = {
         }
         placement="bottom"
         trigger="hover"
+        showCloseButton={true}
       >
         <Button size="sm" variant="outline">Rich Content</Button>
       </Popover>
