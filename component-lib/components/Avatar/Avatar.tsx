@@ -1,5 +1,5 @@
-'use client';
-import React, { useState } from 'react';
+import React from 'react';
+import { useAvatarImage } from './useAvatarImage';
 import './avatar.css';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
@@ -68,8 +68,7 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
     'data-testid': dataTestId,
     ...props
   }, ref) => {
-    const [imageError, setImageError] = useState(false);
-    const [imageLoaded, setImageLoaded] = useState(false);
+    const imageStatus = useAvatarImage({ src });
 
     // Build CSS class names
     const classNames = [
@@ -80,16 +79,6 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
       .filter(Boolean)
       .join(' ');
 
-    const handleImageLoad = () => {
-      setImageLoaded(true);
-      setImageError(false);
-    };
-
-    const handleImageError = () => {
-      setImageError(true);
-      setImageLoaded(false);
-    };
-
     // Generate initials from fallback text
     const getInitials = (text: string) => {
       return text
@@ -99,7 +88,8 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
         .slice(0, 2);
     };
 
-    const showFallback = !src || imageError || !imageLoaded;
+    const showImage = imageStatus === 'loaded';
+    const showFallback = !src || imageStatus === 'error';
     const fallbackContent = children || (fallback ? getInitials(fallback) : '?');
 
     return (
@@ -110,14 +100,11 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
         data-size={size}
         {...props}
       >
-        {src && (
+        {showImage && (
           <img
             src={src}
             alt={alt || fallback || 'Avatar'}
             className="mond-avatar__image"
-            style={{ display: imageLoaded && !imageError ? 'block' : 'none' }}
-            onLoad={handleImageLoad}
-            onError={handleImageError}
           />
         )}
         {showFallback && (

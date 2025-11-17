@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { Box } from '../Box/Box';
 import './tooltip.css';

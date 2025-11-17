@@ -20,7 +20,6 @@ export * from './components/Heading';
 export * from './components/Spinner';
 export * from './components/Divider';
 export * from './components/Label';
-export * from './components/Image';
 export * from './components/Tag';
 export * from './components/Card';
 

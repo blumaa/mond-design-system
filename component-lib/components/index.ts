@@ -19,7 +19,6 @@ export * from './Heading';
 export * from './Spinner';
 export * from './Divider';
 export * from './Label';
-export * from './Image';
 export * from './Tag';
 export * from './Card';
 

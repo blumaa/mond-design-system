@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { Button, Text, Heading } from '@mond-design-system/theme';
 import { ToastContainer, ToastData } from '@mond-design-system/theme/client';
