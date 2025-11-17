@@ -15,6 +15,9 @@ export * from './components/Radio';
 export * from './components/Select';
 export * from './components/Switch';
 
+// Media components (use hooks for loading state)
+export * from './components/Avatar';
+
 // Interactive components (use hooks for interactivity)
 export * from './components/Tooltip';
 export * from './components/Popover';

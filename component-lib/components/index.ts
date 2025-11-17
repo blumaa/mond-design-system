@@ -11,7 +11,6 @@ export * from './Radio';
 export * from './Select';
 export * from './Switch';
 export * from './Badge';
-export * from './Avatar';
 export * from './Tooltip';
 export * from './Icon';
 export * from './Text';
