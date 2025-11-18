@@ -91,4 +91,90 @@ describe('Icon', () => {
 
     expect(ref.current).toBeInstanceOf(HTMLSpanElement);
   });
+
+  describe('Badge', () => {
+    it('renders badge with number', () => {
+      render(
+        <Icon badge={5} data-testid="icon-with-badge">
+          <TestSvg />
+        </Icon>
+      );
+
+      const icon = screen.getByTestId('icon-with-badge');
+      const badge = screen.getByText('5');
+
+      expect(icon).toHaveClass('mond-icon--with-badge');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveClass('mond-icon__badge');
+    });
+
+    it('renders badge with text', () => {
+      render(
+        <Icon badge="NEW" data-testid="icon-with-badge">
+          <TestSvg />
+        </Icon>
+      );
+
+      const badge = screen.getByText('NEW');
+      expect(badge).toBeInTheDocument();
+    });
+
+    it('does not render badge when not provided', () => {
+      const { container } = render(
+        <Icon data-testid="icon-without-badge">
+          <TestSvg />
+        </Icon>
+      );
+
+      const icon = screen.getByTestId('icon-without-badge');
+      const badge = container.querySelector('.mond-icon__badge');
+
+      expect(icon).not.toHaveClass('mond-icon--with-badge');
+      expect(badge).not.toBeInTheDocument();
+    });
+
+    it('shows "99+" for numbers exceeding default badgeMax', () => {
+      render(
+        <Icon badge={150}>
+          <TestSvg />
+        </Icon>
+      );
+
+      const badge = screen.getByText('99+');
+      expect(badge).toBeInTheDocument();
+    });
+
+    it('respects custom badgeMax prop', () => {
+      render(
+        <Icon badge={25} badgeMax={20}>
+          <TestSvg />
+        </Icon>
+      );
+
+      const badge = screen.getByText('20+');
+      expect(badge).toBeInTheDocument();
+    });
+
+    it('shows exact number when below badgeMax', () => {
+      render(
+        <Icon badge={50} badgeMax={99}>
+          <TestSvg />
+        </Icon>
+      );
+
+      const badge = screen.getByText('50');
+      expect(badge).toBeInTheDocument();
+    });
+
+    it('has accessible label for badge', () => {
+      render(
+        <Icon badge={5}>
+          <TestSvg />
+        </Icon>
+      );
+
+      const badge = screen.getByLabelText('5 notifications');
+      expect(badge).toBeInTheDocument();
+    });
+  });
 });
