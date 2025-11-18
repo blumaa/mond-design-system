@@ -166,4 +166,133 @@ describe('Select Component', () => {
     expect(selectButton).toHaveTextContent('No options');
     expect(helperText).toBeInTheDocument();
   });
+
+  describe('Form Integration', () => {
+    it('renders hidden input when name prop is provided', () => {
+      const { container } = render(<Select options={mockOptions} name="test-field" />);
+
+      const hiddenInput = container.querySelector('input[type="hidden"]');
+      expect(hiddenInput).toBeInTheDocument();
+      expect(hiddenInput).toHaveAttribute('name', 'test-field');
+    });
+
+    it('does not render hidden input when name prop is not provided', () => {
+      const { container } = render(<Select options={mockOptions} />);
+
+      const hiddenInput = container.querySelector('input[type="hidden"]');
+      expect(hiddenInput).not.toBeInTheDocument();
+    });
+
+    it('syncs hidden input value with selected option', async () => {
+      const { container } = render(
+        <Select options={mockOptions} name="test-field" defaultValue="option1" />
+      );
+
+      const hiddenInput = container.querySelector('input[type="hidden"]') as HTMLInputElement;
+      expect(hiddenInput.value).toBe('option1');
+
+      const selectButton = screen.getByRole('button');
+      fireEvent.click(selectButton);
+
+      await waitFor(() => {
+        expect(screen.getByText('Option 2')).toBeInTheDocument();
+      });
+
+      const option2 = screen.getByText('Option 2');
+      fireEvent.click(option2);
+
+      await waitFor(() => {
+        expect(hiddenInput.value).toBe('option2');
+      });
+    });
+
+    it('works in uncontrolled mode with defaultValue', async () => {
+      render(<Select options={mockOptions} defaultValue="option2" />);
+
+      const selectButton = screen.getByRole('button');
+      expect(selectButton).toHaveTextContent('Option 2');
+
+      fireEvent.click(selectButton);
+
+      await waitFor(() => {
+        expect(screen.getByText('Option 3')).toBeInTheDocument();
+      });
+
+      const option3 = screen.getByText('Option 3');
+      fireEvent.click(option3);
+
+      await waitFor(() => {
+        expect(selectButton).toHaveTextContent('Option 3');
+      });
+    });
+
+    it('calls onChange in uncontrolled mode', async () => {
+      const handleChange = jest.fn();
+      render(
+        <Select
+          options={mockOptions}
+          defaultValue="option1"
+          onChange={handleChange}
+        />
+      );
+
+      const selectButton = screen.getByRole('button');
+      fireEvent.click(selectButton);
+
+      await waitFor(() => {
+        expect(screen.getByText('Option 2')).toBeInTheDocument();
+      });
+
+      const option2 = screen.getByText('Option 2');
+      fireEvent.click(option2);
+
+      expect(handleChange).toHaveBeenCalledWith('option2');
+    });
+
+    it('submits form data with hidden input', async () => {
+      const handleSubmit = jest.fn((e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target as HTMLFormElement);
+        return formData.get('category');
+      });
+
+      render(
+        <form onSubmit={handleSubmit}>
+          <Select
+            options={mockOptions}
+            name="category"
+            defaultValue="option1"
+          />
+          <button type="submit">Submit</button>
+        </form>
+      );
+
+      const submitButton = screen.getByText('Submit');
+      fireEvent.click(submitButton);
+
+      await waitFor(() => {
+        expect(handleSubmit).toHaveBeenCalled();
+        const result = handleSubmit.mock.results[0].value;
+        expect(result).toBe('option1');
+      });
+    });
+
+    it('passes required attribute to hidden input', () => {
+      const { container } = render(
+        <Select options={mockOptions} name="test-field" required />
+      );
+
+      const hiddenInput = container.querySelector('input[type="hidden"]');
+      expect(hiddenInput).toHaveAttribute('required');
+    });
+
+    it('passes disabled attribute to hidden input', () => {
+      const { container } = render(
+        <Select options={mockOptions} name="test-field" disabled />
+      );
+
+      const hiddenInput = container.querySelector('input[type="hidden"]');
+      expect(hiddenInput).toBeDisabled();
+    });
+  });
 });

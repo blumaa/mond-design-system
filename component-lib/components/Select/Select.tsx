@@ -58,14 +58,24 @@ export interface SelectProps {
   options: SelectOption[];
 
   /**
-   * Selected value
+   * Selected value (controlled mode)
    */
   value?: string;
+
+  /**
+   * Default value (uncontrolled mode)
+   */
+  defaultValue?: string;
 
   /**
    * Change handler
    */
   onChange?: (value: string) => void;
+
+  /**
+   * Name attribute for form integration
+   */
+  name?: string;
 
   /**
    * Disabled state
@@ -97,22 +107,31 @@ export interface SelectProps {
  * Select Component
  *
  * A versatile, SSR-compatible select component that uses CSS variables for theming.
- * Supports multiple sizes, error/success states, and keyboard navigation.
+ * Supports multiple sizes, error/success states, keyboard navigation, and form integration.
  *
  * **SSR-Compatible**: Uses CSS classes and CSS variables instead of runtime theme resolution.
  * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
+ * **Form-Compatible**: Supports both controlled and uncontrolled modes with native form integration.
  *
  * @example
  * // Basic select
  * <Select options={[...]} placeholder="Choose option" />
  *
  * @example
- * // Select with error
- * <Select options={[...]} error="This field is required" />
+ * // Controlled select with React state
+ * <Select label="Country" value={value} onChange={setValue} options={[...]} />
  *
  * @example
- * // Controlled select with label
- * <Select label="Country" value={value} onChange={setValue} options={[...]} />
+ * // Form-compatible select (uncontrolled)
+ * <form>
+ *   <Select name="category" defaultValue="option1" options={[...]} />
+ * </form>
+ *
+ * @example
+ * // Form-compatible with controlled state
+ * <form>
+ *   <Select name="category" value={value} onChange={setValue} options={[...]} />
+ * </form>
  */
 export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
   ({
@@ -124,8 +143,10 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     helperText,
     placeholder = 'Select an option',
     options,
-    value,
+    value: controlledValue,
+    defaultValue,
     onChange,
+    name,
     disabled = false,
     className,
     id,
@@ -134,6 +155,13 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
   }, ref) => {
     const generatedId = useId();
     const selectId = id || `select-${generatedId}`;
+
+    // Internal state for uncontrolled mode
+    const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
+
+    // Determine if controlled or uncontrolled
+    const isControlled = controlledValue !== undefined;
+    const value = isControlled ? controlledValue : internalValue;
 
     const [isOpen, setIsOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -178,6 +206,15 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     }, []);
 
     // Handle keyboard navigation
+    const handleValueChange = (newValue: string) => {
+      // Update internal state if uncontrolled
+      if (!isControlled) {
+        setInternalValue(newValue);
+      }
+      // Always call onChange callback
+      onChange?.(newValue);
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (disabled) return;
 
@@ -188,7 +225,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           if (isOpen && focusedIndex >= 0) {
             const option = options[focusedIndex];
             if (!option.disabled) {
-              onChange?.(option.value);
+              handleValueChange(option.value);
               setIsOpen(false);
               setFocusedIndex(-1);
             }
@@ -235,7 +272,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
 
     const handleOptionClick = (option: SelectOption) => {
       if (!option.disabled) {
-        onChange?.(option.value);
+        handleValueChange(option.value);
         setIsOpen(false);
         setFocusedIndex(-1);
         triggerRef.current?.focus();
@@ -248,6 +285,16 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           <Label htmlFor={selectId} size={size} disabled={disabled} required={required}>
             {label}
           </Label>
+        )}
+        {/* Hidden input for form integration */}
+        {name && (
+          <input
+            type="hidden"
+            name={name}
+            value={value || ''}
+            disabled={disabled}
+            required={required}
+          />
         )}
         <div ref={containerRef} className="mond-select__trigger-container">
           <button
