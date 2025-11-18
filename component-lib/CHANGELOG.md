@@ -1,3 +1,9 @@
+## [2.7.0](https://github.com/blumaa/mond-design-system/compare/v2.6.3...v2.7.0) (2025-11-18)
+
+### ✨ Features
+
+* alarmbell notification on Icon ([2a5a198](https://github.com/blumaa/mond-design-system/commit/2a5a198ae9c88903a6f79c5abf24d6277f2a5203))
+
 ## [2.6.3](https://github.com/blumaa/mond-design-system/compare/v2.6.2...v2.6.3) (2025-11-18)
 
 ### 🐛 Bug Fixes
