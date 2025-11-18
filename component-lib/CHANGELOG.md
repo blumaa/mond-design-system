@@ -1,3 +1,9 @@
+## [2.6.3](https://github.com/blumaa/mond-design-system/compare/v2.6.2...v2.6.3) (2025-11-18)
+
+### 🐛 Bug Fixes
+
+* Select name and defaultValue props add ([cc7d36d](https://github.com/blumaa/mond-design-system/commit/cc7d36d6271e762c093a901ffd980a6b1cc910c7))
+
 ## [2.6.2](https://github.com/blumaa/mond-design-system/compare/v2.6.1...v2.6.2) (2025-11-17)
 
 ### 🐛 Bug Fixes
