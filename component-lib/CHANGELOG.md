@@ -1,3 +1,9 @@
+## [2.8.0](https://github.com/blumaa/mond-design-system/compare/v2.7.0...v2.8.0) (2025-11-19)
+
+### ✨ Features
+
+* dropzone v1 ([823fba4](https://github.com/blumaa/mond-design-system/commit/823fba492b7faa2cd2b783b733006c9138e26337))
+
 ## [2.7.0](https://github.com/blumaa/mond-design-system/compare/v2.6.3...v2.7.0) (2025-11-18)
 
 ### ✨ Features
