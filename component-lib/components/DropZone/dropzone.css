@@ -1,0 +1,148 @@
+/**
+ * DropZone Component Styles
+ *
+ * Styles for drag-and-drop zone component
+ */
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+.mond-dropzone {
+  position: relative;
+  width: 100%;
+  border: 2px dashed var(--mond-border-default);
+  border-radius: var(--mond-radii-md);
+  background-color: var(--mond-surface-card);
+  padding: var(--mond-spacing-4);
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+/* ============================================
+   STATE: EMPTY
+   ============================================ */
+
+.mond-dropzone--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* ============================================
+   STATE: DRAG OVER (VALID DROP)
+   ============================================ */
+
+.mond-dropzone--over {
+  border-color: var(--mond-border-primary);
+  background-color: var(--mond-surface-elevated);
+  box-shadow: 0 0 0 4px var(--mond-color-brand-primary-50);
+}
+
+/* ============================================
+   STATE: DISABLED
+   ============================================ */
+
+.mond-dropzone--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ============================================
+   PLACEHOLDER
+   ============================================ */
+
+.mond-dropzone__placeholder {
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+/* ============================================
+   ITEMS
+   ============================================ */
+
+.mond-dropzone__item {
+  position: relative;
+  margin-bottom: var(--mond-spacing-3);
+  border-radius: var(--mond-radii-md);
+  background-color: var(--mond-surface-elevated);
+  border: 1px solid var(--mond-border-subtle);
+  cursor: grab;
+  transition: all 0.15s ease;
+}
+
+.mond-dropzone__item:last-child {
+  margin-bottom: 0;
+}
+
+.mond-dropzone__item:hover {
+  box-shadow: var(--mond-shadow-md);
+  border-color: var(--mond-border-default);
+}
+
+.mond-dropzone__item:active {
+  cursor: grabbing;
+}
+
+/* Item Content */
+.mond-dropzone__item-content {
+  padding: var(--mond-spacing-4);
+  pointer-events: none;
+}
+
+/* Remove Button */
+.mond-dropzone__item-remove {
+  position: absolute;
+  top: var(--mond-spacing-2);
+  right: var(--mond-spacing-2);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+.mond-dropzone__item:hover .mond-dropzone__item-remove {
+  opacity: 1;
+}
+
+/* ============================================
+   STATE: DRAGGING
+   ============================================ */
+
+.mond-dropzone__item--dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+  box-shadow: var(--mond-shadow-lg);
+  transform: rotate(2deg);
+}
+
+.mond-dropzone__item--dragging .mond-dropzone__item-remove {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+  .mond-dropzone {
+    padding: var(--mond-spacing-3);
+  }
+
+  .mond-dropzone__item {
+    margin-bottom: var(--mond-spacing-2);
+  }
+
+  .mond-dropzone__item-content {
+    padding: var(--mond-spacing-3);
+  }
+
+  /* Always show remove button on mobile */
+  .mond-dropzone__item-remove {
+    opacity: 1;
+  }
+}

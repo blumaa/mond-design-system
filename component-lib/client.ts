@@ -24,6 +24,7 @@ export * from './components/Popover';
 export * from './components/Modal';
 export * from './components/Drawer';
 export * from './components/Tabs';
+export * from './components/DropZone';
 
 // Accordion exports - handle naming conflict between AccordionItem type and component
 export { Accordion, type AccordionProps, type AccordionMode, type AccordionVariant, type AccordionSize } from './components/Accordion';

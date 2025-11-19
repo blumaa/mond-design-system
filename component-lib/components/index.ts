@@ -37,6 +37,7 @@ export * from './Accordion';
 export * from './ToastContainer';
 export * from './Carousel';
 export * from './Popover';
+export * from './DropZone';
 
 // Providers
 export * from './providers';

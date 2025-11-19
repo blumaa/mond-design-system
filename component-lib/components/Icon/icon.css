@@ -72,7 +72,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--mond-feedback-error-background);
+  color: var(--mond-interactive-primary-text);
+  background-color: var(--mond-feedback-success-background);
   font-size: 10px;
   line-height: 1;
   border-radius: var(--mond-radii-full);

@@ -454,7 +454,7 @@ export const tokens = {
       "error": {
         "background": {
           "light": "red.50",
-          "dark": "red.900"
+          "dark": "red.700"
         },
         "border": {
           "light": "red.500",
