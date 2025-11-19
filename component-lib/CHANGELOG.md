@@ -1,3 +1,9 @@
+## [2.8.1](https://github.com/blumaa/mond-design-system/compare/v2.8.0...v2.8.1) (2025-11-19)
+
+### 🐛 Bug Fixes
+
+* DropZone collision ([b604621](https://github.com/blumaa/mond-design-system/commit/b604621e47a3e3c421ea30d3e578c7fb46f9f4ec))
+
 ## [2.8.0](https://github.com/blumaa/mond-design-system/compare/v2.7.0...v2.8.0) (2025-11-19)
 
 ### ✨ Features
