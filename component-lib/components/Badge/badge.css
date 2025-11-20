@@ -70,19 +70,18 @@
   border: none;
 }
 
-/* Secondary Variant */
-.mond-badge--secondary {
-  background-color: var(--mond-surface-elevated);
+/* Outline Variant */
+.mond-badge--outline {
+  background-color: transparent;
   color: var(--mond-text-primary);
-  border: 1px solid var(--mond-border-subtle);
+  border: 1px solid var(--mond-border-default);
 }
 
 /* Success Variant */
 .mond-badge--success {
-  background-color: var(--mond-brand-interactive-background);
-  color: var(--mond-brand-interactive-text);
-  border: 1px solid var(--mond-brand-interactive-background);
-  box-shadow: var(--mond-effects-brand-glow-subtle);
+  background-color: var(--mond-feedback-success-background);
+  color: var(--mond-feedback-success-text);
+  border: 1px solid var(--mond-feedback-success-border);
 }
 
 /* Warning Variant */

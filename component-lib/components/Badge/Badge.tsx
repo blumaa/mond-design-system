@@ -1,7 +1,7 @@
 import React from 'react';
 import './badge.css';
 
-export type BadgeVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
+export type BadgeVariant = 'default' | 'primary' | 'outline' | 'success' | 'warning' | 'error';
 export type BadgeSize = 'sm' | 'md' | 'lg';
 
 export interface BadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'size'> {

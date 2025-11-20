@@ -25,7 +25,7 @@ function MyComponent() {
 A versatile badge component for labels, status indicators, and notifications. Perfect for highlighting important information, showing counts, or indicating states.
 
 **Key Features:**
-- 🎨 Six variants (default, primary, secondary, success, warning, error)
+- 🎨 Six variants (default, primary, outline, success, warning, error)
 - 📏 Three sizes (sm, md, lg)
 - 🔢 Ideal for notification counts and status indicators
 - ✨ Icon support for enhanced visual meaning
@@ -39,7 +39,7 @@ A versatile badge component for labels, status indicators, and notifications. Pe
   argTypes: {
     variant: {
       control: 'select',
-      options: ['default', 'primary', 'secondary', 'success', 'warning', 'error'],
+      options: ['default', 'primary', 'outline', 'success', 'warning', 'error'],
     },
     size: {
       control: 'select',
@@ -66,7 +66,7 @@ export const Variants: Story = {
     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
       <Badge variant="default">Default</Badge>
       <Badge variant="primary">Primary</Badge>
-      <Badge variant="secondary">Secondary</Badge>
+      <Badge variant="outline">Outline</Badge>
       <Badge variant="success">Success</Badge>
       <Badge variant="warning">Warning</Badge>
       <Badge variant="error">Error</Badge>
@@ -135,7 +135,7 @@ export const StatusIndicators: Story = {
       </div>
       <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
         <span>Draft</span>
-        <Badge variant="secondary" size="sm">Draft</Badge>
+        <Badge variant="outline" size="sm">Draft</Badge>
       </div>
     </div>
   ),
@@ -184,7 +184,7 @@ export const DarkMode: Story = {
 export const AllVariantsSizes: Story = {
   render: (_args, _context) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {(['default', 'primary', 'secondary', 'success', 'warning', 'error'] as const).map(variant => (
+      {(['default', 'primary', 'outline', 'success', 'warning', 'error'] as const).map(variant => (
         <div key={variant} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           <span style={{ width: '80px', textTransform: 'capitalize' }}>{variant}:</span>
           <Badge variant={variant} size="sm">{variant}</Badge>

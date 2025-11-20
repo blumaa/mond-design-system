@@ -462,7 +462,7 @@ export const tokens = {
         },
         "text": {
           "light": "red.800",
-          "dark": "red.700"
+          "dark": "red.100"
         }
       },
       "info": {
