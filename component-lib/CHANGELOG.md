@@ -1,3 +1,9 @@
+## [2.8.2](https://github.com/blumaa/mond-design-system/compare/v2.8.1...v2.8.2) (2025-11-20)
+
+### 🐛 Bug Fixes
+
+* badge variant color tokens ([7c2ee75](https://github.com/blumaa/mond-design-system/commit/7c2ee7541d1792c6d6f93aa9d2798d4f3326d788))
+
 ## [2.8.1](https://github.com/blumaa/mond-design-system/compare/v2.8.0...v2.8.1) (2025-11-19)
 
 ### 🐛 Bug Fixes
