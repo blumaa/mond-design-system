@@ -1,3 +1,10 @@
+## [2.8.3](https://github.com/blumaa/mond-design-system/compare/v2.8.2...v2.8.3) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* button tsc ([324202b](https://github.com/blumaa/mond-design-system/commit/324202bda4907b8940836fb75f85b879963aa61f))
+* update box and button corner props ([0170430](https://github.com/blumaa/mond-design-system/commit/0170430ac9e59731e12b3da7d4a3d829391fb72e))
+
 ## [2.8.2](https://github.com/blumaa/mond-design-system/compare/v2.8.1...v2.8.2) (2025-11-20)
 
 ### 🐛 Bug Fixes
