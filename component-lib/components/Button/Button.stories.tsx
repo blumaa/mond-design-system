@@ -179,7 +179,7 @@ export const Ghost: Story = {
   args: {
     variant: 'ghost',
     size: 'md',
-    corners: 'default',
+    corners: 'rounded-xs',
     children: 'Ghost Button',
     disabled: false,
   },
@@ -189,7 +189,7 @@ export const Destructive: Story = {
   args: {
     variant: 'destructive',
     size: 'md',
-    corners: 'default',
+    corners: 'rounded-xs',
     children: 'Delete',
     disabled: false,
   },
@@ -199,7 +199,7 @@ export const Warning: Story = {
   args: {
     variant: 'warning',
     size: 'md',
-    corners: 'default',
+    corners: 'rounded-xs',
     children: 'Warning',
     disabled: false,
   },
@@ -209,7 +209,7 @@ export const WithIcon: Story = {
   args: {
     variant: 'primary',
     size: 'md',
-    corners: 'default',
+    corners: 'rounded-xs',
     children: (
       <>
         <svg
@@ -247,7 +247,7 @@ export const IconOnly: Story = {
   args: {
     variant: 'primary',
     size: 'md',
-    corners: 'default',
+    corners: 'rounded-xs',
     iconOnly: true,
     children: (
       <svg
