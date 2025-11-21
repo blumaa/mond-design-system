@@ -151,11 +151,11 @@ function MyComponent() {
     },
     corners: {
       control: { type: 'select' },
-      options: ['rounded-sm', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-full'],
+      options: ['none', 'rounded-sm', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-full'],
       description: 'Border radius variant',
       table: {
-        type: { summary: "'rounded-sm' | 'rounded-md' | 'rounded-lg' | 'rounded-xl' | 'rounded-2xl' | 'rounded-full'" },
-        defaultValue: { summary: 'undefined' },
+        type: { summary: "'none' | 'rounded-sm' | 'rounded-md' | 'rounded-lg' | 'rounded-xl' | 'rounded-2xl' | 'rounded-full'" },
+        defaultValue: { summary: "'rounded-lg'" },
       },
     },
   },
@@ -1105,7 +1105,7 @@ export const BorderVariants: Story = {
 /**
  * Corner Variants
  *
- * Demonstrates all six corner radius options from smallest to largest.
+ * Demonstrates all seven corner radius options. Default is rounded-lg.
  */
 export const CornerVariants: Story = {
   render: () => (
@@ -1114,10 +1114,23 @@ export const CornerVariants: Story = {
         <Box marginBottom="4">
           <Heading level={3} size="lg">Corner Variants</Heading>
           <Text variant="body-sm" semantic="secondary">
-            All corner radius options from smallest to fully rounded
+            All corner radius options - Default is rounded-lg (0.5rem)
           </Text>
         </Box>
         <Box display="flex" flexWrap="wrap" gap="lg">
+          <Box display="flex" flexDirection="column" gap="sm">
+            <Text variant="body-sm" semantic="secondary">None (0)</Text>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
+              <Box
+                border="default"
+                corners="none"
+                padding="6"
+              >
+                <Text>corners="none"</Text>
+              </Box>
+            </div>
+          </Box>
+
           <Box display="flex" flexDirection="column" gap="sm">
             <Text variant="body-sm" semantic="secondary">SM (0.125rem)</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
@@ -1145,7 +1158,7 @@ export const CornerVariants: Story = {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">LG (0.5rem)</Text>
+            <Text variant="body-sm" semantic="secondary">LG (0.5rem) - DEFAULT</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"

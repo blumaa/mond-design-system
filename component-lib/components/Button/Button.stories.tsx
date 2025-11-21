@@ -50,7 +50,7 @@ A versatile button component with multiple variants, sizes, and styling options.
     },
     corners: {
       control: { type: 'select' },
-      options: ['rounded-sm', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-full'],
+      options: ['none', 'rounded-sm', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-full'],
     },
     alignContent: {
       control: { type: 'select' },

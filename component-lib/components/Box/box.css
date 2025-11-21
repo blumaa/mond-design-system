@@ -318,6 +318,10 @@
    CORNERS UTILITIES
    ============================================ */
 
+.mond-box--corners-none {
+  border-radius: 0;
+}
+
 .mond-box--corners-rounded-sm {
   border-radius: var(--mond-radii-sm);
 }

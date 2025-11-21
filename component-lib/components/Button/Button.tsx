@@ -9,7 +9,7 @@ export type ButtonVariant =
   | "destructive"
   | "warning";
 export type ButtonSize = "sm" | "md" | "lg";
-export type ButtonCorners = "rounded-sm" | "rounded-md" | "rounded-lg" | "rounded-xl" | "rounded-2xl" | "rounded-full";
+export type ButtonCorners = "none" | "rounded-sm" | "rounded-md" | "rounded-lg" | "rounded-xl" | "rounded-2xl" | "rounded-full";
 export type ButtonAlignContent = "left" | "center" | "right";
 
 export interface ButtonProps {
@@ -181,7 +181,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
       as = "button",
       variant = "primary",
       size = "md",
-      corners = "default",
+      corners = "rounded-lg",
       alignContent = "center",
       children,
       iconOnly = false,
