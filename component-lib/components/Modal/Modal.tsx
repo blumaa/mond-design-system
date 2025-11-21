@@ -246,11 +246,7 @@ export const Modal: React.FC<ModalProps> = ({
           </ModalHeader>
         )}
 
-        {typeof children === 'string' || React.isValidElement(children) ? (
-          <ModalBody>{children}</ModalBody>
-        ) : (
-          children
-        )}
+        {children}
       </Box>
     </Box>
   );
