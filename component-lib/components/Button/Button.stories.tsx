@@ -50,7 +50,7 @@ A versatile button component with multiple variants, sizes, and styling options.
     },
     corners: {
       control: { type: 'select' },
-      options: ['rounded-xxs', 'rounded-xs', 'rounded-md', 'rounded-lg', 'rounded-full'],
+      options: ['rounded-sm', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-full'],
     },
     alignContent: {
       control: { type: 'select' },
@@ -100,7 +100,7 @@ export const Default: Story = {
   args: {
     variant: 'primary',
     size: 'md',
-    corners: 'rounded-xs',
+    corners: 'rounded-md',
     children: 'Button',
     disabled: false,
   },
@@ -169,7 +169,7 @@ export const Outline: Story = {
   args: {
     variant: 'outline',
     size: 'md',
-    corners: 'rounded-xs',
+    corners: 'rounded-md',
     children: 'Outline Button',
     disabled: false,
   },
@@ -179,7 +179,7 @@ export const Ghost: Story = {
   args: {
     variant: 'ghost',
     size: 'md',
-    corners: 'rounded-xs',
+    corners: 'rounded-md',
     children: 'Ghost Button',
     disabled: false,
   },
@@ -189,7 +189,7 @@ export const Destructive: Story = {
   args: {
     variant: 'destructive',
     size: 'md',
-    corners: 'rounded-xs',
+    corners: 'rounded-md',
     children: 'Delete',
     disabled: false,
   },
@@ -199,7 +199,7 @@ export const Warning: Story = {
   args: {
     variant: 'warning',
     size: 'md',
-    corners: 'rounded-xs',
+    corners: 'rounded-md',
     children: 'Warning',
     disabled: false,
   },
@@ -209,7 +209,7 @@ export const WithIcon: Story = {
   args: {
     variant: 'primary',
     size: 'md',
-    corners: 'rounded-xs',
+    corners: 'rounded-md',
     children: (
       <>
         <svg
@@ -247,7 +247,7 @@ export const IconOnly: Story = {
   args: {
     variant: 'primary',
     size: 'md',
-    corners: 'rounded-xs',
+    corners: 'rounded-md',
     iconOnly: true,
     children: (
       <svg

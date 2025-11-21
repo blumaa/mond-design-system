@@ -44,7 +44,7 @@ export default function Home() {
           <Button variant="primary" corners="rounded-full">
             Rounded
           </Button>
-          <Button variant="outline" corners="rounded-xs">
+          <Button variant="outline" corners="rounded-md">
             Default Corners
           </Button>
         </div>

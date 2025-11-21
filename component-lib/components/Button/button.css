@@ -198,20 +198,24 @@
    CORNERS
    ============================================ */
 
-.mond-button--corners-rounded-xxs {
+.mond-button--corners-rounded-sm {
   border-radius: var(--mond-radii-sm);
 }
 
-.mond-button--corners-rounded-xs {
+.mond-button--corners-rounded-md {
   border-radius: var(--mond-radii-md);
 }
 
-.mond-button--corners-rounded-md {
+.mond-button--corners-rounded-lg {
   border-radius: var(--mond-radii-lg);
 }
 
-.mond-button--corners-rounded-lg {
+.mond-button--corners-rounded-xl {
   border-radius: var(--mond-radii-xl);
+}
+
+.mond-button--corners-rounded-2xl {
+  border-radius: var(--mond-radii-2xl);
 }
 
 .mond-button--corners-rounded-full {

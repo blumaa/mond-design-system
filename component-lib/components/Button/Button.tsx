@@ -9,7 +9,7 @@ export type ButtonVariant =
   | "destructive"
   | "warning";
 export type ButtonSize = "sm" | "md" | "lg";
-export type ButtonCorners = "rounded-xxs" | "rounded-xs" | "rounded-md" | "rounded-lg" | "rounded-full";
+export type ButtonCorners = "rounded-sm" | "rounded-md" | "rounded-lg" | "rounded-xl" | "rounded-2xl" | "rounded-full";
 export type ButtonAlignContent = "left" | "center" | "right";
 
 export interface ButtonProps {

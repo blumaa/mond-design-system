@@ -42,7 +42,7 @@ export interface BoxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'st
 
   // Visual props
   border?: 'subtle' | 'default' | 'strong';
-  corners?: 'rounded-xxs' | 'rounded-xs' | 'rounded-md' | 'rounded-lg' | 'rounded-full';
+  corners?: 'rounded-sm' | 'rounded-md' | 'rounded-lg' | 'rounded-xl' | 'rounded-2xl' | 'rounded-full';
 }
 
 /**
