@@ -1,3 +1,9 @@
+## [2.8.4](https://github.com/blumaa/mond-design-system/compare/v2.8.3...v2.8.4) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* box and button corner props ([cfd5e1d](https://github.com/blumaa/mond-design-system/commit/cfd5e1dc5abb65cf6c25696cae433020bf76ba4c))
+
 ## [2.8.3](https://github.com/blumaa/mond-design-system/compare/v2.8.2...v2.8.3) (2025-11-21)
 
 ### 🐛 Bug Fixes
