@@ -1,3 +1,9 @@
+## [2.8.5](https://github.com/blumaa/mond-design-system/compare/v2.8.4...v2.8.5) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* default corners for Box ([a0034c4](https://github.com/blumaa/mond-design-system/commit/a0034c4f48928f6474c88448139a08b8c50147e6))
+
 ## [2.8.4](https://github.com/blumaa/mond-design-system/compare/v2.8.3...v2.8.4) (2025-11-21)
 
 ### 🐛 Bug Fixes
