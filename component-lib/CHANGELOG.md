@@ -1,3 +1,9 @@
+## [2.8.6](https://github.com/blumaa/mond-design-system/compare/v2.8.5...v2.8.6) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* Modal separation of concerns ModalyBody ([5fce70f](https://github.com/blumaa/mond-design-system/commit/5fce70f852959d30bcdaedb9f9b492e4f6f82f7a))
+
 ## [2.8.5](https://github.com/blumaa/mond-design-system/compare/v2.8.4...v2.8.5) (2025-11-21)
 
 ### 🐛 Bug Fixes
