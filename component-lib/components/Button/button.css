@@ -198,11 +198,23 @@
    CORNERS
    ============================================ */
 
-.mond-button--corners-default {
+.mond-button--corners-rounded-xxs {
+  border-radius: var(--mond-radii-sm);
+}
+
+.mond-button--corners-rounded-xs {
   border-radius: var(--mond-radii-md);
 }
 
-.mond-button--corners-rounded {
+.mond-button--corners-rounded-md {
+  border-radius: var(--mond-radii-lg);
+}
+
+.mond-button--corners-rounded-lg {
+  border-radius: var(--mond-radii-xl);
+}
+
+.mond-button--corners-rounded-full {
   border-radius: var(--mond-radii-full);
 }
 

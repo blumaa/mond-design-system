@@ -76,14 +76,14 @@ describe('Box Component', () => {
       render(
         <Box
           border="default"
-          corners="rounded"
+          corners="rounded-md"
           data-testid="border-box"
         >
           Content
         </Box>
       );
       const boxElement = screen.getByTestId('border-box');
-      expect(boxElement).toHaveClass('mond-box--border-default', 'mond-box--corners-rounded');
+      expect(boxElement).toHaveClass('mond-box--border-default', 'mond-box--corners-rounded-md');
     });
   });
 

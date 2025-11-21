@@ -282,7 +282,7 @@ export const ProductCard: Story = {
     <Card maxWidth="sm">
       <Box padding="4">
         <Box
-          corners="default"
+          corners="rounded-xs"
           marginBottom="4"
           // Placeholder for product image - would typically use an img element here
         />
@@ -330,7 +330,7 @@ export const UserProfile: Story = {
         alignItems="center"
       >
         <Box
-          corners="rounded"
+          corners="rounded-full"
           marginBottom="3"
           // Avatar placeholder - would typically use an img or Avatar component here
         />
@@ -404,7 +404,7 @@ export const Notification: Story = {
     <Card maxWidth="md">
       <CardBody>
         <Box display="flex" gap="sm">
-          <Box corners="default">{/* Icon or avatar placeholder */}</Box>
+          <Box corners="rounded-xs">{/* Icon or avatar placeholder */}</Box>
           <Box flex="1">
             <Box marginBottom="1">
               <Heading level={4} size="sm">

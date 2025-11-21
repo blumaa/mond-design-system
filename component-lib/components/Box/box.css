@@ -318,10 +318,22 @@
    CORNERS UTILITIES
    ============================================ */
 
-.mond-box--corners-default {
+.mond-box--corners-rounded-xxs {
+  border-radius: var(--mond-radii-sm);
+}
+
+.mond-box--corners-rounded-xs {
   border-radius: var(--mond-radii-md);
 }
 
-.mond-box--corners-rounded {
+.mond-box--corners-rounded-md {
+  border-radius: var(--mond-radii-lg);
+}
+
+.mond-box--corners-rounded-lg {
+  border-radius: var(--mond-radii-xl);
+}
+
+.mond-box--corners-rounded-full {
   border-radius: var(--mond-radii-full);
 }

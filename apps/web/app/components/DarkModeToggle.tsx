@@ -26,7 +26,7 @@ export function DarkModeToggle() {
         alignItems="center"
         gap="xs"
         border="default"
-        corners="default"
+        corners="rounded-md"
       >
         <span style={{ fontSize: 14, fontWeight: 500 }}>
           {isDarkMode ? '🌙' : '☀️'}

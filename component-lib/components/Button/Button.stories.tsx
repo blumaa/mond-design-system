@@ -50,7 +50,7 @@ A versatile button component with multiple variants, sizes, and styling options.
     },
     corners: {
       control: { type: 'select' },
-      options: ['default', 'rounded'],
+      options: ['rounded-xxs', 'rounded-xs', 'rounded-md', 'rounded-lg', 'rounded-full'],
     },
     alignContent: {
       control: { type: 'select' },
@@ -100,7 +100,7 @@ export const Default: Story = {
   args: {
     variant: 'primary',
     size: 'md',
-    corners: 'default',
+    corners: 'rounded-xs',
     children: 'Button',
     disabled: false,
   },
@@ -169,7 +169,7 @@ export const Outline: Story = {
   args: {
     variant: 'outline',
     size: 'md',
-    corners: 'default',
+    corners: 'rounded-xs',
     children: 'Outline Button',
     disabled: false,
   },

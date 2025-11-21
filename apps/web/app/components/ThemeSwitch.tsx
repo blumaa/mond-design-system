@@ -33,7 +33,7 @@ export const ThemeSwitch = () => {
         variant="outline"
         size="md"
         iconOnly
-        corners="rounded"
+        corners="rounded-full"
         onClick={toggleTheme}
       >
         <LightBulbIcon size={20} isLightOn={isDarkMode} />

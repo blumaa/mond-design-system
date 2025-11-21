@@ -41,10 +41,10 @@ export default function Home() {
         </div>
 
         <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>
-          <Button variant="primary" corners="rounded">
+          <Button variant="primary" corners="rounded-full">
             Rounded
           </Button>
-          <Button variant="outline" corners="default">
+          <Button variant="outline" corners="rounded-xs">
             Default Corners
           </Button>
         </div>
@@ -53,7 +53,7 @@ export default function Home() {
           <Button variant="primary" iconOnly>
             ✓
           </Button>
-          <Button variant="ghost" iconOnly corners="rounded">
+          <Button variant="ghost" iconOnly corners="rounded-full">
             ♥
           </Button>
           <Button variant="outline" iconOnly>

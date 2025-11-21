@@ -151,10 +151,10 @@ function MyComponent() {
     },
     corners: {
       control: { type: 'select' },
-      options: ['default', 'rounded'],
+      options: ['rounded-xxs', 'rounded-xs', 'rounded-md', 'rounded-lg', 'rounded-full'],
       description: 'Border radius variant',
       table: {
-        type: { summary: "'default' | 'rounded'" },
+        type: { summary: "'rounded-xxs' | 'rounded-xs' | 'rounded-md' | 'rounded-lg' | 'rounded-full'" },
         defaultValue: { summary: 'undefined' },
       },
     },
@@ -789,7 +789,7 @@ export const GridLayout: Story = {
                 key={num}
                 padding="4"
                 border="default"
-                corners="default"
+                corners="rounded-xs"
               >
                 <Text>Item {num}</Text>
               </Box>
@@ -825,7 +825,7 @@ export const GridLayout: Story = {
                 key={num}
                 padding="4"
                 border="default"
-                corners="default"
+                corners="rounded-xs"
               >
                 <Text>Item {num}</Text>
               </Box>
@@ -861,7 +861,7 @@ export const GridLayout: Story = {
                 key={num}
                 padding="4"
                 border="default"
-                corners="default"
+                corners="rounded-xs"
               >
                 <Text>Item {num}</Text>
               </Box>
@@ -1105,7 +1105,7 @@ export const BorderVariants: Story = {
 /**
  * Corner Variants
  *
- * Demonstrates the two corner radius options: default and rounded (full).
+ * Demonstrates all five corner radius options from smallest to largest.
  */
 export const CornerVariants: Story = {
   render: () => (
@@ -1113,30 +1113,72 @@ export const CornerVariants: Story = {
       <Box>
         <Box marginBottom="4">
           <Heading level={3} size="lg">Corner Variants</Heading>
+          <Text variant="body-sm" semantic="secondary">
+            All corner radius options from smallest to fully rounded
+          </Text>
         </Box>
-        <Box display="flex" gap="lg">
+        <Box display="flex" flexWrap="wrap" gap="lg">
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">Default Corners</Text>
+            <Text variant="body-sm" semantic="secondary">XXS (0.125rem)</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
-                corners="default"
+                corners="rounded-xxs"
                 padding="6"
               >
-                <Text>corners="default"</Text>
+                <Text>corners="rounded-xxs"</Text>
               </Box>
             </div>
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">Rounded Corners</Text>
+            <Text variant="body-sm" semantic="secondary">XS (0.25rem)</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
-                corners="rounded"
+                corners="rounded-xs"
                 padding="6"
               >
-                <Text>corners="rounded"</Text>
+                <Text>corners="rounded-xs"</Text>
+              </Box>
+            </div>
+          </Box>
+
+          <Box display="flex" flexDirection="column" gap="sm">
+            <Text variant="body-sm" semantic="secondary">MD (0.5rem)</Text>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
+              <Box
+                border="default"
+                corners="rounded-md"
+                padding="6"
+              >
+                <Text>corners="rounded-md"</Text>
+              </Box>
+            </div>
+          </Box>
+
+          <Box display="flex" flexDirection="column" gap="sm">
+            <Text variant="body-sm" semantic="secondary">LG (0.75rem)</Text>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
+              <Box
+                border="default"
+                corners="rounded-lg"
+                padding="6"
+              >
+                <Text>corners="rounded-lg"</Text>
+              </Box>
+            </div>
+          </Box>
+
+          <Box display="flex" flexDirection="column" gap="sm">
+            <Text variant="body-sm" semantic="secondary">Full (9999px)</Text>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
+              <Box
+                border="default"
+                corners="rounded-full"
+                padding="6"
+              >
+                <Text>corners="rounded-full"</Text>
               </Box>
             </div>
           </Box>
@@ -1159,65 +1201,92 @@ export const BorderCornerCombinations: Story = {
           <Heading level={3} size="lg">Border & Corner Combinations</Heading>
         </Box>
         <Box display="flex" flexDirection="column" gap="lg">
-          <Box display="flex" gap="md">
+          <Box display="flex" flexWrap="wrap" gap="md">
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
               <Box
                 border="subtle"
-                corners="default"
+                corners="rounded-xxs"
                 padding="4"
               >
-                <Text variant="body-sm">Subtle + Default</Text>
+                <Text variant="body-sm">Subtle + XXS</Text>
               </Box>
             </div>
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
               <Box
                 border="subtle"
-                corners="rounded"
+                corners="rounded-md"
                 padding="4"
               >
-                <Text variant="body-sm">Subtle + Rounded</Text>
+                <Text variant="body-sm">Subtle + MD</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
+              <Box
+                border="subtle"
+                corners="rounded-full"
+                padding="4"
+              >
+                <Text variant="body-sm">Subtle + Full</Text>
               </Box>
             </div>
           </Box>
 
-          <Box display="flex" gap="md">
+          <Box display="flex" flexWrap="wrap" gap="md">
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
               <Box
                 border="default"
-                corners="default"
+                corners="rounded-xxs"
                 padding="4"
               >
-                <Text variant="body-sm">Default + Default</Text>
+                <Text variant="body-sm">Default + XXS</Text>
               </Box>
             </div>
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
               <Box
                 border="default"
-                corners="rounded"
+                corners="rounded-md"
                 padding="4"
               >
-                <Text variant="body-sm">Default + Rounded</Text>
+                <Text variant="body-sm">Default + MD</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
+              <Box
+                border="default"
+                corners="rounded-full"
+                padding="4"
+              >
+                <Text variant="body-sm">Default + Full</Text>
               </Box>
             </div>
           </Box>
 
-          <Box display="flex" gap="md">
+          <Box display="flex" flexWrap="wrap" gap="md">
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
               <Box
                 border="strong"
-                corners="default"
+                corners="rounded-xxs"
                 padding="4"
               >
-                <Text variant="body-sm">Strong + Default</Text>
+                <Text variant="body-sm">Strong + XXS</Text>
               </Box>
             </div>
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
               <Box
                 border="strong"
-                corners="rounded"
+                corners="rounded-md"
                 padding="4"
               >
-                <Text variant="body-sm">Strong + Rounded</Text>
+                <Text variant="body-sm">Strong + MD</Text>
+              </Box>
+            </div>
+            <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
+              <Box
+                border="strong"
+                corners="rounded-full"
+                padding="4"
+              >
+                <Text variant="body-sm">Strong + Full</Text>
               </Box>
             </div>
           </Box>
