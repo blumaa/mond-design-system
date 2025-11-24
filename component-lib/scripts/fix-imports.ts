@@ -32,7 +32,7 @@ function processJsFile(filePath: string): void {
 
   // Match: export/import ... from './path' or "../path"
   content = content.replace(
-    /(from\s+['"])(\.\.[\/\\][\w\/\\-]+|\.\/[\w\/\\-]+)(['"])/g,
+    /(from\s+['"])(\.\.?\/[\w/-]+)(['"])/g,
     (match, prefix, importPath, suffix) => {
       // Skip if already has an extension
       if (/\.(js|json)$/.test(importPath)) {
