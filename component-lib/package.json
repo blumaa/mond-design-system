@@ -37,10 +37,11 @@
     "design-tokens"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:tokens && yarn build:css && yarn build:lib && yarn build:styles",
+    "build": "yarn clean && yarn build:tokens && yarn build:css && yarn build:lib && yarn build:fix-imports && yarn build:styles",
     "build:tokens": "node --import tsx tokens/scripts/build.ts",
     "build:css": "node --import tsx tokens/scripts/generateCSSVariables.ts",
     "build:lib": "tsc --project tsconfig.build.json",
+    "build:fix-imports": "node --import tsx scripts/fix-imports.ts",
     "build:styles": "find components -name '*.css' -exec sh -c 'mkdir -p dist/$(dirname {}) && cp {} dist/{}' \\;",
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn build",
