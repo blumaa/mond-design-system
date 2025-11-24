@@ -1,3 +1,10 @@
+## [2.8.7](https://github.com/blumaa/mond-design-system/compare/v2.8.6...v2.8.7) (2025-11-24)
+
+### 🐛 Bug Fixes
+
+* fix-imports.ts lint ([0deaf5f](https://github.com/blumaa/mond-design-system/commit/0deaf5f62e5e7950c3bda6c76b3bc40ee51b7da7))
+* module import/exports ([d562317](https://github.com/blumaa/mond-design-system/commit/d562317998caa8c2a8e85a1056594dc18aa8500a))
+
 ## [2.8.6](https://github.com/blumaa/mond-design-system/compare/v2.8.5...v2.8.6) (2025-11-21)
 
 ### 🐛 Bug Fixes
