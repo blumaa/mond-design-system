@@ -1,3 +1,9 @@
+## [2.9.0](https://github.com/blumaa/mond-design-system/compare/v2.8.7...v2.9.0) (2025-11-26)
+
+### ✨ Features
+
+* add responsive Box and Card ([1fbe63b](https://github.com/blumaa/mond-design-system/commit/1fbe63bbb2bb6daa3dd46006d89736069aeb89b4))
+
 ## [2.8.7](https://github.com/blumaa/mond-design-system/compare/v2.8.6...v2.8.7) (2025-11-24)
 
 ### 🐛 Bug Fixes
