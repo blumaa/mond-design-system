@@ -1,3 +1,9 @@
+## [2.9.3](https://github.com/blumaa/mond-design-system/compare/v2.9.2...v2.9.3) (2025-11-26)
+
+### 🐛 Bug Fixes
+
+* Box responsive props -- add responsiveWidth and responsiveHeight ([457f23f](https://github.com/blumaa/mond-design-system/commit/457f23f22bec68560141367da96f3e0bf417a8f9))
+
 ## [2.9.2](https://github.com/blumaa/mond-design-system/compare/v2.9.1...v2.9.2) (2025-11-26)
 
 ### 🐛 Bug Fixes
