@@ -339,3 +339,94 @@ export const RealWorldExample: Story = {
     }
   }
 };
+
+/**
+ * Inverse semantic variant for text on contrasting backgrounds
+ * - Light mode: white text for dark backgrounds
+ * - Dark mode: black text for light backgrounds
+ */
+export const InverseVariant: Story = {
+  args: { children: "" },
+  render: () => (
+    <>
+      <style>{`
+        .inverse-demo-gradient {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .inverse-demo-dark-gray {
+          background: #2d3748;
+        }
+        .inverse-demo-darker {
+          background: #1a202c;
+        }
+      `}</style>
+      <Box display="flex" flexDirection="column" gap="lg">
+        {/* Dark background example */}
+        <Box padding="6" corners="rounded-lg" className="inverse-demo-gradient">
+          <Box marginBottom="4">
+            <Text variant="headline" semantic="inverse" weight="bold">
+              Inverse Text on Dark Background
+            </Text>
+          </Box>
+          <Box marginBottom="3">
+            <Text variant="title" semantic="inverse">
+              Perfect for hero sections and cards
+            </Text>
+          </Box>
+          <Text variant="body" semantic="inverse">
+            The inverse semantic automatically uses white text in light mode and black text in dark mode,
+            ensuring optimal contrast on opposite-colored backgrounds.
+          </Text>
+        </Box>
+
+        {/* Comparison with normal text */}
+        <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="md">
+          <Box padding="6" border="default" corners="rounded-lg">
+            <Box marginBottom="3">
+              <Text variant="title" semantic="primary" weight="semibold">
+                Normal Text
+              </Text>
+            </Box>
+            <Text variant="body" semantic="primary">
+              Uses primary semantic colors - dark text in light mode, light text in dark mode.
+            </Text>
+          </Box>
+
+          <Box padding="6" corners="rounded-lg" className="inverse-demo-dark-gray">
+            <Box marginBottom="3">
+              <Text variant="title" semantic="inverse" weight="semibold">
+                Inverse Text
+              </Text>
+            </Box>
+            <Text variant="body" semantic="inverse">
+              Uses inverse colors - white text in light mode, black text in dark mode.
+            </Text>
+          </Box>
+        </Box>
+
+        {/* All semantic variants on dark background */}
+        <Box padding="6" corners="rounded-lg" className="inverse-demo-darker">
+          <Box marginBottom="4">
+            <Text variant="title" semantic="inverse" weight="bold">
+              Semantic Variants on Dark Background
+            </Text>
+          </Box>
+          <Box display="flex" flexDirection="column" gap="sm">
+            <Text semantic="primary">Primary: (not ideal on dark)</Text>
+            <Text semantic="secondary">Secondary: (not ideal on dark)</Text>
+            <Text semantic="inverse">Inverse: Perfect for dark backgrounds!</Text>
+            <Text semantic="success">Success: Works on dark</Text>
+            <Text semantic="error">Error: Works on dark</Text>
+          </Box>
+        </Box>
+      </Box>
+    </>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'The inverse semantic variant automatically swaps between white and black text based on theme mode, making it ideal for text on contrasting backgrounds like dark cards or hero sections.'
+      }
+    }
+  }
+};
