@@ -351,34 +351,54 @@
    ============================================ */
 
 /* Responsive grid sizing inspired by NYT Connections */
-.mond-box--responsive {
+/* Center the box horizontally when using responsive sizing */
+.mond-box--responsive-width,
+.mond-box--responsive-height {
   margin: 0 auto;
 }
 
-/* Mobile: viewport-based sizing for optimal square grid */
+/* Mobile: viewport-based width sizing */
 @media (max-width: 639px) {
-  .mond-box--responsive {
+  .mond-box--responsive-width {
     width: calc(3 * 8px + 4 * 22.5vw);
+  }
+}
+
+/* Tablet: constrained width sizing */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .mond-box--responsive-width {
+    width: 500px;
+    max-width: 90vw;
+  }
+}
+
+/* Desktop: larger constrained width sizing */
+@media (min-width: 1025px) {
+  .mond-box--responsive-width {
+    width: 600px;
+    max-width: 80vw;
+  }
+}
+
+/* Mobile: viewport-based height sizing */
+@media (max-width: 639px) {
+  .mond-box--responsive-height {
     height: calc(3 * 8px + 4 * 22.5vw);
   }
 }
 
-/* Tablet: constrained sizing with max-width */
+/* Tablet: constrained height sizing */
 @media (min-width: 640px) and (max-width: 1024px) {
-  .mond-box--responsive {
-    width: 500px;
+  .mond-box--responsive-height {
     height: 500px;
-    max-width: 90vw;
     max-height: 90vw;
   }
 }
 
-/* Desktop: larger constrained sizing */
+/* Desktop: larger constrained height sizing */
 @media (min-width: 1025px) {
-  .mond-box--responsive {
-    width: 600px;
+  .mond-box--responsive-height {
     height: 600px;
-    max-width: 80vw;
     max-height: 80vw;
   }
 }

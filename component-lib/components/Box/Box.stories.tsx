@@ -1322,3 +1322,136 @@ export const BorderCornerCombinations: Story = {
   ),
 };
 
+/**
+ * Responsive sizing with viewport-width calculations
+ * - responsive: Both width and height (square grid)
+ * - responsiveWidth: Only width (height auto)
+ * - responsiveHeight: Only height (width auto)
+ */
+export const ResponsiveSizing: Story = {
+  args: { children: "" },
+  render: () => (
+    <Box display="flex" flexDirection="column" gap="xl">
+      {/* Both width and height - square grid */}
+      <Box>
+        <Box marginBottom="3">
+          <Text variant="title" weight="semibold">
+            responsive (both width & height)
+          </Text>
+          <Text variant="body-sm" semantic="secondary">
+            For square grids like 4x4 tiles. Width and height scale together.
+          </Text>
+        </Box>
+        <Box
+          responsive
+          display="grid"
+          gridTemplateColumns="repeat(4, 1fr)"
+          gap="xs"
+          border="default"
+          corners="rounded-md"
+          padding="2"
+        >
+          {Array.from({ length: 16 }, (_, i) => (
+            <Box
+              key={i}
+              border="default"
+              corners="rounded-sm"
+              padding="2"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Text variant="body-xs">{i + 1}</Text>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+
+      {/* Only width - height auto */}
+      <Box>
+        <Box marginBottom="3">
+          <Text variant="title" weight="semibold">
+            responsiveWidth (width only)
+          </Text>
+          <Text variant="body-sm" semantic="secondary">
+            For containers where height should grow with content. Width scales, height auto.
+          </Text>
+        </Box>
+        <Box
+          responsiveWidth
+          display="flex"
+          flexDirection="column"
+          gap="sm"
+          border="default"
+          corners="rounded-md"
+          padding="4"
+        >
+          <Text variant="body-sm" weight="semibold">
+            Found Groups Container
+          </Text>
+          <Box border="subtle" corners="rounded-sm" padding="3">
+            <Text variant="body-sm">Group 1: Movies</Text>
+          </Box>
+          <Box border="subtle" corners="rounded-sm" padding="3">
+            <Text variant="body-sm">Group 2: Colors</Text>
+          </Box>
+          <Box border="subtle" corners="rounded-sm" padding="3">
+            <Text variant="body-sm">Group 3: Animals</Text>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Only height - width auto */}
+      <Box>
+        <Box marginBottom="3">
+          <Text variant="title" weight="semibold">
+            responsiveHeight (height only)
+          </Text>
+          <Text variant="body-sm" semantic="secondary">
+            For vertical layouts where width should be flexible. Height scales, width auto.
+          </Text>
+        </Box>
+        <Box display="flex" gap="sm">
+          <Box
+            responsiveHeight
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+            border="default"
+            corners="rounded-md"
+            padding="4"
+            width="md"
+          >
+            <Text variant="body-sm" weight="semibold">
+              Sidebar
+            </Text>
+            <Box display="flex" flexDirection="column" gap="xs">
+              <Box border="subtle" corners="rounded-sm" padding="2">
+                <Text variant="body-xs">Item 1</Text>
+              </Box>
+              <Box border="subtle" corners="rounded-sm" padding="2">
+                <Text variant="body-xs">Item 2</Text>
+              </Box>
+              <Box border="subtle" corners="rounded-sm" padding="2">
+                <Text variant="body-xs">Item 3</Text>
+              </Box>
+            </Box>
+          </Box>
+          <Box padding="4">
+            <Text variant="body-sm" semantic="secondary">
+              Main content area (not responsive)
+            </Text>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates the three responsive sizing options: `responsive` (both), `responsiveWidth` (width only), and `responsiveHeight` (height only). Resize the browser to see how each behaves at different breakpoints.'
+      }
+    }
+  }
+};
+
