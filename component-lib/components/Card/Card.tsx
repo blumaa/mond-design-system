@@ -1,7 +1,7 @@
 import React, { forwardRef, ReactNode } from 'react';
 import './card.css';
 
-export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'className' | 'style'> {
+export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   /**
    * Card content
    */
@@ -79,21 +79,21 @@ export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'c
   aspectRatio?: 'square' | 'small' | 'medium' | 'large';
 }
 
-export interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'className' | 'style'> {
+export interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   /**
    * Header content
    */
   children: ReactNode;
 }
 
-export interface CardBodyProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'className' | 'style'> {
+export interface CardBodyProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   /**
    * Body content
    */
   children: ReactNode;
 }
 
-export interface CardFooterProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'className' | 'style'> {
+export interface CardFooterProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   /**
    * Footer content
    */
@@ -109,11 +109,12 @@ export interface CardFooterProps extends Omit<React.HTMLAttributes<HTMLDivElemen
  * </CardHeader>
  */
 export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
-  ({ children, ...props }, ref) => {
+  ({ children, className, ...props }, ref) => {
+    const headerClassName = `mond-card__header ${className || ''}`.trim();
     return (
       <div
         ref={ref}
-        className="mond-card__header"
+        className={headerClassName}
         {...props}
       >
         {children}
@@ -133,11 +134,12 @@ CardHeader.displayName = 'CardHeader';
  * </CardBody>
  */
 export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(
-  ({ children, ...props }, ref) => {
+  ({ children, className, ...props }, ref) => {
+    const bodyClassName = `mond-card__body ${className || ''}`.trim();
     return (
       <div
         ref={ref}
-        className="mond-card__body"
+        className={bodyClassName}
         {...props}
       >
         {children}
@@ -157,11 +159,12 @@ CardBody.displayName = 'CardBody';
  * </CardFooter>
  */
 export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
-  ({ children, ...props }, ref) => {
+  ({ children, className, ...props }, ref) => {
+    const footerClassName = `mond-card__footer ${className || ''}`.trim();
     return (
       <div
         ref={ref}
-        className="mond-card__footer"
+        className={footerClassName}
         {...props}
       >
         {children}
@@ -234,6 +237,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       shake = false,
       jump = false,
       aspectRatio,
+      className,
       ...props
     },
     ref
@@ -249,7 +253,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       shake ? 'mond-card--shake' : ''
     } ${jump ? 'mond-card--jump' : ''} ${
       aspectRatio ? `mond-card--aspect-ratio-${aspectRatio}` : ''
-    }`.trim();
+    } ${className || ''}`.trim();
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
       onClick?.(e);

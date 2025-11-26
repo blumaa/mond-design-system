@@ -722,7 +722,7 @@ export const AspectRatios: Story = {
  * Film tile grid - 4x4 grid of selectable cards with animations
  * Mobile-optimized design with 4:3 aspect ratio
  */
-export const FilmTileGrid: Story = {
+export const TileGrid: Story = {
   args: { children: "" },
   parameters: {
     layout: "fullscreen",
@@ -774,13 +774,121 @@ export const FilmTileGrid: Story = {
                 height="full"
               >
                 <Text variant="body-sm" weight="medium" align="center">
-                  Film {i + 1}
+                  Tile {i + 1}
                 </Text>
               </Box>
             </CardBody>
           </Card>
         ))}
       </Box>
+    );
+  },
+};
+
+/**
+ * Custom backgrounds using className prop
+ * Demonstrates how to apply custom styling via className
+ */
+export const CustomBackgrounds: Story = {
+  args: { children: "" },
+  parameters: {
+    layout: "padded",
+  },
+  render: () => {
+    return (
+      <>
+        <style>{`
+          .custom-bg-blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          }
+          .custom-bg-blue * {
+            color: white;
+          }
+          .custom-bg-green {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+          }
+          .custom-bg-green * {
+            color: white;
+          }
+          .custom-bg-orange {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+          }
+          .custom-bg-orange * {
+            color: white;
+          }
+          .custom-bg-purple {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+          }
+          .custom-bg-purple * {
+            color: white;
+          }
+        `}</style>
+        <Box display="grid" gap="lg" gridTemplateColumns="repeat(2, 1fr)">
+          <Card aspectRatio="square" className="custom-bg-blue">
+            <CardBody>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height="full"
+              >
+                <Text variant="body-sm" weight="medium" align="center">
+                  Tile 1
+                </Text>
+              </Box>
+            </CardBody>
+          </Card>
+
+          <Card aspectRatio="square" className="custom-bg-green">
+            <CardBody>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height="full"
+              >
+                <Text variant="body-sm" weight="medium" align="center">
+                  Tile 2
+                </Text>
+              </Box>
+            </CardBody>
+          </Card>
+
+          <Card aspectRatio="square" className="custom-bg-orange">
+            <CardBody>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height="full"
+              >
+                <Text variant="body-sm" weight="medium" align="center">
+                  Tile 3
+                </Text>
+              </Box>
+            </CardBody>
+          </Card>
+
+          <Card aspectRatio="square" className="custom-bg-purple">
+            <CardBody>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height="full"
+              >
+                <Text variant="body-sm" weight="medium" align="center">
+                  Tile 4
+                </Text>
+              </Box>
+            </CardBody>
+          </Card>
+        </Box>
+      </>
     );
   },
 };
