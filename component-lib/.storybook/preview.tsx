@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import type { Preview } from "@storybook/react";
-import { withThemeByClassName } from '@storybook/addon-themes';
-import { ThemeProvider } from '../components/providers/ThemeProvider';
-import { brand1Theme, brand2Theme } from '../brands';
-import './styles.css';
+import { withThemeByClassName } from "@storybook/addon-themes";
+import { ThemeProvider } from "../components/providers/ThemeProvider";
+import { brand1Theme, brand2Theme } from "../brands";
+import "./styles.css";
 
 const preview: Preview = {
   parameters: {
@@ -15,30 +15,30 @@ const preview: Preview = {
       },
     },
     themes: {
-      default: 'light',
+      default: "light",
       list: [
-        { name: 'light', class: 'light', color: '#F2F3F4' },
-        { name: 'dark', class: 'dark', color: '#27374D' },
+        { name: "light", class: "light", color: "#F2F3F4" },
+        { name: "dark", class: "dark", color: "#27374D" },
       ],
     },
     backgrounds: {
       disable: true,
       grid: {
-        disable: true
-      }
+        disable: true,
+      },
     },
   },
   globalTypes: {
     brand: {
-      description: 'Brand theme',
-      defaultValue: 'mond',
+      description: "Brand theme",
+      defaultValue: "mond",
       toolbar: {
-        title: 'Brand',
-        icon: 'paintbrush',
+        title: "Brand",
+        icon: "paintbrush",
         items: [
-          { value: 'mond', title: 'MOND', left: '🏢' },
-          { value: 'brand-1', title: 'Brand 1', left: '🎨' },
-          { value: 'brand-2', title: 'Brand 2', left: '🎨' },
+          { value: "mond", title: "MOND", left: "🏢" },
+          { value: "brand-1", title: "Brand 1", left: "🎨" },
+          { value: "brand-2", title: "Brand 2", left: "🎨" },
         ],
         dynamicTitle: true,
       },
@@ -47,42 +47,35 @@ const preview: Preview = {
   decorators: [
     withThemeByClassName({
       themes: {
-        light: 'light',
-        dark: 'dark',
+        light: "light",
+        dark: "dark",
       },
-      defaultTheme: 'light',
+      defaultTheme: "light",
     }),
     (Story: any, context: any) => {
-      const isDark = context.globals.theme === 'dark';
-      const selectedBrandId = context.globals.brand || 'mond';
-      
+      const isDark = context.globals.theme === "dark";
+      const selectedBrandId = context.globals.brand || "mond";
+
       // Map brand IDs to brand theme objects
       const brandThemes = {
         mond: undefined, // Use default theme
-        'brand-1': brand1Theme,
-        'brand-2': brand2Theme,
+        "brand-1": brand1Theme,
+        "brand-2": brand2Theme,
       };
 
-      const brandTheme = brandThemes[selectedBrandId as keyof typeof brandThemes];
-      
+      const brandTheme =
+        brandThemes[selectedBrandId as keyof typeof brandThemes];
+
       return (
-        <ThemeProvider 
+        <ThemeProvider
           brandTheme={brandTheme}
-          colorScheme={isDark ? 'dark' : 'light'}
+          colorScheme={isDark ? "dark" : "light"}
         >
-          <div
-            style={{
-              padding: '3rem',
-              minHeight: '100vh',
-              transition: 'all 0.3s ease-in-out',
-            }}
-          >
-            <Story args={{ ...context.args }} />
-          </div>
+          <Story args={{ ...context.args }} />
         </ThemeProvider>
       );
     },
   ],
 };
 
-export default preview; 
+export default preview;

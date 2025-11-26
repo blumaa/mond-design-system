@@ -345,3 +345,40 @@
 .mond-box--corners-rounded-full {
   border-radius: var(--mond-radii-full);
 }
+
+/* ============================================
+   RESPONSIVE GRID UTILITIES
+   ============================================ */
+
+/* Responsive grid sizing inspired by NYT Connections */
+.mond-box--responsive {
+  margin: 0 auto;
+}
+
+/* Mobile: viewport-based sizing for optimal square grid */
+@media (max-width: 639px) {
+  .mond-box--responsive {
+    width: calc(3 * 8px + 4 * 22.5vw);
+    height: calc(3 * 8px + 4 * 22.5vw);
+  }
+}
+
+/* Tablet: constrained sizing with max-width */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .mond-box--responsive {
+    width: 500px;
+    height: 500px;
+    max-width: 90vw;
+    max-height: 90vw;
+  }
+}
+
+/* Desktop: larger constrained sizing */
+@media (min-width: 1025px) {
+  .mond-box--responsive {
+    width: 600px;
+    height: 600px;
+    max-width: 80vw;
+    max-height: 80vw;
+  }
+}

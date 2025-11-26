@@ -27,7 +27,7 @@ function MyComponent() {
 A flexible Text component for displaying text content with semantic variants, typography options, and accessibility features. Perfect for body text, captions, labels, and any text-based content.
 
 **Key Features:**
-- 📝 Nine text variants (display, headline, title, subtitle, body, body-sm, caption, overline, code)
+- 📝 Eleven text variants (display, headline, title, subtitle, body, body-sm, body-xs, body-xxs, caption, overline, code)
 - 🎨 Semantic color variants for consistent theming
 - 🔤 Complete font weight support (thin to black)
 - 📐 Text alignment options (left, center, right, justify)
@@ -49,7 +49,7 @@ A flexible Text component for displaying text content with semantic variants, ty
   argTypes: {
     variant: {
       control: 'select',
-      options: ['display', 'headline', 'title', 'subtitle', 'body', 'body-sm', 'caption', 'overline', 'code'],
+      options: ['display', 'headline', 'title', 'subtitle', 'body', 'body-sm', 'body-xs', 'body-xxs', 'caption', 'overline', 'code'],
     },
     weight: {
       control: 'select',
@@ -122,6 +122,12 @@ export const Variants: Story = {
       <Text variant="body-sm">
         Small body text - Smaller text for secondary content
       </Text>
+      <Text variant="body-xs">
+        Extra small body text - Even smaller text for compact layouts
+      </Text>
+      <Text variant="body-xxs">
+        Tiny body text - Smallest body text for minimal space
+      </Text>
       <Text variant="caption">
         Caption text - Small descriptive text for labels and captions
       </Text>
@@ -136,7 +142,7 @@ export const Variants: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Text comes in nine different variants: display, headline, title, subtitle, body, body-sm, caption, overline, and code. Each variant has predefined font sizes and line heights optimized for their use case.'
+        story: 'Text comes in eleven different variants: display, headline, title, subtitle, body, body-sm, body-xs, body-xxs, caption, overline, and code. Each variant has predefined font sizes and line heights optimized for their use case.'
       }
     }
   }

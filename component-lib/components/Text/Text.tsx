@@ -8,6 +8,8 @@ export type TextVariant =
   | 'subtitle'
   | 'body'
   | 'body-sm'
+  | 'body-xs'
+  | 'body-xxs'
   | 'caption'
   | 'overline'
   | 'code';

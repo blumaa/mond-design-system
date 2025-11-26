@@ -175,3 +175,96 @@
   outline: 2px solid var(--mond-border-focused);
   outline-offset: 2px;
 }
+
+/* Selected state */
+.mond-card--selected {
+  background-color: var(--mond-surface-disabled);
+  border-color: var(--mond-border-focused);
+}
+
+/* Shake animation */
+.mond-card--shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+/* Jump animation */
+.mond-card--jump {
+  animation: jump 0.5s ease-in;
+}
+
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-12px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  75% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Aspect ratio variants */
+.mond-card--aspect-ratio-square {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  /* Grid will control width based on repeat(4, 1fr) */
+  /* Each card gets 25% of container width */
+}
+
+.mond-card--aspect-ratio-small {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  max-width: 160px;
+}
+
+.mond-card--aspect-ratio-medium {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  max-width: 240px;
+}
+
+.mond-card--aspect-ratio-large {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Ensure content fits within aspect ratio cards */
+.mond-card--aspect-ratio-square,
+.mond-card--aspect-ratio-small,
+.mond-card--aspect-ratio-medium,
+.mond-card--aspect-ratio-large {
+  overflow: hidden;
+}
+
+.mond-card--aspect-ratio-square .mond-card__body,
+.mond-card--aspect-ratio-small .mond-card__body,
+.mond-card--aspect-ratio-medium .mond-card__body,
+.mond-card--aspect-ratio-large .mond-card__body {
+  padding: var(--mond-spacing-2);
+}
+
+@media (min-width: 768px) {
+  .mond-card--aspect-ratio-square .mond-card__body,
+  .mond-card--aspect-ratio-small .mond-card__body,
+  .mond-card--aspect-ratio-medium .mond-card__body,
+  .mond-card--aspect-ratio-large .mond-card__body {
+    padding: var(--mond-spacing-3);
+  }
+}

@@ -50,6 +50,33 @@ export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'c
    * @default false
    */
   fullWidth?: boolean;
+
+  /**
+   * Selected state styling
+   * @default false
+   */
+  isSelected?: boolean;
+
+  /**
+   * Trigger shake animation
+   * @default false
+   */
+  shake?: boolean;
+
+  /**
+   * Trigger jump animation
+   * @default false
+   */
+  jump?: boolean;
+
+  /**
+   * Aspect ratio for the card
+   * square: 1:1 ratio (perfect squares)
+   * small: 4:3 ratio, mobile optimized
+   * medium: 4:3 ratio, tablet optimized
+   * large: 4:3 ratio, desktop optimized
+   */
+  aspectRatio?: 'square' | 'small' | 'medium' | 'large';
 }
 
 export interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'className' | 'style'> {
@@ -203,6 +230,10 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       as: Component = 'div',
       maxWidth,
       fullWidth = false,
+      isSelected = false,
+      shake = false,
+      jump = false,
+      aspectRatio,
       ...props
     },
     ref
@@ -214,6 +245,10 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       isHoverable ? 'mond-card--hoverable' : ''
     } ${maxWidth ? `mond-card--max-width-${maxWidth}` : ''} ${
       fullWidth ? 'mond-card--full-width' : ''
+    } ${isSelected ? 'mond-card--selected' : ''} ${
+      shake ? 'mond-card--shake' : ''
+    } ${jump ? 'mond-card--jump' : ''} ${
+      aspectRatio ? `mond-card--aspect-ratio-${aspectRatio}` : ''
     }`.trim();
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {

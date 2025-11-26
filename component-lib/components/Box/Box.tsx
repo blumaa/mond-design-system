@@ -40,6 +40,14 @@ export interface BoxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'st
   width?: SizeToken;
   height?: SizeToken;
 
+  // Responsive layout
+  /**
+   * Enable responsive sizing with viewport-width calculations
+   * Applies mobile, tablet, and desktop breakpoints automatically
+   * @default false
+   */
+  responsive?: boolean;
+
   // Visual props
   border?: 'subtle' | 'default' | 'strong';
   corners?: 'none' | 'rounded-sm' | 'rounded-md' | 'rounded-lg' | 'rounded-xl' | 'rounded-2xl' | 'rounded-full';
@@ -102,6 +110,7 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   gridAutoColumns,
   width,
   height,
+  responsive = false,
 
   // Visual props
   border,
@@ -138,6 +147,7 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     gap && `gap-${gap}`,
     width && `width-${width}`,
     height && `height-${height}`,
+    responsive && 'mond-box--responsive',
 
     // Visual classes
     border && `mond-box--border-${border}`,

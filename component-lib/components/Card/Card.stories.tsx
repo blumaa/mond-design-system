@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 import { Card, CardHeader, CardBody, CardFooter } from "./Card";
 import { Button } from "../Button/Button";
 import { Heading } from "../Heading/Heading";
@@ -563,4 +564,223 @@ export const MinimalCard: Story = {
       </CardBody>
     </Card>
   ),
+};
+
+/**
+ * Selected state - shows selected styling
+ */
+export const SelectedState: Story = {
+  args: { children: "" },
+  render: () => (
+    <Box display="flex" gap="lg" flexWrap="wrap">
+      <Card aspectRatio="medium" onClick={() => alert("Normal card")}>
+        <CardBody>
+          <Text align="center">Normal</Text>
+        </CardBody>
+      </Card>
+      <Card
+        aspectRatio="medium"
+        isSelected
+        onClick={() => alert("Selected card")}
+      >
+        <CardBody>
+          <Text align="center">Selected</Text>
+        </CardBody>
+      </Card>
+    </Box>
+  ),
+};
+
+/**
+ * Shake animation - triggered on click
+ */
+export const ShakeAnimation: Story = {
+  args: { children: "" },
+  render: () => {
+    const [shake, setShake] = React.useState(false);
+
+    const handleShake = () => {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+    };
+
+    return (
+      <Card
+        aspectRatio="medium"
+        shake={shake}
+        onClick={handleShake}
+        hoverable
+      >
+        <CardBody>
+          <Box display="flex" flexDirection="column" alignItems="center" gap="sm">
+            <Text align="center" weight="bold">
+              Click to Shake
+            </Text>
+            <Text align="center" variant="body-sm" semantic="secondary">
+              Try clicking this card
+            </Text>
+          </Box>
+        </CardBody>
+      </Card>
+    );
+  },
+};
+
+/**
+ * Jump animation - triggered on click
+ */
+export const JumpAnimation: Story = {
+  args: { children: "" },
+  render: () => {
+    const [jump, setJump] = React.useState(false);
+
+    const handleJump = () => {
+      setJump(true);
+      setTimeout(() => setJump(false), 800);
+    };
+
+    return (
+      <Card aspectRatio="medium" jump={jump} onClick={handleJump} hoverable>
+        <CardBody>
+          <Box display="flex" flexDirection="column" alignItems="center" gap="sm">
+            <Text align="center" weight="bold">
+              Click to Jump
+            </Text>
+            <Text align="center" variant="body-sm" semantic="secondary">
+              Try clicking this card
+            </Text>
+          </Box>
+        </CardBody>
+      </Card>
+    );
+  },
+};
+
+/**
+ * Aspect ratio variants - square and 4:3 ratio cards
+ */
+export const AspectRatios: Story = {
+  args: { children: "" },
+  render: () => (
+    <Box display="flex" gap="lg" flexWrap="wrap" alignItems="flex-start">
+      <Card aspectRatio="square" variant="elevated">
+        <CardBody>
+          <Box display="flex" flexDirection="column" gap="xs">
+            <Text variant="body-sm" weight="bold">
+              Square
+            </Text>
+            <Text variant="body-xs" semantic="secondary">
+              1:1 ratio
+            </Text>
+          </Box>
+        </CardBody>
+      </Card>
+
+      <Card aspectRatio="small" variant="elevated">
+        <CardBody>
+          <Box display="flex" flexDirection="column" gap="xs">
+            <Text variant="body-sm" weight="bold">
+              Small
+            </Text>
+            <Text variant="body-xs" semantic="secondary">
+              160px max
+            </Text>
+          </Box>
+        </CardBody>
+      </Card>
+
+      <Card aspectRatio="medium" variant="elevated">
+        <CardBody>
+          <Box display="flex" flexDirection="column" gap="xs">
+            <Text variant="body-sm" weight="bold">
+              Medium
+            </Text>
+            <Text variant="body-xs" semantic="secondary">
+              240px max
+            </Text>
+          </Box>
+        </CardBody>
+      </Card>
+
+      <Card aspectRatio="large" variant="elevated">
+        <CardBody>
+          <Box display="flex" flexDirection="column" gap="xs">
+            <Text variant="body-sm" weight="bold">
+              Large
+            </Text>
+            <Text variant="body-xs" semantic="secondary">
+              320px max
+            </Text>
+          </Box>
+        </CardBody>
+      </Card>
+    </Box>
+  ),
+};
+
+/**
+ * Film tile grid - 4x4 grid of selectable cards with animations
+ * Mobile-optimized design with 4:3 aspect ratio
+ */
+export const FilmTileGrid: Story = {
+  args: { children: "" },
+  parameters: {
+    layout: "fullscreen",
+  },
+  render: () => {
+    const [selected, setSelected] = React.useState<number[]>([]);
+    const [shaking, setShaking] = React.useState<number | null>(null);
+    const [jumping, setJumping] = React.useState<number | null>(null);
+
+    const handleCardClick = (index: number) => {
+      // Toggle selection
+      if (selected.includes(index)) {
+        setSelected(selected.filter((i) => i !== index));
+        // Trigger shake when deselecting
+        setShaking(index);
+        setTimeout(() => setShaking(null), 500);
+      } else {
+        setSelected([...selected, index]);
+        // Trigger jump when selecting
+        setJumping(index);
+        setTimeout(() => setJumping(null), 800);
+      }
+    };
+
+    return (
+      <Box
+        display="grid"
+        gap="sm"
+        gridTemplateColumns="repeat(4, 1fr)"
+        responsive
+      >
+        {Array.from({ length: 16 }, (_, i) => (
+          <Card
+            key={i}
+            aspectRatio="square"
+            isSelected={selected.includes(i)}
+            shake={shaking === i}
+            jump={jumping === i}
+            onClick={() => handleCardClick(i)}
+            hoverable
+            variant="elevated"
+          >
+            <CardBody>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height="full"
+              >
+                <Text variant="body-sm" weight="medium" align="center">
+                  Film {i + 1}
+                </Text>
+              </Box>
+            </CardBody>
+          </Card>
+        ))}
+      </Box>
+    );
+  },
 };
