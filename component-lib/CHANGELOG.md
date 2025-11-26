@@ -1,3 +1,9 @@
+## [2.9.1](https://github.com/blumaa/mond-design-system/compare/v2.9.0...v2.9.1) (2025-11-26)
+
+### 🐛 Bug Fixes
+
+* add className to card for custom background/styling ([6489f99](https://github.com/blumaa/mond-design-system/commit/6489f99add66e74831fa4f6f5dd264a55d0f8fe9))
+
 ## [2.9.0](https://github.com/blumaa/mond-design-system/compare/v2.8.7...v2.9.0) (2025-11-26)
 
 ### ✨ Features
