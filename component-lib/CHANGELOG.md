@@ -1,3 +1,9 @@
+## [2.9.2](https://github.com/blumaa/mond-design-system/compare/v2.9.1...v2.9.2) (2025-11-26)
+
+### 🐛 Bug Fixes
+
+* add inverse variant to Text ([a8a1dd3](https://github.com/blumaa/mond-design-system/commit/a8a1dd3b52dab1030dff6861be65301d89be131c))
+
 ## [2.9.1](https://github.com/blumaa/mond-design-system/compare/v2.9.0...v2.9.1) (2025-11-26)
 
 ### 🐛 Bug Fixes
