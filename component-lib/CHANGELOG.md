@@ -1,3 +1,9 @@
+## [2.9.8](https://github.com/blumaa/mond-design-system/compare/v2.9.7...v2.9.8) (2025-11-27)
+
+### 🐛 Bug Fixes
+
+* custom color Text ([33e1bf4](https://github.com/blumaa/mond-design-system/commit/33e1bf484b90bb5a47cfd5d9e2de56f5b514b4dd))
+
 ## [2.9.7](https://github.com/blumaa/mond-design-system/compare/v2.9.6...v2.9.7) (2025-11-27)
 
 ### 🐛 Bug Fixes
