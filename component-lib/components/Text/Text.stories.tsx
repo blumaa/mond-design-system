@@ -55,6 +55,12 @@ A flexible Text component for displaying text content with semantic colors, typo
     responsive: {
       control: 'boolean',
     },
+    isLongText: {
+      control: 'boolean',
+    },
+    isReallyLongText: {
+      control: 'boolean',
+    },
     weight: {
       control: 'select',
       options: ['thin', 'extralight', 'light', 'normal', 'medium', 'semibold', 'bold', 'extrabold', 'black'],
@@ -87,6 +93,8 @@ A flexible Text component for displaying text content with semantic colors, typo
   args: {
     size: 'md',
     responsive: false,
+    isLongText: false,
+    isReallyLongText: false,
     weight: 'normal',
     semantic: 'primary',
     as: 'span',
@@ -180,6 +188,49 @@ export const ResponsiveScaling: Story = {
     docs: {
       description: {
         story: 'The responsive prop enables auto-scaling text across breakpoints. Mobile (≤639px): -1 size, Tablet (640-1024px): base size, Desktop (≥1025px): +1 size. Perfect for creating fluid typography that adapts to screen size.'
+      }
+    }
+  }
+};
+
+export const LongTextScaling: Story = {
+  render: () => (
+    <Box className="story-flex-column story-gap-24">
+      <Box>
+        <Box marginBottom="2">
+          <Text as="p" size="lg" weight="semibold">Normal text (no scaling):</Text>
+        </Box>
+        <Text size="lg">
+          Short title
+        </Text>
+      </Box>
+      <Box>
+        <Box marginBottom="2">
+          <Text as="p" size="lg" weight="semibold">Long text (isLongText):</Text>
+        </Box>
+        <Text size="lg" isLongText>
+          This is a much longer title that would be too large on mobile devices and needs to scale down more aggressively
+        </Text>
+      </Box>
+      <Box>
+        <Box marginBottom="2">
+          <Text as="p" size="lg" weight="semibold">Really long text (isReallyLongText):</Text>
+        </Box>
+        <Text size="lg" isReallyLongText>
+          This is an extremely long title or product name that would definitely be way too large on mobile devices and needs to scale down even more aggressively to fit properly
+        </Text>
+      </Box>
+      <Box marginTop="6" padding="4" corners="rounded-md" border="subtle">
+        <Text size="sm" semantic="secondary">
+          <strong>Tip:</strong> On mobile (≤639px), isLongText scales down by 2 sizes (lg → sm) and isReallyLongText scales down by 3 sizes (lg → xs). Resize your browser to mobile width to see the effect.
+        </Text>
+      </Box>
+    </Box>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Use isLongText or isReallyLongText props to scale text down more aggressively on mobile viewports. This is useful for long movie titles, product names, or any text that would be too large on small screens. isLongText applies -2 size scaling on mobile, while isReallyLongText applies -3 size scaling.'
       }
     }
   }

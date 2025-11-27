@@ -43,6 +43,22 @@ export interface TextProps {
   responsive?: boolean;
 
   /**
+   * Scale text down more aggressively on mobile for long text
+   * Mobile: -2 sizes (instead of -1)
+   * Only applies on mobile viewport (≤639px)
+   * @default false
+   */
+  isLongText?: boolean;
+
+  /**
+   * Scale text down even more aggressively on mobile for really long text
+   * Mobile: -3 sizes (instead of -1)
+   * Only applies on mobile viewport (≤639px)
+   * @default false
+   */
+  isReallyLongText?: boolean;
+
+  /**
    * Font weight
    * @default 'normal'
    */
@@ -155,6 +171,8 @@ export interface TextProps {
 export const Text = forwardRef<HTMLElement, TextProps>(({
   size = 'md',
   responsive = false,
+  isLongText = false,
+  isReallyLongText = false,
   weight = 'normal',
   align,
   semantic = 'primary',
@@ -181,6 +199,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
   const classNames = [
     `mond-text--${size}`,
     responsive && 'mond-text--responsive',
+    isLongText && 'mond-text--long',
+    isReallyLongText && 'mond-text--really-long',
     !color && `mond-text--${semantic}`, // Only apply semantic if no color prop
     weight && `mond-text--weight-${weight}`,
     align && `mond-text--align-${align}`,

@@ -115,6 +115,37 @@
 }
 
 /* ============================================
+   LONG TEXT MOBILE SCALING
+   Scale down more aggressively on mobile for long text
+   ============================================ */
+
+/* Long text: Mobile scale down by 2 sizes */
+@media (max-width: 639px) {
+  .mond-text--long.mond-text--3xl { font-size: var(--mond-font-size-2xl); }
+  .mond-text--long.mond-text--2xl { font-size: var(--mond-font-size-xl); }
+  .mond-text--long.mond-text--xl { font-size: var(--mond-font-size-base); }
+  .mond-text--long.mond-text--lg { font-size: var(--mond-font-size-sm); }
+  .mond-text--long.mond-text--md { font-size: var(--mond-font-size-xs); }
+  .mond-text--long.mond-text--sm { font-size: 0.625rem; } /* 2xs */
+  .mond-text--long.mond-text--xs { font-size: 0.5rem; } /* 3xs */
+  .mond-text--long.mond-text--2xs { font-size: 0.5rem; } /* 3xs (minimum) */
+  .mond-text--long.mond-text--3xs { font-size: 0.5rem; } /* stays at minimum */
+}
+
+/* Really long text: Mobile scale down by 3 sizes */
+@media (max-width: 639px) {
+  .mond-text--really-long.mond-text--3xl { font-size: var(--mond-font-size-xl); }
+  .mond-text--really-long.mond-text--2xl { font-size: var(--mond-font-size-base); }
+  .mond-text--really-long.mond-text--xl { font-size: var(--mond-font-size-sm); }
+  .mond-text--really-long.mond-text--lg { font-size: var(--mond-font-size-xs); }
+  .mond-text--really-long.mond-text--md { font-size: 0.625rem; } /* 2xs */
+  .mond-text--really-long.mond-text--sm { font-size: 0.5rem; } /* 3xs */
+  .mond-text--really-long.mond-text--xs { font-size: 0.5rem; } /* 3xs (minimum) */
+  .mond-text--really-long.mond-text--2xs { font-size: 0.5rem; } /* 3xs (minimum) */
+  .mond-text--really-long.mond-text--3xs { font-size: 0.5rem; } /* stays at minimum */
+}
+
+/* ============================================
    SEMANTIC COLORS
    ============================================ */
 
