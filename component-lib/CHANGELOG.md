@@ -1,3 +1,9 @@
+## [2.9.7](https://github.com/blumaa/mond-design-system/compare/v2.9.6...v2.9.7) (2025-11-27)
+
+### 🐛 Bug Fixes
+
+* export base variable color tokens ([db8d1f5](https://github.com/blumaa/mond-design-system/commit/db8d1f5f1de502ce91434eaa488632f455d720a0))
+
 ## [2.9.6](https://github.com/blumaa/mond-design-system/compare/v2.9.5...v2.9.6) (2025-11-27)
 
 ### 🐛 Bug Fixes
