@@ -61,7 +61,7 @@ export function ToastDemo() {
           Toast Notifications Demo
         </Heading>
         <div style={{ marginTop: '0.5rem' }}>
-          <Text variant="body" semantic="secondary">
+          <Text size="md" semantic="secondary">
             Click the buttons below to trigger different types of toast notifications
           </Text>
         </div>

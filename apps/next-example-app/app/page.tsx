@@ -30,12 +30,12 @@ export default function HomePage() {
             Mond Design System
           </Heading>
           <div style={{ marginTop: '1rem' }}>
-            <Text variant="headline" semantic="secondary">
+            <Text size="2xl" semantic="secondary">
               CSS Variables API Proof of Concept
             </Text>
           </div>
           <div style={{ marginTop: '1.5rem', maxWidth: '600px', margin: '1.5rem auto 0' }}>
-            <Text variant="body">
+            <Text size="md">
               This is a demonstration of the Mond Design System using the new CSS variables API
               with a custom violet brand theme. This page is server-rendered (SSR), proving MDS
               components work seamlessly with Next.js Server Components.
@@ -164,12 +164,12 @@ export default function HomePage() {
               Text Variants
             </Heading>
             <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <Text variant="display">Display Text</Text>
-              <Text variant="headline">Headline Text</Text>
-              <Text variant="title">Title Text</Text>
-              <Text variant="body">Body Text - Regular paragraph text with default styling</Text>
-              <Text variant="body-sm">Body Small Text - Smaller body text variant</Text>
-              <Text variant="caption">Caption Text - Small supplementary text</Text>
+              <Text size="3xl">Display Text</Text>
+              <Text size="2xl">Headline Text</Text>
+              <Text size="xl">Title Text</Text>
+              <Text size="md">Body Text - Regular paragraph text with default styling</Text>
+              <Text size="sm">Body Small Text - Smaller body text variant</Text>
+              <Text size="xs">Caption Text - Small supplementary text</Text>
             </div>
           </div>
 
@@ -179,17 +179,17 @@ export default function HomePage() {
               Text Semantic Colors
             </Heading>
             <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <Text variant="body">Primary Text (Default)</Text>
-              <Text variant="body" semantic="secondary">
+              <Text size="md">Primary Text (Default)</Text>
+              <Text size="md" semantic="secondary">
                 Secondary Text
               </Text>
-              <Text variant="body" semantic="success">
+              <Text size="md" semantic="success">
                 Success Text
               </Text>
-              <Text variant="body" semantic="error">
+              <Text size="md" semantic="error">
                 Error Text
               </Text>
-              <Text variant="body" semantic="warning">
+              <Text size="md" semantic="warning">
                 Warning Text
               </Text>
             </div>
@@ -198,7 +198,7 @@ export default function HomePage() {
 
         {/* Footer - Server Rendered */}
         <footer style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid var(--mond-border-default)', textAlign: 'center' }}>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             Built with Mond Design System • Next.js 16 • React 19
           </Text>
         </footer>
@@ -227,7 +227,7 @@ function FeatureCard({ title, description }: { title: string; description: strin
         {title}
       </Heading>
       <div style={{ marginTop: '0.5rem' }}>
-        <Text variant="body-sm" semantic="secondary">
+        <Text size="sm" semantic="secondary">
           {description}
         </Text>
       </div>

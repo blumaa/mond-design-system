@@ -83,12 +83,12 @@ export default function ClientPage() {
             Client-Side Rendering Demo
           </Heading>
           <div style={{ marginTop: '1rem' }}>
-            <Text variant="headline" semantic="secondary">
+            <Text size="2xl" semantic="secondary">
               Interactive Client Components
             </Text>
           </div>
           <div style={{ marginTop: '1.5rem', maxWidth: '600px', margin: '1.5rem auto 0' }}>
-            <Text variant="body">
+            <Text size="md">
               This page demonstrates client-side rendering with interactive components.
               All state is managed on the client, showcasing the flexibility of the MDS
               component library in CSR environments.
@@ -119,7 +119,7 @@ export default function ClientPage() {
             Interactive Counter
           </Heading>
           <div style={{ marginTop: '0.5rem' }}>
-            <Text variant="body" semantic="secondary">
+            <Text size="md" semantic="secondary">
               Client-side state management demonstration
             </Text>
           </div>
@@ -137,7 +137,7 @@ export default function ClientPage() {
               {counter}
             </Heading>
             <div style={{ marginTop: '0.5rem' }}>
-              <Text variant="body" semantic="secondary">
+              <Text size="md" semantic="secondary">
                 Current Count
               </Text>
             </div>
@@ -173,7 +173,7 @@ export default function ClientPage() {
             Client-Side Toast Notifications
           </Heading>
           <div style={{ marginTop: '0.5rem' }}>
-            <Text variant="body" semantic="secondary">
+            <Text size="md" semantic="secondary">
               Trigger toast notifications from client-side interactions
             </Text>
           </div>
@@ -282,7 +282,7 @@ export default function ClientPage() {
             textAlign: 'center',
           }}
         >
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             Client-Side Rendered Page • Built with Mond Design System
           </Text>
         </footer>
@@ -320,7 +320,7 @@ function InfoCard({
         border: '1px solid var(--mond-border-default)',
       }}
     >
-      <Text variant="body-sm" semantic="secondary">
+      <Text size="sm" semantic="secondary">
         {title}
       </Text>
       <div style={{ marginTop: '0.5rem' }}>
@@ -329,7 +329,7 @@ function InfoCard({
         </Heading>
       </div>
       <div style={{ marginTop: '0.5rem' }}>
-        <Text variant="caption" semantic="secondary">
+        <Text size="xs" semantic="secondary">
           {description}
         </Text>
       </div>
@@ -372,7 +372,7 @@ function ComparisonCard({
       >
         {features.map((feature, index) => (
           <li key={index}>
-            <Text variant="body-sm">{feature}</Text>
+            <Text size="sm">{feature}</Text>
           </li>
         ))}
       </ul>
