@@ -62,6 +62,27 @@ export function traverseSemanticTokens(
 }
 
 /**
+ * Generate base color CSS variables for all color families
+ * These are static colors that don't change with theme
+ */
+function generateBaseColorVariables(cssVars: CSSVariables): void {
+  const colors = tokens.colors as Record<string, unknown>;
+
+  Object.entries(colors).forEach(([colorFamily, colorScale]) => {
+    // Skip brand colors - they're handled separately
+    if (colorFamily === 'brand') return;
+
+    // Handle simple color scales (blue, gray, red, etc.)
+    if (typeof colorScale === 'object' && colorScale !== null) {
+      Object.entries(colorScale as Record<string, string>).forEach(([shade, value]) => {
+        const cssVarName = `--mond-color-${colorFamily}-${shade}`;
+        cssVars.light.set(cssVarName, value);
+      });
+    }
+  });
+}
+
+/**
  * Generate base brand color CSS variables
  * These are the foundational brand colors that can be overridden at runtime
  */
@@ -86,7 +107,11 @@ export function generateAllCSSVariables(): CSSVariables {
     dark: new Map(),
   };
 
-  // FIRST: Generate base brand color variables
+  // FIRST: Generate base color variables (blue, gray, black, white, etc.)
+  // These are static colors that don't change with theme
+  generateBaseColorVariables(cssVars);
+
+  // SECOND: Generate brand color variables
   // These must be defined before semantic tokens so they can be referenced
   generateBrandColorVariables(cssVars);
 

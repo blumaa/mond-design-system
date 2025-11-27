@@ -7,6 +7,20 @@
 
 /* Heading Size Styles */
 
+.mond-heading--3xs {
+  font-size: 0.5rem; /* 8px at 16px base */
+  line-height: var(--mond-line-height-tight);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
+.mond-heading--2xs {
+  font-size: 0.625rem; /* 10px at 16px base */
+  line-height: var(--mond-line-height-tight);
+  font-family: var(--mond-font-family-sans);
+  margin: 0;
+}
+
 .mond-heading--xs {
   font-size: var(--mond-font-size-xs);
   line-height: var(--mond-line-height-tight);
@@ -92,14 +106,18 @@
   .mond-heading--responsive.mond-heading--xl { font-size: var(--mond-font-size-base); }
   .mond-heading--responsive.mond-heading--lg { font-size: var(--mond-font-size-sm); }
   .mond-heading--responsive.mond-heading--md { font-size: var(--mond-font-size-xs); }
-  .mond-heading--responsive.mond-heading--sm { font-size: var(--mond-font-size-xs); } /* minimum */
-  .mond-heading--responsive.mond-heading--xs { font-size: var(--mond-font-size-xs); } /* stays at minimum */
+  .mond-heading--responsive.mond-heading--sm { font-size: 0.625rem; } /* 2xs */
+  .mond-heading--responsive.mond-heading--xs { font-size: 0.5rem; } /* 3xs */
+  .mond-heading--responsive.mond-heading--2xs { font-size: 0.5rem; } /* 3xs (minimum) */
+  .mond-heading--responsive.mond-heading--3xs { font-size: 0.5rem; } /* stays at minimum */
 }
 
 /* Tablet: Base size (640px - 1024px) - no overrides needed */
 
 /* Desktop: Scale up one size */
 @media (min-width: 1025px) {
+  .mond-heading--responsive.mond-heading--3xs { font-size: 0.625rem; } /* 2xs */
+  .mond-heading--responsive.mond-heading--2xs { font-size: var(--mond-font-size-xs); }
   .mond-heading--responsive.mond-heading--xs { font-size: var(--mond-font-size-sm); }
   .mond-heading--responsive.mond-heading--sm { font-size: var(--mond-font-size-base); }
   .mond-heading--responsive.mond-heading--md { font-size: var(--mond-font-size-lg); }
@@ -126,9 +144,11 @@
   .mond-heading--long.mond-heading--2xl { font-size: var(--mond-font-size-base); }
   .mond-heading--long.mond-heading--xl { font-size: var(--mond-font-size-sm); }
   .mond-heading--long.mond-heading--lg { font-size: var(--mond-font-size-xs); }
-  .mond-heading--long.mond-heading--md { font-size: var(--mond-font-size-xs); } /* minimum */
-  .mond-heading--long.mond-heading--sm { font-size: var(--mond-font-size-xs); } /* minimum */
-  .mond-heading--long.mond-heading--xs { font-size: var(--mond-font-size-xs); } /* stays at minimum */
+  .mond-heading--long.mond-heading--md { font-size: 0.625rem; } /* 2xs */
+  .mond-heading--long.mond-heading--sm { font-size: 0.5rem; } /* 3xs */
+  .mond-heading--long.mond-heading--xs { font-size: 0.5rem; } /* 3xs (minimum) */
+  .mond-heading--long.mond-heading--2xs { font-size: 0.5rem; } /* 3xs (minimum) */
+  .mond-heading--long.mond-heading--3xs { font-size: 0.5rem; } /* stays at minimum */
 }
 
 /* Really long text: Mobile scale down by 4 sizes */
@@ -139,10 +159,12 @@
   .mond-heading--really-long.mond-heading--3xl { font-size: var(--mond-font-size-base); }
   .mond-heading--really-long.mond-heading--2xl { font-size: var(--mond-font-size-sm); }
   .mond-heading--really-long.mond-heading--xl { font-size: var(--mond-font-size-xs); }
-  .mond-heading--really-long.mond-heading--lg { font-size: var(--mond-font-size-xs); } /* minimum */
-  .mond-heading--really-long.mond-heading--md { font-size: var(--mond-font-size-xs); } /* minimum */
-  .mond-heading--really-long.mond-heading--sm { font-size: var(--mond-font-size-xs); } /* minimum */
-  .mond-heading--really-long.mond-heading--xs { font-size: var(--mond-font-size-xs); } /* stays at minimum */
+  .mond-heading--really-long.mond-heading--lg { font-size: 0.625rem; } /* 2xs */
+  .mond-heading--really-long.mond-heading--md { font-size: 0.5rem; } /* 3xs */
+  .mond-heading--really-long.mond-heading--sm { font-size: 0.5rem; } /* 3xs (minimum) */
+  .mond-heading--really-long.mond-heading--xs { font-size: 0.5rem; } /* 3xs (minimum) */
+  .mond-heading--really-long.mond-heading--2xs { font-size: 0.5rem; } /* 3xs (minimum) */
+  .mond-heading--really-long.mond-heading--3xs { font-size: 0.5rem; } /* stays at minimum */
 }
 
 /* ============================================

@@ -51,7 +51,7 @@ A flexible Heading component for creating semantic headings (h1-h6) with consist
     },
     size: {
       control: 'select',
-      options: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],
+      options: ['3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],
     },
     weight: {
       control: 'select',
@@ -151,12 +151,14 @@ export const AllSizes: Story = {
       <Heading size="md">Medium Size - Small heading</Heading>
       <Heading size="sm">Small Size - Very small heading</Heading>
       <Heading size="xs">Extra Small Size - Tiny heading</Heading>
+      <Heading size="2xs">2XS Size - Micro heading</Heading>
+      <Heading size="3xs">3XS Size - Smallest heading</Heading>
     </Box>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'All available sizes from xs to 6xl. Larger sizes (4xl-6xl) use tighter line height for better visual hierarchy.'
+        story: 'All available sizes from 3xs to 6xl. Larger sizes (4xl-6xl) use tighter line height for better visual hierarchy. The smallest sizes (3xs, 2xs) are useful for very compact layouts or when using responsive/long-text scaling.'
       }
     }
   }

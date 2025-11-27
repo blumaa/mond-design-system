@@ -460,10 +460,10 @@ describe('CSS Variable Generator', () => {
       it('generates content of expected size', () => {
         const cssContent = generateCSSContent();
 
-        // We know from build output it should be around 23.87 KB
+        // With base color variables included, should be around 30 KB
         const sizeInKB = cssContent.length / 1024;
         expect(sizeInKB).toBeGreaterThan(20);
-        expect(sizeInKB).toBeLessThan(30);
+        expect(sizeInKB).toBeLessThan(35);
       });
 
       it('contains expected number of variables', () => {
