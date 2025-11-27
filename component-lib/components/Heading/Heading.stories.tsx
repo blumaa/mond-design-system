@@ -68,12 +68,24 @@ A flexible Heading component for creating semantic headings (h1-h6) with consist
     truncate: {
       control: 'boolean',
     },
+    responsive: {
+      control: 'boolean',
+    },
+    isLongText: {
+      control: 'boolean',
+    },
+    isReallyLongText: {
+      control: 'boolean',
+    },
   },
   args: {
     level: 1,
     weight: 'bold',
     semantic: 'primary',
     truncate: false,
+    responsive: false,
+    isLongText: false,
+    isReallyLongText: false,
   },
 };
 
@@ -307,6 +319,100 @@ export const ContentHierarchy: Story = {
     docs: {
       description: {
         story: 'Example of how headings work together to create proper content hierarchy. Notice how semantic HTML structure (h1-h4) is maintained while visual sizes can be customized.'
+      }
+    }
+  }
+};
+
+export const ResponsiveScaling: Story = {
+  render: () => (
+    <Box className="story-flex-column story-gap-24">
+      <Box>
+        <Box marginBottom="2">
+          <Heading level={3} size="sm" weight="semibold">
+            Non-responsive heading (fixed size):
+          </Heading>
+        </Box>
+        <Heading level={1} size="3xl">
+          This heading stays at 3xl on all screen sizes
+        </Heading>
+      </Box>
+      <Box>
+        <Box marginBottom="2">
+          <Heading level={3} size="sm" weight="semibold">
+            Responsive heading (auto-scaling):
+          </Heading>
+        </Box>
+        <Heading level={1} size="3xl" responsive>
+          This heading auto-scales: mobile (xl), tablet (3xl), desktop (4xl)
+        </Heading>
+      </Box>
+      <Box padding="4" className="story-bg-info story-border-radius">
+        <Heading level={4} size="xs" weight="semibold" semantic="primary">
+          💡 Tip
+        </Heading>
+        <Box as="p" className="story-paragraph-small">
+          Use the responsive prop to automatically scale headings across breakpoints. Mobile (≤639px): -2 sizes, Tablet (640-1024px): base size, Desktop (≥1025px): +1 size. Resize your browser to see the effect.
+        </Box>
+      </Box>
+    </Box>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Use the responsive prop to enable automatic scaling across mobile, tablet, and desktop breakpoints. The heading size will automatically adjust: mobile (-2 sizes), tablet (base size), and desktop (+1 size).'
+      }
+    }
+  }
+};
+
+export const LongTextScaling: Story = {
+  render: () => (
+    <Box className="story-flex-column story-gap-24">
+      <Box>
+        <Box marginBottom="2">
+          <Heading level={3} size="sm" weight="semibold">
+            Normal heading (no scaling):
+          </Heading>
+        </Box>
+        <Heading level={1} size="3xl">
+          Short Title
+        </Heading>
+      </Box>
+      <Box>
+        <Box marginBottom="2">
+          <Heading level={3} size="sm" weight="semibold">
+            Long heading (isLongText):
+          </Heading>
+        </Box>
+        <Heading level={1} size="3xl" isLongText>
+          This is a much longer heading that would be too large on mobile devices
+        </Heading>
+      </Box>
+      <Box>
+        <Box marginBottom="2">
+          <Heading level={3} size="sm" weight="semibold">
+            Really long heading (isReallyLongText):
+          </Heading>
+        </Box>
+        <Heading level={1} size="3xl" isReallyLongText>
+          This is an extremely long heading or page title that would definitely be way too large on mobile devices
+        </Heading>
+      </Box>
+      <Box padding="4" className="story-bg-info story-border-radius">
+        <Heading level={4} size="xs" weight="semibold" semantic="primary">
+          💡 Tip
+        </Heading>
+        <Box as="p" className="story-paragraph-small">
+          Use isLongText or isReallyLongText props to scale headings down more aggressively on mobile viewports (≤639px). isLongText scales down by 3 sizes, isReallyLongText by 4 sizes. Only affects mobile - no change on tablet/desktop.
+        </Box>
+      </Box>
+    </Box>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'For headings with long text that might be too large on mobile, use isLongText (mobile: -3 sizes) or isReallyLongText (mobile: -4 sizes). These props only affect mobile viewports (≤639px) and have no effect on tablet or desktop.'
       }
     }
   }

@@ -37,6 +37,8 @@ export interface BoxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'st
 
   // Common layout props
   gap?: SizeToken;
+  columnGap?: SizeToken;
+  rowGap?: SizeToken;
   width?: SizeToken;
   height?: SizeToken;
 
@@ -117,6 +119,8 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
   alignContent,
   justifyContent,
   gap,
+  columnGap,
+  rowGap,
   flex,
   gridTemplateColumns,
   gridTemplateRows,
@@ -161,6 +165,8 @@ export const Box = forwardRef<HTMLElement, BoxProps>(({
     alignContent && `align-content-${alignContent}`,
     justifyContent && `justify-content-${justifyContent}`,
     gap && `gap-${gap}`,
+    columnGap && `column-gap-${columnGap}`,
+    rowGap && `row-gap-${rowGap}`,
     width && `width-${width}`,
     height && `height-${height}`,
     (responsive || responsiveWidth) && 'mond-box--responsive-width',

@@ -26,6 +26,29 @@ export interface HeadingProps {
   size?: HeadingSize;
 
   /**
+   * Enable responsive sizing that auto-scales across breakpoints
+   * Mobile: -2 sizes, Tablet: base size, Desktop: +1 size
+   * @default false
+   */
+  responsive?: boolean;
+
+  /**
+   * Scale heading down more aggressively on mobile for long text
+   * Mobile: -3 sizes (instead of -2)
+   * Only applies on mobile viewport (≤639px)
+   * @default false
+   */
+  isLongText?: boolean;
+
+  /**
+   * Scale heading down even more aggressively on mobile for really long text
+   * Mobile: -4 sizes (instead of -2)
+   * Only applies on mobile viewport (≤639px)
+   * @default false
+   */
+  isReallyLongText?: boolean;
+
+  /**
    * Font weight
    * @default 'bold'
    */
@@ -104,6 +127,9 @@ const getDefaultSizeForLevel = (level: HeadingLevel): HeadingSize => {
 export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
   level = 1,
   size,
+  responsive = false,
+  isLongText = false,
+  isReallyLongText = false,
   weight = 'bold',
   semantic = 'primary',
   color,
@@ -123,6 +149,9 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
   // Build CSS class names
   const classNames = [
     `mond-heading--${effectiveSize}`,
+    responsive && 'mond-heading--responsive',
+    isLongText && 'mond-heading--long',
+    isReallyLongText && 'mond-heading--really-long',
     !color && `mond-heading--${semantic}`, // Only apply semantic if no color prop
     weight && `mond-heading--weight-${weight}`,
     align && `mond-heading--align-${align}`,

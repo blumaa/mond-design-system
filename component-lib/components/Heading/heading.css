@@ -78,6 +78,74 @@
 }
 
 /* ============================================
+   RESPONSIVE AUTO-SCALING
+   Mobile: -2 sizes, Tablet: base size, Desktop: +1 size
+   ============================================ */
+
+/* Mobile: Scale down two sizes */
+@media (max-width: 639px) {
+  .mond-heading--responsive.mond-heading--6xl { font-size: var(--mond-font-size-4xl); }
+  .mond-heading--responsive.mond-heading--5xl { font-size: var(--mond-font-size-3xl); }
+  .mond-heading--responsive.mond-heading--4xl { font-size: var(--mond-font-size-2xl); }
+  .mond-heading--responsive.mond-heading--3xl { font-size: var(--mond-font-size-xl); }
+  .mond-heading--responsive.mond-heading--2xl { font-size: var(--mond-font-size-lg); }
+  .mond-heading--responsive.mond-heading--xl { font-size: var(--mond-font-size-base); }
+  .mond-heading--responsive.mond-heading--lg { font-size: var(--mond-font-size-sm); }
+  .mond-heading--responsive.mond-heading--md { font-size: var(--mond-font-size-xs); }
+  .mond-heading--responsive.mond-heading--sm { font-size: var(--mond-font-size-xs); } /* minimum */
+  .mond-heading--responsive.mond-heading--xs { font-size: var(--mond-font-size-xs); } /* stays at minimum */
+}
+
+/* Tablet: Base size (640px - 1024px) - no overrides needed */
+
+/* Desktop: Scale up one size */
+@media (min-width: 1025px) {
+  .mond-heading--responsive.mond-heading--xs { font-size: var(--mond-font-size-sm); }
+  .mond-heading--responsive.mond-heading--sm { font-size: var(--mond-font-size-base); }
+  .mond-heading--responsive.mond-heading--md { font-size: var(--mond-font-size-lg); }
+  .mond-heading--responsive.mond-heading--lg { font-size: var(--mond-font-size-xl); }
+  .mond-heading--responsive.mond-heading--xl { font-size: var(--mond-font-size-2xl); }
+  .mond-heading--responsive.mond-heading--2xl { font-size: var(--mond-font-size-3xl); }
+  .mond-heading--responsive.mond-heading--3xl { font-size: var(--mond-font-size-4xl); }
+  .mond-heading--responsive.mond-heading--4xl { font-size: var(--mond-font-size-5xl); }
+  .mond-heading--responsive.mond-heading--5xl { font-size: var(--mond-font-size-6xl); }
+  /* 6xl stays at maximum */
+}
+
+/* ============================================
+   LONG TEXT MOBILE SCALING
+   Scale down more aggressively on mobile for long text
+   ============================================ */
+
+/* Long text: Mobile scale down by 3 sizes */
+@media (max-width: 639px) {
+  .mond-heading--long.mond-heading--6xl { font-size: var(--mond-font-size-3xl); }
+  .mond-heading--long.mond-heading--5xl { font-size: var(--mond-font-size-2xl); }
+  .mond-heading--long.mond-heading--4xl { font-size: var(--mond-font-size-xl); }
+  .mond-heading--long.mond-heading--3xl { font-size: var(--mond-font-size-lg); }
+  .mond-heading--long.mond-heading--2xl { font-size: var(--mond-font-size-base); }
+  .mond-heading--long.mond-heading--xl { font-size: var(--mond-font-size-sm); }
+  .mond-heading--long.mond-heading--lg { font-size: var(--mond-font-size-xs); }
+  .mond-heading--long.mond-heading--md { font-size: var(--mond-font-size-xs); } /* minimum */
+  .mond-heading--long.mond-heading--sm { font-size: var(--mond-font-size-xs); } /* minimum */
+  .mond-heading--long.mond-heading--xs { font-size: var(--mond-font-size-xs); } /* stays at minimum */
+}
+
+/* Really long text: Mobile scale down by 4 sizes */
+@media (max-width: 639px) {
+  .mond-heading--really-long.mond-heading--6xl { font-size: var(--mond-font-size-2xl); }
+  .mond-heading--really-long.mond-heading--5xl { font-size: var(--mond-font-size-xl); }
+  .mond-heading--really-long.mond-heading--4xl { font-size: var(--mond-font-size-lg); }
+  .mond-heading--really-long.mond-heading--3xl { font-size: var(--mond-font-size-base); }
+  .mond-heading--really-long.mond-heading--2xl { font-size: var(--mond-font-size-sm); }
+  .mond-heading--really-long.mond-heading--xl { font-size: var(--mond-font-size-xs); }
+  .mond-heading--really-long.mond-heading--lg { font-size: var(--mond-font-size-xs); } /* minimum */
+  .mond-heading--really-long.mond-heading--md { font-size: var(--mond-font-size-xs); } /* minimum */
+  .mond-heading--really-long.mond-heading--sm { font-size: var(--mond-font-size-xs); } /* minimum */
+  .mond-heading--really-long.mond-heading--xs { font-size: var(--mond-font-size-xs); } /* stays at minimum */
+}
+
+/* ============================================
    SEMANTIC COLORS
    ============================================ */
 
