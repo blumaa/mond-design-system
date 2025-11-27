@@ -201,7 +201,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
     responsive && 'mond-text--responsive',
     isLongText && 'mond-text--long',
     isReallyLongText && 'mond-text--really-long',
-    !color && `mond-text--${semantic}`, // Only apply semantic if no color prop
+    color ? 'mond-text--custom-color' : `mond-text--${semantic}`, // Use custom color class or semantic
     weight && `mond-text--weight-${weight}`,
     align && `mond-text--align-${align}`,
     italic && 'mond-text--italic',

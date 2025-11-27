@@ -149,6 +149,11 @@
    SEMANTIC COLORS
    ============================================ */
 
+/* Custom color override - used when color prop is provided */
+.mond-text--custom-color {
+  color: var(--text-color-override);
+}
+
 .mond-text--primary {
   color: var(--text-color-override, var(--mond-text-primary));
 }
