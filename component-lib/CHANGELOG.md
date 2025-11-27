@@ -1,3 +1,9 @@
+## [2.9.5](https://github.com/blumaa/mond-design-system/compare/v2.9.4...v2.9.5) (2025-11-27)
+
+### 🐛 Bug Fixes
+
+* add isLongText and isReallyLongText prop to Text ([5a3438a](https://github.com/blumaa/mond-design-system/commit/5a3438a84545bedbc110b45d3bb76abfdd7125a8))
+
 ## [2.9.4](https://github.com/blumaa/mond-design-system/compare/v2.9.3...v2.9.4) (2025-11-27)
 
 ### 🐛 Bug Fixes
