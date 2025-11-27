@@ -1,3 +1,9 @@
+## [2.9.9](https://github.com/blumaa/mond-design-system/compare/v2.9.8...v2.9.9) (2025-11-27)
+
+### 🐛 Bug Fixes
+
+* color prop in Heading ([588c79c](https://github.com/blumaa/mond-design-system/commit/588c79c1e8a255fc8ce282763a887fa6d1e8c692))
+
 ## [2.9.8](https://github.com/blumaa/mond-design-system/compare/v2.9.7...v2.9.8) (2025-11-27)
 
 ### 🐛 Bug Fixes
