@@ -1,3 +1,10 @@
+## [2.9.4](https://github.com/blumaa/mond-design-system/compare/v2.9.3...v2.9.4) (2025-11-27)
+
+### 🐛 Bug Fixes
+
+* build ci ([a300636](https://github.com/blumaa/mond-design-system/commit/a300636a0c041c17f77bad1cd6173fdcb7660159))
+* text sizing prop ([fa8a931](https://github.com/blumaa/mond-design-system/commit/fa8a9316dd0ad2da2124d8901469449fc896f6b8))
+
 ## [2.9.3](https://github.com/blumaa/mond-design-system/compare/v2.9.2...v2.9.3) (2025-11-26)
 
 ### 🐛 Bug Fixes
