@@ -152,7 +152,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({
     responsive && 'mond-heading--responsive',
     isLongText && 'mond-heading--long',
     isReallyLongText && 'mond-heading--really-long',
-    !color && `mond-heading--${semantic}`, // Only apply semantic if no color prop
+    color ? 'mond-heading--custom-color' : `mond-heading--${semantic}`, // Use custom color class or semantic
     weight && `mond-heading--weight-${weight}`,
     align && `mond-heading--align-${align}`,
     truncate && 'mond-heading--truncate',

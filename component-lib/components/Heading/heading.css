@@ -171,6 +171,11 @@
    SEMANTIC COLORS
    ============================================ */
 
+/* Custom color override - used when color prop is provided */
+.mond-heading--custom-color {
+  color: var(--heading-color-override);
+}
+
 .mond-heading--primary {
   color: var(--heading-color-override, var(--mond-text-primary));
 }
