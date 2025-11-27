@@ -1,3 +1,9 @@
+## [2.9.6](https://github.com/blumaa/mond-design-system/compare/v2.9.5...v2.9.6) (2025-11-27)
+
+### 🐛 Bug Fixes
+
+* Box columnGap rowGap and Heading responsive ([e6e471f](https://github.com/blumaa/mond-design-system/commit/e6e471feb85fbdafd941fc6aedb69331b788dffd))
+
 ## [2.9.5](https://github.com/blumaa/mond-design-system/compare/v2.9.4...v2.9.5) (2025-11-27)
 
 ### 🐛 Bug Fixes
