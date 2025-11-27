@@ -345,7 +345,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
         </div>
         {(error || success || helperText) && (
           <Box marginTop="1">
-            <Text variant="caption" semantic={error ? "error" : success ? "success" : "secondary"}>
+            <Text size="xs" semantic={error ? "error" : success ? "success" : "secondary"}>
               {error || success || helperText}
             </Text>
           </Box>

@@ -80,25 +80,25 @@ const getSizeConfig = (size: PaginationSize) => {
       return {
         buttonSize: 'sm' as const,
         selectSize: 'sm' as const,
-        textVariant: 'body-sm' as const,
+        textSize: 'sm' as const,
       };
     case 'md':
       return {
         buttonSize: 'md' as const,
         selectSize: 'md' as const,
-        textVariant: 'body' as const,
+        textSize: 'md' as const,
       };
     case 'lg':
       return {
         buttonSize: 'lg' as const,
         selectSize: 'lg' as const,
-        textVariant: 'body' as const,
+        textSize: 'md' as const,
       };
     default:
       return {
         buttonSize: 'md' as const,
         selectSize: 'md' as const,
-        textVariant: 'body' as const,
+        textSize: 'md' as const,
       };
   }
 };
@@ -211,7 +211,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
             {showItemsPerPage && onItemsPerPageChange && (
               <div className="mond-pagination__items-per-page">
                 <Text
-                  variant={sizeConfig.textVariant}
+                  size={sizeConfig.textSize}
                   semantic="secondary"
                 >
                   Show
@@ -226,7 +226,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                   }))}
                 />
                 <Text
-                  variant={sizeConfig.textVariant}
+                  size={sizeConfig.textSize}
                   semantic="secondary"
                 >
                   items
@@ -236,7 +236,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
 
             {showTotalInfo && (
               <Text
-                variant={sizeConfig.textVariant}
+                size={sizeConfig.textSize}
                 semantic="secondary"
               >
                 {totalItems === 0
@@ -287,7 +287,7 @@ export const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
                 page === 'ellipsis' ? (
                   <div key={`ellipsis-${index}`} className="mond-pagination__ellipsis">
                     <Text
-                      variant={sizeConfig.textVariant}
+                      size={sizeConfig.textSize}
                       semantic="secondary"
                     >
                       ...

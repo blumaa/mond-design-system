@@ -186,7 +186,7 @@ export const AllSpacingProps: Story = {
         <Box display="flex" flexDirection="column" gap="md">
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">margin="4"</Text>
+              <Text size="xs" semantic="secondary">margin="4"</Text>
             </Box>
             <Box margin="4" border="default" padding="2">
               <Text>All sides</Text>
@@ -195,7 +195,7 @@ export const AllSpacingProps: Story = {
 
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">marginTop="6"</Text>
+              <Text size="xs" semantic="secondary">marginTop="6"</Text>
             </Box>
             <Box marginTop="6" border="default" padding="2">
               <Text>Top only</Text>
@@ -204,7 +204,7 @@ export const AllSpacingProps: Story = {
 
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">marginRight="8"</Text>
+              <Text size="xs" semantic="secondary">marginRight="8"</Text>
             </Box>
             <Box marginRight="8" border="default" padding="2">
               <Text>Right only</Text>
@@ -213,7 +213,7 @@ export const AllSpacingProps: Story = {
 
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">marginBottom="4"</Text>
+              <Text size="xs" semantic="secondary">marginBottom="4"</Text>
             </Box>
             <Box marginBottom="4" border="default" padding="2">
               <Text>Bottom only</Text>
@@ -222,7 +222,7 @@ export const AllSpacingProps: Story = {
 
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">marginLeft="10"</Text>
+              <Text size="xs" semantic="secondary">marginLeft="10"</Text>
             </Box>
             <Box marginLeft="10" border="default" padding="2">
               <Text>Left only</Text>
@@ -238,7 +238,7 @@ export const AllSpacingProps: Story = {
         <Box display="flex" flexDirection="column" gap="md">
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">padding="4"</Text>
+              <Text size="xs" semantic="secondary">padding="4"</Text>
             </Box>
             <Box padding="4" border="default">
               <Text>All sides</Text>
@@ -247,7 +247,7 @@ export const AllSpacingProps: Story = {
 
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">paddingTop="6"</Text>
+              <Text size="xs" semantic="secondary">paddingTop="6"</Text>
             </Box>
             <Box paddingTop="6" border="default">
               <Text>Top only</Text>
@@ -256,7 +256,7 @@ export const AllSpacingProps: Story = {
 
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">paddingRight="8"</Text>
+              <Text size="xs" semantic="secondary">paddingRight="8"</Text>
             </Box>
             <Box paddingRight="8" border="default">
               <Text>Right only</Text>
@@ -265,7 +265,7 @@ export const AllSpacingProps: Story = {
 
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">paddingBottom="4"</Text>
+              <Text size="xs" semantic="secondary">paddingBottom="4"</Text>
             </Box>
             <Box paddingBottom="4" border="default">
               <Text>Bottom only</Text>
@@ -274,7 +274,7 @@ export const AllSpacingProps: Story = {
 
           <Box>
             <Box marginBottom="1">
-              <Text variant="caption" semantic="secondary">paddingLeft="10"</Text>
+              <Text size="xs" semantic="secondary">paddingLeft="10"</Text>
             </Box>
             <Box paddingLeft="10" border="default">
               <Text>Left only</Text>
@@ -289,7 +289,7 @@ export const AllSpacingProps: Story = {
         </Box>
         <Box>
           <Box marginBottom="1">
-            <Text variant="caption" semantic="secondary">margin="4" padding="6"</Text>
+            <Text size="xs" semantic="secondary">margin="4" padding="6"</Text>
           </Box>
           <Box margin="4" padding="6" border="default">
             <Text>Margin and padding together</Text>
@@ -310,7 +310,7 @@ export const SpacingTokens: Story = {
         <Box display="flex" gap="md" flexWrap="wrap">
           {(['0', '1', '2', '3', '4', '5', '6'] as const).map((token) => (
             <Box key={token} display="flex" flexDirection="column" alignItems="center" gap="xs">
-              <Text variant="body-sm" semantic="secondary" as="code">"{token}"</Text>
+              <Text size="sm" semantic="secondary" as="code">"{token}"</Text>
               <div
                 style={{
                   backgroundColor: 'var(--mond-surface-elevated)',
@@ -333,7 +333,7 @@ export const SpacingTokens: Story = {
         <Box display="flex" gap="md" flexWrap="wrap">
           {(['8', '10', '12', '16'] as const).map((token) => (
             <Box key={token} display="flex" flexDirection="column" alignItems="center" gap="xs">
-              <Text variant="body-sm" semantic="secondary" as="code">"{token}"</Text>
+              <Text size="sm" semantic="secondary" as="code">"{token}"</Text>
               <div
                 style={{
                   backgroundColor: 'var(--mond-surface-elevated)',
@@ -356,7 +356,7 @@ export const SpacingTokens: Story = {
         <Box display="flex" gap="md" flexWrap="wrap">
           {(['20', '24', '32', '40', '48', '56', '64'] as const).map((token) => (
             <Box key={token} display="flex" flexDirection="column" alignItems="center" gap="xs">
-              <Text variant="body-sm" semantic="secondary" as="code">"{token}"</Text>
+              <Text size="sm" semantic="secondary" as="code">"{token}"</Text>
               <div
                 style={{
                   backgroundColor: 'var(--mond-surface-elevated)',
@@ -515,7 +515,7 @@ export const GapSizes: Story = {
         <Box key={size}>
           <div style={{ fontFamily: 'monospace' }}>
             <Box marginBottom="2">
-              <Text variant="body-sm" weight="semibold" semantic="secondary">
+              <Text size="sm" weight="semibold" semantic="secondary">
                 gap="{size}"
               </Text>
             </Box>
@@ -542,7 +542,7 @@ export const GapSizes: Story = {
                   }}
                 >
                   <Box padding="3">
-                    <Text variant="body-sm">{i}</Text>
+                    <Text size="sm">{i}</Text>
                   </Box>
                 </div>
               ))}
@@ -679,7 +679,7 @@ export const FlexWrap: Story = {
           <Heading level={3} size="lg">
             Flex Wrap - No Wrap (Default)
           </Heading>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             Items overflow the container when they don't fit
           </Text>
         </Box>
@@ -720,7 +720,7 @@ export const FlexWrap: Story = {
           <Heading level={3} size="lg">
             Flex Wrap - Wrap
           </Heading>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             Items wrap to next line when they don't fit
           </Text>
         </Box>
@@ -767,7 +767,7 @@ export const GridLayout: Story = {
           <Heading level={3} size="lg">
             Grid: Two Columns
           </Heading>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             Using CSS Grid with repeat(2, 1fr) for exactly 2 items per row
           </Text>
         </Box>
@@ -803,7 +803,7 @@ export const GridLayout: Story = {
           <Heading level={3} size="lg">
             Grid: Three Columns
           </Heading>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             Using CSS Grid with repeat(3, 1fr) for exactly 3 items per row
           </Text>
         </Box>
@@ -839,7 +839,7 @@ export const GridLayout: Story = {
           <Heading level={3} size="lg">
             Grid: Four Columns
           </Heading>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             Using CSS Grid with repeat(4, 1fr) for exactly 4 items per row
           </Text>
         </Box>
@@ -930,7 +930,7 @@ export const ResponsiveCardExample: Story = {
                   paddingLeft="3"
                   paddingRight="3"
                 >
-                  <Text variant="body-sm">{tag}</Text>
+                  <Text size="sm">{tag}</Text>
                 </Box>
               </div>
             ))}
@@ -955,7 +955,7 @@ export const AlignmentOptions: Story = {
             <Box key={align}>
               <div style={{ fontFamily: 'monospace' }}>
                 <Box marginBottom="1">
-                  <Text variant="caption" semantic="secondary">
+                  <Text size="xs" semantic="secondary">
                     alignItems="{align}"
                   </Text>
                 </Box>
@@ -1007,7 +1007,7 @@ export const AlignmentOptions: Story = {
             <Box key={justify}>
               <div style={{ fontFamily: 'monospace' }}>
                 <Box marginBottom="1">
-                  <Text variant="caption" semantic="secondary">
+                  <Text size="xs" semantic="secondary">
                     justifyContent="{justify}"
                   </Text>
                 </Box>
@@ -1062,7 +1062,7 @@ export const BorderVariants: Story = {
         </Box>
         <Box display="flex" gap="lg">
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">Subtle Border</Text>
+            <Text size="sm" semantic="secondary">Subtle Border</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="subtle"
@@ -1074,7 +1074,7 @@ export const BorderVariants: Story = {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">Default Border</Text>
+            <Text size="sm" semantic="secondary">Default Border</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
@@ -1086,7 +1086,7 @@ export const BorderVariants: Story = {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">Strong Border</Text>
+            <Text size="sm" semantic="secondary">Strong Border</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="strong"
@@ -1113,13 +1113,13 @@ export const CornerVariants: Story = {
       <Box>
         <Box marginBottom="4">
           <Heading level={3} size="lg">Corner Variants</Heading>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             All corner radius options - Default is rounded-lg (0.5rem)
           </Text>
         </Box>
         <Box display="flex" flexWrap="wrap" gap="lg">
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">None (0)</Text>
+            <Text size="sm" semantic="secondary">None (0)</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
@@ -1132,7 +1132,7 @@ export const CornerVariants: Story = {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">SM (0.125rem)</Text>
+            <Text size="sm" semantic="secondary">SM (0.125rem)</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
@@ -1145,7 +1145,7 @@ export const CornerVariants: Story = {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">MD (0.25rem)</Text>
+            <Text size="sm" semantic="secondary">MD (0.25rem)</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
@@ -1158,7 +1158,7 @@ export const CornerVariants: Story = {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">LG (0.5rem) - DEFAULT</Text>
+            <Text size="sm" semantic="secondary">LG (0.5rem) - DEFAULT</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
@@ -1171,7 +1171,7 @@ export const CornerVariants: Story = {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">XL (0.75rem)</Text>
+            <Text size="sm" semantic="secondary">XL (0.75rem)</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
@@ -1184,7 +1184,7 @@ export const CornerVariants: Story = {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">2XL (1rem)</Text>
+            <Text size="sm" semantic="secondary">2XL (1rem)</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
@@ -1197,7 +1197,7 @@ export const CornerVariants: Story = {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="sm">
-            <Text variant="body-sm" semantic="secondary">Full (9999px)</Text>
+            <Text size="sm" semantic="secondary">Full (9999px)</Text>
             <div style={{ backgroundColor: 'var(--mond-surface-background)' }}>
               <Box
                 border="default"
@@ -1234,7 +1234,7 @@ export const BorderCornerCombinations: Story = {
                 corners="rounded-sm"
                 padding="4"
               >
-                <Text variant="body-sm">Subtle + SM</Text>
+                <Text size="sm">Subtle + SM</Text>
               </Box>
             </div>
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
@@ -1243,7 +1243,7 @@ export const BorderCornerCombinations: Story = {
                 corners="rounded-md"
                 padding="4"
               >
-                <Text variant="body-sm">Subtle + MD</Text>
+                <Text size="sm">Subtle + MD</Text>
               </Box>
             </div>
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
@@ -1252,7 +1252,7 @@ export const BorderCornerCombinations: Story = {
                 corners="rounded-full"
                 padding="4"
               >
-                <Text variant="body-sm">Subtle + Full</Text>
+                <Text size="sm">Subtle + Full</Text>
               </Box>
             </div>
           </Box>
@@ -1264,7 +1264,7 @@ export const BorderCornerCombinations: Story = {
                 corners="rounded-sm"
                 padding="4"
               >
-                <Text variant="body-sm">Default + SM</Text>
+                <Text size="sm">Default + SM</Text>
               </Box>
             </div>
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
@@ -1273,7 +1273,7 @@ export const BorderCornerCombinations: Story = {
                 corners="rounded-md"
                 padding="4"
               >
-                <Text variant="body-sm">Default + MD</Text>
+                <Text size="sm">Default + MD</Text>
               </Box>
             </div>
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
@@ -1282,7 +1282,7 @@ export const BorderCornerCombinations: Story = {
                 corners="rounded-full"
                 padding="4"
               >
-                <Text variant="body-sm">Default + Full</Text>
+                <Text size="sm">Default + Full</Text>
               </Box>
             </div>
           </Box>
@@ -1294,7 +1294,7 @@ export const BorderCornerCombinations: Story = {
                 corners="rounded-sm"
                 padding="4"
               >
-                <Text variant="body-sm">Strong + SM</Text>
+                <Text size="sm">Strong + SM</Text>
               </Box>
             </div>
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
@@ -1303,7 +1303,7 @@ export const BorderCornerCombinations: Story = {
                 corners="rounded-md"
                 padding="4"
               >
-                <Text variant="body-sm">Strong + MD</Text>
+                <Text size="sm">Strong + MD</Text>
               </Box>
             </div>
             <div style={{ backgroundColor: 'var(--mond-surface-background)', minWidth: '150px' }}>
@@ -1312,7 +1312,7 @@ export const BorderCornerCombinations: Story = {
                 corners="rounded-full"
                 padding="4"
               >
-                <Text variant="body-sm">Strong + Full</Text>
+                <Text size="sm">Strong + Full</Text>
               </Box>
             </div>
           </Box>
@@ -1335,10 +1335,10 @@ export const ResponsiveSizing: Story = {
       {/* Both width and height - square grid */}
       <Box>
         <Box marginBottom="3">
-          <Text variant="title" weight="semibold">
+          <Text size="xl" weight="semibold">
             responsive (both width & height)
           </Text>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             For square grids like 4x4 tiles. Width and height scale together.
           </Text>
         </Box>
@@ -1361,7 +1361,7 @@ export const ResponsiveSizing: Story = {
               alignItems="center"
               justifyContent="center"
             >
-              <Text variant="body-xs">{i + 1}</Text>
+              <Text size="xs">{i + 1}</Text>
             </Box>
           ))}
         </Box>
@@ -1370,10 +1370,10 @@ export const ResponsiveSizing: Story = {
       {/* Only width - height auto */}
       <Box>
         <Box marginBottom="3">
-          <Text variant="title" weight="semibold">
+          <Text size="xl" weight="semibold">
             responsiveWidth (width only)
           </Text>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             For containers where height should grow with content. Width scales, height auto.
           </Text>
         </Box>
@@ -1386,17 +1386,17 @@ export const ResponsiveSizing: Story = {
           corners="rounded-md"
           padding="4"
         >
-          <Text variant="body-sm" weight="semibold">
+          <Text size="sm" weight="semibold">
             Found Groups Container
           </Text>
           <Box border="subtle" corners="rounded-sm" padding="3">
-            <Text variant="body-sm">Group 1: Movies</Text>
+            <Text size="sm">Group 1: Movies</Text>
           </Box>
           <Box border="subtle" corners="rounded-sm" padding="3">
-            <Text variant="body-sm">Group 2: Colors</Text>
+            <Text size="sm">Group 2: Colors</Text>
           </Box>
           <Box border="subtle" corners="rounded-sm" padding="3">
-            <Text variant="body-sm">Group 3: Animals</Text>
+            <Text size="sm">Group 3: Animals</Text>
           </Box>
         </Box>
       </Box>
@@ -1404,10 +1404,10 @@ export const ResponsiveSizing: Story = {
       {/* Only height - width auto */}
       <Box>
         <Box marginBottom="3">
-          <Text variant="title" weight="semibold">
+          <Text size="xl" weight="semibold">
             responsiveHeight (height only)
           </Text>
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             For vertical layouts where width should be flexible. Height scales, width auto.
           </Text>
         </Box>
@@ -1422,23 +1422,23 @@ export const ResponsiveSizing: Story = {
             padding="4"
             width="md"
           >
-            <Text variant="body-sm" weight="semibold">
+            <Text size="sm" weight="semibold">
               Sidebar
             </Text>
             <Box display="flex" flexDirection="column" gap="xs">
               <Box border="subtle" corners="rounded-sm" padding="2">
-                <Text variant="body-xs">Item 1</Text>
+                <Text size="xs">Item 1</Text>
               </Box>
               <Box border="subtle" corners="rounded-sm" padding="2">
-                <Text variant="body-xs">Item 2</Text>
+                <Text size="xs">Item 2</Text>
               </Box>
               <Box border="subtle" corners="rounded-sm" padding="2">
-                <Text variant="body-xs">Item 3</Text>
+                <Text size="xs">Item 3</Text>
               </Box>
             </Box>
           </Box>
           <Box padding="4">
-            <Text variant="body-sm" semantic="secondary">
+            <Text size="sm" semantic="secondary">
               Main content area (not responsive)
             </Text>
           </Box>

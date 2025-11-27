@@ -174,8 +174,8 @@ export const UserMenu: Story = {
       content={
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <div style={{ padding: '8px', borderBottom: '1px solid var(--mond-border-subtle)' }}>
-            <Text variant="body-sm" weight="semibold">John Doe</Text>
-            <Text variant="caption" semantic="secondary" as="div">
+            <Text size="sm" weight="semibold">John Doe</Text>
+            <Text size="xs" semantic="secondary" as="div">
               john.doe@example.com
             </Text>
           </div>
@@ -230,7 +230,7 @@ export const UserMenu: Story = {
         }}
       >
         <Avatar size="xs" fallback="John Doe" />
-        <Text variant="body-sm">John Doe</Text>
+        <Text size="sm">John Doe</Text>
         <Icon size="sm" decorative>
           <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" />
         </Icon>
@@ -265,7 +265,7 @@ export const ColorPicker: Story = {
         content={
           <div>
             <div style={{ marginBottom: '12px' }}>
-              <Text variant="body-sm" weight="semibold" as="div">
+              <Text size="sm" weight="semibold" as="div">
                 Choose a color
               </Text>
             </div>

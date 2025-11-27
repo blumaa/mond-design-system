@@ -1,18 +1,16 @@
 import React, { forwardRef } from 'react';
 import './text.css';
 
-export type TextVariant =
-  | 'display'
-  | 'headline'
-  | 'title'
-  | 'subtitle'
-  | 'body'
-  | 'body-sm'
-  | 'body-xs'
-  | 'body-xxs'
-  | 'caption'
-  | 'overline'
-  | 'code';
+export type TextSize =
+  | '3xs'
+  | '2xs'
+  | 'xs'
+  | 'sm'
+  | 'md'
+  | 'lg'
+  | 'xl'
+  | '2xl'
+  | '3xl';
 
 export type TextWeight = 'thin' | 'extralight' | 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
 
@@ -32,10 +30,17 @@ export type TextSemantic =
 
 export interface TextProps {
   /**
-   * Text variant that controls size and line height
-   * @default 'body'
+   * Text size from scale
+   * @default 'md'
    */
-  variant?: TextVariant;
+  size?: TextSize;
+
+  /**
+   * Enable responsive sizing that auto-scales across breakpoints
+   * Mobile: -1 size, Tablet: base size, Desktop: +1 size
+   * @default false
+   */
+  responsive?: boolean;
 
   /**
    * Font weight
@@ -123,8 +128,8 @@ export interface TextProps {
  * **Theme-Aware**: Automatically responds to data-theme attribute changes via CSS.
  *
  * @example
- * // Display text
- * <Text variant="display">Large Display Text</Text>
+ * // Large display text
+ * <Text size="3xl">Large Display Text</Text>
  *
  * @example
  * // Semantic colored text
@@ -137,14 +142,19 @@ export interface TextProps {
  *
  * @example
  * // Text with modifiers
- * <Text variant="body" italic underline>Italic Underlined</Text>
+ * <Text size="md" italic underline>Italic Underlined</Text>
  *
  * @example
  * // Custom element type
- * <Text as="p" variant="body">Paragraph text</Text>
+ * <Text as="p" size="md">Paragraph text</Text>
+ *
+ * @example
+ * // Responsive text that auto-scales
+ * <Text size="md" responsive>Scales across breakpoints</Text>
  */
 export const Text = forwardRef<HTMLElement, TextProps>(({
-  variant = 'body',
+  size = 'md',
+  responsive = false,
   weight = 'normal',
   align,
   semantic = 'primary',
@@ -169,7 +179,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(({
 
   // Build CSS class names
   const classNames = [
-    `mond-text--${variant}`,
+    `mond-text--${size}`,
+    responsive && 'mond-text--responsive',
     !color && `mond-text--${semantic}`, // Only apply semantic if no color prop
     weight && `mond-text--weight-${weight}`,
     align && `mond-text--align-${align}`,

@@ -105,7 +105,7 @@ export const Structured: Story = {
         <Heading level={3} size="lg">
           Card Title
         </Heading>
-        <Text variant="body-sm" semantic="secondary">
+        <Text size="sm" semantic="secondary">
           Subtitle or description
         </Text>
       </CardHeader>
@@ -136,7 +136,7 @@ export const HeaderAndBody: Story = {
         <Heading level={3} size="lg">
           Blog Post Title
         </Heading>
-        <Text variant="body-sm" semantic="tertiary">
+        <Text size="sm" semantic="tertiary">
           January 15, 2025 • 5 min read
         </Text>
       </CardHeader>
@@ -164,7 +164,7 @@ export const Variants: Story = {
           </Heading>
         </CardHeader>
         <CardBody>
-          <Text variant="body-sm">Default background with border.</Text>
+          <Text size="sm">Default background with border.</Text>
         </CardBody>
       </Card>
 
@@ -175,7 +175,7 @@ export const Variants: Story = {
           </Heading>
         </CardHeader>
         <CardBody>
-          <Text variant="body-sm">Subtle elevated background.</Text>
+          <Text size="sm">Subtle elevated background.</Text>
         </CardBody>
       </Card>
 
@@ -186,7 +186,7 @@ export const Variants: Story = {
           </Heading>
         </CardHeader>
         <CardBody>
-          <Text variant="body-sm">Elevated with shadow, no border.</Text>
+          <Text size="sm">Elevated with shadow, no border.</Text>
         </CardBody>
       </Card>
     </Box>
@@ -246,7 +246,7 @@ export const SemanticHTML: Story = {
           <Heading level={3} size="md">
             Article Card
           </Heading>
-          <Text variant="body-sm" semantic="tertiary">
+          <Text size="sm" semantic="tertiary">
             Rendered as &lt;article&gt;
           </Text>
         </CardHeader>
@@ -262,7 +262,7 @@ export const SemanticHTML: Story = {
           <Heading level={3} size="md">
             Section Card
           </Heading>
-          <Text variant="body-sm" semantic="tertiary">
+          <Text size="sm" semantic="tertiary">
             Rendered as &lt;section&gt;
           </Text>
         </CardHeader>
@@ -300,11 +300,11 @@ export const ProductCard: Story = {
           </Heading>
         </Box>
         <Box marginBottom="3">
-          <Text variant="body" semantic="secondary">
+          <Text size="md" semantic="secondary">
             Short product description goes here to entice the customer.
           </Text>
         </Box>
-        <Text variant="body" weight="bold">
+        <Text size="md" weight="bold">
           $99.99
         </Text>
       </CardBody>
@@ -341,12 +341,12 @@ export const UserProfile: Story = {
           </Heading>
         </Box>
         <Box marginBottom="4">
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             Product Designer
           </Text>
         </Box>
         <Box marginBottom="4">
-          <Text variant="body-sm" align="center">
+          <Text size="sm" align="center">
             Building beautiful and accessible user interfaces with a focus on
             design systems.
           </Text>
@@ -379,7 +379,7 @@ export const StatsCard: Story = {
     <Card maxWidth="sm">
       <CardBody>
         <Box marginBottom="2">
-          <Text variant="body-sm" semantic="secondary">
+          <Text size="sm" semantic="secondary">
             Total Revenue
           </Text>
         </Box>
@@ -388,7 +388,7 @@ export const StatsCard: Story = {
             $45,231
           </Heading>
         </Box>
-        <Text variant="body-sm" semantic="success">
+        <Text size="sm" semantic="success">
           +20.1% from last month
         </Text>
       </CardBody>
@@ -413,12 +413,12 @@ export const Notification: Story = {
               </Heading>
             </Box>
             <Box marginBottom="2">
-              <Text variant="body-sm" semantic="secondary">
+              <Text size="sm" semantic="secondary">
                 John Smith replied to your post &quot;Getting started with
                 design systems&quot;
               </Text>
             </Box>
-            <Text variant="body-sm" semantic="tertiary">
+            <Text size="sm" semantic="tertiary">
               2 hours ago
             </Text>
           </Box>
@@ -447,7 +447,7 @@ export const CardGrid: Story = {
             </Heading>
           </CardHeader>
           <CardBody>
-            <Text variant="body-sm">
+            <Text size="sm">
               Example card in a responsive grid layout. Click to navigate.
             </Text>
           </CardBody>
@@ -481,7 +481,7 @@ export const ComplexContent: Story = {
                 Building Scalable Design Systems
               </Heading>
             </Box>
-            <Text variant="body-sm" semantic="tertiary">
+            <Text size="sm" semantic="tertiary">
               January 15, 2025 • 12 min read
             </Text>
           </Box>
@@ -616,7 +616,7 @@ export const ShakeAnimation: Story = {
             <Text align="center" weight="bold">
               Click to Shake
             </Text>
-            <Text align="center" variant="body-sm" semantic="secondary">
+            <Text align="center" size="sm" semantic="secondary">
               Try clicking this card
             </Text>
           </Box>
@@ -646,7 +646,7 @@ export const JumpAnimation: Story = {
             <Text align="center" weight="bold">
               Click to Jump
             </Text>
-            <Text align="center" variant="body-sm" semantic="secondary">
+            <Text align="center" size="sm" semantic="secondary">
               Try clicking this card
             </Text>
           </Box>
@@ -666,10 +666,10 @@ export const AspectRatios: Story = {
       <Card aspectRatio="square" variant="elevated">
         <CardBody>
           <Box display="flex" flexDirection="column" gap="xs">
-            <Text variant="body-sm" weight="bold">
+            <Text size="sm" weight="bold">
               Square
             </Text>
-            <Text variant="body-xs" semantic="secondary">
+            <Text size="xs" semantic="secondary">
               1:1 ratio
             </Text>
           </Box>
@@ -679,10 +679,10 @@ export const AspectRatios: Story = {
       <Card aspectRatio="small" variant="elevated">
         <CardBody>
           <Box display="flex" flexDirection="column" gap="xs">
-            <Text variant="body-sm" weight="bold">
+            <Text size="sm" weight="bold">
               Small
             </Text>
-            <Text variant="body-xs" semantic="secondary">
+            <Text size="xs" semantic="secondary">
               160px max
             </Text>
           </Box>
@@ -692,10 +692,10 @@ export const AspectRatios: Story = {
       <Card aspectRatio="medium" variant="elevated">
         <CardBody>
           <Box display="flex" flexDirection="column" gap="xs">
-            <Text variant="body-sm" weight="bold">
+            <Text size="sm" weight="bold">
               Medium
             </Text>
-            <Text variant="body-xs" semantic="secondary">
+            <Text size="xs" semantic="secondary">
               240px max
             </Text>
           </Box>
@@ -705,10 +705,10 @@ export const AspectRatios: Story = {
       <Card aspectRatio="large" variant="elevated">
         <CardBody>
           <Box display="flex" flexDirection="column" gap="xs">
-            <Text variant="body-sm" weight="bold">
+            <Text size="sm" weight="bold">
               Large
             </Text>
-            <Text variant="body-xs" semantic="secondary">
+            <Text size="xs" semantic="secondary">
               320px max
             </Text>
           </Box>
@@ -773,7 +773,7 @@ export const TileGrid: Story = {
                 justifyContent="center"
                 height="full"
               >
-                <Text variant="body-sm" weight="medium" align="center">
+                <Text size="sm" weight="medium" align="center">
                   Tile {i + 1}
                 </Text>
               </Box>
@@ -833,7 +833,7 @@ export const CustomBackgrounds: Story = {
                 justifyContent="center"
                 height="full"
               >
-                <Text variant="body-sm" weight="medium" align="center">
+                <Text size="sm" weight="medium" align="center">
                   Tile 1
                 </Text>
               </Box>
@@ -849,7 +849,7 @@ export const CustomBackgrounds: Story = {
                 justifyContent="center"
                 height="full"
               >
-                <Text variant="body-sm" weight="medium" align="center">
+                <Text size="sm" weight="medium" align="center">
                   Tile 2
                 </Text>
               </Box>
@@ -865,7 +865,7 @@ export const CustomBackgrounds: Story = {
                 justifyContent="center"
                 height="full"
               >
-                <Text variant="body-sm" weight="medium" align="center">
+                <Text size="sm" weight="medium" align="center">
                   Tile 3
                 </Text>
               </Box>
@@ -881,7 +881,7 @@ export const CustomBackgrounds: Story = {
                 justifyContent="center"
                 height="full"
               >
-                <Text variant="body-sm" weight="medium" align="center">
+                <Text size="sm" weight="medium" align="center">
                   Tile 4
                 </Text>
               </Box>

@@ -129,7 +129,7 @@ function DraggableTemplate({
         userSelect: "none",
       }}
     >
-      <Text variant="body-sm" weight="medium">
+      <Text size="sm" weight="medium">
         {label}
       </Text>
     </div>
@@ -247,7 +247,7 @@ export const InteractiveDemo: Story = {
           {/* Component Palette */}
           <div style={{ width: "200px" }}>
             <Box marginBottom="3">
-              <Text variant="body" weight="semibold">
+              <Text size="md" weight="semibold">
                 Components
               </Text>
             </Box>
@@ -261,7 +261,7 @@ export const InteractiveDemo: Story = {
           {/* Canvas */}
           <div style={{ flex: 1 }}>
             <Box marginBottom="3">
-              <Text variant="body" weight="semibold">
+              <Text size="md" weight="semibold">
                 Canvas
               </Text>
             </Box>
@@ -355,7 +355,7 @@ export const PageLayout: Story = {
           {/* Segment Palette */}
           <div style={{ width: "200px" }}>
             <Box marginBottom="3">
-              <Text variant="body-sm" weight="semibold">
+              <Text size="sm" weight="semibold">
                 Available Segments
               </Text>
             </Box>
@@ -374,7 +374,7 @@ export const PageLayout: Story = {
             }}
           >
             <Box marginBottom="2">
-              <Text variant="body-sm" weight="semibold">
+              <Text size="sm" weight="semibold">
                 Page Layout
               </Text>
             </Box>
@@ -474,7 +474,7 @@ export const MultipleZones: Story = {
         <div style={{ display: "flex", gap: "24px", width: "600px" }}>
           <Box flex="1">
             <Box marginBottom="2">
-              <Text variant="body-sm" weight="semibold">
+              <Text size="sm" weight="semibold">
                 Zone 1
               </Text>
             </Box>
@@ -489,7 +489,7 @@ export const MultipleZones: Story = {
 
           <Box flex="1">
             <Box marginBottom="2">
-              <Text variant="body-sm" weight="semibold">
+              <Text size="sm" weight="semibold">
                 Zone 2
               </Text>
             </Box>
@@ -572,7 +572,7 @@ export const RestrictedTypes: Story = {
         <div style={{ display: "flex", gap: "32px", width: "600px" }}>
           <div style={{ width: "200px" }}>
             <Box marginBottom="3">
-              <Text variant="body-sm" weight="semibold">
+              <Text size="sm" weight="semibold">
                 All Components
               </Text>
             </Box>
@@ -583,7 +583,7 @@ export const RestrictedTypes: Story = {
 
           <div style={{ flex: 1 }}>
             <Box marginBottom="3">
-              <Text variant="body-sm" weight="semibold">
+              <Text size="sm" weight="semibold">
                 Only Accepts: Button, Card
               </Text>
             </Box>

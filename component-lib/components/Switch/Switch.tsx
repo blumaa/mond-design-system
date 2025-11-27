@@ -147,7 +147,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
                 {label}
               </Label>
               {(error || helperText) && (
-                <Text variant="caption" semantic={error ? "error" : "secondary"}>
+                <Text size="xs" semantic={error ? "error" : "secondary"}>
                   {error || helperText}
                 </Text>
               )}

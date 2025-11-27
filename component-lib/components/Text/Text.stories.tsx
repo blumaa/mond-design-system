@@ -17,17 +17,18 @@ import { Text } from '@mond-design-system/theme';
 
 function MyComponent() {
   return (
-    <Text variant="body" semantic="primary">
+    <Text size="md" semantic="primary">
       Your text content here
     </Text>
   );
 }
 \`\`\`
 
-A flexible Text component for displaying text content with semantic variants, typography options, and accessibility features. Perfect for body text, captions, labels, and any text-based content.
+A flexible Text component for displaying text content with semantic colors, typography options, and accessibility features. Perfect for body text, labels, headings, and any text-based content.
 
 **Key Features:**
-- 📝 Eleven text variants (display, headline, title, subtitle, body, body-sm, body-xs, body-xxs, caption, overline, code)
+- 📏 Scale-based sizing system (3xs to 3xl) with 9 size options
+- 📱 Responsive prop for auto-scaling across breakpoints (mobile: -1, tablet: base, desktop: +1)
 - 🎨 Semantic color variants for consistent theming
 - 🔤 Complete font weight support (thin to black)
 - 📐 Text alignment options (left, center, right, justify)
@@ -37,19 +38,22 @@ A flexible Text component for displaying text content with semantic variants, ty
 - 🌙 Dark mode support
 
 **Breaking Changes:**
-- ⚠️ Removed \`body-lg\` and \`body-md\` variants - use \`body\` instead
-- ⚠️ Default variant changed from \`body-md\` to \`body\`
-- ✅ New variants added: \`display\`, \`headline\`, \`title\`, \`subtitle\`, \`code\`
-- ✅ New semantic color: \`accent\`
+- ⚠️ \`variant\` prop renamed to \`size\` prop
+- ⚠️ Removed variants: \`caption\`, \`overline\`, \`code\`
+- ⚠️ Size scale now uses: 3xs, 2xs, xs, sm, md (default), lg, xl, 2xl, 3xl
+- ✅ New \`responsive\` prop for auto-scaling text across breakpoints
 `
       }
     }
   },
   tags: ['autodocs'],
   argTypes: {
-    variant: {
+    size: {
       control: 'select',
-      options: ['display', 'headline', 'title', 'subtitle', 'body', 'body-sm', 'body-xs', 'body-xxs', 'caption', 'overline', 'code'],
+      options: ['3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'],
+    },
+    responsive: {
+      control: 'boolean',
     },
     weight: {
       control: 'select',
@@ -81,7 +85,8 @@ A flexible Text component for displaying text content with semantic variants, ty
     },
   },
   args: {
-    variant: 'body',
+    size: 'md',
+    responsive: false,
     weight: 'normal',
     semantic: 'primary',
     as: 'span',
@@ -101,48 +106,80 @@ export const Default: Story = {
   },
 };
 
-export const Variants: Story = {
+export const Sizes: Story = {
   render: () => (
     <Box className="story-flex-column story-gap-16 story-max-width-600">
-      <Text variant="display">
-        Display text - Largest text variant for hero sections
+      <Text size="3xl">
+        3xl - Largest text size for hero sections and display text
       </Text>
-      <Text variant="headline">
-        Headline text - Large prominent text for page headers
+      <Text size="2xl">
+        2xl - Large prominent text for page headers and headlines
       </Text>
-      <Text variant="title">
-        Title text - Section titles and important labels
+      <Text size="xl">
+        xl - Section titles and important labels
       </Text>
-      <Text variant="subtitle">
-        Subtitle text - Supporting titles and subheadings
+      <Text size="lg">
+        lg - Supporting titles and subheadings
       </Text>
-      <Text variant="body">
-        Body text - Default text for main content and paragraphs
+      <Text size="md">
+        md - Default text size for main content and paragraphs
       </Text>
-      <Text variant="body-sm">
-        Small body text - Smaller text for secondary content
+      <Text size="sm">
+        sm - Smaller text for secondary content
       </Text>
-      <Text variant="body-xs">
-        Extra small body text - Even smaller text for compact layouts
+      <Text size="xs">
+        xs - Extra small text for compact layouts
       </Text>
-      <Text variant="body-xxs">
-        Tiny body text - Smallest body text for minimal space
+      <Text size="2xs">
+        2xs - Very small text for minimal space
       </Text>
-      <Text variant="caption">
-        Caption text - Small descriptive text for labels and captions
-      </Text>
-      <Text variant="overline">
-        Overline text - Used for section headers
-      </Text>
-      <Text variant="code">
-        Code text - Monospace text for code snippets
+      <Text size="3xs">
+        3xs - Smallest text size available
       </Text>
     </Box>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Text comes in eleven different variants: display, headline, title, subtitle, body, body-sm, body-xs, body-xxs, caption, overline, and code. Each variant has predefined font sizes and line heights optimized for their use case.'
+        story: 'Text comes in nine different sizes from 3xs (smallest) to 3xl (largest). Each size has predefined font sizes, line heights, and weights optimized for their use case in the typography scale.'
+      }
+    }
+  }
+};
+
+export const ResponsiveScaling: Story = {
+  render: () => (
+    <Box className="story-flex-column story-gap-24">
+      <Box>
+        <Box marginBottom="2">
+          <Text as="p" size="lg" weight="semibold">Without responsive prop:</Text>
+        </Box>
+        <Text size="md">
+          This text stays at md size on all screen sizes. It doesn't scale with viewport changes.
+        </Text>
+      </Box>
+      <Box>
+        <Box marginBottom="2">
+          <Text as="p" size="lg" weight="semibold">With responsive prop:</Text>
+        </Box>
+        <Text size="md" responsive>
+          This text auto-scales! Mobile: sm (-1 size), Tablet: md (base), Desktop: lg (+1 size). Resize your browser to see it change.
+        </Text>
+      </Box>
+      <Box>
+        <Box marginBottom="2">
+          <Text as="p" size="lg" weight="semibold">Responsive heading:</Text>
+        </Box>
+        <Text size="2xl" responsive weight="bold">
+          This heading scales from xl on mobile to 2xl on tablet to 3xl on desktop
+        </Text>
+      </Box>
+    </Box>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'The responsive prop enables auto-scaling text across breakpoints. Mobile (≤639px): -1 size, Tablet (640-1024px): base size, Desktop (≥1025px): +1 size. Perfect for creating fluid typography that adapts to screen size.'
       }
     }
   }
@@ -312,21 +349,21 @@ export const DarkMode: Story = {
 export const RealWorldExample: Story = {
   render: () => (
     <Box className="story-max-width-600 story-flex-column story-gap-16">
-      <Text variant="overline" semantic="tertiary">ARTICLE</Text>
-      <Text as="div" variant="title" weight="bold" semantic="primary">
+      <Text size="xs" semantic="tertiary" weight="semibold">ARTICLE</Text>
+      <Text as="div" size="xl" weight="bold" semantic="primary">
         Design System Best Practices
       </Text>
       <Box marginBottom="4">
-        <Text variant="body-sm" semantic="secondary">
+        <Text size="sm" semantic="secondary">
           Published on March 15, 2024 by Design Team
         </Text>
       </Box>
-      <Text variant="body" semantic="primary">
+      <Text size="md" semantic="primary">
         A well-designed design system serves as the foundation for consistent,
         scalable user experiences across all product touchpoints. This article
         explores the fundamental principles that make design systems effective.
       </Text>
-      <Text variant="caption" semantic="tertiary">
+      <Text size="xs" semantic="tertiary">
         <Text as="span" italic>Reading time: 5 minutes</Text>
       </Text>
     </Box>
@@ -364,16 +401,16 @@ export const InverseVariant: Story = {
         {/* Dark background example */}
         <Box padding="6" corners="rounded-lg" className="inverse-demo-gradient">
           <Box marginBottom="4">
-            <Text variant="headline" semantic="inverse" weight="bold">
+            <Text size="2xl" semantic="inverse" weight="bold">
               Inverse Text on Dark Background
             </Text>
           </Box>
           <Box marginBottom="3">
-            <Text variant="title" semantic="inverse">
+            <Text size="xl" semantic="inverse">
               Perfect for hero sections and cards
             </Text>
           </Box>
-          <Text variant="body" semantic="inverse">
+          <Text size="md" semantic="inverse">
             The inverse semantic automatically uses white text in light mode and black text in dark mode,
             ensuring optimal contrast on opposite-colored backgrounds.
           </Text>
@@ -383,22 +420,22 @@ export const InverseVariant: Story = {
         <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="md">
           <Box padding="6" border="default" corners="rounded-lg">
             <Box marginBottom="3">
-              <Text variant="title" semantic="primary" weight="semibold">
+              <Text size="xl" semantic="primary" weight="semibold">
                 Normal Text
               </Text>
             </Box>
-            <Text variant="body" semantic="primary">
+            <Text size="md" semantic="primary">
               Uses primary semantic colors - dark text in light mode, light text in dark mode.
             </Text>
           </Box>
 
           <Box padding="6" corners="rounded-lg" className="inverse-demo-dark-gray">
             <Box marginBottom="3">
-              <Text variant="title" semantic="inverse" weight="semibold">
+              <Text size="xl" semantic="inverse" weight="semibold">
                 Inverse Text
               </Text>
             </Box>
-            <Text variant="body" semantic="inverse">
+            <Text size="md" semantic="inverse">
               Uses inverse colors - white text in light mode, black text in dark mode.
             </Text>
           </Box>
@@ -407,7 +444,7 @@ export const InverseVariant: Story = {
         {/* All semantic variants on dark background */}
         <Box padding="6" corners="rounded-lg" className="inverse-demo-darker">
           <Box marginBottom="4">
-            <Text variant="title" semantic="inverse" weight="bold">
+            <Text size="xl" semantic="inverse" weight="bold">
               Semantic Variants on Dark Background
             </Text>
           </Box>

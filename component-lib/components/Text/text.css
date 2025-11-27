@@ -5,95 +5,113 @@
  * Automatically responds to data-theme attribute changes.
  */
 
-/* Text Variant Styles - Typography Scale */
+/* ============================================
+   TEXT SIZE SCALE (3xs to 3xl)
+   ============================================ */
 
-.mond-text--display {
-  font-size: var(--mond-font-size-4xl);
-  line-height: var(--mond-line-height-tight);
-  font-weight: var(--mond-font-weight-bold);
-  letter-spacing: var(--mond-letter-spacing-tight);
-  font-family: var(--mond-font-family-sans);
-}
-
-.mond-text--headline {
-  font-size: var(--mond-font-size-3xl);
-  line-height: var(--mond-line-height-tight);
-  font-weight: var(--mond-font-weight-bold);
-  letter-spacing: var(--mond-letter-spacing-tight);
-  font-family: var(--mond-font-family-sans);
-}
-
-.mond-text--title {
-  font-size: var(--mond-font-size-2xl);
-  line-height: var(--mond-line-height-normal);
-  font-weight: var(--mond-font-weight-semibold);
+.mond-text--3xs {
+  font-size: 0.5rem; /* 8px at 16px base */
+  line-height: var(--mond-line-height-relaxed);
+  font-weight: var(--mond-font-weight-normal);
   letter-spacing: var(--mond-letter-spacing-normal);
   font-family: var(--mond-font-family-sans);
 }
 
-.mond-text--subtitle {
-  font-size: var(--mond-font-size-xl);
+.mond-text--2xs {
+  font-size: 0.625rem; /* 10px - was body-xxs */
+  line-height: var(--mond-line-height-relaxed);
+  font-weight: var(--mond-font-weight-normal);
+  letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--xs {
+  font-size: var(--mond-font-size-xs); /* was body-xs */
+  line-height: var(--mond-line-height-relaxed);
+  font-weight: var(--mond-font-weight-normal);
+  letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--sm {
+  font-size: var(--mond-font-size-sm); /* was body-sm */
+  line-height: var(--mond-line-height-relaxed);
+  font-weight: var(--mond-font-weight-normal);
+  letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--md {
+  font-size: var(--mond-font-size-base); /* was body (default) */
+  line-height: var(--mond-line-height-relaxed);
+  font-weight: var(--mond-font-weight-normal);
+  letter-spacing: var(--mond-letter-spacing-normal);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--lg {
+  font-size: var(--mond-font-size-xl); /* was subtitle */
   line-height: var(--mond-line-height-normal);
   font-weight: var(--mond-font-weight-medium);
   letter-spacing: var(--mond-letter-spacing-normal);
   font-family: var(--mond-font-family-sans);
 }
 
-.mond-text--body {
-  font-size: var(--mond-font-size-base);
-  line-height: var(--mond-line-height-relaxed);
-  font-weight: var(--mond-font-weight-normal);
-  letter-spacing: var(--mond-letter-spacing-normal);
-  font-family: var(--mond-font-family-sans);
-}
-
-.mond-text--body-sm {
-  font-size: var(--mond-font-size-sm);
-  line-height: var(--mond-line-height-relaxed);
-  font-weight: var(--mond-font-weight-normal);
-  letter-spacing: var(--mond-letter-spacing-normal);
-  font-family: var(--mond-font-family-sans);
-}
-
-.mond-text--body-xs {
-  font-size: var(--mond-font-size-xs);
-  line-height: var(--mond-line-height-relaxed);
-  font-weight: var(--mond-font-weight-normal);
-  letter-spacing: var(--mond-letter-spacing-normal);
-  font-family: var(--mond-font-family-sans);
-}
-
-.mond-text--body-xxs {
-  font-size: 0.625rem;
-  line-height: var(--mond-line-height-relaxed);
-  font-weight: var(--mond-font-weight-normal);
-  letter-spacing: var(--mond-letter-spacing-normal);
-  font-family: var(--mond-font-family-sans);
-}
-
-.mond-text--caption {
-  font-size: var(--mond-font-size-xs);
-  line-height: var(--mond-line-height-normal);
-  font-weight: var(--mond-font-weight-normal);
-  letter-spacing: var(--mond-letter-spacing-wide);
-  font-family: var(--mond-font-family-sans);
-}
-
-.mond-text--overline {
-  font-size: var(--mond-font-size-xs);
+.mond-text--xl {
+  font-size: var(--mond-font-size-2xl); /* was title */
   line-height: var(--mond-line-height-normal);
   font-weight: var(--mond-font-weight-semibold);
-  letter-spacing: var(--mond-letter-spacing-wider);
-  text-transform: uppercase;
+  letter-spacing: var(--mond-letter-spacing-normal);
   font-family: var(--mond-font-family-sans);
 }
 
-.mond-text--code {
-  font-size: var(--mond-font-size-sm);
-  line-height: var(--mond-line-height-normal);
-  font-weight: var(--mond-font-weight-normal);
-  letter-spacing: var(--mond-letter-spacing-normal);
-  font-family: var(--mond-font-family-mono);
+.mond-text--2xl {
+  font-size: var(--mond-font-size-3xl); /* was headline */
+  line-height: var(--mond-line-height-tight);
+  font-weight: var(--mond-font-weight-bold);
+  letter-spacing: var(--mond-letter-spacing-tight);
+  font-family: var(--mond-font-family-sans);
+}
+
+.mond-text--3xl {
+  font-size: var(--mond-font-size-4xl); /* was display */
+  line-height: var(--mond-line-height-tight);
+  font-weight: var(--mond-font-weight-bold);
+  letter-spacing: var(--mond-letter-spacing-tight);
+  font-family: var(--mond-font-family-sans);
+}
+
+/* ============================================
+   RESPONSIVE AUTO-SCALING
+   Mobile: -1 size, Tablet: base size, Desktop: +1 size
+   ============================================ */
+
+/* Mobile: Scale down one size */
+@media (max-width: 639px) {
+  .mond-text--responsive.mond-text--3xl { font-size: var(--mond-font-size-3xl); }
+  .mond-text--responsive.mond-text--2xl { font-size: var(--mond-font-size-2xl); }
+  .mond-text--responsive.mond-text--xl { font-size: var(--mond-font-size-xl); }
+  .mond-text--responsive.mond-text--lg { font-size: var(--mond-font-size-base); }
+  .mond-text--responsive.mond-text--md { font-size: var(--mond-font-size-sm); }
+  .mond-text--responsive.mond-text--sm { font-size: var(--mond-font-size-xs); }
+  .mond-text--responsive.mond-text--xs { font-size: 0.625rem; }
+  .mond-text--responsive.mond-text--2xs { font-size: 0.5rem; }
+  /* 3xs stays at 0.5rem (minimum) */
+}
+
+/* Tablet: Base size (640px - 1024px) - no overrides needed */
+
+/* Desktop: Scale up one size */
+@media (min-width: 1025px) {
+  /* 3xl stays at max (no larger size) */
+  .mond-text--responsive.mond-text--2xl { font-size: var(--mond-font-size-4xl); }
+  .mond-text--responsive.mond-text--xl { font-size: var(--mond-font-size-3xl); }
+  .mond-text--responsive.mond-text--lg { font-size: var(--mond-font-size-2xl); }
+  .mond-text--responsive.mond-text--md { font-size: var(--mond-font-size-xl); }
+  .mond-text--responsive.mond-text--sm { font-size: var(--mond-font-size-base); }
+  .mond-text--responsive.mond-text--xs { font-size: var(--mond-font-size-sm); }
+  .mond-text--responsive.mond-text--2xs { font-size: var(--mond-font-size-xs); }
+  .mond-text--responsive.mond-text--3xs { font-size: 0.625rem; }
 }
 
 /* ============================================

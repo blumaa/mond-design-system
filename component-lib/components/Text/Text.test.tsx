@@ -11,12 +11,12 @@ describe('Text Component', () => {
       expect(text.tagName).toBe('SPAN');
     });
 
-    it('renders with different variants', () => {
-      const { rerender } = render(<Text variant="headline">Headline</Text>);
-      expect(screen.getByText('Headline')).toHaveClass('mond-text--headline');
+    it('renders with different sizes', () => {
+      const { rerender } = render(<Text size="2xl">Headline</Text>);
+      expect(screen.getByText('Headline')).toHaveClass('mond-text--2xl');
 
-      rerender(<Text variant="body-sm">Body Small</Text>);
-      expect(screen.getByText('Body Small')).toHaveClass('mond-text--body-sm');
+      rerender(<Text size="sm">Body Small</Text>);
+      expect(screen.getByText('Body Small')).toHaveClass('mond-text--sm');
     });
 
     it('renders as custom element', () => {

@@ -86,7 +86,7 @@ export const DropZonePlaceholder: React.FC<DropZonePlaceholderProps> = ({
         <DropIcon />
       </Icon>
       <Text
-        variant="body"
+        size="md"
         semantic={isOver && isValidDrop ? "primary" : "secondary"}
         align="center"
       >
