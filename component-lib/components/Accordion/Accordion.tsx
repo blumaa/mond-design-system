@@ -39,6 +39,16 @@ export interface AccordionItem {
    * @default false
    */
   defaultExpanded?: boolean;
+
+  /**
+   * Enable scrollable content for this item
+   */
+  scrollable?: boolean;
+
+  /**
+   * Maximum content height when scrollable (in pixels)
+   */
+  maxContentHeight?: number;
 }
 
 export interface AccordionProps {
@@ -242,6 +252,8 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
                 icon={displayIcon}
                 iconPosition={iconPosition}
                 itemId={item.id}
+                scrollable={item.scrollable}
+                maxContentHeight={item.maxContentHeight}
               >
                 {item.content}
               </AccordionItem>

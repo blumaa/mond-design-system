@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AccordionItem, type AccordionItemProps } from './AccordionItem';
+import { AccordionItem, AccordionItemProps } from './AccordionItem';
 
 const defaultProps: AccordionItemProps = {
   title: 'Test Title',
@@ -178,5 +178,46 @@ describe('AccordionItem', () => {
     render(<AccordionItem ref={ref} {...defaultProps} />);
 
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
+  });
+
+  describe('Scrollable Content', () => {
+    const getContentInnerElement = () => {
+      return screen.getByText('Test Content').closest('.mond-accordion-item__content-inner');
+    };
+
+    it('does not apply scrollable class by default', () => {
+      render(<AccordionItem {...defaultProps} defaultExpanded />);
+
+      const contentInner = getContentInnerElement();
+      expect(contentInner).not.toHaveClass('mond-accordion-item__content-inner--scrollable');
+    });
+
+    it('applies scrollable class when scrollable is true', () => {
+      render(<AccordionItem {...defaultProps} defaultExpanded scrollable />);
+
+      const contentInner = getContentInnerElement();
+      expect(contentInner).toHaveClass('mond-accordion-item__content-inner--scrollable');
+    });
+
+    it('uses default maxContentHeight of 400px when scrollable is true', () => {
+      render(<AccordionItem {...defaultProps} defaultExpanded scrollable />);
+
+      const contentInner = getContentInnerElement();
+      expect(contentInner).toHaveStyle({ maxHeight: '400px' });
+    });
+
+    it('uses custom maxContentHeight when provided', () => {
+      render(<AccordionItem {...defaultProps} defaultExpanded scrollable maxContentHeight={600} />);
+
+      const contentInner = getContentInnerElement();
+      expect(contentInner).toHaveStyle({ maxHeight: '600px' });
+    });
+
+    it('does not apply maxContentHeight when scrollable is false', () => {
+      render(<AccordionItem {...defaultProps} defaultExpanded maxContentHeight={600} />);
+
+      const contentInner = getContentInnerElement();
+      expect(contentInner).not.toHaveStyle({ maxHeight: '600px' });
+    });
   });
 });

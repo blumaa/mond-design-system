@@ -70,6 +70,18 @@ export interface AccordionItemProps {
    * Unique identifier
    */
   itemId?: string;
+
+  /**
+   * Enable scrollable content area
+   * @default false
+   */
+  scrollable?: boolean;
+
+  /**
+   * Maximum height of content when scrollable is enabled (in pixels)
+   * @default 400
+   */
+  maxContentHeight?: number;
 }
 
 export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(({
@@ -85,6 +97,8 @@ export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps
   defaultExpanded = false,
   onExpandedChange,
   itemId,
+  scrollable = false,
+  maxContentHeight = 400,
 }, ref) => {
   const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
   const isExpanded = expanded !== undefined ? expanded : internalExpanded;
@@ -165,7 +179,10 @@ export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps
         className="mond-accordion-item__content"
         aria-hidden={!isExpanded}
       >
-        <div className="mond-accordion-item__content-inner">
+        <div
+          className={`mond-accordion-item__content-inner${scrollable ? ' mond-accordion-item__content-inner--scrollable' : ''}`}
+          style={scrollable ? { maxHeight: `${maxContentHeight}px` } : undefined}
+        >
           {children}
         </div>
       </div>

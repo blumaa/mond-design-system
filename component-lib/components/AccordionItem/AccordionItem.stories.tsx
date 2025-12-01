@@ -90,6 +90,14 @@ A single accordion item that can be expanded and collapsed. Internal component u
     itemId: {
       control: 'text',
       description: 'Unique identifier for accessibility'
+    },
+    scrollable: {
+      control: 'boolean',
+      description: 'Enable scrollable content area with fixed height'
+    },
+    maxContentHeight: {
+      control: 'number',
+      description: 'Maximum height of content when scrollable is enabled (in pixels)'
     }
   },
   args: {
@@ -275,6 +283,47 @@ export const ControlledState: Story = {
         />
       </div>
     );
+  }
+};
+
+// Scrollable Content
+export const ScrollableContent: Story = {
+  args: {
+    title: 'Scrollable Long Content',
+    defaultExpanded: true,
+    scrollable: true,
+    maxContentHeight: 200,
+    children: (
+      <div>
+        <p>This accordion has scrollable content with a fixed maximum height of 200px.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+      </div>
+    )
+  }
+};
+
+// Long Content (no scroll - full height)
+export const LongContentFullHeight: Story = {
+  args: {
+    title: 'Long Content - Full Height',
+    defaultExpanded: true,
+    scrollable: false,
+    children: (
+      <div>
+        <p>This accordion shows all content without scrolling. The full content is visible when expanded.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+      </div>
+    )
   }
 };
 

@@ -492,7 +492,76 @@ export const AllVariants: Story = {
   },
 };
 
-// All Sizes Showcase  
+// Scrollable Content
+const scrollableItems: AccordionItem[] = [
+  {
+    id: 'scrollable-1',
+    title: 'Scrollable Content (200px)',
+    scrollable: true,
+    maxContentHeight: 200,
+    content: (
+      <div>
+        <p>This section has scrollable content with a fixed height of 200px.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+      </div>
+    ),
+  },
+  {
+    id: 'scrollable-2',
+    title: 'Full Height Content (no scroll)',
+    scrollable: false,
+    content: (
+      <div>
+        <p>This section shows all content without scrolling.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation.</p>
+      </div>
+    ),
+  },
+  {
+    id: 'scrollable-3',
+    title: 'Scrollable with Custom Height (300px)',
+    scrollable: true,
+    maxContentHeight: 300,
+    content: (
+      <div>
+        <p>This section has a custom max height of 300px.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis.</p>
+      </div>
+    ),
+  },
+];
+
+export const ScrollableContent: Story = {
+  args: {
+    items: scrollableItems,
+    mode: 'multiple',
+    variant: 'bordered',
+    size: 'md',
+    allowToggleOff: true,
+    animated: true,
+    iconPosition: 'right',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Accordion items can have scrollable content with a fixed max height, or show full content without scrolling.',
+      },
+    },
+  },
+};
+
+// All Sizes Showcase
 export const AllSizes: Story = {
   render: (args) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>

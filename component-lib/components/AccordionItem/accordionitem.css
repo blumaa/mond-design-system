@@ -153,16 +153,16 @@
   transition: none;
 }
 
-/* Content Container */
+/* Content Container - uses CSS Grid for height animation */
 .mond-accordion-item__content {
-  overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
 }
 
 .mond-accordion-item--expanded .mond-accordion-item__content {
-  max-height: 1000px;
+  grid-template-rows: 1fr;
   opacity: 1;
 }
 
@@ -172,8 +172,14 @@
 
 /* Content Inner */
 .mond-accordion-item__content-inner {
+  overflow: hidden;
   color: var(--mond-text-primary);
   line-height: 1.6;
+}
+
+/* Scrollable Content - applied to inner container */
+.mond-accordion-item__content-inner--scrollable {
+  overflow-y: auto;
 }
 
 .mond-accordion-item--filled .mond-accordion-item__content-inner {
