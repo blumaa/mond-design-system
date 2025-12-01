@@ -1,3 +1,9 @@
+## [2.9.10](https://github.com/blumaa/mond-design-system/compare/v2.9.9...v2.9.10) (2025-12-01)
+
+### 🐛 Bug Fixes
+
+* accordion scrollable content ([11d576d](https://github.com/blumaa/mond-design-system/commit/11d576da2d7d9a44d9c6fa47002065aed51b56d9))
+
 ## [2.9.9](https://github.com/blumaa/mond-design-system/compare/v2.9.8...v2.9.9) (2025-11-27)
 
 ### 🐛 Bug Fixes
