@@ -246,7 +246,7 @@ export const tokens = {
       },
       "card": {
         "light": "white.50",
-        "dark": "black.100"
+        "dark": "slate.600"
       },
       "terminal": {
         "light": "gray.50",
