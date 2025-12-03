@@ -1,3 +1,9 @@
+## [2.9.12](https://github.com/blumaa/mond-design-system/compare/v2.9.11...v2.9.12) (2025-12-03)
+
+### 🐛 Bug Fixes
+
+* card dark token ([6995aac](https://github.com/blumaa/mond-design-system/commit/6995aacc78d57c11e05ed26f53523acf7879804c))
+
 ## [2.9.11](https://github.com/blumaa/mond-design-system/compare/v2.9.10...v2.9.11) (2025-12-03)
 
 ### 🐛 Bug Fixes
