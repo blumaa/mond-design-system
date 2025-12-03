@@ -1,3 +1,9 @@
+## [2.9.11](https://github.com/blumaa/mond-design-system/compare/v2.9.10...v2.9.11) (2025-12-03)
+
+### 🐛 Bug Fixes
+
+* dark mode card color ([9736ddf](https://github.com/blumaa/mond-design-system/commit/9736ddf3f9134972e6bc952ef28c9edef2ea1e5c))
+
 ## [2.9.10](https://github.com/blumaa/mond-design-system/compare/v2.9.9...v2.9.10) (2025-12-01)
 
 ### 🐛 Bug Fixes
