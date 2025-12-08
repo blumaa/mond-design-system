@@ -8,7 +8,7 @@
 /* Base Container Styles */
 .mond-toast-container {
   position: fixed;
-  z-index: 1000;
+  z-index: 1100; /* Higher than Modal (1000) and Drawer (1000) so toasts appear on top */
   display: flex;
   flex-direction: column;
   gap: var(--mond-spacing-2);
