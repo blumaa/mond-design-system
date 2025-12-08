@@ -1,3 +1,9 @@
+## [2.9.13](https://github.com/blumaa/mond-design-system/compare/v2.9.12...v2.9.13) (2025-12-08)
+
+### 🐛 Bug Fixes
+
+* toast z-index ([4735734](https://github.com/blumaa/mond-design-system/commit/47357340a0872efece615e37f1b27c7c3fdde7fe))
+
 ## [2.9.12](https://github.com/blumaa/mond-design-system/compare/v2.9.11...v2.9.12) (2025-12-03)
 
 ### 🐛 Bug Fixes
