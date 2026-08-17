@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   AppBar,
+  Button,
   Icon,
-  IconButton,
   Screen,
   ScreenContent,
   Stack,
@@ -26,14 +26,14 @@ export const AppShell: Story = {
       <AppBar
         title="Sessions"
         leading={
-          <IconButton label="Back">
+          <Button iconOnly aria-label="Back" variant="ghost">
             <Icon name="arrow-right" />
-          </IconButton>
+          </Button>
         }
         trailing={
-          <IconButton label="Search">
+          <Button iconOnly aria-label="Search" variant="ghost">
             <Icon name="search" />
-          </IconButton>
+          </Button>
         }
       />
       <ScreenContent>

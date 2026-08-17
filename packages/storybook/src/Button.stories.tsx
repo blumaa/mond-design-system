@@ -38,6 +38,21 @@ export const WithIcons: Story = {
     </div>
   ),
 };
+export const IconOnly: Story = {
+  render: () => (
+    <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+      <Button iconOnly aria-label="Search" variant="ghost">
+        <Icon name="search" />
+      </Button>
+      <Button iconOnly aria-label="Confirm" variant="primary">
+        <Icon name="check" />
+      </Button>
+      <Button iconOnly aria-label="Delete" variant="danger">
+        <Icon name="close" />
+      </Button>
+    </div>
+  ),
+};
 export const States: Story = {
   render: () => (
     <div style={{ display: "flex", gap: "0.75rem" }}>

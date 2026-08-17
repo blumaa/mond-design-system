@@ -6,7 +6,7 @@ import styles from "./Button.module.css";
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
-export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+interface ButtonBaseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   /** Glyph slots — pass an <Icon> or any node. Agnostic of icon set. */
@@ -23,6 +23,14 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   ref?: Ref<HTMLButtonElement>;
 }
 
+/* Icon-only collapses the button to a circle holding one glyph. A glyph says
+   nothing to a screen reader, so the type demands the name. */
+type IconOnlyEnforcement =
+  | { iconOnly: true; "aria-label": string }
+  | { iconOnly?: false | undefined };
+
+export type ButtonProps = ButtonBaseProps & IconOnlyEnforcement;
+
 /* Spinner diameter per control size — matches the icon steps. */
 const SPINNER_PX: Record<ButtonSize, number> = { sm: 16, md: 18, lg: 20 };
 
@@ -35,6 +43,7 @@ export function Button({
   loading = false,
   disabled = false,
   fullWidth = false,
+  iconOnly = false,
   type = "button",
   href,
   as,
@@ -53,6 +62,7 @@ export function Button({
         styles[`variant-${variant}`],
         styles[`size-${size}`],
         fullWidth && styles.fullWidth,
+        iconOnly && styles["icon-only"],
         className,
       )}
       aria-busy={loading || undefined}

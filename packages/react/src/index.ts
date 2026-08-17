@@ -20,9 +20,6 @@ export type { IconProps, IconProviderProps, IconRender, IconRenderProps, IconSiz
 export { Button } from "./components/Button/Button";
 export type { ButtonProps, ButtonVariant, ButtonSize } from "./components/Button/Button";
 
-export { IconButton } from "./components/IconButton/IconButton";
-export type { IconButtonProps, IconButtonVariant, IconButtonSize } from "./components/IconButton/IconButton";
-
 export { Link } from "./components/Link/Link";
 export type { LinkProps, LinkVariant } from "./components/Link/Link";
 
@@ -52,6 +49,9 @@ export type { FieldProps, FieldContextValue } from "./components/Field/Field";
 
 export { Input } from "./components/Input/Input";
 export type { InputProps, InputSize } from "./components/Input/Input";
+
+export { PasswordInput } from "./components/PasswordInput/PasswordInput";
+export type { PasswordInputProps } from "./components/PasswordInput/PasswordInput";
 
 export { Textarea } from "./components/Textarea/Textarea";
 export type { TextareaProps } from "./components/Textarea/Textarea";

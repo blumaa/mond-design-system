@@ -1,0 +1,79 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Docs/Getting started" />
+
+# Mond Design System
+
+Brand-agnostic React components on a token contract. A rebrand is one CSS
+file; no component moves.
+
+## Install
+
+```bash
+pnpm add @mond-design-system/react @mond-design-system/tokens
+```
+
+React 19+ is required.
+
+## Load the styles
+
+Once, at the app entry:
+
+```tsx
+import "@mond-design-system/tokens/styles.css"; // tokens + base + neutral defaults
+import "@mond-design-system/react/styles.css";  // component styles
+```
+
+## Use components
+
+```tsx
+import { Button, Card, CardBody, CardHeader, Stack } from "@mond-design-system/react";
+
+<Stack gap="base">
+  <Card>
+    <CardHeader>Session</CardHeader>
+    <CardBody>…</CardBody>
+  </Card>
+  <Button variant="primary">Save</Button>
+</Stack>;
+```
+
+Multi-part components compose (`Card`/`CardHeader`/`CardBody`/`CardFooter`,
+same for `Modal` and `Sheet`). Atoms take props. There is no `Box` and no
+open `style`/`sx` prop — spacing and sizing go through tokens, that is the
+whole point.
+
+## Brand your app
+
+The brand lives in **your app**, never in this package:
+
+1. Copy `@mond-design-system/tokens/brand-template.css` into your app.
+2. Re-point the `--mds-*` semantic aliases at your palette and fonts.
+   Every alias must be declared — the token gate treats the template as a
+   contract, and a missing alias silently falls through.
+3. Scope it: `[data-brand="yourbrand"]` plus a `[data-brand="yourbrand"][data-theme="dark"]` block.
+4. Set `<html data-brand="yourbrand">`. Dark mode is `data-theme="dark"`.
+
+The **brand toolbar** above previews the neutral default ("mond") against
+this Storybook's private demo skin; the **theme toolbar** flips light/dark.
+
+## Icons
+
+The system ships no icon set. Register a renderer once:
+
+```tsx
+import { IconProvider } from "@mond-design-system/react";
+
+<IconProvider render={(name, { size }) => <MyGlyph name={name} size={size} />}>
+  <App />
+</IconProvider>;
+```
+
+`<Icon name="search" />` then resolves through your registry — per brand,
+per app.
+
+## Tokens in your own CSS
+
+Consume the same custom properties the components use — see the
+**Docs/Design tokens** page. Never hard-code a hex or a px length; the
+token gate in this repo rejects both.

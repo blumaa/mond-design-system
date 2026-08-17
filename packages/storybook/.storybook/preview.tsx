@@ -47,6 +47,7 @@ const withIcons: Decorator = (Story) => (
 );
 
 const preview: Preview = {
+  tags: ["autodocs"],
   decorators: [withTheme, withIcons],
   globalTypes: {
     theme: {

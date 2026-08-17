@@ -65,3 +65,32 @@ describe("Button", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 });
+
+describe("Button iconOnly", () => {
+  it("renders a square icon button with an accessible name", () => {
+    render(
+      <Button iconOnly aria-label="Search" variant="ghost">
+        <svg aria-hidden="true" />
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: "Search" });
+    expect(button.className).toContain("icon-only");
+  });
+
+  it("requires aria-label at the type level", () => {
+    // @ts-expect-error — iconOnly without aria-label must not compile
+    const invalid = <Button iconOnly>x</Button>;
+    void invalid;
+  });
+
+  it("keeps variants and disabled behaviour", () => {
+    render(
+      <Button iconOnly aria-label="Delete" variant="danger" disabled>
+        <svg aria-hidden="true" />
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: "Delete" });
+    expect(button).toBeDisabled();
+    expect(button.className).toContain("variant-danger");
+  });
+});

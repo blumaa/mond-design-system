@@ -76,3 +76,13 @@
 .fullWidth {
   width: 100%;
 }
+
+/* Icon-only: circle, one glyph, width locked to the control height. */
+.icon-only {
+  padding: 0;
+  border-radius: var(--mds-radius-pill);
+}
+
+.icon-only.size-sm { width: var(--mds-control-h-sm); }
+.icon-only.size-md { width: var(--mds-control-h-md); }
+.icon-only.size-lg { width: var(--mds-control-h-lg); }

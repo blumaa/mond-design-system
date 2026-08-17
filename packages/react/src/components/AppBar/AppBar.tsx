@@ -3,7 +3,7 @@ import styles from "./AppBar.module.css";
 
 export interface AppBarProps {
   title?: string | undefined;
-  /** Left slot — typically a back IconButton. */
+  /** Left slot — typically a back icon-only Button. */
   leading?: ReactNode;
   /** Right slot — actions. */
   trailing?: ReactNode;

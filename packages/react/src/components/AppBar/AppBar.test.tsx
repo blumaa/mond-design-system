@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { axe } from "jest-axe";
-import { IconButton } from "../IconButton/IconButton";
+import { Button } from "../Button/Button";
 import { AppBar } from "./AppBar";
 
 describe("AppBar", () => {
@@ -16,8 +16,8 @@ describe("AppBar", () => {
     render(
       <AppBar
         title="Sessions"
-        leading={<IconButton label="Back">b</IconButton>}
-        trailing={<IconButton label="Search">s</IconButton>}
+        leading={<Button iconOnly aria-label="Back" variant="ghost">b</Button>}
+        trailing={<Button iconOnly aria-label="Search" variant="ghost">s</Button>}
       />,
     );
     expect(screen.getByRole("button", { name: "Back" })).toBeInTheDocument();
