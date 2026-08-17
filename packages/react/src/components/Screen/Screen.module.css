@@ -1,12 +1,24 @@
+/* Needs a host with a resolved height — the app root, a device frame, or a
+   `flex: 1; min-height: 0` slot. The host owns the viewport (see Screen.tsx);
+   claiming the viewport height here would overflow any frame the keyboard has shrunk. */
 .screen {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  height: 100%;
+  min-height: 0;
   background: var(--mds-surface-page);
 }
 
+/* min-height: 0 is what lets the region shrink inside the flex column and
+   keep the scroll, instead of growing the screen and handing the scroll to
+   whatever contains it. */
 .content {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: var(--mds-pad-page-y) var(--mds-pad-page-x);
+}
+
+.content.flush {
+  padding: 0;
 }
