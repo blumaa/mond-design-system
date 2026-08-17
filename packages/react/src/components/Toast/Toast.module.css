@@ -1,6 +1,6 @@
 .viewport {
   position: fixed;
-  bottom: var(--mds-space-4);
+  bottom: calc(var(--mds-space-4) + var(--mds-safe-bottom));
   left: 50%;
   transform: translateX(-50%);
   z-index: var(--mds-z-toast);

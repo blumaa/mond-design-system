@@ -7,7 +7,7 @@
   height: var(--mds-tabbar-h);
   background: var(--mds-surface-page);
   border-top: var(--mds-border-width) solid var(--mds-border-subtle);
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: var(--mds-safe-bottom);
 }
 
 .item {
@@ -45,14 +45,14 @@
 /* Attention dot, pinned to the icon's top-right corner. */
 .badge {
   position: absolute;
-  top: -1px;
-  right: -3px;
-  width: 8px;
-  height: 8px;
+  top: var(--mds-dot-offset-y);
+  right: var(--mds-dot-offset-x);
+  width: var(--mds-dot);
+  height: var(--mds-dot);
   border-radius: var(--mds-radius-pill);
   background: var(--mds-status-danger);
   /* Ring in the bar's color so the dot stays legible over the glyph. */
-  box-shadow: 0 0 0 2px var(--mds-surface-page);
+  box-shadow: 0 0 0 var(--mds-dot-ring) var(--mds-surface-page);
 }
 
 .label {
@@ -64,9 +64,9 @@
 .action {
   flex: none;
   align-self: flex-start;
-  width: 46px;
-  height: 46px;
-  margin-top: -14px;
+  width: var(--mds-tabbar-action);
+  height: var(--mds-tabbar-action);
+  margin-top: calc(-1 * var(--mds-tabbar-action-lift));
   border: none;
   border-radius: var(--mds-radius-pill);
   background: var(--mds-accent);

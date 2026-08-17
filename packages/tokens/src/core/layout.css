@@ -4,7 +4,17 @@
   /* app chrome */
   --mds-header-h: 56px;
   --mds-tabbar-h: 64px;
+  --mds-tabbar-action: 46px;      /* the raised center action; a circle */
+  --mds-tabbar-action-lift: 14px; /* how far it rises above the bar's edge */
   --mds-sidebar-w: 240px;
+
+  /* Attention dot (TabBar badge). The offsets pin it to an icon's top-right
+     corner; the ring is the surface-colored ring that keeps it legible over
+     the glyph. */
+  --mds-dot: 8px;
+  --mds-dot-ring: 2px;
+  --mds-dot-offset-y: -1px;
+  --mds-dot-offset-x: -3px;
 
   /* content widths */
   --mds-content-max: 720px;       /* reading column */
@@ -37,6 +47,7 @@
   --mds-focus-width: 2px;
   --mds-focus-offset: 2px;
   --mds-border-width: 1px;
+  --mds-border-emphasis: 1.5px; /* accent borders; heavier so the color reads at the same weight */
   --mds-edge-width: 3px; /* the thick marker edge, e.g. a prompt row's accent */
 
   /* Breakpoints. A media query is resolved before custom properties exist,
@@ -45,6 +56,15 @@
   --mds-bp-md: 600px;  /* phone landscape and up: a sheet becomes a dialog */
   --mds-bp-lg: 1024px; /* bottom bar gives way to the sidebar */
   --mds-bp-xl: 1280px; /* room for a second rail */
+
+  /* Device safe areas. Zero on desktop; the real insets once the app opts
+     into viewport-fit=cover. Anything fixed to a screen edge outside the app
+     chrome (Sheet, TabBar, Toast) reads these so its content clears the
+     notch and the home bar. */
+  --mds-safe-top: env(safe-area-inset-top, 0px);
+  --mds-safe-right: env(safe-area-inset-right, 0px);
+  --mds-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --mds-safe-left: env(safe-area-inset-left, 0px);
 
   /* stacking */
   --mds-z-base: 0;

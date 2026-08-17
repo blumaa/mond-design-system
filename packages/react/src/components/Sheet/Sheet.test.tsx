@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Sheet, SheetBody, SheetHeader } from "./Sheet";
+import sheet from "./Sheet.module.css?raw";
 
 describe("Sheet", () => {
   it("open renders a named modal dialog", () => {
@@ -36,4 +37,14 @@ describe("Sheet", () => {
     );
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
+
+  // jsdom computes no real styles, so the stylesheet is the fixture: the panel
+  // portals past the app chrome, and without this inset a sheet's footer
+  // actions sit under the iPhone home bar.
+  it("panel reserves the bottom safe-area inset", () => {
+    const panel = sheet.match(/\.panel\s*\{[^}]*\}/)?.[0];
+    expect(panel).toBeDefined();
+    expect(panel).toContain("padding-bottom: var(--mds-safe-bottom)");
+  });
+
 });

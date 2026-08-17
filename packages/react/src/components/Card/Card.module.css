@@ -22,7 +22,7 @@
 /* Slightly heavier than the plain border so the accent reads at the same
    visual weight. */
 .emphasis {
-  border: 1.5px solid var(--mds-accent);
+  border: var(--mds-border-emphasis) solid var(--mds-accent);
 }
 
 /* Whole-card button/link resets + affordance. */
