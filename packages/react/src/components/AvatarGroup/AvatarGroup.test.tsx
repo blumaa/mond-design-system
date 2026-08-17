@@ -42,6 +42,17 @@ describe("AvatarGroup", () => {
     expect(screen.getByLabelText("2 more")).toBeInTheDocument();
   });
 
+  it("styles the overflow chip for every size the prop admits", async () => {
+    // `size` is typed as AvatarSize, so the chip must have a rule per step —
+    // xs and xl once shipped in the type but not the stylesheet, leaving the
+    // chip unsized. CSS modules can't fail on a missing class, so read the
+    // stylesheet itself.
+    const css = (await import("./AvatarGroup.module.css?raw")).default;
+    for (const size of ["xs", "sm", "md", "lg", "xl"]) {
+      expect(css).toContain(`.size-${size}`);
+    }
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <AvatarGroup max={2}>
