@@ -1,0 +1,63 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-gap-tight);
+  cursor: pointer;
+  min-height: var(--mds-tap-min);
+}
+
+.root:has(.track:disabled) {
+  cursor: not-allowed;
+}
+
+.track {
+  appearance: none;
+  flex: none;
+  margin: 0;
+  width: var(--mds-switch-w);
+  height: var(--mds-switch-h);
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-border-strong);
+  position: relative;
+  cursor: inherit;
+  transition: background-color var(--mds-transition-control);
+}
+
+.track::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: var(--mds-space-1);
+  transform: translateY(-50%);
+  width: var(--mds-switch-knob);
+  height: var(--mds-switch-knob);
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-surface-card);
+  transition: transform var(--mds-transition-control);
+}
+
+.track:checked {
+  background: var(--mds-action-bg);
+}
+
+.track:checked::after {
+  transform: translateY(-50%)
+    translateX(calc(var(--mds-switch-w) - var(--mds-switch-knob) - 2 * var(--mds-space-1)));
+}
+
+.track:disabled {
+  background: var(--mds-action-disabled-bg);
+}
+
+.track:disabled::after {
+  background: var(--mds-action-disabled-fg);
+}
+
+.label {
+  font: var(--mds-type-label);
+  color: var(--mds-text-primary);
+}
+
+.track:disabled ~ .label {
+  color: var(--mds-action-disabled-fg);
+}

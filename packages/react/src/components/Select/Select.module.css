@@ -1,0 +1,43 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+}
+
+.select {
+  appearance: none;
+  width: 100%;
+  border: var(--mds-border-width) solid var(--mds-control-border);
+  border-radius: var(--mds-radius-control);
+  background: var(--mds-surface-card);
+  color: var(--mds-text-primary);
+  font-family: var(--mds-font-body);
+  cursor: pointer;
+  transition: border-color var(--mds-transition-control);
+}
+
+.select:disabled {
+  background: var(--mds-action-disabled-bg);
+  color: var(--mds-action-disabled-fg);
+  cursor: not-allowed;
+}
+
+.select[aria-invalid="true"] {
+  border-color: var(--mds-status-danger);
+}
+
+/* Room for the chevron. */
+.size-sm { height: var(--mds-control-h-sm); padding: 0 var(--mds-space-7) 0 var(--mds-space-2); font-size: var(--mds-text-sm); }
+.size-md { height: var(--mds-control-h-md); padding: 0 var(--mds-space-8) 0 var(--mds-space-3); font-size: var(--mds-text-base); }
+.size-lg { height: var(--mds-control-h-lg); padding: 0 var(--mds-space-8) 0 var(--mds-space-4); font-size: var(--mds-text-base); }
+
+.chevron {
+  position: absolute;
+  right: var(--mds-space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--mds-icon-sm);
+  height: var(--mds-icon-sm);
+  color: var(--mds-text-secondary);
+  pointer-events: none;
+}

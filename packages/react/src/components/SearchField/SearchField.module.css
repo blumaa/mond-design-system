@@ -1,0 +1,61 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+.glass {
+  position: absolute;
+  left: var(--mds-space-3);
+  width: var(--mds-icon-sm);
+  height: var(--mds-icon-sm);
+  color: var(--mds-text-muted);
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  height: var(--mds-control-h-md);
+  padding: 0 var(--mds-space-9) 0 var(--mds-space-8);
+  border: var(--mds-border-width) solid var(--mds-control-border);
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-surface-card);
+  color: var(--mds-text-primary);
+  font-family: var(--mds-font-body);
+  font-size: var(--mds-text-base);
+  transition: border-color var(--mds-transition-control);
+}
+
+.input::placeholder {
+  color: var(--mds-text-muted);
+}
+
+/* Native clear crosses collide with ours. */
+.input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.clear {
+  position: absolute;
+  right: var(--mds-space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-icon-lg);
+  height: var(--mds-icon-lg);
+  border: none;
+  border-radius: var(--mds-radius-pill);
+  background: transparent;
+  color: var(--mds-text-secondary);
+  cursor: pointer;
+}
+
+.clear:hover {
+  background: var(--mds-surface-sunken);
+}
+
+.clearGlyph {
+  width: var(--mds-icon-sm);
+  height: var(--mds-icon-sm);
+}

@@ -1,0 +1,50 @@
+.group {
+  display: inline-flex;
+  padding: var(--mds-space-1);
+  gap: var(--mds-space-1);
+  background: var(--mds-surface-sunken);
+  border-radius: var(--mds-radius-control);
+}
+
+.segment {
+  display: inline-flex;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Radio overlays the whole segment, invisible but real — it stays the hit
+   target and the focusable element. */
+.input {
+  appearance: none;
+  margin: 0;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.face {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(var(--mds-control-h-md) - 2 * var(--mds-space-1));
+  padding: 0 var(--mds-space-3);
+  border-radius: var(--mds-radius-1);
+  font: var(--mds-type-label);
+  color: var(--mds-text-secondary);
+  white-space: nowrap;
+  transition: var(--mds-transition-control);
+}
+
+.input:checked + .face {
+  background: var(--mds-surface-card);
+  color: var(--mds-text-primary);
+  box-shadow: var(--mds-elevation-card);
+}
+
+.input:focus-visible + .face {
+  outline: var(--mds-focus-width) solid var(--mds-focus-ring-color);
+  outline-offset: var(--mds-focus-offset);
+}

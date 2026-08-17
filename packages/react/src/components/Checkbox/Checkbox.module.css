@@ -1,0 +1,61 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-gap-tight);
+  cursor: pointer;
+  min-height: var(--mds-tap-min);
+}
+
+.root:has(.box:disabled) {
+  cursor: not-allowed;
+}
+
+.box {
+  appearance: none;
+  flex: none;
+  margin: 0;
+  width: var(--mds-check-size);
+  height: var(--mds-check-size);
+  /* em-based checkmark geometry scales with the box. */
+  font-size: var(--mds-check-size);
+  border: var(--mds-border-width) solid var(--mds-control-border);
+  border-radius: var(--mds-radius-1);
+  background: var(--mds-surface-card);
+  display: inline-grid;
+  place-content: center;
+  cursor: inherit;
+  transition: var(--mds-transition-control);
+}
+
+.box:checked {
+  background: var(--mds-action-bg);
+  border-color: var(--mds-action-bg);
+}
+
+.box:checked::after {
+  content: "";
+  width: 0.32em;
+  height: 0.6em;
+  margin-top: -0.12em;
+  border: solid var(--mds-action-fg);
+  border-width: 0 calc(var(--mds-border-width) * 2) calc(var(--mds-border-width) * 2) 0;
+  transform: rotate(45deg);
+}
+
+.box:disabled {
+  background: var(--mds-action-disabled-bg);
+  border-color: var(--mds-border-strong);
+}
+
+.box:disabled:checked::after {
+  border-color: var(--mds-action-disabled-fg);
+}
+
+.label {
+  font: var(--mds-type-label);
+  color: var(--mds-text-primary);
+}
+
+.box:disabled ~ .label {
+  color: var(--mds-action-disabled-fg);
+}

@@ -1,0 +1,56 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-gap-tight);
+  cursor: pointer;
+  min-height: var(--mds-tap-min);
+}
+
+.root:has(.dot:disabled) {
+  cursor: not-allowed;
+}
+
+.dot {
+  appearance: none;
+  flex: none;
+  margin: 0;
+  width: var(--mds-check-size);
+  height: var(--mds-check-size);
+  border: var(--mds-border-width) solid var(--mds-control-border);
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-surface-card);
+  display: inline-grid;
+  place-content: center;
+  cursor: inherit;
+  transition: var(--mds-transition-control);
+}
+
+.dot:checked {
+  border-color: var(--mds-action-bg);
+}
+
+.dot:checked::after {
+  content: "";
+  width: 50%;
+  height: 50%;
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-action-bg);
+}
+
+.dot:disabled {
+  background: var(--mds-action-disabled-bg);
+  border-color: var(--mds-border-strong);
+}
+
+.dot:disabled:checked::after {
+  background: var(--mds-action-disabled-fg);
+}
+
+.label {
+  font: var(--mds-type-label);
+  color: var(--mds-text-primary);
+}
+
+.dot:disabled ~ .label {
+  color: var(--mds-action-disabled-fg);
+}
