@@ -2,12 +2,16 @@ import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Card.module.css";
 
-export type CardVariant = "card" | "raised";
+export type CardVariant = "card" | "raised" | "sunken";
 
 export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> {
   children: ReactNode;
-  /** card = flat on border, raised = elevated. Default "card". */
+  /** card = flat on border, raised = elevated, sunken = recessed fill for
+      secondary tiles. Default "card". */
   variant?: CardVariant;
+  /** Accent border — marks the card out from its neighbours (a pinned post,
+      the active choice) without changing its surface. */
+  emphasis?: boolean;
   /** Makes the whole card a button. */
   onClick?: () => void;
   /** Makes the whole card a link. Wins over onClick. */
@@ -28,8 +32,8 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> 
  * <Card href="/items/42" variant="flat">…</Card>
  * ```
  */
-export function Card({ children, variant = "card", onClick, href, className, ...rest }: CardProps): ReactElement {
-  const cardClass = cx(styles.card, styles[`variant-${variant}`], className);
+export function Card({ children, variant = "card", emphasis = false, onClick, href, className, ...rest }: CardProps): ReactElement {
+  const cardClass = cx(styles.card, styles[`variant-${variant}`], emphasis && styles.emphasis, className);
 
   if (href !== undefined) {
     return (

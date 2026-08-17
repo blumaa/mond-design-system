@@ -34,14 +34,18 @@ export interface TabBarItemProps {
   href?: string | undefined;
   onClick?: MouseEventHandler | undefined;
   active?: boolean | undefined;
+  /** Attention dot on the icon — unread, pending. Boolean only: the count
+      lives on the destination screen, the bar just says "something's there". */
+  badge?: boolean | undefined;
 }
 
-export function TabBarItem({ label, icon, href, onClick, active = false }: TabBarItemProps) {
+export function TabBarItem({ label, icon, href, onClick, active = false, badge = false }: TabBarItemProps) {
   const className = cx(styles.item, active && styles.active);
   const content = (
     <>
       <span className={styles.icon} aria-hidden="true">
         {icon}
+        {badge ? <span className={styles.badge} data-testid="mds-tabbar-badge" /> : null}
       </span>
       <span className={styles.label}>{label}</span>
     </>
@@ -56,6 +60,25 @@ export function TabBarItem({ label, icon, href, onClick, active = false }: TabBa
   return (
     <button type="button" className={className} aria-current={active ? "page" : undefined} onClick={onClick}>
       {content}
+    </button>
+  );
+}
+
+export interface TabBarActionProps {
+  /** Names the action — icon-only, so this is all a screen reader gets. */
+  label: string;
+  icon: ReactNode;
+  onClick?: MouseEventHandler | undefined;
+}
+
+/** Raised center action (a create button). Place it between the item halves:
+    it is a peer child, and the bar's flex layout leaves it its own width. */
+export function TabBarAction({ label, icon, onClick }: TabBarActionProps) {
+  return (
+    <button type="button" aria-label={label} className={styles.action} onClick={onClick}>
+      <span className={styles.icon} aria-hidden="true">
+        {icon}
+      </span>
     </button>
   );
 }

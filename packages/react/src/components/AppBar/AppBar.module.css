@@ -22,6 +22,28 @@
   text-overflow: ellipsis;
 }
 
+/* Title + subtitle stack. Takes over the title's flex share; the title
+   inside keeps its own ellipsis. */
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.text .title {
+  flex: none;
+}
+
+.subtitle {
+  min-width: 0;
+  overflow: hidden;
+  font: var(--mds-type-note);
+  color: var(--mds-text-secondary);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .slot {
   display: flex;
   align-items: center;

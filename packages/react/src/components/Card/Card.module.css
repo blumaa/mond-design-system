@@ -15,6 +15,16 @@
   box-shadow: var(--mds-elevation-raised);
 }
 
+.variant-sunken {
+  background: var(--mds-surface-sunken);
+}
+
+/* Slightly heavier than the plain border so the accent reads at the same
+   visual weight. */
+.emphasis {
+  border: 1.5px solid var(--mds-accent);
+}
+
 /* Whole-card button/link resets + affordance. */
 .interactive {
   padding: 0;

@@ -24,6 +24,18 @@ describe("AppBar", () => {
     expect(screen.getByRole("button", { name: "Search" })).toBeInTheDocument();
   });
 
+  it("subtitle renders under the title, outside the heading", () => {
+    render(<AppBar title="Trip crew" subtitle="4 members" />);
+    expect(screen.getByRole("heading", { name: "Trip crew" })).toBeInTheDocument();
+    expect(screen.getByText("4 members")).toBeInTheDocument();
+    expect(screen.getByRole("heading")).not.toHaveTextContent("4 members");
+  });
+
+  it("title takes a node", () => {
+    render(<AppBar title={<button type="button">Trip crew</button>} />);
+    expect(screen.getByRole("heading")).toContainElement(screen.getByRole("button", { name: "Trip crew" }));
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(<AppBar title="Sessions" />);
     expect(await axe(container)).toHaveNoViolations();

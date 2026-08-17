@@ -38,9 +38,47 @@
 }
 
 .icon {
+  position: relative; /* anchors the badge dot */
   display: inline-flex;
+}
+
+/* Attention dot, pinned to the icon's top-right corner. */
+.badge {
+  position: absolute;
+  top: -1px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-status-danger);
+  /* Ring in the bar's color so the dot stays legible over the glyph. */
+  box-shadow: 0 0 0 2px var(--mds-surface-page);
 }
 
 .label {
   line-height: 1;
+}
+
+/* The raised center action. Negative top margin lifts it above the bar's
+   edge; the pill radius keeps it a circle at its fixed size. */
+.action {
+  flex: none;
+  align-self: flex-start;
+  width: 46px;
+  height: 46px;
+  margin-top: -14px;
+  border: none;
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-accent);
+  color: var(--mds-accent-contrast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--mds-elevation-raised);
+  cursor: pointer;
+  transition: background-color var(--mds-transition-control);
+}
+
+.action:hover {
+  background: var(--mds-accent-hover);
 }

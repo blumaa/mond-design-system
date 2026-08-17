@@ -38,6 +38,26 @@ describe("Card", () => {
     expect(screen.getByTestId("c").className).toContain("variant-raised");
   });
 
+  it("sunken variant applies class", () => {
+    render(
+      <Card variant="sunken" data-testid="c">
+        <CardBody>x</CardBody>
+      </Card>,
+    );
+    expect(screen.getByTestId("c").className).toContain("variant-sunken");
+  });
+
+  it("emphasis adds the accent class; plain cards lack it", () => {
+    render(
+      <div>
+        <Card emphasis data-testid="marked"><CardBody>x</CardBody></Card>
+        <Card data-testid="plain"><CardBody>y</CardBody></Card>
+      </div>,
+    );
+    expect(screen.getByTestId("marked").className).toMatch(/emphasis/);
+    expect(screen.getByTestId("plain").className).not.toMatch(/emphasis/);
+  });
+
   it("interactive card: whole card is a button", async () => {
     const onClick = vi.fn();
     render(

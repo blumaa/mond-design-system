@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "jest-axe";
-import { TabBar, TabBarItem } from "./TabBar";
+import { TabBar, TabBarAction, TabBarItem } from "./TabBar";
 
 describe("TabBar", () => {
   it("is a labelled navigation with links", () => {
@@ -26,6 +26,29 @@ describe("TabBar", () => {
       </TabBar>,
     );
     await userEvent.click(screen.getByRole("button", { name: "More" }));
+    expect(onClick).toHaveBeenCalled();
+  });
+
+  it("badge renders a dot on the icon, none by default", () => {
+    render(
+      <TabBar label="Primary">
+        <TabBarItem label="Messages" icon={<svg />} href="/m" badge />
+        <TabBarItem label="Home" icon={<svg />} href="/" />
+      </TabBar>,
+    );
+    expect(screen.getAllByTestId("mds-tabbar-badge")).toHaveLength(1);
+  });
+
+  it("center action is an icon-only button named by its label", async () => {
+    const onClick = vi.fn();
+    render(
+      <TabBar label="Primary">
+        <TabBarItem label="Home" icon={<svg />} href="/" active />
+        <TabBarAction label="Create" icon={<svg />} onClick={onClick} />
+        <TabBarItem label="Search" icon={<svg />} href="/search" />
+      </TabBar>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Create" }));
     expect(onClick).toHaveBeenCalled();
   });
 

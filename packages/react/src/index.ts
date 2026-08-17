@@ -127,8 +127,8 @@ export { Screen, ScreenContent } from "./components/Screen/Screen";
 export { AppBar } from "./components/AppBar/AppBar";
 export type { AppBarProps } from "./components/AppBar/AppBar";
 
-export { TabBar, TabBarItem } from "./components/TabBar/TabBar";
-export type { TabBarItemProps, TabBarProps } from "./components/TabBar/TabBar";
+export { TabBar, TabBarAction, TabBarItem } from "./components/TabBar/TabBar";
+export type { TabBarActionProps, TabBarItemProps, TabBarProps } from "./components/TabBar/TabBar";
 
 export { useOverlay } from "./hooks/useOverlay";
 export type { UseOverlayOptions } from "./hooks/useOverlay";
