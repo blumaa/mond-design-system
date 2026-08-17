@@ -1,0 +1,35 @@
+.text {
+  margin: 0;
+}
+
+/* Type roles — the core shorthands. */
+.variant-body { font: var(--mds-type-body); }
+.variant-label { font: var(--mds-type-label); }
+.variant-note { font: var(--mds-type-note); }
+.variant-meta { font: var(--mds-type-meta); }
+.variant-eyebrow {
+  font: var(--mds-type-eyebrow);
+  letter-spacing: var(--mds-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+/* Tones — semantic aliases only. */
+.tone-primary { color: var(--mds-text-primary); }
+.tone-secondary { color: var(--mds-text-secondary); }
+.tone-muted { color: var(--mds-text-muted); }
+.tone-inverse { color: var(--mds-text-inverse); }
+.tone-accent { color: var(--mds-text-accent); }
+.tone-on-media { color: var(--mds-text-on-media); }
+.tone-danger { color: var(--mds-status-danger); }
+.tone-warning { color: var(--mds-status-warning); }
+.tone-success { color: var(--mds-status-success); }
+
+.align-left { text-align: left; }
+.align-center { text-align: center; }
+.align-right { text-align: right; }
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

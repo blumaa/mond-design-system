@@ -1,0 +1,30 @@
+.group {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Overlap by a tight step; ring separates neighbours. */
+.item {
+  display: inline-flex;
+  border-radius: var(--mds-radius-avatar);
+  box-shadow: 0 0 0 var(--mds-focus-width) var(--mds-surface-card);
+}
+
+.item + .item {
+  margin-left: calc(-1 * var(--mds-space-2));
+}
+
+.overflow {
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  background: var(--mds-surface-sunken);
+  color: var(--mds-text-secondary);
+  font-family: var(--mds-font-body);
+  font-weight: var(--mds-weight-semibold);
+  user-select: none;
+}
+
+.size-sm { width: var(--mds-avatar-sm); height: var(--mds-avatar-sm); font-size: var(--mds-text-xs); }
+.size-md { width: var(--mds-avatar-md); height: var(--mds-avatar-md); font-size: var(--mds-text-sm); }
+.size-lg { width: var(--mds-avatar-lg); height: var(--mds-avatar-lg); font-size: var(--mds-text-xl); }

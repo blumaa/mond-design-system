@@ -1,0 +1,16 @@
+.heading {
+  margin: 0;
+}
+
+.variant-display {
+  font: var(--mds-type-display);
+  letter-spacing: var(--mds-tracking-display);
+}
+.variant-title { font: var(--mds-type-title); }
+.variant-subtitle { font: var(--mds-type-subtitle); }
+
+.tone-primary { color: var(--mds-text-primary); }
+.tone-secondary { color: var(--mds-text-secondary); }
+.tone-inverse { color: var(--mds-text-inverse); }
+.tone-accent { color: var(--mds-text-accent); }
+.tone-on-media { color: var(--mds-text-on-media); }

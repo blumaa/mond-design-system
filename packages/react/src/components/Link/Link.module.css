@@ -1,0 +1,19 @@
+.link {
+  color: var(--mds-text-accent);
+  border-radius: var(--mds-radius-1); /* focus outline hugs the text */
+  transition: color var(--mds-transition-control);
+}
+
+.variant-inline {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.variant-standalone {
+  text-decoration: none;
+  font-weight: var(--mds-weight-medium);
+}
+
+.link:hover {
+  color: var(--mds-accent-hover);
+}

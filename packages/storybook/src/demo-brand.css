@@ -1,0 +1,67 @@
+/* Demo brand — Storybook-private. Proves the swap: same components, second
+ * skin, zero component changes.
+ *
+ * A real app copies @mond-design-system/tokens/brand-template.css, re-points
+ * EVERY token at :root and owns its fonts. This file overrides the visually
+ * decisive subset only, scoped to [data-brand="demo"], so the toolbar can
+ * flip brands at runtime; unset tokens fall through to the mond defaults.
+ */
+[data-brand="demo"] {
+  --mds-font-display: Georgia, "Times New Roman", serif;
+
+  --mds-text-primary: #221a33;
+  --mds-text-secondary: #4a4458;
+  --mds-text-muted: #635c72;
+  --mds-text-accent: #6d28d9;
+
+  --mds-surface-page: #faf9fb;
+  --mds-surface-card: #ffffff;
+  --mds-surface-raised: #ffffff;
+  --mds-surface-sunken: #efedf3;
+  --mds-surface-selected: #ede9fe;
+
+  --mds-border-subtle: #e5e2ec;
+  --mds-border-strong: #c6c1d2;
+  --mds-control-border: #6e6880;
+
+  --mds-action-bg: #312e81;
+  --mds-action-fg: #ffffff;
+  --mds-action-bg-hover: #3730a3;
+  --mds-action-bg-active: #1e1b4b;
+
+  --mds-accent: #6d28d9;
+  --mds-accent-contrast: #ffffff;
+  --mds-accent-hover: #5b21b6;
+  --mds-accent-soft: #ede9fe;
+
+  --mds-focus-ring-color: #6d28d9;
+}
+
+[data-brand="demo"][data-theme="dark"] {
+  --mds-text-primary: #ece8f4;
+  --mds-text-secondary: #c3bcd4;
+  --mds-text-muted: #a49bb8;
+  --mds-text-accent: #c4b5fd;
+
+  --mds-surface-page: #17131f;
+  --mds-surface-card: #201a2c;
+  --mds-surface-raised: #2a2338;
+  --mds-surface-sunken: #110e18;
+  --mds-surface-selected: #33295c;
+
+  --mds-border-subtle: #322a42;
+  --mds-border-strong: #4d4363;
+  --mds-control-border: #948aad;
+
+  --mds-action-bg: #c4b5fd;
+  --mds-action-fg: #1e1b4b;
+  --mds-action-bg-hover: #d6cbfe;
+  --mds-action-bg-active: #b09df8;
+
+  --mds-accent: #c4b5fd;
+  --mds-accent-contrast: #2e1065;
+  --mds-accent-hover: #d6cbfe;
+  --mds-accent-soft: #33295c;
+
+  --mds-focus-ring-color: #c4b5fd;
+}

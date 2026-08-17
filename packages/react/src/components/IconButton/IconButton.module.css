@@ -1,0 +1,33 @@
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border: none;
+  border-radius: var(--mds-radius-pill);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--mds-transition-control);
+}
+
+.size-sm { width: var(--mds-control-h-sm); height: var(--mds-control-h-sm); }
+.size-md { width: var(--mds-control-h-md); height: var(--mds-control-h-md); }
+.size-lg { width: var(--mds-control-h-lg); height: var(--mds-control-h-lg); }
+
+.variant-ghost { color: var(--mds-text-primary); }
+.variant-ghost:hover:not(:disabled) { background: var(--mds-surface-sunken); }
+
+.variant-primary {
+  background: var(--mds-action-bg);
+  color: var(--mds-action-fg);
+}
+.variant-primary:hover:not(:disabled) { background: var(--mds-action-bg-hover); }
+
+.variant-danger { color: var(--mds-status-danger); }
+.variant-danger:hover:not(:disabled) { background: var(--mds-status-danger-soft); }
+
+.iconButton:disabled {
+  color: var(--mds-action-disabled-fg);
+  background: transparent;
+  cursor: not-allowed;
+}

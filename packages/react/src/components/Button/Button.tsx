@@ -1,0 +1,67 @@
+import type { ButtonHTMLAttributes, ElementType, ReactElement, ReactNode, Ref } from "react";
+import { cx } from "../../internal/cx";
+import { Spinner } from "../Spinner/Spinner";
+import styles from "./Button.module.css";
+
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+export type ButtonSize = "sm" | "md" | "lg";
+
+export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  /** Glyph slots — pass an <Icon> or any node. Agnostic of icon set. */
+  iconLeft?: ReactNode;
+  iconRight?: ReactNode;
+  /** Spinner replaces the left slot; disables and announces busy. */
+  loading?: boolean;
+  fullWidth?: boolean;
+  type?: "button" | "submit" | "reset";
+  /** Renders an <a> — for navigation styled as a button. */
+  href?: string;
+  /** Element override, e.g. a router's Link. */
+  as?: ElementType;
+  ref?: Ref<HTMLButtonElement>;
+}
+
+/* Spinner diameter per control size — matches the icon steps. */
+const SPINNER_PX: Record<ButtonSize, number> = { sm: 16, md: 18, lg: 20 };
+
+/** The tappable action. Semantics: button by default, link when `href`/`as` says so. */
+export function Button({
+  variant = "primary",
+  size = "md",
+  iconLeft,
+  iconRight,
+  loading = false,
+  disabled = false,
+  fullWidth = false,
+  type = "button",
+  href,
+  as,
+  className,
+  children,
+  ...rest
+}: ButtonProps): ReactElement {
+  const Element: ElementType = as ?? (href !== undefined ? "a" : "button");
+  const isButton = Element === "button";
+  const own = isButton ? { type, disabled: disabled || loading } : { href };
+
+  return (
+    <Element
+      className={cx(
+        styles.button,
+        styles[`variant-${variant}`],
+        styles[`size-${size}`],
+        fullWidth && styles.fullWidth,
+        className,
+      )}
+      aria-busy={loading || undefined}
+      {...own}
+      {...rest}
+    >
+      {loading ? <Spinner size={SPINNER_PX[size]} /> : iconLeft}
+      {children}
+      {!loading && iconRight}
+    </Element>
+  );
+}

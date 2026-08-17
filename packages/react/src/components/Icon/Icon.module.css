@@ -1,0 +1,11 @@
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: inherit;
+}
+
+.size-sm { width: var(--mds-icon-sm); height: var(--mds-icon-sm); }
+.size-md { width: var(--mds-icon-md); height: var(--mds-icon-md); }
+.size-lg { width: var(--mds-icon-lg); height: var(--mds-icon-lg); }

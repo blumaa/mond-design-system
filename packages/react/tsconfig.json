@@ -4,5 +4,10 @@
     "noEmit": true,
     "types": []
   },
-  "include": ["src", "tsup.config.ts"]
+  "include": [
+    "src",
+    "tsup.config.ts",
+    "../../vitest.setup.ts",
+    "../../vitest.d.ts"
+  ]
 }

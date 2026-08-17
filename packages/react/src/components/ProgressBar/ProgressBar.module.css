@@ -1,0 +1,27 @@
+.track {
+  display: block;
+  width: 100%;
+  height: var(--mds-space-2);
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-surface-sunken);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  width: var(--progress, 0%);
+  border-radius: inherit;
+  background: var(--mds-accent);
+  transition: width var(--mds-transition-control);
+}
+
+.indeterminate .fill {
+  width: 40%;
+  animation: slide var(--mds-dur-pulse) var(--mds-ease-standard) infinite;
+}
+
+@keyframes slide {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
+}

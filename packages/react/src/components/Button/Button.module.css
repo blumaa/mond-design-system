@@ -1,0 +1,78 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-gap-tight);
+  border: var(--mds-border-width) solid transparent;
+  border-radius: var(--mds-radius-control);
+  font-family: var(--mds-font-body);
+  font-weight: var(--mds-weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color var(--mds-transition-control), color var(--mds-transition-control);
+}
+
+/* Sizes — height from the control scale, padding from the space scale. */
+.size-sm {
+  height: var(--mds-control-h-sm);
+  padding: 0 var(--mds-space-3);
+  font-size: var(--mds-text-sm);
+}
+
+.size-md {
+  height: var(--mds-control-h-md);
+  padding: 0 var(--mds-space-4);
+  font-size: var(--mds-text-base);
+}
+
+.size-lg {
+  height: var(--mds-control-h-lg);
+  padding: 0 var(--mds-space-5);
+  font-size: var(--mds-text-lg);
+}
+
+/* Variants */
+.variant-primary {
+  background: var(--mds-action-bg);
+  color: var(--mds-action-fg);
+}
+
+.variant-primary:hover:not(:disabled) { background: var(--mds-action-bg-hover); }
+.variant-primary:active:not(:disabled) { background: var(--mds-action-bg-active); }
+
+.variant-secondary {
+  background: transparent;
+  color: var(--mds-text-primary);
+  border-color: var(--mds-control-border);
+}
+
+.variant-ghost {
+  background: transparent;
+  color: var(--mds-text-primary);
+}
+
+.variant-secondary:hover:not(:disabled),
+.variant-ghost:hover:not(:disabled) {
+  background: var(--mds-surface-sunken);
+}
+
+.variant-danger {
+  background: var(--mds-status-danger);
+  color: var(--mds-status-danger-contrast);
+}
+
+.variant-danger:hover:not(:disabled) { filter: brightness(0.94); }
+
+/* Unavailable is a color, not a fade — opacity composites unpredictably. */
+.button:disabled {
+  background: var(--mds-action-disabled-bg);
+  color: var(--mds-action-disabled-fg);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+
+.fullWidth {
+  width: 100%;
+}

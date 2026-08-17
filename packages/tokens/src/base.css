@@ -48,3 +48,16 @@ textarea {
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+/* Reduced motion, belt and braces: token durations collapse in
+   core/motion.css; this catches literal-duration animations (spinner,
+   shimmer) wherever their keyframes live. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

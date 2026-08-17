@@ -1,0 +1,42 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-gap-hairline);
+  padding: var(--mds-space-1) var(--mds-space-2);
+  border-radius: var(--mds-radius-tag);
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  background: var(--mds-surface-card);
+  color: var(--mds-text-secondary);
+  font: var(--mds-type-label);
+  white-space: nowrap;
+}
+
+.tone-accent {
+  background: var(--mds-accent-soft);
+  border-color: transparent;
+  color: var(--mds-text-primary);
+}
+
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+  margin-right: calc(-1 * var(--mds-space-1));
+  width: var(--mds-icon-md);
+  height: var(--mds-icon-md);
+  border-radius: var(--mds-radius-pill);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.remove:hover {
+  background: var(--mds-surface-sunken);
+}
+
+.removeGlyph {
+  width: var(--mds-icon-sm);
+  height: var(--mds-icon-sm);
+}
