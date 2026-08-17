@@ -1,5 +1,15 @@
 # @mond-design-system/react
 
+## 1.0.0-alpha.2
+
+### Patch Changes
+
+- 85785bd: Button: make the loading spinner decorative. The spinner rendered with its
+  default live label, so a busy button's accessible name became "Loading Save"
+  and name-based queries and screen readers lost the button. aria-busy on the
+  button already announces the state; the spinner now renders with an empty
+  label and aria-hidden, matching CountButton.
+
 ## 1.0.0-alpha.1
 
 ### Minor Changes
