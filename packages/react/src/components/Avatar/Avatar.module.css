@@ -12,9 +12,19 @@
   user-select: none;
 }
 
+.size-xs { width: var(--mds-avatar-xs); height: var(--mds-avatar-xs); font-size: var(--mds-text-xs); }
 .size-sm { width: var(--mds-avatar-sm); height: var(--mds-avatar-sm); font-size: var(--mds-text-xs); }
 .size-md { width: var(--mds-avatar-md); height: var(--mds-avatar-md); font-size: var(--mds-text-sm); }
 .size-lg { width: var(--mds-avatar-lg); height: var(--mds-avatar-lg); font-size: var(--mds-text-xl); }
+.size-xl { width: var(--mds-avatar-xl); height: var(--mds-avatar-xl); font-size: var(--mds-text-2xl); }
+
+/* Identity tints — initials stay --mds-text-primary on every tone; the
+   contrast gate holds each pairing in both themes. */
+.tone-1 { background: var(--mds-avatar-tone-1); color: var(--mds-text-primary); }
+.tone-2 { background: var(--mds-avatar-tone-2); color: var(--mds-text-primary); }
+.tone-3 { background: var(--mds-avatar-tone-3); color: var(--mds-text-primary); }
+.tone-4 { background: var(--mds-avatar-tone-4); color: var(--mds-text-primary); }
+.tone-5 { background: var(--mds-avatar-tone-5); color: var(--mds-text-primary); }
 
 .image {
   width: 100%;

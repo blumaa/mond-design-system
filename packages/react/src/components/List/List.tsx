@@ -1,6 +1,10 @@
-import type { HTMLAttributes, LiHTMLAttributes, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import { createContext, useContext } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./List.module.css";
+
+/* Tells an item whether a group is painting the card around it. */
+const ListGroupContext = createContext(false);
 
 export interface ListGroupProps extends HTMLAttributes<HTMLUListElement> {
   children: ReactNode;
@@ -22,12 +26,18 @@ export interface ListGroupProps extends HTMLAttributes<HTMLUListElement> {
  * ```
  */
 export function ListGroup({ className, ...rest }: ListGroupProps): ReactElement {
-  return <ul className={cx(styles.group, className)} {...rest} />;
+  return (
+    <ListGroupContext.Provider value={true}>
+      <ul className={cx(styles.group, className)} {...rest} />
+    </ListGroupContext.Provider>
+  );
 }
 
-export interface ListItemProps extends Omit<LiHTMLAttributes<HTMLLIElement>, "title" | "onClick"> {
-  title: string;
-  description?: string;
+export type ListItemSurface = "card" | "sunken" | "accent" | "plain";
+
+export interface ListItemProps extends Omit<HTMLAttributes<HTMLElement>, "title" | "onClick"> {
+  title: ReactNode;
+  description?: ReactNode;
   /** Slot before the text — Avatar, Icon, … */
   leading?: ReactNode;
   /** Slot after the text — Badge, chevron, … */
@@ -36,9 +46,19 @@ export interface ListItemProps extends Omit<LiHTMLAttributes<HTMLLIElement>, "ti
   onClick?: () => void;
   /** Makes the whole row a link. Wins over onClick. */
   href?: string;
+  /** What the row paints behind itself. Inside a ListGroup the group is the
+      card, so grouped rows default to painting nothing; standalone rows
+      default to their own card. `accent` is the tinted, accent-edged prompt
+      row. The row paints it itself because a background drawn by a wrapper
+      brings its own corner radius, which peeks past the row's in all four
+      corners. */
+  surface?: ListItemSurface;
 }
 
-/** One row. Static by default; interactive as one whole-row button/link. */
+/**
+ * One row. Static by default; interactive as one whole-row button/link.
+ * An `<li>` inside a ListGroup, a standalone `<div>` row anywhere else.
+ */
 export function ListItem({
   title,
   description,
@@ -46,9 +66,16 @@ export function ListItem({
   trailing,
   onClick,
   href,
+  surface,
   className,
   ...rest
 }: ListItemProps): ReactElement {
+  const inGroup = useContext(ListGroupContext);
+  const Root = inGroup ? "li" : "div";
+  // Grouped rows paint nothing unless told otherwise; standalone rows carry
+  // their own card.
+  const resolved = surface ?? (inGroup ? undefined : "card");
+
   const content = (
     <>
       {leading != null && <span className={styles.leading}>{leading}</span>}
@@ -61,7 +88,10 @@ export function ListItem({
   );
 
   return (
-    <li className={cx(styles.item, className)} {...rest}>
+    <Root
+      className={cx(styles.item, resolved && styles[`surface-${resolved}`], className)}
+      {...rest}
+    >
       {href !== undefined ? (
         <a className={cx(styles.row, styles.interactive)} href={href}>
           {content}
@@ -73,6 +103,6 @@ export function ListItem({
       ) : (
         <span className={styles.row}>{content}</span>
       )}
-    </li>
+    </Root>
   );
 }

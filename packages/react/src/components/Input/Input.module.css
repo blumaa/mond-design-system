@@ -25,3 +25,26 @@
 .size-sm { height: var(--mds-control-h-sm); padding: 0 var(--mds-space-2); font-size: var(--mds-text-sm); }
 .size-md { height: var(--mds-control-h-md); padding: 0 var(--mds-space-3); font-size: var(--mds-text-base); }
 .size-lg { height: var(--mds-control-h-lg); padding: 0 var(--mds-space-4); font-size: var(--mds-text-base); }
+
+/* Icon slots overlay the input's edges; the input pads out of their way.
+   The clearance is fixed across sizes — icons don't grow with the field. */
+.iconWrap {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  color: var(--mds-text-muted);
+  pointer-events: none;
+}
+
+.iconLeft { left: var(--mds-space-3); }
+.iconRight { right: var(--mds-space-3); }
+
+.with-icon-left { padding-left: calc(var(--mds-space-3) + var(--mds-icon-md) + var(--mds-space-2)); }
+.with-icon-right { padding-right: calc(var(--mds-space-3) + var(--mds-icon-md) + var(--mds-space-2)); }

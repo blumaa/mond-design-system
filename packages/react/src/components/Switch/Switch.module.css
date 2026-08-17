@@ -53,11 +53,28 @@
   background: var(--mds-action-disabled-fg);
 }
 
+/* Hosts the busy spinner over the track without moving the input. */
+.trackWrap {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--mds-text-secondary);
+  pointer-events: none;
+}
+
 .label {
   font: var(--mds-type-label);
   color: var(--mds-text-primary);
 }
 
-.track:disabled ~ .label {
+/* The label sits beside the wrapper, not the input — climb via :has. */
+.root:has(.track:disabled) .label {
   color: var(--mds-action-disabled-fg);
 }

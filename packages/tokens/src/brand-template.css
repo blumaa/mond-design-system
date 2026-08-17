@@ -59,6 +59,20 @@
   --mds-accent-hover: #1e40af;
   --mds-accent-soft: #dee7fa;
 
+  /* highlight — the second accent. One-accent brand: leave the aliases.
+     Two-accent brand: re-point all four at the second hue. */
+  --mds-highlight: var(--mds-accent);
+  --mds-highlight-contrast: var(--mds-accent-contrast);
+  --mds-highlight-hover: var(--mds-accent-hover);
+  --mds-highlight-soft: var(--mds-accent-soft);
+
+  /* avatar identity tints — five slots, initials draw in --mds-text-primary */
+  --mds-avatar-tone-1: #dbe7db;
+  --mds-avatar-tone-2: #dee7fa;
+  --mds-avatar-tone-3: #f2e4d7;
+  --mds-avatar-tone-4: #e8e3d1;
+  --mds-avatar-tone-5: #e8dfee;
+
   /* status */
   --mds-status-danger: #b3261e;
   --mds-status-danger-contrast: #ffffff;
@@ -114,6 +128,14 @@
   --mds-accent-contrast: #0f2247;
   --mds-accent-hover: #a9c4f8;
   --mds-accent-soft: #26334d;
+
+  /* highlight follows accent via the aliases; re-point here only if your
+     second hue needs its own dark rungs. Avatar tints get dark rungs. */
+  --mds-avatar-tone-1: #263226;
+  --mds-avatar-tone-2: #26334d;
+  --mds-avatar-tone-3: #3d2f24;
+  --mds-avatar-tone-4: #38331f;
+  --mds-avatar-tone-5: #322a3a;
 
   --mds-status-danger: #f28b82;
   --mds-status-danger-contrast: #401110;

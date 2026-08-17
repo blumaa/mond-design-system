@@ -1,11 +1,12 @@
-import type { InputHTMLAttributes, ReactElement, Ref } from "react";
+import type { InputHTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Checkbox.module.css";
 
 export interface CheckboxProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {
-  /** Inline label — part of the click target. */
-  label: string;
+  /** Inline label — part of the click target. Rich content welcome (an
+      inline link, a Text run); the label element names the box either way. */
+  label: ReactNode;
   ref?: Ref<HTMLInputElement>;
 }
 

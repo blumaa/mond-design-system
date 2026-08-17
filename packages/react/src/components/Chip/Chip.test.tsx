@@ -55,6 +55,11 @@ describe("Chip", () => {
     expect(el.className).toContain("selected");
   });
 
+  it("applies the highlight variant", () => {
+    render(<Chip variant="highlight" data-testid="c">going</Chip>);
+    expect(screen.getByTestId("c").className).toContain("variant-highlight");
+  });
+
   it("renders a leading icon slot", () => {
     render(<Chip icon={<svg data-testid="glyph" />}>With icon</Chip>);
     expect(screen.getByTestId("glyph")).toBeInTheDocument();

@@ -26,6 +26,20 @@ describe("Checkbox", () => {
     expect(screen.getByRole("checkbox")).not.toBeChecked();
   });
 
+  it("takes a rich node label", () => {
+    render(
+      <Checkbox
+        label={
+          <span>
+            Accept the <a href="/conduct">code of conduct</a>
+          </span>
+        }
+      />,
+    );
+    expect(screen.getByRole("checkbox", { name: /accept the code of conduct/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "code of conduct" })).toBeInTheDocument();
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(<Checkbox label="Accept terms" />);
     expect(await axe(container)).toHaveNoViolations();

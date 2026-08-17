@@ -21,6 +21,12 @@
   color: var(--mds-text-primary);
 }
 
+/* The promoted marker — full highlight fill where the other tones stay soft. */
+.tone-highlight {
+  background: var(--mds-highlight);
+  color: var(--mds-highlight-contrast);
+}
+
 .tone-danger {
   background: var(--mds-status-danger-soft);
   color: var(--mds-text-primary);

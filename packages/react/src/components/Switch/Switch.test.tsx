@@ -24,6 +24,23 @@ describe("Switch", () => {
     expect(screen.getByRole("switch")).toBeChecked();
   });
 
+  it("renders label-less with an aria-label and no visible text", () => {
+    render(<Switch aria-label="Email on new posts" />);
+    expect(screen.getByRole("switch", { name: "Email on new posts" })).toBeInTheDocument();
+    expect(screen.queryByText("Email on new posts")).not.toBeInTheDocument();
+  });
+
+  it("loading blocks toggling, announces busy, keeps the name", async () => {
+    const onChange = vi.fn();
+    render(<Switch label="Email" loading onChange={onChange} />);
+    const input = screen.getByRole("switch", { name: "Email" });
+    expect(input).toBeDisabled();
+    expect(input).toHaveAttribute("aria-busy", "true");
+    await userEvent.click(input);
+    expect(onChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(<Switch label="Dark mode" />);
     expect(await axe(container)).toHaveNoViolations();

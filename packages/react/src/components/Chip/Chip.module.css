@@ -23,6 +23,13 @@
   color: var(--mds-text-secondary);
 }
 
+/* The promoted pill — full highlight fill where soft/outline stay quiet. */
+.variant-highlight {
+  background: var(--mds-highlight);
+  border: var(--mds-border-width) solid transparent;
+  color: var(--mds-highlight-contrast);
+}
+
 /* After the variants, so a selected chip wins whichever it was built from. */
 .selected {
   background: var(--mds-accent);

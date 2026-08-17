@@ -30,6 +30,16 @@ describe("SegmentedControl", () => {
     expect(onChange).toHaveBeenCalledWith("month");
   });
 
+  it("disabled blocks every segment and the change callback", async () => {
+    const onChange = vi.fn();
+    render(
+      <SegmentedControl label="Range" options={options} value="day" onChange={onChange} disabled />,
+    );
+    for (const radio of screen.getAllByRole("radio")) expect(radio).toBeDisabled();
+    await userEvent.click(screen.getByRole("radio", { name: "Month" }));
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <SegmentedControl label="Range" options={options} value="day" onChange={() => {}} />,

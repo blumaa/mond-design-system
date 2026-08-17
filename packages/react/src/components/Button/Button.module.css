@@ -58,6 +58,13 @@
   background: var(--mds-surface-sunken);
 }
 
+.variant-highlight {
+  background: var(--mds-highlight);
+  color: var(--mds-highlight-contrast);
+}
+
+.variant-highlight:hover:not(:disabled) { background: var(--mds-highlight-hover); }
+
 .variant-danger {
   background: var(--mds-status-danger);
   color: var(--mds-status-danger-contrast);

@@ -210,6 +210,8 @@ const TEXT_ON_SURFACES: Array<[string, string[]]> = [
   ["--mds-status-warning", ["--mds-surface-page", "--mds-surface-card"]],
   ["--mds-status-success", ["--mds-surface-page", "--mds-surface-card"]],
   ["--mds-text-primary", ["--mds-surface-selected", "--mds-accent-soft", "--mds-status-danger-soft", "--mds-status-warning-soft", "--mds-status-success-soft"]],
+  ["--mds-text-primary", ["--mds-highlight-soft"]],
+  ["--mds-text-primary", ["--mds-avatar-tone-1", "--mds-avatar-tone-2", "--mds-avatar-tone-3", "--mds-avatar-tone-4", "--mds-avatar-tone-5"]],
 ];
 
 const PAIRS_45: Array<[string, string]> = [
@@ -218,6 +220,8 @@ const PAIRS_45: Array<[string, string]> = [
   ["--mds-action-fg", "--mds-action-bg-hover"],
   ["--mds-action-fg", "--mds-action-bg-active"],
   ["--mds-accent-contrast", "--mds-accent"],
+  ["--mds-highlight-contrast", "--mds-highlight"],
+  ["--mds-highlight-contrast", "--mds-highlight-hover"],
   ["--mds-status-danger-contrast", "--mds-status-danger"],
   ["--mds-status-warning-contrast", "--mds-status-warning"],
   ["--mds-status-success-contrast", "--mds-status-success"],

@@ -17,3 +17,24 @@
 .link:hover {
   color: var(--mds-accent-hover);
 }
+
+/* Plain rides its context: same color and weight as the surrounding text,
+   the hover underline is the only tell. Sits after .link:hover — equal
+   specificity, so order decides who wins the hover color. */
+.variant-plain {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+.variant-plain:hover {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.size-xs { font-size: var(--mds-text-xs); }
+.size-sm { font-size: var(--mds-text-sm); }
+.size-base { font-size: var(--mds-text-base); }
+.size-lg { font-size: var(--mds-text-lg); }
+.size-xl { font-size: var(--mds-text-xl); }

@@ -20,6 +20,11 @@ describe("Badge", () => {
     expect(screen.getByTestId("b").className).toContain("tone-danger");
   });
 
+  it("applies the highlight tone", () => {
+    render(<Badge tone="highlight" data-testid="b">going</Badge>);
+    expect(screen.getByTestId("b").className).toContain("tone-highlight");
+  });
+
   it("has no axe violations across tones", async () => {
     const { container } = render(
       <div>

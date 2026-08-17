@@ -44,6 +44,21 @@
   box-shadow: var(--mds-elevation-card);
 }
 
+/* Unavailable is a color, not a fade — matches the control convention. */
+.input:disabled + .face {
+  color: var(--mds-action-disabled-fg);
+  cursor: not-allowed;
+}
+
+.input:disabled:checked + .face {
+  background: var(--mds-action-disabled-bg);
+  box-shadow: none;
+}
+
+.segment:has(.input:disabled) {
+  cursor: not-allowed;
+}
+
 .input:focus-visible + .face {
   outline: var(--mds-focus-width) solid var(--mds-focus-ring-color);
   outline-offset: var(--mds-focus-offset);

@@ -36,6 +36,34 @@ describe("Avatar", () => {
     expect(screen.getByTestId("a").className).toContain("size-lg");
   });
 
+  it("supports xs and xl sizes", () => {
+    render(
+      <div>
+        <Avatar name="Ada" size="xs" data-testid="xs" />
+        <Avatar name="Ada" size="xl" data-testid="xl" />
+      </div>,
+    );
+    expect(screen.getByTestId("xs").className).toContain("size-xs");
+    expect(screen.getByTestId("xl").className).toContain("size-xl");
+  });
+
+  it("applies a numbered tone class", () => {
+    render(<Avatar name="Ada Lovelace" tone={3} data-testid="a" />);
+    expect(screen.getByTestId("a").className).toContain("tone-3");
+  });
+
+  it("decorative hides it from the accessibility tree", () => {
+    render(<Avatar name="Ada Lovelace" decorative data-testid="a" />);
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.getByTestId("a")).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("decorative image renders empty alt", () => {
+    render(<Avatar src="/x.png" name="Ada Lovelace" decorative data-testid="a" />);
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.getByTestId("a").querySelector("img")).toHaveAttribute("alt", "");
+  });
+
   it("has no axe violations in both modes", async () => {
     const { container } = render(
       <div>

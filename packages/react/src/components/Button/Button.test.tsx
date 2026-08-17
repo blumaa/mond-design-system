@@ -14,6 +14,11 @@ describe("Button", () => {
     expect(btn.className).toContain("size-md");
   });
 
+  it("renders the highlight variant", () => {
+    render(<Button variant="highlight">Join</Button>);
+    expect(screen.getByRole("button", { name: "Join" }).className).toContain("variant-highlight");
+  });
+
   it("fires onClick", async () => {
     const onClick = vi.fn();
     render(<Button onClick={onClick}>Go</Button>);

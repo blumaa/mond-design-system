@@ -27,14 +27,17 @@
   --mds-switch-h: 24px;
   --mds-switch-knob: 16px; /* leaves --mds-space-1 of track on every side */
 
+  --mds-avatar-xs: 20px;
   --mds-avatar-sm: 24px;
   --mds-avatar-md: 32px;
   --mds-avatar-lg: 64px;
+  --mds-avatar-xl: 96px;
 
   /* focus + borders */
   --mds-focus-width: 2px;
   --mds-focus-offset: 2px;
   --mds-border-width: 1px;
+  --mds-edge-width: 3px; /* the thick marker edge, e.g. a prompt row's accent */
 
   /* Breakpoints. A media query is resolved before custom properties exist,
      so a breakpoint is the one literal px a component sheet may carry —

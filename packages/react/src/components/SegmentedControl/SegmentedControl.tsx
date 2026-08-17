@@ -14,6 +14,8 @@ export interface SegmentedControlProps<T extends string = string> {
   options: readonly SegmentOption<T>[];
   value: T;
   onChange: (value: T) => void;
+  /** Disables the whole control — e.g. a choice locked while editing. */
+  disabled?: boolean;
   className?: string;
 }
 
@@ -38,6 +40,7 @@ export function SegmentedControl<T extends string = string>({
   options,
   value,
   onChange,
+  disabled = false,
   className,
 }: SegmentedControlProps<T>): ReactElement {
   const name = useId();
@@ -51,6 +54,7 @@ export function SegmentedControl<T extends string = string>({
             value={option.value}
             checked={option.value === value}
             onChange={() => onChange(option.value)}
+            disabled={disabled}
             className={styles.input}
           />
           <span className={styles.face}>{option.label}</span>

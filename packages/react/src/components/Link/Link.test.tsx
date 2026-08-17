@@ -30,6 +30,32 @@ describe("Link", () => {
     expect(screen.getByTestId("fake")).toHaveAttribute("href", "/r");
   });
 
+  it("plain variant applies", () => {
+    render(<Link href="/a" variant="plain">go</Link>);
+    expect(screen.getByRole("link").className).toContain("variant-plain");
+  });
+
+  it("size applies a scale class, none by default", () => {
+    render(
+      <div>
+        <Link href="/a" size="sm">small</Link>
+        <Link href="/b">plainest</Link>
+      </div>,
+    );
+    expect(screen.getByRole("link", { name: "small" }).className).toContain("size-sm");
+    expect(screen.getByRole("link", { name: "plainest" }).className).not.toContain("size-");
+  });
+
+  it("as button gets type=button so forms stay unsubmitted", () => {
+    render(<Link as="button" onClick={() => {}}>act</Link>);
+    expect(screen.getByRole("button", { name: "act" })).toHaveAttribute("type", "button");
+  });
+
+  it("as button respects an explicit type", () => {
+    render(<Link as="button" type="submit">send</Link>);
+    expect(screen.getByRole("button")).toHaveAttribute("type", "submit");
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(<Link href="/a">go</Link>);
     expect(await axe(container)).toHaveNoViolations();

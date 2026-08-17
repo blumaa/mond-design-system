@@ -2,7 +2,7 @@ import type { HTMLAttributes, MouseEventHandler, ReactElement, ReactNode } from 
 import { cx } from "../../internal/cx";
 import styles from "./Chip.module.css";
 
-export type ChipVariant = "soft" | "outline";
+export type ChipVariant = "soft" | "outline" | "highlight";
 
 export interface ChipProps extends HTMLAttributes<HTMLElement> {
   children: ReactNode;

@@ -8,8 +8,38 @@
   overflow: hidden;
 }
 
-.item + .item {
+/* Separators belong to the group — standalone rows sitting side by side
+   keep their own borders instead. */
+.group > .item + .item {
   border-top: var(--mds-border-width) solid var(--mds-border-subtle);
+}
+
+/* Standalone surfaces. The row paints its own background: a wrapper's paint
+   would bring a wrapper's corner radius with it. */
+.surface-card,
+.surface-sunken,
+.surface-accent {
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  border-radius: var(--mds-radius-card);
+}
+
+.surface-card { background: var(--mds-surface-card); }
+.surface-sunken { background: var(--mds-surface-sunken); }
+
+/* The prompt row: full-strength accent on the left edge, soft fill behind.
+   Longhands so a call site's border-color override still lands. */
+.surface-accent {
+  border-left-width: var(--mds-edge-width);
+  border-left-color: var(--mds-accent);
+  background: var(--mds-accent-soft);
+}
+
+/* Paints nothing on purpose — transparent, not unset, so a row on a tinted
+   parent shows what's behind it. */
+.surface-plain {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 }
 
 .row {
