@@ -1,0 +1,12 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--mds-surface-page);
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--mds-pad-page-y) var(--mds-pad-page-x);
+}

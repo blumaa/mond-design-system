@@ -1,0 +1,8 @@
+.container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--mds-pad-page-x);
+}
+
+.width-content { max-width: var(--mds-content-max); }
+.width-wide { max-width: var(--mds-content-max-wide); }

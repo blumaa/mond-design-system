@@ -1,0 +1,43 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--mds-modal-w);
+  max-height: 85dvh;
+  background: var(--mds-surface-raised);
+  border-radius: var(--mds-radius-3);
+  box-shadow: var(--mds-elevation-modal);
+  opacity: 0;
+  transform: scale(0.96);
+  transition:
+    opacity var(--mds-dur-base) var(--mds-ease-standard),
+    transform var(--mds-dur-base) var(--mds-ease-standard);
+}
+
+.panel[data-open] {
+  opacity: 1;
+  transform: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap);
+  padding: var(--mds-pad-card) var(--mds-pad-card) 0;
+  font: var(--mds-type-subtitle);
+  color: var(--mds-text-primary);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--mds-pad-card);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--mds-gap);
+  padding: 0 var(--mds-pad-card) var(--mds-pad-card);
+}

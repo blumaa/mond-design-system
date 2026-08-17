@@ -1,0 +1,15 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-hairline { gap: var(--mds-gap-hairline); }
+.gap-tight { gap: var(--mds-gap-tight); }
+.gap-base { gap: var(--mds-gap); }
+.gap-loose { gap: var(--mds-gap-loose); }
+.gap-section { gap: var(--mds-stack-section); }
+
+.align-start { align-items: flex-start; }
+.align-center { align-items: center; }
+.align-end { align-items: flex-end; }
+.align-stretch { align-items: stretch; }

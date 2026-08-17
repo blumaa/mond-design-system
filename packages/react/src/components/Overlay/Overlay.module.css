@@ -1,0 +1,24 @@
+.scrim {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  background: var(--mds-scrim);
+  opacity: 0;
+  transition: opacity var(--mds-dur-base) var(--mds-ease-standard);
+}
+
+.scrim[data-open] {
+  opacity: 1;
+}
+
+.variant-modal {
+  z-index: var(--mds-z-modal);
+  align-items: center;
+  justify-content: center;
+  padding: var(--mds-pad-page-x);
+}
+
+.variant-sheet {
+  z-index: var(--mds-z-sheet);
+  align-items: flex-end;
+}

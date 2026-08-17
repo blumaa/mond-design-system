@@ -1,0 +1,29 @@
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: var(--mds-z-header);
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap-tight);
+  height: var(--mds-header-h);
+  padding-inline: var(--mds-pad-page-x);
+  background: var(--mds-surface-page);
+  border-bottom: var(--mds-border-width) solid var(--mds-border-subtle);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  margin: 0;
+  font: var(--mds-type-subtitle);
+  color: var(--mds-text-primary);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap-hairline);
+}

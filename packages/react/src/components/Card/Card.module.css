@@ -1,0 +1,51 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--mds-surface-card);
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  border-radius: var(--mds-radius-card);
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+}
+
+.variant-raised {
+  border-color: transparent;
+  background: var(--mds-surface-raised);
+  box-shadow: var(--mds-elevation-raised);
+}
+
+/* Whole-card button/link resets + affordance. */
+.interactive {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: box-shadow var(--mds-transition-surface), background-color var(--mds-transition-surface);
+}
+
+.interactive:hover {
+  box-shadow: var(--mds-elevation-hover);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap);
+  padding: var(--mds-pad-card) var(--mds-pad-card) 0;
+  font: var(--mds-type-subtitle);
+  color: var(--mds-text-primary);
+}
+
+.body {
+  flex: 1;
+  padding: var(--mds-pad-card);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap);
+  padding: 0 var(--mds-pad-card) var(--mds-pad-card);
+}
