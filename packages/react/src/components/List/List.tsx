@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactElement, ReactNode } from "react";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useId } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./List.module.css";
 
@@ -8,13 +8,15 @@ const ListGroupContext = createContext(false);
 
 export interface ListGroupProps extends HTMLAttributes<HTMLUListElement> {
   children: ReactNode;
+  /** Heading over the group. Also names the list to a screen reader. */
+  label?: ReactNode;
 }
 
 /**
  * Card-styled list container for ListItems.
  *
  * ```tsx
- * <ListGroup>
+ * <ListGroup label="Account">
  *   <ListItem
  *     title="Profile"
  *     description="Name, avatar"
@@ -25,11 +27,27 @@ export interface ListGroupProps extends HTMLAttributes<HTMLUListElement> {
  * </ListGroup>
  * ```
  */
-export function ListGroup({ className, ...rest }: ListGroupProps): ReactElement {
-  return (
+export function ListGroup({ label, className, ...rest }: ListGroupProps): ReactElement {
+  const headingId = useId();
+
+  const list = (
     <ListGroupContext.Provider value={true}>
-      <ul className={cx(styles.group, className)} {...rest} />
+      <ul
+        className={cx(styles.group, className)}
+        aria-labelledby={label != null ? headingId : undefined}
+        {...rest}
+      />
     </ListGroupContext.Provider>
+  );
+
+  if (label == null) return list;
+  return (
+    <div className={styles.labelledGroup}>
+      <span className={styles.label} id={headingId}>
+        {label}
+      </span>
+      {list}
+    </div>
   );
 }
 

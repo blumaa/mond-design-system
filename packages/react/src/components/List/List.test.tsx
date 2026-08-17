@@ -17,6 +17,25 @@ describe("List", () => {
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
   });
 
+  it("label heads the group and names the list", () => {
+    render(
+      <ListGroup label="Account">
+        <ListItem title="Profile" />
+      </ListGroup>,
+    );
+    expect(screen.getByRole("list", { name: "Account" })).toBeInTheDocument();
+    expect(screen.getByText("Account")).toBeInTheDocument();
+  });
+
+  it("without a label the list carries no stray labelledby", () => {
+    render(
+      <ListGroup>
+        <ListItem title="Profile" />
+      </ListGroup>,
+    );
+    expect(screen.getByRole("list")).not.toHaveAttribute("aria-labelledby");
+  });
+
   it("description renders under the title", () => {
     render(
       <ListGroup>

@@ -8,6 +8,25 @@
   overflow: hidden;
 }
 
+.labelledGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-2);
+}
+
+/* The heading sits over the card, aligned with the rows' text rather than
+   with the card's edge — the rows' own padding is what the eye reads as the
+   list's left margin, so a heading flush with the border reads as indented
+   the other way. */
+.label {
+  padding-inline: var(--mds-pad-card); /* matches the rows' inline padding */
+  font-weight: var(--mds-weight-semibold);
+  font-size: var(--mds-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--mds-text-secondary);
+}
+
 /* Separators belong to the group — standalone rows sitting side by side
    keep their own borders instead. */
 .group > .item + .item {
