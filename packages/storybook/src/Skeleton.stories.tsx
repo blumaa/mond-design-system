@@ -10,7 +10,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Variants: Story = {
   render: () => (
-    <Stack gap="base" style={{ width: "16rem" }}>
+    <Stack gap="base" style={{ maxWidth: "16rem" }}>
       <Skeleton />
       <Skeleton variant="rect" height="4rem" />
       <Skeleton variant="circle" />

@@ -14,6 +14,8 @@ export interface OverlayProps {
   /** Accessible name of the dialog. */
   label: string;
   variant: "modal" | "sheet";
+  /** Scrim click dismisses. Confirmations turn this off. */
+  closeOnScrimClick: boolean;
   panelClassName: string | undefined;
   children: ReactNode;
 }
@@ -23,7 +25,7 @@ export interface OverlayProps {
  * semantics, useOverlay behaviour, exit-animation presence. Not exported
  * from the package.
  */
-export function Overlay({ open, onClose, label, variant, panelClassName, children }: OverlayProps) {
+export function Overlay({ open, onClose, label, variant, closeOnScrimClick, panelClassName, children }: OverlayProps) {
   const { mounted, visible } = usePresence(open, OVERLAY_EXIT_MS);
   const ref = useOverlay<HTMLDivElement>({ open, onClose });
 
@@ -34,7 +36,7 @@ export function Overlay({ open, onClose, label, variant, panelClassName, childre
       className={cx(styles.scrim, styles[`variant-${variant}`])}
       data-open={visible || undefined}
       data-testid="mds-scrim"
-      onClick={onClose}
+      onClick={closeOnScrimClick ? onClose : undefined}
     >
       <div
         ref={ref}

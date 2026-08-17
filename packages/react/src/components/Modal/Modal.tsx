@@ -7,6 +7,8 @@ export interface ModalProps {
   onClose: () => void;
   /** Accessible name of the dialog. */
   label: string;
+  /** Scrim click dismisses. Default true. */
+  closeOnScrimClick?: boolean;
   children: ReactNode;
 }
 
@@ -19,9 +21,16 @@ export interface ModalProps {
  *     <ModalFooter>…</ModalFooter>
  *   </Modal>
  */
-export function Modal({ open, onClose, label, children }: ModalProps) {
+export function Modal({ open, onClose, label, closeOnScrimClick = true, children }: ModalProps) {
   return (
-    <Overlay open={open} onClose={onClose} label={label} variant="modal" panelClassName={styles.panel}>
+    <Overlay
+      open={open}
+      onClose={onClose}
+      label={label}
+      variant="modal"
+      closeOnScrimClick={closeOnScrimClick}
+      panelClassName={styles.panel}
+    >
       {children}
     </Overlay>
   );

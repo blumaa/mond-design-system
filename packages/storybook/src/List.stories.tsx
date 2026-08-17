@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 export const Mixed: Story = {
   args: { children: null },
   render: () => (
-    <div style={{ width: "22rem" }}>
+    <div style={{ maxWidth: "22rem" }}>
       <ListGroup>
         <ListItem
           title="Ada Lovelace"

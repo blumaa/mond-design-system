@@ -26,3 +26,15 @@
 .textarea[aria-invalid="true"] {
   border-color: var(--mds-status-danger);
 }
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--mds-gap-hairline);
+}
+
+.count {
+  font: var(--mds-type-meta);
+  color: var(--mds-text-muted);
+}

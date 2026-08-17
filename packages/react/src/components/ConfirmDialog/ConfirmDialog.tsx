@@ -26,7 +26,7 @@ export function ConfirmDialog({
   danger = false,
 }: ConfirmDialogProps) {
   return (
-    <Modal open={open} onClose={onClose} label={title}>
+    <Modal open={open} onClose={onClose} label={title} closeOnScrimClick={false}>
       <ModalHeader>{title}</ModalHeader>
       <ModalBody>
         {description ? <p className={styles.description}>{description}</p> : null}

@@ -11,3 +11,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: { "aria-label": "Notes", placeholder: "Notes…" },
 };
+
+export const CharacterLimit: Story = {
+  args: { "aria-label": "Bio", maxLength: 120, showCount: true, placeholder: "Tell us about yourself…" },
+};

@@ -7,6 +7,8 @@ export interface SheetProps {
   onClose: () => void;
   /** Accessible name of the dialog. */
   label: string;
+  /** Scrim click dismisses. Default true. */
+  closeOnScrimClick?: boolean;
   children: ReactNode;
 }
 
@@ -19,9 +21,16 @@ export interface SheetProps {
  *     <SheetFooter>…</SheetFooter>
  *   </Sheet>
  */
-export function Sheet({ open, onClose, label, children }: SheetProps) {
+export function Sheet({ open, onClose, label, closeOnScrimClick = true, children }: SheetProps) {
   return (
-    <Overlay open={open} onClose={onClose} label={label} variant="sheet" panelClassName={styles.panel}>
+    <Overlay
+      open={open}
+      onClose={onClose}
+      label={label}
+      variant="sheet"
+      closeOnScrimClick={closeOnScrimClick}
+      panelClassName={styles.panel}
+    >
       {children}
     </Overlay>
   );

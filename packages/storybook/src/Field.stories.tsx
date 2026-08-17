@@ -20,7 +20,7 @@ export const Required: Story = {
 export const FormRow: Story = {
   args: { label: "unused", children: null },
   render: () => (
-    <div style={{ display: "grid", gap: "1rem", width: "20rem" }}>
+    <div style={{ display: "grid", gap: "1rem", maxWidth: "20rem" }}>
       <Field label="Name" required>
         <Input />
       </Field>

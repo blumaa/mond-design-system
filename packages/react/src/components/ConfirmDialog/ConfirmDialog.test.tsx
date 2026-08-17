@@ -52,3 +52,35 @@ describe("ConfirmDialog", () => {
     expect(await axe(document.body)).toHaveNoViolations();
   });
 });
+
+describe("ConfirmDialog dismissal", () => {
+  it("ignores scrim clicks — the choice must be explicit", async () => {
+    const onClose = vi.fn();
+    render(
+      <ConfirmDialog
+        open
+        onClose={onClose}
+        onConfirm={() => {}}
+        title="Delete session?"
+        confirmLabel="Delete"
+      />,
+    );
+    await userEvent.click(screen.getByTestId("mds-scrim"));
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("Escape still closes", async () => {
+    const onClose = vi.fn();
+    render(
+      <ConfirmDialog
+        open
+        onClose={onClose}
+        onConfirm={() => {}}
+        title="Delete session?"
+        confirmLabel="Delete"
+      />,
+    );
+    await userEvent.keyboard("{Escape}");
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});

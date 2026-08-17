@@ -10,7 +10,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Sizes: Story = {
   render: () => (
-    <Stack gap="tight" style={{ width: "18rem" }}>
+    <Stack gap="tight" style={{ maxWidth: "18rem" }}>
       <Input size="sm" aria-label="Small" placeholder="Small" />
       <Input size="md" aria-label="Medium" placeholder="Medium" />
       <Input size="lg" aria-label="Large" placeholder="Large" />
