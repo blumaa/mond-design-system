@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { axe } from "jest-axe";
 import { Link } from "./Link";
+import sheet from "./Link.module.css?raw";
 
 describe("Link", () => {
   it("renders an anchor with inline variant by default", () => {
@@ -54,6 +55,17 @@ describe("Link", () => {
   it("as button respects an explicit type", () => {
     render(<Link as="button" type="submit">send</Link>);
     expect(screen.getByRole("button")).toHaveAttribute("type", "submit");
+  });
+
+  // jsdom computes no real styles, so the stylesheet itself is the fixture:
+  // a native button carries UA chrome that the sheet must strip, or an
+  // as="button" link renders as a grey pill instead of link text.
+  it("strips native button chrome for as=button", () => {
+    const reset = sheet.match(/button\.link\s*\{[^}]*\}/)?.[0];
+    expect(reset).toBeDefined();
+    for (const decl of ["border: none", "background: none", "padding: 0", "font: inherit", "cursor: pointer"]) {
+      expect(reset).toContain(decl);
+    }
   });
 
   it("has no axe violations", async () => {

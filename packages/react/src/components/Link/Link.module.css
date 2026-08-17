@@ -4,6 +4,18 @@
   transition: color var(--mds-transition-control);
 }
 
+/* `as="button"` renders a native button, which brings its own chrome — strip
+   it so the control reads as link text. font: inherit also drops the UA's
+   button font, so the size classes below still apply (they are declared
+   later, and equal specificity lets order decide). */
+button.link {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
 .variant-inline {
   text-decoration: underline;
   text-underline-offset: 0.15em;
