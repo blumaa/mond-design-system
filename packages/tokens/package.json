@@ -1,0 +1,33 @@
+{
+  "name": "@mond-design-system/tokens",
+  "version": "1.0.0-alpha.0",
+  "description": "Mond Design System — design tokens. CSS custom properties: core scales, semantic contract, brand files (light + dark).",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blumaa/MDS-2.git",
+    "directory": "packages/tokens"
+  },
+  "files": ["src"],
+  "exports": {
+    "./styles.css": "./src/styles.css",
+    "./base.css": "./src/base.css",
+    "./semantic.css": "./src/semantic.css",
+    "./core/*.css": "./src/core/*.css",
+    "./brands/*.css": "./src/brands/*.css",
+    "./assets/*": "./src/assets/*"
+  },
+  "sideEffects": ["*.css"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "true",
+    "typecheck": "true",
+    "lint": "true",
+    "clean": "true"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

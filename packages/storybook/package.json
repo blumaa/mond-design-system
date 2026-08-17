@@ -1,0 +1,30 @@
+{
+  "name": "@mond-design-system/storybook",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Mond Design System — Storybook. Atomic-grouped stories, brand × theme toolbar, a11y addon.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "typecheck": "tsc --noEmit",
+    "lint": "true",
+    "clean": "rm -rf storybook-static .turbo"
+  },
+  "dependencies": {
+    "@mond-design-system/react": "workspace:^",
+    "@mond-design-system/tokens": "workspace:^",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^10.5.8",
+    "@storybook/react-vite": "^10.5.8",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "storybook": "^10.5.8",
+    "typescript": "^5.9.3",
+    "vite": "^7.0.0"
+  }
+}
