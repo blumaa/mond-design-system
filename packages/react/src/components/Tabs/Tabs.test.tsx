@@ -55,6 +55,53 @@ describe("Tabs", () => {
     expect(screen.getByRole("tab", { name: "Beta" })).toHaveAttribute("tabindex", "-1");
   });
 
+  // The strip is also a filter over one shared region (reaction lists, feeds) —
+  // there is no panel per tab. A tab must not claim a panel that does not exist.
+  it("omits aria-controls when no panel carries the tab's value", () => {
+    render(
+      <Tabs value="a" onChange={() => {}}>
+        <TabList label="Filter">
+          <Tab value="a">All</Tab>
+          <Tab value="b">Some</Tab>
+        </TabList>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tab", { name: "All" })).not.toHaveAttribute("aria-controls");
+    expect(screen.getByRole("tab", { name: "Some" })).not.toHaveAttribute("aria-controls");
+  });
+
+  it("has no axe violations as a panel-less strip", async () => {
+    const { container } = render(
+      <Tabs value="a" onChange={() => {}}>
+        <TabList label="Filter">
+          <Tab value="a">All</Tab>
+          <Tab value="b">Some</Tab>
+        </TabList>
+      </Tabs>,
+    );
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("drops aria-controls again when its panel unmounts", () => {
+    const { rerender } = render(
+      <Tabs value="a" onChange={() => {}}>
+        <TabList label="Sections">
+          <Tab value="a">Alpha</Tab>
+        </TabList>
+        <TabPanel value="a">Alpha content</TabPanel>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tab")).toHaveAttribute("aria-controls");
+    rerender(
+      <Tabs value="a" onChange={() => {}}>
+        <TabList label="Sections">
+          <Tab value="a">Alpha</Tab>
+        </TabList>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tab")).not.toHaveAttribute("aria-controls");
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(<Example />);
     expect(await axe(container)).toHaveNoViolations();

@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes, HTMLAttributes, KeyboardEvent, ReactElement, ReactNode } from "react";
-import { createContext, useContext, useId } from "react";
+import { createContext, useCallback, useContext, useEffect, useId, useState } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Tabs.module.css";
 
@@ -7,6 +7,11 @@ interface TabsContextValue {
   value: string;
   onChange: (value: string) => void;
   baseId: string;
+  /** Values whose TabPanel is currently mounted. A tab only claims
+   *  aria-controls over a panel that exists — the strip is also used as a
+   *  filter over one shared region, where there are no panels at all. */
+  panels: ReadonlySet<string>;
+  registerPanel: (value: string) => () => void;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -39,7 +44,22 @@ export interface TabsProps {
  */
 export function Tabs({ value, onChange, children }: TabsProps): ReactElement {
   const baseId = useId();
-  return <TabsContext.Provider value={{ value, onChange, baseId }}>{children}</TabsContext.Provider>;
+  const [panels, setPanels] = useState<ReadonlySet<string>>(new Set());
+  const registerPanel = useCallback((panel: string) => {
+    setPanels((prev) => new Set(prev).add(panel));
+    return () => {
+      setPanels((prev) => {
+        const next = new Set(prev);
+        next.delete(panel);
+        return next;
+      });
+    };
+  }, []);
+  return (
+    <TabsContext.Provider value={{ value, onChange, baseId, panels, registerPanel }}>
+      {children}
+    </TabsContext.Provider>
+  );
 }
 
 export interface TabListProps extends HTMLAttributes<HTMLDivElement> {
@@ -99,7 +119,7 @@ export function Tab({ value, className, children, ...rest }: TabProps): ReactEle
       role="tab"
       id={`${tabs.baseId}-tab-${value}`}
       aria-selected={selected}
-      aria-controls={`${tabs.baseId}-panel-${value}`}
+      aria-controls={tabs.panels.has(value) ? `${tabs.baseId}-panel-${value}` : undefined}
       tabIndex={selected ? 0 : -1}
       data-value={value}
       className={cx(styles.tab, selected && styles.selected, className)}
@@ -119,6 +139,8 @@ export interface TabPanelProps extends HTMLAttributes<HTMLDivElement> {
 export function TabPanel({ value, className, children, ...rest }: TabPanelProps): ReactElement {
   const tabs = useTabs("TabPanel");
   const selected = tabs.value === value;
+  const { registerPanel } = tabs;
+  useEffect(() => registerPanel(value), [registerPanel, value]);
   return (
     <div
       role="tabpanel"
