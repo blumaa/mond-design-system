@@ -100,4 +100,9 @@ describe("Button iconOnly", () => {
     expect(button).toBeDisabled();
     expect(button.className).toContain("variant-danger");
   });
+
+  it("warning variant applies", () => {
+    render(<Button variant="warning">Proceed</Button>);
+    expect(screen.getByRole("button", { name: "Proceed" }).className).toContain("variant-warning");
+  });
 });

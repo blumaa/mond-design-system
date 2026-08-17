@@ -3,3 +3,9 @@
   font: var(--mds-type-body);
   color: var(--mds-text-secondary);
 }
+
+.error {
+  margin: 0;
+  font: var(--mds-type-body);
+  color: var(--mds-status-danger);
+}

@@ -9,6 +9,8 @@ export interface ModalProps {
   label: string;
   /** Scrim click dismisses. Default true. */
   closeOnScrimClick?: boolean;
+  /** alertdialog interrupts — ConfirmDialog sets it. Default "dialog". */
+  role?: "dialog" | "alertdialog";
   children: ReactNode;
 }
 
@@ -24,13 +26,14 @@ export interface ModalProps {
  * </Modal>
  * ```
  */
-export function Modal({ open, onClose, label, closeOnScrimClick = true, children }: ModalProps) {
+export function Modal({ open, onClose, label, closeOnScrimClick = true, role = "dialog", children }: ModalProps) {
   return (
     <Overlay
       open={open}
       onClose={onClose}
       label={label}
       variant="modal"
+      role={role}
       closeOnScrimClick={closeOnScrimClick}
       panelClassName={styles.panel}
     >

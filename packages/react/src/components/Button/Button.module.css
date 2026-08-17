@@ -72,6 +72,12 @@
 
 .variant-danger:hover:not(:disabled) { filter: brightness(0.94); }
 
+.variant-warning {
+  background: var(--mds-status-warning);
+  color: var(--mds-status-warning-contrast);
+}
+.variant-warning:hover:not(:disabled) { filter: brightness(0.94); }
+
 /* Unavailable is a color, not a fade — opacity composites unpredictably. */
 .button:disabled {
   background: var(--mds-action-disabled-bg);

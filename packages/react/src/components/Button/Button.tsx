@@ -3,7 +3,7 @@ import { cx } from "../../internal/cx";
 import { Spinner } from "../Spinner/Spinner";
 import styles from "./Button.module.css";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "highlight";
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "warning" | "highlight";
 export type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonBaseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {

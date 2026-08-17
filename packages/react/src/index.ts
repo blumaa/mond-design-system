@@ -120,7 +120,7 @@ export { Sheet, SheetBody, SheetFooter, SheetHeader } from "./components/Sheet/S
 export type { SheetProps } from "./components/Sheet/Sheet";
 
 export { ConfirmDialog } from "./components/ConfirmDialog/ConfirmDialog";
-export type { ConfirmDialogProps } from "./components/ConfirmDialog/ConfirmDialog";
+export type { ConfirmDialogProps, ConfirmDialogTone } from "./components/ConfirmDialog/ConfirmDialog";
 
 export { Screen, ScreenContent } from "./components/Screen/Screen";
 

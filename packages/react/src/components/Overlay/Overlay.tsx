@@ -14,6 +14,8 @@ export interface OverlayProps {
   /** Accessible name of the dialog. */
   label: string;
   variant: "modal" | "sheet";
+  /** alertdialog interrupts — confirms use it so AT announces the question. */
+  role?: "dialog" | "alertdialog";
   /** Scrim click dismisses. Confirmations turn this off. */
   closeOnScrimClick: boolean;
   panelClassName: string | undefined;
@@ -25,7 +27,7 @@ export interface OverlayProps {
  * semantics, useOverlay behaviour, exit-animation presence. Not exported
  * from the package.
  */
-export function Overlay({ open, onClose, label, variant, closeOnScrimClick, panelClassName, children }: OverlayProps) {
+export function Overlay({ open, onClose, label, variant, role = "dialog", closeOnScrimClick, panelClassName, children }: OverlayProps) {
   const { mounted, visible } = usePresence(open, OVERLAY_EXIT_MS);
   const ref = useOverlay<HTMLDivElement>({ open, onClose });
 
@@ -40,7 +42,7 @@ export function Overlay({ open, onClose, label, variant, closeOnScrimClick, pane
     >
       <div
         ref={ref}
-        role="dialog"
+        role={role}
         aria-modal="true"
         aria-label={label}
         tabIndex={-1}

@@ -55,4 +55,13 @@ describe("Modal", () => {
     const { baseElement } = render(<Example />);
     expect(await axe(baseElement)).toHaveNoViolations();
   });
+
+  it("role=alertdialog overrides the default dialog role", () => {
+    render(
+      <Modal open onClose={() => {}} label="Sure?" role="alertdialog">
+        x
+      </Modal>,
+    );
+    expect(screen.getByRole("alertdialog", { name: "Sure?" })).toBeInTheDocument();
+  });
 });
