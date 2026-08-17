@@ -31,6 +31,16 @@ describe("Link", () => {
     expect(screen.getByTestId("fake")).toHaveAttribute("href", "/r");
   });
 
+  it("as accepts a router link's own props", () => {
+    // Routers name the destination `to`, not `href` — the polymorphic typing
+    // has to admit it or every router link needs an adapter.
+    const Router = ({ to, ...rest }: { to: string } & React.ComponentProps<"a">) => (
+      <a data-testid="router" href={to} {...rest} />
+    );
+    render(<Link as={Router} to="/dest">go</Link>);
+    expect(screen.getByTestId("router")).toHaveAttribute("href", "/dest");
+  });
+
   it("plain variant applies", () => {
     render(<Link href="/a" variant="plain">go</Link>);
     expect(screen.getByRole("link").className).toContain("variant-plain");

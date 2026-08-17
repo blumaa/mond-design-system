@@ -1,4 +1,4 @@
-import type { AnchorHTMLAttributes, ElementType, ReactElement, Ref } from "react";
+import type { ComponentPropsWithoutRef, ElementType, ReactElement, ReactNode } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Link.module.css";
 
@@ -6,7 +6,7 @@ export type LinkVariant = "inline" | "standalone" | "plain";
 
 export type LinkSize = "xs" | "sm" | "base" | "lg" | "xl";
 
-export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+type LinkOwnProps<E extends ElementType> = {
   /** inline = underlined, lives in running text. standalone = nav/action link.
       plain = inherits the surrounding color and weight, underlines on hover —
       for links whose context already marks them (a card title, a list row). */
@@ -15,10 +15,14 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   size?: LinkSize;
   /** Opens in a new tab with rel protection. */
   external?: boolean;
-  /** Element override, e.g. a router's Link. */
-  as?: ElementType;
-  ref?: Ref<HTMLAnchorElement>;
-}
+  /** Element override — `'button'` for a link-styled action, or a router's
+      Link component, whose own props (`to`, `href`, …) then type-check. */
+  as?: E;
+  children?: ReactNode;
+};
+
+export type LinkProps<E extends ElementType = "a"> = LinkOwnProps<E> &
+  Omit<ComponentPropsWithoutRef<E>, keyof LinkOwnProps<E>>;
 
 /**
  * Text link. Inline links keep their underline: color alone fails WCAG 1.4.1
@@ -27,21 +31,27 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
  * ```tsx
  * <Text>Read the <Link href="/terms">terms</Link>.</Text>
  * <Link variant="standalone" href="https://example.com" external>Docs</Link>
- * <Link as={NextLink} href="/about">About</Link>
+ * <Link as={RouterLink} to="/about">About</Link>
  * ```
  */
-export function Link({
+export function Link<E extends ElementType = "a">({
   variant = "inline",
   size,
   external = false,
-  as: Element = "a",
-  className,
+  as,
   ...rest
-}: LinkProps): ReactElement {
+}: LinkProps<E>): ReactElement {
+  const Element: ElementType = as ?? "a";
+  // className and type live on the generic remainder — a plain destructure
+  // cannot reach into ComponentPropsWithoutRef<E> while E is still open.
+  const { className, type, ...others } = rest as {
+    className?: string;
+    type?: string;
+  } & Record<string, unknown>;
   const externalProps = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
   // A button-rendered link defaults to type="button" — inside a form, the
   // browser's "submit" default would fire on every click.
-  const typeProps = Element === "button" ? { type: rest.type ?? "button" } : {};
+  const typeProps = Element === "button" ? { type: type ?? "button" } : type !== undefined ? { type } : {};
   return (
     <Element
       className={cx(
@@ -51,7 +61,7 @@ export function Link({
         className,
       )}
       {...externalProps}
-      {...rest}
+      {...others}
       {...typeProps}
     />
   );
