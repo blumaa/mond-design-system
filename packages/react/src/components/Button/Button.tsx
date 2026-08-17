@@ -79,7 +79,7 @@ export function Button({
       {...own}
       {...rest}
     >
-      {loading ? <Spinner size={SPINNER_PX[size]} /> : iconLeft}
+      {loading ? <Spinner size={SPINNER_PX[size]} label="" aria-hidden="true" /> : iconLeft}
       {children}
       {!loading && iconRight}
     </Element>

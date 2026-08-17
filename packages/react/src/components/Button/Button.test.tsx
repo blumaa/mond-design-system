@@ -28,12 +28,14 @@ describe("Button", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
-  it("loading disables, sets aria-busy, and shows a spinner", () => {
+  it("loading disables, sets aria-busy, and keeps the accessible name", () => {
     render(<Button loading>Save</Button>);
-    const btn = screen.getByRole("button");
+    // aria-busy already announces the state; the spinner is decorative. A live
+    // spinner would prepend "Loading" to the button's accessible name.
+    const btn = screen.getByRole("button", { name: "Save" });
     expect(btn).toBeDisabled();
     expect(btn).toHaveAttribute("aria-busy", "true");
-    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
   it("renders icon slots", () => {
