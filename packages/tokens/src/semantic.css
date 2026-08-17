@@ -1,0 +1,128 @@
+/* Semantic contract — the ONLY color/font tokens components may consume.
+   Values below are the neutral "mond" defaults. A consuming app brands
+   itself by re-pointing these same tokens in its own CSS file (copy
+   brand-template.css). Components never know which brand loaded.
+
+   Dark is a theme scope: it re-points the SAME aliases. Never a second
+   component set, never dark-specific component CSS. Tokens absent from the
+   dark block deliberately do not flip (scrim, on-media — they sit on fixed
+   backdrops). */
+:root {
+  color-scheme: light;
+
+  /* fonts — role names, brand supplies faces */
+  --mds-font-display: ui-serif, Georgia, "Times New Roman", serif;
+  --mds-font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mds-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* text */
+  --mds-text-primary: #232323;
+  --mds-text-secondary: #4b4b4b;
+  --mds-text-muted: #636363;
+  --mds-text-inverse: #f6f6f4;
+  --mds-text-accent: var(--mds-accent);
+  --mds-text-on-media: #ffffff; /* over photos/scrim — no dark flip */
+
+  /* surfaces */
+  --mds-surface-page: #f6f6f4;
+  --mds-surface-card: #ffffff;
+  --mds-surface-raised: #ffffff; /* separates by shadow when no lighter step exists */
+  --mds-surface-sunken: #eaeae7;
+  --mds-surface-inverse: #232323;
+  --mds-surface-media: #141414; /* letterbox behind media — near-black in both themes */
+  --mds-surface-selected: #e5ebf8;
+
+  /* borders + controls */
+  --mds-border-subtle: #e2e2df;
+  --mds-border-strong: #c7c7c3;
+  --mds-control-border: #6e6e6e; /* 3:1 minimum against page and card */
+  --mds-control-knob: #ffffff;
+
+  /* action — the default (primary) interactive fill */
+  --mds-action-bg: #232323;
+  --mds-action-fg: #ffffff;
+  --mds-action-bg-hover: #3a3a3a;
+  --mds-action-bg-active: #000000;
+  /* Disabled is a color, not a fade: opacity composites unpredictably. */
+  --mds-action-disabled-bg: #d9d9d6;
+  --mds-action-disabled-fg: #6e6e6e;
+
+  /* accent */
+  --mds-accent: #1d4ed8;
+  --mds-accent-contrast: #ffffff;
+  --mds-accent-hover: #1e40af;
+  --mds-accent-soft: #dee7fa;
+
+  /* status */
+  --mds-status-danger: #b3261e;
+  --mds-status-danger-contrast: #ffffff;
+  --mds-status-danger-soft: #f9dedc;
+  --mds-status-warning: #8a5a00;
+  --mds-status-warning-contrast: #ffffff;
+  --mds-status-warning-soft: #f6e7c8;
+  --mds-status-success: #22703f;
+  --mds-status-success-contrast: #ffffff;
+  --mds-status-success-soft: #dcebdd;
+
+  /* focus — geometry lives in core/layout.css */
+  --mds-focus-ring-color: #1d4ed8;
+
+  /* overlays — fixed backdrops, most do not flip with theme */
+  --mds-scrim: rgb(0 0 0 / 0.5);
+  --mds-scrim-strong: rgb(0 0 0 / 0.7);
+  --mds-overlay: rgb(15 15 15 / 0.45); /* backdrop behind Sheet/Modal */
+  --mds-on-media-dim: rgb(255 255 255 / 0.55);
+
+  /* shadow tint — space-separated channels, alpha varies in core/elevation.css */
+  --mds-shadow-rgb: 20 20 20;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --mds-text-primary: #ededeb;
+  --mds-text-secondary: #b0b0ac;
+  --mds-text-muted: #969692;
+  --mds-text-inverse: #1b1b1b;
+
+  --mds-surface-page: #151515;
+  --mds-surface-card: #1e1e1e;
+  --mds-surface-raised: #262626;
+  --mds-surface-sunken: #0e0e0e;
+  --mds-surface-inverse: #f2f2f0;
+  --mds-surface-selected: #26324b;
+
+  --mds-border-subtle: #303030;
+  --mds-border-strong: #4a4a4a;
+  --mds-control-border: #8a8a8a;
+
+  --mds-action-bg: #ededeb;
+  --mds-action-fg: #1b1b1b;
+  --mds-action-bg-hover: #ffffff;
+  --mds-action-bg-active: #d6d6d4;
+  --mds-action-disabled-bg: #3a3a3a;
+  --mds-action-disabled-fg: #969692;
+
+  /* accent and status lift on dark surfaces so contrast holds */
+  --mds-accent: #8fb1f5;
+  --mds-accent-contrast: #0f2247;
+  --mds-accent-hover: #a9c4f8;
+  --mds-accent-soft: #26334d;
+
+  --mds-status-danger: #f28b82;
+  --mds-status-danger-contrast: #401110;
+  --mds-status-danger-soft: #3c2422;
+  --mds-status-warning: #f5c542;
+  --mds-status-warning-contrast: #402d00;
+  --mds-status-warning-soft: #3b3020;
+  --mds-status-success: #7fd99a;
+  --mds-status-success-contrast: #0b3a1e;
+  --mds-status-success-soft: #223b2b;
+
+  --mds-focus-ring-color: #8fb1f5;
+
+  --mds-scrim: rgb(0 0 0 / 0.6);
+  --mds-overlay: rgb(0 0 0 / 0.55);
+
+  --mds-shadow-rgb: 0 0 0;
+}

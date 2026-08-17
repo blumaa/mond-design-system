@@ -1,0 +1,36 @@
+/* Motion — fades and short translations. No bounce, no overshoot. */
+:root {
+  --mds-dur-fast: 120ms;
+  --mds-dur-base: 200ms;
+  --mds-dur-slow: 320ms;
+  --mds-dur-pulse: 1200ms; /* looping pending state — reads as waiting, not blinking */
+
+  --mds-ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --mds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  --mds-shift-sm: 2px; /* entire translation vocabulary */
+  --mds-shift-md: 8px;
+
+  --mds-transition-control: var(--mds-dur-fast) var(--mds-ease-standard);
+  --mds-transition-surface: var(--mds-dur-base) var(--mds-ease-standard);
+  --mds-transition-sheet: var(--mds-dur-slow) var(--mds-ease-standard);
+  --mds-transition-reveal: var(--mds-dur-base) var(--mds-ease-standard);
+
+  /* scroll-behavior keyword — browser-owned motion, tokenized so the rule
+     below turns it off with everything else */
+  --mds-scroll: smooth;
+}
+
+/* Honor OS setting. Transitions collapse, not disappear: state changes still
+   complete, nothing waits on a transitionend that never fires. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mds-dur-fast: 1ms;
+    --mds-dur-base: 1ms;
+    --mds-dur-slow: 1ms;
+    --mds-dur-pulse: 1ms;
+    --mds-shift-sm: 0px;
+    --mds-shift-md: 0px;
+    --mds-scroll: auto; /* keyword, not duration — auto is the jump */
+  }
+}

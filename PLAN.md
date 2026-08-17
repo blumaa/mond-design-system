@@ -73,14 +73,14 @@ MDS-2/
       src/
         core/                 colors.css spacing.css typography.css radius.css
                               elevation.css motion.css layout.css
-        semantic.css          the contract — every --mds-* alias, light values
+        semantic.css          the contract — every --mds-* alias, neutral
+                              "mond" defaults, light + dark scopes
         base.css              reset + document defaults + focus-visible
-        brands/
-          fairplay.css        primitives + semantic re-point + dark scope
-          kinbaku.css         same
-          comphq.css          same (placeholder values day 1)
-        styles.css            @import graph, default (unbranded) entry
-      contrast.test.ts        WCAG gate, generalized: every brand × light+dark
+        brand-template.css    full contract listing — apps copy INTO their
+                              own repo, fill values. MDS ships zero brands.
+        styles.css            @import graph
+      contrast.test.ts        WCAG gate: mond defaults × light+dark, template
+                              contract-coverage check
     react/                    @mds/react
       src/
         components/<Name>/    Name.tsx  Name.module.css  Name.test.tsx
@@ -88,7 +88,8 @@ MDS-2/
         internal/             shared unexported helpers (cx, Portal)
         index.ts              public barrel
     storybook/                @mds/storybook — atomic-grouped titles,
-                              brand + theme toolbar switcher, a11y addon
+                              theme toolbar + local demo brand (private,
+                              proves the swap; not published), a11y addon
   scripts/
     check-tokens.mjs          no literal hex/px-media in components (port from kinbaku)
   docs/
@@ -98,8 +99,9 @@ MDS-2/
 Consumption:
 
 ```tsx
-import "@mds/tokens/brands/fairplay.css";  // brand picks everything
-import { Button, Card } from "@mds/react";
+import "@mond-design-system/tokens/styles.css"; // core + semantic defaults + base
+import "./brand.css";                           // APP-OWNED: copied from brand-template.css, loads after, wins
+import { Button, Card } from "@mond-design-system/react";
 // dark: data-theme="dark" on any ancestor
 ```
 
@@ -218,10 +220,11 @@ Apps live in separate repos — npm is the consumption mechanism.
 2. **Brand flourish components** (BallLoader, conduct-card tones). RESOLVED: stay in app, composed from MDS primitives. MDS ships generic `Spinner`. Flourish = app identity, not system.
 3. **Package naming/publishing.** RESOLVED → §8b. npm publish under existing `@mond-design-system` scope, changesets + semver, CI-only publishing. Scope stays `@mond-design-system` — ownership already held, rename cosmetic.
 4. **MDS-2 final location.** RESOLVED: `tools-libraries/MDS-2`, own git repo. Old `tools-libraries/mond-design-system` deleted at phase 7.
-5. **Typography.** RESOLVED: brand CSS declares `@font-face`, woff2 shipped in `@mond-design-system/tokens` assets. One brand file = whole brand. Subpath exports keep unused brand fonts out of other apps' bundles.
+5. **Typography.** RESOLVED (superseded by 9): brand CSS declares `@font-face`; woff2 lives in the APP, not in MDS. Brand re-points `--mds-font-*` role tokens.
 6. **Tooltip/Popover/Dropdown.** RESOLVED: wait — build when CompHQPro has real requirements (YAGNI, no consumer = optimistic code). But: `useOverlay` API designed anchor-capable now; positioning engine when built = `@floating-ui/dom`, never hand-rolled. Mirrors MUI (Popper on Floating UI) and Spectrum (`@react-aria/overlays` single positioning layer) — one shared layer, anchored components compose it.
 7. **CSS strategy.** RESOLVED: CSS Modules. React Spectrum model — internals private (hashed classes), customization via tokens + props only; no MUI-style stable class contract (override API for unknown consumers we don't have, maintenance cost we'd pay anyway). Zero-runtime CSS confirmed by both references (Pigment CSS, Spectrum style macros).
 8. **React target.** RESOLVED: React 19-only, peer `>=19`. MDS is agnostic — sets its own bar, doesn't track app state. No `forwardRef` (ref as prop), modern APIs allowed. Consequence: apps upgrade to React 19 as prerequisite of their migration phase. Ported source code (both libs use forwardRef) modernized during port.
+9. **Brand ownership (added 2026-08-17, supersedes earlier "3 brand files in tokens").** RESOLVED: brands live in CONSUMING APPS, never in MDS. MDS = contract (semantic.css, neutral defaults) + `brand-template.css`. App copies template, re-points `--mds-*` tokens, owns its fonts. MDS contains zero product/app knowledge — no app names, no app-domain tokens (no feed widths, conduct cards, thumbnails). Storybook proves theming with a private generic demo brand.
 
 ---
 
@@ -230,12 +233,12 @@ Apps live in separate repos — npm is the consumption mechanism.
 Each phase = deliverable + gate. TDD throughout.
 
 - **Phase 0 — scaffold.** Workspace, turbo, tsup, vitest, Storybook, CI scripts, token-lint. Gate: empty packages build + test green.
-- **Phase 1 — tokens.** Core scales, semantic contract, base.css, 3 brand files (fairplay + kinbaku real values ported; comphq placeholder). Contrast gate green for all brands × themes. Gate: contrast + lint tests pass.
-- **Phase 2 — primitives.** §5 primitive tier, ported test-first from best of both sources. Gate: tests + axe + Storybook renders under all 3 brands, both themes.
+- **Phase 1 — tokens.** Core scales, semantic contract with neutral mond defaults (light + dark), base.css, brand-template.css. No brand files in MDS (§9.9). Gate: contrast tests green both themes, template covers full contract, token lint clean.
+- **Phase 2 — primitives.** §5 primitive tier, ported test-first from best of both sources. Adds Storybook demo brand (private) to prove token swap. Gate: tests + axe + Storybook renders default + demo brand, both themes.
 - **Phase 3 — forms + composites.** Same discipline.
 - **Phase 4 — patterns + hooks.** Overlay stack (Modal/Sheet/ConfirmDialog on useOverlay), Screen/AppBar/TabBar.
-- **Phase 5 — pilot migration: fairplay.** Prerequisite: app upgrades React 18.3 → 19. Then swap `@fair-play/component-lib` imports → `@mond-design-system/react` + fairplay brand CSS. App-domain components refactored to compose MDS parts. Gate: app test suite + visual pass, zero local duplicates of MDS components.
-- **Phase 6 — kinbaku migration.** Same, incl. React 19 prerequisite. Gate: same.
+- **Phase 5 — pilot migration: fairplay.** Prerequisite: app upgrades React 18.3 → 19. Then: write fairplay brand CSS INSIDE the app (copy brand-template.css, port `--fp-*` values, app keeps its fonts + app-domain tokens), swap `@fair-play/component-lib` imports → `@mond-design-system/react`. App-domain components refactored to compose MDS parts. Gate: app test suite + visual pass, zero local duplicates of MDS components.
+- **Phase 6 — kinbaku migration.** Same, incl. React 19 prerequisite; kinbaku brand CSS written in-app (7 primitives + color-mix ramps port cleanly into template). Gate: same.
 - **Phase 7 — retire.** Delete old MDS + both app-local libs. CompHQPro starts on MDS day one.
 
 Order rationale: fairplay first — CSS Modules already, smaller delta. Kinbaku second — class-name strategy changes.

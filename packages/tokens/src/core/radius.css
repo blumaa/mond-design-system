@@ -1,0 +1,16 @@
+/* Radius — step scale + role aliases. "Cards are softer" = one edit. */
+:root {
+  --mds-radius-1: 4px;
+  --mds-radius-2: 8px;
+  --mds-radius-3: 12px;
+  --mds-radius-4: 16px;
+  --mds-radius-pill: 999px;
+
+  --mds-radius-control: var(--mds-radius-2);
+  --mds-radius-card: var(--mds-radius-3);
+  --mds-radius-media: var(--mds-radius-2);
+  --mds-radius-sheet: var(--mds-radius-4);
+  --mds-radius-tag: var(--mds-radius-1);
+  --mds-radius-chip: var(--mds-radius-pill);
+  --mds-radius-avatar: var(--mds-radius-pill);
+}

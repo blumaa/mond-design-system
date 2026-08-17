@@ -1,0 +1,50 @@
+/* Base — reset + page defaults + focus. The only global CSS the system ships.
+   Everything else is component-scoped. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: var(--mds-scroll);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--mds-surface-page);
+  color: var(--mds-text-primary);
+  font: var(--mds-type-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* One focus treatment, everywhere. Components do not restyle focus. */
+:focus-visible {
+  outline: var(--mds-focus-width) solid var(--mds-focus-ring-color);
+  outline-offset: var(--mds-focus-offset);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}

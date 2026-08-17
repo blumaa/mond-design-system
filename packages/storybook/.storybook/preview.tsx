@@ -1,35 +1,20 @@
+import React from "react";
 import type { Decorator, Preview } from "@storybook/react-vite";
-
-// Every brand stylesheet is imported; the decorator picks which one applies by
-// setting data-brand on <html>. Brand files scope their primitives under
-// :root[data-brand="<name>"] when loaded side by side — see tokens README.
-import "@mond-design-system/tokens/brands/fairplay.css";
-import "@mond-design-system/tokens/brands/kinbaku.css";
-import "@mond-design-system/tokens/brands/comphq.css";
+import "@mond-design-system/tokens/styles.css";
 import "@mond-design-system/react/styles.css";
 
-const withBrandAndTheme: Decorator = (Story, context) => {
-  const { brand, theme } = context.globals;
-  document.documentElement.dataset.brand = brand;
-  document.documentElement.dataset.theme = theme;
-  document.documentElement.style.background = "var(--mds-surface-page)";
+/* Theme rides on the html element, same as in an app. Brand CSS is app-owned;
+   Storybook gets a local demo brand in Phase 2 to prove the swap. */
+const withTheme: Decorator = (Story, context) => {
+  document.documentElement.dataset.theme = context.globals.theme as string;
   return <Story />;
 };
 
 const preview: Preview = {
-  decorators: [withBrandAndTheme],
+  decorators: [withTheme],
   globalTypes: {
-    brand: {
-      description: "Brand token set",
-      toolbar: {
-        title: "Brand",
-        icon: "paintbrush",
-        items: ["fairplay", "kinbaku", "comphq"],
-        dynamicTitle: true,
-      },
-    },
     theme: {
-      description: "Color scheme",
+      description: "Color theme",
       toolbar: {
         title: "Theme",
         icon: "mirror",
@@ -39,8 +24,10 @@ const preview: Preview = {
     },
   },
   initialGlobals: {
-    brand: "fairplay",
     theme: "light",
+  },
+  parameters: {
+    a11y: { test: "error" },
   },
 };
 

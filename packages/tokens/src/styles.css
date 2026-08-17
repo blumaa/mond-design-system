@@ -1,0 +1,10 @@
+/* Everything the system ships, one import. Brand CSS is app-owned and loads
+   AFTER this file so its re-points win. */
+@import "./core/spacing.css";
+@import "./core/radius.css";
+@import "./core/typography.css";
+@import "./core/elevation.css";
+@import "./core/motion.css";
+@import "./core/layout.css";
+@import "./semantic.css";
+@import "./base.css";

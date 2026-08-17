@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Token discipline, made runnable. Ported from the kinbaku design system.
+/* Token discipline, made runnable. Ported from the predecessor app-level systems.
  *
  * The brand promise — a rebrand is one CSS file and nothing else moves — only
  * holds if no component ever writes a raw value or reaches for a token that
