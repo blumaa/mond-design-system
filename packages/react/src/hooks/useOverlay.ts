@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import type { RefObject } from "react";
+import { OverlayHistoryContext } from "./overlayHistory";
 
 export interface UseOverlayOptions {
   open: boolean;
@@ -24,6 +25,16 @@ export function useOverlay<T extends HTMLElement>(options: UseOverlayOptions): R
   useEffect(() => {
     close.current = onClose;
   }, [onClose]);
+
+  /* Back-button contract: an app that supplies OverlayHistory gets every open
+     overlay registered, so back dismisses the innermost one instead of leaving
+     the screen underneath. Null context (Storybook, tests, non-opted apps) is
+     a no-op. The register/dispose pair keeps history balanced either way. */
+  const overlayHistory = useContext(OverlayHistoryContext);
+  useEffect(() => {
+    if (!open || !overlayHistory) return;
+    return overlayHistory.register(() => close.current());
+  }, [open, overlayHistory]);
 
   useEffect(() => {
     if (!open) return;

@@ -1,0 +1,45 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-gap-hairline);
+  padding: var(--mds-space-1) var(--mds-space-3);
+  border-radius: var(--mds-radius-chip);
+  font: var(--mds-type-label);
+  white-space: nowrap;
+  cursor: default;
+  transition: var(--mds-transition-control);
+}
+
+/* Unselected skins. */
+.variant-soft {
+  background: var(--mds-accent-soft);
+  border: var(--mds-border-width) solid transparent;
+  color: var(--mds-text-accent);
+}
+
+.variant-outline {
+  background: transparent;
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  color: var(--mds-text-secondary);
+}
+
+/* After the variants, so a selected chip wins whichever it was built from. */
+.selected {
+  background: var(--mds-accent);
+  border-color: transparent;
+  color: var(--mds-accent-contrast);
+}
+
+/* Only the button branch gets pointer + hover feedback; a selected chip is
+   already at full accent and would only muddy under a filter. */
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:not(.selected):hover {
+  filter: brightness(0.97);
+}
+
+.disabled {
+  opacity: 0.5;
+}

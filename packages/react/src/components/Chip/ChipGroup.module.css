@@ -1,0 +1,17 @@
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.gap-hairline {
+  gap: var(--mds-gap-hairline);
+}
+
+.gap-tight {
+  gap: var(--mds-gap-tight);
+}
+
+.gap-base {
+  gap: var(--mds-gap);
+}

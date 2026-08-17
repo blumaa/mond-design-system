@@ -1,0 +1,40 @@
+.bar {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  min-width: 0;
+}
+
+.gap-hairline {
+  gap: var(--mds-gap-hairline);
+}
+
+.gap-tight {
+  gap: var(--mds-gap-tight);
+}
+
+.gap-base {
+  gap: var(--mds-gap);
+}
+
+/* Frames the strip so its overflow reads as a scroll area. */
+.bordered {
+  padding: var(--mds-space-1) var(--mds-space-3);
+  border-radius: var(--mds-radius-pill);
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  background: var(--mds-surface-sunken);
+}
+
+/* Fade only the trailing edge; the leading chip stays fully legible at rest.
+   `black` is a mask stop, not a colour — only its alpha is read, so it is
+   theme-independent by definition and deliberately not a token. */
+.fade {
+  mask-image: linear-gradient(to right, black calc(100% - var(--mds-space-6)), transparent);
+}
+
+/* Each child keeps its intrinsic width so the row never wraps. */
+.item {
+  flex: none;
+  display: flex;
+}

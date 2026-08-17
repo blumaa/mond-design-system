@@ -1,0 +1,41 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-gap-hairline);
+  padding: var(--mds-space-1) var(--mds-space-2);
+  margin: calc(-1 * var(--mds-space-1)) calc(-1 * var(--mds-space-2));
+  border: none;
+  background: transparent;
+  border-radius: var(--mds-radius-control);
+  color: var(--mds-text-secondary);
+  font: var(--mds-type-label);
+  cursor: pointer;
+  transition: var(--mds-transition-control);
+}
+
+.button:hover:not(:disabled) {
+  background: var(--mds-surface-sunken);
+}
+
+.button:active:not(:disabled) {
+  background: var(--mds-surface-selected);
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* Active tint — the glyph inherits it via currentColor. */
+.tone-accent {
+  color: var(--mds-accent);
+}
+
+.tone-danger {
+  color: var(--mds-status-danger);
+}
+
+.glyph {
+  display: inline-flex;
+  align-items: center;
+}

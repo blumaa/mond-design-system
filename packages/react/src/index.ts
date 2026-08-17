@@ -32,6 +32,21 @@ export type { AvatarGroupProps } from "./components/AvatarGroup/AvatarGroup";
 export { Badge } from "./components/Badge/Badge";
 export type { BadgeProps, BadgeTone } from "./components/Badge/Badge";
 
+export { Chip } from "./components/Chip/Chip";
+export type { ChipProps, ChipVariant } from "./components/Chip/Chip";
+
+export { ChipGroup } from "./components/Chip/ChipGroup";
+export type { ChipGroupGap, ChipGroupProps } from "./components/Chip/ChipGroup";
+
+export { ChipBar } from "./components/Chip/ChipBar";
+export type { ChipBarGap, ChipBarProps } from "./components/Chip/ChipBar";
+
+export { CountButton } from "./components/CountButton/CountButton";
+export type { CountButtonProps, CountButtonTone } from "./components/CountButton/CountButton";
+
+export { DateTimePicker } from "./components/DateTimePicker/DateTimePicker";
+export type { DateTimePickerLabels, DateTimePickerProps } from "./components/DateTimePicker/DateTimePicker";
+
 export { Tag } from "./components/Tag/Tag";
 export type { TagProps, TagTone } from "./components/Tag/Tag";
 
@@ -117,6 +132,9 @@ export type { TabBarItemProps, TabBarProps } from "./components/TabBar/TabBar";
 
 export { useOverlay } from "./hooks/useOverlay";
 export type { UseOverlayOptions } from "./hooks/useOverlay";
+
+export { OverlayHistoryContext } from "./hooks/overlayHistory";
+export type { OverlayHistory } from "./hooks/overlayHistory";
 
 export { usePresence } from "./hooks/usePresence";
 export type { Presence } from "./hooks/usePresence";
