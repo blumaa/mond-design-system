@@ -62,6 +62,10 @@ export interface ListItemProps extends Omit<HTMLAttributes<HTMLElement>, "title"
   trailing?: ReactNode;
   /** Makes the whole row a button. */
   onClick?: () => void;
+  /** Marks an onClick row as a toggle — a picker row that selects rather than
+      navigates. Lands as aria-pressed on the row button itself, where the
+      screen reader's focus is. Leave unset for rows that navigate. */
+  pressed?: boolean;
   /** Makes the whole row a link. Wins over onClick. */
   href?: string;
   /** What the row paints behind itself. Inside a ListGroup the group is the
@@ -83,6 +87,7 @@ export function ListItem({
   leading,
   trailing,
   onClick,
+  pressed,
   href,
   surface,
   className,
@@ -115,7 +120,12 @@ export function ListItem({
           {content}
         </a>
       ) : onClick !== undefined ? (
-        <button type="button" className={cx(styles.row, styles.interactive)} onClick={onClick}>
+        <button
+          type="button"
+          className={cx(styles.row, styles.interactive)}
+          onClick={onClick}
+          aria-pressed={pressed}
+        >
           {content}
         </button>
       ) : (

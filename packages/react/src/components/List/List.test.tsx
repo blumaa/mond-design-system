@@ -120,6 +120,24 @@ describe("List", () => {
     expect(onClick).toHaveBeenCalled();
   });
 
+  // A row that toggles — a member picker — is a pressed button, and the state
+  // has to live on the button a screen reader is focused on, not on the <li>
+  // around it.
+  it("puts aria-pressed on the row button, not the root", () => {
+    render(
+      <ListGroup>
+        <ListItem title="Ada" onClick={() => {}} pressed data-testid="row" />
+      </ListGroup>,
+    );
+    expect(screen.getByRole("button", { name: "Ada" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByTestId("row")).not.toHaveAttribute("aria-pressed");
+  });
+
+  it("leaves aria-pressed off entirely unless the row is a toggle", () => {
+    render(<ListItem title="Tap" onClick={() => {}} />);
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-pressed");
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <ListGroup>
