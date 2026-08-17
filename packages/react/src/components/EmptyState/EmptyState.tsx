@@ -14,7 +14,18 @@ export interface EmptyStateProps {
   className?: string;
 }
 
-/** Nothing-here view: explains the empty screen and offers the next step. */
+/**
+ * Nothing-here view: explains the empty screen and offers the next step.
+ *
+ * ```tsx
+ * <EmptyState
+ *   icon={<Icon name="inbox" size="lg" />}
+ *   title="No sessions yet"
+ *   description="Create your first session to get started."
+ *   action={<Button onClick={create}>New session</Button>}
+ * />
+ * ```
+ */
 export function EmptyState({ title, description, icon, action, className }: EmptyStateProps): ReactElement {
   return (
     <div className={cx(styles.root, className)}>

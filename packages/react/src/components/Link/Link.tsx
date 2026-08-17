@@ -17,6 +17,12 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 /**
  * Text link. Inline links keep their underline: color alone fails WCAG 1.4.1
  * for links inside prose.
+ *
+ * ```tsx
+ * <Text>Read the <Link href="/terms">terms</Link>.</Text>
+ * <Link variant="standalone" href="https://example.com" external>Docs</Link>
+ * <Link as={NextLink} href="/about">About</Link>
+ * ```
  */
 export function Link({
   variant = "inline",

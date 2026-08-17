@@ -12,7 +12,13 @@ export interface SearchFieldProps
   ref?: Ref<HTMLInputElement>;
 }
 
-/** Controlled search input with a clear affordance once there is text. */
+/**
+ * Controlled search input with a clear affordance once there is text.
+ *
+ * ```tsx
+ * <SearchField label="Search sessions" value={query} onChange={setQuery} />
+ * ```
+ */
 export function SearchField({ label, value, onChange, className, ...rest }: SearchFieldProps): ReactElement {
   return (
     <span className={cx(styles.wrap, className)}>

@@ -9,7 +9,18 @@ export interface CheckboxProps
   ref?: Ref<HTMLInputElement>;
 }
 
-/** Native checkbox, styled box. Label is the touch target too. */
+/**
+ * Native checkbox, styled box. Label is the touch target too.
+ *
+ * ```tsx
+ * <Checkbox label="Remember me" defaultChecked />
+ * <Checkbox
+ *   label="Accept terms"
+ *   checked={accepted}
+ *   onChange={(e) => setAccepted(e.target.checked)}
+ * />
+ * ```
+ */
 export function Checkbox({ label, className, ...rest }: CheckboxProps): ReactElement {
   return (
     <label className={cx(styles.root, className)}>

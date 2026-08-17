@@ -10,7 +10,15 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   ref?: Ref<HTMLTextAreaElement>;
 }
 
-/** Multi-line text input. Inside a Field it inherits id/description/invalid. */
+/**
+ * Multi-line text input. Inside a Field it inherits id/description/invalid.
+ *
+ * ```tsx
+ * <Field label="Bio">
+ *   <Textarea maxLength={160} showCount />
+ * </Field>
+ * ```
+ */
 export function Textarea({ rows = 3, showCount = false, className, ...rest }: TextareaProps): ReactElement {
   const field = useFieldContext();
   const [tracked, setTracked] = useState(() => String(rest.defaultValue ?? ""));

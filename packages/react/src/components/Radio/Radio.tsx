@@ -10,7 +10,15 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 
 /**
  * Native radio, styled dot. Group by `name`; wrap the group in
- * <fieldset><legend> for a group label.
+ * `<fieldset>`/`<legend>` for a group label.
+ *
+ * ```tsx
+ * <fieldset>
+ *   <legend>Plan</legend>
+ *   <Radio name="plan" label="Free" checked={plan === "free"} onChange={() => setPlan("free")} />
+ *   <Radio name="plan" label="Pro" checked={plan === "pro"} onChange={() => setPlan("pro")} />
+ * </fieldset>
+ * ```
  */
 export function Radio({ label, className, ...rest }: RadioProps): ReactElement {
   return (

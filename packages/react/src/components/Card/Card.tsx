@@ -17,6 +17,16 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> 
 /**
  * Surface container. Compose with CardHeader/CardBody/CardFooter — the card
  * owns internal spacing, sections own their content.
+ *
+ * ```tsx
+ * <Card>
+ *   <CardHeader><Heading level={3}>Next session</Heading></CardHeader>
+ *   <CardBody><Text>Tomorrow, 19:00</Text></CardBody>
+ *   <CardFooter><Button size="sm">Join</Button></CardFooter>
+ * </Card>
+ *
+ * <Card href="/items/42" variant="flat">…</Card>
+ * ```
  */
 export function Card({ children, variant = "card", onClick, href, className, ...rest }: CardProps): ReactElement {
   const cardClass = cx(styles.card, styles[`variant-${variant}`], className);

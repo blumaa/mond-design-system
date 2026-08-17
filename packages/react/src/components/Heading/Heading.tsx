@@ -22,7 +22,14 @@ const LEVEL_VARIANT: Record<HeadingLevel, HeadingVariant> = {
   4: "subtitle",
 };
 
-/** Brand headings on the core roles. `level` = semantics, `variant` = size. */
+/**
+ * Brand headings on the core roles. `level` = semantics, `variant` = size.
+ *
+ * ```tsx
+ * <Heading level={1}>Sessions</Heading>
+ * <Heading level={2} variant="subtitle" tone="secondary">This week</Heading>
+ * ```
+ */
 export function Heading({
   level = 2,
   variant,

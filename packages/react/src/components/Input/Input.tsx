@@ -10,7 +10,17 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   ref?: Ref<HTMLInputElement>;
 }
 
-/** Single-line text input. Inside a Field it inherits id/description/invalid. */
+/**
+ * Single-line text input. Inside a Field it inherits id/description/invalid.
+ *
+ * ```tsx
+ * <Field label="Name">
+ *   <Input value={name} onChange={(e) => setName(e.target.value)} />
+ * </Field>
+ *
+ * <Input aria-label="Amount" type="number" size="sm" />
+ * ```
+ */
 export function Input({ size = "md", className, ...rest }: InputProps): ReactElement {
   const field = useFieldContext();
   return (

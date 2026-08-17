@@ -20,6 +20,18 @@ export interface SegmentedControlProps<T extends string = string> {
 /**
  * Exclusive choice among few visible options. Native radios under the hood —
  * free keyboard model and semantics.
+ *
+ * ```tsx
+ * <SegmentedControl
+ *   label="View"
+ *   options={[
+ *     { value: "list", label: "List" },
+ *     { value: "grid", label: "Grid" },
+ *   ]}
+ *   value={view}
+ *   onChange={setView}
+ * />
+ * ```
  */
 export function SegmentedControl<T extends string = string>({
   label,

@@ -6,7 +6,14 @@ export interface DividerProps extends HTMLAttributes<HTMLDivElement> {
   orientation?: "horizontal" | "vertical";
 }
 
-/** Visual separator. Semantic separator role via <hr>-equivalent div. */
+/**
+ * Visual separator. Semantic separator role via <hr>-equivalent div.
+ *
+ * ```tsx
+ * <Divider />
+ * <Divider orientation="vertical" />
+ * ```
+ */
 export function Divider({ orientation = "horizontal", className, ...rest }: DividerProps): ReactElement {
   return (
     <div

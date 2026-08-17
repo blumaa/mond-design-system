@@ -34,7 +34,17 @@ export type ButtonProps = ButtonBaseProps & IconOnlyEnforcement;
 /* Spinner diameter per control size — matches the icon steps. */
 const SPINNER_PX: Record<ButtonSize, number> = { sm: 16, md: 18, lg: 20 };
 
-/** The tappable action. Semantics: button by default, link when `href`/`as` says so. */
+/**
+ * The tappable action. Semantics: button by default, link when `href`/`as` says so.
+ *
+ * ```tsx
+ * <Button onClick={save}>Save</Button>
+ * <Button variant="secondary" size="sm">Cancel</Button>
+ * <Button variant="danger" loading={deleting} onClick={remove}>Delete</Button>
+ * <Button iconOnly aria-label="Close" variant="ghost"><Icon name="close" /></Button>
+ * <Button href="/settings">Settings</Button>
+ * ```
+ */
 export function Button({
   variant = "primary",
   size = "md",

@@ -20,7 +20,16 @@ export interface InlineProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
 }
 
-/** Horizontal flow — Stack's row twin. Same token-bounded contract. */
+/**
+ * Horizontal flow — Stack's row twin. Same token-bounded contract.
+ *
+ * ```tsx
+ * <Inline gap="tight" align="center" justify="between">
+ *   <Text variant="label">Total</Text>
+ *   <Text>42</Text>
+ * </Inline>
+ * ```
+ */
 export function Inline({
   gap = "base",
   align = "center",

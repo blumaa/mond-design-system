@@ -22,6 +22,16 @@ export interface IconProviderProps {
  * Registry seam. The system never bundles an icon set — the app registers its
  * own (lucide, Material Symbols, …) once, at the root. Iconography is brand,
  * like color.
+ *
+ * ```tsx
+ * // App root: map names to your icon set once.
+ * <IconProvider render={(name, { size }) => <MyGlyph name={name} width={size} />}>
+ *   <App />
+ * </IconProvider>
+ *
+ * // Anywhere below:
+ * <Icon name="check" size="sm" />
+ * ```
  */
 export function IconProvider({ render, children }: IconProviderProps): ReactElement {
   return <IconContext.Provider value={render}>{children}</IconContext.Provider>;

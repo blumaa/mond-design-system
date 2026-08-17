@@ -9,7 +9,20 @@ export interface AppBarProps {
   trailing?: ReactNode;
 }
 
-/** Top app bar. Sticky, one per screen; the title is the page h1. */
+/**
+ * Top app bar. Sticky, one per screen; the title is the page h1.
+ *
+ * ```tsx
+ * <AppBar
+ *   title="Sessions"
+ *   trailing={
+ *     <Button iconOnly aria-label="Settings" variant="ghost" onClick={openSettings}>
+ *       <Icon name="settings" />
+ *     </Button>
+ *   }
+ * />
+ * ```
+ */
 export function AppBar({ title, leading, trailing }: AppBarProps) {
   return (
     <header className={styles.bar}>

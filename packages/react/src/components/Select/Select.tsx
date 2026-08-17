@@ -14,6 +14,15 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
  * Native select, styled. Native = free keyboard, mobile pickers, screen
  * reader behavior; a custom popover earns its complexity only when options
  * need rich content.
+ *
+ * ```tsx
+ * <Field label="Language">
+ *   <Select value={lang} onChange={(e) => setLang(e.target.value)}>
+ *     <option value="de">Deutsch</option>
+ *     <option value="en">English</option>
+ *   </Select>
+ * </Field>
+ * ```
  */
 export function Select({ size = "md", className, children, ...rest }: SelectProps): ReactElement {
   const field = useFieldContext();

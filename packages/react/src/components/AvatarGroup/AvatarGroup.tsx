@@ -13,7 +13,18 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   size?: AvatarSize;
 }
 
-/** Overlapping stack of avatars with a "+N" chip past `max`. */
+/**
+ * Overlapping stack of avatars with a "+N" chip past `max`.
+ *
+ * ```tsx
+ * <AvatarGroup max={3}>
+ *   <Avatar name="Ada Lovelace" />
+ *   <Avatar name="Grace Hopper" />
+ *   <Avatar name="Margaret Hamilton" />
+ *   <Avatar name="Katherine Johnson" />
+ * </AvatarGroup>
+ * ```
+ */
 export function AvatarGroup({
   children,
   max = 4,

@@ -11,6 +11,14 @@ export interface SwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
 /**
  * On/off toggle. Checkbox under the hood with role="switch" — native
  * semantics and forms integration, switch announcement.
+ *
+ * ```tsx
+ * <Switch
+ *   label="Notifications"
+ *   checked={enabled}
+ *   onChange={(e) => setEnabled(e.target.checked)}
+ * />
+ * ```
  */
 export function Switch({ label, className, ...rest }: SwitchProps): ReactElement {
   return (

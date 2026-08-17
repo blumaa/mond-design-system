@@ -23,7 +23,20 @@ export interface TabsProps {
   children: ReactNode;
 }
 
-/** Controlled tabs root. Compose with TabList, Tab, TabPanel. */
+/**
+ * Controlled tabs root. Compose with TabList, Tab, TabPanel.
+ *
+ * ```tsx
+ * <Tabs value={tab} onChange={setTab}>
+ *   <TabList label="Session details">
+ *     <Tab value="info">Info</Tab>
+ *     <Tab value="notes">Notes</Tab>
+ *   </TabList>
+ *   <TabPanel value="info">…</TabPanel>
+ *   <TabPanel value="notes">…</TabPanel>
+ * </Tabs>
+ * ```
+ */
 export function Tabs({ value, onChange, children }: TabsProps): ReactElement {
   const baseId = useId();
   return <TabsContext.Provider value={{ value, onChange, baseId }}>{children}</TabsContext.Provider>;

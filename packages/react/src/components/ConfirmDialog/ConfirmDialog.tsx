@@ -14,7 +14,21 @@ export interface ConfirmDialogProps {
   danger?: boolean | undefined;
 }
 
-/** Pre-composed Modal for the confirm/cancel pattern. */
+/**
+ * Pre-composed Modal for the confirm/cancel pattern.
+ *
+ * ```tsx
+ * <ConfirmDialog
+ *   open={open}
+ *   onClose={() => setOpen(false)}
+ *   onConfirm={deleteItem}
+ *   title="Delete item?"
+ *   description="This cannot be undone."
+ *   confirmLabel="Delete"
+ *   danger
+ * />
+ * ```
+ */
 export function ConfirmDialog({
   open,
   onClose,

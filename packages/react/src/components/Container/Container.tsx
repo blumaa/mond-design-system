@@ -12,7 +12,15 @@ export interface ContainerProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
 }
 
-/** Centered max-width column with page-edge padding. */
+/**
+ * Centered max-width column with page-edge padding.
+ *
+ * ```tsx
+ * <Container>
+ *   <Stack gap="section">…</Stack>
+ * </Container>
+ * ```
+ */
 export function Container({
   width = "content",
   as = "div",

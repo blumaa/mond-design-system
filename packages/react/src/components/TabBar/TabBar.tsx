@@ -12,6 +12,13 @@ export interface TabBarProps {
  * Bottom navigation. Items are links (or buttons for non-route actions);
  * they stay in the natural tab order — roving focus is for composite
  * widgets, not navigation landmarks.
+ *
+ * ```tsx
+ * <TabBar label="Primary">
+ *   <TabBarItem label="Home" icon={<Icon name="home" />} href="/" active />
+ *   <TabBarItem label="Search" icon={<Icon name="search" />} href="/search" />
+ * </TabBar>
+ * ```
  */
 export function TabBar({ label, children }: TabBarProps) {
   return (

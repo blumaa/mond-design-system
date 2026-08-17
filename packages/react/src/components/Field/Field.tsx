@@ -33,6 +33,12 @@ export interface FieldProps {
  * Label + control + hint/error, wired for assistive tech. The control inside
  * (Input, Textarea, Select, …) picks up id, aria-describedby and aria-invalid
  * from context — no manual plumbing at call sites.
+ *
+ * ```tsx
+ * <Field label="Email" hint="Work email preferred" error={errors.email} required>
+ *   <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+ * </Field>
+ * ```
  */
 export function Field({ label, children, hint, error, required = false, className }: FieldProps): ReactElement {
   const id = useId();

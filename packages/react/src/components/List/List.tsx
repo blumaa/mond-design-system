@@ -6,7 +6,21 @@ export interface ListGroupProps extends HTMLAttributes<HTMLUListElement> {
   children: ReactNode;
 }
 
-/** Card-styled list container for ListItems. */
+/**
+ * Card-styled list container for ListItems.
+ *
+ * ```tsx
+ * <ListGroup>
+ *   <ListItem
+ *     title="Profile"
+ *     description="Name, avatar"
+ *     leading={<Icon name="user" />}
+ *     href="/profile"
+ *   />
+ *   <ListItem title="Log out" onClick={logout} />
+ * </ListGroup>
+ * ```
+ */
 export function ListGroup({ className, ...rest }: ListGroupProps): ReactElement {
   return <ul className={cx(styles.group, className)} {...rest} />;
 }

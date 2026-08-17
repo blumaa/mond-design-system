@@ -21,7 +21,14 @@ function initials(name: string): string {
   return (first + last).toUpperCase();
 }
 
-/** Person marker. Image when available, initials otherwise — never an empty circle. */
+/**
+ * Person marker. Image when available, initials otherwise — never an empty circle.
+ *
+ * ```tsx
+ * <Avatar name="Ada Lovelace" src="/ada.jpg" />
+ * <Avatar name="Grace Hopper" size="lg" />
+ * ```
+ */
 export function Avatar({ name, src, size = "md", className, ...rest }: AvatarProps): ReactElement {
   return (
     <span className={cx(styles.avatar, styles[`size-${size}`], className)} {...rest}>

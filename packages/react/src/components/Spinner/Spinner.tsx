@@ -14,6 +14,10 @@ export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
  * text it sits beside. Keyframe is local: CSS Modules localizes
  * animation-name, a global one resolves to nothing. base.css stops it under
  * prefers-reduced-motion.
+ *
+ * ```tsx
+ * <Spinner label="Loading sessions" />
+ * ```
  */
 export function Spinner({
   size = 20,

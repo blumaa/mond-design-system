@@ -13,13 +13,16 @@ export interface ModalProps {
 }
 
 /**
- * Centered dialog. Compose the sections:
+ * Centered dialog. Escape, scrim click (`closeOnScrimClick`), and focus trap
+ * are handled. Compose the sections:
  *
- *   <Modal open={open} onClose={close} label="Edit session">
- *     <ModalHeader>Edit session</ModalHeader>
- *     <ModalBody>…</ModalBody>
- *     <ModalFooter>…</ModalFooter>
- *   </Modal>
+ * ```tsx
+ * <Modal open={open} onClose={() => setOpen(false)} label="Edit session">
+ *   <ModalHeader>Edit session</ModalHeader>
+ *   <ModalBody>…</ModalBody>
+ *   <ModalFooter><Button onClick={save}>Save</Button></ModalFooter>
+ * </Modal>
+ * ```
  */
 export function Modal({ open, onClose, label, closeOnScrimClick = true, children }: ModalProps) {
   return (

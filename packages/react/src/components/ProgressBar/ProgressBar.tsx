@@ -10,7 +10,14 @@ export interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
   indeterminate?: boolean;
 }
 
-/** Determinate or indeterminate progress track. */
+/**
+ * Determinate or indeterminate progress track.
+ *
+ * ```tsx
+ * <ProgressBar label="Upload" value={64} />
+ * <ProgressBar label="Syncing" indeterminate />
+ * ```
+ */
 export function ProgressBar({
   value = 0,
   label,

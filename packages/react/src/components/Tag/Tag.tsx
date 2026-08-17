@@ -11,7 +11,14 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   onRemove?: () => void;
 }
 
-/** Content label chip — categories, filters, topics. */
+/**
+ * Content label chip — categories, filters, topics.
+ *
+ * ```tsx
+ * <Tag>Design</Tag>
+ * <Tag tone="accent" onRemove={() => remove(id)}>Beginner</Tag>
+ * ```
+ */
 export function Tag({ children, tone = "neutral", onRemove, className, ...rest }: TagProps): ReactElement {
   const text = typeof children === "string" ? children : undefined;
   return (

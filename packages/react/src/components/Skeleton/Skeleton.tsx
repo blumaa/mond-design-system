@@ -14,6 +14,20 @@ export interface SkeletonProps extends HTMLAttributes<HTMLSpanElement> {
 /**
  * Loading placeholder. aria-hidden — the loading announcement belongs to the
  * region (aria-busy), not to each shimmering box.
+ *
+ * ```tsx
+ * <div aria-busy={loading}>
+ *   {loading ? (
+ *     <Stack gap="tight">
+ *       <Skeleton width="40%" />
+ *       <Skeleton />
+ *       <Skeleton variant="rect" height="8rem" />
+ *     </Stack>
+ *   ) : (
+ *     content
+ *   )}
+ * </div>
+ * ```
  */
 export function Skeleton({
   variant = "text",

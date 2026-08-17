@@ -19,6 +19,13 @@ export interface StackProps extends HTMLAttributes<HTMLElement> {
  * Vertical flow. The parent owns spacing between siblings via gap —
  * children carry no outer margins. Token-bounded on purpose: no arbitrary
  * lengths, no style prop.
+ *
+ * ```tsx
+ * <Stack gap="base">
+ *   <Heading level={2}>Profile</Heading>
+ *   <Text tone="secondary">Public information</Text>
+ * </Stack>
+ * ```
  */
 export function Stack({
   gap = "base",

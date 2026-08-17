@@ -13,13 +13,15 @@ export interface SheetProps {
 }
 
 /**
- * Bottom sheet. Same composition as Modal:
+ * Bottom sheet. Same composition and dismissal model as Modal:
  *
- *   <Sheet open={open} onClose={close} label="Filters">
- *     <SheetHeader>Filters</SheetHeader>
- *     <SheetBody>…</SheetBody>
- *     <SheetFooter>…</SheetFooter>
- *   </Sheet>
+ * ```tsx
+ * <Sheet open={open} onClose={() => setOpen(false)} label="Filters">
+ *   <SheetHeader>Filters</SheetHeader>
+ *   <SheetBody>…</SheetBody>
+ *   <SheetFooter><Button onClick={apply}>Apply</Button></SheetFooter>
+ * </Sheet>
+ * ```
  */
 export function Sheet({ open, onClose, label, closeOnScrimClick = true, children }: SheetProps) {
   return (

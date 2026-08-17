@@ -42,7 +42,16 @@ const DEFAULT_TONE: Partial<Record<TextVariant, TextTone>> = {
   eyebrow: "muted",
 };
 
-/** Body-copy primitive. One class per type role — screens never hand-roll styled tags. */
+/**
+ * Body-copy primitive. One class per type role — screens never hand-roll styled tags.
+ *
+ * ```tsx
+ * <Text>Body copy.</Text>
+ * <Text variant="label" as="span">Field label</Text>
+ * <Text variant="meta" tone="muted">Updated 2h ago</Text>
+ * <Text truncate>Very long single line…</Text>
+ * ```
+ */
 export function Text({
   variant = "body",
   as,

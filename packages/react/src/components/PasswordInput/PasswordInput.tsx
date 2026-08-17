@@ -10,6 +10,12 @@ export type PasswordInputProps = Omit<InputProps, "type">;
 /**
  * Password field with a reveal toggle. Composes Input, so inside a Field it
  * inherits id/description/invalid the same way.
+ *
+ * ```tsx
+ * <Field label="Password" hint="At least 12 characters">
+ *   <PasswordInput autoComplete="new-password" />
+ * </Field>
+ * ```
  */
 export function PasswordInput({ className, ...rest }: PasswordInputProps): ReactElement {
   const [visible, setVisible] = useState(false);

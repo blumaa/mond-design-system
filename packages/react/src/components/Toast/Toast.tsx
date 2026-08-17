@@ -35,7 +35,20 @@ export interface ToastProviderProps {
   children: ReactNode;
 }
 
-/** Mount once near the root. Renders the notification region itself. */
+/**
+ * Mount once near the root. Renders the notification region itself.
+ *
+ * ```tsx
+ * // App root
+ * <ToastProvider>
+ *   <App />
+ * </ToastProvider>
+ *
+ * // Anywhere below
+ * const { toast } = useToast();
+ * toast({ title: "Saved", tone: "success" });
+ * ```
+ */
 export function ToastProvider({ children }: ToastProviderProps): ReactElement {
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
   const nextId = useRef(1);
