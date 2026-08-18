@@ -36,6 +36,17 @@ describe("AppBar", () => {
     expect(screen.getByRole("heading")).toContainElement(screen.getByRole("button", { name: "Trip crew" }));
   });
 
+  it("keeps the trailing slot at the end without a title to push it there", () => {
+    render(
+      <AppBar
+        leading={<span>Logo</span>}
+        trailing={<Button iconOnly aria-label="Search" variant="ghost">s</Button>}
+      />,
+    );
+    const slot = screen.getByRole("button", { name: "Search" }).parentElement!;
+    expect(slot.className).toMatch(/trailing/);
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(<AppBar title="Sessions" />);
     expect(await axe(container)).toHaveNoViolations();

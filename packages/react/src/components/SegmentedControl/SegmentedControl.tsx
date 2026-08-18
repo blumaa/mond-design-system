@@ -16,6 +16,9 @@ export interface SegmentedControlProps<T extends string = string> {
   onChange: (value: T) => void;
   /** Disables the whole control — e.g. a choice locked while editing. */
   disabled?: boolean;
+  /** Stretch across the container, segments sharing the width equally —
+      the usual shape when the control heads a screen-wide view switch. */
+  fullWidth?: boolean;
   className?: string;
 }
 
@@ -41,11 +44,12 @@ export function SegmentedControl<T extends string = string>({
   value,
   onChange,
   disabled = false,
+  fullWidth = false,
   className,
 }: SegmentedControlProps<T>): ReactElement {
   const name = useId();
   return (
-    <div role="radiogroup" aria-label={label} className={cx(styles.group, className)}>
+    <div role="radiogroup" aria-label={label} className={cx(styles.group, fullWidth && styles.fullWidth, className)}>
       {options.map((option) => (
         <label key={option.value} className={styles.segment}>
           <input

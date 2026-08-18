@@ -40,6 +40,19 @@ describe("SegmentedControl", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+    it("fullWidth stretches the group across its container", () => {
+    render(
+      <SegmentedControl
+        label="View"
+        fullWidth
+        options={[{ value: "a", label: "A" }, { value: "b", label: "B" }]}
+        value="a"
+        onChange={() => {}}
+      />,
+    );
+    expect(screen.getByRole("radiogroup").className).toMatch(/fullWidth/);
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <SegmentedControl label="Range" options={options} value="day" onChange={() => {}} />,

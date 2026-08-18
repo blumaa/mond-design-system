@@ -41,7 +41,7 @@ export function AppBar({ title, subtitle, leading, trailing }: AppBarProps) {
       ) : (
         heading
       )}
-      {trailing ? <div className={styles.slot}>{trailing}</div> : null}
+      {trailing ? <div className={`${styles.slot} ${styles.trailing}`}>{trailing}</div> : null}
     </header>
   );
 }

@@ -12,6 +12,18 @@
   cursor: pointer;
 }
 
+.fullWidth {
+  display: flex;
+}
+
+.fullWidth .segment {
+  flex: 1;
+}
+
+.fullWidth .face {
+  flex: 1;
+}
+
 /* Radio overlays the whole segment, invisible but real — it stays the hit
    target and the focusable element. */
 .input {

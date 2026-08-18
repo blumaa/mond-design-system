@@ -49,3 +49,10 @@
   align-items: center;
   gap: var(--mds-gap-hairline);
 }
+
+/* The actions belong at the end even when no title is there to push them:
+   auto margin absorbs the free space the missing flex child leaves behind.
+   With a title present its flex share is already 1, so this is a no-op. */
+.trailing {
+  margin-inline-start: auto;
+}
