@@ -56,6 +56,13 @@ describe("Card", () => {
     }
   });
 
+  /* The card clips its overflow, so a footer that cannot fit its controls on one
+     line hides them rather than letting them spill. Four buttons that fit in
+     English do not in German. */
+  it("wraps a footer that cannot fit its controls", () => {
+    expect(sheet).toMatch(/\.footer\s*\{[^}]*flex-wrap:\s*wrap/);
+  });
+
   it("raised variant applies class", () => {
     render(
       <Card variant="raised" data-testid="c">

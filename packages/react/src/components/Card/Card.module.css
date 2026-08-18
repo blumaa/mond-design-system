@@ -58,9 +58,12 @@
   flex: 1;
 }
 
+/* The card clips its overflow, so a row of actions that outgrows one line has
+   to fall to the next rather than disappear off the edge. */
 .footer {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--mds-gap);
 }
 
