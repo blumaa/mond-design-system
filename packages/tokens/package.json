@@ -1,6 +1,6 @@
 {
   "name": "@mond-design-system/tokens",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "Mond Design System \u2014 design tokens. CSS custom properties: core scales, semantic contract with neutral defaults (light + dark), brand template for consuming apps.",
   "license": "MIT",
   "repository": {
