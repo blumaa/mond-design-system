@@ -19,6 +19,8 @@ React:
   localizable, and each dismiss button is named after its toast.
 - Overlay scrim sizes to `--mds-vvh`, keeping Sheet/Modal/ConfirmDialog above
   the software keyboard where the host mirrors visualViewport.height.
+- DateTimePicker picks up Field wiring (control id, aria-describedby) from
+  context, the same way Input/Select/Textarea already did.
 - Every emitted class and keyframe is namespaced (`mds-Sheet__panel`), so the
   stylesheet is collision-proof beside any other library in any cascade order.
   esbuild's local-css loader only produced `Sheet_panel`, and another library

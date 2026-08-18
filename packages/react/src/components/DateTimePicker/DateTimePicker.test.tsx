@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "jest-axe";
+import { Field } from "../Field/Field";
 import { DateTimePicker } from "./DateTimePicker";
 
 /* Fixed future dates so `min: now` never interferes. */
@@ -25,6 +26,32 @@ function setup(props: Partial<Parameters<typeof DateTimePicker>[0]> = {}) {
 }
 
 describe("DateTimePicker", () => {
+  it("inside a Field, the trigger takes the field's id and describedby", () => {
+    render(
+      <Field label="Starts" hint="Local time">
+        <DateTimePicker onChange={vi.fn()} locale="en-US" />
+      </Field>,
+    );
+    const trigger = screen.getByRole("button");
+    // The Field's <label htmlFor> points at its generated control id; the
+    // trigger has to claim that id or the label names nothing.
+    expect(screen.getByText("Starts")).toHaveAttribute("for", trigger.id);
+    expect(trigger.id).not.toBe("");
+    expect(trigger).toHaveAttribute(
+      "aria-describedby",
+      screen.getByText("Local time").id,
+    );
+  });
+
+  it("an explicit id wins over the Field's", () => {
+    render(
+      <Field label="Starts">
+        <DateTimePicker id="mine" onChange={vi.fn()} locale="en-US" />
+      </Field>,
+    );
+    expect(screen.getByRole("button")).toHaveAttribute("id", "mine");
+  });
+
   it("shows the placeholder when empty and the formatted value when set", () => {
     const onChange = vi.fn();
     const { rerender } = render(

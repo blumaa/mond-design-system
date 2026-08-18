@@ -1,6 +1,7 @@
 import type { KeyboardEvent, ReactElement } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cx } from "../../internal/cx";
+import { useFieldContext } from "../Field/Field";
 import { Button } from "../Button/Button";
 import { Select } from "../Select/Select";
 import { Sheet, SheetBody, SheetFooter, SheetHeader } from "../Sheet/Sheet";
@@ -204,6 +205,10 @@ export function DateTimePicker({
   labels,
 }: DateTimePickerProps): ReactElement {
   const text: DateTimePickerLabels = { ...DEFAULT_LABELS, ...labels };
+  /* Inside a Field, claim its generated control id and message wiring, the
+     same way Input/Select/Textarea do — the field's <label htmlFor> points at
+     the control id, and without it the label names nothing. */
+  const field = useFieldContext();
   const intl = useMemo(() => localeData(locale), [locale]);
 
   const [open, setOpen] = useState(false);
@@ -371,9 +376,10 @@ export function DateTimePicker({
   return (
     <>
       <button
-        id={id}
+        id={id ?? field?.id}
         type="button"
         disabled={disabled}
+        aria-describedby={field?.describedBy}
         aria-haspopup="dialog"
         aria-expanded={open}
         /* Announce the field name (when given) alongside the current value. */
