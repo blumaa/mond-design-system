@@ -1,6 +1,7 @@
 .card {
   display: flex;
   flex-direction: column;
+  gap: var(--mds-gap);
   background: var(--mds-surface-card);
   border: var(--mds-border-width) solid var(--mds-border-subtle);
   border-radius: var(--mds-radius-card);
@@ -43,7 +44,6 @@
   display: flex;
   align-items: center;
   gap: var(--mds-gap);
-  padding: var(--mds-pad-card) var(--mds-pad-card) 0;
   font: var(--mds-type-card-title);
   color: var(--mds-text-primary);
 }
@@ -56,12 +56,32 @@
 
 .body {
   flex: 1;
-  padding: var(--mds-pad-card);
 }
 
 .footer {
   display: flex;
   align-items: center;
   gap: var(--mds-gap);
-  padding: 0 var(--mds-pad-card) var(--mds-pad-card);
+}
+
+/* A slot pays for the card edge it sits against; the card's own gap pays for
+   the space between two of them. Padding the outer edges from each slot instead
+   left a header above a footer with nothing between them, and a card ending on
+   its header with no bottom padding at all. */
+.header,
+.body,
+.footer {
+  padding: 0 var(--mds-pad-card);
+}
+
+.header:first-child,
+.body:first-child,
+.footer:first-child {
+  padding-top: var(--mds-pad-card);
+}
+
+.header:last-child,
+.body:last-child,
+.footer:last-child {
+  padding-bottom: var(--mds-pad-card);
 }

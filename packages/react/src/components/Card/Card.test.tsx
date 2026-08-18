@@ -36,6 +36,26 @@ describe("Card", () => {
     expect(screen.getByTestId("c")).toHaveTextContent("Just content");
   });
 
+  /* A card is not always header, body and footer. Padding that only covers the
+     card's outer edges left the separation between slots to whichever one sat
+     between them, so a header above a footer had none and the two rows touched,
+     and a card ending on its header had no bottom padding at all. Each slot
+     therefore pays for the edge it sits against and the card itself supplies
+     the space between them. */
+  it("spaces whichever slots are present", () => {
+    expect(sheet).toMatch(/\.card\s*\{[^}]*\bgap:\s*var\(--mds-gap\)/);
+    expect(sheet).toMatch(
+      /\.header,\s*\.body,\s*\.footer\s*\{\s*padding:\s*0 var\(--mds-pad-card\)/,
+    );
+    for (const edge of ["first", "last"]) {
+      const side = edge === "first" ? "top" : "bottom";
+      const rule = new RegExp(
+        `\\.header:${edge}-child,\\s*\\.body:${edge}-child,\\s*\\.footer:${edge}-child\\s*\\{\\s*padding-${side}:\\s*var\\(--mds-pad-card\\)`,
+      );
+      expect(sheet).toMatch(rule);
+    }
+  });
+
   it("raised variant applies class", () => {
     render(
       <Card variant="raised" data-testid="c">
