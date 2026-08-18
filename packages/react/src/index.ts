@@ -123,6 +123,7 @@ export { ConfirmDialog } from "./components/ConfirmDialog/ConfirmDialog";
 export type { ConfirmDialogProps, ConfirmDialogTone } from "./components/ConfirmDialog/ConfirmDialog";
 
 export { Screen, ScreenContent } from "./components/Screen/Screen";
+export type { ScreenContentProps } from "./components/Screen/Screen";
 
 export { AppBar } from "./components/AppBar/AppBar";
 export type { AppBarProps } from "./components/AppBar/AppBar";
