@@ -1,5 +1,38 @@
 # @mond-design-system/react
 
+## 1.0.0-alpha.6
+
+### Minor Changes
+
+- f81bfd6: Give brands a seam where one alias served two roles.
+
+  `--mds-type-subtitle` dressed both the title of a screen or overlay and a
+  heading inside one; `--mds-type-label` dressed a form label, a list row's title
+  and the type inside a chip, tag or segment. Most brands set those at different
+  sizes, so re-pointing the alias moved slots the brand never meant to touch.
+  `--mds-type-panel-title`, `--mds-type-item-title` and `--mds-type-pill` now name
+  those slots, and AppBar, Modal, Sheet, List, Chip, Tag and SegmentedControl read
+  them.
+
+  Button's inline padding read `--mds-space-3/4/5` directly, which a brand cannot
+  reach — the width of every button on the screen was fixed at the scale. It now
+  reads `--mds-pad-button-sm/md/lg`.
+
+  All six aliases ship as pass-throughs of the role they were split from, so the
+  default look is unchanged.
+
+### Patch Changes
+
+- e0d82ef: CardHeader: give a lone child the full row.
+
+  The header is a centred flex row, so a single layout block passed to it
+  shrink-wrapped and any `justify-content: space-between` inside that block had no
+  free space to distribute — trailing content collapsed against the title. AppBar
+  already flexes its title slot; CardHeader now matches.
+
+- Updated dependencies [f81bfd6]
+  - @mond-design-system/tokens@1.0.0-alpha.4
+
 ## 1.0.0-alpha.5
 
 ### Patch Changes
