@@ -17,6 +17,12 @@
   --mds-dot-offset-x: -3px;
 
   /* content widths */
+  /* Visual-viewport height. The software keyboard shrinks the visual viewport
+     without shrinking 100dvh; a host that mirrors visualViewport.height into
+     this token keeps overlays (Overlay scrim, and so Sheet/Modal) above the
+     keyboard. Untouched, it is simply the dynamic viewport. */
+  --mds-vvh: 100dvh;
+
   --mds-content-max: 720px;       /* reading column */
   --mds-content-max-wide: 1200px; /* desktop multi-column shells */
   --mds-modal-w: 420px;           /* centred dialog */

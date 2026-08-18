@@ -1,6 +1,10 @@
 .scrim {
   position: fixed;
   inset: 0;
+  /* Height beats the bottom inset-0 implies. The keyboard shrinks the visual
+     viewport without shrinking 100dvh; a host that mirrors
+     visualViewport.height into --mds-vvh keeps sheet and modal above it. */
+  height: var(--mds-vvh, 100dvh);
   display: flex;
   background: var(--mds-scrim);
   opacity: 0;
