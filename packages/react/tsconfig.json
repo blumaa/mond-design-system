@@ -1,13 +1,1 @@
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "noEmit": true,
-    "types": []
-  },
-  "include": [
-    "src",
-    "tsup.config.ts",
-    "../../vitest.setup.ts",
-    "../../vitest.d.ts"
-  ]
-}
+{"extends":"../../tsconfig.base.json","compilerOptions":{"noEmit":true,"types":[]},"include":["src","../../vitest.setup.ts","../../vitest.d.ts"],"exclude":["src/dist-css.test.ts"]}
