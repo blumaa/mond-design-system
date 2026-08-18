@@ -42,6 +42,14 @@
   --mds-type-meta: var(--mds-weight-regular) var(--mds-text-xs)/var(--mds-leading-normal) var(--mds-font-mono);
   --mds-type-eyebrow: var(--mds-weight-medium) var(--mds-text-xs)/var(--mds-leading-normal) var(--mds-font-mono);
 
+  /* Sub-roles, so a brand can move one without moving the others. A screen or
+     overlay title and a card's own heading are one size here and two in most
+     brands; the same is true of a form label against a list item's title and
+     the type inside a chip, tag or segment. */
+  --mds-type-panel-title: var(--mds-type-subtitle);
+  --mds-type-item-title: var(--mds-type-label);
+  --mds-type-pill: var(--mds-type-label);
+
   /* letter-spacing rides outside the font shorthand */
   --mds-tracking-eyebrow: var(--mds-tracking-wide);
   --mds-tracking-display: var(--mds-tracking-tight);

@@ -4,7 +4,7 @@
   gap: var(--mds-gap-hairline);
   padding: var(--mds-space-1) var(--mds-space-3);
   border-radius: var(--mds-radius-chip);
-  font: var(--mds-type-label);
+  font: var(--mds-type-pill);
   white-space: nowrap;
   cursor: default;
   transition: var(--mds-transition-control);

@@ -17,19 +17,19 @@
 /* Sizes — height from the control scale, padding from the space scale. */
 .size-sm {
   height: var(--mds-control-h-sm);
-  padding: 0 var(--mds-space-3);
+  padding: 0 var(--mds-pad-button-sm);
   font-size: var(--mds-text-sm);
 }
 
 .size-md {
   height: var(--mds-control-h-md);
-  padding: 0 var(--mds-space-4);
+  padding: 0 var(--mds-pad-button-md);
   font-size: var(--mds-text-base);
 }
 
 .size-lg {
   height: var(--mds-control-h-lg);
-  padding: 0 var(--mds-space-5);
+  padding: 0 var(--mds-pad-button-lg);
   font-size: var(--mds-text-lg);
 }
 

@@ -16,7 +16,7 @@
   min-width: 0;
   overflow: hidden;
   margin: 0;
-  font: var(--mds-type-subtitle);
+  font: var(--mds-type-panel-title);
   color: var(--mds-text-primary);
   white-space: nowrap;
   text-overflow: ellipsis;

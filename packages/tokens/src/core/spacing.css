@@ -21,6 +21,12 @@
   --mds-pad-page-x: var(--mds-space-4);
   --mds-pad-page-y: var(--mds-space-5);
 
+  /* A button's own inline padding. Named per size because it is the width of
+     every button on the screen, and a brand cannot reach a raw step. */
+  --mds-pad-button-sm: var(--mds-space-3);
+  --mds-pad-button-md: var(--mds-space-4);
+  --mds-pad-button-lg: var(--mds-space-5);
+
   /* gaps between siblings */
   --mds-gap-hairline: var(--mds-space-1);
   --mds-gap-tight: var(--mds-space-2);

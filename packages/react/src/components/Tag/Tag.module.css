@@ -7,7 +7,7 @@
   border: var(--mds-border-width) solid var(--mds-border-subtle);
   background: var(--mds-surface-card);
   color: var(--mds-text-secondary);
-  font: var(--mds-type-label);
+  font: var(--mds-type-pill);
   white-space: nowrap;
 }
 

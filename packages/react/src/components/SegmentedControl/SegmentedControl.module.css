@@ -44,7 +44,7 @@
   height: calc(var(--mds-control-h-md) - 2 * var(--mds-space-1));
   padding: 0 var(--mds-space-3);
   border-radius: var(--mds-radius-1);
-  font: var(--mds-type-label);
+  font: var(--mds-type-pill);
   color: var(--mds-text-secondary);
   white-space: nowrap;
   transition: var(--mds-transition-control);

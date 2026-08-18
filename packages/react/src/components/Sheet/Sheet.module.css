@@ -23,7 +23,7 @@
   align-items: center;
   gap: var(--mds-gap);
   padding: var(--mds-pad-card) var(--mds-pad-card) 0;
-  font: var(--mds-type-subtitle);
+  font: var(--mds-type-panel-title);
   color: var(--mds-text-primary);
 }
 

@@ -102,7 +102,7 @@
 }
 
 .title {
-  font: var(--mds-type-label);
+  font: var(--mds-type-item-title);
   color: var(--mds-text-primary);
 }
 
