@@ -39,8 +39,13 @@ it("titles a list row with --mds-type-item-title", () => {
   expect(css).not.toContain("var(--mds-type-label)");
 });
 
-it("keeps a card's own heading on the subtitle role", () => {
-  expect(sheet("Card/Card.module.css")).toContain("font: var(--mds-type-subtitle)");
+/* A card's header is a slot, not a heading level. It shares the subtitle role
+   with Heading levels 3 and 4, and a brand that sizes those for a section title
+   was setting the inherited font of every card header row along with them. */
+it("titles a card with --mds-type-card-title", () => {
+  const css = sheet("Card/Card.module.css");
+  expect(css).toContain("font: var(--mds-type-card-title)");
+  expect(css).not.toContain("var(--mds-type-subtitle)");
 });
 
 it("pads a button from --mds-pad-button-*", () => {

@@ -16,8 +16,10 @@ it("declares --mds-radius-modal at step 3", () => {
   expect(core("radius.css")).toMatch(/--mds-radius-modal:\s*var\(--mds-radius-3\);/);
 });
 
-it("declares --mds-type-panel-title at the subtitle role", () => {
-  expect(core("typography.css")).toMatch(/--mds-type-panel-title:\s*var\(--mds-type-subtitle\);/);
+it.each(["panel-title", "card-title"])("declares --mds-type-%s at the subtitle role", (name) => {
+  expect(core("typography.css")).toMatch(
+    new RegExp(`--mds-type-${name}:\\s*var\\(--mds-type-subtitle\\);`),
+  );
 });
 
 it.each(["item-title", "pill"])("declares --mds-type-%s at the label role", (name) => {
