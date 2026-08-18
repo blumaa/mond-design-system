@@ -48,6 +48,12 @@
   color: var(--mds-text-primary);
 }
 
+/* A lone child is the header row, so it gets the width AppBar gives its title. */
+.header > :only-child {
+  flex: 1;
+  min-width: 0;
+}
+
 .body {
   flex: 1;
   padding: var(--mds-pad-card);

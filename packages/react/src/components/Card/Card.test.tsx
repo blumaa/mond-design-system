@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "jest-axe";
 import { Card, CardBody, CardFooter, CardHeader } from "./Card";
+import sheet from "./Card.module.css?raw";
 
 describe("Card", () => {
   it("composes header, body, footer", () => {
@@ -18,6 +19,12 @@ describe("Card", () => {
     expect(card).toHaveTextContent("Title");
     expect(card).toHaveTextContent("Content");
     expect(card).toHaveTextContent("Actions");
+  });
+
+  // Shrink-wrapped, a lone block's own space-between has no free space to use.
+  it("hands the row to a header's only child", () => {
+    expect(sheet).toMatch(/\.header\s*>\s*:only-child\s*{[^}]*flex:\s*1/);
+    expect(sheet).toMatch(/\.header\s*>\s*:only-child\s*{[^}]*min-width:\s*0/);
   });
 
   it("body alone works", () => {
