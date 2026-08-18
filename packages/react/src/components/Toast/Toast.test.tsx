@@ -33,7 +33,7 @@ describe("Toast", () => {
       </ToastProvider>,
     );
     fireEvent.click(screen.getByRole("button", { name: "fire" }));
-    fireEvent.click(screen.getByRole("button", { name: "Dismiss" }));
+    fireEvent.click(screen.getByRole("button", { name: "Dismiss: Saved" }));
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
@@ -64,6 +64,44 @@ describe("Toast", () => {
       vi.advanceTimersByTime(60000);
     });
     expect(screen.getByRole("status")).toBeInTheDocument();
+  });
+
+
+  it("names each dismiss button after its toast, so two toasts are distinguishable", () => {
+    function TwoToasts() {
+      const { toast } = useToast();
+      return (
+        <button
+          type="button"
+          onClick={() => {
+            toast({ title: "Saved", duration: 0 });
+            toast({ title: "Deleted", duration: 0 });
+          }}
+        >
+          fire
+        </button>
+      );
+    }
+    render(
+      <ToastProvider>
+        <TwoToasts />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "fire" }));
+    expect(screen.getByRole("button", { name: "Dismiss: Saved" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Dismiss: Deleted" })).toBeInTheDocument();
+  });
+
+  it("regionLabel and dismissLabel localise the built-in strings", () => {
+    render(
+      <ToastProvider regionLabel="Benachrichtigungen" dismissLabel="Schließen">
+        <Trigger duration={0} />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "fire" }));
+    expect(screen.getByRole("region", { name: "Benachrichtigungen" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Schließen: Saved" }));
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
   it("useToast outside provider throws", () => {

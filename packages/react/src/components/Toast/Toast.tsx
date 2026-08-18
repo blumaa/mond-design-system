@@ -33,6 +33,12 @@ export function useToast(): ToastContextValue {
 
 export interface ToastProviderProps {
   children: ReactNode;
+  /** Accessible name of the notification region (localise). Default "Notifications". */
+  regionLabel?: string | undefined;
+  /** Prefix of each dismiss button's accessible name (localise). The toast's
+   *  title follows it, so every dismiss control names its own toast. Default
+   *  "Dismiss" — a button labelled "Dismiss: Saved". */
+  dismissLabel?: string | undefined;
 }
 
 /**
@@ -49,7 +55,11 @@ export interface ToastProviderProps {
  * toast({ title: "Saved", tone: "success" });
  * ```
  */
-export function ToastProvider({ children }: ToastProviderProps): ReactElement {
+export function ToastProvider({
+  children,
+  regionLabel = "Notifications",
+  dismissLabel = "Dismiss",
+}: ToastProviderProps): ReactElement {
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
   const nextId = useRef(1);
 
@@ -72,7 +82,7 @@ export function ToastProvider({ children }: ToastProviderProps): ReactElement {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div role="region" aria-label="Notifications" className={styles.viewport}>
+      <div role="region" aria-label={regionLabel} className={styles.viewport}>
         {toasts.map((entry) => (
           <div key={entry.id} role="status" className={cx(styles.toast, styles[`tone-${entry.tone}`])}>
             <span className={styles.body}>
@@ -83,7 +93,7 @@ export function ToastProvider({ children }: ToastProviderProps): ReactElement {
             </span>
             <button
               type="button"
-              aria-label="Dismiss"
+              aria-label={`${dismissLabel}: ${entry.title}`}
               className={styles.close}
               onClick={() => dismiss(entry.id)}
             >
