@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 85dvh;
+  /* Of the scrim, which already tracks the visual viewport (--mds-vvh). */
+  max-height: 85%;
   /* Portalled past the app chrome, so nothing else reserves the home-bar
      inset for it. */
   padding-bottom: var(--mds-safe-bottom);
@@ -38,4 +39,30 @@
   justify-content: flex-end;
   gap: var(--mds-gap);
   padding: 0 var(--mds-pad-card) var(--mds-pad-card);
+}
+
+.headerTitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--mds-tap-min);
+  height: var(--mds-tap-min);
+  margin: calc((var(--mds-tap-min) - var(--mds-icon-lg)) / -2);
+  margin-left: 0;
+  border: none;
+  border-radius: var(--mds-radius-pill);
+  background: transparent;
+  color: var(--mds-text-secondary);
+  cursor: pointer;
+}
+
+.closeGlyph {
+  width: var(--mds-icon-sm);
+  height: var(--mds-icon-sm);
 }
