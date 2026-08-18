@@ -10,6 +10,9 @@
   --mds-radius-card: var(--mds-radius-3);
   --mds-radius-media: var(--mds-radius-2);
   --mds-radius-sheet: var(--mds-radius-4);
+  /* Every surface a brand may want to shape has an alias — card, sheet,
+     control, chip, tag. The modal panel was the one left on a raw step. */
+  --mds-radius-modal: var(--mds-radius-3);
   --mds-radius-tag: var(--mds-radius-1);
   --mds-radius-chip: var(--mds-radius-pill);
   --mds-radius-avatar: var(--mds-radius-pill);

@@ -4,5 +4,5 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["contrast.test.ts", "../../vitest.d.ts"]
+  "include": ["contrast.test.ts", "aliases.test.ts", "../../vitest.d.ts"]
 }

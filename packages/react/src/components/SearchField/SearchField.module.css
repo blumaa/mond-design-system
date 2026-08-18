@@ -23,7 +23,7 @@
   background: var(--mds-surface-card);
   color: var(--mds-text-primary);
   font-family: var(--mds-font-body);
-  font-size: var(--mds-text-base);
+  font-size: var(--mds-text-control);
   transition: border-color var(--mds-transition-control);
 }
 

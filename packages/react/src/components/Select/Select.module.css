@@ -28,8 +28,8 @@
 
 /* Room for the chevron. */
 .size-sm { height: var(--mds-control-h-sm); padding: 0 var(--mds-space-7) 0 var(--mds-space-2); font-size: var(--mds-text-sm); }
-.size-md { height: var(--mds-control-h-md); padding: 0 var(--mds-space-8) 0 var(--mds-space-3); font-size: var(--mds-text-base); }
-.size-lg { height: var(--mds-control-h-lg); padding: 0 var(--mds-space-8) 0 var(--mds-space-4); font-size: var(--mds-text-base); }
+.size-md { height: var(--mds-control-h-md); padding: 0 var(--mds-space-8) 0 var(--mds-space-3); font-size: var(--mds-text-control); }
+.size-lg { height: var(--mds-control-h-lg); padding: 0 var(--mds-space-8) 0 var(--mds-space-4); font-size: var(--mds-text-control); }
 
 .chevron {
   position: absolute;
