@@ -16,9 +16,11 @@
  *      exist, so a breakpoint cannot be var())
  *   3. every --mds-* consumed must be declared by the tokens package or
  *      locally in the same sheet (component tokens)
- *   4. no raw scale step (--mds-space-2, --mds-radius-1) — a step is a number,
- *      and a brand re-pointing it moves every unrelated component that shares
- *      it. Components read the alias that names the role instead.
+ *   4. no raw scale step (--mds-space-2, --mds-radius-1, --mds-text-lg) — a
+ *      step is a rung, and a brand re-pointing it moves every unrelated
+ *      component that shares it. Components read the alias that names the role
+ *      instead. The one exception is a component whose public size prop *is*
+ *      the step, where the consumer chose it rather than the component.
  *
  * `--root` points the gate at a throwaway tree so its own test can watch it
  * fail — a gate never seen failing is indistinguishable from one that cannot.
@@ -71,6 +73,11 @@ const defined = new Set(
   systemSheets.flatMap(({ source }) => matchAll(source, /--mds-[a-z0-9-]+(?=\s*:)/g)),
 );
 
+/* Link's `size` prop is documented as a step on the core text scale, so its
+   size classes are the consumer's choice passed through rather than a size the
+   component picked on their behalf. */
+const SCALE_BY_PROP = new Set(["packages/react/src/components/Link/Link.module.css"]);
+
 const failures = [];
 
 for (const { path, source } of componentSheets) {
@@ -97,7 +104,10 @@ for (const { path, source } of componentSheets) {
       failures.push(`${at}  literal length ${px} — ${reason}`);
     }
 
-    for (const step of matchAll(line, /--mds-(?:space|radius)-[0-9]+(?=\s*[,)])/g)) {
+    const steps = SCALE_BY_PROP.has(file)
+      ? /--mds-(?:space|radius)-[0-9]+(?=\s*[,)])/g
+      : /--mds-(?:(?:space|radius)-[0-9]+|text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl))(?=\s*[,)])/g;
+    for (const step of matchAll(line, steps)) {
       failures.push(
         `${at}  raw scale step ${step} — name the role it plays and alias that ` +
           `step in packages/tokens/src/core`,

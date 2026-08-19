@@ -18,19 +18,19 @@
 .size-sm {
   height: var(--mds-control-h-sm);
   padding: 0 var(--mds-pad-button-sm);
-  font-size: var(--mds-text-sm);
+  font-size: var(--mds-text-button-sm);
 }
 
 .size-md {
   height: var(--mds-control-h-md);
   padding: 0 var(--mds-pad-button-md);
-  font-size: var(--mds-text-base);
+  font-size: var(--mds-text-button-md);
 }
 
 .size-lg {
   height: var(--mds-control-h-lg);
   padding: 0 var(--mds-pad-button-lg);
-  font-size: var(--mds-text-lg);
+  font-size: var(--mds-text-button-lg);
 }
 
 /* Variants */

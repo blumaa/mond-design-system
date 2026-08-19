@@ -97,3 +97,39 @@ it("declares --mds-button-border at the control border", () => {
   const semantic = readFileSync(join(__dirname, "src", "semantic.css"), "utf8");
   expect(semantic).toMatch(/--mds-button-border:\s*var\(--mds-control-border\);/);
 });
+
+it.each([
+  ["sm", "sm"],
+  ["md", "control"],
+  ["lg", "control"],
+])("declares --mds-text-control-%s at the %s size", (size, target) => {
+  expect(core("typography.css")).toMatch(
+    new RegExp(`--mds-text-control-${size}:\\s*var\\(--mds-text-${target}\\);`),
+  );
+});
+
+it.each([
+  ["sm", "sm"],
+  ["md", "base"],
+  ["lg", "lg"],
+])("declares --mds-text-button-%s at the %s step", (size, step) => {
+  expect(core("typography.css")).toMatch(
+    new RegExp(`--mds-text-button-${size}:\\s*var\\(--mds-text-${step}\\);`),
+  );
+});
+
+it("declares --mds-text-section at the smallest step", () => {
+  expect(core("typography.css")).toMatch(/--mds-text-section:\s*var\(--mds-text-xs\);/);
+});
+
+it.each([
+  ["xs", "xs"],
+  ["sm", "xs"],
+  ["md", "sm"],
+  ["lg", "xl"],
+  ["xl", "2xl"],
+])("declares --mds-avatar-text-%s at the %s step", (size, step) => {
+  expect(core("layout.css")).toMatch(
+    new RegExp(`--mds-avatar-text-${size}:\\s*var\\(--mds-text-${step}\\);`),
+  );
+});

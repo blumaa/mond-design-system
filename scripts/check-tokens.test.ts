@@ -40,6 +40,8 @@ const SYSTEM = `:root {
   --mds-surface-card: #ffffff;
   --mds-space-2: 8px;
   --mds-pad-tight: var(--mds-space-2);
+  --mds-text-sm: 0.8125rem;
+  --mds-text-button-sm: var(--mds-text-sm);
   --mds-bp-md: 768px;
 }`;
 
@@ -48,7 +50,7 @@ describe("check-tokens gate", () => {
     const dir = tree({
       "packages/tokens/src/core/layout.css": SYSTEM,
       "packages/react/src/components/Button/Button.module.css":
-        ".root { background: var(--mds-surface-card); padding: var(--mds-pad-tight); }",
+        ".root { background: var(--mds-surface-card); padding: var(--mds-pad-tight); font-size: var(--mds-text-button-sm); }",
     });
     expect(run(dir).status).toBe(0);
   });
@@ -62,6 +64,26 @@ describe("check-tokens gate", () => {
     const result = run(dir);
     expect(result.status).toBe(1);
     expect(result.output).toContain("raw scale step --mds-space-2");
+  });
+
+  it("fails a raw text step in a component sheet", () => {
+    const dir = tree({
+      "packages/tokens/src/core/layout.css": SYSTEM,
+      "packages/react/src/components/Button/Button.module.css":
+        ".root { font-size: var(--mds-text-sm); }",
+    });
+    const result = run(dir);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("raw scale step --mds-text-sm");
+  });
+
+  it("allows the text scale in the one sheet whose size prop names the step", () => {
+    const dir = tree({
+      "packages/tokens/src/core/layout.css": SYSTEM,
+      "packages/react/src/components/Link/Link.module.css":
+        ".size-sm { font-size: var(--mds-text-sm); }",
+    });
+    expect(run(dir).status).toBe(0);
   });
 
   it("fails a literal hex in a component sheet", () => {

@@ -21,7 +21,7 @@
 .label {
   padding-inline: var(--mds-pad-card); /* matches the rows' inline padding */
   font-weight: var(--mds-weight-semibold);
-  font-size: var(--mds-text-xs);
+  font-size: var(--mds-text-section);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--mds-text-secondary);

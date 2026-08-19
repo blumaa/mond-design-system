@@ -22,9 +22,9 @@
   border-color: var(--mds-status-danger);
 }
 
-.size-sm { height: var(--mds-control-h-sm); padding: 0 var(--mds-pad-control-sm); font-size: var(--mds-text-sm); }
-.size-md { height: var(--mds-control-h-md); padding: 0 var(--mds-pad-control-md); font-size: var(--mds-text-control); }
-.size-lg { height: var(--mds-control-h-lg); padding: 0 var(--mds-pad-control-lg); font-size: var(--mds-text-control); }
+.size-sm { height: var(--mds-control-h-sm); padding: 0 var(--mds-pad-control-sm); font-size: var(--mds-text-control-sm); }
+.size-md { height: var(--mds-control-h-md); padding: 0 var(--mds-pad-control-md); font-size: var(--mds-text-control-md); }
+.size-lg { height: var(--mds-control-h-lg); padding: 0 var(--mds-pad-control-lg); font-size: var(--mds-text-control-lg); }
 
 /* Icon slots overlay the input's edges; the input pads out of their way.
    The clearance is fixed across sizes — icons don't grow with the field. */

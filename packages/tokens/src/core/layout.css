@@ -58,6 +58,14 @@
   --mds-avatar-lg: 64px;
   --mds-avatar-xl: 96px;
 
+  /* Initials inside an avatar, keyed to the diameter rather than to the
+     reading scale — the letters are a function of the circle. */
+  --mds-avatar-text-xs: var(--mds-text-xs);
+  --mds-avatar-text-sm: var(--mds-text-xs);
+  --mds-avatar-text-md: var(--mds-text-sm);
+  --mds-avatar-text-lg: var(--mds-text-xl);
+  --mds-avatar-text-xl: var(--mds-text-2xl);
+
   /* focus + borders */
   --mds-focus-width: 2px;
   --mds-focus-offset: 2px;

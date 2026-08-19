@@ -18,9 +18,11 @@ const EDITABLE = [
   "SearchField/SearchField.module.css",
 ];
 
+/* Sized controls read the per-size alias; the two that ship one size read the
+   role under its plain name. Both move with --mds-text-control. */
 it.each(EDITABLE)("%s sizes its editable element with --mds-text-control", (path) => {
   const css = sheet(path);
-  expect(css).toContain("font-size: var(--mds-text-control)");
+  expect(css).toMatch(/font-size: var\(--mds-text-control(-(sm|md|lg))?\)/);
   expect(css).not.toContain("font-size: var(--mds-text-base)");
 });
 
@@ -54,3 +56,31 @@ it.each(["Input/Input.module.css", "Select/Select.module.css", "Textarea/Textare
     expect(sheet(path)).toContain("var(--mds-control-border)");
   },
 );
+
+/* An avatar's initials are sized by the circle they sit in, not by the reading
+ * scale — a brand tuning body copy must not resize every avatar's letters. */
+it.each(["Avatar/Avatar.module.css", "AvatarGroup/AvatarGroup.module.css"])(
+  "%s sizes initials from the avatar scale",
+  (path) => {
+    const css = sheet(path);
+    for (const size of ["xs", "sm", "md", "lg", "xl"]) {
+      expect(css).toContain(`font-size: var(--mds-avatar-text-${size})`);
+    }
+  },
+);
+
+it("sizes a button's label from --mds-text-button-*", () => {
+  const css = sheet("Button/Button.module.css");
+  for (const size of ["sm", "md", "lg"]) {
+    expect(css).toContain(`font-size: var(--mds-text-button-${size})`);
+  }
+});
+
+/* The reveal toggle draws an SVG at 1em, so its font-size is an icon size. On
+ * the type scale it tracked running text and sat a pixel off the chevron and
+ * the clear cross, which are the other two glyphs at the end of a field. */
+it("sizes the password reveal glyph from the icon scale", () => {
+  const css = sheet("PasswordInput/PasswordInput.module.css");
+  expect(css).toContain("font-size: var(--mds-icon-sm)");
+  expect(css).not.toContain("--mds-text-lg");
+});
