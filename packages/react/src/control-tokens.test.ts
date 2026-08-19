@@ -200,11 +200,49 @@ it("sizes the tab bar's glyph and label from the bar's own roles", () => {
 
 /* Height and padding both carry the home-bar inset. With border-box the inset
    would otherwise be taken out of the bar's height, leaving the items to
-   stand in whatever is left. */
-it("adds the home-bar inset to the tab bar rather than spending its height on it", () => {
+   stand in whatever is left. The lift is in the height for the same reason. */
+it("adds the home-bar inset and the action's lift to the tab bar rather than spending its height on them", () => {
   const css = sheet("TabBar/TabBar.module.css");
-  expect(css).toContain("height: calc(var(--mds-tabbar-h) + var(--mds-safe-bottom))");
+  expect(css).toContain(
+    "height: calc(var(--mds-tabbar-h) + var(--mds-tabbar-action-lift) + var(--mds-safe-bottom))",
+  );
   expect(css).toContain("calc(var(--mds-tabbar-seat) + var(--mds-safe-bottom))");
+});
+
+/* The action used to hang out of the top of the bar on a negative margin, where
+   any ancestor's overflow could cut it and anything painted later could cover
+   it — a z-index on the bar does nothing for the part of a child that is not in
+   the bar's box. The bar reserves the lift instead, and takes it back out of the
+   flow so the screen above is the same height as before. */
+it("keeps the raised action inside the bar's box", () => {
+  const css = sheet("TabBar/TabBar.module.css");
+  expect(css).toContain("padding: var(--mds-tabbar-action-lift)");
+  expect(css).toContain("margin-top: calc(-1 * var(--mds-tabbar-action-lift))");
+  expect(css).toContain("inset: var(--mds-tabbar-action-lift) 0 0");
+  expect(css).toMatch(/\.bar::before\s*\{[^}]*z-index: -1/);
+  expect(css).not.toMatch(/\.bar\s*\{[^}]*background:/);
+});
+
+/* An overlay unmounts on a timer, so the number in JS has to be the duration
+   the CSS actually uses. A sheet slides its own height on the slow clock while
+   a modal fades on the base one; unmounting both on the base clock cut 120ms
+   off the end of every sheet's exit. */
+it("unmounts each overlay on the clock its own transition runs on", () => {
+  const overlay = readFileSync(join(__dirname, "components/Overlay/Overlay.tsx"), "utf8");
+  const ms = (name: string) => {
+    const found = new RegExp(`${name} = (\\d+)`).exec(overlay);
+    if (found === null) throw new Error(`Overlay no longer states ${name}`);
+    return `${found[1]}ms`;
+  };
+  const dur = (name: string) => {
+    const found = new RegExp(`--mds-dur-${name}:\\s*(\\d+ms)`).exec(token("core/motion.css"));
+    if (found === null) throw new Error(`motion.css no longer states --mds-dur-${name}`);
+    return found[1];
+  };
+  expect(ms("OVERLAY_EXIT_MS")).toBe(dur("base"));
+  expect(ms("SHEET_EXIT_MS")).toBe(dur("slow"));
+  expect(sheet("Sheet/Sheet.module.css")).toContain("transition: var(--mds-transition-sheet)");
+  expect(token("core/motion.css")).toContain("--mds-transition-sheet: var(--mds-dur-slow)");
 });
 
 /* A sheet is portalled to <body>, so nothing in the app tree constrains it —

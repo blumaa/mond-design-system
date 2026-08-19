@@ -8,6 +8,11 @@ import styles from "./Overlay.module.css";
 /** Matches --mds-dur-base; usePresence needs the number in JS. */
 export const OVERLAY_EXIT_MS = 200;
 
+/** Matches --mds-dur-slow. A sheet travels its own height where a modal only
+    fades, so it is on the slower clock — unmounting it on the fade's clock cut
+    the slide off partway down. */
+export const SHEET_EXIT_MS = 320;
+
 export interface OverlayProps {
   open: boolean;
   onClose: () => void;
@@ -28,7 +33,7 @@ export interface OverlayProps {
  * from the package.
  */
 export function Overlay({ open, onClose, label, variant, role = "dialog", closeOnScrimClick, panelClassName, children }: OverlayProps) {
-  const { mounted, visible } = usePresence(open, OVERLAY_EXIT_MS);
+  const { mounted, visible } = usePresence(open, variant === "sheet" ? SHEET_EXIT_MS : OVERLAY_EXIT_MS);
   const ref = useOverlay<HTMLDivElement>({ open, onClose });
 
   if (!mounted) return null;
