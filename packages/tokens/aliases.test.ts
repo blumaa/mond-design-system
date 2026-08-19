@@ -8,12 +8,25 @@ import { join } from "node:path";
 
 const core = (file: string) => readFileSync(join(__dirname, "src", "core", file), "utf8");
 
+/* Resolves a token to a number of px, following the aliases down to a literal. */
+const px = (name: string, file: string): number => {
+  const declaration = new RegExp(`${name}:\\s*([^;]+);`).exec(core(file));
+  if (!declaration?.[1]) throw new Error(`${name} is not declared in core/${file}`);
+  const value = declaration[1].trim();
+  const alias = /^var\((--mds-[a-z0-9-]+)\)$/.exec(value);
+  if (alias?.[1]) return px(alias[1], file);
+  const literal = /^(-?[\d.]+)px$/.exec(value);
+  if (!literal?.[1]) throw new Error(`${name} resolves to ${value}, which is not a px length`);
+  return Number(literal[1]);
+};
+
 it("declares --mds-text-control at the base reading size", () => {
   expect(core("typography.css")).toMatch(/--mds-text-control:\s*var\(--mds-text-base\);/);
 });
 
-it("declares --mds-radius-modal at step 3", () => {
-  expect(core("radius.css")).toMatch(/--mds-radius-modal:\s*var\(--mds-radius-3\);/);
+it("declares --mds-radius-modal at the same step as a sheet", () => {
+  expect(core("radius.css")).toMatch(/--mds-radius-modal:\s*var\(--mds-radius-6\);/);
+  expect(core("radius.css")).toMatch(/--mds-radius-sheet:\s*var\(--mds-radius-6\);/);
 });
 
 it.each(["panel-title", "card-title"])("declares --mds-type-%s at the subtitle role", (name) => {
@@ -28,14 +41,11 @@ it.each(["item-title", "pill"])("declares --mds-type-%s at the label role", (nam
   );
 });
 
-it.each([
-  ["sm", 3],
-  ["md", 4],
-  ["lg", 5],
-])("declares --mds-pad-button-%s at step %i", (size, step) => {
-  expect(core("spacing.css")).toMatch(
-    new RegExp(`--mds-pad-button-${size}:\\s*var\\(--mds-space-${step}\\);`),
-  );
+it("declares --mds-pad-button-md on the scale, sm and lg off it", () => {
+  expect(core("spacing.css")).toMatch(/--mds-pad-button-md:\s*var\(--mds-space-4\);/);
+  const md = px("--mds-space-4", "spacing.css");
+  expect(px("--mds-pad-button-sm", "spacing.css")).toBeLessThan(md);
+  expect(px("--mds-pad-button-lg", "spacing.css")).toBeGreaterThan(md);
 });
 
 it.each([
@@ -122,14 +132,24 @@ it("declares --mds-text-section at the smallest step", () => {
   expect(core("typography.css")).toMatch(/--mds-text-section:\s*var\(--mds-text-xs\);/);
 });
 
-it.each([
-  ["xs", "xs"],
-  ["sm", "xs"],
-  ["md", "sm"],
-  ["lg", "xl"],
-  ["xl", "2xl"],
-])("declares --mds-avatar-text-%s at the %s step", (size, step) => {
-  expect(core("layout.css")).toMatch(
-    new RegExp(`--mds-avatar-text-${size}:\\s*var\\(--mds-text-${step}\\);`),
-  );
+/* Initials are a fraction of the circle, not a step on the reading scale. The
+   pair used to be set independently, so a brand that resized its avatars got
+   12px initials in a 38px circle — nothing failed, it just looked wrong. */
+it.each(["xs", "sm", "md", "lg", "xl"])(
+  "derives --mds-avatar-text-%s from the diameter it sits in",
+  (size) => {
+    expect(core("layout.css")).toMatch(
+      new RegExp(
+        `--mds-avatar-text-${size}:\\s*calc\\(var\\(--mds-avatar-${size}\\) \\* var\\(--mds-avatar-text-ratio\\)\\);`,
+      ),
+    );
+  },
+);
+
+it("keeps initials legible at every size", () => {
+  const declared = /--mds-avatar-text-ratio:\s*([\d.]+);/.exec(core("layout.css"));
+  const ratio = Number(declared?.[1]);
+  expect(ratio).toBeGreaterThan(0.35);
+  expect(ratio).toBeLessThan(0.5);
+  expect(px("--mds-avatar-xs", "layout.css") * ratio).toBeGreaterThanOrEqual(10);
 });

@@ -7,8 +7,10 @@
   border-radius: var(--mds-radius-avatar);
   background: var(--mds-surface-sunken);
   color: var(--mds-text-secondary);
-  font-family: var(--mds-font-body);
-  font-weight: var(--mds-weight-semibold);
+  /* Initials are display type, not body copy — a brand with a distinct
+     display face wants to see it here, at the size the circle allows. */
+  font-family: var(--mds-font-display);
+  font-weight: var(--mds-weight-medium);
   user-select: none;
 }
 

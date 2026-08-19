@@ -84,3 +84,42 @@ it("sizes the password reveal glyph from the icon scale", () => {
   expect(css).toContain("font-size: var(--mds-icon-sm)");
   expect(css).not.toContain("--mds-text-lg");
 });
+
+/* WCAG 2.5.8 measures the target, not the painted box. These three used to
+ * meet it with min-height on their root, which is layout the host row pays
+ * for: a switch in a settings row made that row 68px tall against the 52px
+ * the design draws. The target moved to an out-of-flow pseudo-element. */
+it.each([
+  ["Switch/Switch.module.css", "track"],
+  ["Checkbox/Checkbox.module.css", "box"],
+  ["Radio/Radio.module.css", "dot"],
+])("%s reaches the tap minimum without costing layout", (path, element) => {
+  const css = sheet(path);
+  expect(css).not.toMatch(/\.root \{[^}]*min-height/s);
+  expect(css).toMatch(
+    new RegExp(
+      `\\.${element}::before \\{[^}]*position: absolute;[^}]*width: max\\(100%, var\\(--mds-tap-min\\)\\);[^}]*height: max\\(100%, var\\(--mds-tap-min\\)\\);`,
+      "s",
+    ),
+  );
+  expect(css).toMatch(new RegExp(`\\.${element} \\{[^}]*position: relative;`, "s"));
+});
+
+/* A list row is the target, so it keeps the minimum as real height. */
+it("keeps the tap minimum on a List row, which is the target itself", () => {
+  expect(sheet("List/List.module.css")).toMatch(/\.row \{[^}]*min-height: var\(--mds-tap-min\)/s);
+});
+
+/* Initials are display type. A brand whose display face is a serif wants to
+ * see it in an avatar; MDS read the body face and there was no way to say so. */
+it("sets avatar initials in the display face", () => {
+  expect(sheet("Avatar/Avatar.module.css")).toContain("font-family: var(--mds-font-display)");
+});
+
+/* A secondary button's label was --mds-text-primary, so a brand could colour
+ * the outline in its accent but not the words inside it. */
+it("colours a secondary button's label with --mds-button-secondary-fg", () => {
+  const css = sheet("Button/Button.module.css");
+  expect(css).toContain("color: var(--mds-button-secondary-fg)");
+  expect(css).toMatch(/\.variant-secondary \{(?:(?!\}).)*--mds-button-secondary-fg/s);
+});

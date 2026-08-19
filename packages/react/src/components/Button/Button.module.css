@@ -44,7 +44,7 @@
 
 .variant-secondary {
   background: transparent;
-  color: var(--mds-text-primary);
+  color: var(--mds-button-secondary-fg);
   border-color: var(--mds-button-border);
 }
 

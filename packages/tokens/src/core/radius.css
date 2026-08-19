@@ -1,19 +1,25 @@
-/* Radius — step scale + role aliases. "Cards are softer" = one edit. */
+/* Radius — step scale + role aliases. "Cards are softer" = one edit.
+
+   The scale is not arithmetic. Rungs exist to let roles share a value, so each
+   one is a corner the system actually draws; a rung nothing lands on is a
+   number pretending to be a decision. */
 :root {
   --mds-radius-1: 4px;
-  --mds-radius-2: 8px;
+  --mds-radius-2: 6px;
   --mds-radius-3: 12px;
-  --mds-radius-4: 16px;
+  --mds-radius-4: 14px;
+  --mds-radius-5: 18px;
+  --mds-radius-6: 20px;
   --mds-radius-pill: 999px;
 
-  --mds-radius-control: var(--mds-radius-2);
-  --mds-radius-card: var(--mds-radius-3);
-  --mds-radius-media: var(--mds-radius-2);
-  --mds-radius-sheet: var(--mds-radius-4);
+  --mds-radius-control: var(--mds-radius-3);
+  --mds-radius-card: var(--mds-radius-5);
+  --mds-radius-media: var(--mds-radius-4);
+  --mds-radius-sheet: var(--mds-radius-6);
   /* Every surface a brand may want to shape has an alias — card, sheet,
      control, chip, tag. The modal panel was the one left on a raw step. */
-  --mds-radius-modal: var(--mds-radius-3);
-  --mds-radius-tag: var(--mds-radius-1);
+  --mds-radius-modal: var(--mds-radius-6);
+  --mds-radius-tag: var(--mds-radius-2);
   --mds-radius-checkbox: var(--mds-radius-1);
   --mds-radius-segment: var(--mds-radius-1);
   --mds-radius-skeleton: var(--mds-radius-1);

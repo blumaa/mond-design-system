@@ -3,7 +3,7 @@
 :root {
   /* app chrome */
   --mds-header-h: 56px;
-  --mds-tabbar-h: 64px;
+  --mds-tabbar-h: 66px;
   --mds-tabbar-action: 46px;      /* the raised center action; a circle */
   --mds-tabbar-action-lift: 14px; /* how far it rises above the bar's edge */
   --mds-sidebar-w: 240px;
@@ -11,10 +11,10 @@
   /* Attention dot (TabBar badge). The offsets pin it to an icon's top-right
      corner; the ring is the surface-colored ring that keeps it legible over
      the glyph. */
-  --mds-dot: 8px;
+  --mds-dot: 9px;
   --mds-dot-ring: 2px;
   --mds-dot-offset-y: -1px;
-  --mds-dot-offset-x: -3px;
+  --mds-dot-offset-x: -2px;
 
   /* content widths */
   /* Visual-viewport height. The software keyboard shrinks the visual viewport
@@ -28,9 +28,9 @@
   --mds-modal-w: 420px;           /* centred dialog */
 
   /* control sizing */
-  --mds-control-h-sm: 28px;
-  --mds-control-h-md: 36px;
-  --mds-control-h-lg: 44px;
+  --mds-control-h-sm: 32px;
+  --mds-control-h-md: 38px;
+  --mds-control-h-lg: 46px;
   --mds-tap-min: 44px; /* smallest touch target that ships */
 
   --mds-icon-sm: 16px;
@@ -38,10 +38,10 @@
   --mds-icon-lg: 24px;
   --mds-icon-stroke: 1.75;
 
-  --mds-check-size: 18px; /* checkbox box and radio circle */
-  --mds-switch-w: 40px;
-  --mds-switch-h: 24px;
-  --mds-switch-knob: 16px; /* leaves --mds-space-1 of track on every side */
+  --mds-check-size: 22px; /* checkbox box and radio circle */
+  --mds-switch-w: 44px;
+  --mds-switch-h: 26px;
+  --mds-switch-knob: 20px; /* leaves --mds-switch-inset of track on every side */
 
   /* Geometry a brand sets without touching the component that draws it. */
   --mds-toast-w: var(--mds-modal-w);
@@ -52,19 +52,23 @@
   --mds-skeleton-h: var(--mds-space-10);
   --mds-fade-w: var(--mds-space-6);
 
-  --mds-avatar-xs: 20px;
-  --mds-avatar-sm: 24px;
-  --mds-avatar-md: 32px;
-  --mds-avatar-lg: 64px;
-  --mds-avatar-xl: 96px;
+  --mds-avatar-xs: 24px;
+  --mds-avatar-sm: 30px;
+  --mds-avatar-md: 38px;
+  --mds-avatar-lg: 46px;
+  --mds-avatar-xl: 72px;
 
-  /* Initials inside an avatar, keyed to the diameter rather than to the
-     reading scale — the letters are a function of the circle. */
-  --mds-avatar-text-xs: var(--mds-text-xs);
-  --mds-avatar-text-sm: var(--mds-text-xs);
-  --mds-avatar-text-md: var(--mds-text-sm);
-  --mds-avatar-text-lg: var(--mds-text-xl);
-  --mds-avatar-text-xl: var(--mds-text-2xl);
+  /* Initials inside an avatar, derived from the diameter rather than named on
+     the reading scale — the letters are a function of the circle, and a brand
+     that resizes its avatars would otherwise have to resize these to match or
+     leave 12px initials in a 38px circle. --mds-avatar-text-ratio is the one
+     number; per-size aliases stay so a brand can still override just one. */
+  --mds-avatar-text-ratio: 0.42;
+  --mds-avatar-text-xs: calc(var(--mds-avatar-xs) * var(--mds-avatar-text-ratio));
+  --mds-avatar-text-sm: calc(var(--mds-avatar-sm) * var(--mds-avatar-text-ratio));
+  --mds-avatar-text-md: calc(var(--mds-avatar-md) * var(--mds-avatar-text-ratio));
+  --mds-avatar-text-lg: calc(var(--mds-avatar-lg) * var(--mds-avatar-text-ratio));
+  --mds-avatar-text-xl: calc(var(--mds-avatar-xl) * var(--mds-avatar-text-ratio));
 
   /* focus + borders */
   --mds-focus-width: 2px;

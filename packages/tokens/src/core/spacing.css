@@ -1,5 +1,10 @@
 /* Spacing — 4px base step scale. Semantic aliases name what a step is FOR:
    density change = one edit here, not a sweep through components. */
+/* Three roles sit between rungs on purpose: a button's small and large inline
+   padding, the tight gap, and the rhythm between sections. The rung scale is
+   4px-based and these are the widths the type actually needs at those sizes;
+   rounding them to a rung is a visible change to every button and every
+   section break. A role is allowed off the scale, a component is not. */
 :root {
   --mds-space-1: 4px;
   --mds-space-2: 8px;
@@ -19,13 +24,13 @@
   --mds-pad-control: var(--mds-space-3);
   --mds-pad-tight: var(--mds-space-2);
   --mds-pad-page-x: var(--mds-space-4);
-  --mds-pad-page-y: var(--mds-space-5);
+  --mds-pad-page-y: var(--mds-space-4);
 
   /* A button's own inline padding. Named per size because it is the width of
      every button on the screen, and a brand cannot reach a raw step. */
-  --mds-pad-button-sm: var(--mds-space-3);
+  --mds-pad-button-sm: 13px;
   --mds-pad-button-md: var(--mds-space-4);
-  --mds-pad-button-lg: var(--mds-space-5);
+  --mds-pad-button-lg: 22px;
 
   /* The inline padding of an editable control, per size. --mds-pad-control is
      the medium one under its older name; both move it. */
@@ -58,12 +63,12 @@
 
   /* gaps between siblings */
   --mds-gap-hairline: var(--mds-space-1);
-  --mds-gap-tight: var(--mds-space-2);
+  --mds-gap-tight: 6px;
   --mds-gap: var(--mds-space-3);
   --mds-gap-loose: var(--mds-space-5);
 
   /* rhythm between blocks */
   --mds-stack-item: var(--mds-space-3);
   --mds-stack-group: var(--mds-space-6);
-  --mds-stack-section: var(--mds-space-9);
+  --mds-stack-section: 30px;
 }

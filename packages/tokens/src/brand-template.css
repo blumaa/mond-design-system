@@ -43,6 +43,7 @@
   --mds-border-strong: #c7c7c3;
   --mds-control-border: #6e6e6e; /* 3:1 minimum against page and card */
   --mds-button-border: var(--mds-control-border); /* the outline of a secondary button */
+  --mds-button-secondary-fg: var(--mds-text-primary); /* and its label */
   --mds-control-knob: #ffffff;
 
   /* action — the default (primary) interactive fill */
@@ -117,6 +118,7 @@
   --mds-border-strong: #4a4a4a;
   --mds-control-border: #8a8a8a;
   --mds-button-border: var(--mds-control-border);
+  --mds-button-secondary-fg: var(--mds-text-primary);
 
   --mds-action-bg: #ededeb;
   --mds-action-fg: #1b1b1b;
