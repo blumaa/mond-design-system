@@ -1,34 +1,21 @@
 .bar {
-  position: sticky;
-  bottom: 0;
+  /* Positioned for the stacking context alone. Sticky bought nothing — the bar
+     is the last item of a column that already has a resolved height — and it
+     promoted the bar to a layer of its own, which is what the raised action
+     then lost its top to. */
+  position: relative;
   z-index: var(--mds-z-tabbar);
   display: flex;
   align-items: stretch;
-  /* The raised action stands inside this box instead of hanging out of the top
-     of it. A child outside its parent is at the mercy of every ancestor's
-     overflow and of paint order, and a z-index buys nothing for the part that
-     is not in the box. The strip it stands in is transparent and taken back out
-     of the flow, so the screen above keeps its height and scrolls under it. */
-  margin-top: calc(-1 * var(--mds-tabbar-action-lift));
   /* The home-bar inset is added to the bar, not spent out of it: the box is
      border-box, so padding alone would take the inset out of the height the
      items stand in and squash them against the edge on a device that has one. */
-  height: calc(var(--mds-tabbar-h) + var(--mds-tabbar-action-lift) + var(--mds-safe-bottom));
-  padding: var(--mds-tabbar-action-lift) var(--mds-tabbar-pad-x) calc(var(--mds-tabbar-seat) + var(--mds-safe-bottom));
-}
-
-/* The bar's surface. Drawn as a layer rather than as the bar's own background
-   so it stops below the lifted strip, which has to stay transparent for the
-   action to read as rising out of the bar. Behind the items (z-index -1) and
-   trapped in the bar's stacking context, so it cannot fall behind the screen.
-   Painted on the step above the page: the bar is chrome over the scrolling
-   body, and taking the page's own colour leaves it a 1px line across a flat
-   field on any brand whose page and card are more than a percent apart. */
-.bar::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: var(--mds-tabbar-action-lift) 0 0;
+  height: calc(var(--mds-tabbar-h) + var(--mds-safe-bottom));
+  padding: 0 var(--mds-tabbar-pad-x) calc(var(--mds-tabbar-seat) + var(--mds-safe-bottom));
+  /* Chrome over the scrolling body, so it takes the step above it rather than
+     the page's own colour: that is the body itself, a percent off the card in
+     the default theme and the same colour on a brand that separates them, which
+     leaves the bar a border line across a flat field. */
   background: var(--mds-surface-card);
   border-top: var(--mds-border-width) solid var(--mds-border-subtle);
 }
@@ -99,11 +86,10 @@
   white-space: nowrap;
 }
 
-/* The raised center action. Aligned to the top of the bar's content, then
-   pulled up by the lift so it sits flush with the bar's own top edge — above
-   the surface, still inside the box. Not centred: centring measures the margin
-   box too, so a negative margin there is halved against the free space it
-   removes and the action lands short of the edge. */
+/* The raised center action. Aligned to the top of the bar, then pulled the lift
+   above it so it breaks the bar's edge. Not centred: centring measures the
+   margin box too, so a negative margin there is halved against the free space
+   it removes and the action lands short of where it was asked to go. */
 .action {
   flex: none;
   align-self: flex-start;

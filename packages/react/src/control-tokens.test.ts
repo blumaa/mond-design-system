@@ -198,40 +198,38 @@ it("sizes the tab bar's glyph and label from the bar's own roles", () => {
   expect(token("core/typography.css")).toContain("--mds-type-tab:");
 });
 
-/* Height and padding both carry the home-bar inset. With border-box the inset
-   would otherwise be taken out of the bar's height, leaving the items to
-   stand in whatever is left. The lift is in the height for the same reason. */
-it("adds the home-bar inset and the action's lift to the tab bar rather than spending its height on them", () => {
+/* Both the height and the padding carry the home-bar inset. With border-box the
+   inset would otherwise be taken out of the bar's height, leaving the items to
+   stand in whatever was left. */
+it("adds the home-bar inset to the tab bar rather than spending its height on it", () => {
   const css = sheet("TabBar/TabBar.module.css");
-  expect(css).toContain(
-    "height: calc(var(--mds-tabbar-h) + var(--mds-tabbar-action-lift) + var(--mds-safe-bottom))",
-  );
+  expect(css).toContain("height: calc(var(--mds-tabbar-h) + var(--mds-safe-bottom))");
   expect(css).toContain("calc(var(--mds-tabbar-seat) + var(--mds-safe-bottom))");
 });
 
-/* The action used to hang out of the top of the bar on a negative margin, where
-   any ancestor's overflow could cut it and anything painted later could cover
-   it — a z-index on the bar does nothing for the part of a child that is not in
-   the bar's box. The bar reserves the lift instead, and takes it back out of the
-   flow so the screen above is the same height as before. */
-it("keeps the raised action inside the bar's box", () => {
+/* The action breaks the bar's top edge on a negative margin, and the bar is a
+   plain positioned box so that nothing has to be painted around it. Reserving
+   the lift as transparent padding and moving the surface to a ::before behind a
+   z-index of -1 put the action's top on the far side of a paint boundary, and a
+   sticky bar is a layer of its own for that boundary to be enforced against.
+   Neither is needed: the bar is the last item of a column with a resolved
+   height, so it is already where sticky would put it. */
+it("raises the action out of a bar that is one plain box", () => {
   const css = sheet("TabBar/TabBar.module.css");
-  expect(css).toContain("padding: var(--mds-tabbar-action-lift)");
-  expect(css).toContain("margin-top: calc(-1 * var(--mds-tabbar-action-lift))");
-  expect(css).toContain("inset: var(--mds-tabbar-action-lift) 0 0");
-  expect(css).toMatch(/\.bar::before\s*\{[^}]*z-index: -1/);
-  expect(css).not.toMatch(/\.bar\s*\{[^}]*background:/);
+  expect(css).toMatch(/\.action\s*\{[^}]*margin-top: calc\(-1 \* var\(--mds-tabbar-action-lift\)\)/);
+  expect(css).toMatch(/\.bar\s*\{[^}]*position: relative/);
+  expect(css).not.toContain("position: sticky");
+  expect(css).not.toContain("::before");
 });
 
-/* Chrome is not the page. The bar floats over the scrolling body, so it paints
-   the step above it — the same one a Card rests on. Painting --mds-surface-page
-   is invisible in the default theme, where page and card are a percent apart,
-   and vanishes entirely on a brand that separates them: the bar becomes a
-   1px line across a flat field and the raised action reads as a shape cut in
-   half rather than a button standing on a bar. */
+/* Chrome is not the page. The bar sits over the scrolling body, so it paints the
+   step above it — the same one a Card rests on. --mds-surface-page is the colour
+   of the body itself: a percent off the card in the default theme, and the same
+   colour on a brand that separates them, which leaves the bar a border line
+   across a flat field. */
 it("paints the tab bar on the step above the page", () => {
   const css = sheet("TabBar/TabBar.module.css");
-  expect(css).toMatch(/\.bar::before\s*\{[^}]*background: var\(--mds-surface-card\)/);
+  expect(css).toMatch(/\.bar\s*\{[^}]*background: var\(--mds-surface-card\)/);
   expect(css).not.toContain("--mds-surface-page");
 });
 
