@@ -1,6 +1,6 @@
 .link {
   color: var(--mds-text-accent);
-  border-radius: var(--mds-radius-1); /* focus outline hugs the text */
+  border-radius: var(--mds-radius-focus); /* focus outline hugs the text */
   transition: color var(--mds-transition-control);
 }
 

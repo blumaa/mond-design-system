@@ -7,7 +7,7 @@
 
 .glass {
   position: absolute;
-  left: var(--mds-space-3);
+  left: var(--mds-pad-control-md);
   width: var(--mds-icon-sm);
   height: var(--mds-icon-sm);
   color: var(--mds-text-muted);
@@ -17,7 +17,8 @@
 .input {
   width: 100%;
   height: var(--mds-control-h-md);
-  padding: 0 var(--mds-space-9) 0 var(--mds-space-8);
+  padding: 0 calc(var(--mds-pad-tight) + var(--mds-icon-lg) + var(--mds-gap-tight))
+    0 calc(var(--mds-pad-control-md) + var(--mds-icon-sm) + var(--mds-gap-hairline));
   border: var(--mds-border-width) solid var(--mds-control-border);
   border-radius: var(--mds-radius-pill);
   background: var(--mds-surface-card);
@@ -38,7 +39,7 @@
 
 .clear {
   position: absolute;
-  right: var(--mds-space-2);
+  right: var(--mds-pad-tight);
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -27,6 +27,35 @@
   --mds-pad-button-md: var(--mds-space-4);
   --mds-pad-button-lg: var(--mds-space-5);
 
+  /* The inline padding of an editable control, per size. --mds-pad-control is
+     the medium one under its older name; both move it. */
+  --mds-pad-control-sm: var(--mds-space-2);
+  --mds-pad-control-md: var(--mds-pad-control);
+  --mds-pad-control-lg: var(--mds-space-4);
+
+  /* Padding inside the small shapes. A pill (chip, segment) is roomier than a
+     tag, and a badge is a count in a circle rather than a label in a shape. */
+  --mds-pad-pill-y: var(--mds-space-1);
+  --mds-pad-pill-x: var(--mds-space-3);
+  --mds-pad-tag-y: var(--mds-space-1);
+  --mds-pad-tag-x: var(--mds-space-2);
+  --mds-pad-badge-x: var(--mds-space-2);
+  --mds-pad-count-y: var(--mds-space-1);
+  --mds-pad-count-x: var(--mds-space-2);
+
+  /* Padding a component owns against an edge someone else set: a list row and
+     an empty state pay --mds-pad-card inline and these on the block axis. */
+  --mds-pad-item-y: var(--mds-space-3);
+  --mds-pad-empty-y: var(--mds-space-10);
+  --mds-pad-tab-y: var(--mds-space-2);
+  --mds-pad-tab-x: var(--mds-space-3);
+  --mds-pad-segment: var(--mds-space-1);
+  --mds-pad-toast-y: var(--mds-space-3);
+  --mds-pad-toast-x: var(--mds-space-4);
+
+  /* How far a toast clears the edge of the viewport it floats over. */
+  --mds-toast-inset: var(--mds-space-4);
+
   /* gaps between siblings */
   --mds-gap-hairline: var(--mds-space-1);
   --mds-gap-tight: var(--mds-space-2);

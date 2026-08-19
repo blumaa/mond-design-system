@@ -1,13 +1,13 @@
 .list {
   display: flex;
-  gap: var(--mds-space-1);
+  gap: var(--mds-gap-hairline);
   border-bottom: var(--mds-border-width) solid var(--mds-border-subtle);
 }
 
 .tab {
   border: none;
   background: transparent;
-  padding: var(--mds-space-2) var(--mds-space-3);
+  padding: var(--mds-pad-tab-y) var(--mds-pad-tab-x);
   margin-bottom: calc(-1 * var(--mds-border-width));
   border-bottom: calc(2 * var(--mds-border-width)) solid transparent;
   font: var(--mds-type-label);

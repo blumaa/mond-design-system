@@ -19,7 +19,7 @@
   /* em-based checkmark geometry scales with the box. */
   font-size: var(--mds-check-size);
   border: var(--mds-border-width) solid var(--mds-control-border);
-  border-radius: var(--mds-radius-1);
+  border-radius: var(--mds-radius-checkbox);
   background: var(--mds-surface-card);
   display: inline-grid;
   place-content: center;

@@ -2,9 +2,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 var(--mds-space-2);
-  min-width: var(--mds-space-5);
-  height: var(--mds-space-5);
+  padding: 0 var(--mds-pad-badge-x);
+  min-width: var(--mds-badge-size);
+  height: var(--mds-badge-size);
   border-radius: var(--mds-radius-pill);
   font: var(--mds-type-meta);
   font-weight: var(--mds-weight-semibold);

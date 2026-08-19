@@ -11,7 +11,7 @@
 
 .required {
   color: var(--mds-status-danger);
-  margin-left: var(--mds-space-1);
+  margin-left: var(--mds-gap-hairline);
 }
 
 .message {

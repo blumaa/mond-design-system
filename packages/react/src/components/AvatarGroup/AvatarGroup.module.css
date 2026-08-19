@@ -11,7 +11,7 @@
 }
 
 .item + .item {
-  margin-left: calc(-1 * var(--mds-space-2));
+  margin-left: calc(-1 * var(--mds-avatar-overlap));
 }
 
 .overflow {

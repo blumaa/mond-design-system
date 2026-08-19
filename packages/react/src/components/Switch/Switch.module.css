@@ -27,7 +27,7 @@
   content: "";
   position: absolute;
   top: 50%;
-  left: var(--mds-space-1);
+  left: var(--mds-switch-inset);
   transform: translateY(-50%);
   width: var(--mds-switch-knob);
   height: var(--mds-switch-knob);
@@ -42,7 +42,7 @@
 
 .track:checked::after {
   transform: translateY(-50%)
-    translateX(calc(var(--mds-switch-w) - var(--mds-switch-knob) - 2 * var(--mds-space-1)));
+    translateX(calc(var(--mds-switch-w) - var(--mds-switch-knob) - 2 * var(--mds-switch-inset)));
 }
 
 .track:disabled {

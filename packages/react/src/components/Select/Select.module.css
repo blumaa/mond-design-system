@@ -27,13 +27,13 @@
 }
 
 /* Room for the chevron. */
-.size-sm { height: var(--mds-control-h-sm); padding: 0 var(--mds-space-7) 0 var(--mds-space-2); font-size: var(--mds-text-sm); }
-.size-md { height: var(--mds-control-h-md); padding: 0 var(--mds-space-8) 0 var(--mds-space-3); font-size: var(--mds-text-control); }
-.size-lg { height: var(--mds-control-h-lg); padding: 0 var(--mds-space-8) 0 var(--mds-space-4); font-size: var(--mds-text-control); }
+.size-sm { height: var(--mds-control-h-sm); padding: 0 calc(var(--mds-pad-tight) + var(--mds-icon-sm) + var(--mds-gap-hairline)) 0 var(--mds-pad-control-sm); font-size: var(--mds-text-sm); }
+.size-md { height: var(--mds-control-h-md); padding: 0 calc(var(--mds-pad-tight) + var(--mds-icon-sm) + var(--mds-gap-tight)) 0 var(--mds-pad-control-md); font-size: var(--mds-text-control); }
+.size-lg { height: var(--mds-control-h-lg); padding: 0 calc(var(--mds-pad-tight) + var(--mds-icon-sm) + var(--mds-gap-tight)) 0 var(--mds-pad-control-lg); font-size: var(--mds-text-control); }
 
 .chevron {
   position: absolute;
-  right: var(--mds-space-2);
+  right: var(--mds-pad-tight);
   top: 50%;
   transform: translateY(-50%);
   width: var(--mds-icon-sm);

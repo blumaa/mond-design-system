@@ -45,7 +45,7 @@
 .variant-secondary {
   background: transparent;
   color: var(--mds-text-primary);
-  border-color: var(--mds-control-border);
+  border-color: var(--mds-button-border);
 }
 
 .variant-ghost {

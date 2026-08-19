@@ -38,3 +38,19 @@ it("shapes the Modal panel with --mds-radius-modal", () => {
   expect(css).toContain("border-radius: var(--mds-radius-modal)");
   expect(css).not.toContain("var(--mds-radius-3)");
 });
+
+/* A secondary button's outline and a text field's border were one token, so a
+ * brand darkening the field border to clear 3:1 against the card also darkened
+ * every button outline on the screen. */
+it("outlines a secondary button with --mds-button-border", () => {
+  const css = sheet("Button/Button.module.css");
+  expect(css).toContain("border-color: var(--mds-button-border)");
+  expect(css).not.toContain("--mds-control-border");
+});
+
+it.each(["Input/Input.module.css", "Select/Select.module.css", "Textarea/Textarea.module.css"])(
+  "%s keeps its own border on --mds-control-border",
+  (path) => {
+    expect(sheet(path)).toContain("var(--mds-control-border)");
+  },
+);

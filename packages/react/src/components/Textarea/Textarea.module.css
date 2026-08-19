@@ -1,6 +1,6 @@
 .textarea {
   width: 100%;
-  padding: var(--mds-space-2) var(--mds-space-3);
+  padding: var(--mds-pad-tight) var(--mds-pad-control-md);
   border: var(--mds-border-width) solid var(--mds-control-border);
   border-radius: var(--mds-radius-control);
   background: var(--mds-surface-card);

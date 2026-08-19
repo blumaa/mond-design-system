@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--mds-gap-hairline);
-  padding: var(--mds-space-1) var(--mds-space-2);
+  padding: var(--mds-pad-tag-y) var(--mds-pad-tag-x);
   border-radius: var(--mds-radius-tag);
   border: var(--mds-border-width) solid var(--mds-border-subtle);
   background: var(--mds-surface-card);
@@ -23,7 +23,7 @@
   justify-content: center;
   border: none;
   padding: 0;
-  margin-right: calc(-1 * var(--mds-space-1));
+  margin-right: calc(-1 * var(--mds-gap-hairline));
   width: var(--mds-icon-md);
   height: var(--mds-icon-md);
   border-radius: var(--mds-radius-pill);

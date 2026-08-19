@@ -39,6 +39,7 @@ function run(dir: string): { status: number; output: string } {
 const SYSTEM = `:root {
   --mds-surface-card: #ffffff;
   --mds-space-2: 8px;
+  --mds-pad-tight: var(--mds-space-2);
   --mds-bp-md: 768px;
 }`;
 
@@ -47,9 +48,20 @@ describe("check-tokens gate", () => {
     const dir = tree({
       "packages/tokens/src/core/layout.css": SYSTEM,
       "packages/react/src/components/Button/Button.module.css":
-        ".root { background: var(--mds-surface-card); padding: var(--mds-space-2); }",
+        ".root { background: var(--mds-surface-card); padding: var(--mds-pad-tight); }",
     });
     expect(run(dir).status).toBe(0);
+  });
+
+  it("fails a raw scale step in a component sheet", () => {
+    const dir = tree({
+      "packages/tokens/src/core/layout.css": SYSTEM,
+      "packages/react/src/components/Button/Button.module.css":
+        ".root { padding: var(--mds-space-2); }",
+    });
+    const result = run(dir);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("raw scale step --mds-space-2");
   });
 
   it("fails a literal hex in a component sheet", () => {
@@ -107,7 +119,7 @@ describe("check-tokens gate", () => {
     const dir = tree({
       "packages/tokens/src/core/layout.css": SYSTEM,
       "packages/react/src/components/Button/Button.module.css":
-        ".root { --mds-button-gap: var(--mds-space-2); gap: var(--mds-button-gap); }",
+        ".root { --mds-button-gap: var(--mds-pad-tight); gap: var(--mds-button-gap); }",
     });
     expect(run(dir).status).toBe(0);
   });
@@ -116,7 +128,7 @@ describe("check-tokens gate", () => {
     const dir = tree({
       "packages/tokens/src/core/layout.css": SYSTEM,
       "packages/react/src/components/Button/Button.module.css":
-        "/* chosen because 32px cleared #ffffff on the mock */\n.root { padding: var(--mds-space-2); }",
+        "/* chosen because 32px cleared #ffffff on the mock */\n.root { padding: var(--mds-pad-tight); }",
     });
     expect(run(dir).status).toBe(0);
   });

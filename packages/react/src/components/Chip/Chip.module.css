@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--mds-gap-hairline);
-  padding: var(--mds-space-1) var(--mds-space-3);
+  padding: var(--mds-pad-pill-y) var(--mds-pad-pill-x);
   border-radius: var(--mds-radius-chip);
   font: var(--mds-type-pill);
   white-space: nowrap;

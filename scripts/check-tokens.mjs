@@ -16,6 +16,9 @@
  *      exist, so a breakpoint cannot be var())
  *   3. every --mds-* consumed must be declared by the tokens package or
  *      locally in the same sheet (component tokens)
+ *   4. no raw scale step (--mds-space-2, --mds-radius-1) — a step is a number,
+ *      and a brand re-pointing it moves every unrelated component that shares
+ *      it. Components read the alias that names the role instead.
  *
  * `--root` points the gate at a throwaway tree so its own test can watch it
  * fail — a gate never seen failing is indistinguishable from one that cannot.
@@ -92,6 +95,13 @@ for (const { path, source } of componentSheets) {
         ? "off the breakpoint list — add it to --mds-bp-* in core/layout.css or use one that is there"
         : "use a spacing, radius or layout token";
       failures.push(`${at}  literal length ${px} — ${reason}`);
+    }
+
+    for (const step of matchAll(line, /--mds-(?:space|radius)-[0-9]+(?=\s*[,)])/g)) {
+      failures.push(
+        `${at}  raw scale step ${step} — name the role it plays and alias that ` +
+          `step in packages/tokens/src/core`,
+      );
     }
 
     for (const used of matchAll(line, /--mds-[a-z0-9-]+(?=\s*[,)])/g)) {

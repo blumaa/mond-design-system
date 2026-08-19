@@ -20,7 +20,7 @@
 
 /* Frames the strip so its overflow reads as a scroll area. */
 .bordered {
-  padding: var(--mds-space-1) var(--mds-space-3);
+  padding: var(--mds-pad-pill-y) var(--mds-pad-pill-x);
   border-radius: var(--mds-radius-pill);
   border: var(--mds-border-width) solid var(--mds-border-subtle);
   background: var(--mds-surface-sunken);
@@ -30,7 +30,7 @@
    `black` is a mask stop, not a colour — only its alpha is read, so it is
    theme-independent by definition and deliberately not a token. */
 .fade {
-  mask-image: linear-gradient(to right, black calc(100% - var(--mds-space-6)), transparent);
+  mask-image: linear-gradient(to right, black calc(100% - var(--mds-fade-w)), transparent);
 }
 
 /* Each child keeps its intrinsic width so the row never wraps. */

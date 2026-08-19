@@ -7,11 +7,11 @@
 
 .variant-text {
   height: var(--skeleton-h, 1em);
-  border-radius: var(--mds-radius-1);
+  border-radius: var(--mds-radius-skeleton);
 }
 
 .variant-rect {
-  height: var(--skeleton-h, var(--mds-space-10));
+  height: var(--skeleton-h, var(--mds-skeleton-h));
   border-radius: var(--mds-radius-media);
 }
 

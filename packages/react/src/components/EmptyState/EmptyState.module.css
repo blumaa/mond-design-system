@@ -4,7 +4,7 @@
   align-items: center;
   text-align: center;
   gap: var(--mds-stack-item);
-  padding: var(--mds-space-10) var(--mds-pad-card);
+  padding: var(--mds-pad-empty-y) var(--mds-pad-card);
 }
 
 .icon {
@@ -13,5 +13,5 @@
 }
 
 .action {
-  margin-top: var(--mds-space-2);
+  margin-top: var(--mds-gap-tight);
 }

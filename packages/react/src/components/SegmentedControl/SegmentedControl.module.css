@@ -1,7 +1,7 @@
 .group {
   display: inline-flex;
-  padding: var(--mds-space-1);
-  gap: var(--mds-space-1);
+  padding: var(--mds-pad-segment);
+  gap: var(--mds-gap-hairline);
   background: var(--mds-surface-sunken);
   border-radius: var(--mds-radius-control);
 }
@@ -41,9 +41,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: calc(var(--mds-control-h-md) - 2 * var(--mds-space-1));
-  padding: 0 var(--mds-space-3);
-  border-radius: var(--mds-radius-1);
+  height: calc(var(--mds-control-h-md) - 2 * var(--mds-pad-segment));
+  padding: 0 var(--mds-pad-pill-x);
+  border-radius: var(--mds-radius-segment);
   font: var(--mds-type-pill);
   color: var(--mds-text-secondary);
   white-space: nowrap;

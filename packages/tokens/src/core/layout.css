@@ -43,6 +43,15 @@
   --mds-switch-h: 24px;
   --mds-switch-knob: 16px; /* leaves --mds-space-1 of track on every side */
 
+  /* Geometry a brand sets without touching the component that draws it. */
+  --mds-toast-w: var(--mds-modal-w);
+  --mds-badge-size: var(--mds-space-5);
+  --mds-avatar-overlap: var(--mds-space-2);
+  --mds-switch-inset: var(--mds-space-1);
+  --mds-progress-h: var(--mds-space-2);
+  --mds-skeleton-h: var(--mds-space-10);
+  --mds-fade-w: var(--mds-space-6);
+
   --mds-avatar-xs: 20px;
   --mds-avatar-sm: 24px;
   --mds-avatar-md: 32px;

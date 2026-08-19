@@ -1,7 +1,7 @@
 .track {
   display: block;
   width: 100%;
-  height: var(--mds-space-2);
+  height: var(--mds-progress-h);
   border-radius: var(--mds-radius-pill);
   background: var(--mds-surface-sunken);
   overflow: hidden;
