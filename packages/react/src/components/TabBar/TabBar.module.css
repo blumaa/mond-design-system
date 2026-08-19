@@ -4,10 +4,13 @@
   z-index: var(--mds-z-tabbar);
   display: flex;
   align-items: stretch;
-  height: var(--mds-tabbar-h);
+  /* The home-bar inset is added to the bar, not spent out of it: the box is
+     border-box, so padding alone would take the inset out of the height the
+     items stand in and squash them against the edge on a device that has one. */
+  height: calc(var(--mds-tabbar-h) + var(--mds-safe-bottom));
+  padding: 0 var(--mds-tabbar-pad-x) calc(var(--mds-tabbar-seat) + var(--mds-safe-bottom));
   background: var(--mds-surface-page);
   border-top: var(--mds-border-width) solid var(--mds-border-subtle);
-  padding-bottom: var(--mds-safe-bottom);
 }
 
 .item {
@@ -22,7 +25,7 @@
   border: none;
   background: none;
   cursor: pointer;
-  font: var(--mds-type-meta);
+  font: var(--mds-type-tab);
   color: var(--mds-text-muted);
   text-decoration: none;
   transition: color var(--mds-transition-control);
@@ -37,9 +40,21 @@
   color: var(--mds-text-accent);
 }
 
+/* A tab's glyph is a step of its own, above the icon scale — see
+   --mds-tabbar-icon. Published as the slot so an icon that states no size of
+   its own takes it, and so does an icon set that can only size itself. */
 .icon {
   position: relative; /* anchors the badge dot */
   display: inline-flex;
+  --mds-icon-slot: var(--mds-tabbar-icon);
+  width: var(--mds-icon-slot);
+  height: var(--mds-icon-slot);
+  font-size: var(--mds-icon-slot);
+}
+
+.icon > svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* Attention dot, pinned to the icon's top-right corner. */
@@ -55,12 +70,19 @@
   box-shadow: 0 0 0 var(--mds-dot-ring) var(--mds-surface-page);
 }
 
+/* A caption never wraps: the bar's height is fixed, and a translation twice
+   the length of the English would push the glyph out of it. */
 .label {
-  line-height: 1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* The raised center action. Negative top margin lifts it above the bar's
-   edge; the pill radius keeps it a circle at its fixed size. */
+   edge; the pill radius keeps it a circle at its fixed size. Aligned to the
+   top of the bar, not centred: flex centring measures the margin box, so a
+   negative margin there moves nothing. */
 .action {
   flex: none;
   align-self: flex-start;

@@ -55,6 +55,25 @@ describe("check-tokens gate", () => {
     expect(run(dir).status).toBe(0);
   });
 
+  it("accepts the slot contract read with a fallback, and refuses it bare", () => {
+    const withFallback = tree({
+      "packages/tokens/src/core/layout.css": SYSTEM,
+      "packages/react/src/components/Icon/Icon.module.css":
+        ".icon { width: var(--mds-icon-slot, var(--mds-pad-tight)); }",
+    });
+    expect(run(withFallback).status).toBe(0);
+    rmSync(withFallback, { recursive: true, force: true });
+
+    const bare = tree({
+      "packages/tokens/src/core/layout.css": SYSTEM,
+      "packages/react/src/components/Icon/Icon.module.css": ".icon { width: var(--mds-icon-slot); }",
+    });
+    const { status, output } = run(bare);
+    expect(status).toBe(1);
+    expect(output).toContain("--mds-icon-slot");
+    expect(output).toContain("fallback");
+  });
+
   it("fails a raw scale step in a component sheet", () => {
     const dir = tree({
       "packages/tokens/src/core/layout.css": SYSTEM,

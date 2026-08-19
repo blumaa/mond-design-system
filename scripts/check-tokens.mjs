@@ -78,6 +78,12 @@ const defined = new Set(
    component picked on their behalf. */
 const SCALE_BY_PROP = new Set(["packages/react/src/components/Link/Link.module.css"]);
 
+/* Published by whichever control owns the icon slot, and deliberately declared
+   nowhere: a :root value would beat the fallback, and every glyph outside a
+   slot would take the slot's size. A sheet that does not publish it may only
+   read it with a fallback — the fallback is what the glyph is worth on its own. */
+const RUNTIME = new Set(["--mds-icon-slot"]);
+
 const failures = [];
 
 for (const { path, source } of componentSheets) {
@@ -115,7 +121,17 @@ for (const { path, source } of componentSheets) {
     }
 
     for (const used of matchAll(line, /--mds-[a-z0-9-]+(?=\s*[,)])/g)) {
-      if (!defined.has(used) && !local.has(used)) {
+      if (local.has(used)) continue;
+      if (RUNTIME.has(used)) {
+        if (!line.includes(`var(${used},`)) {
+          failures.push(
+            `${at}  ${used} is published by a control at runtime and is never ` +
+              `declared — read it with a fallback`,
+          );
+        }
+        continue;
+      }
+      if (!defined.has(used)) {
         failures.push(`${at}  undefined token ${used} — nothing declares it`);
       }
     }

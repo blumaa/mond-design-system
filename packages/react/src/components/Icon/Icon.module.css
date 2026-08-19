@@ -6,6 +6,15 @@
   color: inherit;
 }
 
-.size-sm { width: var(--mds-icon-sm); height: var(--mds-icon-sm); }
-.size-md { width: var(--mds-icon-md); height: var(--mds-icon-md); }
-.size-lg { width: var(--mds-icon-lg); height: var(--mds-icon-lg); }
+/* No step stated: the control around it published one as --mds-icon-slot, and
+   md is what a glyph outside any slot is. font-size carries it to an icon set
+   that sizes itself from the inside — a ligature font has no width to set. */
+.size-slot {
+  width: var(--mds-icon-slot, var(--mds-icon-md));
+  height: var(--mds-icon-slot, var(--mds-icon-md));
+  font-size: var(--mds-icon-slot, var(--mds-icon-md));
+}
+
+.size-sm { width: var(--mds-icon-sm); height: var(--mds-icon-sm); font-size: var(--mds-icon-sm); }
+.size-md { width: var(--mds-icon-md); height: var(--mds-icon-md); font-size: var(--mds-icon-md); }
+.size-lg { width: var(--mds-icon-lg); height: var(--mds-icon-lg); font-size: var(--mds-icon-lg); }

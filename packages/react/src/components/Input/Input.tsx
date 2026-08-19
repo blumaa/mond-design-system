@@ -26,7 +26,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  *   <Input value={name} onChange={(e) => setName(e.target.value)} />
  * </Field>
  *
- * <Input aria-label="Search" iconLeft={<Icon name="search" size="sm" />} />
+ * <Input aria-label="Search" iconLeft={<Icon name="search" />} />
  * ```
  */
 export function Input({

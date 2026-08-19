@@ -142,6 +142,7 @@ it("colours a secondary button's label with --mds-button-secondary-fg", () => {
 it.each([
   ["Button/Button.module.css", ["sm", "md", "lg"]],
   ["Input/Input.module.css", ["md"]],
+  ["CountButton/CountButton.module.css", ["md"]],
 ])("%s publishes --mds-icon-slot and sizes the slot from it", (path, steps) => {
   const css = sheet(path);
   for (const step of steps) expect(css).toContain(`--mds-icon-slot: var(--mds-icon-${step})`);
@@ -172,4 +173,56 @@ it("spins a busy button at the step its glyph occupies", () => {
     return found[1];
   };
   expect([map[1], map[2], map[3]]).toEqual([px("sm"), px("md"), px("lg")]);
+
+  /* Same trade in a count button: the spinner takes the glyph's place, so the
+     row of them must not reflow the moment one is tapped. */
+  const count = readFileSync(join(__dirname, "components/CountButton/CountButton.tsx"), "utf8");
+  const spinner = /SPINNER_PX = (\d+)/.exec(count);
+  if (spinner === null) throw new Error("CountButton no longer states a numeric spinner step");
+  expect(spinner[1]).toBe(px("md"));
+});
+
+const token = (file: string) =>
+  readFileSync(join(__dirname, "../../tokens/src", file), "utf8");
+
+/* The bar is the one place where a glyph is bigger than the type beside it and
+   the type is smaller than any reading step, so both are its own: borrowing
+   the icon scale's md step and the meta role shrank the glyph, grew the label
+   and left the surplus as empty bar. */
+it("sizes the tab bar's glyph and label from the bar's own roles", () => {
+  const css = sheet("TabBar/TabBar.module.css");
+  expect(css).toContain("--mds-icon-slot: var(--mds-tabbar-icon)");
+  expect(css).toContain("font: var(--mds-type-tab)");
+  expect(css).not.toContain("var(--mds-type-meta)");
+  expect(token("core/layout.css")).toMatch(/--mds-tabbar-icon:\s*\d+px/);
+  expect(token("core/typography.css")).toContain("--mds-type-tab:");
+});
+
+/* Height and padding both carry the home-bar inset. With border-box the inset
+   would otherwise be taken out of the bar's height, leaving the items to
+   stand in whatever is left. */
+it("adds the home-bar inset to the tab bar rather than spending its height on it", () => {
+  const css = sheet("TabBar/TabBar.module.css");
+  expect(css).toContain("height: calc(var(--mds-tabbar-h) + var(--mds-safe-bottom))");
+  expect(css).toContain("calc(var(--mds-tabbar-seat) + var(--mds-safe-bottom))");
+});
+
+/* A sheet is portalled to <body>, so nothing in the app tree constrains it —
+   on a desktop viewport it spanned the whole window while the app it belongs
+   to sat in a phone-width column. */
+it("holds a sheet to the app column and centres it", () => {
+  expect(sheet("Sheet/Sheet.module.css")).toContain("max-width: var(--mds-frame-width)");
+  expect(sheet("Overlay/Overlay.module.css")).toMatch(
+    /\.variant-sheet \{(?:(?!\}).)*justify-content: center/s,
+  );
+  expect(token("core/layout.css")).toMatch(/--mds-frame-width:\s*\d+px/);
+});
+
+/* An icon with no size stated takes the slot it sits in, so a control that
+   publishes --mds-icon-slot reaches the system's own Icon too — not only an
+   app icon set that opted into reading the fallback chain. */
+it("sizes an unstated Icon from the slot around it", () => {
+  expect(sheet("Icon/Icon.module.css")).toContain(
+    "width: var(--mds-icon-slot, var(--mds-icon-md))",
+  );
 });

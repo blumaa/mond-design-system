@@ -4,6 +4,12 @@
   /* app chrome */
   --mds-header-h: 56px;
   --mds-tabbar-h: 66px;
+  --mds-tabbar-pad-x: 8px;        /* the bar's own gutter, outside the items */
+  --mds-tabbar-seat: 6px;         /* clear space under the items, above the home bar */
+  /* The glyph in a tab. Bigger than any step on the icon scale and paired with
+     type smaller than any reading step: a tab is read as a picture with a
+     caption, not as a labelled control. */
+  --mds-tabbar-icon: 24px;
   --mds-tabbar-action: 46px;      /* the raised center action; a circle */
   --mds-tabbar-action-lift: 14px; /* how far it rises above the bar's edge */
   --mds-sidebar-w: 240px;
@@ -22,6 +28,11 @@
      this token keeps overlays (Overlay scrim, and so Sheet/Modal) above the
      keyboard. Untouched, it is simply the dynamic viewport. */
   --mds-vvh: 100dvh;
+
+  /* The app column. A phone-shaped app is full-bleed on a phone and framed on
+     a desktop viewport; anything portalled past the app tree (a sheet) reads
+     this to stay the same width as the app it belongs to. */
+  --mds-frame-width: 430px;
 
   --mds-content-max: 720px;       /* reading column */
   --mds-content-max-wide: 1200px; /* desktop multi-column shells */

@@ -6,11 +6,14 @@ import styles from "./CountButton.module.css";
 export type CountButtonTone = "accent" | "danger";
 
 /* Matches --mds-icon-md; the spinner replaces an md glyph without reflow. */
+/* Must match --mds-icon-slot on .glyph: the spinner stands in the glyph's
+   place and Spinner needs a number, which a stylesheet cannot hand it. */
 const SPINNER_PX = 20;
 
 export interface CountButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "aria-label" | "aria-pressed"> {
-  /** Glyph shown before the text, e.g. `<Icon name="heart" />` (md). */
+  /** Glyph shown before the text, e.g. `<Icon name="heart" />`. Sized by the
+      button, whatever the icon set's own default is. */
   icon: ReactNode;
   /** Accessible label (required) — describes the action for screen readers. */
   label: string;
@@ -74,7 +77,9 @@ export function CountButton({
       {...rest}
     >
       {/* The button's own aria-busy announces the wait; the spinner is decor. */}
-      {loading ? <Spinner size={SPINNER_PX} label="" aria-hidden="true" /> : <span className={styles.glyph}>{icon}</span>}
+      <span className={styles.glyph}>
+        {loading ? <Spinner size={SPINNER_PX} label="" aria-hidden="true" /> : icon}
+      </span>
       {children != null ? <span>{children}</span> : null}
     </button>
   );

@@ -2,9 +2,10 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { axe } from "jest-axe";
+import type { IconRenderProps } from "./Icon";
 import { Icon, IconProvider } from "./Icon";
 
-const renderIcon = (name: string, { size }: { size: number }) => (
+const renderIcon = (name: string, { size }: IconRenderProps) => (
   <svg data-testid={`icon-${name}`} width={size} height={size} />
 );
 
@@ -36,6 +37,22 @@ describe("Icon", () => {
       </IconProvider>,
     );
     expect(screen.getByTestId("icon-close")).toHaveAttribute("width", "24");
+  });
+
+  it("leaves the size to the slot when none is stated", () => {
+    const steps: Array<number | undefined> = [];
+    render(
+      <IconProvider
+        render={(name, { size }) => {
+          steps.push(size);
+          return <svg data-testid={`icon-${name}`} />;
+        }}
+      >
+        <Icon name="close" />
+        <Icon name="search" size="sm" />
+      </IconProvider>,
+    );
+    expect(steps).toEqual([undefined, 16]);
   });
 
   it("renders an empty box and warns without a provider", () => {

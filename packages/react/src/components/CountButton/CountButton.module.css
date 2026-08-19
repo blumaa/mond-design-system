@@ -35,7 +35,21 @@
   color: var(--mds-status-danger);
 }
 
+/* The glyph is the button's, not the caller's: a row of these sits on one
+   baseline, and the spinner takes the glyph's place while the count is in
+   flight, so both stand at the same step or the row reflows on a tap. */
 .glyph {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  flex: none;
+  --mds-icon-slot: var(--mds-icon-md);
+  width: var(--mds-icon-slot);
+  height: var(--mds-icon-slot);
+  font-size: var(--mds-icon-slot);
+}
+
+.glyph > svg {
+  width: 100%;
+  height: 100%;
 }

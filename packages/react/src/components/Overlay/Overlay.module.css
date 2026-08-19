@@ -25,4 +25,5 @@
 .variant-sheet {
   z-index: var(--mds-z-sheet);
   align-items: flex-end;
+  justify-content: center;
 }

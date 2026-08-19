@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  /* Portalled to <body>, so nothing in the app tree holds it to the app's own
+     column — left at 100% it spans a desktop window while the app beside it is
+     a phone-width frame. */
+  max-width: var(--mds-frame-width);
   /* Of the scrim, which already tracks the visual viewport (--mds-vvh). */
   max-height: 85%;
   /* Portalled past the app chrome, so nothing else reserves the home-bar
