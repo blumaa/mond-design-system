@@ -19,7 +19,7 @@ reset. Individual layers are exported too (`./core/spacing.css`,
 ## Three layers
 
 **Core scales** (`core/*.css`) are the rungs: `--mds-space-1…12`,
-`--mds-radius-1…4`, `--mds-text-xs…4xl`, durations, easings, z-indices, icon and
+`--mds-radius-1…7`, `--mds-text-xs…4xl`, durations, easings, z-indices, icon and
 avatar sizes.
 
 **Semantic aliases** name what a rung is _for_: `--mds-pad-card`,

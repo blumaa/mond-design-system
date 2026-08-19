@@ -6,22 +6,23 @@
 :root {
   --mds-radius-1: 4px;
   --mds-radius-2: 6px;
-  --mds-radius-3: 12px;
-  --mds-radius-4: 14px;
-  --mds-radius-5: 18px;
-  --mds-radius-6: 20px;
+  --mds-radius-3: 8px;
+  --mds-radius-4: 12px;
+  --mds-radius-5: 14px;
+  --mds-radius-6: 18px;
+  --mds-radius-7: 20px;
   --mds-radius-pill: 999px;
 
-  --mds-radius-control: var(--mds-radius-3);
-  --mds-radius-card: var(--mds-radius-5);
-  --mds-radius-media: var(--mds-radius-4);
-  --mds-radius-sheet: var(--mds-radius-6);
+  --mds-radius-control: var(--mds-radius-4);
+  --mds-radius-card: var(--mds-radius-6);
+  --mds-radius-media: var(--mds-radius-5);
+  --mds-radius-sheet: var(--mds-radius-7);
   /* Every surface a brand may want to shape has an alias — card, sheet,
      control, chip, tag. The modal panel was the one left on a raw step. */
-  --mds-radius-modal: var(--mds-radius-6);
+  --mds-radius-modal: var(--mds-radius-7);
   --mds-radius-tag: var(--mds-radius-2);
+  --mds-radius-segment: var(--mds-radius-3);
   --mds-radius-checkbox: var(--mds-radius-1);
-  --mds-radius-segment: var(--mds-radius-1);
   --mds-radius-skeleton: var(--mds-radius-1);
   --mds-radius-focus: var(--mds-radius-1); /* the ring around a text link */
   --mds-radius-chip: var(--mds-radius-pill);

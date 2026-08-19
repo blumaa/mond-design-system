@@ -38,7 +38,7 @@ it("leaves composed fields to the control they wrap", () => {
 it("shapes the Modal panel with --mds-radius-modal", () => {
   const css = sheet("Modal/Modal.module.css");
   expect(css).toContain("border-radius: var(--mds-radius-modal)");
-  expect(css).not.toContain("var(--mds-radius-3)");
+  expect(css).not.toContain("var(--mds-radius-7)");
 });
 
 /* A secondary button's outline and a text field's border were one token, so a
@@ -59,15 +59,23 @@ it.each(["Input/Input.module.css", "Select/Select.module.css", "Textarea/Textare
 
 /* An avatar's initials are sized by the circle they sit in, not by the reading
  * scale — a brand tuning body copy must not resize every avatar's letters. */
-it.each(["Avatar/Avatar.module.css", "AvatarGroup/AvatarGroup.module.css"])(
-  "%s sizes initials from the avatar scale",
-  (path) => {
-    const css = sheet(path);
-    for (const size of ["xs", "sm", "md", "lg", "xl"]) {
-      expect(css).toContain(`font-size: var(--mds-avatar-text-${size})`);
-    }
-  },
-);
+it("sizes Avatar initials from the avatar scale", () => {
+  const css = sheet("Avatar/Avatar.module.css");
+  for (const size of ["xs", "sm", "md", "lg", "xl"]) {
+    expect(css).toContain(`font-size: var(--mds-avatar-text-${size})`);
+  }
+});
+
+/* The only type AvatarGroup sets is the overflow count — the avatars beside it
+ * size themselves — and a count is two or three characters where initials are
+ * one or two, so it cannot ride the initials ratio. */
+it("sizes the AvatarGroup overflow count from the count ratio", () => {
+  const css = sheet("AvatarGroup/AvatarGroup.module.css");
+  expect(css).not.toContain("--mds-avatar-text-");
+  for (const size of ["xs", "sm", "md", "lg", "xl"]) {
+    expect(css).toContain(`calc(var(--mds-avatar-${size}) * var(--mds-avatar-count-ratio))`);
+  }
+});
 
 it("sizes a button's label from --mds-text-button-*", () => {
   const css = sheet("Button/Button.module.css");
@@ -122,4 +130,46 @@ it("colours a secondary button's label with --mds-button-secondary-fg", () => {
   const css = sheet("Button/Button.module.css");
   expect(css).toContain("color: var(--mds-button-secondary-fg)");
   expect(css).toMatch(/\.variant-secondary \{(?:(?!\}).)*--mds-button-secondary-fg/s);
+});
+
+/* A control that offers an icon slot decides how big the glyph in it is. The
+   caller passes a node from an icon set the system has never heard of, so the
+   only thing that can hold the size steady is the control: the slot is a fixed
+   box on the icon scale, and the step is published as --mds-icon-slot for a set
+   that can only size itself from the inside (a ligature font reading font-size
+   rather than width). Nothing else in a button may change with `loading`, so
+   the spinner reads the same step. */
+it.each([
+  ["Button/Button.module.css", ["sm", "md", "lg"]],
+  ["Input/Input.module.css", ["md"]],
+])("%s publishes --mds-icon-slot and sizes the slot from it", (path, steps) => {
+  const css = sheet(path);
+  for (const step of steps) expect(css).toContain(`--mds-icon-slot: var(--mds-icon-${step})`);
+  expect(css).toMatch(/width: var\(--mds-icon-slot\)/);
+  expect(css).toMatch(/height: var\(--mds-icon-slot\)/);
+  expect(css).toMatch(/font-size: var\(--mds-icon-slot\)/);
+});
+
+it("sizes a chip's glyph to its label, not to the icon scale", () => {
+  /* A pill is barely taller than its type — 16px is over the whole line box —
+     so the chip is the one control whose slot is not a step on the scale. */
+  const css = sheet("Chip/Chip.module.css");
+  expect(css).toContain("--mds-icon-slot: 1em");
+  expect(css).not.toMatch(/--mds-icon-slot: var\(--mds-icon-/);
+});
+
+it("spins a busy button at the step its glyph occupies", () => {
+  const tsx = readFileSync(join(__dirname, "components/Button/Button.tsx"), "utf8");
+  const map = /ICON_PX: Record<ButtonSize, number> = \{ sm: (\d+), md: (\d+), lg: (\d+) \}/.exec(tsx);
+  if (map === null) throw new Error("Button no longer states a numeric step per size");
+  const layout = readFileSync(
+    join(__dirname, "../../tokens/src/core/layout.css"),
+    "utf8",
+  );
+  const px = (name: string) => {
+    const found = new RegExp(`--mds-icon-${name}:\\s*(\\d+)px`).exec(layout);
+    if (found === null) throw new Error(`--mds-icon-${name} is not declared in px`);
+    return found[1];
+  };
+  expect([map[1], map[2], map[3]]).toEqual([px("sm"), px("md"), px("lg")]);
 });

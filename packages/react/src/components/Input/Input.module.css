@@ -27,7 +27,9 @@
 .size-lg { height: var(--mds-control-h-lg); padding: 0 var(--mds-pad-control-lg); font-size: var(--mds-text-control-lg); }
 
 /* Icon slots overlay the input's edges; the input pads out of their way.
-   The clearance is fixed across sizes — icons don't grow with the field. */
+   The clearance is fixed across sizes — icons don't grow with the field — so
+   the slot states that same step and the glyph cannot disagree with the
+   padding reserved for it. */
 .iconWrap {
   position: relative;
   display: block;
@@ -35,12 +37,23 @@
 }
 
 .icon {
+  --mds-icon-slot: var(--mds-icon-md);
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-icon-slot);
+  height: var(--mds-icon-slot);
+  font-size: var(--mds-icon-slot);
   color: var(--mds-text-muted);
   pointer-events: none;
+}
+
+.icon > svg {
+  width: 100%;
+  height: 100%;
 }
 
 .iconLeft { left: var(--mds-pad-control-md); }

@@ -41,3 +41,18 @@ Defaults to `--mds-text-primary`; brands must declare it.
 Migration: most apps see rendered dimensions move. An app that had overridden
 these tokens to reach these values can delete those overrides. Every brand file
 must add `--mds-button-secondary-fg` in both themes.
+
+**A control sizes the glyph in its own icon slot.** `Button`, `Input` and `Chip`
+took an icon slot as a `ReactNode` and sized nothing in it, so a glyph was
+whatever the caller's icon set happened to default to — 20px beside a 12px label
+in a 32px small button. It also meant a small button changed width the moment it
+went busy, because the spinner it swaps in *was* sized by the system, at 16px.
+Each control now gives the slot a fixed box on the icon scale — a button from its
+size, an input at the step its padding already reserved, a chip at its own label
+size, since a pill is shorter than any step on the scale — and publishes that
+step as `--mds-icon-slot` for an icon set that can only size itself from the
+inside. The spinner reads the same step.
+
+Migration: a glyph passed into one of those slots is drawn at the control's size
+rather than its own. An icon that must keep a size of its own states it, as
+before.

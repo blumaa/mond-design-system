@@ -25,8 +25,8 @@ it("declares --mds-text-control at the base reading size", () => {
 });
 
 it("declares --mds-radius-modal at the same step as a sheet", () => {
-  expect(core("radius.css")).toMatch(/--mds-radius-modal:\s*var\(--mds-radius-6\);/);
-  expect(core("radius.css")).toMatch(/--mds-radius-sheet:\s*var\(--mds-radius-6\);/);
+  expect(core("radius.css")).toMatch(/--mds-radius-modal:\s*var\(--mds-radius-7\);/);
+  expect(core("radius.css")).toMatch(/--mds-radius-sheet:\s*var\(--mds-radius-7\);/);
 });
 
 it.each(["panel-title", "card-title"])("declares --mds-type-%s at the subtitle role", (name) => {
@@ -62,8 +62,6 @@ it("keeps --mds-pad-control-md on the alias it renames", () => {
 });
 
 it.each([
-  ["pad-pill-y", 1],
-  ["pad-pill-x", 3],
   ["pad-tag-y", 1],
   ["pad-tag-x", 2],
   ["pad-badge-x", 2],
@@ -82,7 +80,6 @@ it.each([
 });
 
 it.each([
-  ["badge-size", 5],
   ["avatar-overlap", 2],
   ["switch-inset", 1],
   ["progress-h", 2],
@@ -96,7 +93,7 @@ it("declares --mds-toast-w at the modal width", () => {
   expect(core("layout.css")).toMatch(/--mds-toast-w:\s*var\(--mds-modal-w\);/);
 });
 
-it.each(["checkbox", "segment", "skeleton", "focus"])(
+it.each(["checkbox", "skeleton", "focus"])(
   "declares --mds-radius-%s at step 1",
   (name) => {
     expect(core("radius.css")).toMatch(new RegExp(`--mds-radius-${name}:\\s*var\\(--mds-radius-1\\);`));
@@ -152,4 +149,24 @@ it("keeps initials legible at every size", () => {
   expect(ratio).toBeGreaterThan(0.35);
   expect(ratio).toBeLessThan(0.5);
   expect(px("--mds-avatar-xs", "layout.css") * ratio).toBeGreaterThanOrEqual(10);
+});
+
+/* A chip is taller than it is grid-aligned and a badge is a two-digit circle.
+   Both sat on the 4px grid and both read a size too big beside their type. */
+it("pads a chip wider than it is tall", () => {
+  const y = px("--mds-pad-pill-y", "spacing.css");
+  expect(px("--mds-pad-pill-x", "spacing.css")).toBeGreaterThan(y);
+  expect(y).toBeGreaterThan(px("--mds-space-1", "spacing.css"));
+});
+
+it("sizes a badge to hold two digits at meta size", () => {
+  expect(px("--mds-badge-size", "layout.css")).toBe(18);
+});
+
+/* The moving face of a segmented control is a rounded rectangle inside a
+   rounded rectangle; at the checkbox radius it read as a square. */
+it("rounds a segment face between a checkbox and a control", () => {
+  const face = px("--mds-radius-segment", "radius.css");
+  expect(face).toBeGreaterThan(px("--mds-radius-checkbox", "radius.css"));
+  expect(face).toBeLessThan(px("--mds-radius-control", "radius.css"));
 });

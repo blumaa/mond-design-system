@@ -3,7 +3,10 @@
   align-items: center;
   justify-content: center;
   gap: var(--mds-gap-tight);
-  border: var(--mds-border-width) solid transparent;
+  /* A button's outline is a drawn stroke, not a hairline — the same weight
+     the accent border on a Card gets. Filled variants keep it transparent so
+     a row of buttons is one height whether or not it is outlined. */
+  border: var(--mds-border-emphasis) solid transparent;
   border-radius: var(--mds-radius-control);
   font-family: var(--mds-font-body);
   font-weight: var(--mds-weight-semibold);
@@ -14,23 +17,46 @@
   transition: background-color var(--mds-transition-control), color var(--mds-transition-control);
 }
 
-/* Sizes — height from the control scale, padding from the space scale. */
+/* Sizes — height from the control scale, padding from the space scale, glyph
+   from the icon scale. */
 .size-sm {
   height: var(--mds-control-h-sm);
   padding: 0 var(--mds-pad-button-sm);
   font-size: var(--mds-text-button-sm);
+  --mds-icon-slot: var(--mds-icon-sm);
 }
 
 .size-md {
   height: var(--mds-control-h-md);
   padding: 0 var(--mds-pad-button-md);
   font-size: var(--mds-text-button-md);
+  --mds-icon-slot: var(--mds-icon-md);
 }
 
 .size-lg {
   height: var(--mds-control-h-lg);
   padding: 0 var(--mds-pad-button-lg);
   font-size: var(--mds-text-button-lg);
+  --mds-icon-slot: var(--mds-icon-lg);
+}
+
+/* How big the glyph is belongs to the button, not to whoever passed it. The
+   spinner replaces the left glyph while busy, so it reads the same step and the
+   button keeps its width across the change. An icon set that cannot be sized
+   from the outside reads --mds-icon-slot for its own default. */
+.slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--mds-icon-slot);
+  height: var(--mds-icon-slot);
+  font-size: var(--mds-icon-slot);
+}
+
+.slot > svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* Variants */

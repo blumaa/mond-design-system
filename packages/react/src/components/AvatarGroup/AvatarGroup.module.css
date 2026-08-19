@@ -25,9 +25,11 @@
   user-select: none;
 }
 
-/* One rule per AvatarSize step, mirroring Avatar's own scale. */
-.size-xs { width: var(--mds-avatar-xs); height: var(--mds-avatar-xs); font-size: var(--mds-avatar-text-xs); }
-.size-sm { width: var(--mds-avatar-sm); height: var(--mds-avatar-sm); font-size: var(--mds-avatar-text-sm); }
-.size-md { width: var(--mds-avatar-md); height: var(--mds-avatar-md); font-size: var(--mds-avatar-text-md); }
-.size-lg { width: var(--mds-avatar-lg); height: var(--mds-avatar-lg); font-size: var(--mds-avatar-text-lg); }
-.size-xl { width: var(--mds-avatar-xl); height: var(--mds-avatar-xl); font-size: var(--mds-avatar-text-xl); }
+/* One rule per AvatarSize step. Only the overflow chip carries these — the
+   avatars inside .item size themselves — so the type here is the count, a
+   notch under the initials ratio because it is two or three characters. */
+.size-xs { width: var(--mds-avatar-xs); height: var(--mds-avatar-xs); font-size: calc(var(--mds-avatar-xs) * var(--mds-avatar-count-ratio)); }
+.size-sm { width: var(--mds-avatar-sm); height: var(--mds-avatar-sm); font-size: calc(var(--mds-avatar-sm) * var(--mds-avatar-count-ratio)); }
+.size-md { width: var(--mds-avatar-md); height: var(--mds-avatar-md); font-size: calc(var(--mds-avatar-md) * var(--mds-avatar-count-ratio)); }
+.size-lg { width: var(--mds-avatar-lg); height: var(--mds-avatar-lg); font-size: calc(var(--mds-avatar-lg) * var(--mds-avatar-count-ratio)); }
+.size-xl { width: var(--mds-avatar-xl); height: var(--mds-avatar-xl); font-size: calc(var(--mds-avatar-xl) * var(--mds-avatar-count-ratio)); }

@@ -40,8 +40,8 @@
 
   /* Padding inside the small shapes. A pill (chip, segment) is roomier than a
      tag, and a badge is a count in a circle rather than a label in a shape. */
-  --mds-pad-pill-y: var(--mds-space-1);
-  --mds-pad-pill-x: var(--mds-space-3);
+  --mds-pad-pill-y: 6px;
+  --mds-pad-pill-x: 11px;
   --mds-pad-tag-y: var(--mds-space-1);
   --mds-pad-tag-x: var(--mds-space-2);
   --mds-pad-badge-x: var(--mds-space-2);

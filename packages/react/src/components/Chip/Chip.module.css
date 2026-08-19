@@ -10,6 +10,25 @@
   transition: var(--mds-transition-control);
 }
 
+/* A chip's glyph is the size of its label. The pill is barely taller than its
+   type, so a step off the icon scale does not fit inside one, and the glyph
+   the caller passed would otherwise set the chip's height. */
+.icon {
+  --mds-icon-slot: 1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--mds-icon-slot);
+  height: var(--mds-icon-slot);
+  font-size: var(--mds-icon-slot);
+}
+
+.icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
 /* Unselected skins. */
 .variant-soft {
   background: var(--mds-accent-soft);

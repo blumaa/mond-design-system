@@ -11,7 +11,7 @@ export interface ChipProps extends HTMLAttributes<HTMLElement> {
   /** Toggle state. When given on an interactive chip it also sets aria-pressed;
    * omit for a plain action chip so it does not announce as a toggle. */
   selected?: boolean;
-  /** Leading glyph, e.g. `<Icon name="check" size="sm" />`. */
+  /** Leading glyph, sized by the chip. */
   icon?: ReactNode;
   /** When provided, Chip renders as a `<button>`. */
   onClick?: MouseEventHandler;
@@ -25,7 +25,7 @@ export interface ChipProps extends HTMLAttributes<HTMLElement> {
  *
  * ```tsx
  * <Chip selected={filter === "all"} onClick={() => setFilter("all")}>All</Chip>
- * <Chip variant="outline" icon={<Icon name="pin" size="sm" />}>Nearby</Chip>
+ * <Chip variant="outline" icon={<Icon name="pin" />}>Nearby</Chip>
  * ```
  */
 export function Chip({
@@ -54,7 +54,7 @@ export function Chip({
 
   const content = (
     <>
-      {icon}
+      {icon ? <span className={styles.icon}>{icon}</span> : null}
       {children}
     </>
   );

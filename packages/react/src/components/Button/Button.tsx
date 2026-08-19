@@ -9,7 +9,9 @@ export type ButtonSize = "sm" | "md" | "lg";
 interface ButtonBaseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  /** Glyph slots — pass an <Icon> or any node. Agnostic of icon set. */
+  /** Glyph slots — pass an <Icon> or any node. Agnostic of icon set; the
+   *  button sizes the slot from its own size, and publishes that step as
+   *  --mds-icon-slot for an icon set that can only size itself. */
   iconLeft?: ReactNode;
   iconRight?: ReactNode;
   /** Spinner replaces the left slot; disables and announces busy. */
@@ -31,8 +33,9 @@ type IconOnlyEnforcement =
 
 export type ButtonProps = ButtonBaseProps & IconOnlyEnforcement;
 
-/* Spinner diameter per control size — matches the icon steps. */
-const SPINNER_PX: Record<ButtonSize, number> = { sm: 16, md: 18, lg: 20 };
+/* Must match --mds-icon-slot on the size classes: the spinner takes the left
+   glyph's place and Spinner needs a number, which a stylesheet cannot hand it. */
+const ICON_PX: Record<ButtonSize, number> = { sm: 16, md: 20, lg: 24 };
 
 /**
  * The tappable action. Semantics: button by default, link when `href`/`as` says so.
@@ -79,9 +82,15 @@ export function Button({
       {...own}
       {...rest}
     >
-      {loading ? <Spinner size={SPINNER_PX[size]} label="" aria-hidden="true" /> : iconLeft}
+      {loading ? (
+        <span className={styles.slot}>
+          <Spinner size={ICON_PX[size]} label="" aria-hidden="true" />
+        </span>
+      ) : (
+        iconLeft ? <span className={styles.slot}>{iconLeft}</span> : null
+      )}
       {children}
-      {!loading && iconRight}
+      {!loading && iconRight ? <span className={styles.slot}>{iconRight}</span> : null}
     </Element>
   );
 }

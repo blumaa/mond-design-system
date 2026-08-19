@@ -33,6 +33,10 @@
   --mds-control-h-lg: 46px;
   --mds-tap-min: 44px; /* smallest touch target that ships */
 
+  /* A control with an icon slot picks a step here and publishes it to whatever
+     was passed in as --mds-icon-slot, so an icon set that can only size itself
+     has something to read. Deliberately not declared: the fallback in
+     var(--mds-icon-slot, …) is how an icon outside a slot keeps its own size. */
   --mds-icon-sm: 16px;
   --mds-icon-md: 20px;
   --mds-icon-lg: 24px;
@@ -45,7 +49,7 @@
 
   /* Geometry a brand sets without touching the component that draws it. */
   --mds-toast-w: var(--mds-modal-w);
-  --mds-badge-size: var(--mds-space-5);
+  --mds-badge-size: 18px; /* two digits at meta size, off the 4px grid */
   --mds-avatar-overlap: var(--mds-space-2);
   --mds-switch-inset: var(--mds-space-1);
   --mds-progress-h: var(--mds-space-2);
@@ -64,6 +68,9 @@
      leave 12px initials in a 38px circle. --mds-avatar-text-ratio is the one
      number; per-size aliases stay so a brand can still override just one. */
   --mds-avatar-text-ratio: 0.42;
+  /* The overflow count is two or three characters where initials are one or
+     two, so it sits a notch smaller in the same circle. */
+  --mds-avatar-count-ratio: 0.32;
   --mds-avatar-text-xs: calc(var(--mds-avatar-xs) * var(--mds-avatar-text-ratio));
   --mds-avatar-text-sm: calc(var(--mds-avatar-sm) * var(--mds-avatar-text-ratio));
   --mds-avatar-text-md: calc(var(--mds-avatar-md) * var(--mds-avatar-text-ratio));
