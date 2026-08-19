@@ -223,6 +223,34 @@ it("keeps the raised action inside the bar's box", () => {
   expect(css).not.toMatch(/\.bar\s*\{[^}]*background:/);
 });
 
+/* Chrome is not the page. The bar floats over the scrolling body, so it paints
+   the step above it — the same one a Card rests on. Painting --mds-surface-page
+   is invisible in the default theme, where page and card are a percent apart,
+   and vanishes entirely on a brand that separates them: the bar becomes a
+   1px line across a flat field and the raised action reads as a shape cut in
+   half rather than a button standing on a bar. */
+it("paints the tab bar on the step above the page", () => {
+  const css = sheet("TabBar/TabBar.module.css");
+  expect(css).toMatch(/\.bar::before\s*\{[^}]*background: var\(--mds-surface-card\)/);
+  expect(css).not.toContain("--mds-surface-page");
+});
+
+/* The floating action is the only element that stands clear of the chrome it
+   belongs to, so it is the only one on the top resting step. Sharing
+   --mds-elevation-raised with a Card gave a button hovering over the bar the
+   same weight as a card lying on the page. */
+it("floats the tab bar action above the surfaces that rest", () => {
+  expect(sheet("TabBar/TabBar.module.css")).toContain("box-shadow: var(--mds-elevation-floating)");
+  const elevation = readFileSync(
+    join(__dirname, "../../tokens/src/core/elevation.css"),
+    "utf8",
+  );
+  expect(elevation).toContain("--mds-elevation-floating:");
+  for (const path of ["Card/Card.module.css", "SegmentedControl/SegmentedControl.module.css"]) {
+    expect(sheet(path)).not.toContain("--mds-elevation-floating");
+  }
+});
+
 /* An overlay unmounts on a timer, so the number in JS has to be the duration
    the CSS actually uses. A sheet slides its own height on the slow clock while
    a modal fades on the base one; unmounting both on the base clock cut 120ms

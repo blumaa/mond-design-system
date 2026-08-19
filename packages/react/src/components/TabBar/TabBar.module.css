@@ -20,13 +20,16 @@
 /* The bar's surface. Drawn as a layer rather than as the bar's own background
    so it stops below the lifted strip, which has to stay transparent for the
    action to read as rising out of the bar. Behind the items (z-index -1) and
-   trapped in the bar's stacking context, so it cannot fall behind the screen. */
+   trapped in the bar's stacking context, so it cannot fall behind the screen.
+   Painted on the step above the page: the bar is chrome over the scrolling
+   body, and taking the page's own colour leaves it a 1px line across a flat
+   field on any brand whose page and card are more than a percent apart. */
 .bar::before {
   content: "";
   position: absolute;
   z-index: -1;
   inset: var(--mds-tabbar-action-lift) 0 0;
-  background: var(--mds-surface-page);
+  background: var(--mds-surface-card);
   border-top: var(--mds-border-width) solid var(--mds-border-subtle);
 }
 
@@ -84,7 +87,7 @@
   border-radius: var(--mds-radius-pill);
   background: var(--mds-status-danger);
   /* Ring in the bar's color so the dot stays legible over the glyph. */
-  box-shadow: 0 0 0 var(--mds-dot-ring) var(--mds-surface-page);
+  box-shadow: 0 0 0 var(--mds-dot-ring) var(--mds-surface-card);
 }
 
 /* A caption never wraps: the bar's height is fixed, and a translation twice
@@ -98,8 +101,9 @@
 
 /* The raised center action. Aligned to the top of the bar's content, then
    pulled up by the lift so it sits flush with the bar's own top edge — above
-   the surface, still inside the box. Not centred: flex centring measures the
-   margin box, so a negative margin there moves nothing. */
+   the surface, still inside the box. Not centred: centring measures the margin
+   box too, so a negative margin there is halved against the free space it
+   removes and the action lands short of the edge. */
 .action {
   flex: none;
   align-self: flex-start;
@@ -113,7 +117,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--mds-elevation-raised);
+  box-shadow: var(--mds-elevation-floating);
   cursor: pointer;
   transition: background-color var(--mds-transition-control);
 }

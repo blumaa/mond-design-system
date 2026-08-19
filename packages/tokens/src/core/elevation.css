@@ -10,6 +10,10 @@
   --mds-elevation-card: 0 1px 2px rgb(var(--mds-shadow-rgb) / var(--mds-shadow-a1));
   --mds-elevation-raised: 0 2px 8px rgb(var(--mds-shadow-rgb) / var(--mds-shadow-a2));
   --mds-elevation-hover: 0 4px 14px rgb(var(--mds-shadow-rgb) / var(--mds-shadow-a2));
+  /* The step for something that stands clear of the chrome it belongs to —
+     a floating action over a tab bar. Heavier than a resting surface because
+     nothing else separates it from the bar it rises out of. */
+  --mds-elevation-floating: 0 8px 18px rgb(var(--mds-shadow-rgb) / var(--mds-shadow-a3));
   --mds-elevation-sheet: 0 -8px 32px rgb(var(--mds-shadow-rgb) / var(--mds-shadow-a3));
   --mds-elevation-modal: 0 12px 40px rgb(var(--mds-shadow-rgb) / var(--mds-shadow-a4));
 }
