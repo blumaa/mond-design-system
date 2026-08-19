@@ -5,10 +5,10 @@ Components ship their own styles, take no theme object, and carry no product
 vocabulary — a rebrand is one CSS file in the consuming app and nothing else
 moves.
 
-| Package                                         | Version | What it is                                             |
-| ----------------------------------------------- | ------- | ------------------------------------------------------ |
-| [`@mond-design-system/react`](packages/react)   | 1.0.0   | 40 components, self-styled, WCAG 2.2 AA                |
-| [`@mond-design-system/tokens`](packages/tokens) | 1.0.0   | Core scales, the semantic contract, the brand template |
+| Package                                         | Version                                                                                                                     | What it is                                             |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| [`@mond-design-system/react`](packages/react)   | [![npm](https://img.shields.io/npm/v/@mond-design-system/react)](https://www.npmjs.com/package/@mond-design-system/react)   | 40 components, self-styled, WCAG 2.2 AA                |
+| [`@mond-design-system/tokens`](packages/tokens) | [![npm](https://img.shields.io/npm/v/@mond-design-system/tokens)](https://www.npmjs.com/package/@mond-design-system/tokens) | Core scales, the semantic contract, the brand template |
 
 ## Install
 
