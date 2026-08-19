@@ -8,6 +8,17 @@
     "url": "git+https://github.com/blumaa/mond-design-system.git",
     "directory": "packages/tokens"
   },
+  "homepage": "https://github.com/blumaa/mond-design-system#readme",
+  "bugs": {
+    "url": "https://github.com/blumaa/mond-design-system/issues"
+  },
+  "keywords": [
+    "design-tokens",
+    "css-variables",
+    "design-system",
+    "theming",
+    "dark-mode"
+  ],
   "files": [
     "src"
   ],
