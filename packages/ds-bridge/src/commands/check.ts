@@ -1,10 +1,11 @@
-/* `mds check` — the rules, run.
+/* `dsbridge check` — the rules, run.
  *
  * A finding names the file, the line and the rule, and nothing else: the
- * argument for why it matters lives in the rule itself, where `mds rules` can
+ * argument for why it matters lives in the rule itself, where `dsbridge rules` can
  * print it. The output is a work list, not an essay.
  */
 import { rulesFor } from "../rules/index.js";
+import { isEnforced } from "../rules/types.js";
 import type { Context, Finding } from "../rules/types.js";
 
 export type CheckOptions = {
@@ -24,7 +25,7 @@ const place = (a: Finding, b: Finding) => a.file.localeCompare(b.file) || (a.lin
 /** Rule id to the reason it could not run here. */
 export const skippedRules = (context: Context, options: CheckOptions = {}): Map<string, string> => {
   const out = new Map<string, string>();
-  for (const rule of rulesFor(context, options.only)) {
+  for (const rule of rulesFor(context, options.only).filter(isEnforced)) {
     const reason = rule.needs?.(context);
     if (reason !== undefined) out.set(rule.id, reason);
   }
@@ -34,6 +35,7 @@ export const skippedRules = (context: Context, options: CheckOptions = {}): Map<
 export function runCheck(context: Context, options: CheckOptions = {}): Finding[] {
   const skipped = skippedRules(context, options);
   return rulesFor(context, options.only)
+    .filter(isEnforced)
     .filter((rule) => !skipped.has(rule.id))
     .flatMap((rule) => rule.check(context))
     .sort(place);
@@ -42,7 +44,7 @@ export function runCheck(context: Context, options: CheckOptions = {}): Finding[
 export function renderCheck(findings: Finding[], context: Context, options: CheckOptions = {}): string {
   const color = options.color ?? true;
   const skipped = skippedRules(context, options);
-  const ran = rulesFor(context, options.only).length - skipped.size;
+  const ran = rulesFor(context, options.only).filter(isEnforced).length - skipped.size;
   const scope = `${context.sheets.length} stylesheets, ${context.graph.tokens().length} tokens, ${ran} rules`;
   const notes = [...skipped].map(([rule, reason]) => dim(`  skipped ${rule}: ${reason}`, color));
   if (findings.length === 0) return [`${green("clean", color)} — ${scope}`, ...notes, ""].join("\n");
@@ -69,6 +71,6 @@ export function renderCheck(findings: Finding[], context: Context, options: Chec
     lines.push(dim(`  ${String(count).padStart(4)}  ${rule}`, color));
   }
   lines.push(...notes);
-  lines.push(dim(`\nWhy each of these matters: mds rules ${[...byRule.keys()][0]}`, color));
+  lines.push(dim(`\nWhy each of these matters: dsbridge rules ${[...byRule.keys()][0]}`, color));
   return lines.join("\n") + "\n";
 }

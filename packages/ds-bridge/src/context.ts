@@ -45,7 +45,16 @@ export type Config = {
   scales?: string[];
   /** Path fragments whose stylesheets are not the repo's own — fixtures, vendored copies. */
   ignore?: string[];
+  /** The token namespace the design system owns; defaults to `--mds-`. */
+  prefix?: string;
+  /** The taxonomy, simplest first. A component composes strictly lower levels. */
+  levels?: string[];
+  /** Story-title segments that name something other than a level. */
+  levelsIgnore?: string[];
 };
+
+/** The taxonomy a repo gets when it declares none. */
+export const LEVELS = ["atom", "molecule", "organism", "template"];
 
 export type BuildOptions = {
   root: string;
@@ -77,6 +86,8 @@ export function buildContext({
     sheets,
     prefix: prefix ?? graph.prefix,
     ...(system ? { system } : {}),
+    levels: config.levels ?? LEVELS,
+    levelsIgnore: config.levelsIgnore ?? [],
     ...(config.scales ? { scales: config.scales } : {}),
     ...(contract ? { contract } : {}),
     exempt: (rule, file) => (exempt[rule] ?? []).includes(file),
@@ -92,8 +103,9 @@ export type LoadContextOptions = {
 };
 
 /** The same context, read off disk. */
-export function loadContext({ root, system, config, prefix = "--mds-" }: LoadContextOptions): Context {
+export function loadContext({ root, system, config, prefix }: LoadContextOptions): Context {
   const at = resolve(root);
+  const namespace = prefix ?? config?.prefix ?? "--mds-";
   const entry = system ? resolve(system) : resolveSystem(at);
   /* The system's own token files are the graph, never sheets to be judged:
      declaring the contract is what they are for. Checking the design system
@@ -104,14 +116,14 @@ export function loadContext({ root, system, config, prefix = "--mds-" }: LoadCon
      is checked as an app. */
   const vendored = entry.includes(`${sep}node_modules${sep}`);
   const kind = entry.startsWith(at + sep) && !vendored ? "system" : "app";
-  const unbranded = loadGraph({ system: entry, prefix });
+  const unbranded = loadGraph({ system: entry, prefix: namespace });
   const systemDeclares = new Set(unbranded.names());
   const ignored = (file: string) => (config?.ignore ?? []).some((fragment) => relative(at, file).includes(fragment));
   const sheets = findStylesheets(at)
     .filter((file) => !systemFiles.has(file) && !ignored(file))
-    .map((file) => makeSheet(file, readFileSync(file, "utf8"), at, prefix, systemDeclares));
+    .map((file) => makeSheet(file, readFileSync(file, "utf8"), at, namespace, systemDeclares));
   const brand = sheets.filter((s) => s.isBrand).map((s) => s.path);
-  const graph = brand.length > 0 ? loadGraph({ system: entry, prefix, brand }) : unbranded;
+  const graph = brand.length > 0 ? loadGraph({ system: entry, prefix: namespace, brand }) : unbranded;
   /* The contract travels with the system: an app checks itself against the copy
      of it that it installed, not against whatever the tool was built knowing. */
   const contractPath = resolve(dirname(entry), "contract.json");
@@ -123,7 +135,7 @@ export function loadContext({ root, system, config, prefix = "--mds-" }: LoadCon
     kind,
     graph,
     sheets,
-    prefix,
+    prefix: namespace,
     system: entry,
     ...(config ? { config } : {}),
     ...(contract ? { contract } : {}),

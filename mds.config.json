@@ -1,6 +1,0 @@
-{
-  "ignore": ["packages/conformance/src/__fixtures__"],
-  "exempt": {
-    "no-raw-scale-step/typography": ["packages/react/src/components/Link/Link.module.css"]
-  }
-}

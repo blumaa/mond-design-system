@@ -201,7 +201,7 @@ function contrast(map: TokenMap, fgToken: string, bgToken: string): number {
 
 /* ── The matrix ──────────────────────────────────────────────────────────── */
 
-/* The pair list is data the package ships. `mds check` re-runs exactly these
+/* The pair list is data the package ships. `dsbridge check` re-runs exactly these
    against a consuming app's brand, which is where the proof has to hold and
    where nothing else re-establishes it: a brand re-points every token in the
    matrix, so the defaults being accessible says nothing about the app. Editing

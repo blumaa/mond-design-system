@@ -1,6 +1,6 @@
 /* Finding what to read.
  *
- * A consuming app should be able to run `mds tokens` with no arguments and no
+ * A consuming app should be able to run `dsbridge tokens` with no arguments and no
  * config, so the two inputs are discovered rather than declared: the design
  * system comes from the installed package, and the brand file is whichever of
  * the app's own stylesheets *declares* design system tokens instead of reading

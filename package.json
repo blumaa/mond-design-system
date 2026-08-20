@@ -13,7 +13,7 @@
     "test:watch": "vitest",
     "typecheck": "turbo run typecheck",
     "lint": "eslint .",
-    "check": "node packages/conformance/dist/cli.js check",
+    "check": "node packages/ds-bridge/dist/cli.js check",
     "storybook": "turbo run storybook",
     "build-storybook": "turbo run build-storybook",
     "verify": "pnpm build && pnpm typecheck && pnpm lint && pnpm check && pnpm test",

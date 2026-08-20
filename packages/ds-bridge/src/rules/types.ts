@@ -1,6 +1,6 @@
 /* A rule is data.
  *
- * `mds check` runs the `check` half; `mds rules` prints the prose half. They
+ * `dsbridge check` runs the `check` half; `dsbridge rules` prints the prose half. They
  * cannot drift, because they are the same object — which is the point. A
  * design system whose written guidance lives beside its enforcement ends up
  * with guidance nobody enforces and enforcement nobody explained.
@@ -51,6 +51,10 @@ export type Context = {
   prefix: string;
   /** Core groups whose tokens are rungs on a scale rather than named roles. */
   scales?: string[];
+  /** The taxonomy, simplest first: a component composes strictly lower levels. */
+  levels: string[];
+  /** Story-title segments that name something other than a level. */
+  levelsIgnore: string[];
   /** What the system promises about contrast, when it publishes one. */
   contract?: Contract;
   /**
@@ -74,8 +78,15 @@ export type Rule = {
   /** A reason this rule cannot run here, when there is one. Silence from a rule
       that never ran reads exactly like a pass, so it is reported instead. */
   needs?(context: Context): string | undefined;
-  check(context: Context): Finding[];
+  /** Absent when the rule is advisory: some of what a design system asks for is
+      judgement, and a rule that cannot prove itself says so rather than
+      pretending. `dsbridge rules` prints it either way. */
+  check?(context: Context): Finding[];
 };
+
+/** A rule earns "enforced" by carrying its own proof, not by claiming it. */
+export const isEnforced = (rule: Rule): rule is Rule & { check: NonNullable<Rule["check"]> } =>
+  rule.check !== undefined;
 
 export const appliesTo = (rule: Rule, kind: "system" | "app") =>
   rule.target === "both" || rule.target === kind;

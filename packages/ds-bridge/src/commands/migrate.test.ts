@@ -60,6 +60,6 @@ describe("renderMigration", () => {
     expect(out).toContain("--app-gap");
     expect(out).toContain("--mds-gap");
     expect(out).toContain("brand-template.css");
-    expect(out).toContain("mds rules");
+    expect(out).toContain("dsbridge rules");
   });
 });

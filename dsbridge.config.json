@@ -1,0 +1,9 @@
+{
+  "prefix": "--mds-",
+  "levels": ["atom", "molecule", "organism", "template"],
+  "levelsIgnore": ["Docs"],
+  "ignore": ["packages/ds-bridge/src/__fixtures__"],
+  "exempt": {
+    "no-raw-scale-step/typography": ["packages/react/src/components/Link/Link.module.css"]
+  }
+}

@@ -144,7 +144,7 @@ export const noUndefinedToken: Rule = {
     "and the element renders with whatever it inherited. A typo and a missing token " +
     "look identical, and both look like a styling bug.",
   instead:
-    "Check the name against `mds tokens`. A token published at runtime by whichever " +
+    "Check the name against `dsbridge tokens`. A token published at runtime by whichever " +
     "component owns it is declared nowhere on purpose; read it with a fallback, and " +
     "let the fallback say what the element is worth on its own.",
   target: "both",

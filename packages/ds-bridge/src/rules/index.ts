@@ -3,10 +3,16 @@
 import { tokenDisciplineRules } from "./tokenDiscipline.js";
 import { brandRules } from "./brand.js";
 import { contrastRules } from "./contrast.js";
+import { philosophyRules } from "./philosophy.js";
 import type { Context, Finding, Rule } from "./types.js";
-import { appliesTo } from "./types.js";
+import { appliesTo, isEnforced } from "./types.js";
 
-export const RULES: Rule[] = [...tokenDisciplineRules, ...brandRules, ...contrastRules];
+export const RULES: Rule[] = [
+  ...tokenDisciplineRules,
+  ...brandRules,
+  ...contrastRules,
+  ...philosophyRules,
+];
 
 export const ruleById = (id: string): Rule | undefined => RULES.find((rule) => rule.id === id);
 
@@ -16,7 +22,15 @@ export const rulesFor = (context: Context, only?: string[]): Rule[] =>
     (rule) => only === undefined || only.includes(rule.id),
   );
 
+/** The rules that carry a check, and so can fail a build. */
+export const enforcedRules = (): Rule[] => RULES.filter(isEnforced);
+
+/** The rules that carry only an argument, and so can only be read. */
+export const advisoryRules = (): Rule[] => RULES.filter((rule) => !isEnforced(rule));
+
+export { isEnforced };
 export type { Context, Finding, Rule };
 export * from "./tokenDiscipline.js";
 export * from "./brand.js";
 export * from "./contrast.js";
+export * from "./philosophy.js";

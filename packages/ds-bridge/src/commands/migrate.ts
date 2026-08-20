@@ -1,6 +1,6 @@
-/* `mds migrate` — the distance between an app and the system, measured.
+/* `dsbridge migrate` — the distance between an app and the system, measured.
  *
- * An app that has not adopted the system yet is silent under `mds check`: it
+ * An app that has not adopted the system yet is silent under `dsbridge check`: it
  * reads none of the system's tokens, so almost no rule has anything to grip.
  * The useful question there is not "what is wrong" but "what maps" — which of
  * the app's own values the system already names, and what the brand file has to
@@ -159,8 +159,8 @@ export function renderMigration(plan: Migration, context: Context, options: { co
     `${bold("literals in components", color)}  ${plan.literals.length} in ${plural(files.size, "file")}`,
     ...capped(plan.literals, (f) => `${f.file}:${f.line ?? ""}  ${f.message}`, color),
     "",
-    dim("next: mds rules --markdown   the reasoning, for an agent", color),
-    dim("      mds check              the same rules, as a work list", color),
+    dim("next: dsbridge rules --markdown   the reasoning, for an agent", color),
+    dim("      dsbridge check              the same rules, as a work list", color),
   );
   return lines.join("\n") + "\n";
 }

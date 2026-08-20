@@ -59,7 +59,7 @@ The same gate rejects a literal hex, a literal `px` outside a declared
 breakpoint, an undefined `--mds-*`, and a brand file missing part of the
 semantic contract or its dark block — each of which fails silently in CSS
 otherwise. It is the `conformance` package, run against this repo; an app that
-installed the system runs the same rules against itself with `mds check`.
+installed the system runs the same rules against itself with `dsbridge check`.
 
 ## Layout
 

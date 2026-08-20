@@ -182,7 +182,7 @@ export function loadGraph({ system, brand = [], prefix = "--mds-" }: LoadOptions
     try {
       resolved = resolveVars(token.effective.light ?? "", maps.light);
     } catch {
-      /* an unresolvable value has no kind; `mds check` is where that is a finding */
+      /* an unresolvable value has no kind; `dsbridge check` is where that is a finding */
     }
     token.kind = kindOf(resolved, maps.light);
   }

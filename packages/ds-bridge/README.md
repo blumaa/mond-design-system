@@ -1,18 +1,18 @@
-# @mond-design-system/conformance
+# ds-bridge
 
-The `mds` CLI: look at the token graph, check an app against the design
+The `dsbridge` CLI: look at the token graph, check an app against the design
 system's rules, and measure what an app would have to move to adopt it.
 
 Zero runtime dependencies. Reads CSS — it does not run your build, and it does
 not care which framework rendered the class.
 
 ```sh
-pnpm add -D @mond-design-system/conformance
+pnpm add -D ds-bridge
 
-mds tokens            # the graph: core scales, semantic contract, your brand
-mds check             # the rules, as a work list
-mds rules [id]        # what each rule is protecting
-mds migrate           # the distance between this app and the system
+dsbridge tokens            # the graph: core scales, semantic contract, your brand
+dsbridge check             # the rules, as a work list
+dsbridge rules [id]        # what each rule is protecting
+dsbridge migrate           # the distance between this app and the system
 ```
 
 ## Why
@@ -26,29 +26,29 @@ moves. Three things break it, all of them silently:
   own accessibility test still passes, on values the app does not render;
 - guidance lives in a README and enforcement lives in a script, so they drift.
 
-Here a rule is one object with both halves: `check()` is what `mds check` runs,
-and the prose is what `mds rules` prints. They cannot disagree.
+Here a rule is one object with both halves: `check()` is what `dsbridge check` runs,
+and the prose is what `dsbridge rules` prints. They cannot disagree.
 
-## mds tokens
+## dsbridge tokens
 
 ```sh
-mds tokens --layer semantic          # the contract
-mds tokens --theme dark --kind color # what dark actually resolves to
-mds tokens --grep action --json
-mds tokens --html tokens.html        # a page you can look at
-mds tokens --unbranded               # the system's defaults, brand ignored
+dsbridge tokens --layer semantic          # the contract
+dsbridge tokens --theme dark --kind color # what dark actually resolves to
+dsbridge tokens --grep action --json
+dsbridge tokens --html tokens.html        # a page you can look at
+dsbridge tokens --unbranded               # the system's defaults, brand ignored
 ```
 
 Every token is resolved, not just listed: `--mds-action-bg` prints the colour
 the browser will paint, through however many `var()` hops and `color-mix()`
 calls the brand put in the way.
 
-## mds check
+## dsbridge check
 
 ```sh
-mds check                    # every rule that applies here
-mds check --rule keeps-contrast
-mds check --json             # for CI
+dsbridge check                    # every rule that applies here
+dsbridge check --rule keeps-contrast
+dsbridge check --json             # for CI
 ```
 
 Exit code 1 when there are findings. Each one names the file, the line, the
@@ -69,7 +69,7 @@ contract.json, so there is nothing to prove against
 
 ### Configuration
 
-`mds.config.json` at the checked root, all keys optional:
+`dsbridge.config.json` at the checked root, all keys optional:
 
 ```json
 {
@@ -82,24 +82,24 @@ contract.json, so there is nothing to prove against
 ```
 
 An exemption is a claim that the rule is wrong about one file. Put the reason
-in the file, next to what it excuses; `mds check` will not print it for you.
+in the file, next to what it excuses; `dsbridge check` will not print it for you.
 
-## mds rules
+## dsbridge rules
 
 The agent-facing half.
 
 ```sh
-mds rules                       # every rule, one line each
-mds rules no-literal-color      # the reasoning, wrapped for a terminal
-mds rules --markdown > RULES.md # the whole set, for an agent's instructions
+dsbridge rules                       # every rule, one line each
+dsbridge rules no-literal-color      # the reasoning, wrapped for a terminal
+dsbridge rules --markdown > RULES.md # the whole set, for an agent's instructions
 ```
 
 `RULES.md` in this package is that output, committed. Regenerate with
 `pnpm rules`.
 
-## mds migrate
+## dsbridge migrate
 
-For an app that has not adopted the system yet, `mds check` is quiet: it reads
+For an app that has not adopted the system yet, `dsbridge check` is quiet: it reads
 none of the system's tokens, so almost nothing has anything to grip. The useful
 question there is what maps.
 
@@ -141,7 +141,7 @@ is what somebody makes it with.
 | `brand-covers-contract` | system | the brand template the system ships declares every semantic token |
 | `keeps-contrast` | both | every pair in `contract.json` clears its ratio, in both themes, with the brand applied |
 
-`mds rules <id>` for what each one is protecting.
+`dsbridge rules <id>` for what each one is protecting.
 
 ## Any design system
 
@@ -149,7 +149,7 @@ Nothing here is Mond-specific except the default prefix and where it looks for
 the entry stylesheet:
 
 ```sh
-mds check --system path/to/your/styles.css
+dsbridge check --system path/to/your/styles.css
 ```
 
 Layers come from the file layout — `core/*.css`, `semantic.css`, `base.css`,

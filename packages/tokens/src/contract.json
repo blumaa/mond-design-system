@@ -1,5 +1,5 @@
 {
-  "note": "The accessibility contract, as data. A brand re-points every one of these tokens, so the proof has to be re-run against the brand rather than assumed from the defaults — `mds check` reads this file out of whichever copy of the system an app installed.",
+  "note": "The accessibility contract, as data. A brand re-points every one of these tokens, so the proof has to be re-run against the brand rather than assumed from the defaults — `dsbridge check` reads this file out of whichever copy of the system an app installed.",
   "contrast": [
     { "fg": "--mds-text-primary", "bg": ["--mds-surface-page", "--mds-surface-card", "--mds-surface-raised", "--mds-surface-sunken"], "ratio": 4.5 },
     { "fg": "--mds-text-secondary", "bg": ["--mds-surface-page", "--mds-surface-card", "--mds-surface-raised", "--mds-surface-sunken"], "ratio": 4.5 },

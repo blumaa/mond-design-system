@@ -34,7 +34,7 @@ export const keepsContrast: Rule = {
     "— and a failure here is not a style opinion, it is text somebody cannot read.",
   instead:
     "Move the brand value until it clears the ratio, or re-point the paired token " +
-    "with it: a colour and the surface it sits on are one decision. `mds tokens " +
+    "with it: a colour and the surface it sits on are one decision. `dsbridge tokens " +
     "--theme dark` shows what each side currently resolves to.",
   target: "both",
   needs: (context) =>

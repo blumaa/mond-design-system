@@ -100,7 +100,7 @@
 
   /* Breakpoints. A media query is resolved before custom properties exist,
      so a breakpoint is the one literal px a component sheet may carry —
-     `mds check` holds every @media prelude to this list. */
+     `dsbridge check` holds every @media prelude to this list. */
   --mds-bp-md: 600px;  /* phone landscape and up: a sheet becomes a dialog */
   --mds-bp-lg: 1024px; /* bottom bar gives way to the sidebar */
   --mds-bp-xl: 1280px; /* room for a second rail */

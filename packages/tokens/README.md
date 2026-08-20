@@ -36,7 +36,7 @@ toast, and a brand that wants roomier chips cannot have them without moving the
 other three. So every step a component reads has a name for the role it plays,
 and re-pointing that name moves exactly one thing.
 
-The library's `mds check` gate enforces it, along with the failures CSS keeps
+The library's `dsbridge check` gate enforces it, along with the failures CSS keeps
 quiet about: a literal hex, a literal `px` outside a declared breakpoint, an
 undefined `--mds-*` (which drops the declaration with no error anywhere), and a
 brand file missing part of the semantic contract or its dark block.

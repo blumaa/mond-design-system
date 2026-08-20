@@ -1,4 +1,4 @@
-/* `mds tokens` — the listing.
+/* `dsbridge tokens` — the listing.
  *
  * Every token, in the layers they stack in, with the value the browser paints
  * and the alias it came through. The alias is the part worth reading: a

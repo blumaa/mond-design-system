@@ -53,7 +53,7 @@ const check = (dir: string, ...rest: string[]) =>
 const app = (component: string, extra: Record<string, string> = {}) =>
   tree({ "src/Button.module.css": component, ...extra });
 
-describe("mds check", () => {
+describe("dsbridge check", () => {
   it("passes a clean tree and says what it looked at", () => {
     const { status, output } = check(
       app(".root { background: var(--mds-surface-card); padding: var(--mds-pad-control-md); }"),
@@ -106,7 +106,7 @@ describe("mds check", () => {
 
   it("honours an exemption from the config, and says nothing about the file", () => {
     const dir = app(".root { padding: 8px; }", {
-      "mds.config.json": JSON.stringify({ exempt: { "no-literal-length": ["src/Button.module.css"] } }),
+      "dsbridge.config.json": JSON.stringify({ exempt: { "no-literal-length": ["src/Button.module.css"] } }),
     });
     expect(check(dir).status).toBe(0);
   });
@@ -122,7 +122,7 @@ describe("mds", () => {
   it("prints usage with no command, and fails", () => {
     const { status, output } = run([]);
     expect(status).toBe(1);
-    expect(output).toContain("mds tokens");
+    expect(output).toContain("dsbridge tokens");
   });
 
   it("prints usage on request, and passes", () => {
@@ -136,7 +136,7 @@ describe("mds", () => {
   });
 });
 
-describe("mds migrate", () => {
+describe("dsbridge migrate", () => {
   it("reports what an app would have to move", () => {
     const dir = app(".card { padding: 12px; }", {
       "tokens.css": ":root { --app-gap: 8px; --app-brand: #7b3fe4; }",
@@ -157,7 +157,7 @@ describe("mds migrate", () => {
   });
 });
 
-describe("mds rules", () => {
+describe("dsbridge rules", () => {
   it("lists every rule", () => {
     const { status, output } = run(["rules", "--no-color"]);
     expect(status).toBe(0);

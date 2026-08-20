@@ -22,11 +22,11 @@ import type { Target } from "./rules/types.js";
 
 const USAGE = `mds — Mond Design System conformance toolkit
 
-  mds tokens [options]     list the token graph: core scales, the semantic
+  dsbridge tokens [options]     list the token graph: core scales, the semantic
                            contract, and what your brand re-points
-  mds check [options]      run the rules against this repo
-  mds rules [id]           what each rule is protecting, for a human or an agent
-  mds migrate [options]    what an app would have to move to adopt the system
+  dsbridge check [options]      run the rules against this repo
+  dsbridge rules [id]           what each rule is protecting, for a human or an agent
+  dsbridge migrate [options]    what an app would have to move to adopt the system
 
 Options for tokens
   --system <file>   entry stylesheet of the design system (default: the
@@ -62,7 +62,7 @@ Everywhere
 const jsonOut = (value: unknown) => process.stdout.write(JSON.stringify(value, null, 2) + "\n");
 
 function readConfig(root: string): Config | undefined {
-  const path = resolve(root, "mds.config.json");
+  const path = resolve(root, "dsbridge.config.json");
   return existsSync(path) ? (JSON.parse(readFileSync(path, "utf8")) as Config) : undefined;
 }
 
