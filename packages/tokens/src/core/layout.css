@@ -31,8 +31,11 @@
 
   /* The app column. A phone-shaped app is full-bleed on a phone and framed on
      a desktop viewport; anything portalled past the app tree (a sheet) reads
-     this to stay the same width as the app it belongs to. */
-  --mds-frame-width: 430px;
+     this to stay the same width as the app it belongs to. No cap below
+     --mds-bp-md: a large phone can report a viewport wider than the framed
+     measure (462px is real hardware), and a cap there strips the app's edges.
+     The framed measure is set in the media query at the end of this file. */
+  --mds-frame-width: 100%;
 
   --mds-content-max: 720px;       /* reading column */
   --mds-content-max-wide: 1200px; /* desktop multi-column shells */
@@ -119,4 +122,14 @@
   --mds-z-sheet: 200;
   --mds-z-modal: 300;
   --mds-z-toast: 400;
+}
+
+/* The framed measure. Literal 600px because a media query is resolved before
+   custom properties exist — --mds-bp-md is the same number. Above it the app
+   is a phone-shaped column on a wide screen; below it the screen *is* the
+   phone and the app owns every edge. */
+@media (min-width: 600px) {
+  :root {
+    --mds-frame-width: 430px;
+  }
 }

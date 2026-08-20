@@ -279,7 +279,13 @@ it("holds a sheet to the app column and centres it", () => {
   expect(sheet("Overlay/Overlay.module.css")).toMatch(
     /\.variant-sheet \{(?:(?!\}).)*justify-content: center/s,
   );
-  expect(token("core/layout.css")).toMatch(/--mds-frame-width:\s*\d+px/);
+  /* Uncapped by default and capped only above --mds-bp-md: a large phone
+     reports a viewport wider than the framed measure (462px is real
+     hardware), and a cap there strips the app's own edges. */
+  expect(token("core/layout.css")).toMatch(/--mds-frame-width:\s*100%/);
+  expect(token("core/layout.css")).toMatch(
+    /@media \(min-width: 600px\)\s*\{\s*:root\s*\{\s*--mds-frame-width:\s*\d+px/,
+  );
 });
 
 /* An icon with no size stated takes the slot it sits in, so a control that
