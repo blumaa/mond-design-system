@@ -16,7 +16,7 @@ Status: WORKSHOPPED 2026-08-17. All §9 questions resolved. Ready for Phase 0.
 - ~63 components. Flat `src/components/<Name>/` — `.tsx` + `.css` + `.test.tsx` per component.
 - Plain CSS, `k-` BEM prefix. Tokens: 7 brand primitives, ramps derived via `color-mix`, semantic aliases only in components. Rebrand = edit one primitive block.
 - Dark mode: `[data-theme="dark"]` re-points semantic aliases. No component ships dark CSS.
-- `check-tokens.mjs`: rejects literal hex / raw `@media` values in components.
+- `mds check`: rejects literal hex / raw `@media` values in components.
 - Hooks: `useOverlay`, `usePresence`, `useRovingGroup`.
 - pnpm + turbo + tsup + vitest + Storybook. React 18 peer.
 
@@ -55,7 +55,7 @@ Status: WORKSHOPPED 2026-08-17. All §9 questions resolved. Ready for Phase 0.
 4. **Deterministic, test-driven.** No component without failing test first. No optimistic rendering paths.
 5. **Components own their styles.** One `.module.css` per component. No global styles beyond reset + tokens. No Tailwind, no inline styles, no mixing.
 6. **WCAG 2.2 AA is a build gate**, not a review note (§6).
-7. **Mobile-first responsive.** Base styles = 320px. `@media (min-width)` up. Breakpoint values enforced by token-lint (media queries can't `var()` — kinbaku's solved problem, port `check-tokens` script).
+7. **Mobile-first responsive.** Base styles = 320px. `@media (min-width)` up. Breakpoint values enforced by `mds check` (media queries can't `var()` — kinbaku's solved problem).
 8. **DRY across apps:** only components ≥2 apps need live in MDS. App-domain components (PostCard, GroupChatHeader, ReportCard…) stay in apps, composed FROM MDS parts.
 
 ---
@@ -90,8 +90,9 @@ MDS-2/
     storybook/                @mds/storybook — atomic-grouped titles,
                               theme toolbar + local demo brand (private,
                               proves the swap; not published), a11y addon
-  scripts/
-    check-tokens.mjs          no literal hex/px-media in components (port from kinbaku)
+    conformance/              @mds/conformance — the `mds` CLI: tokens, check,
+                              rules, migrate. Rules are data, so the prose and
+                              the enforcement cannot drift.
   docs/
     README.md  getting-started  theming  tokens  contributing  a11y
 ```
@@ -162,7 +163,7 @@ Per-component API: reconcile both existing APIs, take superset only where both a
 
 Build gates, all in CI:
 1. **Contrast test** — port fairplay `contrast.test.ts`, generalize: every brand × light × dark, every semantic foreground × every surface it can sit on. AA 4.5:1 text, 3:1 UI (1.4.11 — kinbaku control-border lesson).
-2. **Token lint** — `check-tokens.mjs`: no literal hex, no raw media values in `@mds/react`.
+2. **Token lint** — `mds check`: no literal hex, no raw media values in `@mds/react`, plus the brand and contrast rules. Same binary an app runs against itself.
 3. **axe per component** — `vitest-axe` in each component test (default render + each variant).
 4. **Storybook a11y addon** — visual review channel.
 5. Manual contract per component doc: keyboard map, focus order, ARIA roles, touch target ≥44px, `prefers-reduced-motion` honored in motion tokens.

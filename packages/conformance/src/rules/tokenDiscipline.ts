@@ -1,0 +1,173 @@
+/* Token discipline: what a stylesheet that *styles something* may contain.
+ *
+ * The brand promise — a rebrand is one CSS file and nothing else moves — only
+ * holds if no component ever writes a raw value or reaches for a token that is
+ * not there. Both failures are silent: a literal hex just works until the brand
+ * lands, and an undefined custom property drops the declaration with no error
+ * anywhere.
+ *
+ * These four apply to the design system's own components and to a consuming
+ * app's components alike, which is why they are the rules an app is checked
+ * against first.
+ */
+import type { Context, Rule, Sheet } from "./types.js";
+import { componentSheets, findingsIn } from "./types.js";
+import { orAdvice, valueIndex } from "./suggest.js";
+
+const matchAll = (source: string, pattern: RegExp) => [...source.matchAll(pattern)].map((m) => m[0]);
+
+/** `var(--x)` or `var(--x, fallback)` — a token being read rather than declared. */
+const readsIn = (line: string, prefix: string) =>
+  matchAll(line, new RegExp(`${prefix}[a-z0-9-]+(?=\\s*[,)])`, "g"));
+
+/**
+ * A rung on a scale: `--mds-space-2`, `--mds-radius-7`, `--mds-text-lg`.
+ *
+ * Two segments, and the second one is a position rather than a name — that is
+ * what makes it a rung. `--mds-text-control-md` has a role in the middle of it
+ * and is an alias *for* a rung, which is exactly what a component should read.
+ */
+export const isRung = (name: string, prefix: string) => {
+  const parts = name.slice(prefix.length).split("-");
+  return parts.length === 2 && /^(?:[0-9]+|xs|sm|base|md|lg|xl|[0-9]xl)$/.test(parts[1]!);
+};
+
+/** Core groups whose tokens are rungs rather than roles. Overridable per system. */
+const SCALES = ["spacing", "radius", "typography"];
+
+/** An exemption may name the whole rule, or one scale within it. */
+const exempted = (context: Context, rule: string, sheet: Sheet, detail?: string) =>
+  context.exempt(rule, sheet.file) || (detail !== undefined && context.exempt(`${rule}/${detail}`, sheet.file));
+
+export const noLiteralColor: Rule = {
+  id: "no-literal-color",
+  title: "A component stylesheet names a color, never writes one.",
+  why:
+    "A literal color works perfectly until a brand lands, and then it is the one " +
+    "thing on the page that did not change. It also never flips for dark mode.",
+  instead:
+    "Read the semantic alias for the role the color plays — surface, text, border. " +
+    "If no alias fits, the role is missing from the contract: add it there.",
+  target: "both",
+  check: (context) => {
+    const index = valueIndex(context.graph, "light", (name) => isRung(name, context.prefix));
+    return componentSheets(context).flatMap((sheet) =>
+      exempted(context, "no-literal-color", sheet)
+        ? []
+        : findingsIn(sheet, "no-literal-color", (line) =>
+            [...matchAll(line, /#[0-9a-fA-F]{3,8}\b/g), ...matchAll(line, /\b(?:rgba?|hsla?)\([^)]*\)/g)].map(
+              (literal) => `literal color ${literal} — ${orAdvice(index.color(literal), "use a semantic alias")}`,
+            ),
+          ),
+    );
+  },
+};
+
+export const noLiteralLength: Rule = {
+  id: "no-literal-length",
+  title: "A component stylesheet reads its lengths from the scale.",
+  why:
+    "A hard-coded px is a decision made once, in one place, that the scale can no " +
+    "longer move. Twenty of them are a layout nobody can retune.",
+  instead:
+    "Use a spacing, radius or layout token. The single exception is a breakpoint " +
+    "inside a @media prelude: the query is resolved before custom properties exist, " +
+    "so it must be a literal — and it must be one of the declared --*-bp-* values.",
+  target: "both",
+  check: (context) => {
+    const breakpoints = new Set(
+      context.graph
+        .tokens()
+        .filter((token) => token.name.startsWith(`${context.prefix}bp-`))
+        .map((token) => token.effective.light?.trim())
+        .filter((value): value is string => value !== undefined),
+    );
+    const index = valueIndex(context.graph, "light", (name) => isRung(name, context.prefix));
+    return componentSheets(context).flatMap((sheet) =>
+      exempted(context, "no-literal-length", sheet)
+        ? []
+        : findingsIn(sheet, "no-literal-length", (line) => {
+            /* A prelude split over two lines fails here — write it on one. */
+            const prelude = line.trimStart().startsWith("@media");
+            return matchAll(line, /\b[0-9.]+px\b/g)
+              .filter((px) => !(prelude && breakpoints.has(px)))
+              .map(
+                (px) =>
+                  `literal length ${px} — ` +
+                  (prelude
+                    ? `off the breakpoint list — declare it as ${context.prefix}bp-* or use one that is there`
+                    : orAdvice(index.length(px), "use a spacing, radius or layout token")),
+              );
+          }),
+    );
+  },
+};
+
+export const noRawScaleStep: Rule = {
+  id: "no-raw-scale-step",
+  title: "A component reads the alias that names the role, not the step behind it.",
+  why:
+    "A step is a rung. Every component that reads the same rung shares its fate, so " +
+    "a brand nudging one of them moves all the others too — including the ones it " +
+    "had no opinion about.",
+  instead:
+    "Name the role the value plays and alias the step once, in the system's core " +
+    "layer. Components read the role. The exception is a component whose public " +
+    "size prop *is* the step, where the consumer chose it rather than the component.",
+  target: "both",
+  check: (context) => {
+    const scales = new Set(context.scales ?? SCALES);
+    const steps = new Map(
+      context.graph
+        .tokens()
+        .filter(
+          (token) => token.layer === "core" && scales.has(token.group) && isRung(token.name, context.prefix),
+        )
+        .map((token) => [token.name, token.group]),
+    );
+    return componentSheets(context).flatMap((sheet) =>
+      findingsIn(sheet, "no-raw-scale-step", (line) =>
+        readsIn(line, context.prefix)
+          .filter((name) => steps.has(name) && !sheet.declares.has(name))
+          .filter((name) => !exempted(context, "no-raw-scale-step", sheet, steps.get(name)))
+          .map((name) => `raw scale step ${name} — name the role it plays and alias the step in the core layer`),
+      ),
+    );
+  },
+};
+
+export const noUndefinedToken: Rule = {
+  id: "no-undefined-token",
+  title: "Every token a stylesheet reads is declared somewhere.",
+  why:
+    "An undefined custom property does not error — the declaration is simply dropped, " +
+    "and the element renders with whatever it inherited. A typo and a missing token " +
+    "look identical, and both look like a styling bug.",
+  instead:
+    "Check the name against `mds tokens`. A token published at runtime by whichever " +
+    "component owns it is declared nowhere on purpose; read it with a fallback, and " +
+    "let the fallback say what the element is worth on its own.",
+  target: "both",
+  check: (context) =>
+    componentSheets(context).flatMap((sheet) =>
+      exempted(context, "no-undefined-token", sheet)
+        ? []
+        : findingsIn(sheet, "no-undefined-token", (line) =>
+            readsIn(line, context.prefix)
+              .filter((name) => !sheet.declares.has(name) && context.graph.get(name) === undefined)
+              .filter((name) => !line.includes(`var(${name},`))
+              .map(
+                (name) =>
+                  `undefined token ${name} — nothing declares it; read it with a fallback ` +
+                  "if a component publishes it at runtime",
+              ),
+          ),
+    ),
+};
+
+export const tokenDisciplineRules: Rule[] = [
+  noLiteralColor,
+  noLiteralLength,
+  noRawScaleStep,
+  noUndefinedToken,
+];

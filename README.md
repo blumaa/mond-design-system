@@ -52,13 +52,14 @@ The template only exposes **semantic aliases** — `--mds-surface-card`,
 `--mds-pad-control-md`, `--mds-text-button-lg`. That is deliberate, and it is
 enforced: a component reading `--mds-space-3` or `--mds-text-sm` directly is
 unreachable from a brand file, because a raw scale step is a rung shared with
-every unrelated component that happens to want the same number. `pnpm
-check:tokens` fails the build on one.
+every unrelated component that happens to want the same number. `pnpm check`
+fails the build on one.
 
 The same gate rejects a literal hex, a literal `px` outside a declared
 breakpoint, an undefined `--mds-*`, and a brand file missing part of the
 semantic contract or its dark block — each of which fails silently in CSS
-otherwise.
+otherwise. It is the `conformance` package, run against this repo; an app that
+installed the system runs the same rules against itself with `mds check`.
 
 ## Layout
 
@@ -67,7 +68,6 @@ packages/
   tokens/      CSS custom properties: core/, semantic.css, base.css, brand-template.css
   react/       the components, one folder each, sheet + tests beside the source
   storybook/   the docs site, atomic-grouped
-scripts/       check-tokens.mjs and its self-test
 ```
 
 ## Develop
@@ -75,7 +75,7 @@ scripts/       check-tokens.mjs and its self-test
 ```sh
 pnpm install
 pnpm storybook       # the components, in isolation
-pnpm verify          # build, typecheck, lint, check:tokens, test
+pnpm verify          # build, typecheck, lint, check, test
 ```
 
 `pnpm verify` is what CI runs, in that order. Keep the two the same.

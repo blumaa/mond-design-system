@@ -1,0 +1,54 @@
+{
+  "name": "@mond-design-system/conformance",
+  "version": "0.0.0",
+  "description": "Mond Design System \u2014 conformance toolkit. Introspect the token graph, check a consuming app against the design system's rules, migrate it onto them.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blumaa/mond-design-system.git",
+    "directory": "packages/conformance"
+  },
+  "homepage": "https://github.com/blumaa/mond-design-system#readme",
+  "bugs": {
+    "url": "https://github.com/blumaa/mond-design-system/issues"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "conformance",
+    "linter",
+    "codemod",
+    "wcag"
+  ],
+  "type": "module",
+  "bin": {
+    "mds": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "RULES.md",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "true",
+    "clean": "rm -rf dist",
+    "rules": "node dist/cli.js rules --markdown > RULES.md"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  }
+}

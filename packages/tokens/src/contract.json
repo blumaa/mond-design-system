@@ -1,0 +1,24 @@
+{
+  "note": "The accessibility contract, as data. A brand re-points every one of these tokens, so the proof has to be re-run against the brand rather than assumed from the defaults — `mds check` reads this file out of whichever copy of the system an app installed.",
+  "contrast": [
+    { "fg": "--mds-text-primary", "bg": ["--mds-surface-page", "--mds-surface-card", "--mds-surface-raised", "--mds-surface-sunken"], "ratio": 4.5 },
+    { "fg": "--mds-text-secondary", "bg": ["--mds-surface-page", "--mds-surface-card", "--mds-surface-raised", "--mds-surface-sunken"], "ratio": 4.5 },
+    { "fg": "--mds-text-muted", "bg": ["--mds-surface-page", "--mds-surface-card", "--mds-surface-raised", "--mds-surface-sunken"], "ratio": 4.5 },
+    { "fg": "--mds-text-accent", "bg": ["--mds-surface-page", "--mds-surface-card"], "ratio": 4.5 },
+    { "fg": "--mds-status-danger", "bg": ["--mds-surface-page", "--mds-surface-card"], "ratio": 4.5 },
+    { "fg": "--mds-status-warning", "bg": ["--mds-surface-page", "--mds-surface-card"], "ratio": 4.5 },
+    { "fg": "--mds-status-success", "bg": ["--mds-surface-page", "--mds-surface-card"], "ratio": 4.5 },
+    { "fg": "--mds-text-primary", "bg": ["--mds-surface-selected", "--mds-accent-soft", "--mds-status-danger-soft", "--mds-status-warning-soft", "--mds-status-success-soft", "--mds-highlight-soft"], "ratio": 4.5 },
+    { "fg": "--mds-text-primary", "bg": ["--mds-avatar-tone-1", "--mds-avatar-tone-2", "--mds-avatar-tone-3", "--mds-avatar-tone-4", "--mds-avatar-tone-5"], "ratio": 4.5 },
+    { "fg": "--mds-text-inverse", "bg": ["--mds-surface-inverse"], "ratio": 4.5 },
+    { "fg": "--mds-action-fg", "bg": ["--mds-action-bg", "--mds-action-bg-hover", "--mds-action-bg-active"], "ratio": 4.5 },
+    { "fg": "--mds-accent-contrast", "bg": ["--mds-accent"], "ratio": 4.5 },
+    { "fg": "--mds-highlight-contrast", "bg": ["--mds-highlight", "--mds-highlight-hover"], "ratio": 4.5 },
+    { "fg": "--mds-status-danger-contrast", "bg": ["--mds-status-danger"], "ratio": 4.5 },
+    { "fg": "--mds-status-warning-contrast", "bg": ["--mds-status-warning"], "ratio": 4.5 },
+    { "fg": "--mds-status-success-contrast", "bg": ["--mds-status-success"], "ratio": 4.5 },
+    { "fg": "--mds-text-on-media", "bg": ["--mds-surface-media"], "ratio": 4.5 },
+    { "fg": "--mds-control-border", "bg": ["--mds-surface-page", "--mds-surface-card"], "ratio": 3 },
+    { "fg": "--mds-focus-ring-color", "bg": ["--mds-surface-page", "--mds-surface-card"], "ratio": 3 }
+  ]
+}

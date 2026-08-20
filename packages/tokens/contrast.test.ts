@@ -201,39 +201,14 @@ function contrast(map: TokenMap, fgToken: string, bgToken: string): number {
 
 /* ── The matrix ──────────────────────────────────────────────────────────── */
 
-const TEXT_ON_SURFACES: Array<[string, string[]]> = [
-  ["--mds-text-primary", ["--mds-surface-page", "--mds-surface-card", "--mds-surface-raised", "--mds-surface-sunken"]],
-  ["--mds-text-secondary", ["--mds-surface-page", "--mds-surface-card", "--mds-surface-raised", "--mds-surface-sunken"]],
-  ["--mds-text-muted", ["--mds-surface-page", "--mds-surface-card", "--mds-surface-raised", "--mds-surface-sunken"]],
-  ["--mds-text-accent", ["--mds-surface-page", "--mds-surface-card"]],
-  ["--mds-status-danger", ["--mds-surface-page", "--mds-surface-card"]],
-  ["--mds-status-warning", ["--mds-surface-page", "--mds-surface-card"]],
-  ["--mds-status-success", ["--mds-surface-page", "--mds-surface-card"]],
-  ["--mds-text-primary", ["--mds-surface-selected", "--mds-accent-soft", "--mds-status-danger-soft", "--mds-status-warning-soft", "--mds-status-success-soft"]],
-  ["--mds-text-primary", ["--mds-highlight-soft"]],
-  ["--mds-text-primary", ["--mds-avatar-tone-1", "--mds-avatar-tone-2", "--mds-avatar-tone-3", "--mds-avatar-tone-4", "--mds-avatar-tone-5"]],
-];
-
-const PAIRS_45: Array<[string, string]> = [
-  ["--mds-text-inverse", "--mds-surface-inverse"],
-  ["--mds-action-fg", "--mds-action-bg"],
-  ["--mds-action-fg", "--mds-action-bg-hover"],
-  ["--mds-action-fg", "--mds-action-bg-active"],
-  ["--mds-accent-contrast", "--mds-accent"],
-  ["--mds-highlight-contrast", "--mds-highlight"],
-  ["--mds-highlight-contrast", "--mds-highlight-hover"],
-  ["--mds-status-danger-contrast", "--mds-status-danger"],
-  ["--mds-status-warning-contrast", "--mds-status-warning"],
-  ["--mds-status-success-contrast", "--mds-status-success"],
-  ["--mds-text-on-media", "--mds-surface-media"],
-];
-
-const PAIRS_30: Array<[string, string]> = [
-  ["--mds-control-border", "--mds-surface-page"],
-  ["--mds-control-border", "--mds-surface-card"],
-  ["--mds-focus-ring-color", "--mds-surface-page"],
-  ["--mds-focus-ring-color", "--mds-surface-card"],
-];
+/* The pair list is data the package ships. `mds check` re-runs exactly these
+   against a consuming app's brand, which is where the proof has to hold and
+   where nothing else re-establishes it: a brand re-points every token in the
+   matrix, so the defaults being accessible says nothing about the app. Editing
+   contract.json changes both proofs at once. */
+type Contract = { contrast: Array<{ fg: string; bg: string[]; ratio: number }> };
+const contract = JSON.parse(readFileSync(join(SRC, "contract.json"), "utf8")) as Contract;
+const PAIRS = contract.contrast.flatMap(({ fg, bg, ratio }) => bg.map((b) => [fg, b, ratio] as const));
 
 const semantic = readFileSync(join(SRC, "semantic.css"), "utf8");
 const maps = themeMaps(semantic);
@@ -241,19 +216,8 @@ const maps = themeMaps(semantic);
 describe.each(["light", "dark"] as const)("mond default brand — %s", (theme) => {
   const map = maps[theme];
 
-  it.each(TEXT_ON_SURFACES.flatMap(([fg, bgs]) => bgs.map((bg) => [fg, bg])))(
-    "text %s on %s ≥ 4.5:1",
-    (fg, bg) => {
-      expect(contrast(map, fg!, bg!)).toBeGreaterThanOrEqual(4.5);
-    },
-  );
-
-  it.each(PAIRS_45)("%s on %s ≥ 4.5:1", (fg, bg) => {
-    expect(contrast(map, fg, bg)).toBeGreaterThanOrEqual(4.5);
-  });
-
-  it.each(PAIRS_30)("UI %s on %s ≥ 3:1", (fg, bg) => {
-    expect(contrast(map, fg, bg)).toBeGreaterThanOrEqual(3);
+  it.each(PAIRS)("%s on %s >= %s:1", (fg, bg, ratio) => {
+    expect(contrast(map, fg, bg)).toBeGreaterThanOrEqual(ratio);
   });
 });
 

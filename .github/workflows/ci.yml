@@ -19,7 +19,7 @@ jobs:
       - run: pnpm build
       - run: pnpm typecheck
       - run: pnpm lint
-      - run: pnpm check:tokens
+      - run: pnpm check
       - run: pnpm test
 
   release:

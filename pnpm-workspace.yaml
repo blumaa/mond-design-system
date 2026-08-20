@@ -2,3 +2,4 @@ packages:
   - "packages/tokens"
   - "packages/react"
   - "packages/storybook"
+  - "packages/conformance"
