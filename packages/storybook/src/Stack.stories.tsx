@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Badge, Stack, Text } from "@mond-design-system/react";
 
 const meta = {
-  title: "Layout/Stack",
+  title: "Atoms/Stack",
   component: Stack,
 } satisfies Meta<typeof Stack>;
 export default meta;

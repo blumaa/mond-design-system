@@ -8,6 +8,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const sheet = (path: string) => readFileSync(join(__dirname, "components", path), "utf8");
+const internalSheet = (path: string) => readFileSync(join(__dirname, "internal", path), "utf8");
 
 /* Every component that styles its own editable element. PasswordInput and
    DateTimePicker are absent on purpose — see below. */
@@ -254,7 +255,7 @@ it("floats the tab bar action above the surfaces that rest", () => {
    a modal fades on the base one; unmounting both on the base clock cut 120ms
    off the end of every sheet's exit. */
 it("unmounts each overlay on the clock its own transition runs on", () => {
-  const overlay = readFileSync(join(__dirname, "components/Overlay/Overlay.tsx"), "utf8");
+  const overlay = readFileSync(join(__dirname, "internal/Overlay.tsx"), "utf8");
   const ms = (name: string) => {
     const found = new RegExp(`${name} = (\\d+)`).exec(overlay);
     if (found === null) throw new Error(`Overlay no longer states ${name}`);
@@ -276,7 +277,7 @@ it("unmounts each overlay on the clock its own transition runs on", () => {
    to sat in a phone-width column. */
 it("holds a sheet to the app column and centres it", () => {
   expect(sheet("Sheet/Sheet.module.css")).toContain("max-width: var(--mds-frame-width)");
-  expect(sheet("Overlay/Overlay.module.css")).toMatch(
+  expect(internalSheet("Overlay.module.css")).toMatch(
     /\.variant-sheet \{(?:(?!\}).)*justify-content: center/s,
   );
   /* Uncapped by default and capped only above --mds-bp-md: a large phone

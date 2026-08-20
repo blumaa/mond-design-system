@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Overlay } from "../Overlay/Overlay";
+import { Overlay } from "../../internal/Overlay";
 import styles from "./Sheet.module.css";
 
 export interface SheetProps {

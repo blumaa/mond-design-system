@@ -6,6 +6,7 @@
  * with guidance nobody enforces and enforcement nobody explained.
  */
 import type { Graph } from "../graph.js";
+import type { Component } from "../structure.js";
 
 /** Who a rule is aimed at: the design system's own source, or an app using it. */
 export type Target = "system" | "app" | "both";
@@ -45,6 +46,8 @@ export type Context = {
   kind: "system" | "app";
   graph: Graph;
   sheets: Sheet[];
+  /** What the repo is made of: one entry per component directory. */
+  components: Component[];
   /** The design system's entry stylesheet, wherever it was resolved from. */
   system?: string;
   /** The token namespace the design system owns, e.g. `--mds-`. */

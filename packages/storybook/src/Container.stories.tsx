@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Container, Stack, Text } from "@mond-design-system/react";
 
 const meta = {
-  title: "Layout/Container",
+  title: "Atoms/Container",
   component: Container,
 } satisfies Meta<typeof Container>;
 export default meta;

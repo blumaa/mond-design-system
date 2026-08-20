@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button, ConfirmDialog } from "@mond-design-system/react";
 
 const meta = {
-  title: "Molecules/ConfirmDialog",
+  title: "Organisms/ConfirmDialog",
   component: ConfirmDialog,
 } satisfies Meta<typeof ConfirmDialog>;
 export default meta;

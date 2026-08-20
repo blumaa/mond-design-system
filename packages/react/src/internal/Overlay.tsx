@@ -1,8 +1,8 @@
 import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
-import { cx } from "../../internal/cx";
-import { useOverlay } from "../../hooks/useOverlay";
-import { usePresence } from "../../hooks/usePresence";
+import { cx } from "./cx";
+import { useOverlay } from "../hooks/useOverlay";
+import { usePresence } from "../hooks/usePresence";
 import styles from "./Overlay.module.css";
 
 /** Matches --mds-dur-base; usePresence needs the number in JS. */

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Avatar, AvatarGroup } from "@mond-design-system/react";
+import { Avatar } from "@mond-design-system/react";
 
 const meta = {
   title: "Atoms/Avatar",
@@ -17,17 +17,5 @@ export const Sizes: Story = {
       <Avatar name="Grace Hopper" size="md" />
       <Avatar name="Alan Turing" size="lg" />
     </div>
-  ),
-};
-export const Group: Story = {
-  args: { name: "Ada Lovelace" },
-  render: () => (
-    <AvatarGroup max={3}>
-      <Avatar name="Ada Lovelace" />
-      <Avatar name="Grace Hopper" />
-      <Avatar name="Alan Turing" />
-      <Avatar name="Edsger Dijkstra" />
-      <Avatar name="Barbara Liskov" />
-    </AvatarGroup>
   ),
 };

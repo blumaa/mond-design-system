@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AppBar, Button, Icon } from "@mond-design-system/react";
 
 const meta = {
-  title: "Molecules/AppBar",
+  title: "Organisms/AppBar",
   component: AppBar,
   parameters: { layout: "fullscreen" },
 } satisfies Meta<typeof AppBar>;

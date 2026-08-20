@@ -22,7 +22,7 @@ const context = (name: string): Context => {
   return buildContext({ root, kind: "app", graph, sheets: [sheet] });
 };
 
-const run = (rule: Rule, brand: string) => rule.check(context(brand));
+const run = (rule: Rule, brand: string) => rule.check!(context(brand));
 
 describe("no-foreign-namespace-token", () => {
   it("flags a token invented in the system's namespace", () => {
@@ -83,7 +83,7 @@ describe("brand-overrides-both-themes", () => {
     const sheets = paths.map((path) =>
       makeSheet(path, readFileSync(path, "utf8"), root, "--mds-", new Set(graph.names())),
     );
-    const findings = brandOverridesBothThemes.check(buildContext({ root, kind: "app", graph, sheets }));
+    const findings = brandOverridesBothThemes.check!(buildContext({ root, kind: "app", graph, sheets }));
     expect(findings).toHaveLength(1);
     expect(findings[0]).toMatchObject({ file: "light-only.css" });
     expect(findings[0]?.message).toContain("--mds-text-primary");
@@ -101,18 +101,18 @@ describe("brand-covers-contract", () => {
   };
 
   it("flags every semantic token the template leaves out", () => {
-    const findings = brandCoversContract.check(shipped("brand-partial.css"));
+    const findings = brandCoversContract.check!(shipped("brand-partial.css"));
     expect(findings).toHaveLength(5);
     expect(findings.map((f) => f.message).join(" ")).toContain("--mds-surface-card");
     expect(findings[0]).toMatchObject({ rule: "brand-covers-contract", file: "system/brand-partial.css" });
   });
 
   it("passes a template that declares the whole contract", () => {
-    expect(brandCoversContract.check(shipped("brand-template.css"))).toEqual([]);
+    expect(brandCoversContract.check!(shipped("brand-template.css"))).toEqual([]);
   });
 
   it("leaves brand files outside the package alone — a demo is allowed to be partial", () => {
-    expect(brandCoversContract.check(shipped("good.css", "brands"))).toEqual([]);
+    expect(brandCoversContract.check!(shipped("good.css", "brands"))).toEqual([]);
   });
 
   it("says so when the repo ships no brand beside its stylesheet", () => {

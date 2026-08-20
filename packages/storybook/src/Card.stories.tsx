@@ -12,7 +12,7 @@ import {
 } from "@mond-design-system/react";
 
 const meta = {
-  title: "Molecules/Card",
+  title: "Organisms/Card",
   component: Card,
 } satisfies Meta<typeof Card>;
 export default meta;

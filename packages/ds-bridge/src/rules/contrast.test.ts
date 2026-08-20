@@ -22,15 +22,15 @@ const context = (brand?: string, contract: Contract | null = CONTRACT) => {
 
 describe("keeps-contrast", () => {
   it("passes the system's own defaults", () => {
-    expect(keepsContrast.check(context())).toEqual([]);
+    expect(keepsContrast.check!(context())).toEqual([]);
   });
 
   it("passes a brand that keeps the ratio", () => {
-    expect(keepsContrast.check(context("good.css"))).toEqual([]);
+    expect(keepsContrast.check!(context("good.css"))).toEqual([]);
   });
 
   it("fails a brand that breaks it, in the theme it breaks in", () => {
-    const findings = keepsContrast.check(context("low-contrast.css"));
+    const findings = keepsContrast.check!(context("low-contrast.css"));
     expect(findings.length).toBeGreaterThan(0);
     expect(findings.every((f) => f.rule === "keeps-contrast")).toBe(true);
     expect(findings.map((f) => f.message)).toContainEqual(
@@ -40,12 +40,12 @@ describe("keeps-contrast", () => {
   });
 
   it("points at the line of the brand declaration it is about", () => {
-    const [finding] = keepsContrast.check(context("low-contrast.css"));
+    const [finding] = keepsContrast.check!(context("low-contrast.css"));
     expect(finding).toMatchObject({ file: "../brands/low-contrast.css", line: 2 });
   });
 
   it("says nothing when the system publishes no contract", () => {
-    expect(keepsContrast.check(context("low-contrast.css", null))).toEqual([]);
+    expect(keepsContrast.check!(context("low-contrast.css", null))).toEqual([]);
   });
 
   it("reads the contract from beside the system's stylesheet", () => {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Badge, Button, Inline, Stack, Text } from "@mond-design-system/react";
 
 const meta = {
-  title: "Layout/Inline",
+  title: "Atoms/Inline",
   component: Inline,
 } satisfies Meta<typeof Inline>;
 export default meta;

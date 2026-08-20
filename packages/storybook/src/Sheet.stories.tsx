@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button, Sheet, SheetBody, SheetHeader, Text } from "@mond-design-system/react";
 
 const meta = {
-  title: "Molecules/Sheet",
+  title: "Organisms/Sheet",
   component: Sheet,
 } satisfies Meta<typeof Sheet>;
 export default meta;

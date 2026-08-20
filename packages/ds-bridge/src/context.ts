@@ -4,7 +4,8 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, relative, resolve, sep } from "node:path";
 import { expandImports, loadGraph, type Graph } from "./graph.js";
-import { findStylesheets, resolveSystem, rootScoped } from "./sources.js";
+import { findSources, findStylesheets, resolveSystem, rootScoped } from "./sources.js";
+import { readComponents, type Component } from "./structure.js";
 import { declarationsIn, stripComments } from "./css/parse.js";
 import type { Context, Contract, Sheet } from "./rules/types.js";
 
@@ -63,6 +64,7 @@ export type BuildOptions = {
   system?: string;
   graph: Graph;
   sheets: Sheet[];
+  components?: Component[];
   prefix?: string;
   config?: Config;
   contract?: Contract;
@@ -73,6 +75,7 @@ export function buildContext({
   kind,
   graph,
   sheets,
+  components = [],
   prefix,
   system,
   config = {},
@@ -84,6 +87,7 @@ export function buildContext({
     kind,
     graph,
     sheets,
+    components,
     prefix: prefix ?? graph.prefix,
     ...(system ? { system } : {}),
     levels: config.levels ?? LEVELS,
@@ -122,6 +126,11 @@ export function loadContext({ root, system, config, prefix }: LoadContextOptions
   const sheets = findStylesheets(at)
     .filter((file) => !systemFiles.has(file) && !ignored(file))
     .map((file) => makeSheet(file, readFileSync(file, "utf8"), at, namespace, systemDeclares));
+  const sources = findSources(at).filter((file) => !ignored(file));
+  const components = readComponents(
+    sources.map((file) => relative(at, file)),
+    (file) => readFileSync(resolve(at, file), "utf8"),
+  );
   const brand = sheets.filter((s) => s.isBrand).map((s) => s.path);
   const graph = brand.length > 0 ? loadGraph({ system: entry, prefix: namespace, brand }) : unbranded;
   /* The contract travels with the system: an app checks itself against the copy
@@ -135,6 +144,7 @@ export function loadContext({ root, system, config, prefix }: LoadContextOptions
     kind,
     graph,
     sheets,
+    components,
     prefix: namespace,
     system: entry,
     ...(config ? { config } : {}),

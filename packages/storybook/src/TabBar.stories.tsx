@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Icon, TabBar, TabBarItem } from "@mond-design-system/react";
 
 const meta = {
-  title: "Molecules/TabBar",
+  title: "Organisms/TabBar",
   component: TabBar,
   parameters: { layout: "fullscreen" },
 } satisfies Meta<typeof TabBar>;

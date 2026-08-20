@@ -11,7 +11,7 @@ const ROOT = "/app";
 const graph = loadGraph({ system: SYSTEM });
 
 const run = (rule: Rule, source: string, file = "src/Button.module.css", config?: Config) =>
-  rule.check(
+  rule.check!(
     buildContext({
       root: ROOT,
       kind: "system",

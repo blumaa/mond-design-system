@@ -47,7 +47,7 @@ Status: WORKSHOPPED 2026-08-17. All §9 questions resolved. Ready for Phase 0.
 ## 2. Principles
 
 1. **Agnostic core, branded skin.** Components know only semantic tokens (`--mds-*`). Brand = one CSS file. Zero brand logic in components.
-2. **Atomic design as taxonomy.** tokens → primitives (atoms) → composites (molecules) → patterns (organisms). Docs + Storybook organized this way. Files flat.
+2. **One taxonomy, four levels.** `atom → molecule → organism → template`, declared in `dsbridge.config.json` and read off each component's Storybook `title:`. Files stay flat; the level is a claim about complexity, not a directory. `dsbridge check` holds it to that claim — a component composes nothing more complex than itself.
 3. **Three token layers** (Spectrum model):
    - **Core** (global/primitive): raw values. `--mds-c-*`, scale steps, font stacks. Never used by components.
    - **Semantic** (alias): `--mds-surface-card`, `--mds-text-primary`, `--mds-accent`, `--mds-focus-ring-color`. The component contract. Brands + dark theme re-point these.
@@ -141,13 +141,15 @@ Old MDS built CSS from JSON via scripts. Neither new system needed it. CSS custo
 ## 5. Component inventory
 
 ### v1 core — shared by both apps today (~32)
-| Tier (docs taxonomy) | Components |
+| Level | Components |
 |---|---|
-| Primitives | Text, Heading, Icon, Button, IconButton, Link, Avatar, AvatarGroup, Badge, Tag/Chip, Divider, Skeleton, Spinner, ProgressBar |
-| Forms | Field, Input, Textarea, Select, Checkbox, Radio, Switch, SegmentedControl, SearchField |
-| Composites | ListItem/ListGroup, EmptyState, Tabs, Toast(+Provider), Tooltip? (old MDS only — defer) |
-| Patterns | Screen, AppBar, TabBar/FooterNav, Card, Modal, Sheet, ConfirmDialog |
-| Hooks | useOverlay, usePresence, useRovingGroup |
+| Atom | Text, Heading, Icon, Button, CountButton, IconButton, Link, Avatar, Badge, Tag, Chip, Divider, Skeleton, Spinner, ProgressBar, Stack, Inline, Container, Input, PasswordInput, Textarea, Select, Checkbox, Radio, Switch, SegmentedControl, SearchField |
+| Molecule | Field, AvatarGroup, List, EmptyState, Tabs, Toast(+Provider), Tooltip? (old MDS only — defer) |
+| Organism | AppBar, TabBar/FooterNav, Card, Modal, Sheet, ConfirmDialog, DateTimePicker |
+| Template | Screen |
+
+Not a level: hooks (`useOverlay`, `usePresence`, `useRovingGroup`) and internals
+(`Overlay`, `cx`) — neither is exported as a component, so neither is filed as one.
 
 ### v2 candidates (one app today, likely shared later)
 Combobox, DateTimePicker, Slider/RangeSlider, MentionField, ReactionBar/List/Picker, ImageCarousel, Lightbox, Breadcrumb, Stat, RichText, ErrorBoundary, Thread, UploadProgress.

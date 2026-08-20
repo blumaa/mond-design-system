@@ -3,7 +3,7 @@ import { useState } from "react";
 import { DateTimePicker, Field } from "@mond-design-system/react";
 
 const meta = {
-  title: "Molecules/DateTimePicker",
+  title: "Organisms/DateTimePicker",
   component: DateTimePicker,
 } satisfies Meta<typeof DateTimePicker>;
 export default meta;
