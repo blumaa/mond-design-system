@@ -238,6 +238,45 @@ describe("brand template", () => {
   });
 });
 
+/* A control standing on a photograph has no surface under it. The two fills are
+   a wash of the text colour rather than a surface, the outline is what separates
+   the control from whatever the picture happens to be doing behind it, and the
+   focus ring is the one from the dark theme — a picture is not lighter in light
+   mode, so none of the four flip with it. */
+describe("controls on media", () => {
+  const WASHES = ["--mds-on-media-surface-hover", "--mds-on-media-surface-active"];
+  const FAMILY = ["--mds-on-media-border", "--mds-on-media-focus-ring", ...WASHES];
+
+  it.each(FAMILY)("%s is declared once, for both themes", (token) => {
+    expect(maps.light.get(token)).toBeDefined();
+    expect(maps.dark.get(token)).toBe(maps.light.get(token));
+  });
+
+  /* An opaque fill here would be a surface, and there is no surface: it would
+     cover the part of the picture the control is standing on. */
+  it.each(WASHES)("%s is a wash, not a fill", (token) => {
+    expect(parseColor(maps.light.get(token)!, maps.light).a).toBeLessThan(1);
+  });
+
+  it("washes the pressed state harder than the hovered one", () => {
+    const alpha = (token: string) => parseColor(maps.light.get(token)!, maps.light).a;
+    expect(alpha("--mds-on-media-surface-active")).toBeGreaterThan(
+      alpha("--mds-on-media-surface-hover"),
+    );
+  });
+
+  /* Both of these are the only thing telling a person where the control is, so
+     they are held to the UI ratio against the letterbox behind them — by the
+     contract rather than by a number here, so a brand re-pointing them is held
+     to the same 3:1 by `dsbridge check`. */
+  it.each(["--mds-on-media-border", "--mds-on-media-focus-ring"])(
+    "%s is gated against the media surface",
+    (token) => {
+      expect(PAIRS).toContainEqual([token, "--mds-surface-media", 3]);
+    },
+  );
+});
+
 /* The resolver's own math — paths the mond defaults don't exercise yet
    (color-mix, alpha compositing, var fallbacks) proven here, not on faith. */
 describe("color resolution", () => {

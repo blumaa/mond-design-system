@@ -18,6 +18,8 @@
     { "fg": "--mds-status-warning-contrast", "bg": ["--mds-status-warning"], "ratio": 4.5 },
     { "fg": "--mds-status-success-contrast", "bg": ["--mds-status-success"], "ratio": 4.5 },
     { "fg": "--mds-text-on-media", "bg": ["--mds-surface-media"], "ratio": 4.5 },
+    { "fg": "--mds-on-media-border", "bg": ["--mds-surface-media"], "ratio": 3 },
+    { "fg": "--mds-on-media-focus-ring", "bg": ["--mds-surface-media"], "ratio": 3 },
     { "fg": "--mds-control-border", "bg": ["--mds-surface-page", "--mds-surface-card"], "ratio": 3 },
     { "fg": "--mds-focus-ring-color", "bg": ["--mds-surface-page", "--mds-surface-card"], "ratio": 3 }
   ]

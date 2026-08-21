@@ -90,6 +90,23 @@
   --mds-overlay: rgb(15 15 15 / 0.45); /* backdrop behind Sheet/Modal */
   --mds-on-media-dim: rgb(255 255 255 / 0.55);
 
+  /* What a control standing on a picture is made of. There is no surface under
+     it — the two fills are a wash of the text colour rather than a step in the
+     surface scale, and an opaque one would cover the part of the photograph the
+     control is standing on. The outline carries the whole separation between the
+     control and whatever the picture is doing behind it, so it is gated at the UI
+     ratio against --mds-surface-media in dsbridge/contract.json.
+
+     The ring is the dark theme's, in both themes: a picture is not lighter in
+     light mode, and the light ring measures 2.8:1 on the letterbox. Naming the
+     lifted value once is what keeps the components that draw it from each
+     picking their own. None of the four appear in the dark block, for the same
+     reason the scrim does not. */
+  --mds-on-media-border: rgb(255 255 255 / 0.55);
+  --mds-on-media-focus-ring: #8fb1f5;
+  --mds-on-media-surface-hover: rgb(255 255 255 / 0.16);
+  --mds-on-media-surface-active: rgb(255 255 255 / 0.28);
+
   /* shadow tint — space-separated channels, alpha varies in core/elevation.css */
   --mds-shadow-rgb: 20 20 20;
 }

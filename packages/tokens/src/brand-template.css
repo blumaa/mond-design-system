@@ -103,6 +103,15 @@
   --mds-overlay: rgb(15 15 15 / 0.45); /* backdrop behind Sheet/Modal */
   --mds-on-media-dim: rgb(255 255 255 / 0.55);
 
+  /* A control standing on a picture: a wash rather than a fill, an outline
+     carrying the whole separation from the photograph behind it, and the lifted
+     ring. Held to 3:1 against --mds-surface-media by the contract, so a brand
+     re-pointing them is checked the same way the defaults are. */
+  --mds-on-media-border: rgb(255 255 255 / 0.55);
+  --mds-on-media-focus-ring: #8fb1f5;
+  --mds-on-media-surface-hover: rgb(255 255 255 / 0.16);
+  --mds-on-media-surface-active: rgb(255 255 255 / 0.28);
+
   /* shadow tint — space-separated channels, alpha varies in core/elevation.css */
   --mds-shadow-rgb: 20 20 20;
 
