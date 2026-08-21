@@ -13,6 +13,7 @@ import type { Graph } from "../graph.js";
 import type { Component } from "../structure.js";
 import type { Roles } from "../roles.js";
 import type { Choosing } from "../choosing.js";
+import type { Surface } from "../surface.js";
 
 /** Who a rule is aimed at: the design system's own source, or an app using it. */
 export type Target = "system" | "app" | "both";
@@ -129,6 +130,10 @@ export type Context = {
   /** Which of two components that both compile this case wants, when the system
       says. Empty otherwise — nothing in the code can answer it. */
   choosing: Choosing;
+  /** What a brand may set and what belongs to nobody, when the system says.
+      Empty otherwise, and an empty surface holds a brand to nothing — which is
+      the honest answer when the system never drew the line. */
+  surface: Surface;
   /** Files found and not scanned. A check that quietly halved its own scope
       reads exactly like a clean one, so the count is printed either way. */
   suppressed: Suppressed;

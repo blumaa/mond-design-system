@@ -5,6 +5,14 @@
    Rules:
    - Light block re-declares EVERY semantic token (a missing alias silently
      falls through to the mond default).
+   - Geometry is the block at the end, and src/brand-surface.json is the list of
+     what may be moved. A `step` role takes a rung (var(--mds-radius-4)), never a
+     length: a rung is shared, and re-pointing one moves components that have
+     nothing to do with each other. A `length` role takes a px value, because
+     three control heights are not a ladder. Anything geometric that is not in
+     that file — the scales themselves, the tap target, the focus ring, the type
+     inside a field — is the system's, and an app that needs one moved asks for
+     the role instead of writing px in a stylesheet.
    - Dark block re-points only what flips. Tokens on fixed backdrops
      (scrim, on-media, surface-media) stay put.
    - @font-face for your faces lives in your app too; point the three
@@ -97,6 +105,42 @@
 
   /* shadow tint — space-separated channels, alpha varies in core/elevation.css */
   --mds-shadow-rgb: 20 20 20;
+
+  /* ── geometry ─────────────────────────────────────────────────────────────
+     Shape and size, and nothing else: none of it flips with the theme, so none
+     of it belongs in the dark block below. Each role and the reason it is
+     settable is in src/brand-surface.json. */
+
+  /* corners — a rung from core/radius.css, never a length */
+  --mds-radius-card: var(--mds-radius-6);
+  --mds-radius-control: var(--mds-radius-4);
+  --mds-radius-media: var(--mds-radius-5);
+  --mds-radius-sheet: var(--mds-radius-7);
+  --mds-radius-tag: var(--mds-radius-2);
+
+  /* rhythm — a rung from core/spacing.css, never a length */
+  --mds-pad-page-y: var(--mds-space-4);
+  --mds-gap-tight: var(--mds-space-2);
+  --mds-stack-section: var(--mds-space-8);
+
+  /* controls */
+  --mds-control-h-sm: 32px;
+  --mds-control-h-md: 38px;
+  --mds-control-h-lg: 46px;
+  --mds-icon-sm: 16px;
+  --mds-icon-md: 20px;
+  --mds-icon-lg: 24px;
+  --mds-icon-btn-size: 38px; /* the round icon button, both axes */
+  --mds-check-size: 22px;
+  --mds-switch-w: 44px;
+  --mds-switch-h: 26px;
+  --mds-switch-knob: 20px;
+
+  /* people and chrome */
+  --mds-avatar-sm: 30px;
+  --mds-avatar-md: 38px;
+  --mds-avatar-lg: 46px;
+  --mds-tabbar-h: 66px;
 }
 
 [data-theme="dark"] {

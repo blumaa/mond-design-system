@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "note": "The geometry a brand may set, and the floors it may not. Three layers: the raw scales (--mds-space-*, --mds-radius-*, --mds-text-*) are the system's and are never re-pointed index-to-index, because a rung is shared by components that have nothing to do with each other; the roles below are the brand's, and a 'step' role must resolve to a rung while a 'length' role may state an off-grid px value, because three control heights are not a ladder and the number is the decision; the floors are nobody's. A role here is permanent public API — adding one is a minor bump, removing one is breaking — so the list grows only on a measured difference between a real brand and this one, never on a guess. The avatar scale is the shape of that rule: sm, md and lg are settable because an app asked for them, xs and xl are not because none did. Colour is settable in full — the template is colour — and its floor is a ratio rather than a name: the pairs in dsbridge/contract.json are held to their contrast by the tests beside it.",
+  "settable": [
+    {
+      "token": "--mds-radius-card",
+      "kind": "step",
+      "why": "The corner every card-shaped surface draws, and the first place a brand's softness reads."
+    },
+    {
+      "token": "--mds-radius-control",
+      "kind": "step",
+      "why": "The corner of a button, a field, and everything else the hand acts on."
+    },
+    {
+      "token": "--mds-radius-media",
+      "kind": "step",
+      "why": "The corner a photograph is cut to, which a brand often keeps squarer than its cards."
+    },
+    {
+      "token": "--mds-radius-sheet",
+      "kind": "step",
+      "why": "The top corners of a sheet rising off the bottom edge of the screen."
+    },
+    {
+      "token": "--mds-radius-tag",
+      "kind": "step",
+      "why": "The corner of the small labelled shapes, where a 2px difference is still visible."
+    },
+    {
+      "token": "--mds-pad-page-y",
+      "kind": "step",
+      "why": "How far a screen's own content clears the chrome above and below it."
+    },
+    {
+      "token": "--mds-gap-tight",
+      "kind": "step",
+      "why": "The gap between two things that belong to each other, such as a glyph and its label."
+    },
+    {
+      "token": "--mds-stack-section",
+      "kind": "step",
+      "why": "The rhythm between one section of a screen and the next."
+    },
+    {
+      "token": "--mds-control-h-sm",
+      "kind": "length",
+      "why": "The height of a control at the compact size, where a dense brand differs from a roomy one most."
+    },
+    {
+      "token": "--mds-control-h-md",
+      "kind": "length",
+      "why": "The height of a control at the default size: the measure every form on the screen is built from."
+    },
+    {
+      "token": "--mds-control-h-lg",
+      "kind": "length",
+      "why": "The height of a control at the large size, where a touch-first brand takes more room."
+    },
+    {
+      "token": "--mds-icon-sm",
+      "kind": "length",
+      "why": "The glyph inside a compact control; an icon set drawn on a 24px grid reads heavy at this step."
+    },
+    {
+      "token": "--mds-icon-md",
+      "kind": "length",
+      "why": "The glyph at the default size, which is the box a caller's icon is scaled into."
+    },
+    {
+      "token": "--mds-icon-lg",
+      "kind": "length",
+      "why": "The glyph at the large size, where an icon stands on its own rather than beside a label."
+    },
+    {
+      "token": "--mds-icon-btn-size",
+      "kind": "length",
+      "why": "The diameter of a circular icon-only button, which is its own decision rather than the height of the text controls beside it."
+    },
+    {
+      "token": "--mds-check-size",
+      "kind": "length",
+      "why": "The drawn box of a checkbox and circle of a radio; the target around it is a floor, this is the mark."
+    },
+    {
+      "token": "--mds-switch-w",
+      "kind": "length",
+      "why": "The width of a switch's track, which sets how far the knob travels."
+    },
+    {
+      "token": "--mds-switch-h",
+      "kind": "length",
+      "why": "The height of a switch's track."
+    },
+    {
+      "token": "--mds-switch-knob",
+      "kind": "length",
+      "why": "The moving knob; the difference between it and the track height is the inset around it."
+    },
+    {
+      "token": "--mds-avatar-sm",
+      "kind": "length",
+      "why": "The avatar beside a line of text, in a comment or a list row."
+    },
+    {
+      "token": "--mds-avatar-md",
+      "kind": "length",
+      "why": "The avatar at the default size, in a card's byline."
+    },
+    {
+      "token": "--mds-avatar-lg",
+      "kind": "length",
+      "why": "The avatar on a profile, where the face is the subject rather than the label."
+    },
+    {
+      "token": "--mds-tabbar-h",
+      "kind": "length",
+      "why": "The height of the bottom bar, which is how much of a phone screen the chrome takes."
+    }
+  ],
+  "floors": [
+    {
+      "token": "--mds-tap-min",
+      "why": "44px is the smallest target that ships. A brand that shrinks it takes the app away from the hands it was already hardest for."
+    },
+    {
+      "token": "--mds-focus-width",
+      "why": "The thickness of the keyboard focus ring, which is the only indication of where the keyboard is."
+    },
+    {
+      "token": "--mds-focus-offset",
+      "why": "The gap between the ring and the control it surrounds, which is what keeps the ring visible on a filled surface."
+    },
+    {
+      "token": "--mds-text-control",
+      "why": "The type inside an editable control: below 16px, iOS Safari zooms the page the moment the field takes focus."
+    },
+    {
+      "token": "--mds-text-control-sm",
+      "why": "The same floor at the compact size, which is where a reading scale would otherwise put 13px type."
+    },
+    {
+      "token": "--mds-text-control-md",
+      "why": "The default size, floored through the role it aliases."
+    },
+    {
+      "token": "--mds-text-control-lg",
+      "why": "The large size, floored through the role it aliases."
+    }
+  ]
+}

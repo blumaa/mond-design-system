@@ -116,12 +116,18 @@
   width: 100%;
 }
 
-/* Icon-only: circle, one glyph, width locked to the control height. */
+/* Icon-only: circle, one glyph, width locked to the control height. The default
+   size is the exception — --mds-icon-btn-size is the diameter of a round button
+   as its own role, so a brand can keep a pressable circle in a header while its
+   text controls get tighter. Both axes read it, or the circle is an ellipse. */
 .icon-only {
   padding: 0;
   border-radius: var(--mds-radius-pill);
 }
 
 .icon-only.size-sm { width: var(--mds-control-h-sm); }
-.icon-only.size-md { width: var(--mds-control-h-md); }
+.icon-only.size-md {
+  width: var(--mds-icon-btn-size);
+  height: var(--mds-icon-btn-size);
+}
 .icon-only.size-lg { width: var(--mds-control-h-lg); }

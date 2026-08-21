@@ -20,8 +20,14 @@ const px = (name: string, file: string): number => {
   return Number(literal[1]);
 };
 
-it("declares --mds-text-control at the base reading size", () => {
-  expect(core("typography.css")).toMatch(/--mds-text-control:\s*var\(--mds-text-base\);/);
+/* The base reading step is 15px and an input under 16px makes iOS Safari zoom
+   the page on focus, so the control role is the reading step with a floor over
+   it: a brand on a larger scale grows through the max(), a brand on a smaller
+   one cannot fall through it. brand-surface.json names it as a floor. */
+it("declares --mds-text-control at the base reading size, floored", () => {
+  expect(core("typography.css")).toMatch(
+    /--mds-text-control:\s*max\(1rem, var\(--mds-text-base\)\);/,
+  );
 });
 
 it("declares --mds-radius-modal at the same step as a sheet", () => {
@@ -75,6 +81,12 @@ it.each([
   ["pad-toast-y", 3],
   ["pad-toast-x", 4],
   ["toast-inset", 4],
+  /* Both used to be off the scale, at 6 and 30. Padding inside a control is
+     allowed off it — the width the type needs is the decision — but these two
+     are the rhythm between elements, where a step off the grid shows up as a
+     row that does not line up with the one above it. */
+  ["gap-tight", 2],
+  ["stack-section", 8],
 ])("declares --mds-%s at step %i", (name, step) => {
   expect(core("spacing.css")).toMatch(new RegExp(`--mds-${name}:\\s*var\\(--mds-space-${step}\\);`));
 });
@@ -105,13 +117,17 @@ it("declares --mds-button-border at the control border", () => {
   expect(semantic).toMatch(/--mds-button-border:\s*var\(--mds-control-border\);/);
 });
 
-it.each([
-  ["sm", "sm"],
-  ["md", "control"],
-  ["lg", "control"],
-])("declares --mds-text-control-%s at the %s size", (size, target) => {
+/* The compact size aliases a step two rungs under the floor, so it carries one
+   of its own rather than inheriting the medium role's. */
+it("declares --mds-text-control-sm at the small size, floored", () => {
   expect(core("typography.css")).toMatch(
-    new RegExp(`--mds-text-control-${size}:\\s*var\\(--mds-text-${target}\\);`),
+    /--mds-text-control-sm:\s*max\(1rem, var\(--mds-text-sm\)\);/,
+  );
+});
+
+it.each(["md", "lg"])("declares --mds-text-control-%s at the control size", (size) => {
+  expect(core("typography.css")).toMatch(
+    new RegExp(`--mds-text-control-${size}:\\s*var\\(--mds-text-control\\);`),
   );
 });
 
@@ -157,6 +173,15 @@ it("pads a chip wider than it is tall", () => {
   const y = px("--mds-pad-pill-y", "spacing.css");
   expect(px("--mds-pad-pill-x", "spacing.css")).toBeGreaterThan(y);
   expect(y).toBeGreaterThan(px("--mds-space-1", "spacing.css"));
+});
+
+/* A round icon button starts at the height of the controls beside it and is
+   not tied to them: it is read as a target rather than as one of a row, so a
+   brand that tightens its fields keeps a circle big enough to press. Stated as
+   a length for that reason — an alias would drag it back. */
+it("sizes the round icon button at the default control height, without aliasing it", () => {
+  expect(core("layout.css")).toMatch(/--mds-icon-btn-size:\s*\d+px;/);
+  expect(px("--mds-icon-btn-size", "layout.css")).toBe(px("--mds-control-h-md", "layout.css"));
 });
 
 it("sizes a badge to hold two digits at meta size", () => {

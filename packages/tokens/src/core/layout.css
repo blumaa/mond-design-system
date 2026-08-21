@@ -56,6 +56,13 @@
   --mds-icon-lg: 24px;
   --mds-icon-stroke: 1.75;
 
+  /* The circular icon-only button, both axes. Stated rather than aliased to the
+     control height it starts at: a round button is read as a target, not as a
+     control in a row of them, so a brand with compact text fields still needs a
+     circle big enough to press. Only the default size has its own role — the
+     other two follow their control heights until an app measures a difference. */
+  --mds-icon-btn-size: 38px;
+
   --mds-check-size: 22px; /* checkbox box and radio circle */
   --mds-switch-w: 44px;
   --mds-switch-h: 26px;

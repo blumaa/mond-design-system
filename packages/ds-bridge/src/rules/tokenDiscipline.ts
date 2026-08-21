@@ -65,6 +65,26 @@ export const isRung = (name: string, prefix: string) => {
 /** Core groups whose tokens are rungs rather than roles. Overridable per system. */
 const SCALES = ["spacing", "radius", "typography"];
 
+/**
+ * Every token that is a step on one of the system's scales, by name.
+ *
+ * A name alone cannot say it: `--mds-icon-md` has the shape of a rung and is a
+ * role, so the group the token was declared in decides. Rules on both sides of
+ * the line read this — one keeps components off the rungs, the other keeps a
+ * brand's shape roles on them.
+ */
+export const rungsIn = (context: Context): Map<string, string> => {
+  const scales = new Set(context.scales ?? SCALES);
+  return new Map(
+    context.graph
+      .tokens()
+      .filter(
+        (token) => token.layer === "core" && scales.has(token.group) && isRung(token.name, context.prefix),
+      )
+      .map((token) => [token.name, token.group]),
+  );
+};
+
 /** An exemption may name the whole rule, or one scale within it. */
 const exempted = (context: Context, rule: string, sheet: Sheet, detail?: string) =>
   context.exempt(rule, sheet.file) || (detail !== undefined && context.exempt(`${rule}/${detail}`, sheet.file));
@@ -158,15 +178,7 @@ export const noRawScaleStep: Rule = {
   target: "both",
   reads: "stylesheet",
   check: (context) => {
-    const scales = new Set(context.scales ?? SCALES);
-    const steps = new Map(
-      context.graph
-        .tokens()
-        .filter(
-          (token) => token.layer === "core" && scales.has(token.group) && isRung(token.name, context.prefix),
-        )
-        .map((token) => [token.name, token.group]),
-    );
+    const steps = rungsIn(context);
     return componentSheets(context).flatMap((sheet) =>
       findingsIn(sheet, "no-raw-scale-step", (line) =>
         readsIn(line, context.prefix)

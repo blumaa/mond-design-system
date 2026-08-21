@@ -27,7 +27,8 @@
     "./base.css": "./src/base.css",
     "./semantic.css": "./src/semantic.css",
     "./core/*.css": "./src/core/*.css",
-    "./brand-template.css": "./src/brand-template.css"
+    "./brand-template.css": "./src/brand-template.css",
+    "./brand-surface.json": "./src/brand-surface.json"
   },
   "sideEffects": [
     "*.css"

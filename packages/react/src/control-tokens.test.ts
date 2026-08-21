@@ -163,6 +163,19 @@ it.each([
   expect(css).toMatch(/font-size: var\(--mds-icon-slot\)/);
 });
 
+/* An icon-only button at the default size is a circle a brand can size on its
+   own: --mds-icon-btn-size is in brand-surface.json because a brand with 36px
+   fields still wants a 32px round button in its header. Both axes read it —
+   taking the width from the role and leaving the height on the control scale
+   is how a circle becomes an ellipse. */
+it("sizes the round icon button from its own role, on both axes", () => {
+  const css = sheet("Button/Button.module.css");
+  expect(css).toMatch(
+    /\.icon-only\.size-md \{[^}]*width: var\(--mds-icon-btn-size\);[^}]*height: var\(--mds-icon-btn-size\);/s,
+  );
+  expect(css).not.toMatch(/\.icon-only\.size-md \{[^}]*--mds-control-h-md/s);
+});
+
 it("sizes a chip's glyph to its label, not to the icon scale", () => {
   /* A pill is barely taller than its type — 16px is over the whole line box —
      so the chip is the one control whose slot is not a step on the scale. */

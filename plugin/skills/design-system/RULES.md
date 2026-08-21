@@ -73,6 +73,22 @@ This file is what an app copies, so a token missing from it is a token no app wi
 
 **Instead.** Add the token to the template with the system's own default as its value. The dark block only needs the tokens that flip.
 
+### brand-role-takes-its-kind
+
+**A shape role is re-pointed at a rung; only a size role is written as a length.** *(both)*
+
+A step role names a rung on a scale that unrelated components share, and the scale is what keeps them in proportion to each other. Writing a length there gives one role a value no other role can reach: the card is 12px and the rung it used to sit on is still 18px, so the next component to ask for a card corner gets the old one and nothing says the two ever agreed.
+
+**Instead.** Point the role at the rung that holds the value — `--mds-radius-card: var(--mds-radius-4)`. If no rung holds it, the honest fix is a rung, in the system, where every role can see it.
+
+### brand-leaves-floors-alone
+
+**A brand does not re-point an accessibility floor.** *(both)*
+
+A floor is the value below which the app stops working for somebody, and it is always the value a design wants back: the target that is too big, the focus ring that is too loud, the field type that is a pixel off the paragraph beside it. Nothing on screen looks wrong afterwards, which is why it survives review.
+
+**Instead.** Leave the token to the system. If the floor is in the way of something the brand genuinely needs, that is a conversation with the design system, not a line in a brand file — and the answer is usually a new role beside the floor.
+
 ### keeps-contrast
 
 **Every pair in the contract clears its ratio, in both themes, with the brand applied.** *(both)*

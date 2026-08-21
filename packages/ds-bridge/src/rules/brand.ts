@@ -9,6 +9,7 @@ import { dirname, relative, sep } from "node:path";
 import type { Declaration } from "../css/parse.js";
 import type { Context, Finding, Rule } from "./types.js";
 import { brandSheets } from "./types.js";
+import { rungsIn } from "./tokenDiscipline.js";
 
 const at = (context: Context, declaration: Declaration) => ({
   file: relative(context.root, declaration.file),
@@ -174,9 +175,98 @@ export const brandCoversContract: Rule = {
   },
 };
 
+/* The roles a brand file sets, paired with the declaration that sets each one.
+   A rule about how a value is written has to read the value as written, so it
+   works from the blocks rather than from the graph, which has already resolved
+   them. */
+const geometryIn = (context: Context) =>
+  brandSheets(context).flatMap((sheet) =>
+    sheet.blocks.flatMap((block) =>
+      block.declarations.map((declaration) => ({ sheet, declaration })),
+    ),
+  );
+
+export const brandRoleTakesItsKind: Rule = {
+  id: "brand-role-takes-its-kind",
+  title: "A shape role is re-pointed at a rung; only a size role is written as a length.",
+  why:
+    "A step role names a rung on a scale that unrelated components share, and the " +
+    "scale is what keeps them in proportion to each other. Writing a length there " +
+    "gives one role a value no other role can reach: the card is 12px and the rung " +
+    "it used to sit on is still 18px, so the next component to ask for a card corner " +
+    "gets the old one and nothing says the two ever agreed.",
+  instead:
+    "Point the role at the rung that holds the value — `--mds-radius-card: " +
+    "var(--mds-radius-4)`. If no rung holds it, the honest fix is a rung, in the " +
+    "system, where every role can see it.",
+  target: "both",
+  reads: "stylesheet",
+  needs: (context) =>
+    context.surface.declared
+      ? undefined
+      : "the design system installed here publishes no brand-surface.json, so nothing says which roles take a rung",
+  check: (context) => {
+    const rungs = rungsIn(context);
+    return geometryIn(context)
+      .filter(({ declaration }) => context.surface.kindOf(declaration.property) === "step")
+      .filter(({ declaration }) => {
+        const named = [
+          ...declaration.value.matchAll(new RegExp(`var\\((${context.prefix}[a-z0-9-]+)`, "g")),
+        ].map((found) => found[1]!);
+        return !named.some((name) => rungs.has(name));
+      })
+      .map(({ sheet, declaration }) => ({
+        rule: "brand-role-takes-its-kind",
+        file: sheet.file,
+        line: declaration.line,
+        message:
+          `${declaration.property} is a step role and this sets it to ${declaration.value.trim()} — ` +
+          "point it at a rung on the scale instead",
+      }))
+      .filter((finding) => !context.exempt("brand-role-takes-its-kind", finding.file));
+  },
+};
+
+export const brandLeavesFloorsAlone: Rule = {
+  id: "brand-leaves-floors-alone",
+  title: "A brand does not re-point an accessibility floor.",
+  why:
+    "A floor is the value below which the app stops working for somebody, and it is " +
+    "always the value a design wants back: the target that is too big, the focus ring " +
+    "that is too loud, the field type that is a pixel off the paragraph beside it. " +
+    "Nothing on screen looks wrong afterwards, which is why it survives review.",
+  instead:
+    "Leave the token to the system. If the floor is in the way of something the brand " +
+    "genuinely needs, that is a conversation with the design system, not a line in a " +
+    "brand file — and the answer is usually a new role beside the floor.",
+  target: "both",
+  reads: "stylesheet",
+  needs: (context) =>
+    context.surface.declared
+      ? undefined
+      : "the design system installed here publishes no brand-surface.json, so nothing says which tokens are floors",
+  check: (context) =>
+    geometryIn(context)
+      .flatMap(({ sheet, declaration }) => {
+        const why = context.surface.floorOf(declaration.property);
+        if (why === undefined) return [];
+        return [
+          {
+            rule: "brand-leaves-floors-alone",
+            file: sheet.file,
+            line: declaration.line,
+            message: `${declaration.property} is a floor, not a role — ${why}`,
+          },
+        ];
+      })
+      .filter((finding) => !context.exempt("brand-leaves-floors-alone", finding.file)),
+};
+
 export const brandRules: Rule[] = [
   noForeignNamespaceToken,
   brandShipsDark,
   brandOverridesBothThemes,
   brandCoversContract,
+  brandRoleTakesItsKind,
+  brandLeavesFloorsAlone,
 ];

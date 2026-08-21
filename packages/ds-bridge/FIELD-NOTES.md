@@ -122,3 +122,38 @@ Fixed 2026-08-21: `as <alias>` is dropped before the identifiers are read, so
 the name taken is the one the package exports. That is the right one for both
 callers: the question is which export was reached for, and a local rename does
 not change the answer.
+
+### 6. The geometry surface: dsbridge had no way to say what a brand may set
+
+Kinbaku's brand file re-points shape and size — card radius, control heights,
+the tab bar — and MDS-2 had no answer to whether it may. dsbridge could tell a
+component off for writing `12px`, and had nothing to say about a brand writing
+the same 12px into a role that names a rung, which is the same failure one layer
+up: the ladder still says 18px and the next component to ask for a card corner
+gets it.
+
+The line is not prose. `packages/tokens/src/brand-surface.json` names every
+role a brand may move, the kind of value each takes (`step` — a rung — or
+`length`), and the floors that belong to nobody. dsbridge reads it the way it
+reads `roles.json` and `choosing.json`, and two rules hold a brand to it:
+`brand-role-takes-its-kind` and `brand-leaves-floors-alone`. Both carry `needs`,
+so a system that publishes no surface gets "nothing says which roles take a
+rung" rather than a silent pass.
+
+Two things this turned up in MDS itself:
+
+- `--mds-text-control` was `var(--mds-text-base)`, 15px. An input under 16px
+  makes iOS Safari zoom the page on focus and nothing puts it back. The system
+  knew about the zoom and had made the fix the brand's option, which is the
+  wrong owner: every app this system ships is phone-shaped. It is now
+  `max(1rem, var(--mds-text-base))` — a larger scale grows through it, a smaller
+  one cannot fall under it — and a floor in the manifest.
+- `--mds-gap-tight` (6px) and `--mds-stack-section` (30px) sat off the spacing
+  scale. Padding inside a control is allowed off it; rhythm between elements is
+  not, or a row does not line up with the one above it. Snapped to 8 and 32.
+
+`isRung` matches `--mds-icon-md` as well as `--mds-space-2` — two segments, the
+second a position — so the rule cannot work from the name alone. `rungsIn` was
+extracted from `no-raw-scale-step` and asks the graph which group the token was
+declared in. Both rules read the same helper, which is what keeps a component's
+"stay off the rungs" and a brand's "stay on them" talking about one list.

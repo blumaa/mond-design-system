@@ -8,6 +8,7 @@ import { findFonts, findSources, findStylesheets, resolveSystem, rootScoped } fr
 import { anyGlob } from "./glob.js";
 import { loadRoles, type Roles, type RolesFile } from "./roles.js";
 import { loadChoosing, type Choosing, type ChoosingFile } from "./choosing.js";
+import { loadSurface, type Surface, type SurfaceFile } from "./surface.js";
 import { readSystemComponents } from "./system.js";
 import { readComponents, type Component } from "./structure.js";
 import { blocksIn, declarationsIn, stripComments } from "./css/parse.js";
@@ -130,6 +131,7 @@ export type BuildOptions = {
   contract?: Contract;
   roles?: Roles;
   choosing?: Choosing;
+  surface?: Surface;
   suppressed?: Suppressed;
   /** Repo-relative file to the lines a comment took out of the check. */
   ignores?: Map<string, Set<number>>;
@@ -151,6 +153,7 @@ export function buildContext({
   contract,
   roles,
   choosing,
+  surface,
   suppressed = { tests: 0, scope: 0, lines: 0 },
   ignores = new Map(),
 }: BuildOptions): Context {
@@ -177,6 +180,7 @@ export function buildContext({
     ...(contract ? { contract } : {}),
     roles: roles ?? loadRoles(undefined, graph.names()),
     choosing: choosing ?? loadChoosing(undefined),
+    surface: surface ?? loadSurface(undefined),
     suppressed,
     exempt: (rule, file) => anyGlob(exempt[rule] ?? [])(file),
     ignored: (file, line) => line !== undefined && (ignores.get(file)?.has(line) ?? false),
@@ -315,6 +319,7 @@ export function loadContext({
   const contract = published<Contract>("contract.json");
   const roles = loadRoles(published<RolesFile>("roles.json"), graph.names());
   const choosing = loadChoosing(published<ChoosingFile>("choosing.json"));
+  const surface = loadSurface(published<SurfaceFile>("brand-surface.json"));
   return buildContext({
     root: at,
     kind,
@@ -331,6 +336,7 @@ export function loadContext({
     ...(contract ? { contract } : {}),
     roles,
     choosing,
+    surface,
     suppressed,
     ignores,
   });

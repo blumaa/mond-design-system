@@ -14,13 +14,16 @@
   --mds-text-4xl: 2.625rem;   /* 42 */
 
   /* Text inputs size independently of the reading scale: iOS Safari zooms the
-     page whenever an input under 16px takes focus. A brand that targets mobile
-     re-points this to 1rem and the reading scale stays where it is. */
-  --mds-text-control: var(--mds-text-base);
+     page whenever an input under 16px takes focus, and nothing puts the page
+     back afterwards. The floor is the system's rather than the brand's — every
+     app this system ships is phone-shaped — so it is written as a max() that a
+     larger scale grows through and no re-pointing can drop below. */
+  --mds-text-control: max(1rem, var(--mds-text-base));
 
   /* The type inside an editable control, per size. --mds-text-control is the
-     medium one under its older name; both move it. */
-  --mds-text-control-sm: var(--mds-text-sm);
+     medium one under its older name; both move it. The compact size carries
+     the floor of its own: it aliases a step two rungs below the floor. */
+  --mds-text-control-sm: max(1rem, var(--mds-text-sm));
   --mds-text-control-md: var(--mds-text-control);
   --mds-text-control-lg: var(--mds-text-control);
 

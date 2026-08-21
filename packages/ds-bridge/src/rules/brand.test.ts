@@ -6,20 +6,23 @@ import { buildContext, makeSheet } from "../context.js";
 import { loadGraph } from "../graph.js";
 import {
   brandCoversContract,
+  brandLeavesFloorsAlone,
   brandOverridesBothThemes,
+  brandRoleTakesItsKind,
   brandShipsDark,
   noForeignNamespaceToken,
 } from "./brand.js";
+import { loadSurface, SURFACE_VERSION, type SurfaceFile } from "../surface.js";
 import type { Context, Rule } from "./types.js";
 
 const SYSTEM = fileURLToPath(new URL("../__fixtures__/system/styles.css", import.meta.url));
 
-const context = (name: string): Context => {
+const context = (name: string, surface?: SurfaceFile): Context => {
   const path = fileURLToPath(new URL(`../__fixtures__/brands/${name}`, import.meta.url));
   const root = dirname(path);
   const graph = loadGraph({ system: SYSTEM, brand: [path] });
   const sheet = makeSheet(path, readFileSync(path, "utf8"), root, "--mds-", new Set(graph.names()));
-  return buildContext({ root, kind: "app", graph, sheets: [sheet] });
+  return buildContext({ root, kind: "app", graph, sheets: [sheet], surface: loadSurface(surface) });
 };
 
 const run = (rule: Rule, brand: string) => rule.check!(context(brand));
@@ -120,5 +123,69 @@ describe("brand-covers-contract", () => {
     const root = fileURLToPath(new URL("../__fixtures__", import.meta.url));
     const context = buildContext({ root, kind: "system", graph, sheets: [], system: SYSTEM });
     expect(brandCoversContract.needs?.(context)).toContain("no brand");
+  });
+});
+
+/* The fixture system's own line: one role on a scale, one that is a size of
+   its own, and one floor. --mds-pad-control-md aliases a spacing rung, so a
+   brand re-pointing it has somewhere to point. */
+const SURFACE: SurfaceFile = {
+  version: SURFACE_VERSION,
+  settable: [
+    { token: "--mds-pad-control-md", kind: "step", why: "the padding inside a control, on the shared rhythm" },
+    { token: "--mds-control-h-md", kind: "length", why: "control heights sit on no scale" },
+  ],
+  floors: [{ token: "--mds-tap-min", why: "44px is the smallest target a thumb reliably hits" }],
+};
+
+describe("brand-role-takes-its-kind", () => {
+  const run = (brand: string) => brandRoleTakesItsKind.check!(context(brand, SURFACE));
+
+  it("flags a step role written as a length", () => {
+    const findings = run("geometry-off-scale.css");
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({
+      rule: "brand-role-takes-its-kind",
+      file: "geometry-off-scale.css",
+      line: 4,
+    });
+    expect(findings[0]?.message).toContain("--mds-pad-control-md");
+    expect(findings[0]?.message).toContain("10px");
+  });
+
+  it("passes a step role pointed at a rung and a length role written as one", () => {
+    expect(run("geometry.css")).toEqual([]);
+  });
+
+  /* Colour is settable in full and is nobody's rung; a rule that read every
+     declaration would flag the brand every app actually ships. */
+  it("says nothing about a declaration the surface never named", () => {
+    expect(run("good.css")).toEqual([]);
+  });
+
+  it("says so when the system published no surface", () => {
+    expect(brandRoleTakesItsKind.needs?.(context("geometry-off-scale.css"))).toContain("brand-surface.json");
+    expect(brandRoleTakesItsKind.needs?.(context("geometry-off-scale.css", SURFACE))).toBeUndefined();
+  });
+});
+
+describe("brand-leaves-floors-alone", () => {
+  const run = (brand: string) => brandLeavesFloorsAlone.check!(context(brand, SURFACE));
+
+  it("flags a floor a brand re-points, with the reason it is one", () => {
+    const findings = run("geometry-off-scale.css");
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({ file: "geometry-off-scale.css", line: 5 });
+    expect(findings[0]?.message).toContain("--mds-tap-min");
+    expect(findings[0]?.message).toContain("thumb");
+  });
+
+  it("passes a brand that only moves what it may", () => {
+    expect(run("geometry.css")).toEqual([]);
+    expect(run("good.css")).toEqual([]);
+  });
+
+  it("says so when the system published no surface", () => {
+    expect(brandLeavesFloorsAlone.needs?.(context("geometry.css"))).toContain("brand-surface.json");
   });
 });
