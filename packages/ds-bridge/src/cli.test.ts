@@ -289,3 +289,41 @@ describe("what a check leaves out", () => {
     expect(output).toMatch(/1 finding/);
   });
 });
+
+describe("what shape the debt is", () => {
+  const tree = `.a { padding: 4px; }
+.b { margin: 4px; }
+.c { padding: 8px; }
+.d { padding: 37px; }
+`;
+
+  it("groups the summary by what would have to be decided, not by rule", () => {
+    const { output } = check(app(tree));
+    expect(output).toContain("one token holds the value");
+    expect(output).toContain("several tokens hold the value");
+    expect(output).toContain("no token holds it");
+  });
+
+  it("counts each value once, with where it is", () => {
+    const { output } = check(app(tree, { "src/Other.module.css": ".e { padding: 4px; }" }));
+    expect(output).toMatch(/4px\s+.*3 places in 2 files/);
+    expect(output).toMatch(/37px\s+.*1 place in 1 file/);
+  });
+
+  it("names the tokens to choose between, so the choice is on the page", () => {
+    const { output } = check(app(tree));
+    expect(output).toMatch(/8px.*--mds-gap.*--mds-space-2/);
+    expect(output).toMatch(/4px\s+var\(--mds-space-1\)/);
+  });
+
+  it("keeps the count per rule, which is what an exemption is written against", () => {
+    const { output } = check(app(tree));
+    expect(output).toMatch(/4\s+no-literal-length/);
+  });
+
+  it("says nothing about causes when no finding carries one", () => {
+    const { output } = check(app(".a { color: var(--mds-nope); }"));
+    expect(output).toContain("no-undefined-token");
+    expect(output).not.toContain("no token holds it");
+  });
+});

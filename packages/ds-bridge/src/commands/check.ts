@@ -7,6 +7,7 @@
 import { rulesFor } from "../rules/index.js";
 import { isEnforced } from "../rules/types.js";
 import type { Context, Finding } from "../rules/types.js";
+import type { Confidence } from "../rules/suggest.js";
 
 export type CheckOptions = {
   /** Rule ids to run; all of them when absent. */
@@ -35,6 +36,54 @@ function exclusions(context: Context, color: boolean): string[] {
   }
   if (scope > 0) out.push(dim(`  ${plural(scope, "file")} outside sources not scanned`, color));
   return out;
+}
+
+/* What a person actually decides, in the order they can decide it: the ones
+   with a single answer, then the ones needing a choice, then the ones that are
+   the system's gap rather than the app's debt. Grouping by rule cannot say
+   this — one rule produces all three. */
+const CAUSES: { confidence: Confidence; title: string }[] = [
+  { confidence: "certain", title: "one token holds the value" },
+  { confidence: "ambiguous", title: "several tokens claim the property" },
+  { confidence: "value-only", title: "several tokens hold the value" },
+  { confidence: "none", title: "no token holds it — the scale is missing a rung" },
+];
+
+/** Values named per cause; the rest are counted. */
+const ROWS = 5;
+/** Candidates named per value. */
+const NAMED = 4;
+
+const row = (parts: string[]) => parts.filter((part) => part !== "").join("  ");
+
+/** The same findings, grouped by what would have to be decided about them. */
+function causes(findings: Finding[], color: boolean): string[] {
+  const carried = findings.filter((f) => f.confidence !== undefined && f.value !== undefined);
+  if (carried.length === 0) return [];
+  const lines: string[] = [];
+  for (const { confidence, title } of CAUSES) {
+    const group = carried.filter((f) => f.confidence === confidence);
+    if (group.length === 0) continue;
+    lines.push(`  ${String(group.length).padStart(4)}  ${title}`);
+
+    const byValue = new Map<string, Finding[]>();
+    for (const finding of group) {
+      byValue.set(finding.value!, [...(byValue.get(finding.value!) ?? []), finding]);
+    }
+    const ordered = [...byValue].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+    const shown = ordered.slice(0, ROWS);
+    const width = Math.max(...shown.map(([value]) => value.length));
+    for (const [value, found] of shown) {
+      const first = found[0]!;
+      const files = new Set(found.map((f) => f.file)).size;
+      const tokens = first.autofix ?? (first.candidates ?? []).slice(0, NAMED).join(" | ");
+      const where = `${plural(found.length, "place")} in ${plural(files, "file")}`;
+      lines.push(dim(`        ${row([value.padEnd(width), tokens, where])}`, color));
+    }
+    const more = ordered.length - shown.length;
+    if (more > 0) lines.push(dim(`        and ${more} more ${more === 1 ? "value" : "values"}`, color));
+  }
+  return lines;
 }
 
 /** Rule id to the reason it could not run here. */
@@ -87,6 +136,7 @@ export function renderCheck(findings: Finding[], context: Context, options: Chec
   for (const [rule, count] of [...byRule].sort((a, b) => b[1] - a[1])) {
     lines.push(dim(`  ${String(count).padStart(4)}  ${rule}`, color));
   }
+  lines.push(...causes(findings, color));
   lines.push(...notes);
   lines.push(dim(`\nWhy each of these matters: dsbridge rules ${[...byRule.keys()][0]}`, color));
   return lines.join("\n") + "\n";
