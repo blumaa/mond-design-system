@@ -152,6 +152,9 @@ export type {
   UploadStatus,
 } from "./components/UploadProgress/UploadProgress";
 
+export { Lightbox } from "./components/Lightbox/Lightbox";
+export type { LightboxLabels, LightboxProps } from "./components/Lightbox/Lightbox";
+
 export { Breadcrumb } from "./components/Breadcrumb/Breadcrumb";
 export type { BreadcrumbProps, Crumb } from "./components/Breadcrumb/Breadcrumb";
 

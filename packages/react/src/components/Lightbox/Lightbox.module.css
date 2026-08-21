@@ -1,0 +1,45 @@
+.panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The controls sit above the notch, not under it. */
+.bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--mds-gap-tight);
+  padding: var(--mds-pad-tight);
+  padding-top: calc(var(--mds-pad-tight) + var(--mds-safe-top));
+}
+
+.surface {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* The browser's own pan and pinch would fight the component's. */
+  touch-action: none;
+  user-select: none;
+}
+
+/* The gesture writes --zoom and --pan-*; the transform is the stylesheet's.
+   No fallbacks: the component sets all three on every render, and a fallback
+   would be a length written into a stylesheet for a case that cannot happen. */
+.image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transform-origin: center;
+  transform: translate(var(--pan-x), var(--pan-y)) scale(var(--zoom));
+  will-change: transform;
+}
+
+.caption {
+  padding: var(--mds-pad-tight) var(--mds-pad-card);
+  padding-bottom: calc(var(--mds-pad-card) + var(--mds-safe-bottom));
+  text-align: center;
+}

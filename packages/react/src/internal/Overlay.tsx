@@ -18,7 +18,7 @@ export interface OverlayProps {
   onClose: () => void;
   /** Accessible name of the dialog. */
   label: string;
-  variant: "modal" | "sheet";
+  variant: "modal" | "sheet" | "lightbox";
   /** alertdialog interrupts — confirms use it so AT announces the question. */
   role?: "dialog" | "alertdialog";
   /** Scrim click dismisses. Confirmations turn this off. */
@@ -28,7 +28,7 @@ export interface OverlayProps {
 }
 
 /**
- * Internal shell shared by Modal and Sheet: portal, scrim, dialog
+ * Internal shell shared by Modal, Sheet and Lightbox: portal, scrim, dialog
  * semantics, useOverlay behaviour, exit-animation presence. Not exported
  * from the package.
  */

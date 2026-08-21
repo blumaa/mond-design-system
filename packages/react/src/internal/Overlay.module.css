@@ -27,3 +27,13 @@
   align-items: flex-end;
   justify-content: center;
 }
+
+/* The picture is the dialog: the panel takes the whole scrim rather than
+   sitting on it, and the scrim goes darker so a bright photograph is the only
+   lit thing on the screen. */
+.variant-lightbox {
+  z-index: var(--mds-z-modal);
+  align-items: stretch;
+  justify-content: stretch;
+  background: var(--mds-scrim-strong);
+}
