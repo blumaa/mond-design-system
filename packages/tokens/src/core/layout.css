@@ -92,6 +92,10 @@
      is about — and big enough to tell two photographs of the same thing apart,
      which is the whole reason the list stopped being file names. */
   --mds-upload-thumb: 48px;
+  /* How far a control sitting on a picture stands off its edge. Not padding —
+     nothing is inside it — and not a motion shift, which collapses when motion
+     is turned down and would drop the control onto the corner. */
+  --mds-media-inset: 8px;
   /* Obscures a picture without hiding that there is one: far enough that the
      photo reads as shape and colour only. A smaller radius still leaves a face
      recognisable, which is the whole failure this covers. */

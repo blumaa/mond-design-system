@@ -1,0 +1,129 @@
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-tight);
+}
+
+.viewport {
+  position: relative;
+  /* The gallery takes the horizontal drag; the page keeps the vertical one. */
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.slide {
+  overflow: hidden;
+  border-radius: var(--mds-radius-media);
+}
+
+/* Qualified with `.viewport` so the answer does not depend on which stylesheet
+   the bundler happens to write last: `.step` and Button's `.variant-secondary`
+   are both one class, and the variant is transparent by design — over a
+   photograph that would leave the control to be guessed at. */
+.viewport .step,
+.viewport .zoom {
+  position: absolute;
+  z-index: var(--mds-z-raised);
+  background: var(--mds-surface-card);
+}
+
+.viewport .step {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.viewport .prev {
+  inset-inline-start: var(--mds-media-inset);
+}
+
+.viewport .next {
+  inset-inline-end: var(--mds-media-inset);
+}
+
+/* Hidden rather than dimmed at the ends: a control that cannot do anything is
+   one more thing to read on top of the picture. */
+.viewport .step:disabled {
+  visibility: hidden;
+}
+
+.viewport .zoom {
+  inset-inline-start: var(--mds-media-inset);
+  inset-block-end: var(--mds-media-inset);
+}
+
+.counter {
+  position: absolute;
+  inset-inline-end: var(--mds-media-inset);
+  inset-block-end: var(--mds-media-inset);
+  z-index: var(--mds-z-raised);
+  padding: var(--mds-pad-count-y) var(--mds-pad-count-x);
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-scrim);
+  color: var(--mds-text-on-media);
+}
+
+.thumbs {
+  display: flex;
+  gap: var(--mds-gap-hairline);
+}
+
+.thumb {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: var(--mds-border-width) solid transparent;
+  border-radius: var(--mds-radius-media);
+  background: var(--mds-surface-sunken);
+  cursor: pointer;
+  transition: var(--mds-transition-control);
+}
+
+.thumb:hover {
+  border-color: var(--mds-border-subtle);
+}
+
+.thumb[aria-current="true"] {
+  border-color: var(--mds-border-strong);
+}
+
+.more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+}
+
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* The dot is what you see; the button is what you hit. Drawing the mark with
+   a pseudo-element lets the target be a thumb wide without a row of dots
+   turning into a row of buttons. */
+.dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--mds-tap-min);
+  min-height: var(--mds-tap-min);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.dot::after {
+  content: "";
+  width: var(--mds-dot);
+  height: var(--mds-dot);
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-border-subtle);
+  transition: var(--mds-transition-control);
+}
+
+.dot[aria-current="true"]::after {
+  background: var(--mds-accent);
+}

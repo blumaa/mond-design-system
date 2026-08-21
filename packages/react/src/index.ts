@@ -137,6 +137,14 @@ export type { TabBarActionProps, TabBarItemProps, TabBarProps } from "./componen
 export { MediaPlaceholder } from "./components/MediaPlaceholder/MediaPlaceholder";
 export type { MediaPlaceholderProps } from "./components/MediaPlaceholder/MediaPlaceholder";
 
+export { ImageCarousel } from "./components/ImageCarousel/ImageCarousel";
+export type {
+  CarouselPager,
+  CarouselSlide,
+  ImageCarouselLabels,
+  ImageCarouselProps,
+} from "./components/ImageCarousel/ImageCarousel";
+
 export { UploadProgress } from "./components/UploadProgress/UploadProgress";
 export type {
   UploadProgressLabels,
