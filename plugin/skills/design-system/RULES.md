@@ -121,6 +121,14 @@ An upward import inverts the hierarchy: the atom now cannot be understood, teste
 
 **Instead.** Move the shared part down to the level that needs it, or move the importing component up. What the rule deliberately allows is a peer: a Button that renders a Spinner while it loads is using an affordance, and a ConfirmDialog built out of Modal's parts is `composition-over-configuration` working as intended. Whether a peer wrapper has earned its own level is a judgement, and a checker that fired on it would be wrong more often than right.
 
+### choosing-names-a-real-component
+
+**Every component the system's choosing.json names is one the system has.** *(system)*
+
+This is the one file whose contents nothing else can check. A misspelt or renamed component in it does not fail a build, fail a type check or fail a test — the JSON is still valid, so the guidance simply stops answering, and the first anyone hears of it is somebody reaching for the wrong component and the tool having nothing to say.
+
+**Instead.** Fix the name, or delete the entry. A component that has been removed no longer needs a rule for when to prefer it; one that has been renamed needs the entry renamed with it.
+
 ### no-duplicate-of-a-system-component
 
 **Do not give an app component the name of one the system exports.** *(app)*

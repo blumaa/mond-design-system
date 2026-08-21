@@ -7,6 +7,7 @@
  * own source — an app groups its components by feature, and being told that
  * `EventCard` is not an atom would be noise.
  */
+import { dirname, relative, resolve } from "node:path";
 import { asLevel, type Component } from "../structure.js";
 import type { Context, Finding, Rule } from "./types.js";
 
@@ -172,10 +173,54 @@ export const composesDownward: Rule = {
   },
 };
 
+/** Where the system published the file, as a finding should print it. */
+const choosingFile = (context: Context): string => {
+  if (context.system === undefined) return "dsbridge/choosing.json";
+  const at = resolve(dirname(context.system), "dsbridge", "choosing.json");
+  const here = relative(context.root, at);
+  return here.startsWith("..") ? at : here;
+};
+
+export const choosingNamesARealComponent: Rule = {
+  id: "choosing-names-a-real-component",
+  title: "Every component the system's choosing.json names is one the system has.",
+  why:
+    "This is the one file whose contents nothing else can check. A misspelt or " +
+    "renamed component in it does not fail a build, fail a type check or fail a " +
+    "test — the JSON is still valid, so the guidance simply stops answering, and " +
+    "the first anyone hears of it is somebody reaching for the wrong component " +
+    "and the tool having nothing to say.",
+  instead:
+    "Fix the name, or delete the entry. A component that has been removed no " +
+    "longer needs a rule for when to prefer it; one that has been renamed needs " +
+    "the entry renamed with it.",
+  target,
+  reads: "repo",
+  needs: (context) =>
+    context.choosing.declared
+      ? undefined
+      : "the design system here publishes no dsbridge/choosing.json, so there is nothing to check",
+  check: (context) => {
+    const has = context.components.map((component) => component.name);
+    const file = choosingFile(context);
+    return context.choosing
+      .unknown(has)
+      .filter(() => !context.exempt("choosing-names-a-real-component", file))
+      .map((name) =>
+        finding(
+          "choosing-names-a-real-component",
+          file,
+          `choosing.json names ${name} and this repo has no such component — rename the entry or remove it`,
+        ),
+      );
+  },
+};
+
 export const structureRules: Rule[] = [
   everyComponentHasAStory,
   everyComponentHasATest,
   declaresItsLevel,
   levelIsInTheTaxonomy,
   composesDownward,
+  choosingNamesARealComponent,
 ];

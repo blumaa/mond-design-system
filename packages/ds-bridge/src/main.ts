@@ -20,6 +20,7 @@ import { aboveBaseline, readBaseline, updateBaseline, NO_BASELINE } from "./comm
 import { applyFixes } from "./commands/fix.js";
 import { renderRules, ruleData, rulesForFile, selectRules } from "./commands/rules.js";
 import { renderRoles, roleData } from "./commands/roles.js";
+import { renderChoosing, choosingData } from "./commands/choosing.js";
 import { planMigration, renderMigration } from "./commands/migrate.js";
 import { isHookEvent, runHook, type HookInput } from "./commands/hook.js";
 import type { Kind, Layer } from "./graph.js";
@@ -33,6 +34,7 @@ const USAGE = `dsbridge — design system conformance, for the system and the ap
   dsbridge check [path] [opts]  run the rules against this repo, or one path in it
   dsbridge rules [id]           what each rule is protecting, for a human or an agent
   dsbridge roles                what the system says its tokens are for
+  dsbridge choosing [name]      which of two that both compile this case wants
   dsbridge migrate [path]       what an app would have to move to adopt the system
   dsbridge hook <event>         answer a Claude Code hook, protocol JSON on stdin
 
@@ -74,6 +76,11 @@ Options for roles
   --root <dir>      the repo to answer for  (default: the cwd)
   --system <file>   as above
   --coverage        name the tokens no role claims
+
+Options for choosing
+  --root <dir>      the repo to answer for  (default: the cwd)
+  --system <file>   as above
+  <name>            only the choices that name this component
 
 Options for rules
   --for <file>      only the rules that read this kind of file
@@ -387,6 +394,44 @@ function rolesCommand(rest: string[]): number {
   return 0;
 }
 
+function choosingCommand(rest: string[]): number {
+  const { values, positionals } = parseArgs({
+    args: rest,
+    allowPositionals: true,
+    options: {
+      root: { type: "string" },
+      system: { type: "string" },
+      json: { type: "boolean" },
+      color: { type: "boolean", default: true },
+    },
+    allowNegative: true,
+  });
+
+  const root = resolve(values.root ?? process.cwd());
+  const config = readConfig(root);
+  const context = loadContext({
+    root,
+    ...(values.system ? { system: resolve(values.system) } : {}),
+    ...(config ? { config } : {}),
+  });
+  /* In an app the choice is between the system's components, not the app's own;
+     in the system's repo there is nothing installed to ask, so it is its own. */
+  const components =
+    context.exported.length > 0 ? context.exported : context.components.map((it) => it.name);
+
+  if (values.json === true) {
+    jsonOut(choosingData(context.choosing, components));
+    return 0;
+  }
+  process.stdout.write(
+    renderChoosing(context.choosing, components, {
+      ...(positionals[0] !== undefined ? { component: positionals[0] } : {}),
+      color: values.color !== false && process.stdout.isTTY === true,
+    }),
+  );
+  return 0;
+}
+
 /* A stack trace is the tool failing to answer, printed as if it were one. The
    frames are still there behind DSBRIDGE_DEBUG for whoever is fixing dsbridge. */
 function failed(command: string, error: unknown): number {
@@ -415,6 +460,7 @@ export function main(argv: string[], stdin?: string): number {
     if (command === "check") return checkCommand(rest, stdin);
     if (command === "rules") return rulesCommand(rest);
     if (command === "roles") return rolesCommand(rest);
+    if (command === "choosing") return choosingCommand(rest);
     if (command === "migrate") return migrateCommand(rest);
     if (command === "hook") return hookCommand(rest, stdin);
   } catch (error) {

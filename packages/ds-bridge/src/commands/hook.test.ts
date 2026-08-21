@@ -11,6 +11,7 @@ import { loadGraph } from "../graph.js";
 import { fileURLToPath } from "node:url";
 import { baselineOf } from "./baseline.js";
 import { applyEdit, pendingWrite, regression, sessionBrief, warning } from "./hook.js";
+import { loadChoosing } from "../choosing.js";
 import type { Finding } from "../rules/types.js";
 
 const SYSTEM = fileURLToPath(new URL("../__fixtures__/system/styles.css", import.meta.url));
@@ -142,6 +143,19 @@ describe("what a session opens knowing", () => {
       context({ components: [{ name: "Button", file: "src/Button/Button.tsx", imports: [] }] }),
     );
     expect(brief).toContain("Button");
+  });
+
+  /* The lookup only earns its line where the system published one — an app
+     told to run a verb that answers nothing learns to ignore the brief. */
+  it("offers the choosing lookup only when the system declared some", () => {
+    expect(sessionBrief(context())).not.toContain("dsbridge choosing");
+    const declared = context({
+      choosing: loadChoosing({
+        version: 1,
+        clusters: [{ default: "Stack", use: "vertical flow", instead: [{ when: "a row", prefer: "Inline" }] }],
+      }),
+    });
+    expect(sessionBrief(declared)).toContain("dsbridge choosing");
   });
 
   it("counts the rest rather than listing 156 of them", () => {

@@ -13,6 +13,7 @@ dsbridge tokens            # the graph: core scales, semantic contract, your bra
 dsbridge check             # the rules, as a work list
 dsbridge rules [id]        # what each rule is protecting
 dsbridge roles             # what the system says its tokens are for
+dsbridge choosing          # which of two that both compile this case wants
 dsbridge migrate           # the distance between this app and the system
 dsbridge hook <event>      # answer a Claude Code hook, protocol JSON on stdin
 ```
@@ -166,6 +167,50 @@ the honest answer names them all rather than breaking the tie.
 Coverage is reported and never enforced. A system with half its tokens declared
 gets half the benefit and no failing build.
 
+## dsbridge choosing
+
+Everything else here is derivable. The graph knows what a token holds,
+TypeScript knows what a component accepts, the import graph knows what composes
+what. This does not: `Sheet`, `Modal` and `ConfirmDialog` all compile, all pass
+every rule, and exactly one of them is right for the case in front of you.
+
+```sh
+dsbridge choosing                 # every choice, the default and its exceptions
+dsbridge choosing Modal           # only the choices that name this component
+```
+
+```json
+{
+  "version": 1,
+  "clusters": [
+    {
+      "default": "Sheet",
+      "use": "a transient panel over the page — filters, a picker, a short form",
+      "instead": [
+        { "when": "the viewport is md or wider", "prefer": "Modal" },
+        { "when": "the user has to answer before anything continues", "prefer": "ConfirmDialog" }
+      ]
+    }
+  ],
+  "deprecated": [{ "component": "Button", "prop": "kind", "use": "variant" }]
+}
+```
+
+The components in a choice are not listed: they are the default plus everything
+the exceptions prefer. A second copy of the same list is a copy free to go
+stale, and this is the one file nothing else can check — which is why
+`choosing-names-a-real-component` does, against the components the repo has.
+
+Keep it to the choices people actually get wrong. A catalogue of forty
+components is what `dsbridge check` and the session-start hook already print;
+this is the dozen or so that need a sentence, and a dozen is a length somebody
+will read.
+
+`deprecated` holds what a `@deprecated` tag cannot: what to write now, and why
+the old one went. Where a tag exists it is the better warning — an editor shows
+it without being asked — so this is for the intent that has not been written
+into the types yet.
+
 ### Configuration
 
 `dsbridge.config.json` at the checked root, all keys optional:
@@ -298,7 +343,7 @@ is what somebody makes it with.
 
 ## The rules
 
-There are 37, of which 24 carry a `check`. Listing them here would be a second
+There are 42, of which 30 carry a `check`. Listing them here would be a second
 copy of something already generated:
 
 ```sh
@@ -322,7 +367,8 @@ dsbridge check --system path/to/your/styles.css
 Layers come from the file layout — `core/*.css`, `semantic.css`, `base.css`,
 anything else that declares tokens at the document root is a brand. What the
 system declares about itself goes in a `dsbridge/` directory beside the entry
-stylesheet, `roles.json` above and `contract.json` for the contrast gate:
+stylesheet: `roles.json` and `choosing.json` above, and `contract.json` for the
+contrast gate:
 
 ```json
 { "contrast": [{ "fg": "--x-text", "bg": ["--x-surface"], "ratio": 4.5 }] }

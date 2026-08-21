@@ -21,6 +21,7 @@ The rules live in the tool, not in this file. Ask for the ones that apply.
 | about to write or edit one file | `dsbridge rules --for <path>` |
 | reaching for a value — `12px`, `#f60`, `1.5rem` | `dsbridge tokens --grep <text>` |
 | a finding that names several tokens, or a token you cannot place | `dsbridge roles` |
+| two components that both look right — `Sheet` or `Modal` | `dsbridge choosing [name]` |
 | a finding you want to understand or argue with | `dsbridge rules <id>` |
 | finished a change | `dsbridge check <path>` |
 | an app deciding what it would take to adopt the system | `dsbridge migrate` |
@@ -30,6 +31,11 @@ that kind of file, one line each, and says of each whether it is checked or a
 judgement call. The whole set is 22 KB and most of it is about a file you are not
 touching — `dsbridge rules --markdown` prints all of it, and is almost never what
 you want mid-edit.
+
+`choosing` is the only lookup here that nothing in the code could answer.
+Everything else is derived — the graph, the types, the import graph — but which
+of two components that both compile is right for this case is a decision
+somebody made, and it is written down or it is lost.
 
 `roles` is what turns a value back into a name. The graph knows what a token
 *holds*; only the system says what it is *for*, and a finding that names several

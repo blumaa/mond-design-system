@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "clusters": [
+    {
+      "default": "Sheet",
+      "use": "a transient panel over the page — filters, a picker, a short form",
+      "instead": [
+        { "when": "the viewport is md or wider", "prefer": "Modal" },
+        { "when": "the user has to answer before anything continues", "prefer": "ConfirmDialog" }
+      ]
+    },
+    {
+      "default": "Tabs",
+      "use": "switching between panels of one screen, where each panel is substantial",
+      "instead": [
+        { "when": "the choice is between two or three short options and changes a view in place", "prefer": "SegmentedControl" },
+        { "when": "it is the app's primary navigation, anchored to the bottom", "prefer": "TabBar" }
+      ]
+    },
+    {
+      "default": "Tag",
+      "use": "a label on content the reader cannot press — a category, a topic",
+      "instead": [
+        { "when": "pressing it filters or selects something", "prefer": "Chip" },
+        { "when": "it reports state or a count rather than naming content", "prefer": "Badge" }
+      ]
+    },
+    {
+      "default": "Container",
+      "use": "a page's centred column, with the page-edge padding it owns",
+      "instead": [
+        { "when": "the content is one raised, self-contained thing", "prefer": "Card" },
+        { "when": "it is the whole screen, with a bar above or below it", "prefer": "Screen" }
+      ]
+    },
+    {
+      "default": "Stack",
+      "use": "vertical flow, with the gap owned by the parent",
+      "instead": [
+        { "when": "the children sit in a row", "prefer": "Inline" },
+        { "when": "the children are rows of one settings-style list", "prefer": "List" }
+      ]
+    },
+    {
+      "default": "Input",
+      "use": "one line of free text",
+      "instead": [
+        { "when": "the text runs to more than one line", "prefer": "Textarea" },
+        { "when": "it is a password and wants a reveal toggle", "prefer": "PasswordInput" },
+        { "when": "it is a search box that should clear itself", "prefer": "SearchField" },
+        { "when": "the answer is one of a known set", "prefer": "Select" }
+      ]
+    },
+    {
+      "default": "Text",
+      "use": "body copy, labels and metadata — anything that is not a section title",
+      "instead": [
+        { "when": "it starts a section and belongs in the document outline", "prefer": "Heading" }
+      ]
+    },
+    {
+      "default": "Skeleton",
+      "use": "content on its way, in a shape the reader will recognise when it lands",
+      "instead": [
+        { "when": "the wait is short and has no shape to stand in for", "prefer": "Spinner" },
+        { "when": "there is a measurable amount of work left", "prefer": "ProgressBar" }
+      ]
+    },
+    {
+      "default": "Checkbox",
+      "use": "an independent yes/no that a form submits",
+      "instead": [
+        { "when": "the change takes effect the moment it is tapped", "prefer": "Switch" },
+        { "when": "it is one of several answers to one question", "prefer": "Radio" },
+        { "when": "the few options are worth showing side by side", "prefer": "SegmentedControl" }
+      ]
+    },
+    {
+      "default": "Icon",
+      "use": "a glyph that carries meaning next to, or instead of, a word",
+      "instead": [
+        { "when": "it stands for a person", "prefer": "Avatar" },
+        { "when": "it stands for several people at once", "prefer": "AvatarGroup" }
+      ]
+    },
+    {
+      "default": "Button",
+      "use": "something happens when it is pressed",
+      "instead": [
+        { "when": "it goes somewhere, and sits inside a sentence", "prefer": "Link" },
+        { "when": "it toggles a count the reader contributes to — a like, a reaction", "prefer": "CountButton" }
+      ]
+    },
+    {
+      "default": "ChipGroup",
+      "use": "several chips inside a form, wrapping onto new lines so none is hidden",
+      "instead": [
+        { "when": "it is a filter strip that should stay on one scrolling line", "prefer": "ChipBar" }
+      ]
+    },
+    {
+      "default": "EmptyState",
+      "use": "the list came back and there was nothing in it",
+      "instead": [
+        { "when": "it has not come back yet", "prefer": "Skeleton" }
+      ]
+    },
+    {
+      "default": "Toast",
+      "use": "telling the reader something landed, without taking the screen away",
+      "instead": [
+        { "when": "they have to answer before anything continues", "prefer": "ConfirmDialog" }
+      ]
+    }
+  ],
+  "deprecated": []
+}

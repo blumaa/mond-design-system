@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { structureRules } from "./structure.js";
+import { loadChoosing, type ChoosingFile } from "../choosing.js";
 import { runCheck, skippedRules } from "../commands/check.js";
 import type { Component } from "../structure.js";
 import type { Context } from "./types.js";
@@ -31,6 +32,7 @@ const contextWith = (components: Component[]): Context =>
     components,
     levels: ["atom", "molecule", "organism"],
     levelsIgnore: ["Docs"],
+    choosing: loadChoosing(undefined),
     exempt: () => false,
     ignored: () => false,
   }) as unknown as Context;
@@ -170,5 +172,47 @@ describe("an app's own taxonomy", () => {
       [component("EventCard", { level: "primitive", story: undefined, test: undefined })],
     );
     expect(runCheck(declared, { only: ids })).toEqual([]);
+  });
+});
+
+describe("what the system says to choose between", () => {
+  const file = (clusters: ChoosingFile["clusters"]): ChoosingFile => ({ version: 1, clusters });
+
+  const withChoosing = (names: string[], choosing: ChoosingFile | undefined): Context =>
+    ({
+      root: "/repo",
+      system: "/repo/packages/tokens/src/styles.css",
+      kind: "system",
+      components: names.map((name) => component(name, { level: "atom" })),
+      levels: ["atom", "molecule", "organism"],
+      levelsIgnore: [],
+      choosing: loadChoosing(choosing),
+      exempt: () => false,
+      ignored: () => false,
+    }) as unknown as Context;
+
+  const run = (names: string[], choosing: ChoosingFile | undefined) =>
+    runCheck(withChoosing(names, choosing), { only: ["choosing-names-a-real-component"] });
+
+  it("passes a choice whose every component the repo has", () => {
+    const choosing = file([{ default: "Tag", use: "a label", instead: [{ when: "pressable", prefer: "Chip" }] }]);
+    expect(run(["Tag", "Chip"], choosing)).toEqual([]);
+  });
+
+  /* Guidance naming something that does not exist is guidance that never fires,
+     and nothing else in the repo can notice: the JSON compiles. */
+  it("reports a component the choice names and the repo does not have", () => {
+    const choosing = file([{ default: "Tag", use: "a label", instead: [{ when: "pressable", prefer: "Chipp" }] }]);
+    const found = run(["Tag", "Chip"], choosing);
+    expect(found).toHaveLength(1);
+    expect(found[0]?.message).toContain("Chipp");
+    expect(found[0]?.file).toBe("packages/tokens/src/dsbridge/choosing.json");
+  });
+
+  it("skips a system that declared no choices at all", () => {
+    const skipped = skippedRules(withChoosing(["Tag"], undefined), {
+      only: ["choosing-names-a-real-component"],
+    });
+    expect(skipped.get("choosing-names-a-real-component")).toMatch(/choosing\.json/);
   });
 });

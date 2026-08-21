@@ -528,6 +528,33 @@ describe("dsbridge roles", () => {
   });
 });
 
+/* Choosing travels with the system too, and is the one declaration nothing in
+   the code could have answered: Stack and Inline both compile. */
+describe("dsbridge choosing", () => {
+  const choosing = (dir: string, ...rest: string[]) =>
+    run(["choosing", "--root", dir, "--system", SYSTEM, "--no-color", ...rest]);
+
+  it("prints the default first and the exception under it", () => {
+    const { status, output } = choosing(app(".a { color: var(--mds-text-primary); }"));
+    expect(status).toBe(0);
+    expect(output).toContain("vertical flow");
+    expect(output).toContain("the children sit in a row");
+    expect(output.indexOf("Stack")).toBeLessThan(output.indexOf("Inline"));
+  });
+
+  it("answers about one component, and leaves the other choices out", () => {
+    const { output } = choosing(app(".a { color: var(--mds-text-primary); }"), "Inline");
+    expect(output).toContain("the children sit in a row");
+    expect(output).not.toContain("something happens when it is pressed");
+  });
+
+  it("carries the deprecations the types have no tag for", () => {
+    const { output } = choosing(app(".a { color: var(--mds-text-primary); }"), "Button");
+    expect(output).toContain("Button kind");
+    expect(output).toContain("variant");
+  });
+});
+
 /* The runtime, end to end: protocol JSON in, protocol JSON out. What a rule
    finds is tested above; what is tested here is that a hook says it at the
    right moment, and says nothing at every other one. */

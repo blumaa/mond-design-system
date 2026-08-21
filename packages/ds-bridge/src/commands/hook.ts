@@ -153,6 +153,9 @@ export function sessionBrief(context: Context, baseline?: Baseline): string {
     "  dsbridge rules --for <path>     the rules that read that kind of file, one line each",
     "  dsbridge tokens --grep <text>   what the system already names",
     "  dsbridge check <path>           what is wrong in it now",
+    ...(context.choosing.declared
+      ? ["  dsbridge choosing [name]        which of two that both compile this case wants"]
+      : []),
     "",
   ].join("\n");
 }
