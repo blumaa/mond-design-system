@@ -207,3 +207,35 @@ Known limit: a bag of strings is only found through the name of the const that
 holds it. `labels`, `messages`, `copy` are caught; `strings2` is not. The name
 is the only evidence available without knowing what each key means, and a rule
 that guesses at intent would report the app's config objects too.
+
+### 8. Building six components with the tool open beside them
+
+Phase 2 added `Breadcrumb`, `MediaPlaceholder` and `UploadProgress` with
+`dsbridge rules --for <path>` run before each stylesheet and `dsbridge check`
+after it. Every one of them came out clean on the first check — which sounds
+like the tool did nothing, and is the opposite. The rules were read before the
+file was written, so what would have been three findings never got typed.
+
+Two things it could not answer, both about the same moment:
+
+- `no-literal-length` refuses `blur(20px)` and a hatch pitch of `8px`, correctly.
+  `dsbridge tokens --grep blur` then answers "no tokens match that filter" and
+  stops. That is the whole answer to "does the system already name this?" and no
+  answer at all to "so where do I put it?" — which core file, which naming shape
+  (`--mds-blur-media` or `--mds-media-blur`, `--mds-upload-thumb` beside
+  `--mds-avatar-md`). Both decisions were made by reading neighbouring tokens.
+  A `tokens --propose <name>` that named the file the nearest group lives in,
+  and showed how that group names things, would close it.
+- `check <path>` filters findings to that path, but its summary line still counts
+  the whole repo: "clean — 51 stylesheets, 264 tokens". A scoped run reads as
+  though the path was ignored, which is exactly the doubt a check is meant to
+  remove. It cost a deliberate broken-colour probe to confirm the file was being
+  scanned at all.
+
+The `--mds-icon-slot` convention was found by grep, not by the tool: a control
+that offers an icon slot publishes the step and sizes the slot from it, and
+`control-tokens.test.ts` enforces it through a hand-maintained list of files.
+`UploadProgress` had to be added to that list by hand. A rule reading "a
+stylesheet that declares `--mds-icon-slot` reads it back for width, height and
+font-size" would enforce it for every component, including the ones nobody
+remembers to add.
