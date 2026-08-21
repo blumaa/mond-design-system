@@ -45,6 +45,7 @@
 }
 
 .close {
+  composes: hitArea from "../../internal/hit-area.module.css";
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -56,6 +57,7 @@
   background: transparent;
   color: var(--mds-text-secondary);
   cursor: pointer;
+  position: relative;
 }
 
 .close:hover {

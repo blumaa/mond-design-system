@@ -38,6 +38,7 @@
 }
 
 .clear {
+  composes: hitArea from "../../internal/hit-area.module.css";
   position: absolute;
   right: var(--mds-pad-tight);
   display: inline-flex;

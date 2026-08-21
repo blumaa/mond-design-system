@@ -7,7 +7,9 @@ import {
   breakpointIsDeclared,
   mobileFirstMedia,
   noOuterMargin,
+  reachForThePrimitive,
   screenEdgeClearsTheSafeArea,
+  touchTargets,
   viewportHeightIsAToken,
   zIndexIsAToken,
 } from "./layout.js";
@@ -137,5 +139,138 @@ describe("no-outer-margin", () => {
     expect(
       run(noOuterMargin, "@media (min-width: 600px) {\n  .button { margin-top: var(--mds-gap); }\n}"),
     ).toHaveLength(1);
+  });
+});
+
+/* Both of these were judgement until the numbers said otherwise: a tap target
+   is a measurement, and a flex container that does nothing but stack things
+   with a gap is a primitive somebody rewrote. */
+describe("touch-targets", () => {
+  const tap = (source: string) => run(touchTargets, source).map((f) => f.message);
+
+  it("flags a pressable shorter than the tap minimum", () => {
+    const [finding] = run(touchTargets, ".chip {\n  cursor: pointer;\n  height: 32px;\n}");
+    expect(finding).toMatchObject({ rule: "touch-targets", line: 3 });
+    expect(finding?.message).toContain("32px");
+  });
+
+  it("reads through a token to the value it holds", () => {
+    expect(tap(".chip {\n  cursor: pointer;\n  min-height: var(--mds-control-h-md);\n}")).toHaveLength(1);
+  });
+
+  it("passes a pressable that reaches it", () => {
+    expect(tap(".chip {\n  cursor: pointer;\n  height: var(--mds-tap-min);\n}")).toEqual([]);
+  });
+
+  it("takes a control selector as pressable without a cursor", () => {
+    expect(tap("button.icon {\n  height: 24px;\n}")).toHaveLength(1);
+    expect(tap('[role="tab"] {\n  height: 24px;\n}')).toHaveLength(1);
+  });
+
+  it("says nothing about a field that fills the row, which nobody misses", () => {
+    expect(tap(".trigger {\n  cursor: pointer;\n  width: 100%;\n  height: 38px;\n}")).toEqual([]);
+    expect(tap(".trigger {\n  cursor: pointer;\n  min-width: 48px;\n  height: 38px;\n}")).toEqual([]);
+  });
+
+  it("says nothing about a short thing nobody taps", () => {
+    expect(tap(".divider {\n  height: 1px;\n}")).toEqual([]);
+  });
+
+  it("says nothing about a height it cannot measure", () => {
+    expect(tap(".chip {\n  cursor: pointer;\n  height: auto;\n}")).toEqual([]);
+    expect(tap(".chip {\n  cursor: pointer;\n  height: 100%;\n}")).toEqual([]);
+    expect(tap(".chip {\n  cursor: pointer;\n  height: var(--app-own-size);\n}")).toEqual([]);
+  });
+
+  it("skips a system that names no tap minimum", () => {
+    const context = buildContext({ root: ROOT, kind: "system", graph, sheets: [] });
+    expect(touchTargets.needs!({ ...context, prefix: "--other-" })).toContain("tap");
+  });
+
+  it("passes a small control whose own pseudo-element grows the target", () => {
+    expect(
+      tap(
+        ".remove {\n  cursor: pointer;\n  width: 20px;\n  height: 20px;\n}\n" +
+          ".remove::before {\n  content: \"\";\n  width: max(100%, var(--mds-tap-min));\n" +
+          "  height: max(100%, var(--mds-tap-min));\n}",
+      ),
+    ).toEqual([]);
+  });
+
+  it("still flags a pseudo-element that grows only one axis", () => {
+    expect(
+      tap(
+        ".remove {\n  cursor: pointer;\n  width: 20px;\n  height: 20px;\n}\n" +
+          ".remove::before {\n  content: \"\";\n  width: var(--mds-tap-min);\n  height: 100%;\n}",
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("follows composes to the target the other stylesheet holds", () => {
+    const sheets = [
+      makeSheet(
+        join(ROOT, "src/Tag/Tag.module.css"),
+        '.remove {\n  composes: hitArea from "../internal/hit-area.module.css";\n' +
+          "  cursor: pointer;\n  height: 20px;\n}",
+        ROOT,
+        "--mds-",
+      ),
+      makeSheet(
+        join(ROOT, "src/internal/hit-area.module.css"),
+        '.hitArea::before {\n  content: "";\n  width: max(100%, var(--mds-tap-min));\n' +
+          "  height: max(100%, var(--mds-tap-min));\n}",
+        ROOT,
+        "--mds-",
+      ),
+    ];
+    expect(touchTargets.check!(buildContext({ root: ROOT, kind: "system", graph, sheets }))).toEqual([]);
+  });
+
+  it("reports the control when the composed stylesheet is not one it can read", () => {
+    expect(
+      tap(
+        '.remove {\n  composes: hitArea from "@acme/ds/hit-area.module.css";\n' +
+          "  cursor: pointer;\n  height: 20px;\n}",
+      ),
+    ).toHaveLength(1);
+  });
+});
+
+describe("reach-for-the-primitive", () => {
+  const primitives = ["Stack", "Inline"];
+
+  const app = (source: string, file = "src/components/Feed/Feed.module.css") =>
+    reachForThePrimitive.check!(
+      buildContext({
+        root: ROOT,
+        kind: "app",
+        graph,
+        sheets: [makeSheet(join(ROOT, file), source, ROOT, "--mds-")],
+        config: { primitives },
+      }),
+    );
+
+  it("flags a block that only stacks things with a gap", () => {
+    const [finding] = app(".list {\n  display: flex;\n  flex-direction: column;\n  gap: var(--mds-gap-tight);\n}");
+    expect(finding).toMatchObject({ rule: "reach-for-the-primitive", line: 1 });
+    expect(finding?.message).toContain("Stack");
+  });
+
+  it("passes a block that does something else as well", () => {
+    expect(app(".card {\n  display: flex;\n  gap: 8px;\n  padding: 8px;\n}")).toEqual([]);
+    expect(app(".row {\n  display: flex;\n  gap: 8px;\n  position: sticky;\n}")).toEqual([]);
+  });
+
+  it("passes flex without a gap, which is alignment rather than spacing", () => {
+    expect(app(".row {\n  display: flex;\n  align-items: center;\n}")).toEqual([]);
+  });
+
+  it("skips a repo whose system names no primitives", () => {
+    const context = buildContext({ root: ROOT, kind: "app", graph, sheets: [] });
+    expect(reachForThePrimitive.needs!(context)).toContain("primitives");
+  });
+
+  it("says nothing in the system's own repo, which is where the primitives are written", () => {
+    expect(reachForThePrimitive.target).toBe("app");
   });
 });

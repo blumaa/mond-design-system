@@ -1,0 +1,20 @@
+/* A 44px target on a control that paints smaller than one.
+ *
+ * WCAG 2.5.8 measures the target, not the painted box, and a min-height on the
+ * control itself forces whatever row it was dropped into taller than its
+ * content. So the target is an out-of-flow pseudo-element: it takes no layout,
+ * and it grows to the minimum in both axes without moving anything.
+ *
+ * The composing class supplies the containing block — `position: relative` on
+ * most, `absolute` on one. Setting it here instead would overwrite the one that
+ * needs `absolute`, because a composed rule is emitted once per importer and the
+ * last copy lands after the importer's own. */
+.hitArea::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: max(100%, var(--mds-tap-min));
+  height: max(100%, var(--mds-tap-min));
+}

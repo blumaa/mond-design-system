@@ -18,6 +18,7 @@
 }
 
 .remove {
+  composes: hitArea from "../../internal/hit-area.module.css";
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -30,6 +31,7 @@
   background: transparent;
   color: inherit;
   cursor: pointer;
+  position: relative;
 }
 
 .remove:hover {

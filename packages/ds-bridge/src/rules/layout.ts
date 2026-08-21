@@ -13,7 +13,7 @@
  */
 import type { Block, Property } from "../css/parse.js";
 import type { Context, Finding, Rule, Sheet } from "./types.js";
-import { componentSheets, findingsIn } from "./types.js";
+import { componentSheets, findingsIn, sameElement } from "./types.js";
 
 const finding = (rule: string, sheet: Sheet, line: number, message: string): Finding => ({
   rule,
@@ -259,9 +259,44 @@ export const reachForThePrimitive: Rule = {
     "is a centred column at the content measure. Their gaps are an enum over the " +
     "gap tokens — that restriction is the point, not a limitation to work around. " +
     "Write flex by hand when the layout is genuinely none of those three.",
-  target: "both",
-  reads: "component",
+  target: "app",
+  reads: "stylesheet",
+  needs: (context) =>
+    context.primitives.length === 0
+      ? "nothing names the system's layout components — list them in dsbridge.config.json as primitives"
+      : undefined,
+  check: (context) =>
+    componentBlocks(context).flatMap(({ sheet, block }) => {
+      if (context.exempt("reach-for-the-primitive", sheet.file)) return [];
+      const declarations = block.declarations.filter((d) => !d.property.startsWith("--"));
+      if (!declarations.some((d) => d.property === "display" && d.value === "flex")) return [];
+      if (!declarations.some((d) => d.property === "gap")) return [];
+      /* Anything beyond stacking is a layout a primitive does not do: padding,
+         a background, a border, a position. Those blocks are flex because the
+         component needed flex, and this rule has nothing to say about them. */
+      if (!declarations.every((d) => STACKING.has(d.property))) return [];
+      return [
+        finding(
+          "reach-for-the-primitive",
+          sheet,
+          block.line,
+          `${block.selector} is flex and a gap and nothing else — ${context.primitives.join(" or ")} does that`,
+        ),
+      ];
+    }),
 };
+
+/* What a layout primitive already does. A block holding only these is one. */
+const STACKING = new Set([
+  "display",
+  "flex-direction",
+  "flex-wrap",
+  "gap",
+  "row-gap",
+  "column-gap",
+  "align-items",
+  "justify-content",
+]);
 
 export const flexFirstGridWhenEarned: Rule = {
   id: "flex-first-grid-when-earned",
@@ -309,6 +344,61 @@ export const whatEachBreakpointMeans: Rule = {
   reads: "stylesheet",
 };
 
+/* A selector that names something a finger goes to. A CSS module usually says
+   `.chip` and nothing more, so `cursor: pointer` carries most of the weight —
+   this is the rest, for the sheets that style the element itself. */
+const PRESSABLE = /(^|[\s>+~(])(button|a|summary)([.:[\s>+~)]|$)|\[role=["']?(button|tab|link|switch|checkbox|menuitem|option)/;
+
+/** The arguments of `max(a, b, ...)`, when the value is one. */
+const maxArguments = (value: string): string[] | undefined => {
+  const inner = /^max\(([\s\S]*)\)$/.exec(value.trim())?.[1];
+  if (inner === undefined) return undefined;
+  const out: string[] = [];
+  let depth = 0;
+  let from = 0;
+  for (let at = 0; at < inner.length; at++) {
+    const char = inner[at]!;
+    if (char === "(") depth++;
+    else if (char === ")") depth--;
+    else if (char === "," && depth === 0) {
+      out.push(inner.slice(from, at));
+      from = at + 1;
+    }
+  }
+  out.push(inner.slice(from));
+  return out;
+};
+
+/** A length in px, when the value is one. `auto`, `100%` and `fit-content` are
+    not measurements, and a token is measured by what it resolves to. */
+const inPx = (context: Context, value: string): number | undefined => {
+  /* `max(100%, 44px)` is at least 44px whatever the percentage turns out to be,
+     so the largest argument that measures is a floor for the whole thing. */
+  const args = maxArguments(value);
+  if (args !== undefined) {
+    const sizes = args.map((a) => inPx(context, a)).filter((n): n is number => n !== undefined);
+    return sizes.length === 0 ? undefined : Math.max(...sizes);
+  }
+  const name = /^var\(\s*(--[\w-]+)/.exec(value.trim())?.[1];
+  /* An app names its own tokens too, and the graph holds only the system's.
+     A value nothing declares is one this rule cannot measure, not an error —
+     `no-undefined-token` is the rule that has something to say about it. */
+  if (name !== undefined && context.graph.get(name) === undefined) return undefined;
+  const resolved = name === undefined ? value.trim() : context.graph.resolve(name, "light").trim();
+  const match = /^(-?[\d.]+)(px|rem|em)$/.exec(resolved);
+  if (!match) return undefined;
+  return Number(match[1]) * (match[2] === "px" ? 1 : 16);
+};
+
+/** The biggest this block asks an axis to be, 0 when it does not say. */
+const largest = (context: Context, block: Block, axis: "width" | "height"): number =>
+  Math.max(
+    0,
+    ...block.declarations
+      .filter((d) => d.property === axis || d.property === `min-${axis}`)
+      .map((d) => inPx(context, d.value) ?? 0),
+  );
+
 export const touchTargets: Rule = {
   id: "touch-targets",
   title: "Anything you can tap is big enough to tap.",
@@ -322,6 +412,61 @@ export const touchTargets: Rule = {
     "visual control can still pad its hit area out to the minimum.",
   target: "both",
   reads: "stylesheet",
+  needs: (context) =>
+    minimumTap(context) === undefined
+      ? `the design system declares no ${context.prefix}tap-min, so there is no minimum to measure against`
+      : undefined,
+  check: (context) => {
+    const minimum = minimumTap(context);
+    if (minimum === undefined) return [];
+    return componentBlocks(context).flatMap(({ sheet, block }) => {
+      if (context.exempt("touch-targets", sheet.file)) return [];
+      const pressable =
+        PRESSABLE.test(block.selector) ||
+        block.declarations.some((d) => d.property === "cursor" && d.value === "pointer");
+      if (!pressable) return [];
+      /* The painted box is not the target. A pseudo-element on the class — its
+         own, or one it composes from another sheet — is part of what a finger
+         hits, and growing that rather than the control is how a small control
+         reaches the minimum without forcing the row around it taller. */
+      const grown = sameElement(context, sheet, block).some(
+        ({ block: other }) =>
+          other !== block && largest(context, other, "width") >= minimum && largest(context, other, "height") >= minimum,
+      );
+      if (grown) return [];
+      /* A full-width field is 38px tall and nobody misses it — the miss is a
+         control that is small in both directions. A width that is a percentage,
+         `auto` or `fit-content` does not measure, and a target that stretches
+         is not the one this is about. */
+      const wide = block.declarations
+        .filter((d) => d.property === "width" || d.property === "min-width")
+        .some((d) => {
+          const size = inPx(context, d.value);
+          return size === undefined || size >= minimum;
+        });
+      if (wide) return [];
+      return block.declarations
+        .filter((d) => d.property === "height" || d.property === "min-height")
+        .flatMap((d) => {
+          const size = inPx(context, d.value);
+          if (size === undefined || size <= 0 || size >= minimum) return [];
+          return [
+            finding(
+              "touch-targets",
+              sheet,
+              d.line,
+              `${block.selector} is tappable and ${d.property}: ${d.value} is ${size}px, under the ${minimum}px minimum`,
+            ),
+          ];
+        });
+    });
+  },
+};
+
+/** What the system says the smallest shippable target is, when it says. */
+const minimumTap = (context: Context): number | undefined => {
+  const token = context.graph.tokens().find((t) => t.name === `${context.prefix}tap-min`);
+  return token === undefined ? undefined : inPx(context, `var(${token.name})`);
 };
 
 export const fixedToAnEdge: Rule = {

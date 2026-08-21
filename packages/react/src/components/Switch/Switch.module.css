@@ -10,6 +10,7 @@
 }
 
 .track {
+  composes: hitArea from "../../internal/hit-area.module.css";
   appearance: none;
   flex: none;
   margin: 0;
@@ -17,9 +18,9 @@
   height: var(--mds-switch-h);
   border-radius: var(--mds-radius-pill);
   background: var(--mds-border-strong);
-  position: relative;
   cursor: inherit;
   transition: background-color var(--mds-transition-control);
+  position: relative;
 }
 
 .track::after {
@@ -76,19 +77,4 @@
 /* The label sits beside the wrapper, not the input — climb via :has. */
 .root:has(.track:disabled) .label {
   color: var(--mds-action-disabled-fg);
-}
-
-/* The target measures 44px in both axes without the control taking 44px of
-   layout. A bare control is usually dropped into someone else's row — a list
-   row's trailing slot — and a min-height on the root forced that whole row
-   taller than its content. WCAG 2.5.8 measures the target, not the painted box,
-   so the target is an out-of-flow pseudo-element instead. */
-.track::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  width: max(100%, var(--mds-tap-min));
-  height: max(100%, var(--mds-tap-min));
 }

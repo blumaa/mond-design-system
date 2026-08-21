@@ -201,6 +201,22 @@ A margin is an opinion about a neighbour the component has never met. Two of the
 
 **Instead.** Let the parent space its children — `gap` on the Stack or Inline that holds them. `margin: 0` and `margin-inline: auto` are fine: one is a reset of the browser's opinion, the other is centring, which is about the element itself.
 
+### reach-for-the-primitive
+
+**Stack, Inline and Container before hand-written flex.** *(app)*
+
+A hand-written flex container is four declarations that could have been a component name, and its gap is a number somebody picked. Repeat it across an app and the spacing between things stops being a system and becomes a habit.
+
+**Instead.** Stack is a flex column, Inline is a flex row that wraps and aligns, Container is a centred column at the content measure. Their gaps are an enum over the gap tokens — that restriction is the point, not a limitation to work around. Write flex by hand when the layout is genuinely none of those three.
+
+### touch-targets
+
+**Anything you can tap is big enough to tap.** *(both)*
+
+A 32px target is comfortable with a mouse and a coin-flip with a thumb. The failure never shows up in a test — the tap simply misses, and the user thinks the app ignored them.
+
+**Instead.** Reach the minimum tap size on interactive elements, and take control heights from the control-height tokens rather than measuring one by hand. A small visual control can still pad its hit area out to the minimum.
+
 ### style-prop-needs-a-token
 
 **A style prop sets a custom property or carries a token value.** *(both)*
@@ -239,14 +255,6 @@ Without one there is no way to say where a component sits, so the caller wraps i
 
 **Instead.** Take `className` and merge it after the component's own classes, so the caller's declaration wins. This is a judgement and not a check: a Modal, a Sheet or a Toast positions itself, and letting a caller restyle that box is how the overlay ends up half off-screen. Those refuse a className on purpose.
 
-### reach-for-the-primitive
-
-**Stack, Inline and Container before hand-written flex.** *(both)*
-
-A hand-written flex container is four declarations that could have been a component name, and its gap is a number somebody picked. Repeat it across an app and the spacing between things stops being a system and becomes a habit.
-
-**Instead.** Stack is a flex column, Inline is a flex row that wraps and aligns, Container is a centred column at the content measure. Their gaps are an enum over the gap tokens — that restriction is the point, not a limitation to work around. Write flex by hand when the layout is genuinely none of those three.
-
 ### flex-first-grid-when-earned
 
 **Flex is the default; grid is for layouts that are actually two-dimensional.** *(both)*
@@ -270,14 +278,6 @@ A separate desktop layout is a second implementation of the same screen. They dr
 Breakpoints chosen per component are a layout that changes shape three times on the way across a desk. Chosen for the app, they are one moment where the whole screen becomes a different kind of surface.
 
 **Instead.** `md` (600px): a sheet becomes a dialog, and the app becomes a framed column rather than the whole window. `lg` (1024px): the bottom bar gives way to a sidebar. `xl` (1280px): there is room for a second rail. Break where one of those is true.
-
-### touch-targets
-
-**Anything you can tap is big enough to tap.** *(both)*
-
-A 32px target is comfortable with a mouse and a coin-flip with a thumb. The failure never shows up in a test — the tap simply misses, and the user thinks the app ignored them.
-
-**Instead.** Reach the minimum tap size on interactive elements, and take control heights from the control-height tokens rather than measuring one by hand. A small visual control can still pad its hit area out to the minimum.
 
 ### fixed-to-an-edge
 

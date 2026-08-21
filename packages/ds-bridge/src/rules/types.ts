@@ -5,6 +5,7 @@
  * design system whose written guidance lives beside its enforcement ends up
  * with guidance nobody enforces and enforcement nobody explained.
  */
+import { dirname, resolve } from "node:path";
 import type { Suppressed } from "../context.js";
 import type { Block } from "../css/parse.js";
 import type { Confidence } from "./suggest.js";
@@ -112,6 +113,8 @@ export type Context = {
   levels: string[];
   /** Story-title segments that name something other than a level. */
   levelsIgnore: string[];
+  /** The layout components the design system ships, when the config names them. */
+  primitives: string[];
   /** What the system promises about contrast, when it publishes one. */
   contract?: Contract;
   /** Files found and not scanned. A check that quietly halved its own scope
@@ -161,6 +164,60 @@ export const appliesTo = (rule: Rule, kind: "system" | "app") =>
     A file whose job is to declare values is not one of them — writing `8px`
     there is what it is for. */
 export const componentSheets = (context: Context) => context.sheets.filter((s) => !s.isTokens && !s.isBrand);
+
+/** A block's selector without the pseudo-element it ends in. */
+const base = (selector: string) => selector.replace(/::?[a-zA-Z-]+$/, "");
+
+/** What `composes: a b from "./x.css"` names, and where it names it. */
+const composedIn = (block: Block): { names: string[]; from?: string }[] =>
+  block.declarations
+    .filter((d) => d.property === "composes")
+    .map((d) => {
+      const split = /^([\s\S]+?)\s+from\s+["']([^"']+)["']\s*$/.exec(d.value.trim());
+      const names = (split?.[1] ?? d.value).trim().split(/\s+/).filter(Boolean);
+      return split === null ? { names } : { names, from: split[2]! };
+    });
+
+/**
+ * Every block that styles the element this one styles.
+ *
+ * A block is not the whole of what an element gets: a pseudo-element attached
+ * to the class paints part of it, and CSS Modules `composes` puts another
+ * class's rules on it as well — from another file, which a rule reading one
+ * sheet never sees. Anything that measures an element has to follow both or it
+ * measures a fraction of it.
+ *
+ * A `composes` pointing outside what was scanned — a package the app installed —
+ * resolves to nothing, and the caller sees only what it can actually read.
+ */
+export const sameElement = (
+  context: Context,
+  sheet: Sheet,
+  block: Block,
+  seen = new Set<string>(),
+): { sheet: Sheet; block: Block }[] => {
+  const key = `${sheet.path} ${block.selector}`;
+  if (seen.has(key)) return [];
+  seen.add(key);
+
+  const here = base(block.selector);
+  const mine = sheet.blocks.filter((b) => base(b.selector) === here);
+  return [
+    ...mine.map((b) => ({ sheet, block: b })),
+    ...composedIn(block).flatMap(({ names, from }) => {
+      const target =
+        from === undefined
+          ? sheet
+          : context.sheets.find((s) => s.path === resolve(dirname(sheet.path), from));
+      if (target === undefined) return [];
+      return names.flatMap((name) =>
+        target.blocks
+          .filter((b) => base(b.selector) === `.${name}`)
+          .flatMap((b) => sameElement(context, target, b, seen)),
+      );
+    }),
+  ];
+};
 
 /** Sheets that declare values for the whole document: the app's own token layer. */
 export const tokenSheets = (context: Context) => context.sheets.filter((s) => s.isTokens);

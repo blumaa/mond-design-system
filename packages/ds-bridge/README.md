@@ -114,6 +114,7 @@ file, `exempt` says so in config.
   "prefix": "--mds-",
   "system": "packages/tokens/src/styles.css",
   "components": "@mond-design-system/react",
+  "primitives": ["Stack", "Inline", "Container"],
   "levels": ["atom", "molecule", "organism", "template"],
   "levelsIgnore": ["Docs"],
   "sources": ["src"],
@@ -137,6 +138,11 @@ used.
 — or a path to a `.d.ts`, for a system the repo owns. Without it an app cannot
 be told it has rebuilt something it already has, and the two rules that would
 say so skip with that as the reason.
+
+`primitives` names the design system's layout components. A tool that guessed
+them would be telling every design system what its own parts are called, so the
+rule that says "this hand-written flex row is a `Stack`" skips until the repo
+says which name to reach for.
 
 `levels` is the taxonomy, simplest first; `levelsIgnore` lists story-title
 segments that name something other than a level. An app has no taxonomy until

@@ -64,6 +64,10 @@ export type Config = {
   levels?: string[];
   /** Story-title segments that name something other than a level. */
   levelsIgnore?: string[];
+  /** The layout components the design system ships — Stack, Inline, whatever
+      this one calls them. Named rather than guessed: a tool that assumed the
+      names would be telling every design system what its own parts are. */
+  primitives?: string[];
 };
 
 /** The taxonomy a design system gets when it declares none. An app gets none:
@@ -157,6 +161,7 @@ export function buildContext({
        own parts are called. The rules that read levels skip a repo with none. */
     levels: config.levels ?? (kind === "system" ? LEVELS : []),
     levelsIgnore: config.levelsIgnore ?? [],
+    primitives: config.primitives ?? [],
     ...(config.scales ? { scales: config.scales } : {}),
     ...(contract ? { contract } : {}),
     suppressed,

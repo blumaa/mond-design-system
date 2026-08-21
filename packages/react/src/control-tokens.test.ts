@@ -94,24 +94,35 @@ it("sizes the password reveal glyph from the icon scale", () => {
   expect(css).not.toContain("--mds-text-lg");
 });
 
-/* WCAG 2.5.8 measures the target, not the painted box. These three used to
- * meet it with min-height on their root, which is layout the host row pays
- * for: a switch in a settings row made that row 68px tall against the 52px
- * the design draws. The target moved to an out-of-flow pseudo-element. */
+/* WCAG 2.5.8 measures the target, not the painted box. These used to meet it
+ * with min-height on their root, which is layout the host row pays for: a
+ * switch in a settings row made that row 68px tall against the 52px the design
+ * draws. The target is an out-of-flow pseudo-element instead, written once. */
+it("grows the target without taking the layout, in one place", () => {
+  expect(internalSheet("hit-area.module.css")).toMatch(
+    /\.hitArea::before \{[^}]*position: absolute;[^}]*width: max\(100%, var\(--mds-tap-min\)\);[^}]*height: max\(100%, var\(--mds-tap-min\)\);/s,
+  );
+});
+
 it.each([
   ["Switch/Switch.module.css", "track"],
   ["Checkbox/Checkbox.module.css", "box"],
   ["Radio/Radio.module.css", "dot"],
-])("%s reaches the tap minimum without costing layout", (path, element) => {
+  ["Tag/Tag.module.css", "remove"],
+  ["Toast/Toast.module.css", "close"],
+  ["SearchField/SearchField.module.css", "clear"],
+])("%s composes that target onto its %s", (path, element) => {
   const css = sheet(path);
   expect(css).not.toMatch(/\.root \{[^}]*min-height/s);
   expect(css).toMatch(
     new RegExp(
-      `\\.${element}::before \\{[^}]*position: absolute;[^}]*width: max\\(100%, var\\(--mds-tap-min\\)\\);[^}]*height: max\\(100%, var\\(--mds-tap-min\\)\\);`,
+      `\\.${element} \\{[^}]*composes: hitArea from "\\.\\./\\.\\./internal/hit-area\\.module\\.css";`,
       "s",
     ),
   );
-  expect(css).toMatch(new RegExp(`\\.${element} \\{[^}]*position: relative;`, "s"));
+  /* The composing class supplies the containing block. The shared rule cannot:
+     one of these is `absolute`, and a composed declaration would overwrite it. */
+  expect(css).toMatch(new RegExp(`\\.${element} \\{[^}]*position: (relative|absolute);`, "s"));
 });
 
 /* A list row is the target, so it keeps the minimum as real height. */
