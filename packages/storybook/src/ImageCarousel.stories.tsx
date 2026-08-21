@@ -64,7 +64,7 @@ export const Covered: Story = {
                 <Text variant="meta" tone="on-media">
                   Sensitive content
                 </Text>
-                <Button size="sm" variant="secondary" onClick={() => setRevealed(true)}>
+                <Button size="sm" variant="secondary" onMedia onClick={() => setRevealed(true)}>
                   Show
                 </Button>
               </Stack>

@@ -1,0 +1,136 @@
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-tight);
+}
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--mds-radius-media);
+  background: var(--mds-surface-media);
+}
+
+.media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  transition: var(--mds-transition-reveal);
+}
+
+/* The blur reaches the picture only: a cover sitting over a blurred cover is
+   unreadable, and it is the one thing here that has to be read. */
+.covered .media {
+  filter: blur(var(--mds-blur-media));
+  transform: scale(1.1);
+}
+
+.start {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  background: var(--mds-scrim);
+  color: var(--mds-text-on-media);
+  cursor: pointer;
+}
+
+.startGlyph {
+  display: flex;
+  width: var(--mds-icon-btn-size);
+  height: var(--mds-icon-btn-size);
+  align-items: center;
+  justify-content: center;
+  border: var(--mds-border-width) solid var(--mds-on-media-border);
+  border-radius: var(--mds-radius-pill);
+  background: var(--mds-on-media-surface-hover);
+}
+
+.startGlyph svg {
+  width: var(--mds-icon-md);
+  height: var(--mds-icon-md);
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--mds-pad-card);
+  text-align: center;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap-tight);
+}
+
+.scrub {
+  flex: 1 1 auto;
+  min-width: 0;
+  accent-color: var(--mds-accent);
+  cursor: pointer;
+}
+
+.scrub:focus-visible {
+  border-radius: var(--mds-radius-pill);
+}
+
+/* A clock that does not shuffle sideways as the digits change. */
+.time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.chapters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-hairline);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chapter {
+  width: 100%;
+  justify-content: flex-start;
+  gap: var(--mds-gap-tight);
+  text-align: start;
+}
+
+.chapterAt {
+  font-variant-numeric: tabular-nums;
+  color: var(--mds-text-muted);
+}
+
+/* Up full screen the player is the page: the picture takes the room the list
+   and the controls do not need. */
+.player:fullscreen {
+  justify-content: center;
+  padding: var(--mds-pad-tight);
+  background: var(--mds-surface-page);
+}
+
+.player:fullscreen .frame {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.player:fullscreen .media {
+  max-height: 100%;
+  aspect-ratio: auto;
+}
+
+.player:fullscreen .chapters {
+  min-height: 0;
+  overflow-y: auto;
+}

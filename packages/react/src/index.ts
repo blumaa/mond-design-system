@@ -155,6 +155,14 @@ export type {
 export { Lightbox } from "./components/Lightbox/Lightbox";
 export type { LightboxLabels, LightboxProps } from "./components/Lightbox/Lightbox";
 
+export { VideoPlayer } from "./components/VideoPlayer/VideoPlayer";
+export type {
+  VideoCaptions,
+  VideoChapter,
+  VideoPlayerLabels,
+  VideoPlayerProps,
+} from "./components/VideoPlayer/VideoPlayer";
+
 export { Breadcrumb } from "./components/Breadcrumb/Breadcrumb";
 export type { BreadcrumbProps, Crumb } from "./components/Breadcrumb/Breadcrumb";
 
