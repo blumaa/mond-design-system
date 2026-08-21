@@ -7,7 +7,7 @@
  */
 import { parseArgs } from "node:util";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { relative, resolve } from "node:path";
+import { isAbsolute, relative, resolve } from "node:path";
 import { loadGraph } from "./graph.js";
 import { findBrandFiles, resolveSystem } from "./sources.js";
 import { loadContext, type Config } from "./context.js";
@@ -24,9 +24,9 @@ const USAGE = `dsbridge — design system conformance, for the system and the ap
 
   dsbridge tokens [options]     list the token graph: core scales, the semantic
                            contract, and what your brand re-points
-  dsbridge check [options]      run the rules against this repo
+  dsbridge check [path] [opts]  run the rules against this repo, or one path in it
   dsbridge rules [id]           what each rule is protecting, for a human or an agent
-  dsbridge migrate [options]    what an app would have to move to adopt the system
+  dsbridge migrate [path]       what an app would have to move to adopt the system
 
 Options for tokens
   --system <file>   entry stylesheet of the design system (default: the
@@ -43,6 +43,7 @@ Options for tokens
 
 Options for check
   --root <dir>      what to check              (default: the cwd)
+  <path>            report only what lives under this path; repeatable
   --system <file>   as above
   --rule <id>       run one rule; repeatable
 
@@ -66,6 +67,13 @@ function readConfig(root: string): Config | undefined {
   return existsSync(path) ? (JSON.parse(readFileSync(path, "utf8")) as Config) : undefined;
 }
 
+/** A positional is a path filter: report only what lives under it. */
+function pathFilter(root: string, paths: string[]): (file: string) => boolean {
+  if (paths.length === 0) return () => true;
+  const wanted = paths.map((p) => (isAbsolute(p) ? relative(root, p) : p).replace(/\/+$/, ""));
+  return (file) => wanted.some((w) => file === w || file.startsWith(`${w}/`));
+}
+
 function tokensCommand(rest: string[]): number {
   const { values } = parseArgs({
     args: rest,
@@ -82,6 +90,7 @@ function tokensCommand(rest: string[]): number {
       html: { type: "string" },
       color: { type: "boolean", default: true },
     },
+    allowPositionals: true,
     allowNegative: true,
   });
 
@@ -119,7 +128,7 @@ function tokensCommand(rest: string[]): number {
 }
 
 function checkCommand(rest: string[]): number {
-  const { values } = parseArgs({
+  const { values, positionals } = parseArgs({
     args: rest,
     options: {
       root: { type: "string" },
@@ -128,6 +137,7 @@ function checkCommand(rest: string[]): number {
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
     },
+    allowPositionals: true,
     allowNegative: true,
   });
 
@@ -142,7 +152,7 @@ function checkCommand(rest: string[]): number {
     ...(values.rule ? { only: values.rule } : {}),
     color: values.color !== false && process.stdout.isTTY === true,
   };
-  const findings = runCheck(context, options);
+  const findings = runCheck(context, options).filter((finding) => pathFilter(root, positionals)(finding.file));
 
   if (values.json === true) jsonOut(findings);
   else process.stdout.write(renderCheck(findings, context, options));
@@ -150,7 +160,7 @@ function checkCommand(rest: string[]): number {
 }
 
 function migrateCommand(rest: string[]): number {
-  const { values } = parseArgs({
+  const { values, positionals } = parseArgs({
     args: rest,
     options: {
       root: { type: "string" },
@@ -158,6 +168,7 @@ function migrateCommand(rest: string[]): number {
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
     },
+    allowPositionals: true,
     allowNegative: true,
   });
 
@@ -168,7 +179,12 @@ function migrateCommand(rest: string[]): number {
     ...(values.system ? { system: resolve(values.system) } : {}),
     ...(config ? { config } : {}),
   });
-  const plan = planMigration(context);
+  const keep = pathFilter(root, positionals);
+  const whole = planMigration(context);
+  const plan =
+    positionals.length === 0
+      ? whole
+      : { ...whole, literals: whole.literals.filter((f) => keep(f.file)), files: whole.files.filter(keep) };
 
   if (values.json === true) jsonOut(plan);
   else process.stdout.write(renderMigration(plan, context, { color: values.color !== false && process.stdout.isTTY === true }));
@@ -203,16 +219,35 @@ function rulesCommand(rest: string[]): number {
   return 0;
 }
 
+/* A stack trace is the tool failing to answer, printed as if it were one. The
+   frames are still there behind DSBRIDGE_DEBUG for whoever is fixing dsbridge. */
+function failed(command: string, error: unknown): number {
+  /* parseArgs appends advice about `--` that is wrong for most failures. */
+  const whole = error instanceof Error ? error.message : String(error);
+  const message = /^[^.]+\./.exec(whole)?.[0] ?? whole;
+  const parseFailure = String((error as NodeJS.ErrnoException).code ?? "").startsWith("ERR_PARSE_ARGS");
+  process.stderr.write(`dsbridge ${command}: ${message}\n`);
+  if (parseFailure) process.stderr.write(`\nrun dsbridge help for the options ${command} takes\n`);
+  if (process.env["DSBRIDGE_DEBUG"] !== undefined && error instanceof Error) {
+    process.stderr.write(`${error.stack ?? ""}\n`);
+  }
+  return 1;
+}
+
 export function main(argv: string[]): number {
   const [command, ...rest] = argv;
   if (!command || command === "help" || command === "--help" || command === "-h") {
     process.stdout.write(USAGE);
     return command ? 0 : 1;
   }
-  if (command === "tokens") return tokensCommand(rest);
-  if (command === "check") return checkCommand(rest);
-  if (command === "rules") return rulesCommand(rest);
-  if (command === "migrate") return migrateCommand(rest);
+  try {
+    if (command === "tokens") return tokensCommand(rest);
+    if (command === "check") return checkCommand(rest);
+    if (command === "rules") return rulesCommand(rest);
+    if (command === "migrate") return migrateCommand(rest);
+  } catch (error) {
+    return failed(command, error);
+  }
   process.stderr.write(`unknown command "${command}"\n\n${USAGE}`);
   return 1;
 }

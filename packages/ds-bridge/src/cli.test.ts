@@ -202,3 +202,57 @@ describe("dsbridge rules", () => {
     expect(rules.every((rule) => rule.check === undefined)).toBe(true);
   });
 });
+
+describe("dsbridge arguments", () => {
+  const dirty = ".root { padding: 8px; }";
+  const clean = ".root { padding: var(--mds-pad-control-md); }";
+
+  it("takes a path as a filter, and reports only what is under it", () => {
+    const dir = tree({ "src/a/A.module.css": dirty, "src/b/B.module.css": dirty });
+    const { status, output } = check(dir, "src/a");
+    expect(status).toBe(1);
+    expect(output).toContain("src/a/A.module.css");
+    expect(output).not.toContain("src/b/B.module.css");
+  });
+
+  it("is clean when the filtered path holds nothing", () => {
+    const dir = tree({ "src/a/A.module.css": clean, "src/b/B.module.css": dirty });
+    expect(check(dir, "src/a").status).toBe(0);
+  });
+
+  it("filters migrate by path too", () => {
+    const dir = tree({ "src/a/A.module.css": dirty, "src/b/B.module.css": dirty });
+    const { output } = run(["migrate", "--root", dir, "--system", SYSTEM, "--no-color", "src/a"]);
+    expect(output).not.toContain("src/b");
+  });
+
+  /* A stack trace is the tool failing to answer, printed as if it were an
+     answer. Every verb, every parse failure, one line. */
+  const noStack = (output: string) => {
+    expect(output).not.toMatch(/\n\s+at /);
+    expect(output).not.toContain("ERR_PARSE_ARGS");
+  };
+
+  it("says what is wrong with an unknown option, on every verb", () => {
+    for (const verb of ["tokens", "check", "rules", "migrate"]) {
+      const { status, output } = run([verb, "--nonsense"]);
+      expect(status).toBe(1);
+      expect(output).toContain("--nonsense");
+      noStack(output);
+    }
+  });
+
+  it("names the verb that does not take the option", () => {
+    const { status, output } = run(["tokens", "--root", "/tmp"]);
+    expect(status).toBe(1);
+    expect(output).toContain("--root");
+    expect(output).toContain("tokens");
+    noStack(output);
+  });
+
+  it("says so when an option is given no value", () => {
+    const { status, output } = run(["check", "--rule"]);
+    expect(status).toBe(1);
+    noStack(output);
+  });
+});
