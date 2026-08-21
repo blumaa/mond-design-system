@@ -35,6 +35,7 @@ export const noForeignNamespaceToken: Rule = {
     "token at them: `--mds-accent: var(--fp-accent)`. If the value names a role the " +
     "system should own, the right fix is to add it to the contract instead.",
   target: "both",
+  reads: "stylesheet",
   check: (context) =>
     context.graph
       .tokens()
@@ -70,6 +71,7 @@ export const brandShipsDark: Rule = {
     "Give the brand a `[data-theme=\"dark\"]` block that re-points every token the " +
     "light block does.",
   target: "both",
+  reads: "stylesheet",
   check: (context) => {
     const flipping = new Set(
       overrides(context)
@@ -98,6 +100,7 @@ export const brandOverridesBothThemes: Rule = {
     "Re-point the token in both the light and the dark block of the brand file, even " +
     "when the two values are the same.",
   target: "both",
+  reads: "stylesheet",
   check: (context) => {
     /* A file with no dark scope at all is one finding, not one per token. */
     const noDarkScope = new Set(
@@ -150,6 +153,7 @@ export const brandCoversContract: Rule = {
     "Add the token to the template with the system's own default as its value. " +
     "The dark block only needs the tokens that flip.",
   target: "system",
+  reads: "stylesheet",
   needs: (context) =>
     shippedBrands(context).length === 0
       ? "this repo ships no brand file beside its stylesheet, so there is nothing to compare the contract against"

@@ -7,7 +7,7 @@
  */
 import { RULES } from "../rules/index.js";
 import { isEnforced } from "../rules/types.js";
-import type { Rule, Target } from "../rules/types.js";
+import type { Reads, Rule, Target } from "../rules/types.js";
 import { bold, dim } from "../text.js";
 
 export type RulesOptions = {
@@ -32,6 +32,26 @@ const wrap = (text: string, width: number, indent: string) => {
   return out.join("\n");
 };
 
+/** What kind of thing a path is, as far as any rule is concerned. */
+export const readsOf = (file: string): Reads | undefined => {
+  if (/\.(?:css|scss|sass|less)$/.test(file)) return "stylesheet";
+  if (/\.(?:tsx|ts|jsx|js|mjs|cjs)$/.test(file)) return "component";
+  return undefined;
+};
+
+/**
+ * The rules that have anything to say about one file.
+ *
+ * The whole set is 22 KB and most of it is about something else. An agent
+ * about to edit a stylesheet needs the four rules about stylesheets, now,
+ * rather than a document it will skim.
+ */
+export function rulesForFile(file: string, target?: Target): Rule[] {
+  const reads = readsOf(file);
+  if (reads === undefined) return [];
+  return selectRules({ ...(target !== undefined ? { target } : {}) }).filter((rule) => rule.reads === reads);
+}
+
 export const selectRules = (options: RulesOptions = {}): Rule[] =>
   RULES.filter((rule) => options.id === undefined || rule.id === options.id).filter(
     (rule) => options.target === undefined || rule.target === options.target || rule.target === "both",
@@ -42,15 +62,18 @@ export const selectRules = (options: RulesOptions = {}): Rule[] =>
     weigh — and the functions are dropped because JSON cannot carry them. */
 export type RuleData = Omit<Rule, "check" | "needs"> & { enforced: boolean };
 
-export const rulesAsJson = (options: RulesOptions = {}): RuleData[] =>
-  selectRules(options).map((rule) => ({
+export const ruleData = (rules: Rule[]): RuleData[] =>
+  rules.map((rule) => ({
     id: rule.id,
     title: rule.title,
     why: rule.why,
     instead: rule.instead,
     target: rule.target,
+    reads: rule.reads,
     enforced: isEnforced(rule),
   }));
+
+export const rulesAsJson = (options: RulesOptions = {}): RuleData[] => ruleData(selectRules(options));
 
 const section = (rules: Rule[]) =>
   rules.flatMap((rule) => [
@@ -90,10 +113,11 @@ const asMarkdown = (rules: Rule[]) => {
   ].join("\n");
 };
 
-export function renderRules(options: RulesOptions = {}): string {
-  const chosen = selectRules(options);
+export function renderRules(chosen: Rule[], options: RulesOptions = {}): string {
   if (chosen.length === 0) {
-    return `no rule called "${options.id}" — dsbridge rules lists them all\n`;
+    return options.id !== undefined
+      ? `no rule called "${options.id}" — dsbridge rules lists them all\n`
+      : "no rule reads this kind of file\n";
   }
   if (options.markdown === true) return asMarkdown(chosen);
 
@@ -125,6 +149,7 @@ export function renderRules(options: RulesOptions = {}): string {
             color,
           )}`,
       )
-      .join("\n") + `\n\n${dim("dsbridge rules <id> for the reasoning, --markdown for all of it", color)}\n`
+      .join("\n") +
+    `\n\n${dim(`dsbridge rules ${chosen[0]!.id} for the reasoning, --markdown for all of it`, color)}\n`
   );
 }

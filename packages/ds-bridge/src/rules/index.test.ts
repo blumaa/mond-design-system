@@ -9,6 +9,7 @@ const advisory: Rule = {
   why: "Some of what a design system asks for is judgement.",
   instead: "Read the reasoning and decide.",
   target: "both",
+  reads: "component",
 };
 
 const context = { kind: "system", exempt: () => false } as unknown as Context;

@@ -35,7 +35,7 @@ afterEach(() => {
 const SYSTEM = fileURLToPath(new URL("./__fixtures__/system/styles.css", import.meta.url));
 
 /** The command, run; its exit code and everything it printed. */
-function run(argv: string[]): { status: number; output: string } {
+function run(argv: string[], stdin?: string): { status: number; output: string } {
   let output = "";
   const capture = (chunk: string | Uint8Array) => {
     output += String(chunk);
@@ -43,7 +43,7 @@ function run(argv: string[]): { status: number; output: string } {
   };
   vi.spyOn(process.stdout, "write").mockImplementation(capture);
   vi.spyOn(process.stderr, "write").mockImplementation(capture);
-  const status = main(argv);
+  const status = main(argv, stdin);
   return { status, output };
 }
 
@@ -396,5 +396,41 @@ describe("dsbridge check --baseline", () => {
     expect(status).toBe(1);
     expect(output).toContain("no baseline");
     expect(output).toContain("--update-baseline");
+  });
+});
+
+describe("dsbridge check --pending", () => {
+  const held = (dir: string, file: string, source: string, ...rest: string[]) =>
+    run(["check", "--root", dir, "--system", SYSTEM, "--no-color", "--pending", file, ...rest], source);
+
+  it("judges the text the editor is holding, not the file on disk", () => {
+    const root = app(".a { padding: var(--mds-pad-control-md); }");
+    const { status, output } = held(root, "src/Button.module.css", ".a { padding: 13px; }");
+    expect(status).toBe(1);
+    expect(output).toContain("13px");
+  });
+
+  it("says nothing about the rest of the repo, which is not what is being written", () => {
+    const root = app(".a { top: 37px; }", { "src/Other.module.css": ".b { top: 41px; }" });
+    const { output } = held(root, "src/Button.module.css", ".a { padding: var(--mds-pad-control-md); }");
+    expect(output).not.toContain("41px");
+    expect(output).toContain("clean");
+  });
+
+  it("checks a file that does not exist yet", () => {
+    const root = app(".a { padding: var(--mds-pad-control-md); }");
+    const { status, output } = held(root, "src/New.module.css", ".new { padding: 13px; }");
+    expect(status).toBe(1);
+    expect(output).toContain("src/New.module.css");
+  });
+
+  it("holds its tongue about lines the pending text suppresses", () => {
+    const root = app(".a { padding: var(--mds-pad-control-md); }");
+    const { status } = held(
+      root,
+      "src/Button.module.css",
+      "/* dsbridge-ignore-next-line: the SDK hands us this */\n.a { padding: 13px; }",
+    );
+    expect(status).toBe(0);
   });
 });

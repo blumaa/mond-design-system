@@ -37,6 +37,7 @@ export const keepsContrast: Rule = {
     "with it: a colour and the surface it sits on are one decision. `dsbridge tokens " +
     "--theme dark` shows what each side currently resolves to.",
   target: "both",
+  reads: "repo",
   needs: (context) =>
     context.contract === undefined
       ? "the design system installed here publishes no contract.json, so there is nothing to prove against"

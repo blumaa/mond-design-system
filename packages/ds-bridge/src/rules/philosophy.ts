@@ -22,6 +22,7 @@ export const belongsInTheSystem: Rule = {
     "shaping the API instead of one imagined one. PostCard, GroupChatHeader and " +
     "ReportCard are app components, and stay app components.",
   target: "both",
+  reads: "component",
 };
 
 export const earnTheSemanticToken: Rule = {
@@ -41,6 +42,7 @@ export const earnTheSemanticToken: Rule = {
     "answer is 'only Card uses this', it is Card's local custom property, not the " +
     "contract's.",
   target: "both",
+  reads: "stylesheet",
 };
 
 export const compositionOverConfiguration: Rule = {
@@ -58,6 +60,7 @@ export const compositionOverConfiguration: Rule = {
     "TabPanel. The container owns the spacing between its slots. Atoms stay " +
     "prop-based — `Button iconLeft` is a shape, not a slot.",
   target: "system",
+  reads: "component",
 };
 
 export const boundedPrimitivesOnly: Rule = {
@@ -74,6 +77,7 @@ export const boundedPrimitivesOnly: Rule = {
     "they cannot express, that is a missing enum value or a missing component, not a " +
     "missing escape hatch. Card plus the surface tokens covers styled containers.",
   target: "system",
+  reads: "component",
 };
 
 export const brandFlourishStaysInApp: Rule = {
@@ -89,6 +93,7 @@ export const brandFlourishStaysInApp: Rule = {
     "and keeps it. Same for tone-carrying cards and any component whose reason for " +
     "existing is that it looks like this brand.",
   target: "both",
+  reads: "stylesheet",
 };
 
 export const iconsAreBrand: Rule = {
@@ -104,6 +109,7 @@ export const iconsAreBrand: Rule = {
     "Fair Play keeps Material Symbols, and the system stays agnostic. A component asks " +
     "for a name and a size, never for a specific glyph.",
   target: "system",
+  reads: "repo",
 };
 
 export const deferUnbuiltComponents: Rule = {
@@ -120,6 +126,7 @@ export const deferUnbuiltComponents: Rule = {
     "one positioning engine when they arrive, and use `@floating-ui/dom` rather than " +
     "hand-rolling it.",
   target: "system",
+  reads: "component",
 };
 
 export const philosophyRules: Rule[] = [

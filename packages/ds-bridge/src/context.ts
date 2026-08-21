@@ -160,11 +160,34 @@ export type LoadContextOptions = {
   prefix?: string;
   /** Scan tests, stories and fixtures too. */
   includeTests?: boolean;
+  /**
+   * Content an editor holds but has not written yet.
+   *
+   * A hook that fires before the write is the only place a finding can be
+   * answered without a commit, and at that moment the text exists nowhere on
+   * disk. The rest of the repo is still read normally: a pending stylesheet is
+   * judged against the same token graph as a saved one.
+   */
+  pending?: { file: string; source: string };
 };
 
 /** The same context, read off disk. */
-export function loadContext({ root, system, config, prefix, includeTests }: LoadContextOptions): Context {
+export function loadContext({
+  root,
+  system,
+  config,
+  prefix,
+  includeTests,
+  pending,
+}: LoadContextOptions): Context {
   const at = resolve(root);
+  const held = pending === undefined ? undefined : resolve(at, pending.file);
+  /* The pending file wins over whatever is on disk, and counts as present even
+     when nothing is: a file being written for the first time is the case a
+     pre-write hook exists for. */
+  const contents = (file: string) => (file === held ? pending!.source : readFileSync(file, "utf8"));
+  const withHeld = (files: string[], wanted: (file: string) => boolean) =>
+    held !== undefined && wanted(held) && !files.includes(held) ? [...files, held] : files;
   const namespace = prefix ?? config?.prefix ?? "--mds-";
   const declared = config?.system;
   const entry = system ? resolve(system) : declared ? resolve(at, declared) : resolveSystem(at);
@@ -210,19 +233,22 @@ export function loadContext({ root, system, config, prefix, includeTests }: Load
     }
     return true;
   };
-  const sheets = findStylesheets(at)
-    .filter((file) => !systemFiles.has(file) && scanned(file))
-    .map((file) =>
-      makeSheet(file, noting(relative(at, file), readFileSync(file, "utf8")), at, namespace, systemDeclares),
-    );
-  const tsx = findSources(at).filter((file) => !ignored(relative(at, file)));
+  const isSheet = (file: string) => /\.(?:css|scss|sass|less)$/.test(file);
+  const isSource = (file: string) => /\.(?:tsx|ts|jsx|js|mjs|cjs)$/.test(file);
+  /* Held content is being written now, so a story or test file holding it is
+     read: the agent is asking about the file in front of it. */
+  const wanted = (file: string) => file === held || scanned(file);
+  const sheets = withHeld(findStylesheets(at), isSheet)
+    .filter((file) => !systemFiles.has(file) && wanted(file))
+    .map((file) => makeSheet(file, noting(relative(at, file), contents(file)), at, namespace, systemDeclares));
+  const tsx = withHeld(findSources(at), isSource).filter((file) => !ignored(relative(at, file)));
   const sources = tsx
-    .filter(scanned)
-    .map((file) => ({ file: relative(at, file), source: noting(relative(at, file), readFileSync(file, "utf8")) }));
+    .filter(wanted)
+    .map((file) => ({ file: relative(at, file), source: noting(relative(at, file), contents(file)) }));
   /* A component's story is what names its level, and its test is how the
      structure rules know it has one — so those two are read whether or not
      any rule scans their bodies. */
-  const read = new Map(tsx.map((file) => [relative(at, file), readFileSync(file, "utf8")]));
+  const read = new Map(tsx.map((file) => [relative(at, file), contents(file)]));
   const components = readComponents([...read.keys()], (file) => read.get(file) ?? "");
   const fonts = findFonts(at)
     .filter(scanned)

@@ -48,6 +48,7 @@ export const mobileFirstMedia: Rule = {
     "Write the phone layout as the plain rules, and add `min-width` queries for " +
     "the room a wider screen gives you. One layout widened, never two maintained.",
   target: "both",
+  reads: "stylesheet",
   check: (context) =>
     context.sheets.flatMap((sheet) =>
       context.exempt("mobile-first-media", sheet.file)
@@ -73,6 +74,7 @@ export const breakpointIsDeclared: Rule = {
     "names, that width is a new breakpoint: declare it, say what it means, and use " +
     "the name everywhere.",
   target: "both",
+  reads: "stylesheet",
   needs: (context) =>
     breakpoints(context).size === 0 ? `no ${context.prefix}bp-* token is declared` : undefined,
   check: (context) => {
@@ -106,6 +108,7 @@ export const zIndexIsAToken: Rule = {
     "Read a `*-z-*` token. The scale is the whole stack written down once, so a " +
     "new layer is a decision about where it sits, taken where the others are visible.",
   target: "both",
+  reads: "stylesheet",
   check: (context) => {
     const names = declared(context, "z-")
       .map((token) => token.name)
@@ -144,6 +147,7 @@ export const viewportHeightIsAToken: Rule = {
     "better — one watching `visualViewport.height` — can re-point it to the height " +
     "the user can actually see.",
   target: "both",
+  reads: "stylesheet",
   check: (context) => {
     const token = `${context.prefix}vvh`;
     return componentSheets(context).flatMap((sheet) =>
@@ -173,6 +177,7 @@ export const screenEdgeClearsTheSafeArea: Rule = {
     "`bottom: calc(var(--…-toast-inset) + var(--…-safe-bottom))`. The tokens hold " +
     "`env(safe-area-inset-*)`, which is 0 everywhere it is not needed.",
   target: "both",
+  reads: "stylesheet",
   check: (context) => {
     const safe = `${context.prefix}safe-`;
     const clears = (declarations: Property[]) => declarations.some((d) => d.value.includes(safe));
@@ -216,6 +221,7 @@ export const noOuterMargin: Rule = {
     "them. `margin: 0` and `margin-inline: auto` are fine: one is a reset of the " +
     "browser's opinion, the other is centring, which is about the element itself.",
   target: "both",
+  reads: "stylesheet",
   check: (context) =>
     componentBlocks(context)
       .filter(({ sheet }) => !context.exempt("no-outer-margin", sheet.file))
@@ -254,6 +260,7 @@ export const reachForThePrimitive: Rule = {
     "gap tokens — that restriction is the point, not a limitation to work around. " +
     "Write flex by hand when the layout is genuinely none of those three.",
   target: "both",
+  reads: "component",
 };
 
 export const flexFirstGridWhenEarned: Rule = {
@@ -268,6 +275,7 @@ export const flexFirstGridWhenEarned: Rule = {
     "narrow screen needs. Use grid when rows and columns both matter at once: a " +
     "calendar, a form where labels align across rows, a real tiled layout.",
   target: "both",
+  reads: "stylesheet",
 };
 
 export const oneLayoutWidened: Rule = {
@@ -282,6 +290,7 @@ export const oneLayoutWidened: Rule = {
     "give the same structure more room. If a wide screen needs something the narrow " +
     "one cannot express at all, that is a different screen, not a breakpoint.",
   target: "both",
+  reads: "stylesheet",
 };
 
 export const whatEachBreakpointMeans: Rule = {
@@ -297,6 +306,7 @@ export const whatEachBreakpointMeans: Rule = {
     "sidebar. `xl` (1280px): there is room for a second rail. Break where one of " +
     "those is true.",
   target: "both",
+  reads: "stylesheet",
 };
 
 export const touchTargets: Rule = {
@@ -311,6 +321,7 @@ export const touchTargets: Rule = {
     "from the control-height tokens rather than measuring one by hand. A small " +
     "visual control can still pad its hit area out to the minimum.",
   target: "both",
+  reads: "stylesheet",
 };
 
 export const fixedToAnEdge: Rule = {
@@ -326,6 +337,7 @@ export const fixedToAnEdge: Rule = {
     "let the app shell own the pinned regions — a component that pins itself is one " +
     "that cannot be composed.",
   target: "both",
+  reads: "stylesheet",
 };
 
 export const layoutRules: Rule[] = [

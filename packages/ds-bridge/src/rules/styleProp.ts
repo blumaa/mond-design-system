@@ -55,6 +55,7 @@ export const stylePropNeedsAToken: Rule = {
     "reference, not the exception. For layout, the primitive is the answer: " +
     "Stack, Inline and Container take gaps that are already tokens.",
   target: "both",
+  reads: "component",
   check: (context) => {
     const index = valueIndex(context.graph, "light", (name) => isRung(name, context.prefix));
     return sourcesOf(context, "style-prop-needs-a-token").flatMap((source) =>
@@ -96,6 +97,7 @@ export const fontsLiveInTheApp: Rule = {
     "file re-point it. `@font-face`, the files themselves and the preloading all " +
     "belong to the app, next to the rest of its assets.",
   target: "system",
+  reads: "repo",
   check: (context) => {
     const carried: Finding[] = context.fonts
       .filter((file) => !context.exempt("fonts-live-in-the-app", file))
@@ -142,6 +144,7 @@ export const noRawElementOverComponent: Rule = {
     "does not have yet. The design system's own source is exempt: it is the one " +
     "place the raw element has to be written.",
   target: "app",
+  reads: "component",
   check: (context) =>
     sourcesOf(context, "no-raw-element-over-component").flatMap((source) =>
       source.source.split("\n").flatMap((line, i) =>

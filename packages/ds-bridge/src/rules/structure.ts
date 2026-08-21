@@ -38,6 +38,7 @@ export const everyComponentHasAStory: Rule = {
     "Write `<Name>.stories.tsx` with a title whose first segment is the level, and " +
     "one story per state worth arguing about — not one story per prop.",
   target,
+  reads: "component",
   needs: needsComponents,
   check: (context) =>
     context.components
@@ -58,6 +59,7 @@ export const everyComponentHasATest: Rule = {
     "Write `<Name>.test.tsx` beside the component. Test what a consumer can " +
     "observe — rendered text, roles, what a click does — not the internals.",
   target,
+  reads: "component",
   needs: needsComponents,
   check: (context) =>
     context.components
@@ -79,6 +81,7 @@ export const declaresItsLevel: Rule = {
     "it is the one people already read; a separate manifest would be a second " +
     "answer to the same question, and the second answer goes stale.",
   target,
+  reads: "component",
   needs: needsComponents,
   check: (context) =>
     context.components
@@ -102,6 +105,7 @@ export const levelIsInTheTaxonomy: Rule = {
     "in the order it belongs. Grouping in the sidebar is a job for the segments " +
     "after the first one.",
   target,
+  reads: "component",
   needs: needsComponents,
   check: (context) => {
     const known = new Set([...context.levels, ...context.levelsIgnore.map(asLevel)]);
@@ -136,6 +140,7 @@ export const composesDownward: Rule = {
     "intended. Whether a peer wrapper has earned its own level is a judgement, and " +
     "a checker that fired on it would be wrong more often than right.",
   target,
+  reads: "component",
   needs: needsComponents,
   check: (context) => {
     const rank = (level?: string) => (level === undefined ? -1 : context.levels.indexOf(level));

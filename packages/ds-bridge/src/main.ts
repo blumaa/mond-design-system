@@ -15,7 +15,7 @@ import { renderTokens, selectTokens, type RenderOptions } from "./commands/token
 import { renderTokensHtml } from "./commands/tokensHtml.js";
 import { renderCheck, runCheck } from "./commands/check.js";
 import { aboveBaseline, readBaseline, updateBaseline, NO_BASELINE } from "./commands/baseline.js";
-import { renderRules, rulesAsJson } from "./commands/rules.js";
+import { renderRules, ruleData, rulesForFile, selectRules } from "./commands/rules.js";
 import { planMigration, renderMigration } from "./commands/migrate.js";
 import type { Kind, Layer } from "./graph.js";
 import type { Theme } from "./css/parse.js";
@@ -48,6 +48,7 @@ Options for check
   --system <file>   as above
   --rule <id>       run one rule; repeatable
   --include-tests   scan tests, stories and fixtures too
+  --pending <file>  judge this file as the text on stdin, not as it is on disk
   --baseline        report only what is above .dsbridge/baseline.json
   --update-baseline record what is there now as the debt to hold
 
@@ -57,6 +58,7 @@ Options for migrate
   --include-tests   as above
 
 Options for rules
+  --for <file>      only the rules that read this kind of file
   --target <name>   system | app
   --markdown        the whole set, for an agent's instructions
 
@@ -132,7 +134,7 @@ function tokensCommand(rest: string[]): number {
   return 0;
 }
 
-function checkCommand(rest: string[]): number {
+function checkCommand(rest: string[], stdin?: string): number {
   const { values, positionals } = parseArgs({
     args: rest,
     options: {
@@ -140,6 +142,7 @@ function checkCommand(rest: string[]): number {
       system: { type: "string" },
       rule: { type: "string", multiple: true },
       "include-tests": { type: "boolean" },
+      pending: { type: "string" },
       baseline: { type: "boolean" },
       "update-baseline": { type: "boolean" },
       json: { type: "boolean" },
@@ -151,17 +154,23 @@ function checkCommand(rest: string[]): number {
 
   const root = resolve(values.root ?? process.cwd());
   const config = readConfig(root);
+  /* The pending file is the only thing being asked about: everything else in
+     the repo is either already known or not this edit's business. */
+  const held = values.pending;
+  const pending = held === undefined ? undefined : { file: held, source: stdin ?? "" };
   const context = loadContext({
     root,
     ...(values.system ? { system: resolve(values.system) } : {}),
     ...(config ? { config } : {}),
     ...(values["include-tests"] === true ? { includeTests: true } : {}),
+    ...(pending ? { pending } : {}),
   });
   const options = {
     ...(values.rule ? { only: values.rule } : {}),
     color: values.color !== false && process.stdout.isTTY === true,
   };
-  const all = runCheck(context, options).filter((finding) => pathFilter(root, positionals)(finding.file));
+  const asked = held === undefined ? positionals : [held];
+  const all = runCheck(context, options).filter((finding) => pathFilter(root, asked)(finding.file));
 
   /* Recording half a repo would drop the other half from the baseline. */
   if (values["update-baseline"] === true) {
@@ -222,6 +231,7 @@ function rulesCommand(rest: string[]): number {
     allowPositionals: true,
     options: {
       target: { type: "string" },
+      for: { type: "string" },
       markdown: { type: "boolean" },
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
@@ -236,11 +246,17 @@ function rulesCommand(rest: string[]): number {
     color: values.color !== false && process.stdout.isTTY === true,
   };
 
+  const target = values.target as Target | undefined;
+  const chosen =
+    values.for !== undefined
+      ? rulesForFile(values.for, target)
+      : selectRules(options);
+
   if (values.json === true) {
-    jsonOut(rulesAsJson(options));
+    jsonOut(ruleData(chosen));
     return 0;
   }
-  process.stdout.write(renderRules(options));
+  process.stdout.write(renderRules(chosen, options));
   return 0;
 }
 
@@ -259,7 +275,7 @@ function failed(command: string, error: unknown): number {
   return 1;
 }
 
-export function main(argv: string[]): number {
+export function main(argv: string[], stdin?: string): number {
   const [command, ...rest] = argv;
   if (!command || command === "help" || command === "--help" || command === "-h") {
     process.stdout.write(USAGE);
@@ -267,7 +283,7 @@ export function main(argv: string[]): number {
   }
   try {
     if (command === "tokens") return tokensCommand(rest);
-    if (command === "check") return checkCommand(rest);
+    if (command === "check") return checkCommand(rest, stdin);
     if (command === "rules") return rulesCommand(rest);
     if (command === "migrate") return migrateCommand(rest);
   } catch (error) {

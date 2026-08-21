@@ -69,6 +69,7 @@ export const noLiteralColor: Rule = {
     "Read the semantic alias for the role the color plays — surface, text, border. " +
     "If no alias fits, the role is missing from the contract: add it there.",
   target: "both",
+  reads: "stylesheet",
   check: (context) => {
     const index = valueIndex(context.graph, "light", (name) => isRung(name, context.prefix));
     return componentSheets(context).flatMap((sheet) =>
@@ -97,6 +98,7 @@ export const noLiteralLength: Rule = {
     "length has to be written out — the query is resolved before custom properties " +
     "exist — and `breakpoint-is-declared` holds those to the breakpoint list.",
   target: "both",
+  reads: "stylesheet",
   check: (context) => {
     const index = valueIndex(context.graph, "light", (name) => isRung(name, context.prefix));
     return componentSheets(context).flatMap((sheet) =>
@@ -136,6 +138,7 @@ export const noRawScaleStep: Rule = {
     "layer. Components read the role. The exception is a component whose public " +
     "size prop *is* the step, where the consumer chose it rather than the component.",
   target: "both",
+  reads: "stylesheet",
   check: (context) => {
     const scales = new Set(context.scales ?? SCALES);
     const steps = new Map(
@@ -169,6 +172,7 @@ export const noUndefinedToken: Rule = {
     "component owns it is declared nowhere on purpose; read it with a fallback, and " +
     "let the fallback say what the element is worth on its own.",
   target: "both",
+  reads: "stylesheet",
   check: (context) =>
     componentSheets(context).flatMap((sheet) =>
       exempted(context, "no-undefined-token", sheet)

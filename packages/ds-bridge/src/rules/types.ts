@@ -15,6 +15,16 @@ import type { Component } from "../structure.js";
 export type Target = "system" | "app" | "both";
 
 /**
+ * What a rule reads, and so which file it has anything to say about.
+ *
+ * `dsbridge rules --for <file>` is the path an agent takes mid-edit, and it can
+ * only be short if a rule declares its own subject. `repo` is the rest: rules
+ * about the token graph, the fonts, or the shape of the whole repo, which no
+ * single file query should return.
+ */
+export type Reads = "stylesheet" | "component" | "repo";
+
+/**
  * One thing wrong, as data.
  *
  * `message` is the sentence a person reads. Everything under it is the same
@@ -125,6 +135,9 @@ export type Rule = {
   /** What to do instead. */
   instead: string;
   target: Target;
+  /** The kind of file this rule is about. Required: a rule that does not say
+      is a rule `--for` silently never mentions. */
+  reads: Reads;
   /** A reason this rule cannot run here, when there is one. Silence from a rule
       that never ran reads exactly like a pass, so it is reported instead. */
   needs?(context: Context): string | undefined;

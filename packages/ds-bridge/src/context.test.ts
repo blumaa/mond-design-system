@@ -111,3 +111,47 @@ describe("what a check reads", () => {
     expect(context.exempt("no-literal-length", "other/Card.module.css")).toBe(false);
   });
 });
+
+describe("content that is not on disk yet", () => {
+  it("checks the pending text in place of the file", () => {
+    const root = app({ "src/Card.module.css": ".card { padding: var(--mds-pad-control-md); }" });
+    const context = loadContext({
+      root,
+      system: SYSTEM,
+      pending: { file: "src/Card.module.css", source: ".card { padding: 13px; }" },
+    });
+    const sheet = context.sheets.find((s) => s.file === "src/Card.module.css");
+    expect(sheet?.source).toContain("13px");
+  });
+
+  it("checks a file that does not exist yet, which is the whole point of Write", () => {
+    const root = app({ "src/Card.module.css": ".card { color: var(--mds-text-primary); }" });
+    const context = loadContext({
+      root,
+      system: SYSTEM,
+      pending: { file: "src/New.module.css", source: ".new { padding: 13px; }" },
+    });
+    expect(context.sheets.map((s) => s.file)).toContain("src/New.module.css");
+  });
+
+  it("takes an absolute path, because a hook is given one", () => {
+    const root = app({ "src/Card.module.css": ".card { padding: 4px; }" });
+    const context = loadContext({
+      root,
+      system: SYSTEM,
+      pending: { file: join(root, "src/Card.module.css"), source: ".card { padding: 13px; }" },
+    });
+    expect(context.sheets).toHaveLength(1);
+    expect(context.sheets[0]?.source).toContain("13px");
+  });
+
+  it("scans a pending test file, since the agent is writing it right now", () => {
+    const root = app({ "src/Card.module.css": ".card { padding: 4px; }" });
+    const context = loadContext({
+      root,
+      system: SYSTEM,
+      pending: { file: "src/Card.stories.tsx", source: "export const a = 1;" },
+    });
+    expect(context.sources.map((s) => s.file)).toContain("src/Card.stories.tsx");
+  });
+});
