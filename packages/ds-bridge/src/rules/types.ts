@@ -101,6 +101,10 @@ export type Context = {
   /** What the design system this repo uses exports, when it says. Empty in the
       system's own repo, and in an app whose config never named the package. */
   exported: string[];
+  /** The specifier those names are imported under, when it is known. Two systems
+      are installed at once for the length of a migration and they share component
+      names by design, so a count that cannot tell them apart counts nothing. */
+  exportedFrom?: string;
   /** Every `.tsx` the repo owns, read: where CSS-in-JS hides. */
   sources: Source[];
   /** Repo-relative paths of any typeface the repo carries. */

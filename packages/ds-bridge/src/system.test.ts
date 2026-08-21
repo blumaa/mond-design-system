@@ -37,6 +37,7 @@ describe("what a design system package says it exports", () => {
 describe("finding the package that holds them", () => {
   const files: Record<string, string> = {
     "/app/node_modules/ds/package.json": JSON.stringify({
+      name: "@scope/ds",
       exports: { ".": { types: "./dist/index.d.ts" } },
     }),
     "/app/node_modules/ds/dist/index.d.ts": "export { Button, type ButtonProps };",
@@ -47,11 +48,11 @@ describe("finding the package that holds them", () => {
   const read = (file: string) => files[file];
 
   it("reads the types entry the package points at", () => {
-    expect(readSystemComponents("ds", "/app", read)).toEqual(["Button"]);
+    expect(readSystemComponents("ds", "/app", read)?.names).toEqual(["Button"]);
   });
 
   it("reads the older types field as well", () => {
-    expect(readSystemComponents("old", "/app", read)).toEqual(["Card"]);
+    expect(readSystemComponents("old", "/app", read)?.names).toEqual(["Card"]);
   });
 
   it("says nothing about a package that ships no types, rather than guessing", () => {
@@ -60,6 +61,24 @@ describe("finding the package that holds them", () => {
   });
 
   it("takes a path to a file as readily as a package name", () => {
-    expect(readSystemComponents("/app/node_modules/ds/dist/index.d.ts", "/app", read)).toEqual(["Button"]);
+    expect(readSystemComponents("/app/node_modules/ds/dist/index.d.ts", "/app", read)?.names).toEqual([
+      "Button",
+    ]);
+  });
+
+  /* Whose Button it is, not just that there is one. Told a package, that is the
+     answer; told a path, the package holding the file states its own name, and a
+     file in no package leaves the question open rather than answered wrongly. */
+  it("names the package the components are imported from", () => {
+    expect(readSystemComponents("ds", "/app", read)?.id).toBe("ds");
+    expect(readSystemComponents("/app/node_modules/ds/dist/index.d.ts", "/app", read)?.id).toBe(
+      "@scope/ds",
+    );
+  });
+
+  it("leaves the package unnamed for a file that sits in none", () => {
+    const loose = { "/app/types.d.ts": "export { Button };" };
+    expect(readSystemComponents("/app/types.d.ts", "/app", (f) => loose[f as keyof typeof loose])?.id)
+      .toBeUndefined();
   });
 });

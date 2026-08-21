@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readComponents } from "./structure.js";
+import { importedNames, readComponents } from "./structure.js";
 
 const files = [
   "src/components/Button/Button.tsx",
@@ -117,5 +117,44 @@ describe("how an app files a component", () => {
   it("does not take a lower-case module, a spec or a stylesheet for a component", () => {
     expect(flat.map((component) => component.name)).not.toContain("router");
     expect(flat.map((component) => component.name)).not.toContain("MobileFrame");
+  });
+});
+
+describe("the names a file imports", () => {
+  const source = [
+    `import { Button, Card } from "@old/react";`,
+    `import { Button as MdsButton, Sheet } from "@mds/react";`,
+    `import { Sheet as Nested } from "@mds/react/sheet";`,
+    `import type { ButtonProps } from "@mds/react";`,
+    `import { useState } from "react";`,
+    "",
+  ].join("\n");
+
+  it("takes every name when nothing says where from", () => {
+    expect([...importedNames(source)].sort()).toEqual(["Button", "Card", "Sheet", "useState"]);
+  });
+
+  /* The name the system exports, not the one the importing file gave it: the question
+     is whether that component was reached for, and `Button as MdsButton` reached for
+     Button. Counting the alias too made every aliased import of the OLD system's
+     Button read as an import of the new one's. */
+  it("reads the name the system exports, not the one the file gave it", () => {
+    expect([...importedNames(`import { Sheet as Nested } from "@mds/react";`)]).toEqual(["Sheet"]);
+  });
+
+  /* Two design systems are loaded at once for the length of a migration, and they
+     share component names by design — that is what makes the migration mechanical.
+     A count that cannot tell one Button from the other reads as adoption and
+     measures nothing. */
+  it("takes only the ones from the package named, when one is", () => {
+    expect([...importedNames(source, "@mds/react")].sort()).toEqual(["Button", "Sheet"]);
+  });
+
+  it("counts a deep import from that package as the package", () => {
+    expect([...importedNames(source, "@mds/react/sheet")]).toEqual(["Sheet"]);
+  });
+
+  it("does not take a package whose name merely starts the same way", () => {
+    expect([...importedNames(source, "@mds/re")]).toEqual([]);
   });
 });

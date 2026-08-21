@@ -160,6 +160,78 @@ describe("dsbridge migrate", () => {
     expect(output).toContain("12px");
   });
 
+  it("takes the namespace from the system named, not from the config's own", () => {
+    /* An app being migrated still names the system it is leaving: its config's
+       prefix is the other system's, and reading it makes the app's own scale
+       look like a brand file re-pointing a contract it has never read. */
+    const dir = tree({
+      "tokens/styles.css": ":root { --k-gap: 8px; --k-brand: #7b3fe4; }",
+      "src/Card.module.css": ".card { padding: 12px; }",
+      "dsbridge.config.json": JSON.stringify({ prefix: "--k-", system: "tokens/styles.css" }),
+    });
+    const { output } = run(["migrate", "--root", dir, "--system", SYSTEM, "--json"]);
+    const plan = JSON.parse(output) as { own: Array<{ name: string; equivalent?: string }> };
+    expect(plan.own.map((token) => token.name)).toEqual(["--k-gap", "--k-brand"]);
+    expect(plan.own[0]).toMatchObject({ equivalent: "--mds-gap" });
+  });
+
+  it("names the system's components on the command line, for an app that has not installed it", () => {
+    const dir = tree({
+      "tokens/styles.css": ":root { --k-gap: 8px; }",
+      "src/Card.module.css": ".card { padding: var(--k-gap); }",
+      "src/Card.tsx": "import { Card } from 'fixture-system';\nexport const Row = () => <Card />;",
+      "dsbridge.config.json": JSON.stringify({ prefix: "--k-", system: "tokens/styles.css" }),
+    });
+    const components = fileURLToPath(new URL("./__fixtures__/system/index.d.ts", import.meta.url));
+    const { output } = run(["migrate", "--root", dir, "--system", SYSTEM, "--components", components, "--json"]);
+    const plan = JSON.parse(output) as { components?: { used: string[]; unused: string[] } };
+    expect(plan.components?.used).toEqual(["Card"]);
+    expect(plan.components?.unused).toContain("Button");
+  });
+
+  /* The number that says how far a migration has got. Both systems are installed
+     while it runs and they share component names by design, so counting any
+     import of the name reports the app as already arrived on the day it starts. */
+  it("does not count the old system's Button as the new system's", () => {
+    const dir = tree({
+      "tokens/styles.css": ":root { --k-gap: 8px; }",
+      "src/Bar.tsx": "import { Button } from 'legacy-system';\nexport const Bar = () => <Button />;",
+      "dsbridge.config.json": JSON.stringify({ prefix: "--k-", system: "tokens/styles.css" }),
+    });
+    const components = fileURLToPath(new URL("./__fixtures__/system/index.d.ts", import.meta.url));
+    const { output } = run(["migrate", "--root", dir, "--system", SYSTEM, "--components", components, "--json"]);
+    const plan = JSON.parse(output) as { components?: { used: string[]; unused: string[] } };
+    expect(plan.components?.used).toEqual([]);
+    expect(plan.components?.unused).toContain("Button");
+  });
+
+  it("does not offer a role for the app's own scale rungs", () => {
+    /* --k-sand-50 is a rung: what it holds is the brand's value, and a rung is
+       not a role whichever system declares it. The alias above it is. */
+    const dir = tree({
+      "tokens.css": ":root { --k-sand-50: #ffffff; --k-surface-card: var(--k-sand-50); }",
+      "src/Card.module.css": ".card { background: var(--k-surface-card); }",
+    });
+    const { output } = run(["migrate", "--root", dir, "--system", SYSTEM, "--json"]);
+    const plan = JSON.parse(output) as { own: Array<{ name: string; equivalent?: string }> };
+    const of = (name: string) => plan.own.find((token) => token.name === name);
+    expect(of("--k-sand-50")?.equivalent).toBeUndefined();
+    expect(of("--k-surface-card")?.equivalent).toBe("--mds-surface-card");
+  });
+
+  it("says when a value alone chose the token, and what else holds it", () => {
+    /* #ffffff is --mds-text-inverse and --mds-surface-card both, and --k-paper
+       names neither: the head of the list is a guess, and reads as one. */
+    const dir = tree({
+      "tokens.css": ":root { --k-paper: #ffffff; }",
+      "src/Card.module.css": ".card { color: var(--k-paper); }",
+    });
+    const { output } = run(["migrate", "--root", dir, "--system", SYSTEM, "--no-color"]);
+    expect(output).toContain("--mds-text-inverse");
+    expect(output).toContain("--mds-surface-card");
+    expect(output).toContain("the value chose, not the name");
+  });
+
   it("emits the plan as JSON", () => {
     const dir = app(".card { color: #232323; }", { "tokens.css": ":root { --app-ink: #232323; }" });
     const { output } = run(["migrate", "--root", dir, "--system", SYSTEM, "--json"]);

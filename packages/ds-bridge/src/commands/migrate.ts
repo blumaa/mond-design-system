@@ -9,7 +9,7 @@
  */
 import { existsSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
-import { loadGraph } from "../graph.js";
+import { inferPrefix, loadGraph } from "../graph.js";
 import { valueIndex } from "../rules/suggest.js";
 import { isRung } from "../rules/tokenDiscipline.js";
 import { importedNames } from "../structure.js";
@@ -24,6 +24,10 @@ export type Mapping = {
   file: string;
   line: number;
   equivalent?: string;
+  /** Other system tokens holding the same value, when the name settled nothing.
+      The head of that list is a guess, and a migration that cannot see which
+      ones were guesses repaints by coincidence. */
+  alternatives?: string[];
 };
 
 export type Migration = {
@@ -50,10 +54,15 @@ const segments = (name: string) => name.replace(/^--[a-z0-9]+-/, "").split("-");
    between them — but the app's own name usually can: --k-surface-card is
    telling us which role it plays. Shared words break the tie; when nothing is
    shared, the value index's own ranking stands. */
-const closest = (name: string, candidates: string[]): string | undefined => {
+const closest = (name: string, candidates: string[]): { pick?: string; guessed: boolean } => {
   const words = new Set(segments(name));
   const shared = (other: string) => segments(other).filter((word) => words.has(word)).length;
-  return [...candidates].sort((a, b) => shared(b) - shared(a))[0];
+  const ranked = [...candidates].sort((a, b) => shared(b) - shared(a));
+  const pick = ranked[0];
+  return {
+    ...(pick ? { pick } : {}),
+    guessed: pick !== undefined && shared(pick) === 0 && ranked.length > 1,
+  };
 };
 
 export function planMigration(context: Context): Migration {
@@ -66,6 +75,9 @@ export function planMigration(context: Context): Migration {
       : loadGraph({ system: context.system, prefix: context.prefix, brand: sheets.map((s) => s.path) });
   const index = valueIndex(context.graph, "light", (name) => isRung(name, context.prefix));
   const owned = new Set(sheets.flatMap((sheet) => [...sheet.declares]));
+  /* The app's namespace, not the system's: after `--system` names the system
+     being adopted, `context.prefix` is that one's. */
+  const ownPrefix = inferPrefix([...owned]) ?? context.prefix;
 
   const own: Mapping[] = [];
   for (const token of graph.tokens()) {
@@ -78,13 +90,19 @@ export function planMigration(context: Context): Migration {
     } catch {
       continue;
     }
-    const equivalent = closest(token.name, index.candidates(value));
+    /* A rung holds the brand's value, and holding a value the system also
+       holds is a coincidence of the brand rather than a role to read. The
+       index leaves the system's rungs out for the same reason; this is the
+       other side of the map. */
+    const candidates = isRung(token.name, ownPrefix) ? [] : index.candidates(value);
+    const { pick, guessed } = closest(token.name, candidates);
     own.push({
       name: token.name,
       value,
       file: relative(context.root, declaration.file),
       line: declaration.line,
-      ...(equivalent ? { equivalent } : {}),
+      ...(pick ? { equivalent: pick } : {}),
+      ...(guessed ? { alternatives: candidates.filter((it) => it !== pick) } : {}),
     });
   }
 
@@ -99,7 +117,9 @@ export function planMigration(context: Context): Migration {
   /* Reaching for a component is importing it, once, anywhere. A component the
      app has never imported is not a violation of anything — it may simply be
      one this app does not need — so this is counted and never enforced. */
-  const reached = new Set(context.sources.flatMap((source) => [...importedNames(source.source)]));
+  const reached = new Set(
+    context.sources.flatMap((source) => [...importedNames(source.source, context.exportedFrom)]),
+  );
   const components =
     context.exported.length === 0
       ? undefined
@@ -152,7 +172,13 @@ export function renderMigration(plan: Migration, context: Context, options: { co
       ? [dim(`  ${plan.wired.length} are already read by a brand file — that is the mechanism working`, color)]
       : []),
     dim(`  ${mapped.length} hold a value the system already names — read the system's instead`, color),
-    ...capped(mapped, (t) => `${`${t.name}: ${t.value}`.padEnd(width)}  ${t.equivalent}`, color),
+    ...capped(
+      mapped,
+      (t) =>
+        `${`${t.name}: ${t.value}`.padEnd(width)}  ${t.equivalent}` +
+        (t.alternatives === undefined ? "" : dim(`  or ${t.alternatives.join(", ")} — the value chose, not the name`, color)),
+      color,
+    ),
     dim(`  ${unmapped.length} do not — each is a brand value, or a role the contract is missing`, color),
     ...capped(unmapped, (t) => `${t.name}: ${t.value}`, color),
     "",

@@ -64,6 +64,22 @@ const resolvePackage = (id: string, from: string): string | undefined => {
   }
 };
 
+/** What a design system exports, and the specifier those names are imported
+    under. The second half is what tells one system's Button from another's. */
+export type SystemComponents = { id?: string; names: string[] };
+
+/** The name the package holding `file` goes by, walking up to its manifest. */
+function packageOf(file: string, read: ReadFile): string | undefined {
+  let at = dirname(file);
+  for (;;) {
+    const declared = read(join(at, "package.json"));
+    if (declared !== undefined) return (JSON.parse(declared) as { name?: string }).name;
+    const up = dirname(at);
+    if (up === at) return undefined;
+    at = up;
+  }
+}
+
 /**
  * What the design system installed here exports.
  *
@@ -76,11 +92,13 @@ export function readSystemComponents(
   id: string,
   root: string,
   read: ReadFile = onDisk,
-): string[] | undefined {
+): SystemComponents | undefined {
   const direct = isAbsolute(id) || id.startsWith(".") ? resolve(root, id) : undefined;
   if (direct !== undefined) {
     const source = read(direct);
-    return source === undefined ? undefined : componentsIn(source);
+    if (source === undefined) return undefined;
+    const held = packageOf(direct, read);
+    return { ...(held ? { id: held } : {}), names: componentsIn(source) };
   }
   const manifest = resolvePackage(id, resolve(root)) ?? join(resolve(root), "node_modules", id, "package.json");
   const declared = read(manifest);
@@ -88,5 +106,5 @@ export function readSystemComponents(
   const entry = typesEntry(declared);
   if (entry === undefined) return undefined;
   const source = read(resolve(dirname(manifest), entry));
-  return source === undefined ? undefined : componentsIn(source);
+  return source === undefined ? undefined : { id, names: componentsIn(source) };
 }

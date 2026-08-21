@@ -82,7 +82,7 @@ export const wrapsRatherThanReimplements: Rule = {
   check: (context) => {
     const source = new Map(context.sources.map((it) => [it.file, it.source]));
     const wraps = (component: Component, base: string) =>
-      importedNames(source.get(component.file) ?? "").has(base);
+      importedNames(source.get(component.file) ?? "", context.exportedFrom).has(base);
 
     /* Grouped before judged: the repo's own convention is the evidence. Where
        most of a family builds on its base, the rest are the outliers; where

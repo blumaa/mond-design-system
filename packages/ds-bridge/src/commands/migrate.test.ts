@@ -77,6 +77,17 @@ describe("what of the system the app actually uses", () => {
     expect(components?.unused).toEqual(["Button", "Stack", "Switch"]);
   });
 
+  it("takes the components named by the caller over the ones the config names", () => {
+    /* Migrating, the config still describes the system being left: its
+       components are the app's own, and the ones to plan against are the
+       caller's. */
+    const leaving = { components: "./does-not-exist.d.ts" };
+    const { components } = planMigration(
+      loadContext({ root: APP, system: SYSTEM, config: leaving, components: "../system/index.d.ts" }),
+    );
+    expect(components?.used).toEqual(["Card"]);
+  });
+
   it("says nothing at all when no package was named", () => {
     expect(planMigration(loadContext({ root: APP, system: SYSTEM })).components).toBeUndefined();
   });

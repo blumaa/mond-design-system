@@ -121,6 +121,8 @@ export type BuildOptions = {
   components?: Component[];
   /** What the design system exports, read from the package the repo installed. */
   exported?: string[];
+  /** The specifier `exported` is imported under, where the package named one. */
+  exportedFrom?: string;
   sources?: Source[];
   fonts?: string[];
   prefix?: string;
@@ -140,6 +142,7 @@ export function buildContext({
   sheets,
   components = [],
   exported = [],
+  exportedFrom,
   sources = [],
   fonts = [],
   prefix,
@@ -159,6 +162,7 @@ export function buildContext({
     sheets,
     components,
     exported,
+    ...(exportedFrom ? { exportedFrom } : {}),
     sources,
     fonts,
     prefix: prefix ?? graph.prefix,
@@ -183,6 +187,10 @@ export type LoadContextOptions = {
   root: string;
   /** Entry stylesheet of the design system; discovered from the root when absent. */
   system?: string;
+  /** What the design system exports, named the way the config names it. Same
+      reason as `system`: a repo migrating between two has a config describing
+      the one it is leaving. */
+  components?: string;
   config?: Config;
   prefix?: string;
   /** Scan tests, stories and fixtures too. */
@@ -202,6 +210,7 @@ export type LoadContextOptions = {
 export function loadContext({
   root,
   system,
+  components: named,
   config,
   prefix,
   includeTests,
@@ -215,8 +224,12 @@ export function loadContext({
   const contents = (file: string) => (file === held ? pending!.source : readFileSync(file, "utf8"));
   const withHeld = (files: string[], wanted: (file: string) => boolean) =>
     held !== undefined && wanted(held) && !files.includes(held) ? [...files, held] : files;
-  const told = prefix ?? config?.prefix;
   const declared = config?.system;
+  /* The namespace belongs to the entry stylesheet, not to the repo reading it.
+     A caller naming a system the config does not name is migrating between two,
+     and the config's prefix is the one it is leaving: inferring from the entry
+     is the only answer that can be right for both. */
+  const told = prefix ?? (system ? undefined : config?.prefix);
   const entry = system ? resolve(system) : declared ? resolve(at, declared) : resolveSystem(at);
   /* The system's own token files are the graph, never sheets to be judged:
      declaring the contract is what they are for. Checking the design system
@@ -281,7 +294,9 @@ export function loadContext({
   /* Named, never guessed: the tool has no way to tell which of an app's
      dependencies is its design system, and the rules that read this say so
      rather than passing silently when nothing named one. */
-  const exported = config?.components === undefined ? undefined : readSystemComponents(config.components, at);
+  const declaredComponents = named ?? config?.components;
+  const exported =
+    declaredComponents === undefined ? undefined : readSystemComponents(declaredComponents, at);
   const fonts = findFonts(at)
     .filter(scanned)
     .map((file) => relative(at, file));
@@ -310,7 +325,8 @@ export function loadContext({
     fonts,
     prefix: namespace,
     system: entry,
-    ...(exported ? { exported } : {}),
+    ...(exported ? { exported: exported.names } : {}),
+    ...(exported?.id ? { exportedFrom: exported.id } : {}),
     ...(config ? { config } : {}),
     ...(contract ? { contract } : {}),
     roles,

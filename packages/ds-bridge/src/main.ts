@@ -57,6 +57,8 @@ Options for check
   --root <dir>      what to check              (default: the cwd)
   <path>            report only what lives under this path; repeatable
   --system <file>   as above
+  --components <p>  the system's components: a package name, or a path to its
+                    type declarations (default: what the config names)
   --rule <id>       run one rule; repeatable
   --include-tests   scan tests, stories and fixtures too
   --pending <file>  judge this file as the text on stdin, not as it is on disk
@@ -67,11 +69,14 @@ Options for check
 Options for next
   --root <dir>      what to look at            (default: the cwd)
   --system <file>   as above
+  --components <p>  as above
   --include-tests   as above
 
 Options for migrate
   --root <dir>      the app to plan for   (default: the cwd)
   --system <file>   as above
+  --components <p>  as above — the pair names the system being migrated to,
+                    which the app has not installed and its config cannot name
   --include-tests   as above
 
 Events for hook
@@ -87,6 +92,7 @@ Options for roles
 Options for choosing
   --root <dir>      the repo to answer for  (default: the cwd)
   --system <file>   as above
+  --components <p>  as above
   <name>            only the choices that name this component
 
 Options for rules
@@ -189,6 +195,7 @@ function checkCommand(rest: string[], stdin?: string): number {
     options: {
       root: { type: "string" },
       system: { type: "string" },
+      components: { type: "string" },
       rule: { type: "string", multiple: true },
       "include-tests": { type: "boolean" },
       pending: { type: "string" },
@@ -211,6 +218,7 @@ function checkCommand(rest: string[], stdin?: string): number {
   const context = loadContext({
     root,
     ...(values.system ? { system: resolve(values.system) } : {}),
+    ...(values.components ? { components: resolve(values.components) } : {}),
     ...(config ? { config } : {}),
     ...(values["include-tests"] === true ? { includeTests: true } : {}),
     ...(pending ? { pending } : {}),
@@ -239,6 +247,7 @@ function checkCommand(rest: string[], stdin?: string): number {
         loadContext({
           root,
           ...(values.system ? { system: resolve(values.system) } : {}),
+          ...(values.components ? { components: resolve(values.components) } : {}),
           ...(config ? { config } : {}),
           ...(values["include-tests"] === true ? { includeTests: true } : {}),
         }),
@@ -272,6 +281,7 @@ function nextCommand(rest: string[]): number {
     options: {
       root: { type: "string" },
       system: { type: "string" },
+      components: { type: "string" },
       "include-tests": { type: "boolean" },
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
@@ -284,6 +294,7 @@ function nextCommand(rest: string[]): number {
   const context = loadContext({
     root,
     ...(values.system ? { system: resolve(values.system) } : {}),
+    ...(values.components ? { components: resolve(values.components) } : {}),
     ...(config ? { config } : {}),
     ...(values["include-tests"] === true ? { includeTests: true } : {}),
   });
@@ -316,6 +327,7 @@ function migrateCommand(rest: string[]): number {
     options: {
       root: { type: "string" },
       system: { type: "string" },
+      components: { type: "string" },
       "include-tests": { type: "boolean" },
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
@@ -329,6 +341,7 @@ function migrateCommand(rest: string[]): number {
   const context = loadContext({
     root,
     ...(values.system ? { system: resolve(values.system) } : {}),
+    ...(values.components ? { components: resolve(values.components) } : {}),
     ...(config ? { config } : {}),
     ...(values["include-tests"] === true ? { includeTests: true } : {}),
   });
@@ -453,6 +466,7 @@ function choosingCommand(rest: string[]): number {
     options: {
       root: { type: "string" },
       system: { type: "string" },
+      components: { type: "string" },
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
     },
@@ -464,6 +478,7 @@ function choosingCommand(rest: string[]): number {
   const context = loadContext({
     root,
     ...(values.system ? { system: resolve(values.system) } : {}),
+    ...(values.components ? { components: resolve(values.components) } : {}),
     ...(config ? { config } : {}),
   });
   /* In an app the choice is between the system's components, not the app's own;

@@ -97,18 +97,27 @@ export function importsIn(source: string): Edge[] {
 }
 
 /**
- * Every name a file imports, whatever it imports it from.
+ * The names a file imports — from `from`, when one is named.
  *
  * `importsIn` answers a question about this repo's own composition, so it drops
  * packages. This answers a different one — does this file use that thing at all
  * — and for a component named after one the design system exports, the import
  * line is the whole answer.
+ *
+ * Whose Button it is has to be part of that answer. Two design systems are
+ * loaded at once for the length of a migration and they share component names
+ * by design, so "somebody imported Button" says nothing about which one.
+ *
+ * The name taken is the one the package exports, never the local alias: it is
+ * the export being reached for either way, and `Button as OldButton` counted as
+ * both put a name in the set that nothing exports.
  */
-export function importedNames(source: string): Set<string> {
+export function importedNames(source: string, from?: string): Set<string> {
   const out = new Set<string>();
-  const pattern = /^import\s+(?!type\b)((?:(?!^import\b)[\s\S])*?)\s+from\s+["'][^"']+["']/gm;
+  const pattern = /^import\s+(?!type\b)((?:(?!^import\b)[\s\S])*?)\s+from\s+["']([^"']+)["']/gm;
   for (const match of source.matchAll(pattern)) {
-    const bindings = (match[1] ?? "").replace(/\btype\s+\w+/g, "");
+    if (from !== undefined && !(match[2] === from || match[2]!.startsWith(`${from}/`))) continue;
+    const bindings = (match[1] ?? "").replace(/\btype\s+\w+/g, "").replace(/\bas\s+[A-Za-z_$][\w$]*/g, "");
     for (const name of bindings.match(/[A-Za-z_$][\w$]*/g) ?? []) out.add(name);
   }
   return out;
