@@ -24,6 +24,7 @@ The rules live in the tool, not in this file. Ask for the ones that apply.
 | two components that both look right — `Sheet` or `Modal` | `dsbridge choosing [name]` |
 | a finding you want to understand or argue with | `dsbridge rules <id>` |
 | finished a change | `dsbridge check <path>` |
+| picking up conformance work with no particular file in hand | `dsbridge next` |
 | an app deciding what it would take to adopt the system | `dsbridge migrate` |
 
 `--for` is the one to reach for by default: it answers with the rules that read
@@ -42,6 +43,12 @@ somebody made, and it is written down or it is lost.
 tokens is naming every one whose role answers that property. Reading the roles is
 how you pick between them — the token that names the role you are writing, not
 the one that happens to sort first.
+
+`next` is for the other kind of session — no file in hand, the task is the debt
+itself. It picks one item from the findings as they stand: the cheapest real
+work first, and above the baseline before anything the baseline already forgives.
+There is no plan behind it and nothing stored, so the way to close the item is to
+make the findings go away.
 
 Configuration lives in `dsbridge.config.json` at the repo root: the token prefix,
 where the design system's stylesheet lives, the component taxonomy, and any

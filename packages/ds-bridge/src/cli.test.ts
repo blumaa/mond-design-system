@@ -558,6 +558,46 @@ describe("dsbridge choosing", () => {
 /* The runtime, end to end: protocol JSON in, protocol JSON out. What a rule
    finds is tested above; what is tested here is that a hook says it at the
    right moment, and says nothing at every other one. */
+describe("dsbridge next", () => {
+  const next = (dir: string, ...rest: string[]) =>
+    run(["next", "--root", dir, "--system", SYSTEM, "--no-color", ...rest]);
+
+  it("takes the findings with one answer first, whatever else is there", () => {
+    const { status, output } = next(app(".a { gap: 8px; top: 37px; left: 41px; }"));
+    expect(status).toBe(0);
+    expect(output).toContain("dsbridge check --fix");
+  });
+
+  it("says a clean repo is clean rather than inventing work", () => {
+    expect(next(app(".a { gap: var(--mds-gap); }")).output).toContain("nothing");
+  });
+
+  /* The debt was forgiven once; what arrived after it was not. */
+  it("prefers what is above the baseline, and says that is what it is", () => {
+    const dir = app(".a { top: 37px; }");
+    check(dir, "--update-baseline");
+    writeFileSync(join(dir, "src/Button.module.css"), ".a { top: 37px; }\n.b { gap: 8px; }");
+    const { output } = next(dir);
+    expect(output).toContain("above the baseline");
+    expect(output).toContain("dsbridge check --fix");
+  });
+
+  it("falls back to the debt the baseline holds when nothing is above it", () => {
+    const dir = app(".a { top: 37px; }");
+    check(dir, "--update-baseline");
+    const { output } = next(dir);
+    expect(output).not.toContain("above the baseline");
+    expect(output).toContain("37px");
+  });
+
+  it("prints the item as data too, for anything that is not a person", () => {
+    const { output } = next(app(".a { gap: 8px; }"), "--json");
+    const data = JSON.parse(output) as { total: number; item: { kind: string } | null };
+    expect(data.item?.kind).toBe("fix");
+    expect(data.total).toBe(1);
+  });
+});
+
 describe("dsbridge hook", () => {
   const hook = (dir: string, event: string, input: object) =>
     run(["hook", event, "--root", dir, "--system", SYSTEM], JSON.stringify(input));

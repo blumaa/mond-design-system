@@ -14,6 +14,7 @@ dsbridge check             # the rules, as a work list
 dsbridge rules [id]        # what each rule is protecting
 dsbridge roles             # what the system says its tokens are for
 dsbridge choosing          # which of two that both compile this case wants
+dsbridge next              # the one piece of work to do now, and what closes it
 dsbridge migrate           # the distance between this app and the system
 dsbridge hook <event>      # answer a Claude Code hook, protocol JSON on stdin
 ```
@@ -210,6 +211,46 @@ will read.
 the old one went. Where a tag exists it is the better warning — an editor shows
 it without being asked — so this is for the intent that has not been written
 into the types yet.
+
+## dsbridge next
+
+One work item, chosen from the findings as they stand. Nothing is stored, so
+there is no list to fall out of date the moment somebody fixes something
+outside it — the way to close the item is to make the findings go away, and the
+next run picks up whatever is now the cheapest real work.
+
+```sh
+dsbridge next                     # the item, what it closes, and the command
+dsbridge next --json              # the same as data
+```
+
+```
+  rewrite 86 literals that can only mean one token
+  closes 86 of 407, in 41 files
+
+  dsbridge check --fix
+
+  One command closes every one of them, and not one is a judgement call.
+```
+
+The order is by what the work costs, not by what it is worth:
+
+1. **fix** — the findings with exactly one answer, however few. One command
+   closes them and not one is a judgement call, so nothing needing a decision
+   competes with them.
+2. **decide** — the value written in the most places that more than one token
+   could be. Every place is the same decision made again; reading the roles
+   once settles all of them.
+3. **name** — the value written in the most places that *no* token holds. That
+   is the system's backlog rather than this repo's debt: one token named in the
+   scale closes every place here, and nothing this repo writes will.
+4. **rule** — where nothing carries a value to sort by, the rule with the most
+   findings.
+
+Where `.dsbridge/baseline.json` exists, anything above it is taken first and
+the output says so. When nothing is above it, the item is the largest thing the
+baseline is holding — and the output says that instead, so forgiven debt and a
+regression are never mistaken for each other.
 
 ### Configuration
 

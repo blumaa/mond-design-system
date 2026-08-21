@@ -132,6 +132,13 @@ describe("what a session opens knowing", () => {
     expect(sessionBrief(context())).toContain("--update-baseline");
   });
 
+  /* A repo with recorded debt is one somebody is working through; a repo
+     without one has not decided to yet, and has nothing to resume. */
+  it("offers the resume verb only where there is recorded debt to resume", () => {
+    expect(sessionBrief(context())).not.toContain("dsbridge next");
+    expect(sessionBrief(context(), baselineOf([finding()]))).toContain("dsbridge next");
+  });
+
   it("says an app has no taxonomy rather than printing an empty line for it", () => {
     const brief = sessionBrief(context());
     expect(brief).toContain("none declared");

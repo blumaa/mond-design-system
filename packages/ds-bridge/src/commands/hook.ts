@@ -156,6 +156,11 @@ export function sessionBrief(context: Context, baseline?: Baseline): string {
     ...(context.choosing.declared
       ? ["  dsbridge choosing [name]        which of two that both compile this case wants"]
       : []),
+    /* Only where debt is recorded: a repo that has not drawn that line has
+       nothing to resume, and pointing at a work queue it never made is noise. */
+    ...(baseline
+      ? ["", "When the work is the debt itself:", "  dsbridge next                   the one thing to do now, and what closes it"]
+      : []),
     "",
   ].join("\n");
 }

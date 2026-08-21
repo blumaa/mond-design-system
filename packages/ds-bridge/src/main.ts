@@ -21,6 +21,7 @@ import { applyFixes } from "./commands/fix.js";
 import { renderRules, ruleData, rulesForFile, selectRules } from "./commands/rules.js";
 import { renderRoles, roleData } from "./commands/roles.js";
 import { renderChoosing, choosingData } from "./commands/choosing.js";
+import { nextItem, renderNext } from "./commands/next.js";
 import { planMigration, renderMigration } from "./commands/migrate.js";
 import { isHookEvent, runHook, type HookInput } from "./commands/hook.js";
 import type { Kind, Layer } from "./graph.js";
@@ -35,6 +36,7 @@ const USAGE = `dsbridge — design system conformance, for the system and the ap
   dsbridge rules [id]           what each rule is protecting, for a human or an agent
   dsbridge roles                what the system says its tokens are for
   dsbridge choosing [name]      which of two that both compile this case wants
+  dsbridge next                 the one piece of work to do now, and what closes it
   dsbridge migrate [path]       what an app would have to move to adopt the system
   dsbridge hook <event>         answer a Claude Code hook, protocol JSON on stdin
 
@@ -61,6 +63,11 @@ Options for check
   --fix             rewrite the findings that name exactly one token
   --baseline        report only what is above .dsbridge/baseline.json
   --update-baseline record what is there now as the debt to hold
+
+Options for next
+  --root <dir>      what to look at            (default: the cwd)
+  --system <file>   as above
+  --include-tests   as above
 
 Options for migrate
   --root <dir>      the app to plan for   (default: the cwd)
@@ -256,6 +263,51 @@ function checkCommand(rest: string[], stdin?: string): number {
   if (values.json === true) jsonOut(findings);
   else process.stdout.write(renderCheck(findings, context, { ...options, held: all.length - findings.length }));
   return findings.length > 0 ? 1 : 0;
+}
+
+function nextCommand(rest: string[]): number {
+  const { values } = parseArgs({
+    args: rest,
+    allowPositionals: true,
+    options: {
+      root: { type: "string" },
+      system: { type: "string" },
+      "include-tests": { type: "boolean" },
+      json: { type: "boolean" },
+      color: { type: "boolean", default: true },
+    },
+    allowNegative: true,
+  });
+
+  const root = resolve(values.root ?? process.cwd());
+  const config = readConfig(root);
+  const context = loadContext({
+    root,
+    ...(values.system ? { system: resolve(values.system) } : {}),
+    ...(config ? { config } : {}),
+    ...(values["include-tests"] === true ? { includeTests: true } : {}),
+  });
+  const all = runCheck(context);
+
+  /* Something added since the debt was recorded outranks the debt itself, and
+     when nothing is above the baseline the work is whatever is largest under
+     it — said as such, so the two are never mistaken for each other. */
+  const recorded = readBaseline(root);
+  const above = recorded ? aboveBaseline(all, recorded) : [];
+  const regression = above.length > 0;
+  const pool = regression ? above : all;
+
+  if (values.json === true) {
+    jsonOut({ regression, total: all.length, item: nextItem(pool) ?? null });
+    return 0;
+  }
+  process.stdout.write(
+    renderNext(pool, regression ? pool.length : all.length, {
+      regression,
+      color: values.color !== false && process.stdout.isTTY === true,
+    }),
+  );
+  return 0;
 }
 
 function migrateCommand(rest: string[]): number {
@@ -461,6 +513,7 @@ export function main(argv: string[], stdin?: string): number {
     if (command === "rules") return rulesCommand(rest);
     if (command === "roles") return rolesCommand(rest);
     if (command === "choosing") return choosingCommand(rest);
+    if (command === "next") return nextCommand(rest);
     if (command === "migrate") return migrateCommand(rest);
     if (command === "hook") return hookCommand(rest, stdin);
   } catch (error) {
