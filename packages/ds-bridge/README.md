@@ -13,6 +13,7 @@ dsbridge tokens            # the graph: core scales, semantic contract, your bra
 dsbridge check             # the rules, as a work list
 dsbridge rules [id]        # what each rule is protecting
 dsbridge migrate           # the distance between this app and the system
+dsbridge hook <event>      # answer a Claude Code hook, protocol JSON on stdin
 ```
 
 ## Why
@@ -155,6 +156,36 @@ dsbridge rules --markdown > RULES.md # the whole set, for an agent's instruction
 `RULES.md` in this package is that output, committed, and the Claude Code
 plugin under `plugin/` ships the same file as its skill. Both are generated —
 `pnpm rules` from the repo root writes both, and CI fails if either is stale.
+
+## dsbridge hook
+
+The same rules, moved to the moment they are cheap to act on. `hook` reads the
+Claude Code hook protocol on stdin and writes it back on stdout; the plugin under
+`plugin/` wires the three events to it, so nothing in either repo needs to know
+where the other one is installed.
+
+| event | what it says |
+| --- | --- |
+| `session-start` | the namespace, the token count, the taxonomy, what the repo already has, and what the baseline holds |
+| `pre-tool-use` | what a pending `Write` or `Edit` **adds** — the file is checked as it stands and as it would stand, and only the difference is reported |
+| `stop` | holds the turn open while the session has left the repo above its baseline |
+
+`pre-tool-use` warns; it never answers the permission question. Emitting
+`permissionDecision: "allow"` would settle the prompt for every `Write` and
+`Edit` in the session, and a warning is not consent.
+
+Three things it refuses to do, each for the same reason — a hook that fails
+loudly is a hook someone removes, and then nothing is checked at all:
+
+- a repo with no design system, or a config that does not parse, gets silence
+  rather than an error on every write;
+- a repo that has never recorded a baseline is not gated at `stop`;
+- `stop` returns nothing when `stop_hook_active` is set, so the agent gets one
+  turn to answer and the session cannot be trapped in a loop.
+
+```sh
+echo '{"cwd":"'$PWD'"}' | dsbridge hook session-start
+```
 
 ## dsbridge migrate
 

@@ -102,6 +102,16 @@ export function runCheck(context: Context, options: CheckOptions = {}): Finding[
     .sort(place);
 }
 
+/** Findings as one line each, line number gutter aligned. What a person scans
+    and what a hook injects are the same list, so they cannot drift. */
+export function lineList(findings: Finding[], color: boolean): string[] {
+  const width = Math.max(...findings.map((f) => String(f.line ?? "").length));
+  return findings.map((finding) => {
+    const at = String(finding.line ?? "").padStart(width);
+    return `  ${dim(at, color)}  ${finding.message}  ${dim(finding.rule, color)}`;
+  });
+}
+
 export function renderCheck(findings: Finding[], context: Context, options: CheckOptions = {}): string {
   const color = options.color ?? true;
   const skipped = skippedRules(context, options);
@@ -121,11 +131,7 @@ export function renderCheck(findings: Finding[], context: Context, options: Chec
   const lines: string[] = [];
   for (const [file, found] of files) {
     lines.push(bold(file, color));
-    const width = Math.max(...found.map((f) => String(f.line ?? "").length));
-    for (const finding of found) {
-      const at = String(finding.line ?? "").padStart(width);
-      lines.push(`  ${dim(at, color)}  ${finding.message}  ${dim(finding.rule, color)}`);
-    }
+    lines.push(...lineList(found, color));
     lines.push("");
   }
 

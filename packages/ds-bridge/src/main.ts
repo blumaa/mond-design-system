@@ -17,6 +17,7 @@ import { renderCheck, runCheck } from "./commands/check.js";
 import { aboveBaseline, readBaseline, updateBaseline, NO_BASELINE } from "./commands/baseline.js";
 import { renderRules, ruleData, rulesForFile, selectRules } from "./commands/rules.js";
 import { planMigration, renderMigration } from "./commands/migrate.js";
+import { isHookEvent, runHook, type HookInput } from "./commands/hook.js";
 import type { Kind, Layer } from "./graph.js";
 import type { Theme } from "./css/parse.js";
 import type { Target } from "./rules/types.js";
@@ -28,6 +29,7 @@ const USAGE = `dsbridge — design system conformance, for the system and the ap
   dsbridge check [path] [opts]  run the rules against this repo, or one path in it
   dsbridge rules [id]           what each rule is protecting, for a human or an agent
   dsbridge migrate [path]       what an app would have to move to adopt the system
+  dsbridge hook <event>         answer a Claude Code hook, protocol JSON on stdin
 
 Options for tokens
   --system <file>   entry stylesheet of the design system (default: the
@@ -56,6 +58,11 @@ Options for migrate
   --root <dir>      the app to plan for   (default: the cwd)
   --system <file>   as above
   --include-tests   as above
+
+Events for hook
+  session-start     the namespace, the taxonomy and what the repo already has
+  pre-tool-use      what the pending Write or Edit adds, and nothing already there
+  stop              hold the turn open while it is above the baseline
 
 Options for rules
   --for <file>      only the rules that read this kind of file
@@ -225,6 +232,35 @@ function migrateCommand(rest: string[]): number {
   return 0;
 }
 
+/* The protocol, and nothing else: `runHook` decides, this resolves where. The
+   exit code is always 0 — a hook says what it wants in the JSON, and a tool
+   that fails a session because it could not read a stylesheet is a worse
+   outcome than one that says nothing. */
+function hookCommand(rest: string[], stdin?: string): number {
+  const { values, positionals } = parseArgs({
+    args: rest,
+    options: { root: { type: "string" }, system: { type: "string" } },
+    allowPositionals: true,
+    allowNegative: true,
+  });
+
+  const event = positionals[0];
+  if (event === undefined || !isHookEvent(event)) {
+    process.stderr.write("dsbridge hook: one of session-start, pre-tool-use, stop\n");
+    return 1;
+  }
+  const input = (stdin ?? "").trim() === "" ? {} : (JSON.parse(stdin!) as HookInput);
+  const root = resolve(values.root ?? input.cwd ?? process.cwd());
+  const config = readConfig(root);
+  const output = runHook(event, input, {
+    root,
+    ...(values.system ? { system: resolve(values.system) } : {}),
+    ...(config ? { config } : {}),
+  });
+  if (output !== undefined) jsonOut(output);
+  return 0;
+}
+
 function rulesCommand(rest: string[]): number {
   const { values, positionals } = parseArgs({
     args: rest,
@@ -286,6 +322,7 @@ export function main(argv: string[], stdin?: string): number {
     if (command === "check") return checkCommand(rest, stdin);
     if (command === "rules") return rulesCommand(rest);
     if (command === "migrate") return migrateCommand(rest);
+    if (command === "hook") return hookCommand(rest, stdin);
   } catch (error) {
     return failed(command, error);
   }

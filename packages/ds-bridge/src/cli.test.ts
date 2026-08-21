@@ -434,3 +434,93 @@ describe("dsbridge check --pending", () => {
     expect(status).toBe(0);
   });
 });
+
+/* The runtime, end to end: protocol JSON in, protocol JSON out. What a rule
+   finds is tested above; what is tested here is that a hook says it at the
+   right moment, and says nothing at every other one. */
+describe("dsbridge hook", () => {
+  const hook = (dir: string, event: string, input: object) =>
+    run(["hook", event, "--root", dir, "--system", SYSTEM], JSON.stringify(input));
+
+  const write = (dir: string, file: string, content: string) => ({
+    tool_name: "Write",
+    tool_input: { file_path: join(dir, file), content },
+  });
+
+  it("opens a session with the namespace, the taxonomy and how to ask for more", () => {
+    const { status, output } = hook(app(".root { color: var(--mds-text-primary); }"), "session-start", {});
+    expect(status).toBe(0);
+    expect(output).toContain("SessionStart");
+    expect(output).toContain("--mds-");
+    expect(output).toContain("dsbridge rules --for");
+  });
+
+  it("warns about a literal in text that is nowhere on disk yet", () => {
+    const dir = app(".root { padding: var(--mds-pad-control-md); }");
+    const { status, output } = hook(dir, "pre-tool-use", write(dir, "src/New.module.css", ".n { padding: 13px; }"));
+    expect(status).toBe(0);
+    expect(output).toContain("PreToolUse");
+    expect(output).toContain("13px");
+  });
+
+  it("never answers the permission question, because a warning is not consent", () => {
+    const dir = app(".root { padding: var(--mds-pad-control-md); }");
+    const { output } = hook(dir, "pre-tool-use", write(dir, "src/New.module.css", ".n { padding: 13px; }"));
+    expect(output).not.toContain("permissionDecision");
+    expect(output).not.toContain("allow");
+  });
+
+  it("says nothing about a clean write", () => {
+    const dir = app(".root { padding: var(--mds-pad-control-md); }");
+    const { status, output } = hook(
+      dir,
+      "pre-tool-use",
+      write(dir, "src/New.module.css", ".n { padding: var(--mds-pad-control-md); }"),
+    );
+    expect(status).toBe(0);
+    expect(output).toBe("");
+  });
+
+  it("reports what the write adds, not what the file already carried", () => {
+    const dir = app(".root { padding: 13px; }");
+    const { output } = hook(dir, "pre-tool-use", {
+      tool_name: "Edit",
+      tool_input: { file_path: "src/Button.module.css", old_string: ".root", new_string: ".card" },
+    });
+    expect(output).toBe("");
+  });
+
+  it("says nothing about a file no rule reads", () => {
+    const dir = app(".root { padding: var(--mds-pad-control-md); }");
+    expect(hook(dir, "pre-tool-use", write(dir, "README.md", "13px everywhere")).output).toBe("");
+  });
+
+  it("holds the turn open when the session left the repo above its baseline", () => {
+    const dir = app(".root { padding: 13px; }", {
+      ".dsbridge/baseline.json": JSON.stringify({ version: 1, counts: {} }),
+    });
+    const { status, output } = hook(dir, "stop", { stop_hook_active: false });
+    expect(status).toBe(0);
+    expect(output).toContain('"block"');
+    expect(output).toContain("above the baseline");
+    expect(output).toContain("--update-baseline");
+  });
+
+  it("lets the turn end once, so a blocked stop cannot trap the session", () => {
+    const dir = app(".root { padding: 13px; }", {
+      ".dsbridge/baseline.json": JSON.stringify({ version: 1, counts: {} }),
+    });
+    expect(hook(dir, "stop", { stop_hook_active: true }).output).toBe("");
+  });
+
+  it("does not gate a repo that has never recorded a baseline", () => {
+    const dir = app(".root { padding: 13px; }");
+    expect(hook(dir, "stop", { stop_hook_active: false }).output).toBe("");
+  });
+
+  it("names the three events rather than failing silently", () => {
+    const { status, output } = run(["hook", "nope"], "{}");
+    expect(status).toBe(1);
+    expect(output).toContain("session-start");
+  });
+});
