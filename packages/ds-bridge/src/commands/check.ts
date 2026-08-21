@@ -28,13 +28,14 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 /** What the check did not look at. Silence here reads as a pass, so it is
     printed whether the run was clean or not, and names what would restore it. */
 function exclusions(context: Context, color: boolean): string[] {
-  const { tests, scope } = context.suppressed;
+  const { tests, scope, lines } = context.suppressed;
   const out: string[] = [];
   if (tests > 0) {
     const what = tests === 1 ? "test or story" : "tests and stories";
     out.push(dim(`  ${tests} ${what} not scanned — run --include-tests`, color));
   }
   if (scope > 0) out.push(dim(`  ${plural(scope, "file")} outside sources not scanned`, color));
+  if (lines > 0) out.push(dim(`  ${plural(lines, "line")} suppressed by comment`, color));
   return out;
 }
 
@@ -102,6 +103,7 @@ export function runCheck(context: Context, options: CheckOptions = {}): Finding[
     .filter(isEnforced)
     .filter((rule) => !skipped.has(rule.id))
     .flatMap((rule) => rule.check(context))
+    .filter((finding) => !context.ignored(finding.file, finding.line))
     .sort(place);
 }
 

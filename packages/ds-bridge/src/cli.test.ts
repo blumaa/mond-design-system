@@ -327,3 +327,38 @@ describe("what shape the debt is", () => {
     expect(output).not.toContain("no token holds it");
   });
 });
+
+describe("the escape hatch", () => {
+  it("does not report a line a comment suppressed, with its reason", () => {
+    const { status, output } = check(
+      app("/* dsbridge-ignore-next-line: the sheet's own drop shadow offset */\n.a { top: 37px; }"),
+    );
+    expect(status).toBe(0);
+    expect(output).toContain("clean");
+  });
+
+  it("reports it anyway when no reason was given", () => {
+    const { status } = check(app("/* dsbridge-ignore-next-line */\n.a { top: 37px; }"));
+    expect(status).toBe(1);
+  });
+
+  it("suppresses the next line only, never the one the comment sits on", () => {
+    const { output } = check(app(".a { top: 37px; } /* dsbridge-ignore-next-line: why */\n.b { top: 37px; }"));
+    expect(output).toMatch(/1 finding/);
+  });
+
+  it("says how many lines were suppressed, so nobody has to grep for them", () => {
+    const { output } = check(app("/* dsbridge-ignore-next-line: why */\n.a { top: 37px; }\n.b { top: 37px; }"));
+    expect(output).toContain("1 line suppressed by comment");
+  });
+
+  it("works in JSX too, where the comment is written either way", () => {
+    const { status } = check(
+      app(".a { color: red; }", {
+        "src/Button.tsx": "// dsbridge-ignore-next-line: measured at runtime\n<i style={{ gap: 37 }} />",
+        "src/Button.module.css": ".a { color: var(--mds-text-primary); }",
+      }),
+    );
+    expect(status).toBe(0);
+  });
+});

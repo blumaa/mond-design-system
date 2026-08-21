@@ -76,7 +76,27 @@ export type Suppressed = {
   tests: number;
   /** Outside the `sources` the repo declared. */
   scope: number;
+  /** Lines a comment took out of the check, each with its reason beside it. */
+  lines: number;
 };
+
+/**
+ * `dsbridge-ignore-next-line: reason` — the escape hatch, in either comment
+ * syntax. The reason is required: an agent that meets a false positive with no
+ * way past it either loops on the finding or deletes the rule, and a bare
+ * suppression is indistinguishable from the second. Without one the comment
+ * does nothing, so the finding stands and someone has to look at it.
+ */
+const IGNORE = /(?:\/\*|\/\/)\s*dsbridge-ignore-next-line\s*:\s*(\S[^*\n]*)/;
+
+/** The 1-based lines a file asked not to be judged on. */
+export function ignoredLines(source: string): Set<number> {
+  const out = new Set<number>();
+  source.split("\n").forEach((line, i) => {
+    if (IGNORE.test(line)) out.add(i + 2);
+  });
+  return out;
+}
 
 export type BuildOptions = {
   root: string;
@@ -92,6 +112,8 @@ export type BuildOptions = {
   config?: Config;
   contract?: Contract;
   suppressed?: Suppressed;
+  /** Repo-relative file to the lines a comment took out of the check. */
+  ignores?: Map<string, Set<number>>;
 };
 
 export function buildContext({
@@ -106,7 +128,8 @@ export function buildContext({
   system,
   config = {},
   contract,
-  suppressed = { tests: 0, scope: 0 },
+  suppressed = { tests: 0, scope: 0, lines: 0 },
+  ignores = new Map(),
 }: BuildOptions): Context {
   const exempt = config.exempt ?? {};
   return {
@@ -125,6 +148,7 @@ export function buildContext({
     ...(contract ? { contract } : {}),
     suppressed,
     exempt: (rule, file) => anyGlob(exempt[rule] ?? [])(file),
+    ignored: (file, line) => line !== undefined && (ignores.get(file)?.has(line) ?? false),
   };
 }
 
@@ -159,7 +183,18 @@ export function loadContext({ root, system, config, prefix, includeTests }: Load
   const bounds = config?.sources ?? [];
   const inScope = bounds.length > 0 ? anyGlob(bounds) : () => true;
   const isTest = anyGlob(TEST_GLOBS);
-  const suppressed: Suppressed = { tests: 0, scope: 0 };
+  const suppressed: Suppressed = { tests: 0, scope: 0, lines: 0 };
+  const ignores = new Map<string, Set<number>>();
+  /* Read off the raw text: `makeSheet` blanks comments before anything parses
+     them, so by the time a rule sees a stylesheet the comment is gone. */
+  const noting = (file: string, source: string) => {
+    const lines = ignoredLines(source);
+    if (lines.size > 0) {
+      ignores.set(file, lines);
+      suppressed.lines += lines.size;
+    }
+    return source;
+  };
   /* Counted where it happens, so the reason a file went unread is the reason
      reported, not one inferred afterwards from a difference of two numbers. */
   const scanned = (file: string) => {
@@ -177,11 +212,13 @@ export function loadContext({ root, system, config, prefix, includeTests }: Load
   };
   const sheets = findStylesheets(at)
     .filter((file) => !systemFiles.has(file) && scanned(file))
-    .map((file) => makeSheet(file, readFileSync(file, "utf8"), at, namespace, systemDeclares));
+    .map((file) =>
+      makeSheet(file, noting(relative(at, file), readFileSync(file, "utf8")), at, namespace, systemDeclares),
+    );
   const tsx = findSources(at).filter((file) => !ignored(relative(at, file)));
   const sources = tsx
     .filter(scanned)
-    .map((file) => ({ file: relative(at, file), source: readFileSync(file, "utf8") }));
+    .map((file) => ({ file: relative(at, file), source: noting(relative(at, file), readFileSync(file, "utf8")) }));
   /* A component's story is what names its level, and its test is how the
      structure rules know it has one — so those two are read whether or not
      any rule scans their bodies. */
@@ -211,5 +248,6 @@ export function loadContext({ root, system, config, prefix, includeTests }: Load
     ...(config ? { config } : {}),
     ...(contract ? { contract } : {}),
     suppressed,
+    ignores,
   });
 }

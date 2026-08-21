@@ -32,6 +32,7 @@ const contextWith = (components: Component[]): Context =>
     levels: ["atom", "molecule", "organism"],
     levelsIgnore: ["Docs"],
     exempt: () => false,
+    ignored: () => false,
   }) as unknown as Context;
 
 const ids = structureRules.map((rule) => rule.id);

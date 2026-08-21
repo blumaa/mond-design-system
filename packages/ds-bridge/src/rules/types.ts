@@ -108,6 +108,9 @@ export type Context = {
    * exempts one scale rather than the whole rule.
    */
   exempt(rule: string, file: string): boolean;
+  /** A line a comment took out of the check, reason and all. Applied once, to
+      every finding, so no rule can forget to honour it. */
+  ignored(file: string, line?: number): boolean;
 };
 
 export type Rule = {
