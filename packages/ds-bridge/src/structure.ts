@@ -52,6 +52,26 @@ export function levelIn(source: string): { level: string; line: number } | undef
 }
 
 /**
+ * The component a specifier points at, if it points at one.
+ *
+ * The design system writes `../Button/Button.js`; an app writes `../Button` or
+ * `@/components/Card`, and a graph that only reads one convention has nothing
+ * to say about the other. A package names no component — `react` and
+ * `@mond-design-system/react` have no PascalCase segment — and a segment that
+ * is not a component in this repo is dropped by the rule that reads the edge.
+ */
+export function importedComponent(specifier: string): string | undefined {
+  const segments = specifier.split("/").map((segment) => segment.replace(/\..*$/, ""));
+  for (let at = segments.length - 1; at >= 0; at--) {
+    const segment = segments[at]!;
+    if (/^[A-Z]\w*$/.test(segment)) return segment;
+    /* A barrel stands for the directory holding it, and nothing else does. */
+    if (segment !== "index") return undefined;
+  }
+  return undefined;
+}
+
+/**
  * The components a file composes.
  *
  * Only a PascalCase binding counts. `Input` importing `useFieldContext` from
@@ -63,10 +83,12 @@ export function importsIn(source: string): Edge[] {
   const out: Edge[] = [];
   /* The bindings may span lines, but never a second `import` — a lazy `[\s\S]*?`
      would happily swallow every statement above the one that matched. */
-  const pattern = /^import\s+(type\s+)?((?:(?!^import\b)[\s\S])*?)\s+from\s+["']\.\.\/([A-Z]\w*)\/[^"']*["']/gm;
+  const pattern = /^import\s+(type\s+)?((?:(?!^import\b)[\s\S])*?)\s+from\s+["']([^"']+)["']/gm;
   for (const match of source.matchAll(pattern)) {
-    const [, typeOnly, bindings = "", name = ""] = match;
+    const [, typeOnly, bindings = "", specifier = ""] = match;
     if (typeOnly !== undefined) continue;
+    const name = importedComponent(specifier);
+    if (name === undefined) continue;
     const names = bindings.replace(/\btype\s+\w+/g, "").match(/[A-Za-z_$][\w$]*/g) ?? [];
     if (!names.some((binding) => /^[A-Z]/.test(binding))) continue;
     out.push({ name, line: lineOf(source, match.index) });
@@ -79,9 +101,10 @@ const base = (file: string) => file.slice(file.lastIndexOf("/") + 1);
 /**
  * Every component in a repo, with the files that go with it.
  *
- * A component is a directory that names a `.tsx` file after itself — the
- * convention every component here already follows, and the one that makes
- * "where does Button live" a question with one answer.
+ * A `.tsx` file named after the component in it. The design system gives each
+ * one a directory; an app usually does not, and a recogniser that insists on
+ * `<Name>/<Name>.tsx` finds nothing in the repos this is pointed at. The one
+ * thing both conventions agree on is the file name, so that is what is read.
  */
 export function readComponents(files: string[], read: (file: string) => string): Component[] {
   const stories = new Map<string, string>();
@@ -95,8 +118,9 @@ export function readComponents(files: string[], read: (file: string) => string):
   const out: Component[] = [];
   for (const file of files) {
     const name = base(file).replace(/\.tsx$/, "");
-    if (base(file) === name) continue;
-    if (!file.endsWith(`/${name}/${name}.tsx`)) continue;
+    /* PascalCase and nothing else in the name: `router.tsx` is not a component
+       and `Overlay.test.tsx` leaves `Overlay.test`, which is not a name. */
+    if (base(file) === name || !/^[A-Z]\w*$/.test(name)) continue;
     const story = stories.get(name);
     const level = story === undefined ? undefined : levelIn(read(story));
     out.push({

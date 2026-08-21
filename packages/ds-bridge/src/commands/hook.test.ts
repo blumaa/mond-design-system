@@ -115,7 +115,7 @@ const context = (over: Partial<BuildOptions> = {}) =>
 
 describe("what a session opens knowing", () => {
   it("names the namespace, the count, and the taxonomy — not the rules themselves", () => {
-    const brief = sessionBrief(context());
+    const brief = sessionBrief(context({ kind: "system" }));
     expect(brief).toContain("--mds-");
     expect(brief).toContain("atom, molecule, organism, template");
     expect(brief).toContain("dsbridge rules --for");
@@ -129,6 +129,12 @@ describe("what a session opens knowing", () => {
 
   it("says how to make one when there is none, so the gate is not silently off", () => {
     expect(sessionBrief(context())).toContain("--update-baseline");
+  });
+
+  it("says an app has no taxonomy rather than printing an empty line for it", () => {
+    const brief = sessionBrief(context());
+    expect(brief).toContain("none declared");
+    expect(brief).toContain("dsbridge.config.json");
   });
 
   it("names what the repo already has, so a second Button is a lookup away", () => {

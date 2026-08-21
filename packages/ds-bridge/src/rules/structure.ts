@@ -15,6 +15,16 @@ const target = "system" as const;
 const needsComponents = (context: Context) =>
   context.components.length === 0 ? "no component directories under this root" : undefined;
 
+/* An app's levels are its own — Fair Play groups by feature, and holding it to
+   atom/molecule/organism would be 156 findings about a vocabulary it never
+   agreed to. So the taxonomy rules run wherever a taxonomy is declared, and
+   say so rather than passing silently where none is. */
+const needsTaxonomy = (context: Context) =>
+  needsComponents(context) ??
+  (context.levels.length === 0
+    ? "no levels declared — name this repo's taxonomy in dsbridge.config.json"
+    : undefined);
+
 const finding = (rule: string, file: string, message: string, line?: number): Finding => ({
   rule,
   file,
@@ -80,9 +90,9 @@ export const declaresItsLevel: Rule = {
     "`title: \"Atoms/Button\"`. The story title is where the level lives, because " +
     "it is the one people already read; a separate manifest would be a second " +
     "answer to the same question, and the second answer goes stale.",
-  target,
+  target: "both",
   reads: "component",
-  needs: needsComponents,
+  needs: needsTaxonomy,
   check: (context) =>
     context.components
       .filter((component) => component.story !== undefined && component.level === undefined)
@@ -104,9 +114,9 @@ export const levelIsInTheTaxonomy: Rule = {
     "Use a level from `levels` in the config, or add the tier there — deliberately, " +
     "in the order it belongs. Grouping in the sidebar is a job for the segments " +
     "after the first one.",
-  target,
+  target: "both",
   reads: "component",
-  needs: needsComponents,
+  needs: needsTaxonomy,
   check: (context) => {
     const known = new Set([...context.levels, ...context.levelsIgnore.map(asLevel)]);
     return context.components
@@ -139,9 +149,9 @@ export const composesDownward: Rule = {
     "built out of Modal's parts is `composition-over-configuration` working as " +
     "intended. Whether a peer wrapper has earned its own level is a judgement, and " +
     "a checker that fired on it would be wrong more often than right.",
-  target,
+  target: "both",
   reads: "component",
-  needs: needsComponents,
+  needs: needsTaxonomy,
   check: (context) => {
     const rank = (level?: string) => (level === undefined ? -1 : context.levels.indexOf(level));
     return context.components.flatMap((component) => {

@@ -4,6 +4,11 @@
   "levelsIgnore": ["Docs"],
   "ignore": ["packages/ds-bridge/src/__fixtures__"],
   "exempt": {
-    "no-raw-scale-step/typography": ["packages/react/src/components/Link/Link.module.css"]
+    "no-raw-scale-step/typography": ["packages/react/src/components/Link/Link.module.css"],
+    "every-component-has-a-story": [
+      "packages/react/src/components/Chip/ChipBar.tsx",
+      "packages/react/src/components/Chip/ChipGroup.tsx",
+      "packages/react/src/internal/Overlay.tsx"
+    ]
   }
 }

@@ -138,7 +138,12 @@ export function sessionBrief(context: Context, baseline?: Baseline): string {
     "dsbridge — this repo is checked against a design system.",
     "",
     field("tokens", `${context.graph.tokens().length} under ${context.prefix}`),
-    field("levels", context.levels.join(", ")),
+    field(
+      "levels",
+      context.levels.length > 0
+        ? context.levels.join(", ")
+        : "none declared — the taxonomy rules are off until dsbridge.config.json names them",
+    ),
     ...(names.length > 0
       ? [field("components", `${names.length} — ${shown.join(", ")}${andMore(shown.length, names.length)}`)]
       : []),

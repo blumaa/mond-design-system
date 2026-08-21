@@ -61,7 +61,8 @@ export type Config = {
   levelsIgnore?: string[];
 };
 
-/** The taxonomy a repo gets when it declares none. */
+/** The taxonomy a design system gets when it declares none. An app gets none:
+    its levels are its own, and a default would be a guess. */
 export const LEVELS = ["atom", "molecule", "organism", "template"];
 
 /* Files that exist to exercise the app rather than to be it. A literal length
@@ -142,7 +143,10 @@ export function buildContext({
     fonts,
     prefix: prefix ?? graph.prefix,
     ...(system ? { system } : {}),
-    levels: config.levels ?? LEVELS,
+    /* A system without a stated taxonomy still has the common one; an app does
+       not, and inventing one for it would be this tool telling a repo what its
+       own parts are called. The rules that read levels skip a repo with none. */
+    levels: config.levels ?? (kind === "system" ? LEVELS : []),
     levelsIgnore: config.levelsIgnore ?? [],
     ...(config.scales ? { scales: config.scales } : {}),
     ...(contract ? { contract } : {}),

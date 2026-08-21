@@ -99,7 +99,7 @@ The system's promise to an app is that upgrading it is safe. Nothing backs that 
 
 ### declares-its-level
 
-**A story title starts with the component's level.** *(system)*
+**A story title starts with the component's level.** *(both)*
 
 The level is what makes composition checkable. Without it a component is just a file, and the question `may this import that` has no answer — which is how a system ends up with an atom rendering a dialog and nobody noticing until it is imported everywhere.
 
@@ -107,7 +107,7 @@ The level is what makes composition checkable. Without it a component is just a 
 
 ### level-is-in-the-taxonomy
 
-**A level is one the taxonomy declares.** *(system)*
+**A level is one the taxonomy declares.** *(both)*
 
 Every invented level is a tier nothing can be ordered against, and it spreads: `Layout/Stack` and `Atoms/Button` are both true statements about the sidebar and neither says which may contain the other. A taxonomy with exceptions is a filing system, not a hierarchy.
 
@@ -115,7 +115,7 @@ Every invented level is a tier nothing can be ordered against, and it spreads: `
 
 ### composes-downward
 
-**A component never composes something more complex than itself.** *(system)*
+**A component never composes something more complex than itself.** *(both)*
 
 An upward import inverts the hierarchy: the atom now cannot be understood, tested or shipped without the molecule above it, and the two can reach each other, so the cycle arrives as a stack overflow rather than as a design review. It also breaks the one promise the levels make to a reader — that you can learn this system from the bottom up.
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { structureRules } from "./structure.js";
-import { runCheck } from "../commands/check.js";
+import { runCheck, skippedRules } from "../commands/check.js";
 import type { Component } from "../structure.js";
 import type { Context } from "./types.js";
 
@@ -108,5 +108,67 @@ describe("what a repo is made of", () => {
   it("reports rather than passes silently when there are no components", () => {
     const context = contextWith([]);
     for (const rule of structureRules) expect(rule.needs?.(context)).toBeTypeOf("string");
+  });
+});
+
+/* The taxonomy is the design system's, and an app's is its own — Fair Play
+   groups by feature, so telling it `EventCard` is not an atom would be noise.
+   The rules are the same rules; what an app supplies is the vocabulary. */
+describe("an app's own taxonomy", () => {
+  const TAXONOMY = ["declares-its-level", "level-is-in-the-taxonomy", "composes-downward"];
+
+  const app = (levels: string[], components: Component[]): Context =>
+    ({
+      kind: "app",
+      components,
+      levels,
+      levelsIgnore: [],
+      exempt: () => false,
+      ignored: () => false,
+    }) as unknown as Context;
+
+  const undeclared = app([], [component("EventCard", { level: undefined })]);
+
+  it("skips the taxonomy rules with a reason when none is declared", () => {
+    const skipped = skippedRules(undeclared, { only: ids });
+    for (const rule of TAXONOMY) {
+      expect(skipped.get(rule)).toContain("levels");
+    }
+    expect(runCheck(undeclared, { only: ids })).toEqual([]);
+  });
+
+  it("still asks the app for a level once the app has said what a level is", () => {
+    const declared = app(["primitive", "block", "screen"], [component("EventCard", { level: undefined })]);
+    expect(skippedRules(declared, { only: ids }).has("declares-its-level")).toBe(false);
+    expect(runCheck(declared, { only: ids }).map((f) => f.rule)).toContain("declares-its-level");
+  });
+
+  it("reads an app's levels, not atom/molecule/organism", () => {
+    const declared = app(
+      ["primitive", "block", "screen"],
+      [component("EventCard", { level: "block" }), component("Odd", { level: "molecule" })],
+    );
+    const found = runCheck(declared, { only: ids });
+    expect(found.map((f) => f.rule)).toEqual(["level-is-in-the-taxonomy"]);
+    expect(found[0]!.message).toContain("molecule");
+  });
+
+  it("holds an app to composing downward, which is what a level is for", () => {
+    const declared = app(
+      ["primitive", "block", "screen"],
+      [
+        component("EventCard", { level: "block", imports: [{ name: "EventScreen", line: 4 }] }),
+        component("EventScreen", { level: "screen" }),
+      ],
+    );
+    expect(runCheck(declared, { only: ids }).map((f) => f.rule)).toEqual(["composes-downward"]);
+  });
+
+  it("leaves stories and tests to the system, which is the repo that publishes", () => {
+    const declared = app(
+      ["primitive"],
+      [component("EventCard", { level: "primitive", story: undefined, test: undefined })],
+    );
+    expect(runCheck(declared, { only: ids })).toEqual([]);
   });
 });
