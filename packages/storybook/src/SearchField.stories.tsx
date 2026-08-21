@@ -10,9 +10,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: { label: "Search", value: "", onChange: () => {} },
+  args: { label: "Search", clearLabel: "Clear search", value: "", onChange: () => {} },
   render: function Render() {
     const [value, setValue] = useState("rope");
-    return <SearchField label="Search" value={value} onChange={setValue} placeholder="Search…" />;
+    return (
+      <SearchField
+        label="Search"
+        clearLabel="Clear search"
+        value={value}
+        onChange={setValue}
+        placeholder="Search…"
+      />
+    );
   },
 };

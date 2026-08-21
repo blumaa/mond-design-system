@@ -177,6 +177,14 @@ Spreading the rest props onto a `<div>` tells the caller this is that div: `id`,
 
 **Instead.** If the system styles `:focus-visible` once for the whole document, leave the outline alone and inherit it. If this component really needs its own treatment, write `:focus-visible` in the same file. To hide the ring from a mouse and keep it for a keyboard, the selector is `:focus:not(:focus-visible)`.
 
+### user-facing-text-is-a-prop
+
+**A component takes the words it shows; it does not contain them.** *(system)*
+
+A string written into a component is a string the app installing it cannot reach: it sits in `node_modules`, where the app's translation check never looks, so the check passes and the label stays English for everybody. The ones that hurt most are the ones nobody sees — an `aria-label` on an icon button is read aloud, in the wrong language, only to the person who depends on it.
+
+**Instead.** Take the text as a required prop. Required rather than optional-with-default: a default compiles everywhere, so the one call site nobody passed a label to is the one nobody finds, while a required prop makes `tsc` the gate. An `alt=""` is not copy — it is the mark of a decorative picture, and it stays.
+
 ### mobile-first-media
 
 **A media query widens the layout; it never narrows it.** *(both)*

@@ -3,6 +3,17 @@ import { useState } from "react";
 import { DateTimePicker, Field } from "@mond-design-system/react";
 import story from "./story.module.css";
 
+const english = {
+  dialog: "Pick date and time",
+  previousMonth: "Previous month",
+  nextMonth: "Next month",
+  today: "Today",
+  done: "Done",
+  hour: "Hour",
+  minute: "Minutes",
+  dayPeriod: "AM/PM",
+};
+
 const meta = {
   title: "Organisms/DateTimePicker",
   component: DateTimePicker,
@@ -11,13 +22,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const InAField: Story = {
-  args: { onChange: () => {} },
+  args: { onChange: () => {}, labels: english },
   render: function Render() {
     const [value, setValue] = useState<string | undefined>();
     return (
       <div className={story.frame}>
         <Field label="Starts">
-          <DateTimePicker value={value} onChange={setValue} minuteStep={30} aria-label="Starts" />
+          <DateTimePicker
+            value={value}
+            onChange={setValue}
+            labels={english}
+            minuteStep={30}
+            aria-label="Starts"
+          />
         </Field>
       </div>
     );
@@ -25,7 +42,7 @@ export const InAField: Story = {
 };
 
 export const German24Hour: Story = {
-  args: { onChange: () => {} },
+  args: { onChange: () => {}, labels: english },
   render: function Render() {
     const [value, setValue] = useState<string | undefined>();
     return (
@@ -45,6 +62,7 @@ export const German24Hour: Story = {
               done: "Fertig",
               hour: "Stunde",
               minute: "Minuten",
+              dayPeriod: "Tageszeit",
             }}
           />
         </Field>
@@ -54,5 +72,5 @@ export const German24Hour: Story = {
 };
 
 export const Disabled: Story = {
-  args: { onChange: () => {}, disabled: true },
+  args: { onChange: () => {}, labels: english, disabled: true },
 };

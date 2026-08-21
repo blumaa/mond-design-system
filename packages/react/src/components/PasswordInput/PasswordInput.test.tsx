@@ -10,7 +10,7 @@ describe("PasswordInput", () => {
   it("starts hidden as type password", () => {
     render(
       <Field label="Password">
-        <PasswordInput />
+        <PasswordInput showLabel="Show password" hideLabel="Hide password" />
       </Field>,
     );
     expect(screen.getByLabelText("Password")).toHaveAttribute("type", "password");
@@ -19,7 +19,7 @@ describe("PasswordInput", () => {
   it("reveal toggle switches to text and back", async () => {
     render(
       <Field label="Password">
-        <PasswordInput />
+        <PasswordInput showLabel="Show password" hideLabel="Hide password" />
       </Field>,
     );
     const toggle = screen.getByRole("button", { name: "Show password" });
@@ -37,7 +37,7 @@ describe("PasswordInput", () => {
   it("inherits Field wiring like Input", () => {
     render(
       <Field label="Password" error="Too short">
-        <PasswordInput />
+        <PasswordInput showLabel="Show password" hideLabel="Hide password" />
       </Field>,
     );
     const input = screen.getByLabelText("Password");
@@ -48,7 +48,7 @@ describe("PasswordInput", () => {
   it("has no axe violations", async () => {
     const { container } = render(
       <Field label="Password">
-        <PasswordInput />
+        <PasswordInput showLabel="Show password" hideLabel="Hide password" />
       </Field>,
     );
     expect(await axe(container)).toHaveNoViolations();

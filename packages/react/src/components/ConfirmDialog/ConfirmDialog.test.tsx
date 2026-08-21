@@ -17,6 +17,7 @@ describe("ConfirmDialog", () => {
         title="Delete session?"
         description="This cannot be undone."
         confirmLabel="Delete"
+        cancelLabel="Cancel"
         {...props}
       />,
     );
@@ -71,6 +72,7 @@ describe("ConfirmDialog lifecycle", () => {
         onConfirm={onConfirm}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     const confirm = screen.getByRole("button", { name: "Delete" });
@@ -92,6 +94,7 @@ describe("ConfirmDialog lifecycle", () => {
         onConfirm={() => Promise.reject(new Error("Network down"))}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     await userEvent.click(screen.getByRole("button", { name: "Delete" }));
@@ -109,6 +112,7 @@ describe("ConfirmDialog lifecycle", () => {
         errorMessage={(m) => `Could not delete (${m}).`}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     await userEvent.click(screen.getByRole("button", { name: "Delete" }));
@@ -124,6 +128,7 @@ describe("ConfirmDialog lifecycle", () => {
         onConfirm={onConfirm}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     expect(screen.getByRole("alertdialog")).toBeInTheDocument();
@@ -139,6 +144,7 @@ describe("ConfirmDialog lifecycle", () => {
         onConfirm={(id: number) => Promise.resolve(id)}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
@@ -153,6 +159,7 @@ describe("ConfirmDialog lifecycle", () => {
         onConfirm={failing}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     await userEvent.click(screen.getByRole("button", { name: "Delete" }));
@@ -164,6 +171,7 @@ describe("ConfirmDialog lifecycle", () => {
         onConfirm={failing}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     rerender(
@@ -173,6 +181,7 @@ describe("ConfirmDialog lifecycle", () => {
         onConfirm={failing}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
@@ -189,6 +198,7 @@ describe("ConfirmDialog dismissal", () => {
         onConfirm={() => Promise.resolve()}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     await userEvent.click(screen.getByTestId("mds-scrim"));
@@ -204,6 +214,7 @@ describe("ConfirmDialog dismissal", () => {
         onConfirm={() => Promise.resolve()}
         title="Delete session?"
         confirmLabel="Delete"
+        cancelLabel="Cancel"
       />,
     );
     await userEvent.keyboard("{Escape}");

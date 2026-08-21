@@ -42,7 +42,7 @@ const at = <T extends HTMLElement>(
 
 const cases: Case[] = [
   at<HTMLSpanElement>("Avatar", (ref) => <Avatar name="Ada Lovelace" ref={ref} />, "SPAN"),
-  at<HTMLDivElement>("AvatarGroup", (ref) => <AvatarGroup ref={ref}>{null}</AvatarGroup>, "DIV"),
+  at<HTMLDivElement>("AvatarGroup", (ref) => <AvatarGroup overflowLabel={(n) => `${n} more`} ref={ref}>{null}</AvatarGroup>, "DIV"),
   at<HTMLSpanElement>("Badge", (ref) => <Badge ref={ref}>3</Badge>, "SPAN"),
   at<HTMLElement>("Card", (ref) => <Card ref={ref}>body</Card>, "DIV"),
   at<HTMLElement>("Card as a link", (ref) => <Card href="/x" ref={ref}>body</Card>, "A"),
@@ -62,7 +62,7 @@ const cases: Case[] = [
   at<HTMLElement>("ListItem", (ref) => <ListItem title="Row" ref={ref} />, "DIV"),
   at<HTMLDivElement>("ProgressBar", (ref) => <ProgressBar label="Upload" value={50} ref={ref} />, "DIV"),
   at<HTMLSpanElement>("Skeleton", (ref) => <Skeleton ref={ref} />, "SPAN"),
-  at<HTMLSpanElement>("Spinner", (ref) => <Spinner ref={ref} />, "SPAN"),
+  at<HTMLSpanElement>("Spinner", (ref) => <Spinner label="Loading" ref={ref} />, "SPAN"),
   at<HTMLDivElement>("TabList", (ref) => <TabList label="Views" ref={ref}>{null}</TabList>, "DIV"),
   at<HTMLButtonElement>("Tab", (ref) => <Tab value="a" ref={ref}>A</Tab>, "BUTTON"),
   at<HTMLDivElement>("TabPanel", (ref) => <TabPanel value="a" ref={ref}>content</TabPanel>, "DIV"),

@@ -9,9 +9,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const InField: Story = {
+  args: { showLabel: "Show password", hideLabel: "Hide password" },
   render: () => (
     <Field label="Password" hint="At least 12 characters.">
-      <PasswordInput autoComplete="new-password" />
+      <PasswordInput
+        autoComplete="new-password"
+        showLabel="Show password"
+        hideLabel="Hide password"
+      />
     </Field>
   ),
 };

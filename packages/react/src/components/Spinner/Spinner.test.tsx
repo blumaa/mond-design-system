@@ -5,24 +5,19 @@ import { axe } from "jest-axe";
 import { Spinner } from "./Spinner";
 
 describe("Spinner", () => {
-  it("announces as status with a default label", () => {
-    render(<Spinner />);
-    expect(screen.getByRole("status")).toHaveAccessibleName("Loading");
-  });
-
-  it("takes a custom label", () => {
+  it("announces as status, named by the label the caller passed", () => {
     render(<Spinner label="Saving" />);
     expect(screen.getByRole("status")).toHaveAccessibleName("Saving");
   });
 
   it("sizes via a per-instance custom property", () => {
-    render(<Spinner size={32} />);
+    render(<Spinner label="Loading" size={32} />);
     const el = screen.getByRole("status");
     expect(el.style.getPropertyValue("--spinner-size")).toBe("32px");
   });
 
   it("has no axe violations", async () => {
-    const { container } = render(<Spinner />);
+    const { container } = render(<Spinner label="Loading" />);
     expect(await axe(container)).toHaveNoViolations();
   });
 });

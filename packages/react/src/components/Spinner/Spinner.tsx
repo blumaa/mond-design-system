@@ -5,8 +5,9 @@ import styles from "./Spinner.module.css";
 export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
   /** Diameter in px. Default 20. */
   size?: number;
-  /** Accessible label. Default "Loading". */
-  label?: string;
+  /** Accessible label. Required: the words are the app's, in the app's
+      language, and a default here is one no translation file can reach. */
+  label: string;
   ref?: Ref<HTMLSpanElement>;
 }
 
@@ -22,7 +23,7 @@ export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
  */
 export function Spinner({
   size = 20,
-  label = "Loading",
+  label,
   className,
   style,
   ...rest

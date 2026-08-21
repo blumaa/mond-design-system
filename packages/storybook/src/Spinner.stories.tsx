@@ -8,13 +8,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = { args: { label: "Loading" } };
 export const Sizes: Story = {
+  args: { label: "Loading" },
   render: () => (
     <Inline gap="loose">
-      <Spinner size={16} />
-      <Spinner size={24} />
-      <Spinner size={40} />
+      <Spinner label="Loading" size={16} />
+      <Spinner label="Loading" size={24} />
+      <Spinner label="Loading" size={40} />
     </Inline>
   ),
 };

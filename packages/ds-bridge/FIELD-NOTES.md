@@ -157,3 +157,53 @@ second a position — so the rule cannot work from the name alone. `rungsIn` was
 extracted from `no-raw-scale-step` and asks the graph which group the token was
 declared in. Both rules read the same helper, which is what keeps a component's
 "stay off the rungs" and a brand's "stay on them" talking about one list.
+
+### 7. Copy inside a component: the gate that had to exist before Phase 2
+
+MDS held three policies at once. Some components took every string they showed
+as a required prop, some took an optional one over an English default, and some
+hardcoded the words. Nothing said which was right, so each new component picked
+whichever the file beside it happened to use.
+
+The default is the one that looks safe and is not. `regionLabel = "Notifications"`
+compiles everywhere, so no app is ever asked for the German, and the gate that
+would catch the missing translation never fires — a gate never seen to fail is
+indistinguishable from a gate that cannot. Required props move the question to
+`tsc`, which asks once per call site and cannot be forgotten.
+
+`user-facing-text-is-a-prop` reads a component four ways: literals in the
+attributes a person hears (`aria-label`, `alt`, `title`, `placeholder`, `label`
+and the aria text properties), text nodes between tags, defaulted parameters
+whose name reads as copy, and object literals under a name like `labels` or
+`messages`. `target: "system"` — an app owns its words and writes `t(...)`,
+which the literal scan would otherwise flag on every line.
+
+The first run reported 124 findings, of which 105 were the scanner's fault, and
+all three causes were shared with every other rule that reads a source file:
+
+- JSDoc `@example` blocks were read as real markup. `buildContext` now blanks
+  comments before any rule sees a source, the way `makeSheet` already did for
+  stylesheets. A documented example of the thing a rule forbids is not the file
+  doing it.
+- `` throw new Error(`${component} must sit inside <Tabs>`) `` opened an element
+  that never closed, so the rest of the file read as text. The scanner is now
+  string-aware in the same pass.
+- `) : null}` was reported as copy. JSX alternates between markup and code, so
+  the scanner carries a frame stack: inside `{...}` a string is a string, inside
+  an element it is what somebody reads.
+
+The surviving 19 were all real, and four of the eight components they named were
+not in the migration plan: `AvatarGroup`'s "+N more", `ConfirmDialog`'s
+"Cancel", `Toast`'s "Notifications" and "Dismiss", and `DateTimePicker`'s bag of
+eight. The plan had listed the four everyone remembers.
+
+Two shapes came out of the fixes. `AvatarGroup.overflowLabel` is
+`(hidden: number) => string` rather than a string, because only the app knows
+how its language counts. `Tag` pairs `onRemove` with `removeLabel` in a
+discriminated union, so a tag with no remove button is not asked for the words
+of one.
+
+Known limit: a bag of strings is only found through the name of the const that
+holds it. `labels`, `messages`, `copy` are caught; `strings2` is not. The name
+is the only evidence available without knowing what each key means, and a rule
+that guesses at intent would report the app's config objects too.

@@ -15,6 +15,7 @@ export const Danger: Story = {
   args: {
     title: "Delete session?",
     confirmLabel: "Delete",
+    cancelLabel: "Cancel",
     onConfirm: () => Promise.resolve(),
   },
   render: function Render() {
@@ -31,6 +32,7 @@ export const Danger: Story = {
           title="Delete session?"
           description="This cannot be undone."
           confirmLabel="Delete"
+          cancelLabel="Cancel"
           tone="danger"
         />
       </>
@@ -44,6 +46,7 @@ export const Failure: Story = {
   args: {
     title: "Remove member?",
     confirmLabel: "Remove",
+    cancelLabel: "Cancel",
     onConfirm: () => Promise.resolve(),
   },
   render: function Render() {
@@ -63,6 +66,7 @@ export const Failure: Story = {
           title="Remove member?"
           description="They can be invited again later."
           confirmLabel="Remove"
+          cancelLabel="Cancel"
           tone="warning"
         />
       </>

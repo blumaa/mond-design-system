@@ -19,23 +19,13 @@ export interface DateTimePickerLabels {
   dayPeriod: string;
 }
 
-const DEFAULT_LABELS: DateTimePickerLabels = {
-  dialog: "Pick date and time",
-  previousMonth: "Previous month",
-  nextMonth: "Next month",
-  today: "Today",
-  done: "Done",
-  hour: "Hour",
-  minute: "Minutes",
-  dayPeriod: "AM/PM",
-};
-
 export interface DateTimePickerProps {
   /** Current value as an ISO 8601 string. */
   value?: string | undefined;
   /** Fires with the combined ISO string when the user confirms. */
   onChange: (iso: string) => void;
-  /** Shown on the trigger when nothing is selected. */
+  /** Shown on the trigger when nothing is selected. Nothing is shown without
+      it: the component ships no words of its own. */
   placeholder?: string | undefined;
   /** Earliest selectable moment as an ISO string. Default: now. */
   min?: string | undefined;
@@ -48,8 +38,10 @@ export interface DateTimePickerProps {
   "aria-label"?: string | undefined;
   /** BCP 47 tag for names, week start and hour cycle. Default: runtime locale. */
   locale?: string | undefined;
-  /** Overrides for the picker's own strings (defaults are English). */
-  labels?: Partial<DateTimePickerLabels> | undefined;
+  /** Every string the picker says. Required and whole rather than a partial
+      over English defaults: a default is a word no translation file reaches,
+      and a partial makes the one nobody filled in look deliberate. */
+  labels: DateTimePickerLabels;
 }
 
 /* --- Intl-derived locale facts, computed once per locale ------------------ */
@@ -185,6 +177,7 @@ const clockGlyph = (
  *   <DateTimePicker
  *     value={startsAt}
  *     onChange={setStartsAt}
+ *     labels={t("picker", { returnObjects: true })}
  *     min={new Date().toISOString()}
  *     minuteStep={30}
  *     locale={i18n.language}
@@ -195,16 +188,15 @@ const clockGlyph = (
 export function DateTimePicker({
   value,
   onChange,
-  placeholder = "Select date & time",
+  placeholder,
   min,
   minuteStep = 5,
   disabled = false,
   id,
   "aria-label": ariaLabel,
   locale,
-  labels,
+  labels: text,
 }: DateTimePickerProps): ReactElement {
-  const text: DateTimePickerLabels = { ...DEFAULT_LABELS, ...labels };
   /* Inside a Field, claim its generated control id and message wiring, the
      same way Input/Select/Textarea do — the field's <label htmlFor> points at
      the control id, and without it the label names nothing. */
@@ -373,6 +365,11 @@ export function DateTimePicker({
     );
   });
 
+  /* The trigger shows the value, or the placeholder, or nothing: the
+     placeholder is optional, and interpolating it while unset would print
+     "undefined" into the accessible name. */
+  const shown = value ? intl.full.format(new Date(value)) : placeholder;
+
   return (
     <>
       <button
@@ -383,16 +380,12 @@ export function DateTimePicker({
         aria-haspopup="dialog"
         aria-expanded={open}
         /* Announce the field name (when given) alongside the current value. */
-        aria-label={
-          ariaLabel
-            ? `${ariaLabel}: ${value ? intl.full.format(new Date(value)) : placeholder}`
-            : undefined
-        }
+        aria-label={ariaLabel === undefined ? undefined : [ariaLabel, shown].filter(Boolean).join(": ")}
         onClick={openPicker}
         className={cx(styles.trigger, value && styles.hasValue)}
       >
         {calendarGlyph}
-        <span className={styles.triggerLabel}>{value ? intl.full.format(new Date(value)) : placeholder}</span>
+        <span className={styles.triggerLabel}>{shown}</span>
       </button>
 
       <Sheet open={open} onClose={() => setOpen(false)} label={ariaLabel ?? text.dialog}>

@@ -9,18 +9,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const people = ["Ada Lovelace", "Grace Hopper", "Alan Turing", "Edsger Dijkstra", "Barbara Liskov"];
+const more = (hidden: number) => `${hidden} more`;
 const avatars = (count: number) => people.slice(0, count).map((name) => <Avatar key={name} name={name} />);
 
-export const Default: Story = { args: { children: avatars(3) } };
+export const Default: Story = { args: { children: avatars(3), overflowLabel: more } };
 
 /** Past `max`, the rest collapse into one chip. */
-export const Overflow: Story = { args: { max: 3, children: avatars(5) } };
+export const Overflow: Story = { args: { max: 3, children: avatars(5), overflowLabel: more } };
 
 /** The chip sizes with the avatars it stands in for. */
 export const Sizes: Story = {
-  args: { children: avatars(5) },
+  args: { children: avatars(5), overflowLabel: more },
   render: () => (
-    <AvatarGroup max={2} size="lg">
+    <AvatarGroup max={2} size="lg" overflowLabel={more}>
       {people.slice(0, 4).map((name) => (
         <Avatar key={name} name={name} size="lg" />
       ))}

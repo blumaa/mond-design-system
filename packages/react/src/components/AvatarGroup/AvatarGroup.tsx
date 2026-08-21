@@ -11,6 +11,10 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   max?: number;
   /** Sizes the overflow chip to match the avatars. Default "md". */
   size?: AvatarSize;
+  /** Names the "+N" chip, e.g. `(n) => `${n} more``. Required and a function:
+      the chip stands for people whose names are not on screen, and only the app
+      knows how its language counts them. */
+  overflowLabel: (hidden: number) => string;
   ref?: Ref<HTMLDivElement>;
 }
 
@@ -18,7 +22,7 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
  * Overlapping stack of avatars with a "+N" chip past `max`.
  *
  * ```tsx
- * <AvatarGroup max={3}>
+ * <AvatarGroup max={3} overflowLabel={(n) => `${n} more`}>
  *   <Avatar name="Ada Lovelace" />
  *   <Avatar name="Grace Hopper" />
  *   <Avatar name="Margaret Hamilton" />
@@ -30,6 +34,7 @@ export function AvatarGroup({
   children,
   max = 4,
   size = "md",
+  overflowLabel,
   className,
   ...rest
 }: AvatarGroupProps): ReactElement {
@@ -47,7 +52,7 @@ export function AvatarGroup({
       {hidden > 0 && (
         <span
           className={cx(styles.item, styles.overflow, styles[`size-${size}`])}
-          aria-label={`${hidden} more`}
+          aria-label={overflowLabel(hidden)}
         >
           +{hidden}
         </span>

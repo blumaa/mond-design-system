@@ -28,8 +28,9 @@ export interface ConfirmDialogProps<T = void> {
   /** Consequence explained in a sentence or two. */
   description?: ReactNode;
   confirmLabel: string;
-  /** @default "Cancel" */
-  cancelLabel?: string;
+  /** Names the way out, e.g. "Cancel". Required: it is a button with words on
+      it, and the words are the app's. */
+  cancelLabel: string;
   /** Styles the confirm action: danger for destructive, warning for
       consequential-but-recoverable. */
   tone?: ConfirmDialogTone;
@@ -74,6 +75,7 @@ const CONFIRM_VARIANT = {
  *   title="Delete session?"
  *   description="This cannot be undone."
  *   confirmLabel="Delete"
+ *   cancelLabel="Cancel"
  *   tone="danger"
  * />
  * ```
@@ -86,7 +88,7 @@ export function ConfirmDialog<T = void>({
   title,
   description,
   confirmLabel,
-  cancelLabel = "Cancel",
+  cancelLabel,
   tone = "default",
   errorMessage,
 }: ConfirmDialogProps<T>) {

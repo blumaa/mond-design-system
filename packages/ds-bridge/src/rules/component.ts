@@ -5,6 +5,7 @@
  * declaration file — the source says whether the ref goes anywhere, and the
  * stylesheet says whether the ring survives.
  */
+import { openingTags } from "../jsx.js";
 import { componentSheets, type Context, type Finding, type Rule } from "./types.js";
 
 const finding = (rule: string, file: string, message: string, line?: number): Finding => ({
@@ -29,23 +30,14 @@ const elementNames = (source: string): Set<string> => {
  * The line a rest spread lands on a DOM element, if it lands on one.
  *
  * A spread onto `<Surface>` is that component's problem; a spread onto `<div>`
- * is this one's. Told apart by walking the opening tag rather than matching it:
- * `onClick={() => x}` puts a `>` inside a tag, so any regex that stops at the
- * first one reads half of it.
+ * is this one's.
  */
 export function spreadOntoAnElement(source: string): number | undefined {
   const named = elementNames(source);
-  for (const match of source.matchAll(/<([A-Za-z][\w.-]*)/g)) {
-    if (/^[A-Z]/.test(match[1]!) && !named.has(match[1]!)) continue;
-    let depth = 0;
-    for (let at = match.index + match[0].length; at < source.length; at++) {
-      const char = source[at]!;
-      if (char === "{") {
-        if (depth === 0 && source.startsWith("{...", at)) return source.slice(0, at).split("\n").length;
-        depth++;
-      } else if (char === "}") depth--;
-      else if (char === ">" && depth === 0) break;
-    }
+  for (const tag of openingTags(source)) {
+    if (/^[A-Z]/.test(tag.name) && !named.has(tag.name)) continue;
+    const spread = tag.attributes.find((it) => it.name === "" && it.value?.startsWith("{..."));
+    if (spread !== undefined) return spread.line;
   }
   return undefined;
 }

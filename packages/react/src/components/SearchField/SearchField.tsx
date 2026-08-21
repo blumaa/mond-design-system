@@ -6,6 +6,9 @@ export interface SearchFieldProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size" | "value" | "onChange"> {
   /** Accessible name. */
   label: string;
+  /** Names the clear button, e.g. "Clear search". Required: the button is a
+      glyph, so this is all a screen reader has, and the words are the app's. */
+  clearLabel: string;
   value: string;
   /** Receives the new text — "" when cleared. */
   onChange: (value: string) => void;
@@ -16,10 +19,17 @@ export interface SearchFieldProps
  * Controlled search input with a clear affordance once there is text.
  *
  * ```tsx
- * <SearchField label="Search sessions" value={query} onChange={setQuery} />
+ * <SearchField label="Search sessions" clearLabel="Clear search" value={query} onChange={setQuery} />
  * ```
  */
-export function SearchField({ label, value, onChange, className, ...rest }: SearchFieldProps): ReactElement {
+export function SearchField({
+  label,
+  clearLabel,
+  value,
+  onChange,
+  className,
+  ...rest
+}: SearchFieldProps): ReactElement {
   return (
     <span className={cx(styles.wrap, className)}>
       <svg viewBox="0 0 16 16" aria-hidden="true" className={styles.glass}>
@@ -42,7 +52,7 @@ export function SearchField({ label, value, onChange, className, ...rest }: Sear
       {value !== "" && (
         <button
           type="button"
-          aria-label="Clear search"
+          aria-label={clearLabel}
           className={styles.clear}
           onClick={() => onChange("")}
         >

@@ -17,7 +17,7 @@ describe("Toast", () => {
 
   it("toast() shows a status message in the notifications region", () => {
     render(
-      <ToastProvider>
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
         <Trigger />
       </ToastProvider>,
     );
@@ -28,7 +28,7 @@ describe("Toast", () => {
 
   it("dismiss button removes the toast", () => {
     render(
-      <ToastProvider>
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
         <Trigger duration={0} />
       </ToastProvider>,
     );
@@ -40,7 +40,7 @@ describe("Toast", () => {
   it("auto-dismisses after its duration", () => {
     vi.useFakeTimers();
     render(
-      <ToastProvider>
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
         <Trigger duration={3000} />
       </ToastProvider>,
     );
@@ -55,7 +55,7 @@ describe("Toast", () => {
   it("duration 0 never auto-dismisses", () => {
     vi.useFakeTimers();
     render(
-      <ToastProvider>
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
         <Trigger duration={0} />
       </ToastProvider>,
     );
@@ -83,7 +83,7 @@ describe("Toast", () => {
       );
     }
     render(
-      <ToastProvider>
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
         <TwoToasts />
       </ToastProvider>,
     );

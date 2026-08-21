@@ -33,12 +33,12 @@ export function useToast(): ToastContextValue {
 
 export interface ToastProviderProps {
   children: ReactNode;
-  /** Accessible name of the notification region (localise). Default "Notifications". */
-  regionLabel?: string | undefined;
-  /** Prefix of each dismiss button's accessible name (localise). The toast's
-   *  title follows it, so every dismiss control names its own toast. Default
-   *  "Dismiss" — a button labelled "Dismiss: Saved". */
-  dismissLabel?: string | undefined;
+  /** Accessible name of the notification region, e.g. "Notifications".
+      Required: it is read aloud, in the app's language. */
+  regionLabel: string;
+  /** Prefix of each dismiss button's accessible name. The toast's title follows
+   *  it, so every dismiss control names its own toast: "Dismiss: Saved". */
+  dismissLabel: string;
 }
 
 /**
@@ -46,7 +46,7 @@ export interface ToastProviderProps {
  *
  * ```tsx
  * // App root
- * <ToastProvider>
+ * <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
  *   <App />
  * </ToastProvider>
  *
@@ -57,8 +57,8 @@ export interface ToastProviderProps {
  */
 export function ToastProvider({
   children,
-  regionLabel = "Notifications",
-  dismissLabel = "Dismiss",
+  regionLabel,
+  dismissLabel,
 }: ToastProviderProps): ReactElement {
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
   const nextId = useRef(1);

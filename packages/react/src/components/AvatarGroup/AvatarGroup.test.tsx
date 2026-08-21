@@ -10,7 +10,7 @@ const four = ["Ada Lovelace", "Grace Hopper", "Alan Turing", "Edsger Dijkstra"];
 describe("AvatarGroup", () => {
   it("renders all children under max", () => {
     render(
-      <AvatarGroup max={5}>
+      <AvatarGroup max={5} overflowLabel={(n) => `${n} more`}>
         {four.map((n) => (
           <Avatar key={n} name={n} />
         ))}
@@ -21,7 +21,7 @@ describe("AvatarGroup", () => {
 
   it("caps at max and shows +N overflow", () => {
     render(
-      <AvatarGroup max={2}>
+      <AvatarGroup max={2} overflowLabel={(n) => `${n} more`}>
         {four.map((n) => (
           <Avatar key={n} name={n} />
         ))}
@@ -33,7 +33,7 @@ describe("AvatarGroup", () => {
 
   it("overflow indicator announces the hidden count", () => {
     render(
-      <AvatarGroup max={2}>
+      <AvatarGroup max={2} overflowLabel={(n) => `${n} more`}>
         {four.map((n) => (
           <Avatar key={n} name={n} />
         ))}
@@ -55,7 +55,7 @@ describe("AvatarGroup", () => {
 
   it("has no axe violations", async () => {
     const { container } = render(
-      <AvatarGroup max={2}>
+      <AvatarGroup max={2} overflowLabel={(n) => `${n} more`}>
         {four.map((n) => (
           <Avatar key={n} name={n} />
         ))}

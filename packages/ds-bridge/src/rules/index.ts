@@ -6,6 +6,7 @@ import { contrastRules } from "./contrast.js";
 import { layoutRules } from "./layout.js";
 import { structureRules } from "./structure.js";
 import { componentRules } from "./component.js";
+import { textRules } from "./text.js";
 import { usageRules } from "./usage.js";
 import { stylePropRules } from "./styleProp.js";
 import { philosophyRules } from "./philosophy.js";
@@ -19,6 +20,7 @@ export const RULES: Rule[] = [
   ...structureRules,
   ...usageRules,
   ...componentRules,
+  ...textRules,
   ...layoutRules,
   ...stylePropRules,
   ...philosophyRules,
@@ -43,6 +45,7 @@ export type { Context, Finding, Rule };
 export * from "./tokenDiscipline.js";
 export * from "./brand.js";
 export * from "./component.js";
+export * from "./text.js";
 export * from "./usage.js";
 export * from "./contrast.js";
 export * from "./structure.js";

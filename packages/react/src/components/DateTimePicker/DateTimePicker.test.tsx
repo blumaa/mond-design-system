@@ -10,12 +10,24 @@ import { DateTimePicker } from "./DateTimePicker";
 const MIN = new Date(2030, 5, 15, 12, 0, 0).toISOString(); // Jun 15 2030
 const VALUE = new Date(2030, 5, 20, 14, 30, 0).toISOString(); // Jun 20 2030, 14:30
 
+const LABELS = {
+  dialog: "Pick date and time",
+  previousMonth: "Previous month",
+  nextMonth: "Next month",
+  today: "Today",
+  done: "Done",
+  hour: "Hour",
+  minute: "Minutes",
+  dayPeriod: "AM/PM",
+};
+
 function setup(props: Partial<Parameters<typeof DateTimePicker>[0]> = {}) {
   const onChange = vi.fn();
   render(
     <DateTimePicker
       value={VALUE}
       onChange={onChange}
+      labels={LABELS}
       min={MIN}
       aria-label="Starts"
       locale="en-US"
@@ -29,7 +41,7 @@ describe("DateTimePicker", () => {
   it("inside a Field, the trigger takes the field's id and describedby", () => {
     render(
       <Field label="Starts" hint="Local time">
-        <DateTimePicker onChange={vi.fn()} locale="en-US" />
+        <DateTimePicker onChange={vi.fn()} labels={LABELS} locale="en-US" />
       </Field>,
     );
     const trigger = screen.getByRole("button");
@@ -46,7 +58,7 @@ describe("DateTimePicker", () => {
   it("an explicit id wins over the Field's", () => {
     render(
       <Field label="Starts">
-        <DateTimePicker id="mine" onChange={vi.fn()} locale="en-US" />
+        <DateTimePicker id="mine" onChange={vi.fn()} labels={LABELS} locale="en-US" />
       </Field>,
     );
     expect(screen.getByRole("button")).toHaveAttribute("id", "mine");
@@ -55,10 +67,10 @@ describe("DateTimePicker", () => {
   it("shows the placeholder when empty and the formatted value when set", () => {
     const onChange = vi.fn();
     const { rerender } = render(
-      <DateTimePicker onChange={onChange} placeholder="Pick one" locale="en-US" />,
+      <DateTimePicker onChange={onChange} labels={LABELS} placeholder="Pick one" locale="en-US" />,
     );
     expect(screen.getByText("Pick one")).toBeInTheDocument();
-    rerender(<DateTimePicker value={VALUE} onChange={onChange} locale="en-US" />);
+    rerender(<DateTimePicker value={VALUE} onChange={onChange} labels={LABELS} locale="en-US" />);
     expect(screen.getByRole("button", { name: /Jun 20/ })).toBeInTheDocument();
   });
 
@@ -134,7 +146,14 @@ describe("DateTimePicker", () => {
 
   it("has no axe violations while open", async () => {
     const { container } = render(
-      <DateTimePicker value={VALUE} onChange={() => {}} min={MIN} aria-label="Starts" locale="en-US" />,
+      <DateTimePicker
+        value={VALUE}
+        onChange={() => {}}
+        labels={LABELS}
+        min={MIN}
+        aria-label="Starts"
+        locale="en-US"
+      />,
     );
     await userEvent.click(screen.getByRole("button", { name: /Starts/ }));
     expect(await axe(document.body, { rules: { region: { enabled: false } } })).toHaveNoViolations();

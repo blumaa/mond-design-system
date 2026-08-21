@@ -23,7 +23,7 @@ describe("Tag", () => {
 
   it("onRemove renders a labelled remove button and fires", async () => {
     const onRemove = vi.fn();
-    render(<Tag onRemove={onRemove}>ropes</Tag>);
+    render(<Tag onRemove={onRemove} removeLabel="Remove ropes">ropes</Tag>);
     await userEvent.click(screen.getByRole("button", { name: "Remove ropes" }));
     expect(onRemove).toHaveBeenCalledTimes(1);
   });
@@ -32,7 +32,7 @@ describe("Tag", () => {
     const { container } = render(
       <div>
         <Tag>plain</Tag>
-        <Tag onRemove={() => {}}>removable</Tag>
+        <Tag onRemove={() => {}} removeLabel="Remove removable">removable</Tag>
       </div>,
     );
     expect(await axe(container)).toHaveNoViolations();

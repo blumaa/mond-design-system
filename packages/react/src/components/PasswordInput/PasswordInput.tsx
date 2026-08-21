@@ -5,7 +5,14 @@ import { Input } from "../Input/Input";
 import type { InputProps } from "../Input/Input";
 import styles from "./PasswordInput.module.css";
 
-export type PasswordInputProps = Omit<InputProps, "type">;
+export interface PasswordInputProps extends Omit<InputProps, "type"> {
+  /** Names the reveal button while the password is hidden, e.g. "Show password".
+      Required: the button carries no visible text, so this is the only thing a
+      screen reader has, and it is the app's language rather than the system's. */
+  showLabel: string;
+  /** Names the same button while the password is visible, e.g. "Hide password". */
+  hideLabel: string;
+}
 
 /**
  * Password field with a reveal toggle. Composes Input, so inside a Field it
@@ -13,11 +20,16 @@ export type PasswordInputProps = Omit<InputProps, "type">;
  *
  * ```tsx
  * <Field label="Password" hint="At least 12 characters">
- *   <PasswordInput autoComplete="new-password" />
+ *   <PasswordInput showLabel="Show password" hideLabel="Hide password" autoComplete="new-password" />
  * </Field>
  * ```
  */
-export function PasswordInput({ className, ...rest }: PasswordInputProps): ReactElement {
+export function PasswordInput({
+  showLabel,
+  hideLabel,
+  className,
+  ...rest
+}: PasswordInputProps): ReactElement {
   const [visible, setVisible] = useState(false);
   return (
     <span className={styles.wrap}>
@@ -25,7 +37,7 @@ export function PasswordInput({ className, ...rest }: PasswordInputProps): React
       <button
         type="button"
         className={styles.toggle}
-        aria-label={visible ? "Hide password" : "Show password"}
+        aria-label={visible ? hideLabel : showLabel}
         aria-pressed={visible}
         onClick={() => setVisible((v) => !v)}
       >

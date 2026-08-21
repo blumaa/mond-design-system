@@ -24,9 +24,9 @@ function Demo() {
 }
 
 export const Default: Story = {
-  args: { children: null },
+  args: { children: null, regionLabel: "Notifications", dismissLabel: "Dismiss" },
   render: () => (
-    <ToastProvider>
+    <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
       <Demo />
     </ToastProvider>
   ),

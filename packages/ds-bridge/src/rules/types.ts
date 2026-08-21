@@ -85,6 +85,7 @@ export type Sheet = {
 export type Source = {
   /** Relative to the checked root — what a finding prints. */
   file: string;
+  /** Comments blanked, line numbers preserved. */
   source: string;
 };
 

@@ -4,32 +4,46 @@ import styles from "./Tag.module.css";
 
 export type TagTone = "neutral" | "accent";
 
-export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
+export type TagProps = HTMLAttributes<HTMLSpanElement> & {
   children: ReactNode;
   tone?: TagTone;
-  /** Renders a labelled ✕ button. Label reads "Remove <content>" when content is text. */
-  onRemove?: () => void;
   ref?: Ref<HTMLSpanElement>;
-}
+} & (
+    | {
+        /** Renders a ✕ button after the content. */
+        onRemove: () => void;
+        /** Names that button, e.g. "Remove Beginner". Required alongside
+            `onRemove`: the glyph says nothing, and only the app knows how its
+            language builds the sentence. */
+        removeLabel: string;
+      }
+    | { onRemove?: undefined; removeLabel?: undefined }
+  );
 
 /**
  * Content label chip — categories, filters, topics.
  *
  * ```tsx
  * <Tag>Design</Tag>
- * <Tag tone="accent" onRemove={() => remove(id)}>Beginner</Tag>
+ * <Tag tone="accent" onRemove={() => remove(id)} removeLabel="Remove Beginner">Beginner</Tag>
  * ```
  */
-export function Tag({ children, tone = "neutral", onRemove, className, ...rest }: TagProps): ReactElement {
-  const text = typeof children === "string" ? children : undefined;
+export function Tag({
+  children,
+  tone = "neutral",
+  onRemove,
+  removeLabel,
+  className,
+  ...rest
+}: TagProps): ReactElement {
   return (
     <span className={cx(styles.tag, styles[`tone-${tone}`], className)} {...rest}>
       {children}
-      {onRemove && (
+      {onRemove !== undefined && (
         <button
           type="button"
           className={styles.remove}
-          aria-label={text ? `Remove ${text}` : "Remove"}
+          aria-label={removeLabel}
           onClick={onRemove}
         >
           <svg viewBox="0 0 16 16" aria-hidden="true" className={styles.removeGlyph}>

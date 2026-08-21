@@ -12,6 +12,7 @@ import { loadSurface, type Surface, type SurfaceFile } from "./surface.js";
 import { readSystemComponents } from "./system.js";
 import { readComponents, type Component } from "./structure.js";
 import { blocksIn, declarationsIn, stripComments } from "./css/parse.js";
+import { withoutComments } from "./jsx.js";
 import type { Context, Contract, Sheet, Source } from "./rules/types.js";
 
 /**
@@ -166,7 +167,10 @@ export function buildContext({
     components,
     exported,
     ...(exportedFrom ? { exportedFrom } : {}),
-    sources,
+    /* Comments blanked, as a stylesheet's are: a rule reads what a file does,
+       and a documented example of the thing a rule forbids is not the file
+       doing it. */
+    sources: sources.map((it) => ({ ...it, source: withoutComments(it.source) })),
     fonts,
     prefix: prefix ?? graph.prefix,
     ...(system ? { system } : {}),
