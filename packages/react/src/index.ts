@@ -134,6 +134,12 @@ export type { AppBarProps } from "./components/AppBar/AppBar";
 export { TabBar, TabBarAction, TabBarItem } from "./components/TabBar/TabBar";
 export type { TabBarActionProps, TabBarItemProps, TabBarProps } from "./components/TabBar/TabBar";
 
+export { MediaPlaceholder } from "./components/MediaPlaceholder/MediaPlaceholder";
+export type { MediaPlaceholderProps } from "./components/MediaPlaceholder/MediaPlaceholder";
+
+export { Breadcrumb } from "./components/Breadcrumb/Breadcrumb";
+export type { BreadcrumbProps, Crumb } from "./components/Breadcrumb/Breadcrumb";
+
 export { useOverlay } from "./hooks/useOverlay";
 export type { UseOverlayOptions } from "./hooks/useOverlay";
 

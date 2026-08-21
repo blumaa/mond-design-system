@@ -83,6 +83,14 @@
   --mds-progress-h: var(--mds-space-2);
   --mds-skeleton-h: var(--mds-space-10);
   --mds-fade-w: var(--mds-space-6);
+  /* Pitch of the hatch on an empty media surface. Its own role rather than a
+     rung read directly: the stripe is not spacing, and a scale that gets
+     tighter should not close the hatch up with it. */
+  --mds-media-hatch: 8px;
+  /* Obscures a picture without hiding that there is one: far enough that the
+     photo reads as shape and colour only. A smaller radius still leaves a face
+     recognisable, which is the whole failure this covers. */
+  --mds-blur-media: 20px;
 
   --mds-avatar-xs: 24px;
   --mds-avatar-sm: 30px;

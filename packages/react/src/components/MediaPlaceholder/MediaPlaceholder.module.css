@@ -1,0 +1,68 @@
+.media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: var(--media-aspect, 16 / 9);
+  border-radius: var(--mds-radius-media);
+  background: var(--mds-surface-sunken);
+}
+
+/* Absolutely positioned rather than filling the flow: the box owns its height
+   through aspect-ratio, and a picture that has not loaded must not change it. */
+.fill {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-gap-tight);
+  color: var(--mds-text-muted);
+  /* Reads as "nothing here yet" rather than as a colour somebody chose. */
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 var(--mds-media-hatch),
+    var(--mds-border-strong) var(--mds-media-hatch)
+      calc(var(--mds-media-hatch) + var(--mds-border-width))
+  );
+  transition: filter var(--mds-transition-reveal);
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter var(--mds-transition-reveal);
+}
+
+.caption {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  padding: var(--mds-pad-tight);
+  background: var(--mds-scrim);
+}
+
+/* A sibling of the fill and the image rather than a child of either, so it
+   stays sharp while they blur — the prompt to reveal has to stay readable. */
+.cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-gap-tight);
+  padding: var(--mds-pad-card);
+  text-align: center;
+}
+
+/* Blur reaches the fill and the image only. */
+.blurred .fill,
+.blurred .image {
+  filter: blur(var(--mds-blur-media));
+  transform: scale(1.1);
+}
