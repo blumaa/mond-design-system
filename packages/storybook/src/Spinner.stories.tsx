@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Spinner } from "@mond-design-system/react";
+import { Inline, Spinner } from "@mond-design-system/react";
 
 const meta = {
   title: "Atoms/Spinner",
@@ -11,10 +11,10 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 export const Sizes: Story = {
   render: () => (
-    <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+    <Inline gap="loose">
       <Spinner size={16} />
       <Spinner size={24} />
       <Spinner size={40} />
-    </div>
+    </Inline>
   ),
 };

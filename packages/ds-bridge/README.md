@@ -73,6 +73,10 @@ contract.json, so there is nothing to prove against
 
 ```json
 {
+  "prefix": "--mds-",
+  "system": "packages/tokens/src/styles.css",
+  "levels": ["atom", "molecule", "organism", "template"],
+  "levelsIgnore": ["Docs"],
   "ignore": ["src/__fixtures__"],
   "scales": ["spacing", "radius", "typography"],
   "exempt": {
@@ -80,6 +84,18 @@ contract.json, so there is nothing to prove against
   }
 }
 ```
+
+`prefix` is the namespace the design system owns — the app's own namespace is
+whatever else it declares, and the two being different is the point.
+
+`system` names the design system's entry stylesheet, and is only needed when
+the system is a folder the repo owns rather than a package it installed. With
+neither `system` nor `--system`, the installed `@mond-design-system/tokens` is
+used.
+
+`levels` is the taxonomy, simplest first; `levelsIgnore` lists story-title
+segments that name something other than a level. Both are read only when the
+checked repo is the design system itself.
 
 An exemption is a claim that the rule is wrong about one file. Put the reason
 in the file, next to what it excuses; `dsbridge check` will not print it for you.
@@ -94,8 +110,9 @@ dsbridge rules no-literal-color      # the reasoning, wrapped for a terminal
 dsbridge rules --markdown > RULES.md # the whole set, for an agent's instructions
 ```
 
-`RULES.md` in this package is that output, committed. Regenerate with
-`pnpm rules`.
+`RULES.md` in this package is that output, committed, and the Claude Code
+plugin under `plugin/` ships the same file as its skill. Both are generated —
+`pnpm rules` from the repo root writes both, and CI fails if either is stale.
 
 ## dsbridge migrate
 

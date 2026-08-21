@@ -59,13 +59,11 @@ describe("no-literal-length", () => {
     expect(messages(noLiteralLength, ".a { gap: var(--mds-gap, 8px); }")).toHaveLength(1);
   });
 
-  it("allows a declared breakpoint in a media prelude", () => {
+  /* A prelude has to spell the number out, so the length in one is not this
+     rule's to judge — breakpoint-is-declared holds it to the breakpoint list. */
+  it("leaves a media prelude alone", () => {
     expect(run(noLiteralLength, "@media (min-width: 600px) {\n  .a { gap: var(--mds-gap); }\n}")).toEqual([]);
-  });
-
-  it("flags an undeclared breakpoint in a media prelude", () => {
-    const [finding] = run(noLiteralLength, "@media (min-width: 640px) { .a { gap: 0 } }");
-    expect(finding?.message).toContain("breakpoint list");
+    expect(run(noLiteralLength, "@media (min-width: 640px) { .a { gap: 0 } }")).toEqual([]);
   });
 
   it("flags a declared breakpoint used outside a prelude", () => {

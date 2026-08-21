@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Field, Input, Select, Textarea } from "@mond-design-system/react";
+import { Field, Input, Select, Stack, Textarea } from "@mond-design-system/react";
+import story from "./story.module.css";
 
 const meta = {
   title: "Molecules/Field",
@@ -20,7 +21,7 @@ export const Required: Story = {
 export const FormRow: Story = {
   args: { label: "unused", children: null },
   render: () => (
-    <div style={{ display: "grid", gap: "1rem", maxWidth: "20rem" }}>
+    <Stack gap="base" className={story.frame}>
       <Field label="Name" required>
         <Input />
       </Field>
@@ -33,6 +34,6 @@ export const FormRow: Story = {
       <Field label="Notes" hint="Optional">
         <Textarea />
       </Field>
-    </div>
+    </Stack>
   ),
 };

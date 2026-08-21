@@ -14,13 +14,13 @@ import { loadContext, type Config } from "./context.js";
 import { renderTokens, selectTokens, type RenderOptions } from "./commands/tokens.js";
 import { renderTokensHtml } from "./commands/tokensHtml.js";
 import { renderCheck, runCheck } from "./commands/check.js";
-import { renderRules, selectRules } from "./commands/rules.js";
+import { renderRules, rulesAsJson } from "./commands/rules.js";
 import { planMigration, renderMigration } from "./commands/migrate.js";
 import type { Kind, Layer } from "./graph.js";
 import type { Theme } from "./css/parse.js";
 import type { Target } from "./rules/types.js";
 
-const USAGE = `mds — Mond Design System conformance toolkit
+const USAGE = `dsbridge — design system conformance, for the system and the apps that use it
 
   dsbridge tokens [options]     list the token graph: core scales, the semantic
                            contract, and what your brand re-points
@@ -196,7 +196,7 @@ function rulesCommand(rest: string[]): number {
   };
 
   if (values.json === true) {
-    jsonOut(selectRules(options).map(({ check: _check, ...rule }) => rule));
+    jsonOut(rulesAsJson(options));
     return 0;
   }
   process.stdout.write(renderRules(options));

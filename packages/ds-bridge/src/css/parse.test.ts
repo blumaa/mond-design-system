@@ -3,7 +3,7 @@
    on what this returns, so it records where a value came from, not just what
    it was. */
 import { describe, expect, it } from "vitest";
-import { declarationsIn, flatten, stripComments } from "./parse";
+import { blocksIn, declarationsIn, flatten, stripComments } from "./parse";
 
 describe("stripComments", () => {
   it("takes a comment out without moving the lines after it", () => {
@@ -77,5 +77,35 @@ describe("flatten", () => {
        report the desktop measure as the value a phone gets. */
     const css = ":root { --mds-frame-width: 100%; }\n@media (min-width: 600px) { :root { --mds-frame-width: 430px; } }";
     expect(flatten(declarationsIn(css, "f.css"), "light").get("--mds-frame-width")).toBe("100%");
+  });
+});
+
+describe("blocksIn", () => {
+  const blocks = blocksIn;
+
+  it("reads every declaration in a rule, not only the custom properties", () => {
+    const [block] = blocks(".bar {\n  position: fixed;\n  --mds-x: 1px;\n}");
+    expect(block?.selector).toBe(".bar");
+    expect(block?.declarations).toEqual([
+      { property: "position", value: "fixed", line: 2 },
+      { property: "--mds-x", value: "1px", line: 3 },
+    ]);
+  });
+
+  it("keeps the at-rules a block sits inside", () => {
+    const [block] = blocks("@media (min-width: 600px) {\n  .bar {\n    top: 0;\n  }\n}");
+    expect(block?.conditions).toEqual(["@media (min-width: 600px)"]);
+    expect(block?.selector).toBe(".bar");
+  });
+
+  it("survives a value with braces or a semicolon in a string", () => {
+    const [block] = blocks('.a { content: ";"; background: url(a;b.png); }');
+    expect(block?.declarations.map((d) => d.property)).toEqual(["content", "background"]);
+  });
+
+  it("gives every block the line its selector is on", () => {
+    const [first, second] = blocks(".a {\n  top: 0;\n}\n\n.b {\n  top: 1px;\n}");
+    expect(first?.line).toBe(1);
+    expect(second?.line).toBe(5);
   });
 });

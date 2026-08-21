@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { CSSProperties } from "react";
 import { Heading, Inline, Stack, Text } from "@mond-design-system/react";
+import story from "./story.module.css";
 
 /* Live token browser. Values are read from the computed style of <html>, so
    the brand and theme toolbars change what you see — that is the contract
@@ -21,7 +23,7 @@ function Row({ name, preview }: { name: string; preview: React.ReactNode }) {
   const value = tokenValue(name);
   return (
     <Inline gap="base" align="center">
-      <span style={{ flex: "none", width: "16rem" }}>
+      <span className={story.tokenName}>
         <Text variant="note" as="code">{name}</Text>
       </span>
       {preview}
@@ -36,14 +38,8 @@ function Swatch({ name }: { name: string }) {
       name={name}
       preview={
         <span
-          style={{
-            flex: "none",
-            width: "3.5rem",
-            height: "2rem",
-            borderRadius: "var(--mds-radius-1)",
-            border: "var(--mds-border-width) solid var(--mds-border-subtle)",
-            background: `var(${name})`,
-          }}
+          className={story.swatch}
+          style={{ "--specimen-color": `var(${name})` } as CSSProperties}
         />
       }
     />
@@ -164,14 +160,7 @@ export const Spacing: Story = {
             key={n}
             name={n}
             preview={
-              <span
-                style={{
-                  flex: "none",
-                  height: "1rem",
-                  width: `var(${n})`,
-                  background: "var(--mds-accent)",
-                }}
-              />
+              <span className={story.bar} style={{ "--specimen-length": `var(${n})` } as CSSProperties} />
             }
           />
         ))}
@@ -196,14 +185,7 @@ export const Spacing: Story = {
             key={n}
             name={n}
             preview={
-              <span
-                style={{
-                  flex: "none",
-                  height: "1rem",
-                  width: `var(${n})`,
-                  background: "var(--mds-accent)",
-                }}
-              />
+              <span className={story.bar} style={{ "--specimen-length": `var(${n})` } as CSSProperties} />
             }
           />
         ))}
@@ -233,15 +215,7 @@ export const RadiusAndElevation: Story = {
             "--mds-radius-pill",
           ].map((n) => (
             <Stack key={n} gap="hairline" align="center">
-              <span
-                style={{
-                  width: "4rem",
-                  height: "4rem",
-                  borderRadius: `var(${n})`,
-                  background: "var(--mds-surface-sunken)",
-                  border: "var(--mds-border-width) solid var(--mds-border-strong)",
-                }}
-              />
+              <span className={story.tile} style={{ "--specimen-radius": `var(${n})` } as CSSProperties} />
               <Text variant="meta" tone="muted">{n.replace("--mds-radius-", "")}</Text>
             </Stack>
           ))}
@@ -258,15 +232,7 @@ export const RadiusAndElevation: Story = {
             "--mds-elevation-sheet",
           ].map((n) => (
             <Stack key={n} gap="hairline" align="center">
-              <span
-                style={{
-                  width: "6rem",
-                  height: "4rem",
-                  borderRadius: "var(--mds-radius-card)",
-                  background: "var(--mds-surface-card)",
-                  boxShadow: `var(${n})`,
-                }}
-              />
+              <span className={story.shadowTile} style={{ "--specimen-shadow": `var(${n})` } as CSSProperties} />
               <Text variant="meta" tone="muted">{n.replace("--mds-elevation-", "")}</Text>
             </Stack>
           ))}
@@ -280,14 +246,7 @@ export const RadiusAndElevation: Story = {
               key={n}
               name={n}
               preview={
-                <span
-                  style={{
-                    flex: "none",
-                    width: "1rem",
-                    height: `var(${n})`,
-                    background: "var(--mds-accent)",
-                  }}
-                />
+                <span className={story.barUpright} style={{ "--specimen-length": `var(${n})` } as CSSProperties} />
               }
             />
           ),

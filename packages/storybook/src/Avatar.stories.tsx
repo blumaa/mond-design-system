@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Avatar } from "@mond-design-system/react";
+import { Avatar, Inline } from "@mond-design-system/react";
 
 const meta = {
   title: "Atoms/Avatar",
@@ -12,10 +12,10 @@ export const Initials: Story = { args: { name: "Ada Lovelace" } };
 export const Sizes: Story = {
   args: { name: "Ada Lovelace" },
   render: () => (
-    <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+    <Inline>
       <Avatar name="Ada Lovelace" size="sm" />
       <Avatar name="Grace Hopper" size="md" />
       <Avatar name="Alan Turing" size="lg" />
-    </div>
+    </Inline>
   ),
 };

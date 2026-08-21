@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Icon } from "@mond-design-system/react";
+import { Icon, Inline } from "@mond-design-system/react";
 
 const meta = {
   title: "Atoms/Icon",
@@ -13,10 +13,10 @@ export const Labelled: Story = { args: { name: "search", label: "Search" } };
 export const Sizes: Story = {
   args: { name: "check" },
   render: () => (
-    <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+    <Inline gap="loose">
       <Icon name="check" size="sm" />
       <Icon name="check" size="md" />
       <Icon name="check" size="lg" />
-    </div>
+    </Inline>
   ),
 };

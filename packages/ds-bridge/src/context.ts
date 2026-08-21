@@ -4,10 +4,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, relative, resolve, sep } from "node:path";
 import { expandImports, loadGraph, type Graph } from "./graph.js";
-import { findSources, findStylesheets, resolveSystem, rootScoped } from "./sources.js";
+import { findFonts, findSources, findStylesheets, resolveSystem, rootScoped } from "./sources.js";
 import { readComponents, type Component } from "./structure.js";
-import { declarationsIn, stripComments } from "./css/parse.js";
-import type { Context, Contract, Sheet } from "./rules/types.js";
+import { blocksIn, declarationsIn, stripComments } from "./css/parse.js";
+import type { Context, Contract, Sheet, Source } from "./rules/types.js";
 
 /**
  * One stylesheet, read.
@@ -32,6 +32,7 @@ export function makeSheet(
     file: relative(root, path),
     source: blanked,
     lines: blanked.split("\n"),
+    blocks: blocksIn(blanked),
     declares,
     isTokens: atRoot.length > 0,
     isBrand:
@@ -48,6 +49,9 @@ export type Config = {
   ignore?: string[];
   /** The token namespace the design system owns; defaults to `--mds-`. */
   prefix?: string;
+  /** The design system's entry stylesheet, relative to the root. For a repo
+      whose system is a folder it owns rather than a package it installed. */
+  system?: string;
   /** The taxonomy, simplest first. A component composes strictly lower levels. */
   levels?: string[];
   /** Story-title segments that name something other than a level. */
@@ -65,6 +69,8 @@ export type BuildOptions = {
   graph: Graph;
   sheets: Sheet[];
   components?: Component[];
+  sources?: Source[];
+  fonts?: string[];
   prefix?: string;
   config?: Config;
   contract?: Contract;
@@ -76,6 +82,8 @@ export function buildContext({
   graph,
   sheets,
   components = [],
+  sources = [],
+  fonts = [],
   prefix,
   system,
   config = {},
@@ -88,6 +96,8 @@ export function buildContext({
     graph,
     sheets,
     components,
+    sources,
+    fonts,
     prefix: prefix ?? graph.prefix,
     ...(system ? { system } : {}),
     levels: config.levels ?? LEVELS,
@@ -110,7 +120,8 @@ export type LoadContextOptions = {
 export function loadContext({ root, system, config, prefix }: LoadContextOptions): Context {
   const at = resolve(root);
   const namespace = prefix ?? config?.prefix ?? "--mds-";
-  const entry = system ? resolve(system) : resolveSystem(at);
+  const declared = config?.system;
+  const entry = system ? resolve(system) : declared ? resolve(at, declared) : resolveSystem(at);
   /* The system's own token files are the graph, never sheets to be judged:
      declaring the contract is what they are for. Checking the design system
      against itself is therefore checking its component stylesheets. */
@@ -126,11 +137,14 @@ export function loadContext({ root, system, config, prefix }: LoadContextOptions
   const sheets = findStylesheets(at)
     .filter((file) => !systemFiles.has(file) && !ignored(file))
     .map((file) => makeSheet(file, readFileSync(file, "utf8"), at, namespace, systemDeclares));
-  const sources = findSources(at).filter((file) => !ignored(file));
-  const components = readComponents(
-    sources.map((file) => relative(at, file)),
-    (file) => readFileSync(resolve(at, file), "utf8"),
-  );
+  const sources = findSources(at)
+    .filter((file) => !ignored(file))
+    .map((file) => ({ file: relative(at, file), source: readFileSync(file, "utf8") }));
+  const read = new Map(sources.map((source) => [source.file, source.source]));
+  const components = readComponents([...read.keys()], (file) => read.get(file) ?? "");
+  const fonts = findFonts(at)
+    .filter((file) => !ignored(file))
+    .map((file) => relative(at, file));
   const brand = sheets.filter((s) => s.isBrand).map((s) => s.path);
   const graph = brand.length > 0 ? loadGraph({ system: entry, prefix: namespace, brand }) : unbranded;
   /* The contract travels with the system: an app checks itself against the copy
@@ -145,6 +159,8 @@ export function loadContext({ root, system, config, prefix }: LoadContextOptions
     graph,
     sheets,
     components,
+    sources,
+    fonts,
     prefix: namespace,
     system: entry,
     ...(config ? { config } : {}),

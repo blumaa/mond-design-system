@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar, Badge, Icon, ListGroup, ListItem } from "@mond-design-system/react";
+import story from "./story.module.css";
 
 const meta = {
   title: "Molecules/List",
@@ -11,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 export const Mixed: Story = {
   args: { children: null },
   render: () => (
-    <div style={{ maxWidth: "22rem" }}>
+    <div className={story.frame}>
       <ListGroup>
         <ListItem
           title="Ada Lovelace"

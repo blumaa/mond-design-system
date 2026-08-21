@@ -1,0 +1,14 @@
+{
+  "name": "dsbridge",
+  "owner": {
+    "name": "Mond Design System"
+  },
+  "plugins": [
+    {
+      "name": "dsbridge",
+      "source": "./",
+      "description": "Design system conformance: check a repo against its own rules, read its token graph, and plan an app's way in."
+    }
+  ],
+  "description": "Design system conformance for the repos that own a system and the apps that use one."
+}

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Input, Stack } from "@mond-design-system/react";
+import story from "./story.module.css";
 
 const meta = {
   title: "Atoms/Input",
@@ -10,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Sizes: Story = {
   render: () => (
-    <Stack gap="tight" style={{ maxWidth: "18rem" }}>
+    <Stack gap="tight" className={story.frame}>
       <Input size="sm" aria-label="Small" placeholder="Small" />
       <Input size="md" aria-label="Medium" placeholder="Medium" />
       <Input size="lg" aria-label="Large" placeholder="Large" />

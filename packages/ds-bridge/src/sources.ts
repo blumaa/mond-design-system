@@ -37,14 +37,14 @@ export function resolveSystem(cwd: string, resolver: Resolver = nodeResolver): s
 }
 
 /** Every file under a directory the repo owns, by extension. */
-export function findFiles(dir: string, extension: string): string[] {
+export function findFiles(dir: string, extensions: string[]): string[] {
   const out: string[] = [];
   const walk = (at: string) => {
     for (const entry of readdirSync(at)) {
       if (skipped(entry)) continue;
       const path = join(at, entry);
       if (statSync(path).isDirectory()) walk(path);
-      else if (entry.endsWith(extension)) out.push(path);
+      else if (extensions.some((extension) => entry.endsWith(extension))) out.push(path);
     }
   };
   walk(resolve(dir));
@@ -52,10 +52,14 @@ export function findFiles(dir: string, extension: string): string[] {
 }
 
 /** Every stylesheet the app owns. */
-export const findStylesheets = (dir: string): string[] => findFiles(dir, ".css");
+export const findStylesheets = (dir: string): string[] => findFiles(dir, [".css"]);
 
 /** Every TypeScript component, story and test the app owns. */
-export const findSources = (dir: string): string[] => findFiles(dir, ".tsx");
+export const findSources = (dir: string): string[] => findFiles(dir, [".tsx"]);
+
+/** Typefaces the repo carries in its own source. */
+export const findFonts = (dir: string): string[] =>
+  findFiles(dir, [".woff2", ".woff", ".ttf", ".otf", ".eot"]);
 
 /**
  * A selector that sets a value for the whole document rather than for one thing

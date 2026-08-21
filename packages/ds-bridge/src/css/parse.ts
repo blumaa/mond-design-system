@@ -23,28 +23,47 @@ export const stripComments = (css: string) =>
 
 const DARK = /\[data-theme=["']?dark["']?\]|prefers-color-scheme:\s*dark/;
 
-export function declarationsIn(source: string, file: string): Declaration[] {
+/** One declaration as written: not only the custom properties. */
+export type Property = { property: string; value: string; line: number };
+
+/**
+ * One rule block: a selector, what it sits inside, and everything it sets.
+ *
+ * The layout rules ask questions a flat list of declarations cannot answer —
+ * whether the element that pins itself to an edge is the one clearing the
+ * safe area, whether a margin is on the component's root or on something
+ * inside it. Both are about a block, so a block is what the reader returns.
+ */
+export type Block = {
+  selector: string;
+  /** At-rule preludes this block sits inside, outermost first. */
+  conditions: string[];
+  theme: Theme;
+  /** 1-based, the line the selector is on. */
+  line: number;
+  declarations: Property[];
+};
+
+export function blocksIn(source: string): Block[] {
   const css = stripComments(source);
-  const out: Declaration[] = [];
-  const stack: string[] = [];
+  const out: Block[] = [];
+  const stack: Block[] = [];
   let buf = "";
   let bufLine = 1;
   let line = 1;
   let parens = 0;
+  let quote: string | undefined;
 
   const flush = () => {
-    const m = /^(--[a-z0-9-]+)\s*:\s*([\s\S]+)$/i.exec(buf.trim());
-    if (m && stack.length > 0) {
-      const selector = stack[stack.length - 1]!;
-      const conditions = stack.filter((s) => s.startsWith("@"));
-      out.push({
-        name: m[1]!,
+    const m = /^([-a-z0-9]+)\s*:\s*([\s\S]+)$/i.exec(buf.trim());
+    const block = stack[stack.length - 1];
+    if (m && block) {
+      const property = m[1]!;
+      block.declarations.push({
+        /* A custom property is case-sensitive; a CSS property is not. */
+        property: property.startsWith("--") ? property : property.toLowerCase(),
         value: m[2]!.replace(/\s+/g, " ").trim(),
-        file,
         line: bufLine,
-        selector,
-        conditions,
-        theme: [selector, ...conditions].some((s) => DARK.test(s)) ? "dark" : "light",
       });
     }
     buf = "";
@@ -52,18 +71,34 @@ export function declarationsIn(source: string, file: string): Declaration[] {
 
   for (const ch of css) {
     if (ch === "\n") line++;
+    if (quote !== undefined) {
+      if (ch === quote) quote = undefined;
+      buf += ch;
+      continue;
+    }
+    if (ch === '"' || ch === "'") quote = ch;
     if (ch === "(") parens++;
     if (ch === ")") parens--;
-    if (parens === 0) {
+    if (parens === 0 && quote === undefined) {
       if (ch === "{") {
-        stack.push(buf.replace(/\s+/g, " ").trim());
+        const selector = buf.replace(/\s+/g, " ").trim();
+        const conditions = stack.map((b) => b.selector).filter((s) => s.startsWith("@"));
+        const scopes = [selector, ...conditions];
+        stack.push({
+          selector,
+          conditions,
+          theme: scopes.some((s) => DARK.test(s)) ? "dark" : "light",
+          line: bufLine,
+          declarations: [],
+        });
         buf = "";
         bufLine = line;
         continue;
       }
       if (ch === "}") {
         flush();
-        stack.pop();
+        const done = stack.pop();
+        if (done) out.push(done);
         bufLine = line;
         continue;
       }
@@ -80,6 +115,30 @@ export function declarationsIn(source: string, file: string): Declaration[] {
     buf += ch;
   }
   return out;
+}
+
+/**
+ * The custom-property declarations, in source order.
+ *
+ * A view of the same reader: a token file is a stylesheet whose declarations
+ * happen to all be custom properties, so there is one walker, not two.
+ */
+export function declarationsIn(source: string, file: string): Declaration[] {
+  return blocksIn(source)
+    .flatMap((block) =>
+      block.declarations
+        .filter((d) => d.property.startsWith("--"))
+        .map((d) => ({
+          name: d.property,
+          value: d.value,
+          file,
+          line: d.line,
+          selector: block.selector,
+          conditions: block.conditions,
+          theme: block.theme,
+        })),
+    )
+    .sort((a, b) => a.line - b.line);
 }
 
 /**

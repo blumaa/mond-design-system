@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button, ToastProvider, useToast } from "@mond-design-system/react";
+import { Button, Inline, ToastProvider, useToast } from "@mond-design-system/react";
 
 const meta = {
   title: "Molecules/Toast",
@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 function Demo() {
   const { toast } = useToast();
   return (
-    <div style={{ display: "flex", gap: "0.75rem" }}>
+    <Inline>
       <Button onClick={() => toast({ title: "Saved", tone: "success" })}>Success</Button>
       <Button variant="danger" onClick={() => toast({ title: "Failed", description: "Try again.", tone: "danger" })}>
         Danger
@@ -19,7 +19,7 @@ function Demo() {
       <Button variant="secondary" onClick={() => toast({ title: "Heads up", duration: 0 })}>
         Sticky
       </Button>
-    </div>
+    </Inline>
   );
 }
 

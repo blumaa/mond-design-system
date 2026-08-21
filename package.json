@@ -14,6 +14,7 @@
     "typecheck": "turbo run typecheck",
     "lint": "eslint .",
     "check": "node packages/ds-bridge/dist/cli.js check",
+    "rules": "node packages/ds-bridge/dist/cli.js rules --markdown | tee packages/ds-bridge/RULES.md > plugin/skills/design-system/RULES.md",
     "storybook": "turbo run storybook",
     "build-storybook": "turbo run build-storybook",
     "verify": "pnpm build && pnpm typecheck && pnpm lint && pnpm check && pnpm test",

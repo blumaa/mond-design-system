@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { DateTimePicker, Field } from "@mond-design-system/react";
+import story from "./story.module.css";
 
 const meta = {
   title: "Organisms/DateTimePicker",
@@ -14,7 +15,7 @@ export const InAField: Story = {
   render: function Render() {
     const [value, setValue] = useState<string | undefined>();
     return (
-      <div style={{ maxWidth: 360 }}>
+      <div className={story.frame}>
         <Field label="Starts">
           <DateTimePicker value={value} onChange={setValue} minuteStep={30} aria-label="Starts" />
         </Field>
@@ -28,7 +29,7 @@ export const German24Hour: Story = {
   render: function Render() {
     const [value, setValue] = useState<string | undefined>();
     return (
-      <div style={{ maxWidth: 360 }}>
+      <div className={story.frame}>
         <Field label="Beginn">
           <DateTimePicker
             value={value}

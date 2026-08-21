@@ -111,6 +111,17 @@ describe("dsbridge check", () => {
     expect(check(dir).status).toBe(0);
   });
 
+  it("finds the design system where the config says it lives", () => {
+    const dir = tree({
+      "design/tokens/styles.css": ":root { --k-surface-page: #ffffff; }",
+      "src/Card.module.css": ".root { background: var(--k-surface-page); }",
+      "dsbridge.config.json": JSON.stringify({ prefix: "--k-", system: "design/tokens/styles.css" }),
+    });
+    const { status, output } = run(["check", "--root", dir, "--no-color"]);
+    expect(status).toBe(0);
+    expect(output).toContain("clean");
+  });
+
   it("emits findings as JSON", () => {
     const { output } = check(app(".root { background: #ff0000; }"), "--json");
     const findings = JSON.parse(output) as Array<{ rule: string; file: string; line: number }>;
@@ -179,5 +190,15 @@ describe("dsbridge rules", () => {
     const { output } = run(["rules", "--markdown"]);
     expect(output).toContain("## no-literal-color");
     expect(output).toContain("**Instead.**");
+  });
+
+  /* The distinction is the whole model: a reader that cannot tell a proved
+     finding from an argument has been given a pile of opinions. */
+  it("says which rules are checked when read as JSON", () => {
+    const { output } = run(["rules", "--json"]);
+    const rules = JSON.parse(output) as Array<{ id: string; enforced: boolean; check?: unknown }>;
+    expect(rules.find((rule) => rule.id === "no-literal-color")?.enforced).toBe(true);
+    expect(rules.find((rule) => rule.id === "belongs-in-the-system")?.enforced).toBe(false);
+    expect(rules.every((rule) => rule.check === undefined)).toBe(true);
   });
 });

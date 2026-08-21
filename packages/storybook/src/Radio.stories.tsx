@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Radio, Stack } from "@mond-design-system/react";
+import story from "./story.module.css";
 
 const meta = {
   title: "Atoms/Radio",
@@ -18,7 +19,7 @@ export const Group: Story = {
     const name = useId();
     const [plan, setPlan] = useState("free");
     return (
-      <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+      <fieldset className={story.fieldset}>
         <legend>Plan</legend>
         <Stack gap="tight">
           {([["free", "Free"], ["pro", "Pro"], ["team", "Team"]] as const).map(([value, label]) => (

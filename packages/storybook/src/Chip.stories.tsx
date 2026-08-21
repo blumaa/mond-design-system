@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Chip, ChipBar, ChipGroup } from "@mond-design-system/react";
+import story from "./story.module.css";
 
 const meta = {
   title: "Atoms/Chip",
@@ -20,7 +21,7 @@ export const FilterBar: Story = {
     const segments = ["All", "Games", "Posts", "Players", "Courts", "Coaching"];
     const [segment, setSegment] = useState("All");
     return (
-      <div style={{ maxWidth: 320 }}>
+      <div className={story.frame}>
         <ChipBar bordered>
           {segments.map((s) => (
             <Chip key={s} selected={s === segment} onClick={() => setSegment(s)}>
@@ -46,7 +47,7 @@ export const MultiSelectGroup: Story = {
         return next;
       });
     return (
-      <div style={{ maxWidth: 280 }}>
+      <div className={story.frame}>
         <ChipGroup>
           {days.map((day) => (
             <Chip key={day} variant="outline" selected={picked.has(day)} onClick={() => toggle(day)}>

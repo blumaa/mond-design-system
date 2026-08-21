@@ -5,6 +5,7 @@
  * design system whose written guidance lives beside its enforcement ends up
  * with guidance nobody enforces and enforcement nobody explained.
  */
+import type { Block } from "../css/parse.js";
 import type { Graph } from "../graph.js";
 import type { Component } from "../structure.js";
 
@@ -28,6 +29,8 @@ export type Sheet = {
   /** Comments blanked, line numbers preserved. */
   source: string;
   lines: string[];
+  /** Every rule block in the file, with everything it sets. */
+  blocks: Block[];
   /** Tokens this sheet declares. */
   declares: Set<string>;
   /** It declares tokens for the whole document, so it is a value source rather
@@ -35,6 +38,13 @@ export type Sheet = {
   isTokens: boolean;
   /** It re-points design system tokens, so brand rules apply to it. */
   isBrand: boolean;
+};
+
+/** A TypeScript source file, read once for every rule that looks at one. */
+export type Source = {
+  /** Relative to the checked root — what a finding prints. */
+  file: string;
+  source: string;
 };
 
 /** The accessibility contract the design system publishes beside its stylesheet. */
@@ -48,6 +58,10 @@ export type Context = {
   sheets: Sheet[];
   /** What the repo is made of: one entry per component directory. */
   components: Component[];
+  /** Every `.tsx` the repo owns, read: where CSS-in-JS hides. */
+  sources: Source[];
+  /** Repo-relative paths of any typeface the repo carries. */
+  fonts: string[];
   /** The design system's entry stylesheet, wherever it was resolved from. */
   system?: string;
   /** The token namespace the design system owns, e.g. `--mds-`. */

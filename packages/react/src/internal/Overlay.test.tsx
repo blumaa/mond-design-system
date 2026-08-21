@@ -13,6 +13,6 @@ describe("Overlay scrim", () => {
   it("sizes to the visual viewport where the host mirrors it", () => {
     const scrim = sheet.match(/\.scrim\s*\{[^}]*\}/)?.[0];
     expect(scrim).toBeDefined();
-    expect(scrim).toContain("height: var(--mds-vvh, 100dvh)");
+    expect(scrim).toContain("height: var(--mds-vvh)");
   });
 });

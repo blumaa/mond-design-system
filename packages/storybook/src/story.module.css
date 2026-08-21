@@ -1,0 +1,77 @@
+/* What a story may need that is not a component.
+ *
+ * Stories are code like any other, so the same rule holds: no story writes a
+ * measurement into a style prop. Anything a demo needs to look right lives
+ * here, in tokens, and the story reaches for a class.
+ *
+ * The token specimens are the one place geometry is the subject rather than
+ * the servant: a swatch is a picture of a token, so its tile is sized to be
+ * looked at. The token being shown arrives as --specimen-*, set by the story.
+ */
+
+/* The width a demo gets: the app's own column, so a story is framed the way
+   the app it belongs to would be. */
+.frame {
+  max-width: var(--mds-frame-width);
+}
+
+/* A story playing the host that owns the real height — see Screen.tsx. */
+.viewport {
+  height: var(--mds-vvh);
+}
+
+/* A fieldset carries UA chrome no design asked for. */
+.fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fill {
+  flex: 1;
+}
+
+.tokenName {
+  flex: none;
+  width: 16rem;
+}
+
+.swatch {
+  flex: none;
+  width: 3.5rem;
+  height: 2rem;
+  border-radius: var(--mds-radius-control);
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  background: var(--specimen-color);
+}
+
+/* A length, drawn: the token sets the bar's own dimension. */
+.bar {
+  flex: none;
+  height: 1rem;
+  width: var(--specimen-length);
+  background: var(--mds-accent);
+}
+
+.barUpright {
+  flex: none;
+  width: 1rem;
+  height: var(--specimen-length);
+  background: var(--mds-accent);
+}
+
+.tile {
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--specimen-radius);
+  background: var(--mds-surface-sunken);
+  border: var(--mds-border-width) solid var(--mds-border-strong);
+}
+
+.shadowTile {
+  width: 6rem;
+  height: 4rem;
+  border-radius: var(--mds-radius-card);
+  background: var(--mds-surface-card);
+  box-shadow: var(--specimen-shadow);
+}

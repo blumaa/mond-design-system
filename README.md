@@ -80,6 +80,20 @@ pnpm verify          # build, typecheck, lint, check, test
 
 `pnpm verify` is what CI runs, in that order. Keep the two the same.
 
+## Rules
+
+`dsbridge check` holds this repo, and any app that installs the system, to the
+rules the system claims. Guidance and enforcement are the same object, so they
+cannot drift.
+
+```sh
+pnpm check           # what this repo violates today
+pnpm rules           # regenerate the agent-facing RULES.md (CI fails if stale)
+```
+
+The same rules ship as a Claude Code plugin in `plugin/` — four commands and a
+skill an agent reads before it writes CSS.
+
 ## Release
 
 Changesets. A change that adds tokens or components is a minor; a rendered value

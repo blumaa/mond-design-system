@@ -10,6 +10,7 @@ import {
   TabBarItem,
   Text,
 } from "@mond-design-system/react";
+import story from "./story.module.css";
 
 const meta = {
   title: "Templates/Screen",
@@ -18,7 +19,7 @@ const meta = {
   // Screen fills its host rather than claiming the viewport (the host owns
   // the real height — see Screen.tsx). Storybook's root has no height, so
   // the story plays the host.
-  decorators: [(Story) => <div style={{ height: "100dvh" }}><Story /></div>],
+  decorators: [(Story) => <div className={story.viewport}><Story /></div>],
 } satisfies Meta<typeof Screen>;
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -70,34 +70,23 @@ export const noLiteralLength: Rule = {
     "A hard-coded px is a decision made once, in one place, that the scale can no " +
     "longer move. Twenty of them are a layout nobody can retune.",
   instead:
-    "Use a spacing, radius or layout token. The single exception is a breakpoint " +
-    "inside a @media prelude: the query is resolved before custom properties exist, " +
-    "so it must be a literal — and it must be one of the declared --*-bp-* values.",
+    "Use a spacing, radius or layout token. A `@media` prelude is the one place a " +
+    "length has to be written out — the query is resolved before custom properties " +
+    "exist — and `breakpoint-is-declared` holds those to the breakpoint list.",
   target: "both",
   check: (context) => {
-    const breakpoints = new Set(
-      context.graph
-        .tokens()
-        .filter((token) => token.name.startsWith(`${context.prefix}bp-`))
-        .map((token) => token.effective.light?.trim())
-        .filter((value): value is string => value !== undefined),
-    );
     const index = valueIndex(context.graph, "light", (name) => isRung(name, context.prefix));
     return componentSheets(context).flatMap((sheet) =>
       exempted(context, "no-literal-length", sheet)
         ? []
         : findingsIn(sheet, "no-literal-length", (line) => {
             /* A prelude split over two lines fails here — write it on one. */
-            const prelude = line.trimStart().startsWith("@media");
-            return matchAll(line, /\b[0-9.]+px\b/g)
-              .filter((px) => !(prelude && breakpoints.has(px)))
-              .map(
-                (px) =>
-                  `literal length ${px} — ` +
-                  (prelude
-                    ? `off the breakpoint list — declare it as ${context.prefix}bp-* or use one that is there`
-                    : orAdvice(index.length(px), "use a spacing, radius or layout token")),
-              );
+            if (line.trimStart().startsWith("@media")) return [];
+            return matchAll(line, /\b[0-9.]+px\b/g).map(
+              (px) =>
+                `literal length ${px} — ` +
+                orAdvice(index.length(px), "use a spacing, radius or layout token"),
+            );
           }),
     );
   },
