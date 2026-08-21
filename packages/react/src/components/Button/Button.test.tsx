@@ -73,6 +73,40 @@ describe("Button", () => {
   });
 });
 
+describe("Button shape", () => {
+  it("says nothing about shape by default: the size class decides", () => {
+    render(<Button>Go</Button>);
+    expect(screen.getByRole("button").className).not.toContain("shape-");
+  });
+
+  it("takes a rectangle even where the default would round it", () => {
+    render(
+      <Button iconOnly aria-label="Search" shape="rect">
+        <svg aria-hidden="true" />
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: "Search" });
+    expect(button.className).toContain("icon-only");
+    expect(button.className).toContain("shape-rect");
+  });
+
+  it("takes a pill on a button with words in it", () => {
+    render(<Button shape="pill">Follow</Button>);
+    expect(screen.getByRole("button", { name: "Follow" }).className).toContain("shape-pill");
+  });
+
+  it("outranks the shape a class further up the file sets", async () => {
+    /* Both `.icon-only` and `.shape-rect` are one class, so source order would
+       decide which radius wins — and a stylesheet's order is not something a
+       call site can see. The shape classes qualify themselves with `.button`
+       to settle it. */
+    const css = (await import("./Button.module.css?raw")).default;
+    for (const shape of ["rect", "pill"]) {
+      expect(css).toContain(`.button.shape-${shape}`);
+    }
+  });
+});
+
 describe("Button iconOnly", () => {
   it("renders a square icon button with an accessible name", () => {
     render(

@@ -53,6 +53,17 @@ export const IconOnly: Story = {
     </Inline>
   ),
 };
+/** The default shape follows the size, and `shape` overrides it either way. */
+export const Shapes: Story = {
+  render: () => (
+    <Inline gap="base" align="center">
+      <Button shape="pill">Follow</Button>
+      <Button iconOnly aria-label="Search" variant="ghost" shape="rect">
+        <Icon name="search" />
+      </Button>
+    </Inline>
+  ),
+};
 export const States: Story = {
   render: () => (
     <Inline gap="base">

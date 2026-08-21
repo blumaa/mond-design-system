@@ -131,3 +131,14 @@
   height: var(--mds-icon-btn-size);
 }
 .icon-only.size-lg { width: var(--mds-control-h-lg); }
+
+/* Shape, when the caller wants one the size does not imply. Qualified with
+   `.button` so the answer does not depend on which rule above happens to be
+   written last. */
+.button.shape-rect {
+  border-radius: var(--mds-radius-control);
+}
+
+.button.shape-pill {
+  border-radius: var(--mds-radius-pill);
+}

@@ -18,7 +18,7 @@ export { Icon, IconProvider } from "./components/Icon/Icon";
 export type { IconProps, IconProviderProps, IconRender, IconRenderProps, IconSize } from "./components/Icon/Icon";
 
 export { Button } from "./components/Button/Button";
-export type { ButtonProps, ButtonVariant, ButtonSize } from "./components/Button/Button";
+export type { ButtonProps, ButtonVariant, ButtonSize, ButtonShape } from "./components/Button/Button";
 
 export { Link } from "./components/Link/Link";
 export type { LinkProps, LinkVariant } from "./components/Link/Link";

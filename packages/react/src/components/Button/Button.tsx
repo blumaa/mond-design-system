@@ -5,10 +5,16 @@ import styles from "./Button.module.css";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "warning" | "highlight";
 export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonShape = "rect" | "pill";
 
 interface ButtonBaseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  /** Corner shape, when the default is not the one this button wants: a
+   *  rectangle where `iconOnly` would round it, or a pill around words.
+   *  Unset, the shape follows from the size — rect, or a circle when
+   *  `iconOnly`. */
+  shape?: ButtonShape;
   /** Glyph slots — pass an <Icon> or any node. Agnostic of icon set; the
    *  button sizes the slot from its own size, and publishes that step as
    *  --mds-icon-slot for an icon set that can only size itself. */
@@ -46,11 +52,13 @@ const ICON_PX: Record<ButtonSize, number> = { sm: 16, md: 20, lg: 24 };
  * <Button variant="danger" loading={deleting} onClick={remove}>Delete</Button>
  * <Button iconOnly aria-label="Close" variant="ghost"><Icon name="close" /></Button>
  * <Button href="/settings">Settings</Button>
+ * <Button iconOnly aria-label="Menu" shape="rect"><Icon name="menu" /></Button>
  * ```
  */
 export function Button({
   variant = "primary",
   size = "md",
+  shape,
   iconLeft,
   iconRight,
   loading = false,
@@ -76,6 +84,7 @@ export function Button({
         styles[`size-${size}`],
         fullWidth && styles.fullWidth,
         iconOnly && styles["icon-only"],
+        shape !== undefined && styles[`shape-${shape}`],
         className,
       )}
       aria-busy={loading || undefined}
