@@ -82,11 +82,16 @@ export const noLiteralLength: Rule = {
         : findingsIn(sheet, "no-literal-length", (line) => {
             /* A prelude split over two lines fails here — write it on one. */
             if (line.trimStart().startsWith("@media")) return [];
-            return matchAll(line, /\b[0-9.]+px\b/g).map(
-              (px) =>
-                `literal length ${px} — ` +
-                orAdvice(index.length(px), "use a spacing, radius or layout token"),
-            );
+            return matchAll(line, /-?\b[0-9.]+px\b/g).map((px) => {
+              /* No token holds a negative value; -4px is a token negated. */
+              const negated = px.startsWith("-");
+              const token = index.length(negated ? px.slice(1) : px);
+              const advice =
+                negated && token !== undefined
+                  ? `negate the token: calc(-1 * var(${token}))`
+                  : orAdvice(token, "use a spacing, radius or layout token");
+              return `literal length ${px} — ${advice}`;
+            });
           }),
     );
   },

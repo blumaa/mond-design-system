@@ -73,6 +73,24 @@ describe("no-literal-length", () => {
   it("passes a token", () => {
     expect(run(noLiteralLength, ".a { padding: var(--mds-gap); }")).toEqual([]);
   });
+
+  /* A negative offset read as positive is the one finding whose advice moves the
+     element to the other side of the box — and it applies clean. */
+  it("keeps the sign on a negative length", () => {
+    expect(messages(noLiteralLength, ".a { top: -4px; }")[0]).toContain("-4px");
+  });
+
+  it("never offers a bare token for a negative length", () => {
+    expect(messages(noLiteralLength, ".a { top: -4px; }")[0]).not.toMatch(/var\(--mds-[a-z0-9-]+\) has that value/);
+  });
+
+  it("offers the negated token when one holds the magnitude", () => {
+    expect(messages(noLiteralLength, ".a { top: -4px; }")[0]).toMatch(/calc\(-1 \* var\(--mds-[a-z0-9-]+\)\)/);
+  });
+
+  it("advises without a token when nothing holds the magnitude", () => {
+    expect(messages(noLiteralLength, ".a { top: -37px; }")[0]).toContain("-37px");
+  });
 });
 
 describe("no-raw-scale-step", () => {
