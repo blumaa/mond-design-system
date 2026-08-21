@@ -107,6 +107,39 @@ describe("Button shape", () => {
   });
 });
 
+describe("Button on media", () => {
+  it("says nothing about the ground it stands on by default", () => {
+    render(<Button variant="ghost">Go</Button>);
+    expect(screen.getByRole("button").className).not.toContain("on-media");
+  });
+
+  it("takes the on-media ground alongside its variant", () => {
+    render(
+      <Button variant="ghost" onMedia>
+        Show
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: "Show" });
+    expect(button.className).toContain("variant-ghost");
+    expect(button.className).toContain("on-media");
+  });
+
+  it("reads the on-media palette, and only where a variant has a ground to lose", async () => {
+    /* A filled button carries its own background onto the picture and needs
+       nothing; the two see-through variants are the ones that would leave
+       dark text on a photograph. */
+    const css = (await import("./Button.module.css?raw")).default;
+    expect(css).toContain(".on-media.variant-ghost");
+    expect(css).toContain(".on-media.variant-secondary");
+    expect(css).toContain("var(--mds-text-on-media)");
+    expect(css).toContain("var(--mds-on-media-border)");
+    expect(css).toContain("var(--mds-on-media-surface-hover)");
+    expect(css).toContain("var(--mds-on-media-surface-active)");
+    expect(css).toContain("var(--mds-on-media-focus-ring)");
+    expect(css).toContain("var(--mds-on-media-dim)");
+  });
+});
+
 describe("Button iconOnly", () => {
   it("renders a square icon button with an accessible name", () => {
     render(

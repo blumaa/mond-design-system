@@ -10,6 +10,10 @@ export type ButtonShape = "rect" | "pill";
 interface ButtonBaseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  /** Standing on a picture, where the page's own foreground would be read
+   *  against a photograph. Only the two see-through variants take it up: a
+   *  filled button brings its own ground. */
+  onMedia?: boolean;
   /** Corner shape, when the default is not the one this button wants: a
    *  rectangle where `iconOnly` would round it, or a pill around words.
    *  Unset, the shape follows from the size — rect, or a circle when
@@ -59,6 +63,7 @@ export function Button({
   variant = "primary",
   size = "md",
   shape,
+  onMedia = false,
   iconLeft,
   iconRight,
   loading = false,
@@ -85,6 +90,7 @@ export function Button({
         fullWidth && styles.fullWidth,
         iconOnly && styles["icon-only"],
         shape !== undefined && styles[`shape-${shape}`],
+        onMedia && styles["on-media"],
         className,
       )}
       aria-busy={loading || undefined}

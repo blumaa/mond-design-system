@@ -132,6 +132,48 @@
 }
 .icon-only.size-lg { width: var(--mds-control-h-lg); }
 
+/* Standing on a picture. Qualified by variant on both sides: only the two
+   see-through grounds are in danger of leaving dark text on a photograph, and
+   the pairing is what keeps a filled button from losing its own colour here.
+   The order of these rules against the variant rules above must not decide
+   anything, hence two classes on every one of them. */
+.on-media.variant-ghost,
+.on-media.variant-secondary {
+  color: var(--mds-text-on-media);
+}
+
+.on-media.variant-secondary {
+  border-color: var(--mds-on-media-border);
+}
+
+.on-media.variant-ghost:hover:not(:disabled),
+.on-media.variant-secondary:hover:not(:disabled) {
+  background: var(--mds-on-media-surface-hover);
+  color: var(--mds-text-on-media);
+}
+
+.on-media.variant-secondary:hover:not(:disabled) {
+  border-color: var(--mds-text-on-media);
+}
+
+.on-media.variant-ghost:active:not(:disabled),
+.on-media.variant-secondary:active:not(:disabled) {
+  background: var(--mds-on-media-surface-active);
+}
+
+.on-media:focus-visible {
+  outline-color: var(--mds-on-media-focus-ring);
+}
+
+/* The page's disabled grey is a light-background colour: on a photograph it
+   is either invisible or reads as available. */
+.on-media.variant-ghost:disabled,
+.on-media.variant-secondary:disabled {
+  background: none;
+  border-color: var(--mds-on-media-border);
+  color: var(--mds-on-media-dim);
+}
+
 /* Shape, when the caller wants one the size does not imply. Qualified with
    `.button` so the answer does not depend on which rule above happens to be
    written last. */

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button, Icon, Inline } from "@mond-design-system/react";
+import story from "./story.module.css";
 
 const meta = {
   title: "Atoms/Button",
@@ -64,6 +65,30 @@ export const Shapes: Story = {
     </Inline>
   ),
 };
+/** On a picture, the two see-through variants swap the page's foreground for
+ *  the on-media one. The filled variants bring their own ground and are left
+ *  alone. */
+export const OnMedia: Story = {
+  render: () => (
+    <div className={story.photo}>
+      <Inline gap="base" align="center">
+        <Button variant="ghost" onMedia>
+          Show
+        </Button>
+        <Button variant="secondary" onMedia>
+          Save
+        </Button>
+        <Button variant="secondary" onMedia disabled>
+          Saved
+        </Button>
+        <Button iconOnly aria-label="Close" variant="ghost" onMedia>
+          <Icon name="close" />
+        </Button>
+      </Inline>
+    </div>
+  ),
+};
+
 export const States: Story = {
   render: () => (
     <Inline gap="base">
