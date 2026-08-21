@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
+import type { ElementType, HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Card.module.css";
 
@@ -16,6 +16,8 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> 
   onClick?: () => void;
   /** Makes the whole card a link. Wins over onClick. */
   href?: string;
+  /** Element override for that link, e.g. a router's Link. */
+  as?: ElementType;
   /** The root is an `<a>`, a `<button>` or a `<div>` depending on the props,
       so the ref is typed to what all three are. */
   ref?: Ref<HTMLElement>;
@@ -35,14 +37,15 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> 
  * <Card href="/items/42" variant="flat">…</Card>
  * ```
  */
-export function Card({ children, variant = "card", emphasis = false, onClick, href, className, ref, ...rest }: CardProps): ReactElement {
+export function Card({ children, variant = "card", emphasis = false, onClick, href, as, className, ref, ...rest }: CardProps): ReactElement {
   const cardClass = cx(styles.card, styles[`variant-${variant}`], emphasis && styles.emphasis, className);
 
   if (href !== undefined) {
+    const Element: ElementType = as ?? "a";
     return (
-      <a className={cx(cardClass, styles.interactive)} href={href} ref={ref as Ref<HTMLAnchorElement>} {...rest}>
+      <Element className={cx(cardClass, styles.interactive)} href={href} ref={ref as Ref<HTMLAnchorElement>} {...rest}>
         {children}
-      </a>
+      </Element>
     );
   }
   if (onClick !== undefined) {

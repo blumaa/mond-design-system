@@ -112,6 +112,16 @@ describe("Card", () => {
     expect(screen.getByRole("link", { name: "Go" })).toHaveAttribute("href", "/x");
   });
 
+  it("as renders the router's link as the card", () => {
+    const Fake = (props: React.ComponentProps<"a">) => <a data-testid="fake" {...props} />;
+    render(
+      <Card as={Fake} href="/x">
+        <CardBody>Go</CardBody>
+      </Card>,
+    );
+    expect(screen.getByTestId("fake")).toHaveAttribute("href", "/x");
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <div>

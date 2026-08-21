@@ -39,6 +39,21 @@ describe("TabBar", () => {
     expect(screen.getAllByTestId("mds-tabbar-badge")).toHaveLength(1);
   });
 
+  /* A tab bar in a client-routed app is the one place a full page reload is
+     most expensive: the shell restarts on every tap. The router's Link is the
+     element that stops it, and only the app knows which router it has. */
+  it("as renders the router's link, keeping href and the active mark", () => {
+    const Fake = (props: React.ComponentProps<"a">) => <a data-testid="fake" {...props} />;
+    render(
+      <TabBar label="Primary">
+        <TabBarItem as={Fake} label="Home" icon={<span />} href="/" active />
+      </TabBar>,
+    );
+    const link = screen.getByTestId("fake");
+    expect(link).toHaveAttribute("href", "/");
+    expect(link).toHaveAttribute("aria-current", "page");
+  });
+
   it("center action is an icon-only button named by its label", async () => {
     const onClick = vi.fn();
     render(

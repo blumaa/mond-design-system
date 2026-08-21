@@ -65,6 +65,16 @@ describe("List", () => {
     expect(screen.getByRole("link", { name: /Go/ })).toHaveAttribute("href", "/there");
   });
 
+  it("as renders the router's link in the row", () => {
+    const Fake = (props: React.ComponentProps<"a">) => <a data-testid="fake" {...props} />;
+    render(
+      <ListGroup>
+        <ListItem as={Fake} title="Go" href="/there" />
+      </ListGroup>,
+    );
+    expect(screen.getByTestId("fake")).toHaveAttribute("href", "/there");
+  });
+
   it("title and description take rich nodes", () => {
     render(
       <ListGroup>

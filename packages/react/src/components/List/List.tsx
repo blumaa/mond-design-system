@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
+import type { ElementType, HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { createContext, useContext, useId } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./List.module.css";
@@ -69,6 +69,8 @@ export interface ListItemProps extends Omit<HTMLAttributes<HTMLElement>, "title"
   pressed?: boolean;
   /** Makes the whole row a link. Wins over onClick. */
   href?: string;
+  /** Element override for that link, e.g. a router's Link. */
+  as?: ElementType;
   /** What the row paints behind itself. Inside a ListGroup the group is the
       card, so grouped rows default to painting nothing; standalone rows
       default to their own card. `accent` is the tinted, accent-edged prompt
@@ -93,6 +95,7 @@ export function ListItem({
   onClick,
   pressed,
   href,
+  as,
   surface,
   className,
   ref,
@@ -100,6 +103,7 @@ export function ListItem({
 }: ListItemProps): ReactElement {
   const inGroup = useContext(ListGroupContext);
   const Root = inGroup ? "li" : "div";
+  const LinkElement: ElementType = as ?? "a";
   // Grouped rows paint nothing unless told otherwise; standalone rows carry
   // their own card.
   const resolved = surface ?? (inGroup ? undefined : "card");
@@ -122,9 +126,9 @@ export function ListItem({
       {...rest}
     >
       {href !== undefined ? (
-        <a className={cx(styles.row, styles.interactive)} href={href}>
+        <LinkElement className={cx(styles.row, styles.interactive)} href={href}>
           {content}
-        </a>
+        </LinkElement>
       ) : onClick !== undefined ? (
         <button
           type="button"

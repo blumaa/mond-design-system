@@ -1,4 +1,4 @@
-import type { MouseEventHandler, ReactNode } from "react";
+import type { ElementType, MouseEventHandler, ReactNode } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./TabBar.module.css";
 
@@ -37,9 +37,12 @@ export interface TabBarItemProps {
   /** Attention dot on the icon — unread, pending. Boolean only: the count
       lives on the destination screen, the bar just says "something's there". */
   badge?: boolean | undefined;
+  /** Element override for the link, e.g. a router's Link. A bottom bar is
+      where a full page reload costs the most — it restarts the whole shell. */
+  as?: ElementType;
 }
 
-export function TabBarItem({ label, icon, href, onClick, active = false, badge = false }: TabBarItemProps) {
+export function TabBarItem({ label, icon, href, onClick, active = false, badge = false, as }: TabBarItemProps) {
   const className = cx(styles.item, active && styles.active);
   const content = (
     <>
@@ -51,10 +54,11 @@ export function TabBarItem({ label, icon, href, onClick, active = false, badge =
     </>
   );
   if (href !== undefined) {
+    const Element: ElementType = as ?? "a";
     return (
-      <a href={href} className={className} aria-current={active ? "page" : undefined} onClick={onClick}>
+      <Element href={href} className={className} aria-current={active ? "page" : undefined} onClick={onClick}>
         {content}
-      </a>
+      </Element>
     );
   }
   return (
