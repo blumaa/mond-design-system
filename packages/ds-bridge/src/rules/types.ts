@@ -5,6 +5,7 @@
  * design system whose written guidance lives beside its enforcement ends up
  * with guidance nobody enforces and enforcement nobody explained.
  */
+import type { Suppressed } from "../context.js";
 import type { Block } from "../css/parse.js";
 import type { Graph } from "../graph.js";
 import type { Component } from "../structure.js";
@@ -74,6 +75,9 @@ export type Context = {
   levelsIgnore: string[];
   /** What the system promises about contrast, when it publishes one. */
   contract?: Contract;
+  /** Files found and not scanned. A check that quietly halved its own scope
+      reads exactly like a clean one, so the count is printed either way. */
+  suppressed: Suppressed;
   /**
    * Per-rule opt-outs from the config, each with a reason on record. A rule may
    * also ask about a narrower key of its own — `no-raw-scale-step/typography`

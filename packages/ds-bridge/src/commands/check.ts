@@ -22,6 +22,21 @@ const green = (s: string, on: boolean) => (on ? `${ESC}32m${s}${ESC}0m` : s);
 
 const place = (a: Finding, b: Finding) => a.file.localeCompare(b.file) || (a.line ?? 0) - (b.line ?? 0);
 
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
+/** What the check did not look at. Silence here reads as a pass, so it is
+    printed whether the run was clean or not, and names what would restore it. */
+function exclusions(context: Context, color: boolean): string[] {
+  const { tests, scope } = context.suppressed;
+  const out: string[] = [];
+  if (tests > 0) {
+    const what = tests === 1 ? "test or story" : "tests and stories";
+    out.push(dim(`  ${tests} ${what} not scanned — run --include-tests`, color));
+  }
+  if (scope > 0) out.push(dim(`  ${plural(scope, "file")} outside sources not scanned`, color));
+  return out;
+}
+
 /** Rule id to the reason it could not run here. */
 export const skippedRules = (context: Context, options: CheckOptions = {}): Map<string, string> => {
   const out = new Map<string, string>();
@@ -46,7 +61,10 @@ export function renderCheck(findings: Finding[], context: Context, options: Chec
   const skipped = skippedRules(context, options);
   const ran = rulesFor(context, options.only).filter(isEnforced).length - skipped.size;
   const scope = `${context.sheets.length} stylesheets, ${context.graph.tokens().length} tokens, ${ran} rules`;
-  const notes = [...skipped].map(([rule, reason]) => dim(`  skipped ${rule}: ${reason}`, color));
+  const notes = [
+    ...exclusions(context, color),
+    ...[...skipped].map(([rule, reason]) => dim(`  skipped ${rule}: ${reason}`, color)),
+  ];
   if (findings.length === 0) return [`${green("clean", color)} — ${scope}`, ...notes, ""].join("\n");
 
   const files = new Map<string, Finding[]>();
@@ -65,7 +83,6 @@ export function renderCheck(findings: Finding[], context: Context, options: Chec
 
   const byRule = new Map<string, number>();
   for (const finding of findings) byRule.set(finding.rule, (byRule.get(finding.rule) ?? 0) + 1);
-  const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
   lines.push(`${red(plural(findings.length, "finding"), color)} in ${plural(files.size, "file")} — ${scope}`);
   for (const [rule, count] of [...byRule].sort((a, b) => b[1] - a[1])) {
     lines.push(dim(`  ${String(count).padStart(4)}  ${rule}`, color));

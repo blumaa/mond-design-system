@@ -256,3 +256,36 @@ describe("dsbridge arguments", () => {
     noStack(output);
   });
 });
+
+describe("what a check leaves out", () => {
+  const debt = ".root { padding: 13px; }";
+
+  it("says how many files it did not scan, and how to scan them", () => {
+    const { output } = check(app(debt, { "src/Button.stories.css": debt, "src/legacy.test.css": debt }));
+    expect(output).toContain("2 tests and stories not scanned");
+    expect(output).toContain("--include-tests");
+    expect(output).toMatch(/1 finding/);
+  });
+
+  it("scans them when asked, and then has nothing to report about them", () => {
+    const { output } = check(app(debt, { "src/Button.stories.css": debt }), "--include-tests");
+    expect(output).toMatch(/2 findings/);
+    expect(output).not.toContain("not scanned");
+  });
+
+  it("says nothing about exclusions when there were none", () => {
+    const { output } = check(app(".root { padding: var(--mds-pad-control-md); }"));
+    expect(output).toContain("clean");
+    expect(output).not.toContain("not scanned");
+  });
+
+  it("reports what a declared scope left out, which no flag restores", () => {
+    const root = app(debt, {
+      "src/legacy/old.css": debt,
+      "dsbridge.config.json": JSON.stringify({ sources: ["src/Button.module.css"] }),
+    });
+    const { output } = check(root);
+    expect(output).toContain("1 file outside sources");
+    expect(output).toMatch(/1 finding/);
+  });
+});

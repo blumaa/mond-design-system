@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { makeSheet } from "./context.js";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
+import { loadContext, makeSheet } from "./context.js";
+
+const SYSTEM = fileURLToPath(new URL("./__fixtures__/system/styles.css", import.meta.url));
 
 const sheet = (source: string, system: string[] = []) =>
   makeSheet("/app/src/x.module.css", source, "/app", "--mds-", new Set(system));
@@ -36,5 +42,72 @@ describe("brand or component", () => {
     expect([...s.declares]).toEqual(["--mds-icon-slot"]);
     expect(s.lines).toHaveLength(3);
     expect(s.file).toBe("src/x.module.css");
+  });
+});
+
+/* An app whose tests and stories carry exactly the debt its source does: the
+   only question is which of it gets reported. */
+const app = (files: Record<string, string>) => {
+  const root = mkdtempSync(join(tmpdir(), "dsbridge-"));
+  for (const [name, source] of Object.entries(files)) {
+    mkdirSync(dirname(join(root, name)), { recursive: true });
+    writeFileSync(join(root, name), source);
+  }
+  return root;
+};
+
+const APP = {
+  "src/Card.tsx": "export const Card = () => <div />;",
+  "src/Card.test.tsx": "it('renders', () => {});",
+  "src/Card.stories.tsx": "export const Default = () => <Card />;",
+  "src/Card.module.css": ".card { padding: 13px; }",
+  "src/__fixtures__/legacy.css": ".old { padding: 13px; }",
+};
+
+describe("what a check reads", () => {
+  it("leaves out tests, stories and fixtures, and says how many", () => {
+    const context = loadContext({ root: app(APP), system: SYSTEM });
+    expect(context.sources.map((s) => s.file)).toEqual(["src/Card.tsx"]);
+    expect(context.sheets.map((s) => s.file)).toEqual(["src/Card.module.css"]);
+    expect(context.suppressed.tests).toBe(3);
+  });
+
+  it("reads them when asked to", () => {
+    const context = loadContext({ root: app(APP), system: SYSTEM, includeTests: true });
+    expect(context.sources.map((s) => s.file).sort()).toEqual([
+      "src/Card.stories.tsx",
+      "src/Card.test.tsx",
+      "src/Card.tsx",
+    ]);
+    expect(context.suppressed.tests).toBe(0);
+  });
+
+  it("reads only what `sources` names, when a repo names any", () => {
+    const config = { sources: ["src/components/**"] };
+    const context = loadContext({
+      root: app({ ...APP, "src/components/Button.tsx": "export const Button = () => <button />;" }),
+      system: SYSTEM,
+      config,
+    });
+    expect(context.sources.map((s) => s.file)).toEqual(["src/components/Button.tsx"]);
+  });
+
+  it("takes a glob in `ignore`, and a path prefix still means the directory", () => {
+    const context = loadContext({
+      root: app(APP),
+      system: SYSTEM,
+      config: { ignore: ["**/*.module.css"] },
+    });
+    expect(context.sheets).toHaveLength(0);
+  });
+
+  it("takes a glob in `exempt`, so one rule can be lifted off a directory", () => {
+    const context = loadContext({
+      root: app(APP),
+      system: SYSTEM,
+      config: { exempt: { "no-literal-length": ["src/**"] } },
+    });
+    expect(context.exempt("no-literal-length", "src/Card.module.css")).toBe(true);
+    expect(context.exempt("no-literal-length", "other/Card.module.css")).toBe(false);
   });
 });

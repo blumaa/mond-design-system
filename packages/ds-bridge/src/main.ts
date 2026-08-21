@@ -46,10 +46,12 @@ Options for check
   <path>            report only what lives under this path; repeatable
   --system <file>   as above
   --rule <id>       run one rule; repeatable
+  --include-tests   scan tests, stories and fixtures too
 
 Options for migrate
   --root <dir>      the app to plan for   (default: the cwd)
   --system <file>   as above
+  --include-tests   as above
 
 Options for rules
   --target <name>   system | app
@@ -134,6 +136,7 @@ function checkCommand(rest: string[]): number {
       root: { type: "string" },
       system: { type: "string" },
       rule: { type: "string", multiple: true },
+      "include-tests": { type: "boolean" },
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
     },
@@ -147,6 +150,7 @@ function checkCommand(rest: string[]): number {
     root,
     ...(values.system ? { system: resolve(values.system) } : {}),
     ...(config ? { config } : {}),
+    ...(values["include-tests"] === true ? { includeTests: true } : {}),
   });
   const options = {
     ...(values.rule ? { only: values.rule } : {}),
@@ -165,6 +169,7 @@ function migrateCommand(rest: string[]): number {
     options: {
       root: { type: "string" },
       system: { type: "string" },
+      "include-tests": { type: "boolean" },
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
     },
@@ -178,6 +183,7 @@ function migrateCommand(rest: string[]): number {
     root,
     ...(values.system ? { system: resolve(values.system) } : {}),
     ...(config ? { config } : {}),
+    ...(values["include-tests"] === true ? { includeTests: true } : {}),
   });
   const keep = pathFilter(root, positionals);
   const whole = planMigration(context);

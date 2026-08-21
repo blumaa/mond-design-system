@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, relative, resolve, sep } from "node:path";
 import { expandImports, loadGraph, type Graph } from "./graph.js";
 import { findFonts, findSources, findStylesheets, resolveSystem, rootScoped } from "./sources.js";
+import { anyGlob } from "./glob.js";
 import { readComponents, type Component } from "./structure.js";
 import { blocksIn, declarationsIn, stripComments } from "./css/parse.js";
 import type { Context, Contract, Sheet, Source } from "./rules/types.js";
@@ -41,12 +42,14 @@ export function makeSheet(
 }
 
 export type Config = {
-  /** Rule id to the files it does not apply to, each with a reason in the file itself. */
+  /** Rule id to the globs it does not apply to, each with a reason in the file itself. */
   exempt?: Record<string, string[]>;
   /** Core groups that are scales; defaults to spacing, radius and typography. */
   scales?: string[];
-  /** Path fragments whose stylesheets are not the repo's own — fixtures, vendored copies. */
+  /** Globs whose files are not the repo's own — fixtures, vendored copies. */
   ignore?: string[];
+  /** Globs bounding what the repo asks to be checked; everything, when absent. */
+  sources?: string[];
   /** The token namespace the design system owns; defaults to `--mds-`. */
   prefix?: string;
   /** The design system's entry stylesheet, relative to the root. For a repo
@@ -61,6 +64,20 @@ export type Config = {
 /** The taxonomy a repo gets when it declares none. */
 export const LEVELS = ["atom", "molecule", "organism", "template"];
 
+/* Files that exist to exercise the app rather than to be it. A literal length
+   in a story is the point of the story, and Kinbaku's 606 findings are 577
+   of them — reporting those buries the 29 that are real. The structure rules
+   still see these files; what changes is that no rule scans their bodies. */
+export const TEST_GLOBS = ["**/*.stories.*", "**/*.test.*", "**/*.spec.*", "**/__fixtures__", "**/__mocks__"];
+
+/** What a check did not look at, and why — never silently. */
+export type Suppressed = {
+  /** Left out as a test, a story or a fixture; `--include-tests` restores them. */
+  tests: number;
+  /** Outside the `sources` the repo declared. */
+  scope: number;
+};
+
 export type BuildOptions = {
   root: string;
   kind: "system" | "app";
@@ -74,6 +91,7 @@ export type BuildOptions = {
   prefix?: string;
   config?: Config;
   contract?: Contract;
+  suppressed?: Suppressed;
 };
 
 export function buildContext({
@@ -88,6 +106,7 @@ export function buildContext({
   system,
   config = {},
   contract,
+  suppressed = { tests: 0, scope: 0 },
 }: BuildOptions): Context {
   const exempt = config.exempt ?? {};
   return {
@@ -104,7 +123,8 @@ export function buildContext({
     levelsIgnore: config.levelsIgnore ?? [],
     ...(config.scales ? { scales: config.scales } : {}),
     ...(contract ? { contract } : {}),
-    exempt: (rule, file) => (exempt[rule] ?? []).includes(file),
+    suppressed,
+    exempt: (rule, file) => anyGlob(exempt[rule] ?? [])(file),
   };
 }
 
@@ -114,10 +134,12 @@ export type LoadContextOptions = {
   system?: string;
   config?: Config;
   prefix?: string;
+  /** Scan tests, stories and fixtures too. */
+  includeTests?: boolean;
 };
 
 /** The same context, read off disk. */
-export function loadContext({ root, system, config, prefix }: LoadContextOptions): Context {
+export function loadContext({ root, system, config, prefix, includeTests }: LoadContextOptions): Context {
   const at = resolve(root);
   const namespace = prefix ?? config?.prefix ?? "--mds-";
   const declared = config?.system;
@@ -133,17 +155,40 @@ export function loadContext({ root, system, config, prefix }: LoadContextOptions
   const kind = entry.startsWith(at + sep) && !vendored ? "system" : "app";
   const unbranded = loadGraph({ system: entry, prefix: namespace });
   const systemDeclares = new Set(unbranded.names());
-  const ignored = (file: string) => (config?.ignore ?? []).some((fragment) => relative(at, file).includes(fragment));
+  const ignored = anyGlob(config?.ignore ?? []);
+  const bounds = config?.sources ?? [];
+  const inScope = bounds.length > 0 ? anyGlob(bounds) : () => true;
+  const isTest = anyGlob(TEST_GLOBS);
+  const suppressed: Suppressed = { tests: 0, scope: 0 };
+  /* Counted where it happens, so the reason a file went unread is the reason
+     reported, not one inferred afterwards from a difference of two numbers. */
+  const scanned = (file: string) => {
+    const path = relative(at, file);
+    if (ignored(path)) return false;
+    if (!inScope(path)) {
+      suppressed.scope += 1;
+      return false;
+    }
+    if (includeTests !== true && isTest(path)) {
+      suppressed.tests += 1;
+      return false;
+    }
+    return true;
+  };
   const sheets = findStylesheets(at)
-    .filter((file) => !systemFiles.has(file) && !ignored(file))
+    .filter((file) => !systemFiles.has(file) && scanned(file))
     .map((file) => makeSheet(file, readFileSync(file, "utf8"), at, namespace, systemDeclares));
-  const sources = findSources(at)
-    .filter((file) => !ignored(file))
+  const tsx = findSources(at).filter((file) => !ignored(relative(at, file)));
+  const sources = tsx
+    .filter(scanned)
     .map((file) => ({ file: relative(at, file), source: readFileSync(file, "utf8") }));
-  const read = new Map(sources.map((source) => [source.file, source.source]));
+  /* A component's story is what names its level, and its test is how the
+     structure rules know it has one — so those two are read whether or not
+     any rule scans their bodies. */
+  const read = new Map(tsx.map((file) => [relative(at, file), readFileSync(file, "utf8")]));
   const components = readComponents([...read.keys()], (file) => read.get(file) ?? "");
   const fonts = findFonts(at)
-    .filter((file) => !ignored(file))
+    .filter(scanned)
     .map((file) => relative(at, file));
   const brand = sheets.filter((s) => s.isBrand).map((s) => s.path);
   const graph = brand.length > 0 ? loadGraph({ system: entry, prefix: namespace, brand }) : unbranded;
@@ -165,5 +210,6 @@ export function loadContext({ root, system, config, prefix }: LoadContextOptions
     system: entry,
     ...(config ? { config } : {}),
     ...(contract ? { contract } : {}),
+    suppressed,
   });
 }
