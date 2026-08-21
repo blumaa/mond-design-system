@@ -21,8 +21,12 @@ export type Index = {
   length(value: string): string | undefined;
   /** A token painting exactly this colour, if one does. */
   color(value: string): string | undefined;
-  /** Every token holding this value, best first — when the caller knows more
-      than the value, as a migration does: it also knows the name. */
+  /** Every token holding this length, best first. */
+  lengths(value: string): string[];
+  /** Every token painting this colour, best first. */
+  colors(value: string): string[];
+  /** Both, for a caller that knows the name as well as the value — a migration
+      matching `--app-gap` against the system does. */
   candidates(value: string): string[];
 };
 
@@ -75,13 +79,68 @@ export function valueIndex(
   };
   const forLength = (value: string) => lengths.get(value.trim()) ?? [];
 
+  const names = (tokens: Token[]) => tokens.map((token) => token.name);
   return {
     length: (value) => forLength(value)[0]?.name,
     color: (value) => forColor(value)[0]?.name,
-    candidates: (value) => [...forLength(value), ...forColor(value)].map((token) => token.name),
+    lengths: (value) => names(forLength(value)),
+    colors: (value) => names(forColor(value)),
+    candidates: (value) => names([...forLength(value), ...forColor(value)]),
   };
 }
 
 /** The tail of a finding: the token that already holds the value, or the advice. */
 export const orAdvice = (token: string | undefined, advice: string) =>
   token === undefined ? advice : `var(${token}) has that value`;
+
+/**
+ * How sure the tool is about what was meant.
+ *
+ * `certain` is the only one a fix may act on. `value-only` is the honest name
+ * for the match this tool made before any token declared what it is *for*:
+ * several tokens hold the value and nothing yet distinguishes them, so naming
+ * one of them would be a coin flip printed with the authority of a fact.
+ */
+export type Confidence = "certain" | "ambiguous" | "value-only" | "none";
+
+export type Suggestion = {
+  /** Every token that could be meant, best first. */
+  candidates: string[];
+  confidence: Confidence;
+  /** What to write instead, when exactly one thing can be meant. */
+  autofix?: string;
+  /** The tail of the finding's message. */
+  advice: string;
+};
+
+/** Named in the message; the rest are counted. The whole list is in the JSON. */
+const NAMED = 4;
+
+export type SuggestOptions = {
+  /** What to say when no token holds the value at all. */
+  advice: string;
+  /** How a token becomes the replacement: `var(--x)` for nearly everything,
+      `calc(-1 * var(--x))` where the literal was negative. */
+  write?: (token: string) => string;
+  /** How to say it when exactly one token can be meant. */
+  say?: (replacement: string) => string;
+};
+
+/** A finding's tail, from the tokens that hold the value. */
+export function suggest(candidates: string[], options: SuggestOptions): Suggestion {
+  const { advice, write = (token: string) => `var(${token})`, say = (r: string) => `${r} has that value` } =
+    options;
+  const [first, ...rest] = candidates;
+  if (first === undefined) return { candidates, confidence: "none", advice };
+  if (rest.length === 0) {
+    return { candidates, confidence: "certain", autofix: write(first), advice: say(write(first)) };
+  }
+  const shown = candidates.slice(0, NAMED);
+  const more = candidates.length - shown.length;
+  const tail = more > 0 ? `, and ${more} more` : "";
+  return {
+    candidates,
+    confidence: "value-only",
+    advice: `${candidates.length} tokens hold it: ${shown.join(", ")}${tail} — use the one that names the role`,
+  };
+}

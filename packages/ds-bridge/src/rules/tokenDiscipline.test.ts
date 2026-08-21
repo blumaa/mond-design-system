@@ -162,3 +162,62 @@ describe("as prose", () => {
     }
   });
 });
+
+describe("a finding as data", () => {
+  it("carries the property, the value and every token that could be meant", () => {
+    const [finding] = run(noLiteralLength, ".a { padding: 8px; }");
+    expect(finding).toMatchObject({
+      property: "padding",
+      value: "8px",
+      candidates: ["--mds-gap", "--mds-space-2"],
+      confidence: "value-only",
+    });
+    expect(finding?.autofix).toBeUndefined();
+  });
+
+  it("carries a replacement only when one token can be meant", () => {
+    const [finding] = run(noLiteralLength, ".a { padding: 4px; }");
+    expect(finding).toMatchObject({ confidence: "certain", autofix: "var(--mds-space-1)" });
+  });
+
+  it("says none rather than guessing when the scale is missing the value", () => {
+    const [finding] = run(noLiteralLength, ".a { padding: 37px; }");
+    expect(finding).toMatchObject({ confidence: "none", candidates: [] });
+  });
+
+  it("negates the token in the replacement, never the bare token", () => {
+    const [finding] = run(noLiteralLength, ".a { margin-top: -4px; }");
+    expect(finding).toMatchObject({
+      property: "margin-top",
+      value: "-4px",
+      autofix: "calc(-1 * var(--mds-space-1))",
+    });
+  });
+
+  it("names the property the value was written for, not the first on the line", () => {
+    const [, second] = run(noLiteralLength, ".a { padding: 37px; margin: 37px; }");
+    expect(second?.property).toBe("margin");
+  });
+
+  it("points at the column the literal starts in", () => {
+    const [finding] = run(noLiteralLength, ".a { padding: 37px; }");
+    expect(finding?.col).toBe(15);
+  });
+
+  it("carries the same data for a colour", () => {
+    const [finding] = run(noLiteralColor, ".a { background: #ffffff; }");
+    expect(finding).toMatchObject({
+      property: "background",
+      value: "#ffffff",
+      candidates: ["--mds-text-inverse", "--mds-surface-card"],
+      confidence: "value-only",
+    });
+  });
+
+  it("names every token that holds the value rather than asserting the first", () => {
+    const [finding] = run(noLiteralLength, ".a { padding: 8px; }");
+    expect(finding?.message).toContain("--mds-gap");
+    expect(finding?.message).toContain("--mds-space-2");
+    expect(finding?.message).not.toContain("has that value");
+  });
+});

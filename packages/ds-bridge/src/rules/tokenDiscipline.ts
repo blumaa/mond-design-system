@@ -10,11 +10,31 @@
  * app's components alike, which is why they are the rules an app is checked
  * against first.
  */
-import type { Context, Rule, Sheet } from "./types.js";
+import type { Context, Detail, Rule, Sheet } from "./types.js";
 import { componentSheets, findingsIn } from "./types.js";
-import { orAdvice, valueIndex } from "./suggest.js";
+import { suggest, valueIndex, type SuggestOptions } from "./suggest.js";
+import { propertyAt } from "../css/parse.js";
 
 const matchAll = (source: string, pattern: RegExp) => [...source.matchAll(pattern)].map((m) => m[0]);
+
+/** The same matches, with where they are: a fix has to know the column. */
+const matchesIn = (source: string, pattern: RegExp) =>
+  [...source.matchAll(pattern)].map((m) => ({ text: m[0], at: m.index }));
+
+/** One literal, as a finding: the sentence, and the same thing as data. */
+function literal(kind: string, line: string, at: number, text: string, options: SuggestOptions, candidates: string[]): Detail {
+  const found = suggest(candidates, options);
+  const property = propertyAt(line, at);
+  return {
+    message: `literal ${kind} ${text} — ${found.advice}`,
+    col: at + 1,
+    value: text,
+    candidates: found.candidates,
+    confidence: found.confidence,
+    ...(property !== undefined ? { property } : {}),
+    ...(found.autofix !== undefined ? { autofix: found.autofix } : {}),
+  };
+}
 
 /** `var(--x)` or `var(--x, fallback)` — a token being read rather than declared. */
 const readsIn = (line: string, prefix: string) =>
@@ -55,8 +75,11 @@ export const noLiteralColor: Rule = {
       exempted(context, "no-literal-color", sheet)
         ? []
         : findingsIn(sheet, "no-literal-color", (line) =>
-            [...matchAll(line, /#[0-9a-fA-F]{3,8}\b/g), ...matchAll(line, /\b(?:rgba?|hsla?)\([^)]*\)/g)].map(
-              (literal) => `literal color ${literal} — ${orAdvice(index.color(literal), "use a semantic alias")}`,
+            [
+              ...matchesIn(line, /#[0-9a-fA-F]{3,8}\b/g),
+              ...matchesIn(line, /\b(?:rgba?|hsla?)\([^)]*\)/g),
+            ].map(({ text, at }) =>
+              literal("color", line, at, text, { advice: "use a semantic alias" }, index.colors(text)),
             ),
           ),
     );
@@ -82,15 +105,19 @@ export const noLiteralLength: Rule = {
         : findingsIn(sheet, "no-literal-length", (line) => {
             /* A prelude split over two lines fails here — write it on one. */
             if (line.trimStart().startsWith("@media")) return [];
-            return matchAll(line, /-?\b[0-9.]+px\b/g).map((px) => {
+            return matchesIn(line, /-?\b[0-9.]+px\b/g).map(({ text, at }) => {
               /* No token holds a negative value; -4px is a token negated. */
-              const negated = px.startsWith("-");
-              const token = index.length(negated ? px.slice(1) : px);
-              const advice =
-                negated && token !== undefined
-                  ? `negate the token: calc(-1 * var(${token}))`
-                  : orAdvice(token, "use a spacing, radius or layout token");
-              return `literal length ${px} — ${advice}`;
+              const negated = text.startsWith("-");
+              const options: SuggestOptions = {
+                advice: "use a spacing, radius or layout token",
+                ...(negated
+                  ? {
+                      write: (token: string) => `calc(-1 * var(${token}))`,
+                      say: (replacement: string) => `negate the token: ${replacement}`,
+                    }
+                  : {}),
+              };
+              return literal("length", line, at, text, options, index.lengths(negated ? text.slice(1) : text));
             });
           }),
     );

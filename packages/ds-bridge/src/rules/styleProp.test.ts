@@ -37,9 +37,15 @@ describe("style-prop-needs-a-token", () => {
     expect(run(stylePropNeedsAToken, "<i style={{ font: `var(${token})` }} />")).toEqual([]);
   });
 
-  it("flags a literal length and names a token holding that value", () => {
+  it("flags a literal length and names every token holding that value", () => {
     const [finding] = run(stylePropNeedsAToken, "<i style={{ gap: 8 }} />");
     expect(finding).toMatchObject({ rule: "style-prop-needs-a-token", file: "src/Button.tsx", line: 1 });
+    expect(finding?.message).toContain("--mds-gap");
+    expect(finding?.message).toContain("--mds-space-2");
+  });
+
+  it("names the one token when only one holds the value", () => {
+    const [finding] = run(stylePropNeedsAToken, "<i style={{ gap: 4 }} />");
     expect(finding?.message).toMatch(/var\(--mds-[a-z0-9-]+\) has that value/);
   });
 
@@ -100,5 +106,29 @@ describe("no-raw-element-over-component", () => {
 
   it("is aimed at apps: the system is where the raw element has to be written", () => {
     expect(noRawElementOverComponent.target).toBe("app");
+  });
+});
+
+describe("a style-prop finding as data", () => {
+  it("carries the key, the value and every token that could be meant", () => {
+    const [finding] = run(stylePropNeedsAToken, "<i style={{ padding: 8 }} />");
+    expect(finding).toMatchObject({
+      property: "padding",
+      value: "8px",
+      candidates: ["--mds-gap", "--mds-space-2"],
+      confidence: "value-only",
+    });
+  });
+
+  it("carries a replacement only when one token can be meant", () => {
+    const [finding] = run(stylePropNeedsAToken, '<i style={{ padding: "4px" }} />');
+    expect(finding).toMatchObject({ confidence: "certain", autofix: "var(--mds-space-1)" });
+  });
+
+  it("says none for a value the scale does not hold, and for one that is not a length", () => {
+    const [length] = run(stylePropNeedsAToken, "<i style={{ padding: 37 }} />");
+    expect(length).toMatchObject({ confidence: "none", candidates: [] });
+    const [other] = run(stylePropNeedsAToken, '<i style={{ display: "flex" }} />');
+    expect(other).toMatchObject({ confidence: "none", value: "flex" });
   });
 });

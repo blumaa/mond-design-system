@@ -27,6 +27,16 @@ const DARK = /\[data-theme=["']?dark["']?\]|prefers-color-scheme:\s*dark/;
 export type Property = { property: string; value: string; line: number };
 
 /**
+ * The property a value on this line was written for.
+ *
+ * Read backwards from where the value sits, because a line may hold several
+ * declarations and the first one on it is not always the one being judged.
+ * A brace or a semicolon ends the search: neither can appear inside a value.
+ */
+export const propertyAt = (line: string, at: number): string | undefined =>
+  /(--)?([a-zA-Z][-a-zA-Z]*)\s*:[^;{}]*$/.exec(line.slice(0, at))?.[0]?.replace(/\s*:.*$/s, "");
+
+/**
  * One rule block: a selector, what it sits inside, and everything it sets.
  *
  * The layout rules ask questions a flat list of declarations cannot answer —

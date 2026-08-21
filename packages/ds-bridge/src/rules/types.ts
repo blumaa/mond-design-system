@@ -7,20 +7,44 @@
  */
 import type { Suppressed } from "../context.js";
 import type { Block } from "../css/parse.js";
+import type { Confidence } from "./suggest.js";
 import type { Graph } from "../graph.js";
 import type { Component } from "../structure.js";
 
 /** Who a rule is aimed at: the design system's own source, or an app using it. */
 export type Target = "system" | "app" | "both";
 
+/**
+ * One thing wrong, as data.
+ *
+ * `message` is the sentence a person reads. Everything under it is the same
+ * finding without the English: a consumer that wants the tokens a value could
+ * have been should not have to regex them back out of a sentence, and a fix
+ * cannot be written at all until `confidence` says which findings have one
+ * right answer.
+ */
 export type Finding = {
   rule: string;
   /** Repo-relative. */
   file: string;
   /** 1-based, absent when the finding is about the file as a whole. */
   line?: number;
+  /** 1-based, where the offending text starts. */
+  col?: number;
   message: string;
+  /** The CSS property or style-prop key the value was written for. */
+  property?: string;
+  /** The literal, as written. */
+  value?: string;
+  /** Every token that could be meant, best first. */
+  candidates?: string[];
+  confidence?: Confidence;
+  /** What to write instead — present only where exactly one thing can be meant. */
+  autofix?: string;
 };
+
+/** A finding before it knows where it is: what a scan over one line returns. */
+export type Detail = Omit<Finding, "rule" | "file" | "line">;
 
 export type Sheet = {
   /** Absolute. */
@@ -123,11 +147,17 @@ export const tokenSheets = (context: Context) => context.sheets.filter((s) => s.
 /** Sheets a brand rule looks at: the ones that re-point the contract. */
 export const brandSheets = (context: Context) => context.sheets.filter((s) => s.isBrand);
 
+/** A rule with nothing structured to say returns the sentence and no more. */
 export const findingsIn = (
   sheet: Sheet,
   rule: string,
-  scan: (line: string, number: number) => string[],
+  scan: (line: string, number: number) => (string | Detail)[],
 ): Finding[] =>
   sheet.lines.flatMap((line, i) =>
-    scan(line, i + 1).map((message) => ({ rule, file: sheet.file, line: i + 1, message })),
+    scan(line, i + 1).map((found) => ({
+      rule,
+      file: sheet.file,
+      line: i + 1,
+      ...(typeof found === "string" ? { message: found } : found),
+    })),
   );

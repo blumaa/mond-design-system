@@ -8,7 +8,7 @@
  */
 import { styleDeclarations } from "../jsx.js";
 import { isRung } from "./tokenDiscipline.js";
-import { orAdvice, valueIndex } from "./suggest.js";
+import { suggest, valueIndex } from "./suggest.js";
 import type { Context, Finding, Rule, Source } from "./types.js";
 
 const unquoted = (text: string) => text.replace(/^["'`]|["'`]$/g, "");
@@ -63,15 +63,20 @@ export const stylePropNeedsAToken: Rule = {
         .filter((declaration) => !declaration.value.includes("var("))
         .map((declaration): Finding => {
           const length = asLength(declaration.key, declaration.value);
-          const suggestion =
-            length === undefined
-              ? "pass it as a custom property and let the stylesheet use it"
-              : orAdvice(index.length(length), "pass it as a custom property and let the stylesheet use it");
+          const advice = "pass it as a custom property and let the stylesheet use it";
+          /* Anything that is not a length is a value no token was ever going to
+             hold — a `display` or a computed string — so nothing is offered. */
+          const found = suggest(length === undefined ? [] : index.lengths(length), { advice });
           return {
             rule: "style-prop-needs-a-token",
             file: source.file,
             line: declaration.line,
-            message: `${declaration.key}: ${declaration.value.trim()} reaches no token — ${suggestion}`,
+            message: `${declaration.key}: ${declaration.value.trim()} reaches no token — ${found.advice}`,
+            property: unquoted(declaration.key),
+            value: length ?? unquoted(declaration.value.trim()),
+            candidates: found.candidates,
+            confidence: found.confidence,
+            ...(found.autofix !== undefined ? { autofix: found.autofix } : {}),
           };
         }),
     );
