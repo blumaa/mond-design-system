@@ -239,3 +239,50 @@ that offers an icon slot publishes the step and sizes the slot from it, and
 stylesheet that declares `--mds-icon-slot` reads it back for width, height and
 font-size" would enforce it for every component, including the ones nobody
 remembers to add.
+
+### 9. Verifying a release against an app that already shipped
+
+MDS 4.0.0 makes every user-facing string a required prop. What that costs an app
+is not a judgement call, it is a number: Fair Play, built against 3.0.3, came to
+58 type errors in 48 files, and every one of them was a string the library used
+to supply. Six props account for all of them — `ToastProvider`'s pair (25),
+`ConfirmDialog.cancelLabel` (18), `Spinner.label` (5), `AvatarGroup.overflowLabel`
+(6), `SearchField.clearLabel` (2), `DateTimePicker.labels` (2). The long tail is
+the two providers an app mounts once and the dialog it raises everywhere; the
+components with one label each barely register. A release note that says "expect
+roughly one error per overlay and provider, and one per confirm" would have been
+worth more than the list of changed components.
+
+The brand rules earned their keep on the first run. `brand-leaves-floors-alone`
+found that Fair Play re-pointed `--mds-text-control` — a floor, not a role. The
+value was right (16px either way), which is exactly why nobody would have looked:
+the failure was that the floor had moved into a file where the next edit could
+lower it, and only a rule reading the manifest could see that.
+
+It also showed the gap next to it. Fair Play re-points sixteen typography
+tokens the manifest does not name as settable — the raw scale rungs
+`--mds-text-sm`, `--mds-text-base`, `--mds-text-md` and the `--mds-type-*` roles
+built on them — and dsbridge said nothing, because `brand-role-takes-its-kind`
+only judges the roles the manifest lists. The manifest is read as a list of
+promises and not as a fence. A brand may set what it names; nothing says a brand
+may set *only* what it names, so the layering the note in `brand-surface.json`
+describes ("raw scales the system's, never re-pointed index-to-index") is prose
+with no rule behind it. The rule that closes it — call it
+`brand-sets-only-what-the-manifest-names` — has to be geometry-only, since
+colour is settable in full by design, and it will report a real app on day one:
+Fair Play's type scale is a deliberate, shipped decision, not a slip. That is an
+argument for `--baseline`, not against the rule.
+
+Two smaller notes from building Lightbox and VideoPlayer beside the tool:
+
+- `every-component-has-a-story` caught VideoPlayer's missing story file, which
+  is the kind of thing that gets forgotten at the end of a long component.
+- dsbridge is silent about what eslint's `react-hooks/refs` and
+  `react-hooks/immutability` catch: a ref read during render, and a mutation
+  reached through a value already used in JSX. Both fired on real code here.
+  They are not conformance rules and dsbridge should not grow them, but a
+  system's setup guidance should say the two tools are complementary, or an
+  agent that sees `dsbridge check` pass will believe the component is done.
+- `check --root <an app with no dsbridge.config.json>` names the six rules it
+  skipped and why. That is the right behaviour and worth keeping: the rules that
+  need a taxonomy said so rather than passing.
