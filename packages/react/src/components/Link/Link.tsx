@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, ElementType, ReactElement, ReactNode } from "react";
+import type { ComponentPropsWithRef, ElementType, ReactElement, ReactNode } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Link.module.css";
 
@@ -21,8 +21,10 @@ type LinkOwnProps<E extends ElementType> = {
   children?: ReactNode;
 };
 
+/* WithRef, not Without: the ref goes to whatever `as` rendered, and a link a
+   caller cannot measure is a link a popover cannot anchor to. */
 export type LinkProps<E extends ElementType = "a"> = LinkOwnProps<E> &
-  Omit<ComponentPropsWithoutRef<E>, keyof LinkOwnProps<E>>;
+  Omit<ComponentPropsWithRef<E>, keyof LinkOwnProps<E>>;
 
 /**
  * Text link. Inline links keep their underline: color alone fails WCAG 1.4.1

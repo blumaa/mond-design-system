@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, HTMLAttributes, KeyboardEvent, ReactElement, ReactNode } from "react";
+import type { ButtonHTMLAttributes, HTMLAttributes, KeyboardEvent, ReactElement, ReactNode, Ref } from "react";
 import { createContext, useCallback, useContext, useEffect, useId, useState } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Tabs.module.css";
@@ -66,6 +66,7 @@ export interface TabListProps extends HTMLAttributes<HTMLDivElement> {
   /** Accessible name for the tab set. */
   label: string;
   children: ReactNode;
+  ref?: Ref<HTMLDivElement>;
 }
 
 /* Selection follows focus (WAI-APG "automatic activation") — panels here are
@@ -108,6 +109,7 @@ export function TabList({ label, className, children, ...rest }: TabListProps): 
 export interface TabProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "value" | "type"> {
   value: string;
   children: ReactNode;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 export function Tab({ value, className, children, ...rest }: TabProps): ReactElement {
@@ -134,6 +136,7 @@ export function Tab({ value, className, children, ...rest }: TabProps): ReactEle
 export interface TabPanelProps extends HTMLAttributes<HTMLDivElement> {
   value: string;
   children: ReactNode;
+  ref?: Ref<HTMLDivElement>;
 }
 
 export function TabPanel({ value, className, children, ...rest }: TabPanelProps): ReactElement {

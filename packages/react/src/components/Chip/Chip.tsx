@@ -1,4 +1,4 @@
-import type { HTMLAttributes, MouseEventHandler, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, MouseEventHandler, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Chip.module.css";
 
@@ -16,6 +16,9 @@ export interface ChipProps extends HTMLAttributes<HTMLElement> {
   /** When provided, Chip renders as a `<button>`. */
   onClick?: MouseEventHandler;
   disabled?: boolean;
+  /** The root is a `<button>` when it has an onClick and a `<span>` otherwise,
+      so the ref is typed to what both are. */
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -36,6 +39,7 @@ export function Chip({
   onClick,
   disabled = false,
   className,
+  ref,
   ...rest
 }: ChipProps): ReactElement {
   const interactive = typeof onClick === "function";
@@ -65,11 +69,12 @@ export function Chip({
       onClick={onClick}
       disabled={disabled}
       aria-pressed={selected === undefined ? undefined : selected}
+      ref={ref as Ref<HTMLButtonElement>}
       {...shared}
     >
       {content}
     </button>
   ) : (
-    <span {...shared}>{content}</span>
+    <span ref={ref as Ref<HTMLSpanElement>} {...shared}>{content}</span>
   );
 }

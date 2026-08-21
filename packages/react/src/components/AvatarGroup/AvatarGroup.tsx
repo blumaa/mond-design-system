@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { Children } from "react";
 import { cx } from "../../internal/cx";
 import type { AvatarSize } from "../Avatar/Avatar";
@@ -11,6 +11,7 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   max?: number;
   /** Sizes the overflow chip to match the avatars. Default "md". */
   size?: AvatarSize;
+  ref?: Ref<HTMLDivElement>;
 }
 
 /**

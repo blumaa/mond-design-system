@@ -137,6 +137,22 @@ Two components with one name is a question every reader of the app has to answer
 
 **Instead.** Render the system's component and pass your content into it. Where it cannot do what you need, that is a gap in the system worth naming rather than a reason to start again.
 
+### forwards-its-ref
+
+**A component that spreads the rest onto an element takes a ref too.** *(both)*
+
+Spreading the rest props onto a `<div>` tells the caller this is that div: `id`, `aria-*`, `onClick` and every other attribute reach it. `ref` is the one that silently does not, and it is the one a tooltip, a popover, a scroll target, an intersection observer and a focus manager all need. The caller who needs it wraps the component in a spare div, and the layout that div breaks is discovered somewhere else entirely.
+
+**Instead.** Take `ref?: Ref<HTMLDivElement>` in the props — in React 19 it is an ordinary prop — and put it on the same element the rest is spread onto. A component that genuinely has no single element to hand back should say so with an exemption rather than leave the caller guessing.
+
+### interactive-has-focus-visible
+
+**A stylesheet that takes the focus ring away puts one back.** *(both)*
+
+`outline: none` is the single most common way a codebase becomes unusable by keyboard. It is almost never written to remove focus — it is written because the default ring looked wrong — and the replacement is what gets forgotten. Nothing else fails: the component looks right, the tests pass, and the only person who finds out is the one who cannot see where they are.
+
+**Instead.** If the system styles `:focus-visible` once for the whole document, leave the outline alone and inherit it. If this component really needs its own treatment, write `:focus-visible` in the same file. To hide the ring from a mouse and keep it for a keyboard, the selector is `:focus:not(:focus-visible)`.
+
 ### mobile-first-media
 
 **A media query widens the layout; it never narrows it.** *(both)*
@@ -214,6 +230,14 @@ A raw `<button>` is the point where every promise stops: no focus ring, no 44px 
 No tool can prove these. They are the calls someone has to make with the
 codebase in front of them, and they matter more than the checked ones — a repo
 can pass every check above and still be a design system in name only.
+
+### accepts-a-class-name
+
+**A component the caller is meant to place takes a className.** *(system)*
+
+Without one there is no way to say where a component sits, so the caller wraps it in a div and puts the margin there. That div is not in the system, nobody reviews it, and the spacing it holds is the spacing the scale can no longer move.
+
+**Instead.** Take `className` and merge it after the component's own classes, so the caller's declaration wins. This is a judgement and not a check: a Modal, a Sheet or a Toast positions itself, and letting a caller restyle that box is how the overlay ends up half off-screen. Those refuse a className on purpose.
 
 ### reach-for-the-primitive
 

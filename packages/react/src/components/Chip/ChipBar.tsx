@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { Children } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./ChipBar.module.css";
@@ -14,6 +14,7 @@ export interface ChipBarProps extends HTMLAttributes<HTMLDivElement> {
   bordered?: boolean;
   /** Fade the trailing edge to hint that the row scrolls. Default true. */
   fade?: boolean;
+  ref?: Ref<HTMLDivElement>;
 }
 
 /**

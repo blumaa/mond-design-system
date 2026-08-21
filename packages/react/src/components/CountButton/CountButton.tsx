@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactElement, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import { Spinner } from "../Spinner/Spinner";
 import styles from "./CountButton.module.css";
@@ -32,6 +32,7 @@ export interface CountButtonProps
   loading?: boolean;
   /** Visible text beside the icon — typically a count or a word. */
   children?: ReactNode;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 /**

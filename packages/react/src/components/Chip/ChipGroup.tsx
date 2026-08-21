@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./ChipGroup.module.css";
 
@@ -9,6 +9,7 @@ export interface ChipGroupProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   /** Space between items, on the gap scale. Default "tight". */
   gap?: ChipGroupGap;
+  ref?: Ref<HTMLDivElement>;
 }
 
 /**

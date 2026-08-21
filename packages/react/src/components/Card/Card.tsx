@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Card.module.css";
 
@@ -16,6 +16,9 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> 
   onClick?: () => void;
   /** Makes the whole card a link. Wins over onClick. */
   href?: string;
+  /** The root is an `<a>`, a `<button>` or a `<div>` depending on the props,
+      so the ref is typed to what all three are. */
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -32,31 +35,37 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> 
  * <Card href="/items/42" variant="flat">…</Card>
  * ```
  */
-export function Card({ children, variant = "card", emphasis = false, onClick, href, className, ...rest }: CardProps): ReactElement {
+export function Card({ children, variant = "card", emphasis = false, onClick, href, className, ref, ...rest }: CardProps): ReactElement {
   const cardClass = cx(styles.card, styles[`variant-${variant}`], emphasis && styles.emphasis, className);
 
   if (href !== undefined) {
     return (
-      <a className={cx(cardClass, styles.interactive)} href={href} {...rest}>
+      <a className={cx(cardClass, styles.interactive)} href={href} ref={ref as Ref<HTMLAnchorElement>} {...rest}>
         {children}
       </a>
     );
   }
   if (onClick !== undefined) {
     return (
-      <button type="button" className={cx(cardClass, styles.interactive)} onClick={onClick} {...rest}>
+      <button
+        type="button"
+        className={cx(cardClass, styles.interactive)}
+        onClick={onClick}
+        ref={ref as Ref<HTMLButtonElement>}
+        {...rest}
+      >
         {children}
       </button>
     );
   }
   return (
-    <div className={cardClass} {...rest}>
+    <div className={cardClass} ref={ref as Ref<HTMLDivElement>} {...rest}>
       {children}
     </div>
   );
 }
 
-export type CardSectionProps = HTMLAttributes<HTMLDivElement>;
+export type CardSectionProps = HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> };
 
 /** Top slot — title row, media, tabs. */
 export function CardHeader({ className, ...rest }: CardSectionProps): ReactElement {

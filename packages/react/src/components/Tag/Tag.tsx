@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Tag.module.css";
 
@@ -9,6 +9,7 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   tone?: TagTone;
   /** Renders a labelled ✕ button. Label reads "Remove <content>" when content is text. */
   onRemove?: () => void;
+  ref?: Ref<HTMLSpanElement>;
 }
 
 /**

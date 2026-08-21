@@ -1,9 +1,10 @@
-import type { HTMLAttributes, ReactElement } from "react";
+import type { HTMLAttributes, ReactElement, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Divider.module.css";
 
 export interface DividerProps extends HTMLAttributes<HTMLDivElement> {
   orientation?: "horizontal" | "vertical";
+  ref?: Ref<HTMLDivElement>;
 }
 
 /**

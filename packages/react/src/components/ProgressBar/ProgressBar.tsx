@@ -1,4 +1,4 @@
-import type { CSSProperties, HTMLAttributes, ReactElement } from "react";
+import type { CSSProperties, HTMLAttributes, ReactElement, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./ProgressBar.module.css";
 
@@ -8,6 +8,7 @@ export interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
   /** Accessible name — required. A bare bar announces nothing useful. */
   label: string;
   indeterminate?: boolean;
+  ref?: Ref<HTMLDivElement>;
 }
 
 /**

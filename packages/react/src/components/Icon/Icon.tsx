@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { createContext, useContext } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Icon.module.css";
@@ -54,6 +54,7 @@ export interface IconProps extends HTMLAttributes<HTMLSpanElement> {
   size?: IconSize;
   /** Accessible name. Omitted = decorative (aria-hidden). */
   label?: string;
+  ref?: Ref<HTMLSpanElement>;
 }
 
 const warned = new Set<string>();

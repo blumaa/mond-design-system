@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement } from "react";
+import type { HTMLAttributes, ReactElement, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Avatar.module.css";
 
@@ -19,6 +19,7 @@ export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
   /** Hide from assistive tech — for avatars that repeat a name already in
       the row's text. The name prop still drives the initials. */
   decorative?: boolean;
+  ref?: Ref<HTMLSpanElement>;
 }
 
 /* First + last word: "Ada Byron King Lovelace" → AL. Middle names add noise

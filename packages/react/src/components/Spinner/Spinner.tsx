@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement } from "react";
+import type { HTMLAttributes, ReactElement, Ref } from "react";
 import { cx, type CSSVars } from "../../internal/cx";
 import styles from "./Spinner.module.css";
 
@@ -7,6 +7,7 @@ export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
   size?: number;
   /** Accessible label. Default "Loading". */
   label?: string;
+  ref?: Ref<HTMLSpanElement>;
 }
 
 /**

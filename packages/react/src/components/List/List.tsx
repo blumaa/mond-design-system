@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { createContext, useContext, useId } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./List.module.css";
@@ -10,6 +10,7 @@ export interface ListGroupProps extends HTMLAttributes<HTMLUListElement> {
   children: ReactNode;
   /** Heading over the group. Also names the list to a screen reader. */
   label?: ReactNode;
+  ref?: Ref<HTMLUListElement>;
 }
 
 /**
@@ -75,6 +76,9 @@ export interface ListItemProps extends Omit<HTMLAttributes<HTMLElement>, "title"
       brings its own corner radius, which peeks past the row's in all four
       corners. */
   surface?: ListItemSurface;
+  /** The root is an `<li>` inside a ListGroup and a `<div>` outside one, so
+      the ref is typed to what both are. */
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -91,6 +95,7 @@ export function ListItem({
   href,
   surface,
   className,
+  ref,
   ...rest
 }: ListItemProps): ReactElement {
   const inGroup = useContext(ListGroupContext);
@@ -113,6 +118,7 @@ export function ListItem({
   return (
     <Root
       className={cx(styles.item, resolved && styles[`surface-${resolved}`], className)}
+      ref={ref as Ref<HTMLLIElement & HTMLDivElement>}
       {...rest}
     >
       {href !== undefined ? (

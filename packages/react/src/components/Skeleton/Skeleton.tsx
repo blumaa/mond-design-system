@@ -1,4 +1,4 @@
-import type { CSSProperties, HTMLAttributes, ReactElement } from "react";
+import type { CSSProperties, HTMLAttributes, ReactElement, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Skeleton.module.css";
 
@@ -9,6 +9,7 @@ export interface SkeletonProps extends HTMLAttributes<HTMLSpanElement> {
   /** Any CSS length. Text defaults to full width, one line tall. */
   width?: string;
   height?: string;
+  ref?: Ref<HTMLSpanElement>;
 }
 
 /**
