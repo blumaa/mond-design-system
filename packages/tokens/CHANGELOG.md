@@ -1,5 +1,65 @@
 # @mond-design-system/tokens
 
+## 3.2.0
+
+### Minor Changes
+
+- 49e71ce: `ImageCarousel`: a gallery of frames, one on show, paged by control, arrow key,
+  swipe or thumbnail. `pager` chooses thumbnails, dots or nothing; past
+  `maxThumbnails` the rest collapse into one button that pages to the first frame
+  no thumbnail stands for.
+
+  A frame carries its own `covered` and `cover`, so a gallery can hold one
+  sensitive picture among ordinary ones. A covered frame does not open larger,
+  however it is tapped.
+
+  `onZoom` pairs at the type level with `zoomIcon` and `zoomLabel`: the glyph is
+  the app's and the words are the app's, and a zoom control with neither is a
+  control nobody can use. A tap under the swipe threshold opens the frame; a
+  longer drag pages it.
+
+  Every word it says is a prop, including the two a screen reader reads in place
+  of "region" and "group" — `labels.carouselRole` and `labels.slideRole`.
+
+  New tokens: `--mds-media-inset` (how far a control on a picture stands off its
+  edge).
+
+- bb3ecce: `UploadProgress`: one file on its way up — a thumbnail, its name, how far it
+  has got, and the way out. It composes `ProgressBar` rather than drawing a
+  second bar, and the bar stops counting while the server processes, which
+  reports no percentage.
+
+  `ProgressBar` takes `valueText`: the progress in the caller's words ("2.1 MB of
+  5 MB"), read out instead of a percentage that is not always what the number
+  means.
+
+  The status glyph comes in through `mark`, from the app's icon set, and the
+  system tints it by the state it is standing for. New token
+  `--mds-upload-thumb`.
+
+- 1c321ce: Two components an app that shows other people's things needs: `Breadcrumb` and
+  `MediaPlaceholder`.
+
+  `Breadcrumb` renders a labelled `nav` around an ordered list. The last step
+  never links, wherever it points, and carries `aria-current="page"`; a step with
+  no `href` renders as text wherever it sits. `linkAs` takes a router's link. An
+  empty trail renders nothing rather than an empty landmark.
+
+  `MediaPlaceholder` is the box a picture goes in, whether or not there is one
+  yet. Without a `src`, or after one fails to load, it draws a hatched surface
+  carrying a `glyph` slot and a caption; with one, the picture fills the box and
+  the caption moves onto a scrim over it. `blurred` obscures the media far enough
+  that a photo reads as shape and colour only. What asks for consent belongs to
+  the app, so it comes in through `cover` — a node drawn over the surface and
+  outside the blur, so the prompt stays readable while what it covers does not.
+
+  The broken-image state keys off the source rather than a flag, so handing the
+  component a different picture tries again instead of leaving the box empty for
+  as long as it stays mounted.
+
+  New tokens: `--mds-blur-media` (how far a covered picture is blurred) and
+  `--mds-media-hatch` (the pitch of the hatch on an empty media surface).
+
 ## 3.1.1
 
 ### Patch Changes

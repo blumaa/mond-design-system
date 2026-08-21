@@ -1,5 +1,128 @@
 # @mond-design-system/react
 
+## 4.0.0
+
+### Major Changes
+
+- ddd960c: Every user-facing string a component shows is now a required prop.
+
+  Three policies were in the library at once: some components took the words as a
+  required prop, some took an optional prop over an English default, and some
+  hardcoded them. The default is the one that looks safe and is not — it compiles
+  in every app, so no app is ever asked for the translation, and the missing
+  German is found by the person using a screen reader rather than by a build.
+  Making the prop required moves the question to `tsc`, which asks once per call
+  site and cannot be forgotten.
+
+  Migration — each of these is a type error until the prop is passed:
+
+  - `Spinner` takes `label`.
+  - `SearchField` takes `clearLabel`.
+  - `PasswordInput` takes `showLabel` and `hideLabel`.
+  - `Tag` takes `removeLabel` alongside `onRemove`. The two are a pair: a tag
+    without a remove button is not asked for the words of one, and the label is
+    no longer guessed from the children.
+  - `AvatarGroup` takes `overflowLabel: (hidden: number) => string` — a function,
+    because only the app knows how its language counts what it hides.
+  - `ToastProvider` takes `regionLabel` and `dismissLabel`, which previously
+    defaulted to "Notifications" and "Dismiss".
+  - `ConfirmDialog` takes `cancelLabel`, which previously defaulted to "Cancel".
+  - `DateTimePicker` takes the whole `labels` object rather than a partial over
+    English defaults: a partial makes the one key nobody filled in look
+    deliberate. `placeholder` stays optional but no longer defaults to "Select
+    date & time" — the trigger shows nothing when neither a value nor a
+    placeholder is given.
+
+  The rule is enforced from now on. `dsbridge`'s `user-facing-text-is-a-prop`
+  fails the build on a literal reaching `aria-label`, `alt`, `title`,
+  `placeholder`, `label`, a text node, or a defaulted prop whose name reads as
+  copy.
+
+### Minor Changes
+
+- 5dae007: Button takes `onMedia`, for a control standing on a picture. The two see-through
+  variants swap the page's foreground, border, hover, active, focus ring and
+  disabled grey for the `on-media` palette; the filled variants bring their own
+  ground and are left alone.
+- 49e71ce: `ImageCarousel`: a gallery of frames, one on show, paged by control, arrow key,
+  swipe or thumbnail. `pager` chooses thumbnails, dots or nothing; past
+  `maxThumbnails` the rest collapse into one button that pages to the first frame
+  no thumbnail stands for.
+
+  A frame carries its own `covered` and `cover`, so a gallery can hold one
+  sensitive picture among ordinary ones. A covered frame does not open larger,
+  however it is tapped.
+
+  `onZoom` pairs at the type level with `zoomIcon` and `zoomLabel`: the glyph is
+  the app's and the words are the app's, and a zoom control with neither is a
+  control nobody can use. A tap under the swipe threshold opens the frame; a
+  longer drag pages it.
+
+  Every word it says is a prop, including the two a screen reader reads in place
+  of "region" and "group" — `labels.carouselRole` and `labels.slideRole`.
+
+  New tokens: `--mds-media-inset` (how far a control on a picture stands off its
+  edge).
+
+- de3d034: `Button` takes `shape?: "rect" | "pill"`.
+
+  Unset, nothing changes: the shape follows from the size, which means a
+  rectangle, or a circle when `iconOnly`. The prop is for the two cases the
+  default gets wrong — a pill around words, and a square icon button, which is
+  what an app with a rectangular control language wants for the icon buttons
+  sitting in its rows.
+
+- bb3ecce: `UploadProgress`: one file on its way up — a thumbnail, its name, how far it
+  has got, and the way out. It composes `ProgressBar` rather than drawing a
+  second bar, and the bar stops counting while the server processes, which
+  reports no percentage.
+
+  `ProgressBar` takes `valueText`: the progress in the caller's words ("2.1 MB of
+  5 MB"), read out instead of a percentage that is not always what the number
+  means.
+
+  The status glyph comes in through `mark`, from the app's icon set, and the
+  system tints it by the state it is standing for. New token
+  `--mds-upload-thumb`.
+
+- c705c93: New `Lightbox`: one picture full screen, with zoom controls, double tap, pinch
+  and trackpad pinch, and panning held inside the picture's own edges. The
+  overlay shell gains a `lightbox` variant — a panel that takes the whole scrim
+  rather than sitting on it.
+- fa466f8: New `VideoPlayer`: transport, seek, sound, captions, fullscreen and chapters,
+  with `covered` and `cover` for media that has to be asked past. Chapters and
+  captions each pair with the label that names them, so a player without either
+  is asked for neither. The transport marks join the internal glyphs.
+- 1c321ce: Two components an app that shows other people's things needs: `Breadcrumb` and
+  `MediaPlaceholder`.
+
+  `Breadcrumb` renders a labelled `nav` around an ordered list. The last step
+  never links, wherever it points, and carries `aria-current="page"`; a step with
+  no `href` renders as text wherever it sits. `linkAs` takes a router's link. An
+  empty trail renders nothing rather than an empty landmark.
+
+  `MediaPlaceholder` is the box a picture goes in, whether or not there is one
+  yet. Without a `src`, or after one fails to load, it draws a hatched surface
+  carrying a `glyph` slot and a caption; with one, the picture fills the box and
+  the caption moves onto a scrim over it. `blurred` obscures the media far enough
+  that a photo reads as shape and colour only. What asks for consent belongs to
+  the app, so it comes in through `cover` — a node drawn over the surface and
+  outside the blur, so the prompt stays readable while what it covers does not.
+
+  The broken-image state keys off the source rather than a flag, so handing the
+  component a different picture tries again instead of leaving the box empty for
+  as long as it stays mounted.
+
+  New tokens: `--mds-blur-media` (how far a covered picture is blurred) and
+  `--mds-media-hatch` (the pitch of the hatch on an empty media surface).
+
+### Patch Changes
+
+- Updated dependencies [49e71ce]
+- Updated dependencies [bb3ecce]
+- Updated dependencies [1c321ce]
+  - @mond-design-system/tokens@3.2.0
+
 ## 3.0.3
 
 ### Patch Changes
