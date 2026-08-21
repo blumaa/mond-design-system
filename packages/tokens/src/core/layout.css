@@ -47,6 +47,13 @@
   --mds-control-h-lg: 46px;
   --mds-tap-min: 44px; /* smallest touch target that ships */
 
+  /* The box a screen-reader-only element collapses to. One pixel rather than
+     none: a zero-sized box is dropped from the accessibility tree in some
+     browsers, and the text going with it is the whole failure that element
+     exists to avoid. A mechanism rather than a size — brand-surface.json holds
+     it as a floor, so no brand can take it to zero. */
+  --mds-hidden-size: 1px;
+
   /* A control with an icon slot picks a step here and publishes it to whatever
      was passed in as --mds-icon-slot, so an icon set that can only size itself
      has something to read. Deliberately not declared: the fallback in

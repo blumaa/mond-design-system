@@ -53,6 +53,9 @@ export type { TagProps, TagTone } from "./components/Tag/Tag";
 export { Divider } from "./components/Divider/Divider";
 export type { DividerProps } from "./components/Divider/Divider";
 
+export { VisuallyHidden } from "./components/VisuallyHidden/VisuallyHidden";
+export type { VisuallyHiddenProps } from "./components/VisuallyHidden/VisuallyHidden";
+
 export { Skeleton } from "./components/Skeleton/Skeleton";
 export type { SkeletonProps, SkeletonVariant } from "./components/Skeleton/Skeleton";
 

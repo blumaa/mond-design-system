@@ -321,3 +321,16 @@ it("sizes an unstated Icon from the slot around it", () => {
     "width: var(--mds-icon-slot, var(--mds-icon-md))",
   );
 });
+
+/* A screen-reader-only element collapses to a box rather than to nothing — a
+   zero-sized box is dropped from the accessibility tree, and dropping the text
+   is the one failure the component exists to avoid. The pixel is a mechanism
+   rather than a size, so it is a role in the core layer and a floor in the
+   manifest: no brand can take it to zero. */
+it("collapses a hidden element to the clip box role, never to a literal", () => {
+  const css = sheet("VisuallyHidden/VisuallyHidden.module.css");
+  expect(css).toMatch(/width: var\(--mds-hidden-size\);/);
+  expect(css).toMatch(/height: var\(--mds-hidden-size\);/);
+  expect(css).toMatch(/margin: calc\(-1 \* var\(--mds-hidden-size\)\);/);
+  expect(css).not.toMatch(/\dpx/);
+});

@@ -120,6 +120,10 @@
   ],
   "floors": [
     {
+      "token": "--mds-hidden-size",
+      "why": "a screen-reader-only element collapses to a pixel rather than to nothing, because a zero-sized box is dropped from the accessibility tree and takes its text with it"
+    },
+    {
       "token": "--mds-tap-min",
       "why": "44px is the smallest target that ships. A brand that shrinks it takes the app away from the hands it was already hardest for."
     },

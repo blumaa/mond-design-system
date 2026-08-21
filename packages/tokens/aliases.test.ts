@@ -195,3 +195,11 @@ it("rounds a segment face between a checkbox and a control", () => {
   expect(face).toBeGreaterThan(px("--mds-radius-checkbox", "radius.css"));
   expect(face).toBeLessThan(px("--mds-radius-control", "radius.css"));
 });
+
+/* The box a screen-reader-only element collapses to. One pixel rather than
+   none: a zero-sized box is dropped from the accessibility tree in some
+   browsers, and the text going with it is the whole failure VisuallyHidden
+   exists to avoid. brand-surface.json holds it as a floor for that reason. */
+it("keeps the clipped box a pixel rather than nothing", () => {
+  expect(px("--mds-hidden-size", "layout.css")).toBe(1);
+});
