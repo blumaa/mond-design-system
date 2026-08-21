@@ -14,6 +14,7 @@ import { loadContext, type Config } from "./context.js";
 import { renderTokens, selectTokens, type RenderOptions } from "./commands/tokens.js";
 import { renderTokensHtml } from "./commands/tokensHtml.js";
 import { renderCheck, runCheck } from "./commands/check.js";
+import { aboveBaseline, readBaseline, updateBaseline, NO_BASELINE } from "./commands/baseline.js";
 import { renderRules, rulesAsJson } from "./commands/rules.js";
 import { planMigration, renderMigration } from "./commands/migrate.js";
 import type { Kind, Layer } from "./graph.js";
@@ -47,6 +48,8 @@ Options for check
   --system <file>   as above
   --rule <id>       run one rule; repeatable
   --include-tests   scan tests, stories and fixtures too
+  --baseline        report only what is above .dsbridge/baseline.json
+  --update-baseline record what is there now as the debt to hold
 
 Options for migrate
   --root <dir>      the app to plan for   (default: the cwd)
@@ -137,6 +140,8 @@ function checkCommand(rest: string[]): number {
       system: { type: "string" },
       rule: { type: "string", multiple: true },
       "include-tests": { type: "boolean" },
+      baseline: { type: "boolean" },
+      "update-baseline": { type: "boolean" },
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
     },
@@ -156,10 +161,24 @@ function checkCommand(rest: string[]): number {
     ...(values.rule ? { only: values.rule } : {}),
     color: values.color !== false && process.stdout.isTTY === true,
   };
-  const findings = runCheck(context, options).filter((finding) => pathFilter(root, positionals)(finding.file));
+  const all = runCheck(context, options).filter((finding) => pathFilter(root, positionals)(finding.file));
+
+  /* Recording half a repo would drop the other half from the baseline. */
+  if (values["update-baseline"] === true) {
+    if (positionals.length > 0 || values.rule !== undefined) {
+      process.stderr.write("--update-baseline records the whole repo; drop the path and --rule\n");
+      return 1;
+    }
+    process.stdout.write(updateBaseline(root, all));
+    return 0;
+  }
+
+  const recorded = values.baseline === true ? readBaseline(root) : undefined;
+  if (values.baseline === true && recorded === undefined) process.stdout.write(`${NO_BASELINE}\n\n`);
+  const findings = recorded ? aboveBaseline(all, recorded) : all;
 
   if (values.json === true) jsonOut(findings);
-  else process.stdout.write(renderCheck(findings, context, options));
+  else process.stdout.write(renderCheck(findings, context, { ...options, held: all.length - findings.length }));
   return findings.length > 0 ? 1 : 0;
 }
 

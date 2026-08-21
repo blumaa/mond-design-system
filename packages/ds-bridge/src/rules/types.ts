@@ -41,6 +41,8 @@ export type Finding = {
   confidence?: Confidence;
   /** What to write instead — present only where exactly one thing can be meant. */
   autofix?: string;
+  /** Above the baseline: this one was not there when the debt was recorded. */
+  new?: boolean;
 };
 
 /** A finding before it knows where it is: what a scan over one line returns. */

@@ -8,22 +8,17 @@ import { rulesFor } from "../rules/index.js";
 import { isEnforced } from "../rules/types.js";
 import type { Context, Finding } from "../rules/types.js";
 import type { Confidence } from "../rules/suggest.js";
+import { bold, dim, green, plural, red } from "../text.js";
 
 export type CheckOptions = {
   /** Rule ids to run; all of them when absent. */
   only?: string[];
   color?: boolean;
+  /** Findings the baseline already holds, so the debt is never invisible. */
+  held?: number;
 };
 
-const ESC = "\u001b[";
-const dim = (s: string, on: boolean) => (on ? `${ESC}2m${s}${ESC}0m` : s);
-const bold = (s: string, on: boolean) => (on ? `${ESC}1m${s}${ESC}0m` : s);
-const red = (s: string, on: boolean) => (on ? `${ESC}31m${s}${ESC}0m` : s);
-const green = (s: string, on: boolean) => (on ? `${ESC}32m${s}${ESC}0m` : s);
-
 const place = (a: Finding, b: Finding) => a.file.localeCompare(b.file) || (a.line ?? 0) - (b.line ?? 0);
-
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
 /** What the check did not look at. Silence here reads as a pass, so it is
     printed whether the run was clean or not, and names what would restore it. */
@@ -112,7 +107,9 @@ export function renderCheck(findings: Finding[], context: Context, options: Chec
   const skipped = skippedRules(context, options);
   const ran = rulesFor(context, options.only).filter(isEnforced).length - skipped.size;
   const scope = `${context.sheets.length} stylesheets, ${context.graph.tokens().length} tokens, ${ran} rules`;
+  const held = options.held ?? 0;
   const notes = [
+    ...(held > 0 ? [dim(`  ${plural(held, "finding")} held by the baseline`, color)] : []),
     ...exclusions(context, color),
     ...[...skipped].map(([rule, reason]) => dim(`  skipped ${rule}: ${reason}`, color)),
   ];

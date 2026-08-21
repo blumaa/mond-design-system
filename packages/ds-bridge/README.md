@@ -47,7 +47,9 @@ calls the brand put in the way.
 
 ```sh
 dsbridge check                    # every rule that applies here
+dsbridge check src/components     # only what lives under a path
 dsbridge check --rule keeps-contrast
+dsbridge check --include-tests    # stories, tests and fixtures too
 dsbridge check --json             # for CI
 ```
 
@@ -60,12 +62,47 @@ src/components/Card.module.css
   18  literal color #18201B — var(--mds-text-primary) has that value  no-literal-color
 ```
 
+Stories, tests and fixtures are not scanned — a fixture is written to be wrong.
+What was left out is always printed, because silence here reads as a pass:
+
+```
+  111 tests and stories not scanned — run --include-tests
+  3 lines suppressed by comment
+```
+
 A rule that cannot run here says so rather than passing quietly:
 
 ```
 skipped keeps-contrast: the design system installed here publishes no
 contract.json, so there is nothing to prove against
 ```
+
+### The baseline
+
+A gate that fails on 394 findings is a gate nobody turns on. Record the debt
+once and the check answers the useful question instead — did this change make
+it worse:
+
+```sh
+dsbridge check --update-baseline  # .dsbridge/baseline.json — 394 findings held
+dsbridge check --baseline         # exit 1 only above it
+```
+
+It holds counts per rule per file, not fingerprints, so reformatting a
+stylesheet does not invalidate it. The held count is printed on every run: debt
+that goes quiet is debt that grows. `--update-baseline` records the whole repo,
+so it refuses a path or a `--rule`, and says what moved in both directions.
+
+### Suppressing one line
+
+```css
+/* dsbridge-ignore-next-line: the SDK hands us a hex and nothing names it */
+border-color: #4a4a4a;
+```
+
+The reason is required — without one the line is reported as usual. This is for
+the case where the rule is wrong about one line; when it is wrong about a whole
+file, `exempt` says so in config.
 
 ### Configuration
 
@@ -77,7 +114,8 @@ contract.json, so there is nothing to prove against
   "system": "packages/tokens/src/styles.css",
   "levels": ["atom", "molecule", "organism", "template"],
   "levelsIgnore": ["Docs"],
-  "ignore": ["src/__fixtures__"],
+  "sources": ["src"],
+  "ignore": ["**/generated/**"],
   "scales": ["spacing", "radius", "typography"],
   "exempt": {
     "no-raw-scale-step/typography": ["src/components/Link/Link.module.css"]
@@ -96,6 +134,10 @@ used.
 `levels` is the taxonomy, simplest first; `levelsIgnore` lists story-title
 segments that name something other than a level. Both are read only when the
 checked repo is the design system itself.
+
+`sources` bounds what is read at all; `ignore` removes files from within it.
+Both take globs — `*` and `?` stop at a path separator, `**` does not, and a
+pattern naming a directory claims everything under it.
 
 An exemption is a claim that the rule is wrong about one file. Put the reason
 in the file, next to what it excuses; `dsbridge check` will not print it for you.

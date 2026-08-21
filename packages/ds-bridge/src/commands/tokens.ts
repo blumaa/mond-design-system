@@ -8,6 +8,7 @@
 import { parseColor, type RGBA } from "../css/color.js";
 import type { Graph, Kind, Layer, Token } from "../graph.js";
 import type { Theme } from "../css/parse.js";
+import { bold, dim, ESC } from "../text.js";
 
 export type RenderOptions = {
   theme?: Theme;
@@ -21,10 +22,6 @@ export type RenderOptions = {
 
 /** The order the layers load in, which is the order they override in. */
 const LAYERS: Layer[] = ["core", "semantic", "base", "brand"];
-
-const ESC = "[";
-const dim = (s: string, on: boolean) => (on ? `${ESC}2m${s}${ESC}0m` : s);
-const bold = (s: string, on: boolean) => (on ? `${ESC}1m${s}${ESC}0m` : s);
 
 const swatch = ({ r, g, b }: RGBA, on: boolean) =>
   on ? `${ESC}48;2;${Math.round(r)};${Math.round(g)};${Math.round(b)}m  ${ESC}0m ` : "";

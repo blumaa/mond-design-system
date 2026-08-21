@@ -8,6 +8,7 @@
 import { RULES } from "../rules/index.js";
 import { isEnforced } from "../rules/types.js";
 import type { Rule, Target } from "../rules/types.js";
+import { bold, dim } from "../text.js";
 
 export type RulesOptions = {
   /** One rule, in full. */
@@ -17,10 +18,6 @@ export type RulesOptions = {
   markdown?: boolean;
   color?: boolean;
 };
-
-const ESC = "\u001b[";
-const dim = (s: string, on: boolean) => (on ? `${ESC}2m${s}${ESC}0m` : s);
-const bold = (s: string, on: boolean) => (on ? `${ESC}1m${s}${ESC}0m` : s);
 
 const wrap = (text: string, width: number, indent: string) => {
   const out: string[] = [];

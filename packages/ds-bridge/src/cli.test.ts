@@ -362,3 +362,39 @@ describe("the escape hatch", () => {
     expect(status).toBe(0);
   });
 });
+
+describe("dsbridge check --baseline", () => {
+  const debt = ".a { top: 37px; }";
+
+  it("records what is there and then passes, until something is added", () => {
+    const root = app(debt);
+    expect(check(root, "--update-baseline").status).toBe(0);
+    expect(check(root, "--baseline").status).toBe(0);
+
+    writeFileSync(join(root, "src/Button.module.css"), `${debt}\n.b { top: 41px; }`);
+    const worse = check(root, "--baseline");
+    expect(worse.status).toBe(1);
+    expect(worse.output).toContain("41px");
+    expect(worse.output).not.toContain("37px");
+  });
+
+  it("says how much it is holding, so the debt is never invisible", () => {
+    const root = app(debt);
+    check(root, "--update-baseline");
+    expect(check(root, "--baseline").output).toContain("1 finding held by the baseline");
+  });
+
+  it("says what the update moved, in both directions", () => {
+    const root = app(`${debt}\n.b { top: 41px; }`);
+    check(root, "--update-baseline");
+    writeFileSync(join(root, "src/Button.module.css"), debt);
+    expect(check(root, "--update-baseline").output).toMatch(/1 fewer/);
+  });
+
+  it("holds nothing it was never given, and says so rather than passing", () => {
+    const { status, output } = check(app(debt), "--baseline");
+    expect(status).toBe(1);
+    expect(output).toContain("no baseline");
+    expect(output).toContain("--update-baseline");
+  });
+});

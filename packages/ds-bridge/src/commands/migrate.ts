@@ -14,6 +14,7 @@ import { valueIndex } from "../rules/suggest.js";
 import { isRung } from "../rules/tokenDiscipline.js";
 import { runCheck } from "./check.js";
 import { brandSheets, tokenSheets, type Context, type Finding } from "../rules/types.js";
+import { bold, dim, plural } from "../text.js";
 
 /** One of the app's own tokens, and the system token holding the same value. */
 export type Mapping = {
@@ -106,13 +107,7 @@ export function planMigration(context: Context): Migration {
   };
 }
 
-const ESC = "\u001b[";
-const dim = (s: string, on: boolean) => (on ? `${ESC}2m${s}${ESC}0m` : s);
-const bold = (s: string, on: boolean) => (on ? `${ESC}1m${s}${ESC}0m` : s);
-
 const LIST = 10;
-
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
 /** Inside the app, say where; outside it — an installed system — say the path. */
 const shown = (root: string, path: string) => {
