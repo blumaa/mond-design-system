@@ -137,6 +137,13 @@ export type { TabBarActionProps, TabBarItemProps, TabBarProps } from "./componen
 export { MediaPlaceholder } from "./components/MediaPlaceholder/MediaPlaceholder";
 export type { MediaPlaceholderProps } from "./components/MediaPlaceholder/MediaPlaceholder";
 
+export { UploadProgress } from "./components/UploadProgress/UploadProgress";
+export type {
+  UploadProgressLabels,
+  UploadProgressProps,
+  UploadStatus,
+} from "./components/UploadProgress/UploadProgress";
+
 export { Breadcrumb } from "./components/Breadcrumb/Breadcrumb";
 export type { BreadcrumbProps, Crumb } from "./components/Breadcrumb/Breadcrumb";
 

@@ -1,0 +1,62 @@
+.upload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-tight);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap-tight);
+  /* Without this the name's ellipsis never triggers: a flex item's floor is
+     its content, so a long file name widens the row instead of truncating. */
+  min-width: 0;
+}
+
+.preview {
+  flex: none;
+  width: var(--mds-upload-thumb);
+  height: var(--mds-upload-thumb);
+  overflow: hidden;
+  border-radius: var(--mds-radius-media);
+  background: var(--mds-surface-sunken);
+}
+
+.preview > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A fixed box on the icon scale: the mark comes from an icon set the system
+   has never heard of, and only the slot can hold the row's height steady. */
+.mark {
+  --mds-icon-slot: var(--mds-icon-sm);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-icon-slot);
+  height: var(--mds-icon-slot);
+  font-size: var(--mds-icon-slot);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mds-gap-tight);
+}
+
+.status-done .mark {
+  color: var(--mds-status-success);
+}
+
+.status-error .mark {
+  color: var(--mds-status-danger);
+}

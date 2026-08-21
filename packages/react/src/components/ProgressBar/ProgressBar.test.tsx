@@ -29,6 +29,16 @@ describe("ProgressBar", () => {
     expect(screen.getByRole("progressbar")).not.toHaveAttribute("aria-valuenow");
   });
 
+  it("says the progress in the caller's words when a percentage says nothing", () => {
+    render(<ProgressBar value={40} label="Upload" valueText="2.1 MB of 5 MB" />);
+    expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuetext", "2.1 MB of 5 MB");
+  });
+
+  it("leaves the percentage to be read when there are no such words", () => {
+    render(<ProgressBar value={40} label="Upload" />);
+    expect(screen.getByRole("progressbar")).not.toHaveAttribute("aria-valuetext");
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(<ProgressBar value={60} label="Upload" />);
     expect(await axe(container)).toHaveNoViolations();

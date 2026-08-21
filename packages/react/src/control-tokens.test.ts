@@ -155,6 +155,7 @@ it.each([
   ["Button/Button.module.css", ["sm", "md", "lg"]],
   ["Input/Input.module.css", ["md"]],
   ["CountButton/CountButton.module.css", ["md"]],
+  ["UploadProgress/UploadProgress.module.css", ["sm"]],
 ])("%s publishes --mds-icon-slot and sizes the slot from it", (path, steps) => {
   const css = sheet(path);
   for (const step of steps) expect(css).toContain(`--mds-icon-slot: var(--mds-icon-${step})`);

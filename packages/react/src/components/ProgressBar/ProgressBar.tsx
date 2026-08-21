@@ -7,6 +7,9 @@ export interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
   value?: number;
   /** Accessible name — required. A bare bar announces nothing useful. */
   label: string;
+  /** What the bar has got through, in words — "2.1 MB of 5 MB". Read instead
+      of the percentage, which is not always what the number means. */
+  valueText?: string;
   indeterminate?: boolean;
   ref?: Ref<HTMLDivElement>;
 }
@@ -22,6 +25,7 @@ export interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
 export function ProgressBar({
   value = 0,
   label,
+  valueText,
   indeterminate = false,
   className,
   style,
@@ -35,6 +39,7 @@ export function ProgressBar({
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={indeterminate ? undefined : clamped}
+      aria-valuetext={valueText}
       className={cx(styles.track, indeterminate && styles.indeterminate, className)}
       style={{ ...( { "--progress": `${clamped}%` } as CSSProperties), ...style }}
       {...rest}
