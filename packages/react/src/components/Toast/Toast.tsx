@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
 import { cx } from "../../internal/cx";
+import { CloseGlyph } from "../../internal/glyphs";
 import styles from "./Toast.module.css";
 
 export type ToastTone = "neutral" | "success" | "danger";
@@ -97,9 +98,7 @@ export function ToastProvider({
               className={styles.close}
               onClick={() => dismiss(entry.id)}
             >
-              <svg viewBox="0 0 16 16" aria-hidden="true" className={styles.closeGlyph}>
-                <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
-              </svg>
+              <CloseGlyph className={styles.closeGlyph} />
             </button>
           </div>
         ))}

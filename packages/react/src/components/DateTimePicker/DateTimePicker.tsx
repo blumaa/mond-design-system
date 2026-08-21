@@ -1,6 +1,7 @@
 import type { KeyboardEvent, ReactElement } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cx } from "../../internal/cx";
+import { ChevronLeftGlyph, ChevronRightGlyph } from "../../internal/glyphs";
 import { useFieldContext } from "../Field/Field";
 import { Button } from "../Button/Button";
 import { Select } from "../Select/Select";
@@ -140,18 +141,8 @@ function pad2(n: number): string {
   return String(n).padStart(2, "0");
 }
 
-/* --- glyphs — internal chrome, like Tag's remove ✕; no registry contract --- */
+/* --- glyphs this picker alone draws; the shared ones are in internal/glyphs --- */
 
-const chevronLeft = (
-  <svg viewBox="0 0 16 16" aria-hidden="true" className={styles.glyph}>
-    <path d="M10 3l-5 5 5 5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-const chevronRight = (
-  <svg viewBox="0 0 16 16" aria-hidden="true" className={styles.glyph}>
-    <path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 const calendarGlyph = (
   <svg viewBox="0 0 16 16" aria-hidden="true" className={styles.glyph}>
     <rect x="2.5" y="3.5" width="11" height="10" rx="1.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
@@ -446,11 +437,11 @@ export function DateTimePicker({
                 disabled={prevDisabled}
                 onClick={() => shiftMonth(-1)}
               >
-                {chevronLeft}
+                <ChevronLeftGlyph className={styles.glyph} />
               </Button>
               <span className={styles.monthLabel}>{intl.monthTitle.format(first)}</span>
               <Button iconOnly aria-label={text.nextMonth} variant="ghost" size="sm" onClick={() => shiftMonth(1)}>
-                {chevronRight}
+                <ChevronRightGlyph className={styles.glyph} />
               </Button>
             </div>
             <div className={styles.weekdays}>

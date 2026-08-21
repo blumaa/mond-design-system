@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Overlay } from "../../internal/Overlay";
+import { CloseGlyph } from "../../internal/glyphs";
 import styles from "./Sheet.module.css";
 
 export interface SheetProps {
@@ -54,9 +55,7 @@ export function SheetHeader({ children, onClose, closeLabel }: SheetHeaderProps)
       <span className={styles.headerTitle}>{children}</span>
       {onClose !== undefined && (
         <button type="button" aria-label={closeLabel} className={styles.close} onClick={onClose}>
-          <svg viewBox="0 0 16 16" aria-hidden="true" className={styles.closeGlyph}>
-            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
-          </svg>
+          <CloseGlyph className={styles.closeGlyph} />
         </button>
       )}
     </div>
