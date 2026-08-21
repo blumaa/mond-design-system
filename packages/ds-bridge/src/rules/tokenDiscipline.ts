@@ -22,9 +22,19 @@ const matchesIn = (source: string, pattern: RegExp) =>
   [...source.matchAll(pattern)].map((m) => ({ text: m[0], at: m.index }));
 
 /** One literal, as a finding: the sentence, and the same thing as data. */
-function literal(kind: string, line: string, at: number, text: string, options: SuggestOptions, candidates: string[]): Detail {
-  const found = suggest(candidates, options);
+function literal(
+  context: Context,
+  kind: string,
+  line: string,
+  at: number,
+  text: string,
+  options: SuggestOptions,
+  candidates: string[],
+): Detail {
+  /* The property before the suggestion: it is half of what the suggestion is. */
   const property = propertyAt(line, at);
+  const claims = property === undefined ? undefined : context.roles.forProperty(property);
+  const found = suggest(candidates, { ...options, ...(claims ? { claims } : {}) });
   return {
     message: `literal ${kind} ${text} — ${found.advice}`,
     col: at + 1,
@@ -80,7 +90,7 @@ export const noLiteralColor: Rule = {
               ...matchesIn(line, /#[0-9a-fA-F]{3,8}\b/g),
               ...matchesIn(line, /\b(?:rgba?|hsla?)\([^)]*\)/g),
             ].map(({ text, at }) =>
-              literal("color", line, at, text, { advice: "use a semantic alias" }, index.colors(text)),
+              literal(context, "color", line, at, text, { advice: "use a semantic alias" }, index.colors(text)),
             ),
           ),
     );
@@ -119,7 +129,15 @@ export const noLiteralLength: Rule = {
                     }
                   : {}),
               };
-              return literal("length", line, at, text, options, index.lengths(negated ? text.slice(1) : text));
+              return literal(
+                context,
+                "length",
+                line,
+                at,
+                text,
+                options,
+                index.lengths(negated ? text.slice(1) : text),
+              );
             });
           }),
     );

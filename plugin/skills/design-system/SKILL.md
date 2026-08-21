@@ -20,6 +20,7 @@ The rules live in the tool, not in this file. Ask for the ones that apply.
 | --- | --- |
 | about to write or edit one file | `dsbridge rules --for <path>` |
 | reaching for a value — `12px`, `#f60`, `1.5rem` | `dsbridge tokens --grep <text>` |
+| a finding that names several tokens, or a token you cannot place | `dsbridge roles` |
 | a finding you want to understand or argue with | `dsbridge rules <id>` |
 | finished a change | `dsbridge check <path>` |
 | an app deciding what it would take to adopt the system | `dsbridge migrate` |
@@ -29,6 +30,12 @@ that kind of file, one line each, and says of each whether it is checked or a
 judgement call. The whole set is 22 KB and most of it is about a file you are not
 touching — `dsbridge rules --markdown` prints all of it, and is almost never what
 you want mid-edit.
+
+`roles` is what turns a value back into a name. The graph knows what a token
+*holds*; only the system says what it is *for*, and a finding that names several
+tokens is naming every one whose role answers that property. Reading the roles is
+how you pick between them — the token that names the role you are writing, not
+the one that happens to sort first.
 
 Configuration lives in `dsbridge.config.json` at the repo root: the token prefix,
 where the design system's stylesheet lives, the component taxonomy, and any
@@ -56,6 +63,11 @@ rules <id>` is what tells you why, and the why is what decides the fix.
 exempt it with the reason written beside the code. Never fix one by making it
 unmeasurable — moving a literal into a JavaScript string satisfies no rule and
 defeats every one of them.
+
+Where a finding says exactly one token can be meant, `dsbridge check --fix`
+writes it. It touches nothing else: a finding that names two tokens is a choice,
+and one that names none is a value the scale has no word for. Both of those are
+yours to answer.
 
 **Judgement.** No tool can prove them. Whether a component belongs in the system
 at all, whether a value has earned a semantic name, whether a variant should be a

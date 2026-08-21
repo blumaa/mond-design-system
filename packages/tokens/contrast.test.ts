@@ -207,7 +207,7 @@ function contrast(map: TokenMap, fgToken: string, bgToken: string): number {
    matrix, so the defaults being accessible says nothing about the app. Editing
    contract.json changes both proofs at once. */
 type Contract = { contrast: Array<{ fg: string; bg: string[]; ratio: number }> };
-const contract = JSON.parse(readFileSync(join(SRC, "contract.json"), "utf8")) as Contract;
+const contract = JSON.parse(readFileSync(join(SRC, "dsbridge", "contract.json"), "utf8")) as Contract;
 const PAIRS = contract.contrast.flatMap(({ fg, bg, ratio }) => bg.map((b) => [fg, b, ratio] as const));
 
 const semantic = readFileSync(join(SRC, "semantic.css"), "utf8");

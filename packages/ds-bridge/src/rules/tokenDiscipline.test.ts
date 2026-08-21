@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildContext, makeSheet, type Config } from "../context.js";
 import { loadGraph } from "../graph.js";
+import { loadRoles, type RolesFile } from "../roles.js";
 import { noLiteralColor, noLiteralLength, noRawScaleStep, noUndefinedToken } from "./tokenDiscipline.js";
 import type { Rule } from "./types.js";
 
@@ -10,7 +11,13 @@ const SYSTEM = fileURLToPath(new URL("../__fixtures__/system/styles.css", import
 const ROOT = "/app";
 const graph = loadGraph({ system: SYSTEM });
 
-const run = (rule: Rule, source: string, file = "src/Button.module.css", config?: Config) =>
+const run = (
+  rule: Rule,
+  source: string,
+  file = "src/Button.module.css",
+  config?: Config,
+  roles?: RolesFile,
+) =>
   rule.check!(
     buildContext({
       root: ROOT,
@@ -18,6 +25,7 @@ const run = (rule: Rule, source: string, file = "src/Button.module.css", config?
       graph,
       sheets: [makeSheet(join(ROOT, file), source, ROOT, "--mds-")],
       ...(config ? { config } : {}),
+      ...(roles ? { roles: loadRoles(roles, graph.names()) } : {}),
     }),
   );
 
@@ -219,5 +227,35 @@ describe("a finding as data", () => {
     expect(finding?.message).toContain("--mds-gap");
     expect(finding?.message).toContain("--mds-space-2");
     expect(finding?.message).not.toContain("has that value");
+  });
+
+  /* The value alone cannot tell --mds-gap from --mds-space-2; the property can.
+     This is the whole point of roles, so it is checked at the rule rather than
+     only at the function underneath it. */
+  it("takes the property into account once the system says what a token is for", () => {
+    const roles: RolesFile = {
+      version: 1,
+      roles: { gap: { properties: ["gap", "row-gap", "column-gap"], tokens: ["--mds-gap*"] } },
+    };
+    const [finding] = run(noLiteralLength, ".a { gap: 8px; }", undefined, undefined, roles);
+    expect(finding).toMatchObject({ confidence: "certain", autofix: "var(--mds-gap)" });
+  });
+
+  it("leaves a property no role claims on the value-only path", () => {
+    const roles: RolesFile = {
+      version: 1,
+      roles: { gap: { properties: ["gap"], tokens: ["--mds-gap*"] } },
+    };
+    const [finding] = run(noLiteralLength, ".a { margin-top: 8px; }", undefined, undefined, roles);
+    expect(finding?.confidence).toBe("value-only");
+  });
+
+  it("negates the role's token rather than the first one holding the value", () => {
+    const roles: RolesFile = {
+      version: 1,
+      roles: { gap: { properties: ["top"], tokens: ["--mds-space-*"] } },
+    };
+    const [finding] = run(noLiteralLength, ".a { top: -8px; }", undefined, undefined, roles);
+    expect(finding).toMatchObject({ confidence: "certain", autofix: "calc(-1 * var(--mds-space-2))" });
   });
 });

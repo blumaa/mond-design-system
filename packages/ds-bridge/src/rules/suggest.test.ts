@@ -76,3 +76,57 @@ describe("every token that could be meant", () => {
     expect(index.colors("#ffffff")).toEqual(["--mds-text-inverse", "--mds-surface-card"]);
   });
 });
+
+/* The property is the half of the question the value cannot answer. Two tokens
+   hold 8px; only one of them is what a `gap` means. */
+describe("the property the value was written for", () => {
+  const claims = (...tokens: string[]) => new Set(tokens);
+
+  it("settles a tie when one of the tokens answers the property", () => {
+    const found = suggest(index.lengths("8px"), { advice: "x", claims: claims("--mds-gap") });
+    expect(found.confidence).toBe("certain");
+    expect(found.autofix).toBe("var(--mds-gap)");
+    expect(found.candidates).toEqual(["--mds-gap"]);
+  });
+
+  it("names both, and breaks nothing, when two answer it", () => {
+    const found = suggest(index.lengths("8px"), {
+      advice: "x",
+      claims: claims("--mds-gap", "--mds-space-2"),
+    });
+    expect(found.confidence).toBe("ambiguous");
+    expect(found.autofix).toBeUndefined();
+    expect(found.candidates).toEqual(["--mds-gap", "--mds-space-2"]);
+    expect(found.advice).toContain("--mds-gap");
+    expect(found.advice).toContain("--mds-space-2");
+  });
+
+  it("stays value-only when no role claims the property", () => {
+    const found = suggest(index.lengths("8px"), { advice: "x", claims: claims() });
+    expect(found.confidence).toBe("value-only");
+    expect(found.candidates).toEqual(["--mds-gap", "--mds-space-2"]);
+  });
+
+  /* The reason the whole file exists: a rung is a step on a scale, and writing
+     one into a `width` is exactly the guess roles were added to stop — even
+     when it is the only token that happens to hold the value. */
+  it("will not answer a claimed property with a token that is for something else", () => {
+    const found = suggest(["--mds-space-12"], { advice: "x", claims: claims("--mds-avatar-md") });
+    expect(found.confidence).toBe("value-only");
+    expect(found.autofix).toBeUndefined();
+    expect(found.candidates).toEqual(["--mds-space-12"]);
+  });
+
+  it("still answers a property the system says nothing about", () => {
+    const found = suggest(["--mds-space-12"], { advice: "x", claims: claims() });
+    expect(found).toMatchObject({ confidence: "certain", autofix: "var(--mds-space-12)" });
+  });
+
+  /* A role claiming the property is not a licence to invent a token that does
+     not hold the value: the intersection is the answer, never the union. */
+  it("never offers a token that does not hold the value", () => {
+    const found = suggest(index.lengths("8px"), { advice: "x", claims: claims("--mds-space-1") });
+    expect(found.candidates).not.toContain("--mds-space-1");
+    expect(found.confidence).toBe("value-only");
+  });
+});

@@ -119,6 +119,10 @@ const NAMED = 4;
 export type SuggestOptions = {
   /** What to say when no token holds the value at all. */
   advice: string;
+  /** The tokens whose role answers the property this value was written for.
+      Absent where there is no property to ask about — a `style` prop holding a
+      string, a system that published no roles. */
+  claims?: Set<string>;
   /** How a token becomes the replacement: `var(--x)` for nearly everything,
       `calc(-1 * var(--x))` where the literal was negative. */
   write?: (token: string) => string;
@@ -126,21 +130,59 @@ export type SuggestOptions = {
   say?: (replacement: string) => string;
 };
 
+/** The first few, and a count for the rest — the whole list is in the JSON. */
+const listed = (tokens: string[]) => {
+  const shown = tokens.slice(0, NAMED);
+  const more = tokens.length - shown.length;
+  return `${shown.join(", ")}${more > 0 ? `, and ${more} more` : ""}`;
+};
+
 /** A finding's tail, from the tokens that hold the value. */
 export function suggest(candidates: string[], options: SuggestOptions): Suggestion {
   const { advice, write = (token: string) => `var(${token})`, say = (r: string) => `${r} has that value` } =
     options;
-  const [first, ...rest] = candidates;
-  if (first === undefined) return { candidates, confidence: "none", advice };
-  if (rest.length === 0) {
-    return { candidates, confidence: "certain", autofix: write(first), advice: say(write(first)) };
+  const answer = (token: string, held = candidates): Suggestion => ({
+    candidates: held,
+    confidence: "certain",
+    autofix: write(token),
+    advice: say(write(token)),
+  });
+  if (candidates.length === 0) return { candidates, confidence: "none", advice };
+
+  /* The intersection, never the union: a role claiming `width` does not make a
+     token that holds 12px an answer to `width: 20px`. */
+  const claims = options.claims;
+  const claimed = claims === undefined ? [] : candidates.filter((token) => claims.has(token));
+  const [only, ...others] = claimed;
+  if (only !== undefined && others.length === 0) return answer(only, claimed);
+  if (others.length > 0) {
+    return {
+      candidates: claimed,
+      confidence: "ambiguous",
+      advice: `${claimed.length} tokens answer this property: ${listed(claimed)} — pick the role you mean`,
+    };
   }
-  const shown = candidates.slice(0, NAMED);
-  const more = candidates.length - shown.length;
-  const tail = more > 0 ? `, and ${more} more` : "";
+
+  /* The system named tokens for this property and none of them holds the value.
+     Whatever else does hold it is for something else — a rung, or another
+     role's token — so it is reported and never written. That is the gap report:
+     the value the app needed and the scale has no name for. */
+  if (claims !== undefined && claims.size > 0) {
+    return {
+      candidates,
+      confidence: "value-only",
+      advice:
+        candidates.length === 1
+          ? `${write(candidates[0]!)} has that value, but it is not one of this property's tokens`
+          : `${candidates.length} tokens hold it: ${listed(candidates)} — none of them is one of this property's tokens`,
+    };
+  }
+
+  /* Nothing is declared about this property, so the value is all there is. */
+  if (candidates.length === 1) return answer(candidates[0]!);
   return {
     candidates,
     confidence: "value-only",
-    advice: `${candidates.length} tokens hold it: ${shown.join(", ")}${tail} — use the one that names the role`,
+    advice: `${candidates.length} tokens hold it: ${listed(candidates)} — use the one that names the role`,
   };
 }

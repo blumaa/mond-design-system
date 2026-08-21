@@ -11,6 +11,7 @@ import type { Block } from "../css/parse.js";
 import type { Confidence } from "./suggest.js";
 import type { Graph } from "../graph.js";
 import type { Component } from "../structure.js";
+import type { Roles } from "../roles.js";
 
 /** Who a rule is aimed at: the design system's own source, or an app using it. */
 export type Target = "system" | "app" | "both";
@@ -117,6 +118,9 @@ export type Context = {
   primitives: string[];
   /** What the system promises about contrast, when it publishes one. */
   contract?: Contract;
+  /** What each token is for, when the system says. Empty otherwise, and an
+      empty set answers no property — which is the honest answer. */
+  roles: Roles;
   /** Files found and not scanned. A check that quietly halved its own scope
       reads exactly like a clean one, so the count is printed either way. */
   suppressed: Suppressed;

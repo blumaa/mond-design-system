@@ -9,6 +9,7 @@ import { parseArgs } from "node:util";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { isAbsolute, relative, resolve } from "node:path";
 import { anyGlob } from "./glob.js";
+import { plural } from "./text.js";
 import { loadGraph } from "./graph.js";
 import { findBrandFiles, resolveSystem } from "./sources.js";
 import { loadContext, type Config } from "./context.js";
@@ -16,7 +17,9 @@ import { renderTokens, selectTokens, type RenderOptions } from "./commands/token
 import { renderTokensHtml } from "./commands/tokensHtml.js";
 import { renderCheck, runCheck } from "./commands/check.js";
 import { aboveBaseline, readBaseline, updateBaseline, NO_BASELINE } from "./commands/baseline.js";
+import { applyFixes } from "./commands/fix.js";
 import { renderRules, ruleData, rulesForFile, selectRules } from "./commands/rules.js";
+import { renderRoles, roleData } from "./commands/roles.js";
 import { planMigration, renderMigration } from "./commands/migrate.js";
 import { isHookEvent, runHook, type HookInput } from "./commands/hook.js";
 import type { Kind, Layer } from "./graph.js";
@@ -29,6 +32,7 @@ const USAGE = `dsbridge — design system conformance, for the system and the ap
                            contract, and what your brand re-points
   dsbridge check [path] [opts]  run the rules against this repo, or one path in it
   dsbridge rules [id]           what each rule is protecting, for a human or an agent
+  dsbridge roles                what the system says its tokens are for
   dsbridge migrate [path]       what an app would have to move to adopt the system
   dsbridge hook <event>         answer a Claude Code hook, protocol JSON on stdin
 
@@ -52,6 +56,7 @@ Options for check
   --rule <id>       run one rule; repeatable
   --include-tests   scan tests, stories and fixtures too
   --pending <file>  judge this file as the text on stdin, not as it is on disk
+  --fix             rewrite the findings that name exactly one token
   --baseline        report only what is above .dsbridge/baseline.json
   --update-baseline record what is there now as the debt to hold
 
@@ -64,6 +69,11 @@ Events for hook
   session-start     the namespace, the taxonomy and what the repo already has
   pre-tool-use      what the pending Write or Edit adds, and nothing already there
   stop              hold the turn open while it is above the baseline
+
+Options for roles
+  --root <dir>      the repo to answer for  (default: the cwd)
+  --system <file>   as above
+  --coverage        name the tokens no role claims
 
 Options for rules
   --for <file>      only the rules that read this kind of file
@@ -168,6 +178,7 @@ function checkCommand(rest: string[], stdin?: string): number {
       rule: { type: "string", multiple: true },
       "include-tests": { type: "boolean" },
       pending: { type: "string" },
+      fix: { type: "boolean" },
       baseline: { type: "boolean" },
       "update-baseline": { type: "boolean" },
       json: { type: "boolean" },
@@ -195,7 +206,31 @@ function checkCommand(rest: string[], stdin?: string): number {
     color: values.color !== false && process.stdout.isTTY === true,
   };
   const asked = held === undefined ? positionals : [held];
-  const all = runCheck(context, options).filter((finding) => pathFilter(root, asked)(finding.file));
+  const scan = (at: ReturnType<typeof loadContext>) =>
+    runCheck(at, options).filter((finding) => pathFilter(root, asked)(finding.file));
+  let all = scan(context);
+
+  /* Write, then read the tree back: what remains is what a second run would
+     say, and a fix that closed nothing is a fix worth seeing not reported. */
+  if (values.fix === true) {
+    if (held !== undefined) {
+      process.stderr.write("--fix writes the files on disk; drop --pending\n");
+      return 1;
+    }
+    const done = applyFixes(root, all);
+    const fixed = done.reduce((n, file) => n + file.fixed, 0);
+    if (fixed > 0) {
+      process.stdout.write(`fixed ${plural(fixed, "finding")} in ${plural(done.length, "file")}\n\n`);
+      all = scan(
+        loadContext({
+          root,
+          ...(values.system ? { system: resolve(values.system) } : {}),
+          ...(config ? { config } : {}),
+          ...(values["include-tests"] === true ? { includeTests: true } : {}),
+        }),
+      );
+    }
+  }
 
   /* Recording half a repo would drop the other half from the baseline. */
   if (values["update-baseline"] === true) {
@@ -314,6 +349,44 @@ function rulesCommand(rest: string[]): number {
   return 0;
 }
 
+/* The roles are the system's, not this repo's: an app is answered from the copy
+   of the system it installed, which is what `loadContext` already resolves. */
+function rolesCommand(rest: string[]): number {
+  const { values } = parseArgs({
+    args: rest,
+    allowPositionals: true,
+    options: {
+      root: { type: "string" },
+      system: { type: "string" },
+      coverage: { type: "boolean" },
+      json: { type: "boolean" },
+      color: { type: "boolean", default: true },
+    },
+    allowNegative: true,
+  });
+
+  const root = resolve(values.root ?? process.cwd());
+  const config = readConfig(root);
+  const context = loadContext({
+    root,
+    ...(values.system ? { system: resolve(values.system) } : {}),
+    ...(config ? { config } : {}),
+  });
+  const tokens = context.graph.names().filter((name) => name.startsWith(context.prefix));
+
+  if (values.json === true) {
+    jsonOut(roleData(context.roles, tokens));
+    return 0;
+  }
+  process.stdout.write(
+    renderRoles(context.roles, tokens, {
+      ...(values.coverage === true ? { coverage: true } : {}),
+      color: values.color !== false && process.stdout.isTTY === true,
+    }),
+  );
+  return 0;
+}
+
 /* A stack trace is the tool failing to answer, printed as if it were one. The
    frames are still there behind DSBRIDGE_DEBUG for whoever is fixing dsbridge. */
 function failed(command: string, error: unknown): number {
@@ -341,6 +414,7 @@ export function main(argv: string[], stdin?: string): number {
     if (command === "tokens") return tokensCommand(rest);
     if (command === "check") return checkCommand(rest, stdin);
     if (command === "rules") return rulesCommand(rest);
+    if (command === "roles") return rolesCommand(rest);
     if (command === "migrate") return migrateCommand(rest);
     if (command === "hook") return hookCommand(rest, stdin);
   } catch (error) {

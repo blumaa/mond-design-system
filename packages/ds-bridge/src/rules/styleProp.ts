@@ -13,6 +13,11 @@ import type { Context, Finding, Rule, Source } from "./types.js";
 
 const unquoted = (text: string) => text.replace(/^["'`]|["'`]$/g, "");
 
+/** A style prop's key as CSS spells it: `maxHeight` is `max-height`, and a
+    vendor key keeps the dash it starts with — `WebkitLineClamp` is
+    `-webkit-line-clamp`. */
+const cssName = (key: string) => key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+
 /** Properties React leaves as a bare number: `flex: 1` is not one pixel. */
 const UNITLESS = new Set([
   "flex",
@@ -65,15 +70,19 @@ export const stylePropNeedsAToken: Rule = {
         .map((declaration): Finding => {
           const length = asLength(declaration.key, declaration.value);
           const advice = "pass it as a custom property and let the stylesheet use it";
+          const property = cssName(unquoted(declaration.key));
           /* Anything that is not a length is a value no token was ever going to
              hold — a `display` or a computed string — so nothing is offered. */
-          const found = suggest(length === undefined ? [] : index.lengths(length), { advice });
+          const found = suggest(length === undefined ? [] : index.lengths(length), {
+            advice,
+            claims: context.roles.forProperty(property),
+          });
           return {
             rule: "style-prop-needs-a-token",
             file: source.file,
             line: declaration.line,
             message: `${declaration.key}: ${declaration.value.trim()} reaches no token — ${found.advice}`,
-            property: unquoted(declaration.key),
+            property,
             value: length ?? unquoted(declaration.value.trim()),
             candidates: found.candidates,
             confidence: found.confidence,

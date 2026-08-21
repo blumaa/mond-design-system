@@ -6,6 +6,7 @@ import { dirname, relative, resolve, sep } from "node:path";
 import { expandImports, loadGraph, type Graph } from "./graph.js";
 import { findFonts, findSources, findStylesheets, resolveSystem, rootScoped } from "./sources.js";
 import { anyGlob } from "./glob.js";
+import { loadRoles, type Roles, type RolesFile } from "./roles.js";
 import { readSystemComponents } from "./system.js";
 import { readComponents, type Component } from "./structure.js";
 import { blocksIn, declarationsIn, stripComments } from "./css/parse.js";
@@ -124,6 +125,7 @@ export type BuildOptions = {
   prefix?: string;
   config?: Config;
   contract?: Contract;
+  roles?: Roles;
   suppressed?: Suppressed;
   /** Repo-relative file to the lines a comment took out of the check. */
   ignores?: Map<string, Set<number>>;
@@ -142,6 +144,7 @@ export function buildContext({
   system,
   config = {},
   contract,
+  roles,
   suppressed = { tests: 0, scope: 0, lines: 0 },
   ignores = new Map(),
 }: BuildOptions): Context {
@@ -165,6 +168,7 @@ export function buildContext({
     primitives: config.primitives ?? [],
     ...(config.scales ? { scales: config.scales } : {}),
     ...(contract ? { contract } : {}),
+    roles: roles ?? loadRoles(undefined, graph.names()),
     suppressed,
     exempt: (rule, file) => anyGlob(exempt[rule] ?? [])(file),
     ignored: (file, line) => line !== undefined && (ignores.get(file)?.has(line) ?? false),
@@ -279,12 +283,18 @@ export function loadContext({
     .map((file) => relative(at, file));
   const brand = sheets.filter((s) => s.isBrand).map((s) => s.path);
   const graph = brand.length > 0 ? loadGraph({ system: entry, prefix: namespace, brand }) : unbranded;
-  /* The contract travels with the system: an app checks itself against the copy
-     of it that it installed, not against whatever the tool was built knowing. */
-  const contractPath = resolve(dirname(entry), "contract.json");
-  const contract = existsSync(contractPath)
-    ? (JSON.parse(readFileSync(contractPath, "utf8")) as Contract)
-    : undefined;
+  /* What the system declares travels with the system: an app is answered from
+     the copy of it that it installed, not from whatever the tool was built
+     knowing. `dsbridge/` beside the entry stylesheet is where it publishes it,
+     and the file beside the entry is the older place the contract sat. */
+  const published = <T,>(name: string): T | undefined => {
+    for (const at of [resolve(dirname(entry), "dsbridge", name), resolve(dirname(entry), name)]) {
+      if (existsSync(at)) return JSON.parse(readFileSync(at, "utf8")) as T;
+    }
+    return undefined;
+  };
+  const contract = published<Contract>("contract.json");
+  const roles = loadRoles(published<RolesFile>("roles.json"), graph.names());
   return buildContext({
     root: at,
     kind,
@@ -298,6 +308,7 @@ export function loadContext({
     ...(exported ? { exported } : {}),
     ...(config ? { config } : {}),
     ...(contract ? { contract } : {}),
+    roles,
     suppressed,
     ignores,
   });

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { fileURLToPath } from "node:url";
 import { buildContext } from "../context.js";
 import { loadGraph } from "../graph.js";
+import { loadRoles, type RolesFile } from "../roles.js";
 import { fontsLiveInTheApp, noRawElementOverComponent, stylePropNeedsAToken } from "./styleProp.js";
 import type { Rule } from "./types.js";
 
@@ -11,7 +12,12 @@ const graph = loadGraph({ system: SYSTEM });
 const run = (
   rule: Rule,
   source: string,
-  { kind = "system", file = "src/Button.tsx", fonts = [] as string[] } = {},
+  {
+    kind = "system",
+    file = "src/Button.tsx",
+    fonts = [] as string[],
+    roles,
+  }: { kind?: string; file?: string; fonts?: string[]; roles?: RolesFile } = {},
 ) =>
   rule.check!(
     buildContext({
@@ -21,6 +27,7 @@ const run = (
       sheets: [],
       sources: [{ file, source }],
       fonts,
+      ...(roles ? { roles: loadRoles(roles, graph.names()) } : {}),
     }),
   );
 
@@ -68,6 +75,23 @@ describe("style-prop-needs-a-token", () => {
 
   it("says nothing about a style it is only passing on", () => {
     expect(run(stylePropNeedsAToken, "<i style={{ ...vars, ...style }} />")).toEqual([]);
+  });
+
+  /* A style prop is written in the DOM's spelling and roles are written in the
+     stylesheet's, so the key is translated once, here, and the finding carries
+     the CSS name every other rule reports. */
+  it("names the property as CSS spells it", () => {
+    const [finding] = run(stylePropNeedsAToken, "<i style={{ maxHeight: 8 }} />");
+    expect(finding?.property).toBe("max-height");
+  });
+
+  it("takes the property into account once the system says what a token is for", () => {
+    const roles: RolesFile = {
+      version: 1,
+      roles: { gap: { properties: ["gap"], tokens: ["--mds-gap*"] } },
+    };
+    const [finding] = run(stylePropNeedsAToken, "<i style={{ gap: 8 }} />", { roles });
+    expect(finding).toMatchObject({ confidence: "certain", autofix: "var(--mds-gap)" });
   });
 });
 

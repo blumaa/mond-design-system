@@ -5,7 +5,7 @@
  * against throwaway trees. `main` returns the code instead of setting it, which
  * is the only reason no subprocess is needed here.
  */
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -410,6 +410,49 @@ describe("dsbridge check --baseline", () => {
   });
 });
 
+describe("dsbridge check --fix", () => {
+  const fix = (dir: string, ...rest: string[]) =>
+    run(["check", "--root", dir, "--system", SYSTEM, "--no-color", "--fix", ...rest]);
+
+  it("writes the one token that answers the property, and says what it did", () => {
+    const dir = app(".a { gap: 8px; }");
+    const { output } = fix(dir);
+    expect(output).toContain("fixed 1");
+    expect(readFileSync(join(dir, "src/Button.module.css"), "utf8")).toBe(".a { gap: var(--mds-gap); }");
+  });
+
+  /* The whole discipline of the fix: two tokens hold 8px and nothing says which
+     one a margin means, so the file is left exactly as it was. */
+  it("leaves a value it is not sure about alone, and still reports it", () => {
+    const dir = app(".a { margin-top: 8px; }");
+    const { status, output } = fix(dir);
+    expect(status).toBe(1);
+    expect(readFileSync(join(dir, "src/Button.module.css"), "utf8")).toBe(".a { margin-top: 8px; }");
+    expect(output).toContain("8px");
+  });
+
+  it("re-checks what it wrote rather than reporting the findings it just closed", () => {
+    const { status, output } = fix(app(".a { gap: 8px; }"));
+    expect(status).toBe(0);
+    expect(output).toContain("clean");
+  });
+
+  it("refuses to fix text that is not on disk", () => {
+    const { status, output } = run([
+      "check",
+      "--root",
+      app(".a { gap: 8px; }"),
+      "--system",
+      SYSTEM,
+      "--fix",
+      "--pending",
+      "src/Button.module.css",
+    ], ".a { gap: 8px; }");
+    expect(status).toBe(1);
+    expect(output).toContain("--pending");
+  });
+});
+
 describe("dsbridge check --pending", () => {
   const held = (dir: string, file: string, source: string, ...rest: string[]) =>
     run(["check", "--root", dir, "--system", SYSTEM, "--no-color", "--pending", file, ...rest], source);
@@ -443,6 +486,45 @@ describe("dsbridge check --pending", () => {
       "/* dsbridge-ignore-next-line: the SDK hands us this */\n.a { padding: 13px; }",
     );
     expect(status).toBe(0);
+  });
+});
+
+/* Roles are the half of a suggestion the value cannot supply, and they travel
+   with the system rather than with the tool. These read the fixture system's
+   own dsbridge/roles.json, the way an app reads the one it installed. */
+describe("dsbridge roles", () => {
+  const roles = (dir: string, ...rest: string[]) =>
+    run(["roles", "--root", dir, "--system", SYSTEM, "--no-color", ...rest]);
+
+  it("lists what the installed system says its tokens are for", () => {
+    const { status, output } = roles(app(".a { color: var(--mds-text-primary); }"));
+    expect(status).toBe(0);
+    expect(output).toContain("gap");
+    expect(output).toContain("height, min-height");
+    expect(output).toContain("tokens claimed");
+  });
+
+  it("names the tokens no role claims only when asked", () => {
+    const dir = app(".a { color: var(--mds-text-primary); }");
+    expect(roles(dir).output).not.toContain("--mds-text-primary");
+    expect(roles(dir, "--coverage").output).toContain("--mds-text-primary");
+  });
+
+  /* The point of the whole file: `8px` is held by --mds-gap and --mds-space-2,
+     and only the property says which was meant. */
+  it("turns a two-token guess into an answer once the property is claimed", () => {
+    const { output } = run([
+      "check",
+      "--root",
+      app(".a { gap: 8px; }"),
+      "--system",
+      SYSTEM,
+      "--json",
+      "--rule",
+      "no-literal-length",
+    ]);
+    const [finding] = JSON.parse(output) as { confidence: string; autofix: string }[];
+    expect(finding).toMatchObject({ confidence: "certain", autofix: "var(--mds-gap)" });
   });
 });
 

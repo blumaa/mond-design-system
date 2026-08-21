@@ -12,6 +12,7 @@ pnpm add -D ds-bridge
 dsbridge tokens            # the graph: core scales, semantic contract, your brand
 dsbridge check             # the rules, as a work list
 dsbridge rules [id]        # what each rule is protecting
+dsbridge roles             # what the system says its tokens are for
 dsbridge migrate           # the distance between this app and the system
 dsbridge hook <event>      # answer a Claude Code hook, protocol JSON on stdin
 ```
@@ -78,6 +79,17 @@ skipped keeps-contrast: the design system installed here publishes no
 contract.json, so there is nothing to prove against
 ```
 
+### Fixing the ones with a single answer
+
+```sh
+dsbridge check --fix              # rewrite every finding of confidence `certain`
+```
+
+A fix that is ever wrong is worse than no fix: it lands in a diff nobody reads
+closely, under a green check. So `--fix` writes only where exactly one token can
+be meant, and even then it re-reads the file and proves the literal is still at
+the column the finding named. Everything else is reported and left alone.
+
 ### The baseline
 
 A gate that fails on 394 findings is a gate nobody turns on. Record the debt
@@ -104,6 +116,55 @@ border-color: #4a4a4a;
 The reason is required — without one the line is reported as usual. This is for
 the case where the rule is wrong about one line; when it is wrong about a whole
 file, `exempt` says so in config.
+
+## dsbridge roles
+
+The graph knows what a token *holds*. Only the system knows what it is *for*,
+and without that a suggestion is a coin flip: `20px` is an icon size, a switch
+knob and a spacing rung at once.
+
+```sh
+dsbridge roles                    # every role, what it answers, how many tokens
+dsbridge roles --coverage         # the tokens no role claims
+```
+
+A role is a set of tokens and the CSS properties they answer. The system
+publishes them in `dsbridge/roles.json` beside its entry stylesheet, so an app
+is answered from the copy of the system it installed:
+
+```json
+{
+  "version": 1,
+  "roles": {
+    "gap":       { "properties": ["gap", "row-gap", "column-gap"], "tokens": ["--mds-gap*"] },
+    "icon-size": { "properties": ["width", "height"],              "tokens": ["--mds-icon-*"] },
+    "rung":      { "properties": [],                               "tokens": ["--mds-space-*"] }
+  },
+  "roleOf": { "--mds-switch-knob": "icon-size" }
+}
+```
+
+Tokens and properties are both globs; `roleOf` places one token by hand, and
+takes it out of every role a glob would have put it in. A role with no
+properties answers nothing — that is what a scale rung is, a step that exists so
+the scale is complete.
+
+A suggestion is then the intersection of *the tokens that hold the value* and
+*the roles that claim the property*:
+
+| | |
+| --- | --- |
+| one token in both | `certain` — the only kind `--fix` writes |
+| several | `ambiguous`, all of them named |
+| the property is claimed, and none of its tokens holds the value | `value-only` — the scale is missing a rung |
+| nothing claims the property | `value-only`, or `certain` when one token holds it |
+
+The relation is many-to-many on purpose: `width` is claimed by icon-size,
+avatar-size and control-width together, and where more than one holds the value
+the honest answer names them all rather than breaking the tie.
+
+Coverage is reported and never enforced. A system with half its tokens declared
+gets half the benefit and no failing build.
 
 ### Configuration
 
@@ -259,8 +320,9 @@ dsbridge check --system path/to/your/styles.css
 ```
 
 Layers come from the file layout — `core/*.css`, `semantic.css`, `base.css`,
-anything else that declares tokens at the document root is a brand. The
-contrast contract is `contract.json` beside the entry stylesheet:
+anything else that declares tokens at the document root is a brand. What the
+system declares about itself goes in a `dsbridge/` directory beside the entry
+stylesheet, `roles.json` above and `contract.json` for the contrast gate:
 
 ```json
 { "contrast": [{ "fg": "--x-text", "bg": ["--x-surface"], "ratio": 4.5 }] }
