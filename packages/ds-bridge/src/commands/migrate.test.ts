@@ -63,3 +63,28 @@ describe("renderMigration", () => {
     expect(out).toContain("dsbridge rules");
   });
 });
+
+/* A system nobody imports from is a system in name only, and the count of what
+   an app has never reached for is the one number that says so. Judgement, not
+   a finding: eighteen unused components can be eighteen the app does not need. */
+describe("what of the system the app actually uses", () => {
+  const config = { components: "../system/index.d.ts" };
+  const context = () => loadContext({ root: APP, system: SYSTEM, config });
+
+  it("splits what the system exports into used and never imported", () => {
+    const { components } = planMigration(context());
+    expect(components?.used).toEqual(["Card"]);
+    expect(components?.unused).toEqual(["Button", "Stack", "Switch"]);
+  });
+
+  it("says nothing at all when no package was named", () => {
+    expect(planMigration(loadContext({ root: APP, system: SYSTEM })).components).toBeUndefined();
+  });
+
+  it("reports the count and names the unused", () => {
+    const at = context();
+    const out = renderMigration(planMigration(at), at, { color: false });
+    expect(out).toContain("1 of 4");
+    expect(out).toContain("Switch");
+  });
+});

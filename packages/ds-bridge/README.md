@@ -113,6 +113,7 @@ file, `exempt` says so in config.
 {
   "prefix": "--mds-",
   "system": "packages/tokens/src/styles.css",
+  "components": "@mond-design-system/react",
   "levels": ["atom", "molecule", "organism", "template"],
   "levelsIgnore": ["Docs"],
   "sources": ["src"],
@@ -132,9 +133,15 @@ the system is a folder the repo owns rather than a package it installed. With
 neither `system` nor `--system`, the installed `@mond-design-system/tokens` is
 used.
 
+`components` names the package whose exports are the design system's components
+— or a path to a `.d.ts`, for a system the repo owns. Without it an app cannot
+be told it has rebuilt something it already has, and the two rules that would
+say so skip with that as the reason.
+
 `levels` is the taxonomy, simplest first; `levelsIgnore` lists story-title
-segments that name something other than a level. Both are read only when the
-checked repo is the design system itself.
+segments that name something other than a level. An app has no taxonomy until
+it declares one here, and the three rules that read levels skip until it does:
+its levels are its own, and a repo grouped by feature is not wrong for it.
 
 `sources` bounds what is read at all; `ignore` removes files from within it.
 Both take globs — `*` and `?` stop at a path separator, `**` does not, and a

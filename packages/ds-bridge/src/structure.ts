@@ -96,6 +96,24 @@ export function importsIn(source: string): Edge[] {
   return out;
 }
 
+/**
+ * Every name a file imports, whatever it imports it from.
+ *
+ * `importsIn` answers a question about this repo's own composition, so it drops
+ * packages. This answers a different one — does this file use that thing at all
+ * — and for a component named after one the design system exports, the import
+ * line is the whole answer.
+ */
+export function importedNames(source: string): Set<string> {
+  const out = new Set<string>();
+  const pattern = /^import\s+(?!type\b)((?:(?!^import\b)[\s\S])*?)\s+from\s+["'][^"']+["']/gm;
+  for (const match of source.matchAll(pattern)) {
+    const bindings = (match[1] ?? "").replace(/\btype\s+\w+/g, "");
+    for (const name of bindings.match(/[A-Za-z_$][\w$]*/g) ?? []) out.add(name);
+  }
+  return out;
+}
+
 const base = (file: string) => file.slice(file.lastIndexOf("/") + 1);
 
 /**

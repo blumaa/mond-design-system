@@ -5,6 +5,7 @@ import { brandRules } from "./brand.js";
 import { contrastRules } from "./contrast.js";
 import { layoutRules } from "./layout.js";
 import { structureRules } from "./structure.js";
+import { usageRules } from "./usage.js";
 import { stylePropRules } from "./styleProp.js";
 import { philosophyRules } from "./philosophy.js";
 import type { Context, Finding, Rule } from "./types.js";
@@ -15,6 +16,7 @@ export const RULES: Rule[] = [
   ...brandRules,
   ...contrastRules,
   ...structureRules,
+  ...usageRules,
   ...layoutRules,
   ...stylePropRules,
   ...philosophyRules,
@@ -38,6 +40,7 @@ export { isEnforced };
 export type { Context, Finding, Rule };
 export * from "./tokenDiscipline.js";
 export * from "./brand.js";
+export * from "./usage.js";
 export * from "./contrast.js";
 export * from "./structure.js";
 export * from "./layout.js";

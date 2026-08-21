@@ -121,6 +121,22 @@ An upward import inverts the hierarchy: the atom now cannot be understood, teste
 
 **Instead.** Move the shared part down to the level that needs it, or move the importing component up. What the rule deliberately allows is a peer: a Button that renders a Spinner while it loads is using an affordance, and a ConfirmDialog built out of Modal's parts is `composition-over-configuration` working as intended. Whether a peer wrapper has earned its own level is a judgement, and a checker that fired on it would be wrong more often than right.
 
+### no-duplicate-of-a-system-component
+
+**Do not give an app component the name of one the system exports.** *(app)*
+
+Two components with one name is a question every reader of the app has to answer from the import line: whose Icon is this. One of them gets the accessibility work and the next release, and it is not the app's — so the app's copy drifts quietly, and the day someone deletes the local import to 'clean up' the page changes shape.
+
+**Instead.** Use the system's, or name yours for what makes it different — `AvatarIcon`, `SportIcon`. If the system's is genuinely wrong for the app, say so in the system: a second consumer will want the same thing.
+
+### wraps-rather-than-reimplements
+
+**A component named after a system component builds on it.** *(app)*
+
+`VenueCard` that renders its own `<div>` is a Card that will not follow the system's radius, padding, elevation or dark theme. The name promises a family resemblance the code does not keep, and the rebrand that moves every other card leaves this one behind. Judged against the repo's own habit: this only fires where most of the family already builds on the same base.
+
+**Instead.** Render the system's component and pass your content into it. Where it cannot do what you need, that is a gap in the system worth naming rather than a reason to start again.
+
 ### mobile-first-media
 
 **A media query widens the layout; it never narrows it.** *(both)*

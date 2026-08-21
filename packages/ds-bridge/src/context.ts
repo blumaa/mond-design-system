@@ -6,6 +6,7 @@ import { dirname, relative, resolve, sep } from "node:path";
 import { expandImports, loadGraph, type Graph } from "./graph.js";
 import { findFonts, findSources, findStylesheets, resolveSystem, rootScoped } from "./sources.js";
 import { anyGlob } from "./glob.js";
+import { readSystemComponents } from "./system.js";
 import { readComponents, type Component } from "./structure.js";
 import { blocksIn, declarationsIn, stripComments } from "./css/parse.js";
 import type { Context, Contract, Sheet, Source } from "./rules/types.js";
@@ -55,6 +56,10 @@ export type Config = {
   /** The design system's entry stylesheet, relative to the root. For a repo
       whose system is a folder it owns rather than a package it installed. */
   system?: string;
+  /** The package whose exports are the design system's components — or a path
+      to its type declarations. Without it an app cannot be told it has rebuilt
+      something it already has. */
+  components?: string;
   /** The taxonomy, simplest first. A component composes strictly lower levels. */
   levels?: string[];
   /** Story-title segments that name something other than a level. */
@@ -107,6 +112,8 @@ export type BuildOptions = {
   graph: Graph;
   sheets: Sheet[];
   components?: Component[];
+  /** What the design system exports, read from the package the repo installed. */
+  exported?: string[];
   sources?: Source[];
   fonts?: string[];
   prefix?: string;
@@ -123,6 +130,7 @@ export function buildContext({
   graph,
   sheets,
   components = [],
+  exported = [],
   sources = [],
   fonts = [],
   prefix,
@@ -139,6 +147,7 @@ export function buildContext({
     graph,
     sheets,
     components,
+    exported,
     sources,
     fonts,
     prefix: prefix ?? graph.prefix,
@@ -254,6 +263,10 @@ export function loadContext({
      any rule scans their bodies. */
   const read = new Map(tsx.map((file) => [relative(at, file), contents(file)]));
   const components = readComponents([...read.keys()], (file) => read.get(file) ?? "");
+  /* Named, never guessed: the tool has no way to tell which of an app's
+     dependencies is its design system, and the rules that read this say so
+     rather than passing silently when nothing named one. */
+  const exported = config?.components === undefined ? undefined : readSystemComponents(config.components, at);
   const fonts = findFonts(at)
     .filter(scanned)
     .map((file) => relative(at, file));
@@ -275,6 +288,7 @@ export function loadContext({
     fonts,
     prefix: namespace,
     system: entry,
+    ...(exported ? { exported } : {}),
     ...(config ? { config } : {}),
     ...(contract ? { contract } : {}),
     suppressed,

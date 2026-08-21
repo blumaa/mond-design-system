@@ -95,6 +95,9 @@ export type Context = {
   sheets: Sheet[];
   /** What the repo is made of: one entry per component directory. */
   components: Component[];
+  /** What the design system this repo uses exports, when it says. Empty in the
+      system's own repo, and in an app whose config never named the package. */
+  exported: string[];
   /** Every `.tsx` the repo owns, read: where CSS-in-JS hides. */
   sources: Source[];
   /** Repo-relative paths of any typeface the repo carries. */

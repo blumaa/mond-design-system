@@ -12,6 +12,7 @@ import { dirname, join, relative } from "node:path";
 import { loadGraph } from "../graph.js";
 import { valueIndex } from "../rules/suggest.js";
 import { isRung } from "../rules/tokenDiscipline.js";
+import { importedNames } from "../structure.js";
 import { runCheck } from "./check.js";
 import { brandSheets, tokenSheets, type Context, type Finding } from "../rules/types.js";
 import { bold, dim, plural } from "../text.js";
@@ -34,6 +35,9 @@ export type Migration = {
   /** How much of the semantic contract a brand file already re-points. */
   contract: { total: number; repointed: number };
   literals: Finding[];
+  /** The system's components, split by whether the app has ever imported one.
+      Absent when nothing said what the system exports. */
+  components?: { used: string[]; unused: string[] };
   /** The brand file the system ships to be copied, when it ships one. */
   template?: string;
 };
@@ -92,6 +96,17 @@ export function planMigration(context: Context): Migration {
     ),
   );
   const semantic = context.graph.tokens().filter((token) => token.layer === "semantic");
+  /* Reaching for a component is importing it, once, anywhere. A component the
+     app has never imported is not a violation of anything — it may simply be
+     one this app does not need — so this is counted and never enforced. */
+  const reached = new Set(context.sources.flatMap((source) => [...importedNames(source.source)]));
+  const components =
+    context.exported.length === 0
+      ? undefined
+      : {
+          used: context.exported.filter((name) => reached.has(name)),
+          unused: context.exported.filter((name) => !reached.has(name)),
+        };
   const template = context.system === undefined ? undefined : join(dirname(context.system), "brand-template.css");
 
   return {
@@ -103,6 +118,7 @@ export function planMigration(context: Context): Migration {
       repointed: semantic.filter((token) => token.overriddenBy.length > 0).length,
     },
     literals: runCheck(context, { only: LITERAL_RULES }),
+    ...(components ? { components } : {}),
     ...(template !== undefined && existsSync(template) ? { template } : {}),
   };
 }
@@ -146,6 +162,18 @@ export function renderMigration(plan: Migration, context: Context, options: { co
   if (plan.template !== undefined && plan.contract.repointed < plan.contract.total) {
     lines.push(dim(`    copy ${shown(context.root, plan.template)} into the app, load it after the`, color));
     lines.push(dim("    system's stylesheet, and point its values at the app's own tokens", color));
+  }
+
+  if (plan.components !== undefined) {
+    const { used, unused } = plan.components;
+    lines.push(
+      "",
+      `${bold("the system's components", color)}  ${used.length} of ${used.length + unused.length} imported somewhere`,
+    );
+    if (unused.length > 0) {
+      lines.push(dim("    never imported — worth knowing before writing one of them again", color));
+      lines.push(...capped(unused, (name) => name, color));
+    }
   }
 
   const files = new Set(plan.literals.map((finding) => finding.file));
