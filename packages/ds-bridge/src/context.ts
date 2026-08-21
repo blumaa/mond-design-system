@@ -51,7 +51,8 @@ export type Config = {
   ignore?: string[];
   /** Globs bounding what the repo asks to be checked; everything, when absent. */
   sources?: string[];
-  /** The token namespace the design system owns; defaults to `--mds-`. */
+  /** The token namespace the design system owns. Read off the system's own
+      stylesheet when nothing says — the commonest first segment it declares. */
   prefix?: string;
   /** The design system's entry stylesheet, relative to the root. For a repo
       whose system is a folder it owns rather than a package it installed. */
@@ -206,7 +207,7 @@ export function loadContext({
   const contents = (file: string) => (file === held ? pending!.source : readFileSync(file, "utf8"));
   const withHeld = (files: string[], wanted: (file: string) => boolean) =>
     held !== undefined && wanted(held) && !files.includes(held) ? [...files, held] : files;
-  const namespace = prefix ?? config?.prefix ?? "--mds-";
+  const told = prefix ?? config?.prefix;
   const declared = config?.system;
   const entry = system ? resolve(system) : declared ? resolve(at, declared) : resolveSystem(at);
   /* The system's own token files are the graph, never sheets to be judged:
@@ -218,7 +219,8 @@ export function loadContext({
      is checked as an app. */
   const vendored = entry.includes(`${sep}node_modules${sep}`);
   const kind = entry.startsWith(at + sep) && !vendored ? "system" : "app";
-  const unbranded = loadGraph({ system: entry, prefix: namespace });
+  const unbranded = loadGraph({ system: entry, ...(told ? { prefix: told } : {}) });
+  const namespace = unbranded.prefix;
   const systemDeclares = new Set(unbranded.names());
   const ignored = anyGlob(config?.ignore ?? []);
   const bounds = config?.sources ?? [];

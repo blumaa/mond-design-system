@@ -10,6 +10,19 @@ const BRAND = join(__dirname, "__fixtures__", "app", "brand.css");
 describe("loadGraph", () => {
   const graph = loadGraph({ system: DS });
 
+  /* The namespace is a fact about the stylesheet, not a setting: a design
+     system declares nearly everything it owns under one first segment, so
+     being told which one is being told what it already says. */
+  it("takes the namespace from what the system declares", () => {
+    const other = loadGraph({ system: join(__dirname, "__fixtures__", "other", "styles.css") });
+    expect(other.prefix).toBe("--acme-");
+    expect(graph.prefix).toBe("--mds-");
+  });
+
+  it("is told the namespace when it is told", () => {
+    expect(loadGraph({ system: DS, prefix: "--x-" }).prefix).toBe("--x-");
+  });
+
   it("follows @import so one entry is the whole system", () => {
     expect(graph.names()).toContain("--mds-space-1");
     expect(graph.names()).toContain("--mds-text-primary");

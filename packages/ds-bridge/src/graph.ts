@@ -107,7 +107,26 @@ function kindOf(resolved: string | undefined, map: TokenMap): Kind {
 const referencesIn = (value: string | undefined): string[] =>
   value === undefined ? [] : [...value.matchAll(/var\(\s*(--[a-z0-9-]+)/gi)].map((m) => m[1]!);
 
-export function loadGraph({ system, brand = [], prefix = "--mds-" }: LoadOptions): Graph {
+/**
+ * The namespace a set of token names shares.
+ *
+ * A design system declares nearly everything it owns under one first segment,
+ * so the commonest one is the one it owns. Reading it off the stylesheet rather
+ * than defaulting to a name is the difference between a tool that works for any
+ * design system and a tool that works for the one it was written against.
+ */
+export const inferPrefix = (names: string[]): string | undefined => {
+  const counts = new Map<string, number>();
+  for (const name of names) {
+    const head = /^(--[a-zA-Z0-9]+-)/.exec(name)?.[1];
+    if (head !== undefined) counts.set(head, (counts.get(head) ?? 0) + 1);
+  }
+  let best: string | undefined;
+  for (const [head, n] of counts) if (best === undefined || n > counts.get(best)!) best = head;
+  return best;
+};
+
+export function loadGraph({ system, brand = [], prefix }: LoadOptions): Graph {
   const systemFiles = expandImports(system);
   /* One `seen` across every brand entry: an app that passes both its token
      entry and the files that entry imports would otherwise read them twice. */
@@ -116,6 +135,9 @@ export function loadGraph({ system, brand = [], prefix = "--mds-" }: LoadOptions
 
   const read = (file: string) => declarationsIn(readFileSync(file, "utf8"), file);
   const systemDecls = systemFiles.flatMap(read);
+  /* `--` when a stylesheet declares no tokens at all: there is no namespace to
+     find, and nothing downstream has a token to ask about either. */
+  const namespace = prefix ?? inferPrefix(systemDecls.map((d) => d.name)) ?? "--";
   const brandDecls = brandFiles.flatMap(read);
   const all = [...systemDecls, ...brandDecls];
 
@@ -149,7 +171,7 @@ export function loadGraph({ system, brand = [], prefix = "--mds-" }: LoadOptions
       token = {
         name: d.name,
         layer,
-        group: groupOf(d.name, layer, fileOfName.get(d.name) ?? d.file, prefix),
+        group: groupOf(d.name, layer, fileOfName.get(d.name) ?? d.file, namespace),
         kind: "other",
         declarations: [],
         overriddenBy: [],
@@ -195,7 +217,7 @@ export function loadGraph({ system, brand = [], prefix = "--mds-" }: LoadOptions
   for (const token of tokens.values()) token.referencedBy.sort();
 
   return {
-    prefix,
+    prefix: namespace,
     files: [...systemFiles, ...brandFiles],
     names: () => [...tokens.keys()],
     tokens: () => [...tokens.values()],

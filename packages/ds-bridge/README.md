@@ -127,12 +127,17 @@ file, `exempt` says so in config.
 ```
 
 `prefix` is the namespace the design system owns — the app's own namespace is
-whatever else it declares, and the two being different is the point.
+whatever else it declares, and the two being different is the point. Unset, it
+is read off the system's own stylesheet: the first segment most of its tokens
+share is the one it owns, and being told it is being told what it already says.
 
 `system` names the design system's entry stylesheet, and is only needed when
 the system is a folder the repo owns rather than a package it installed. With
-neither `system` nor `--system`, the installed `@mond-design-system/tokens` is
-used.
+neither `system` nor `--system`, it is whichever installed dependency publishes
+a `styles.css` — and where a design system ships both tokens and components,
+the one that *declares* the tokens rather than spending them. Two that both
+declare is a question only the repo can answer, and it is asked rather than
+guessed at.
 
 `components` names the package whose exports are the design system's components
 — or a path to a `.d.ts`, for a system the repo owns. Without it an app cannot

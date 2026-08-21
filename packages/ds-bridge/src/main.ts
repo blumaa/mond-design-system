@@ -8,6 +8,7 @@
 import { parseArgs } from "node:util";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { isAbsolute, relative, resolve } from "node:path";
+import { anyGlob } from "./glob.js";
 import { loadGraph } from "./graph.js";
 import { findBrandFiles, resolveSystem } from "./sources.js";
 import { loadContext, type Config } from "./context.js";
@@ -109,8 +110,25 @@ function tokensCommand(rest: string[]): number {
   });
 
   const cwd = process.cwd();
-  const system = values.system ? resolve(values.system) : resolveSystem(cwd);
-  const brand = values.unbranded === true ? [] : (values.brand?.map((b) => resolve(b)) ?? findBrandFiles(cwd));
+  /* Same order as every other verb: the flag, then what the repo declared,
+     then discovery — a repo that had to name its own stylesheet for `check`
+     should not have to name it again here. */
+  const config = readConfig(cwd);
+  const declared = config?.system;
+  const system = values.system
+    ? resolve(values.system)
+    : declared !== undefined
+      ? resolve(cwd, declared)
+      : resolveSystem(cwd);
+  /* Honour the same `ignore` the check honours. A fixture stylesheet declaring
+     a token for a test to read is not this repo's brand, and reported as one it
+     puts the wrong provenance on a real token. */
+  const ignored = anyGlob(config?.ignore ?? []);
+  const brand =
+    values.unbranded === true
+      ? []
+      : (values.brand?.map((b) => resolve(b)) ??
+        findBrandFiles(cwd).filter((file) => !ignored(relative(cwd, file))));
   const graph = loadGraph({ system, ...(brand.length > 0 ? { brand } : {}) });
 
   const options: RenderOptions = {
@@ -299,10 +317,12 @@ function rulesCommand(rest: string[]): number {
 /* A stack trace is the tool failing to answer, printed as if it were one. The
    frames are still there behind DSBRIDGE_DEBUG for whoever is fixing dsbridge. */
 function failed(command: string, error: unknown): number {
-  /* parseArgs appends advice about `--` that is wrong for most failures. */
   const whole = error instanceof Error ? error.message : String(error);
-  const message = /^[^.]+\./.exec(whole)?.[0] ?? whole;
   const parseFailure = String((error as NodeJS.ErrnoException).code ?? "").startsWith("ERR_PARSE_ARGS");
+  /* parseArgs appends advice about `--` that is wrong for most failures, and it
+     is the only message whose first full stop ends a sentence. Everywhere else
+     the first one is inside a filename, and cutting there loses the answer. */
+  const message = parseFailure ? (/^[^.]+\./.exec(whole)?.[0] ?? whole) : whole;
   process.stderr.write(`dsbridge ${command}: ${message}\n`);
   if (parseFailure) process.stderr.write(`\nrun dsbridge help for the options ${command} takes\n`);
   if (process.env["DSBRIDGE_DEBUG"] !== undefined && error instanceof Error) {

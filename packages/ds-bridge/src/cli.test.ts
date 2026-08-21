@@ -233,6 +233,17 @@ describe("dsbridge arguments", () => {
     expect(output).not.toContain("ERR_PARSE_ARGS");
   };
 
+  /* The first full stop is the end of a sentence in Node's parse advice and the
+     middle of a filename everywhere else. Cutting there told an app its design
+     system published "a styles." and stopped before saying what to do. */
+  it("keeps the whole of an error that names a file", () => {
+    const dir = tree({ "src/a/A.module.css": clean });
+    const { status, output } = run(["check", "--root", dir, "--system", join(dir, "nope.css")]);
+    expect(status).toBe(1);
+    expect(output).toContain("nope.css");
+    noStack(output);
+  });
+
   it("says what is wrong with an unknown option, on every verb", () => {
     for (const verb of ["tokens", "check", "rules", "migrate"]) {
       const { status, output } = run([verb, "--nonsense"]);

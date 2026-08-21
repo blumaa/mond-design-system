@@ -3,21 +3,49 @@
    measured against the wrong values, so both failures are loud. */
 import { describe, expect, it } from "vitest";
 import { join } from "node:path";
-import { findBrandFiles, findStylesheets, resolveSystem } from "./sources.js";
+import { findBrandFiles, findStylesheets, resolveSystem, type Resolver } from "./sources.js";
 
 const APP = join(__dirname, "__fixtures__", "consumer");
 const REPO = join(__dirname, "..", "..", "..");
 
 describe("resolveSystem", () => {
-  it("finds the tokens package from inside the repo that builds it", () => {
-    expect(resolveSystem(REPO)).toMatch(/packages[/\\]tokens[/\\]src[/\\]styles\.css$/);
+  const INSTALLED = join(__dirname, "__fixtures__", "installed");
+  const missing = () => {
+    throw new Error("MODULE_NOT_FOUND");
+  };
+  const resolves = (...ids: string[]): Resolver =>
+    (id) => {
+      if (!ids.includes(id)) throw new Error("MODULE_NOT_FOUND");
+      return `/node_modules/${id}`;
+    };
+
+  it("finds the design system among the packages the app installed", () => {
+    expect(resolveSystem(INSTALLED, resolves("@acme/ds/styles.css"))).toBe(
+      "/node_modules/@acme/ds/styles.css",
+    );
   });
 
-  it("says what to install rather than failing blank", () => {
-    const missing = () => {
-      throw new Error("MODULE_NOT_FOUND");
-    };
-    expect(() => resolveSystem("/", missing)).toThrow(/@mond-design-system\/tokens/);
+  it("names no design system of its own when it cannot find one", () => {
+    expect(() => resolveSystem(INSTALLED, missing)).toThrow(/dsbridge\.config\.json/);
+    expect(() => resolveSystem(INSTALLED, missing)).not.toThrow(/mond/);
+  });
+
+  /* A design system ships its components as a second package, and that one
+     publishes a stylesheet too — one that reads tokens rather than declaring
+     any. Declaring them is what makes a stylesheet the system's entry. */
+  it("takes the package that declares the tokens over the one that spends them", () => {
+    const onDisk: Resolver = (id) => join(INSTALLED, "node_modules", id);
+    expect(resolveSystem(INSTALLED, onDisk)).toBe(join(INSTALLED, "node_modules", "@acme/ds/styles.css"));
+  });
+
+  it("asks which one, rather than picking, when two could be it", () => {
+    const both = resolves("@acme/ds/styles.css", "react/styles.css");
+    expect(() => resolveSystem(INSTALLED, both)).toThrow(/@acme\/ds/);
+    expect(() => resolveSystem(INSTALLED, both)).toThrow(/react/);
+  });
+
+  it("says so when there is no package.json to read", () => {
+    expect(() => resolveSystem(join(REPO, "no-such-dir"), missing)).toThrow(/dsbridge\.config\.json/);
   });
 });
 
