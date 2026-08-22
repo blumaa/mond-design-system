@@ -1,5 +1,15 @@
 # @mond-design-system/react
 
+## 4.6.0
+
+### Minor Changes
+
+- Stack takes `gap="group"`, the middle step of the block rhythm that
+  `--mds-stack-group` has always named but nothing could reach.
+
+  ListItem takes `actions` — controls of the row's own, rendered beside the
+  row rather than inside its link or button.
+
 ## 4.5.0
 
 ### Minor Changes
