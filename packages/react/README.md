@@ -60,7 +60,7 @@ Dark mode is `data-theme="dark"` on `<html>`. Nothing else changes.
 
 **Layout** — `Stack`, `Inline`, `Container`, `Screen`, `ScreenContent`
 
-**Navigation** — `Tabs`, `TabList`, `Tab`, `TabPanel`, `AppBar`, `TabBar`
+**Navigation** — `Tabs`, `TabList`, `Tab`, `TabPanel`, `AppBar`, `TabBar`, `SideNav`
 
 **Overlays** — `Modal`, `Sheet`, `ConfirmDialog`
 

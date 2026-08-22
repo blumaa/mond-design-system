@@ -14,7 +14,8 @@
       "use": "switching between panels of one screen, where each panel is substantial",
       "instead": [
         { "when": "the choice is between two or three short options and changes a view in place", "prefer": "SegmentedControl" },
-        { "when": "it is the app's primary navigation, anchored to the bottom", "prefer": "TabBar" }
+        { "when": "it is the app's primary navigation, anchored to the bottom", "prefer": "TabBar" },
+        { "when": "it is the app's primary navigation, standing in a column beside the page", "prefer": "SideNav" }
       ]
     },
     {

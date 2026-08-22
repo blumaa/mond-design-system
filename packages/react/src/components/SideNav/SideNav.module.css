@@ -1,0 +1,84 @@
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-tight);
+  width: var(--mds-sidebar-w);
+  flex: 0 0 var(--mds-sidebar-w);
+  padding: var(--mds-pad-page-y) var(--mds-pad-tight);
+  overflow-y: auto;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-hairline);
+}
+
+/* Only inset, to line the word up with the rows under it: the column's own
+   gap is what holds it off them. */
+.heading {
+  padding-inline: var(--mds-pad-control);
+  font: var(--mds-type-label);
+  color: var(--mds-text-muted);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap-tight);
+  min-height: var(--mds-tap-min);
+  padding: var(--mds-pad-tight) var(--mds-pad-control);
+  border: none;
+  border-radius: var(--mds-radius-control);
+  background: none;
+  color: var(--mds-text-secondary);
+  font: var(--mds-type-label);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--mds-transition-surface);
+}
+
+.item:hover {
+  background: var(--mds-surface-sunken);
+  color: var(--mds-text-primary);
+}
+
+/* The row you are on is a surface, not a colour: the accent is spent on what
+   can be pressed, and every row here can. */
+.active,
+.active:hover {
+  background: var(--mds-surface-selected);
+  color: var(--mds-text-primary);
+  font-weight: var(--mds-weight-semibold);
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  --mds-icon-slot: var(--mds-icon-md);
+  width: var(--mds-icon-slot);
+  height: var(--mds-icon-slot);
+  font-size: var(--mds-icon-slot);
+}
+
+.icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* The word takes the room the glyph and the count leave, and gives it back by
+   truncating: a translation twice the length of the English would otherwise
+   wrap a row that is one line tall. */
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* At the far end of the row, away from the word it counts. */
+.count {
+  flex: none;
+}
