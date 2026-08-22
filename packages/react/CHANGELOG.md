@@ -1,5 +1,16 @@
 # @mond-design-system/react
 
+## 4.9.0
+
+### Minor Changes
+
+- Add `FileDrop`: the place a file is handed over, which the system was missing beside `UploadProgress`. Press it for the picker or drop a file on it; it takes `accept` and `multiple` through to the input, cuts a multi-file drop to one when it was told to take one, marks itself while a file is over it, and hides the input the browser needs behind the button a person sees. Tokens gain `--mds-pad-drop-y`, the block padding that makes a drop zone a target for a dragged file rather than a row to press.
+
+### Patch Changes
+
+- Updated dependencies
+  - @mond-design-system/tokens@3.4.0
+
 ## 4.8.0
 
 ### Minor Changes

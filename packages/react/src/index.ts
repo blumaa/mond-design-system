@@ -170,6 +170,9 @@ export type {
   UploadStatus,
 } from "./components/UploadProgress/UploadProgress";
 
+export { FileDrop } from "./components/FileDrop/FileDrop";
+export type { FileDropProps } from "./components/FileDrop/FileDrop";
+
 export { Lightbox } from "./components/Lightbox/Lightbox";
 export type { LightboxLabels, LightboxProps } from "./components/Lightbox/Lightbox";
 

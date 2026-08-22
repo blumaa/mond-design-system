@@ -1,0 +1,50 @@
+.drop {
+  display: block;
+}
+
+.target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mds-gap-hairline);
+  width: 100%;
+  padding: var(--mds-pad-drop-y) var(--mds-pad-card);
+  border: var(--mds-border-width) dashed var(--mds-border-strong);
+  border-radius: var(--mds-radius-media);
+  background: var(--mds-surface-sunken);
+  color: var(--mds-text-primary);
+  cursor: pointer;
+  transition: var(--mds-transition-surface);
+}
+
+.target:focus-visible {
+  outline: var(--mds-focus-width) solid var(--mds-focus-ring-color);
+  outline-offset: var(--mds-focus-offset);
+}
+
+.target:disabled {
+  border-color: var(--mds-border-subtle);
+  color: var(--mds-action-disabled-fg);
+  cursor: not-allowed;
+}
+
+/* A file is over the zone and would land if let go. The dashes stay — the
+   invitation has not changed — and only the surface answers. */
+.over .target {
+  border-color: var(--mds-action-bg);
+  background: var(--mds-surface-selected);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-icon-lg);
+  height: var(--mds-icon-lg);
+  font-size: var(--mds-icon-lg);
+  color: var(--mds-text-muted);
+}
+
+.picker {
+  display: none;
+}

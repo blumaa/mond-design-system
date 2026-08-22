@@ -57,6 +57,9 @@
   --mds-pad-tab-y: var(--mds-space-2);
   --mds-pad-tab-x: var(--mds-space-3);
   --mds-pad-segment: var(--mds-space-1);
+  /* A drop zone is tall enough to be a target for a dragged file, not a row
+     to press: the block padding is what makes the difference. */
+  --mds-pad-drop-y: var(--mds-space-6);
   --mds-pad-toast-y: var(--mds-space-3);
   --mds-pad-toast-x: var(--mds-space-4);
 
