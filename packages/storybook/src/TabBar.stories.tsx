@@ -19,3 +19,17 @@ export const Default: Story = {
     </TabBar>
   ),
 };
+
+/** `hideLabel` takes the caption off the screen and leaves it in the item's
+    accessible name — for a bar whose glyphs carry the meaning, and whose
+    captions would wrap once translated. */
+export const IconsOnly: Story = {
+  args: { label: "Primary", children: null },
+  render: () => (
+    <TabBar label="Primary">
+      <TabBarItem href="#home" label="Home" icon={<Icon name="star" />} hideLabel active />
+      <TabBarItem href="#search" label="Search" icon={<Icon name="search" />} hideLabel />
+      <TabBarItem href="#done" label="Done" icon={<Icon name="check" />} hideLabel />
+    </TabBar>
+  ),
+};

@@ -68,3 +68,23 @@
   width: var(--mds-icon-sm);
   height: var(--mds-icon-sm);
 }
+
+/* Sits between the words and the close button: the message is read left to
+   right, and the doing is the last thing on that line. */
+.action {
+  composes: hitArea from "../../internal/hit-area.module.css";
+  flex: none;
+  align-self: center;
+  padding: var(--mds-pad-pill-y) var(--mds-pad-pill-x);
+  border: none;
+  border-radius: var(--mds-radius-pill);
+  background: transparent;
+  font: var(--mds-type-label);
+  color: var(--mds-text-accent);
+  cursor: pointer;
+  position: relative;
+}
+
+.action:hover {
+  background: var(--mds-surface-sunken);
+}

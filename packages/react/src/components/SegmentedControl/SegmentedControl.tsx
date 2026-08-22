@@ -8,6 +8,8 @@ export interface SegmentOption<T extends string = string> {
   label: string;
 }
 
+export type SegmentedControlSize = "sm" | "md";
+
 export interface SegmentedControlProps<T extends string = string> {
   /** Accessible group name. */
   label: string;
@@ -19,6 +21,14 @@ export interface SegmentedControlProps<T extends string = string> {
   /** Stretch across the container, segments sharing the width equally —
       the usual shape when the control heads a screen-wide view switch. */
   fullWidth?: boolean;
+  /** Control step. Default md. sm is for chrome — a switch sharing a header
+      bar with an avatar and a menu, where the medium step is the tallest
+      thing up there. */
+  size?: SegmentedControlSize;
+  /** Drop the frame: no tray, no padding around the segments. The tray is
+      what makes the group read as a form field, and in a header bar a field
+      is what it is not. The chosen segment still carries its own surface. */
+  bare?: boolean;
   className?: string;
 }
 
@@ -45,11 +55,23 @@ export function SegmentedControl<T extends string = string>({
   onChange,
   disabled = false,
   fullWidth = false,
+  size = "md",
+  bare = false,
   className,
 }: SegmentedControlProps<T>): ReactElement {
   const name = useId();
   return (
-    <div role="radiogroup" aria-label={label} className={cx(styles.group, fullWidth && styles.fullWidth, className)}>
+    <div
+      role="radiogroup"
+      aria-label={label}
+      className={cx(
+        styles.group,
+        styles[`size-${size}`],
+        fullWidth && styles.fullWidth,
+        bare && styles.bare,
+        className,
+      )}
+    >
       {options.map((option) => (
         <label key={option.value} className={styles.segment}>
           <input

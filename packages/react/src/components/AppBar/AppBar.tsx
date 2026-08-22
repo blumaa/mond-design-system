@@ -1,7 +1,8 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, Ref } from "react";
+import { cx } from "../../internal/cx";
 import styles from "./AppBar.module.css";
 
-export interface AppBarProps {
+export interface AppBarProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   /** Page heading — rendered as the h1. A node is allowed for titles that
       are themselves a control (e.g. a thread title that opens the event). */
   title?: ReactNode;
@@ -12,6 +13,7 @@ export interface AppBarProps {
   leading?: ReactNode;
   /** Right slot — actions. */
   trailing?: ReactNode;
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -28,10 +30,10 @@ export interface AppBarProps {
  * />
  * ```
  */
-export function AppBar({ title, subtitle, leading, trailing }: AppBarProps) {
+export function AppBar({ title, subtitle, leading, trailing, className, ref, ...rest }: AppBarProps) {
   const heading = title ? <h1 className={styles.title}>{title}</h1> : null;
   return (
-    <header className={styles.bar}>
+    <header ref={ref} className={cx(styles.bar, className)} {...rest}>
       {leading ? <div className={styles.slot}>{leading}</div> : null}
       {subtitle != null ? (
         <div className={styles.text}>

@@ -104,6 +104,108 @@ describe("Toast", () => {
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
+  /* A message that asks for something — "Update ready", "Install this" — needs
+     the doing next to the saying. Anywhere else and the reader has to find it. */
+  describe("action", () => {
+    function Offer({ onTake }: { onTake: () => void }) {
+      const { toast } = useToast();
+      return (
+        <button
+          type="button"
+          onClick={() =>
+            toast({ title: "Update ready", duration: 0, action: { label: "Reload", onClick: onTake } })
+          }
+        >
+          fire
+        </button>
+      );
+    }
+
+    it("shows the action the caller named and calls it", () => {
+      const onTake = vi.fn();
+      render(
+        <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+          <Offer onTake={onTake} />
+        </ToastProvider>,
+      );
+      fireEvent.click(screen.getByRole("button", { name: "fire" }));
+      fireEvent.click(screen.getByRole("button", { name: "Reload" }));
+      expect(onTake).toHaveBeenCalledOnce();
+    });
+
+    it("closes once the action is taken — the message has been answered", () => {
+      render(
+        <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+          <Offer onTake={() => {}} />
+        </ToastProvider>,
+      );
+      fireEvent.click(screen.getByRole("button", { name: "fire" }));
+      fireEvent.click(screen.getByRole("button", { name: "Reload" }));
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
+    it("shows no action button when the caller named none", () => {
+      render(
+        <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+          <Trigger duration={0} />
+        </ToastProvider>,
+      );
+      fireEvent.click(screen.getByRole("button", { name: "fire" }));
+      expect(screen.getAllByRole("button")).toHaveLength(2); // fire + dismiss
+    });
+  });
+
+  /* A nudge that has been turned down must remember it, and "not now" is the
+     close button, the timeout and the action alike — every way out is an
+     answer. One callback for all three is what keeps the caller from having
+     to distinguish them. */
+  describe("onDismiss", () => {
+    function Nudge({ onGone, duration }: { onGone: () => void; duration?: number | undefined }) {
+      const { toast } = useToast();
+      return (
+        <button
+          type="button"
+          onClick={() => toast({ title: "Install", duration, onDismiss: onGone })}
+        >
+          fire
+        </button>
+      );
+    }
+
+    const fire = (onGone: () => void, duration?: number) => {
+      render(
+        <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+          <Nudge onGone={onGone} duration={duration} />
+        </ToastProvider>,
+      );
+      fireEvent.click(screen.getByRole("button", { name: "fire" }));
+    };
+
+    it("fires when the toast is closed by hand", () => {
+      const onGone = vi.fn();
+      fire(onGone, 0);
+      fireEvent.click(screen.getByRole("button", { name: "Dismiss: Install" }));
+      expect(onGone).toHaveBeenCalledOnce();
+    });
+
+    it("fires when the toast times out", () => {
+      vi.useFakeTimers();
+      const onGone = vi.fn();
+      fire(onGone, 1000);
+      act(() => void vi.advanceTimersByTime(1000));
+      expect(onGone).toHaveBeenCalledOnce();
+    });
+
+    it("fires once, not once per way out", () => {
+      vi.useFakeTimers();
+      const onGone = vi.fn();
+      fire(onGone, 1000);
+      fireEvent.click(screen.getByRole("button", { name: "Dismiss: Install" }));
+      act(() => void vi.advanceTimersByTime(2000));
+      expect(onGone).toHaveBeenCalledOnce();
+    });
+  });
+
   it("useToast outside provider throws", () => {
     const spy = vi.spyOn(console, "error").mockImplementation(() => {});
     expect(() => render(<Trigger />)).toThrow(/ToastProvider/);

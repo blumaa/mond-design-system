@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { createRef } from "react";
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { axe } from "jest-axe";
@@ -45,6 +46,30 @@ describe("AppBar", () => {
     );
     const slot = screen.getByRole("button", { name: "Search" }).parentElement!;
     expect(slot.className).toMatch(/trailing/);
+  });
+
+  /* A bar is placed by the screen around it — shown from one breakpoint up,
+     pinned inside a frame. That is the screen's business, not the bar's, and
+     the alternative is a wrapper element between the bar and the column it
+     is a flex child of. */
+  it("takes a class from the screen that places it, keeping its own", () => {
+    render(<AppBar title="Sessions" className="only-wide" />);
+    const bar = screen.getByRole("banner");
+    expect(bar.className).toContain("only-wide");
+    expect(bar.className).toMatch(/bar/);
+  });
+
+  it("passes the rest of its attributes to the header element", () => {
+    render(<AppBar title="Sessions" id="top" data-testid="app-bar" />);
+    expect(screen.getByTestId("app-bar")).toHaveAttribute("id", "top");
+  });
+
+  /* Spreading the rest makes the bar look like a header element to whoever
+     places it, and a ref is the one thing that spread cannot carry. */
+  it("hands the header element out through ref", () => {
+    const ref = createRef<HTMLElement>();
+    render(<AppBar title="Sessions" ref={ref} />);
+    expect(ref.current).toBe(screen.getByRole("banner"));
   });
 
   it("has no axe violations", async () => {

@@ -87,7 +87,11 @@ export { Switch } from "./components/Switch/Switch";
 export type { SwitchProps } from "./components/Switch/Switch";
 
 export { SegmentedControl } from "./components/SegmentedControl/SegmentedControl";
-export type { SegmentedControlProps, SegmentOption } from "./components/SegmentedControl/SegmentedControl";
+export type {
+  SegmentedControlProps,
+  SegmentedControlSize,
+  SegmentOption,
+} from "./components/SegmentedControl/SegmentedControl";
 
 export { SearchField } from "./components/SearchField/SearchField";
 export type { SearchFieldProps } from "./components/SearchField/SearchField";
@@ -102,7 +106,7 @@ export { Tab, TabList, TabPanel, Tabs } from "./components/Tabs/Tabs";
 export type { TabProps, TabListProps, TabPanelProps, TabsProps } from "./components/Tabs/Tabs";
 
 export { ToastProvider, useToast } from "./components/Toast/Toast";
-export type { ToastOptions, ToastProviderProps, ToastTone } from "./components/Toast/Toast";
+export type { ToastAction, ToastOptions, ToastProviderProps, ToastTone } from "./components/Toast/Toast";
 
 export { Stack } from "./components/Stack/Stack";
 export type { StackAlign, StackGap, StackProps } from "./components/Stack/Stack";

@@ -67,6 +67,41 @@ describe("TabBar", () => {
     expect(onClick).toHaveBeenCalled();
   });
 
+  /* A bar of four glyphs on the narrowest phone has no room for a caption
+     under each one, and a translation twice the length of the English is what
+     turns the row into two. Hiding the word is a layout decision; deleting it
+     would take the item's accessible name with it. */
+  describe("hideLabel", () => {
+    it("keeps the caption out of sight and in the accessible name", () => {
+      render(
+        <TabBar label="Primary">
+          <TabBarItem href="/library" label="Library" icon={<svg />} hideLabel />
+        </TabBar>,
+      );
+      expect(screen.getByRole("link", { name: "Library" })).toBeInTheDocument();
+      expect(screen.getByText("Library").className).toMatch(/hidden/);
+    });
+
+    it("draws the caption when nothing asks it not to", () => {
+      render(
+        <TabBar label="Primary">
+          <TabBarItem href="/library" label="Library" icon={<svg />} />
+        </TabBar>,
+      );
+      expect(screen.getByText("Library").className).toMatch(/label/);
+    });
+
+    it("hides the caption on a bar item that is a button too", () => {
+      render(
+        <TabBar label="Primary">
+          <TabBarItem label="More" icon={<svg />} onClick={() => {}} hideLabel />
+        </TabBar>,
+      );
+      expect(screen.getByRole("button", { name: "More" })).toBeInTheDocument();
+      expect(screen.getByText("More").className).toMatch(/hidden/);
+    });
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <TabBar label="Primary">

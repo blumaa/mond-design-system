@@ -6,6 +6,28 @@
   border-radius: var(--mds-radius-control);
 }
 
+/* The face is the control step less the tray it sits in, so that the whole
+   thing stands at the step. Without a tray it is the step itself. */
+.size-md .face {
+  height: calc(var(--mds-control-h-md) - 2 * var(--mds-pad-segment));
+  padding: 0 var(--mds-pad-pill-x);
+}
+
+.size-sm .face {
+  height: calc(var(--mds-control-h-sm) - 2 * var(--mds-pad-segment));
+  padding: 0 var(--mds-pad-tag-x);
+}
+
+/* No tray: the group is chrome, and chrome that carries a frame reads as a
+   form field. The chosen segment keeps its surface — that is the answer. */
+.bare {
+  padding: 0;
+  background: transparent;
+}
+
+.bare.size-md .face { height: var(--mds-control-h-md); }
+.bare.size-sm .face { height: var(--mds-control-h-sm); }
+
 .segment {
   display: inline-flex;
   position: relative;
@@ -41,8 +63,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: calc(var(--mds-control-h-md) - 2 * var(--mds-pad-segment));
-  padding: 0 var(--mds-pad-pill-x);
   border-radius: var(--mds-radius-segment);
   font: var(--mds-type-pill);
   color: var(--mds-text-secondary);

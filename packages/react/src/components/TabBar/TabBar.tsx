@@ -1,5 +1,6 @@
 import type { ElementType, MouseEventHandler, ReactNode } from "react";
 import { cx } from "../../internal/cx";
+import { VisuallyHidden } from "../VisuallyHidden/VisuallyHidden";
 import styles from "./TabBar.module.css";
 
 export interface TabBarProps {
@@ -40,9 +41,23 @@ export interface TabBarItemProps {
   /** Element override for the link, e.g. a router's Link. A bottom bar is
       where a full page reload costs the most — it restarts the whole shell. */
   as?: ElementType;
+  /** Take the caption off the screen and leave it in the accessible name.
+      For a bar whose glyphs carry the meaning: four captions on the narrowest
+      phone wrap, and a translation twice the length of the English wraps
+      everywhere. Hidden, never dropped — the word is the item's name. */
+  hideLabel?: boolean | undefined;
 }
 
-export function TabBarItem({ label, icon, href, onClick, active = false, badge = false, as }: TabBarItemProps) {
+export function TabBarItem({
+  label,
+  icon,
+  href,
+  onClick,
+  active = false,
+  badge = false,
+  as,
+  hideLabel = false,
+}: TabBarItemProps) {
   const className = cx(styles.item, active && styles.active);
   const content = (
     <>
@@ -50,7 +65,11 @@ export function TabBarItem({ label, icon, href, onClick, active = false, badge =
         {icon}
         {badge ? <span className={styles.badge} data-testid="mds-tabbar-badge" /> : null}
       </span>
-      <span className={styles.label}>{label}</span>
+      {hideLabel ? (
+        <VisuallyHidden>{label}</VisuallyHidden>
+      ) : (
+        <span className={styles.label}>{label}</span>
+      )}
     </>
   );
   if (href !== undefined) {
