@@ -468,3 +468,73 @@ holding the heading off the rows beneath it, which the group's own
 `--mds-gap-hairline` already does. The declaration came out entirely. A rule
 that ends in deleted code rather than a substituted token is the rule working
 at its best.
+
+### 18. The dying system's tokens are invisible, which is the migration's blind spot
+
+`dsbridge check apps/web/src/components/PostControls.module.css` reports
+"clean". The file is built entirely out of `--k-gap`, `--k-space-3` and
+`--k-radius-control` — the design system being migrated away from. Every
+length in it comes from a system dsbridge has never heard of, and the tool
+has nothing to say.
+
+The rules are individually right. `no-undefined-token` reads `--mds-` tokens
+and checks they are declared. `no-foreign-namespace-token` says an app
+re-points the system's tokens and does not invent new ones *in the system's
+namespace* — `--k-` is a different namespace, so it is the app's own business.
+Between them there is a hole exactly the shape of a migration: the one job
+where "which files still read the old system?" is the only question that
+matters, and the tool that exists to answer questions about design system
+adherence cannot answer it.
+
+The app has to hand-roll the gate. Kinbaku's PR 8 ends with a grep asserting
+zero `--k-` across `src/`, which is a check dsbridge should own:
+
+    "retiring": ["--k-"]
+
+in `dsbridge.config.json`, and every read of a retiring namespace becomes a
+finding with a file and a line. That turns the migration's progress into
+something the tool reports — `dsbridge check` counting down — rather than
+something a person tracks in a plan document. It also makes the end of a
+migration provable, which a grep in a CI script only approximates.
+
+### 19. A panel's title was not a heading, and only the app's tests knew
+
+Four tests in `ReactorsSheet.test.tsx` failed on `getByRole('heading', { name:
+'Who reacted' })` after the sheet moved to MDS. Kinbaku's `ModalSheet` rendered
+its title as a heading; MDS's `SheetHeader` rendered a styled `<span>` and named
+the dialog with `aria-label` instead. Both name the dialog, so no automated
+check on either side saw a difference — axe passes, the accessible name is
+right, and the only thing lost is the title's place in the document outline.
+`ModalHeader` had the same shape, and `AppBar` — the third reader of
+`--mds-type-panel-title` — already rendered its title as the page `h1`, so the
+system disagreed with itself in a way nothing was reading.
+
+Same family as note 16: a difference across the boundary that neither side's
+own tests could see. And the same fix would have caught it — a `migrate
+--semantics` that diffed the element and role of what each component renders
+would have printed
+
+    ModalSheet → Sheet   title  h2 → span
+
+before the swap. Released as react 4.6.1.
+
+### 20. Two components that both compile, and the reason to prefer one
+
+`ListItem` grew an `actions` slot during this layer, and the reason is worth
+recording because `choosing` should be able to say it. A reactor row links to
+the member's profile and carries a remove button for the reader's own
+reaction. `trailing` compiles — it takes a `ReactNode` and the button renders.
+It also puts a `<button>` inside an `<a>`, which is invalid HTML and leaves
+the control unreachable by name.
+
+The system had one slot after the text and two jobs for it: things that are
+read (a badge, a chevron) and things that are pressed. `trailing` sits inside
+the row's hit target and `actions` sits beside it, so the choice between them
+is now the question "is this read or pressed?" rather than a guess.
+
+Kinbaku's `MemberList` had the right shape all along — its `action` rendered
+outside `.k-member__hit` — which is the second time in this migration the
+dying library has been the one with the more careful markup. That is worth
+saying plainly: a component library grown inside one app knows things the
+general system had no reason to learn, and a migration is the only moment
+those are legible.
