@@ -25,6 +25,12 @@ export interface SegmentedControlProps<T extends string = string> {
       bar with an avatar and a menu, where the medium step is the tallest
       thing up there. */
   size?: SegmentedControlSize;
+  /** Report the segment already chosen being picked again. Off by default:
+      a radio only fires when its checked state changes, and for most choices
+      that is the whole story. Turn it on where confirming the value on screen
+      is itself an act — pinning a language that until now was inferred from
+      the browser, so it stops following it. */
+  repick?: boolean;
   /** Drop the frame: no tray, no padding around the segments. The tray is
       what makes the group read as a form field, and in a header bar a field
       is what it is not. The chosen segment still carries its own surface. */
@@ -57,6 +63,7 @@ export function SegmentedControl<T extends string = string>({
   fullWidth = false,
   size = "md",
   bare = false,
+  repick = false,
   className,
 }: SegmentedControlProps<T>): ReactElement {
   const name = useId();
@@ -80,6 +87,11 @@ export function SegmentedControl<T extends string = string>({
             value={option.value}
             checked={option.value === value}
             onChange={() => onChange(option.value)}
+            /* Only for the segment already chosen: for any other, the click
+               is followed by a change event and this would say it twice. */
+            onClick={
+              repick && option.value === value ? () => onChange(option.value) : undefined
+            }
             disabled={disabled}
             className={styles.input}
           />

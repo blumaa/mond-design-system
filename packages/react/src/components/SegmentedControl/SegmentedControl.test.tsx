@@ -30,6 +30,53 @@ describe("SegmentedControl", () => {
     expect(onChange).toHaveBeenCalledWith("month");
   });
 
+  it("picking the segment already chosen changes nothing, and says nothing", async () => {
+    const onChange = vi.fn();
+    render(<SegmentedControl label="Range" options={options} value="day" onChange={onChange} />);
+    await userEvent.click(screen.getByRole("radio", { name: "Day" }));
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  /* Confirming the current choice is an act of its own where the value on
+     screen was inferred rather than chosen — a language taken from the
+     browser, a sort taken from a default. `repick` is how the caller hears
+     that tap; without it the radio's own event model swallows it. */
+  describe("repick", () => {
+    it("reports the segment already chosen being picked again", async () => {
+      const onChange = vi.fn();
+      render(
+        <SegmentedControl label="Range" options={options} value="day" onChange={onChange} repick />,
+      );
+      await userEvent.click(screen.getByRole("radio", { name: "Day" }));
+      expect(onChange).toHaveBeenCalledWith("day");
+    });
+
+    it("still reports a real change exactly once", async () => {
+      const onChange = vi.fn();
+      render(
+        <SegmentedControl label="Range" options={options} value="day" onChange={onChange} repick />,
+      );
+      await userEvent.click(screen.getByRole("radio", { name: "Month" }));
+      expect(onChange).toHaveBeenCalledExactlyOnceWith("month");
+    });
+
+    it("stays quiet while the control is disabled", async () => {
+      const onChange = vi.fn();
+      render(
+        <SegmentedControl
+          label="Range"
+          options={options}
+          value="day"
+          onChange={onChange}
+          repick
+          disabled
+        />,
+      );
+      await userEvent.click(screen.getByRole("radio", { name: "Day" }));
+      expect(onChange).not.toHaveBeenCalled();
+    });
+  });
+
   it("disabled blocks every segment and the change callback", async () => {
     const onChange = vi.fn();
     render(
