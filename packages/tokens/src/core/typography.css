@@ -64,6 +64,12 @@
      under the reading scale, and it is set heavy to hold at that size. */
   --mds-type-tab: var(--mds-weight-semibold) var(--mds-text-2xs)/var(--mds-leading-tight) var(--mds-font-body);
 
+  /* A run a reader has to copy character by character — a one-time password,
+     a key, an identifier. Mono, because that is what tells 0 from O and 1
+     from l apart, and a step above prose, because reading it wrong costs a
+     round trip that reading a sentence wrong does not. */
+  --mds-type-code: var(--mds-weight-regular) var(--mds-text-lg)/var(--mds-leading-normal) var(--mds-font-mono);
+
   /* Sub-roles, so a brand can move one without moving the others. A screen or
      overlay title and a card's own heading are one size here and two in most
      brands; the same is true of a form label against a list item's title and
