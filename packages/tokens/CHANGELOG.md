@@ -1,5 +1,11 @@
 # @mond-design-system/tokens
 
+## 3.3.0
+
+### Minor Changes
+
+- 3fde8db: Add the `--mds-type-code` type role: mono, one step above prose. A run a reader has to copy character by character — a one-time password, a key, an identifier — reads differently from a sentence, and until now an app had no role to ask for it and had to reach for a raw scale step.
+
 ## 3.2.0
 
 ### Minor Changes
