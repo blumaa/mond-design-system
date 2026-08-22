@@ -19,6 +19,15 @@ export const Variants: Story = {
   ),
 };
 
+/** A paragraph's worth of lines, the last one short. */
+export const Lines: Story = {
+  render: () => (
+    <div className={story.frame}>
+      <Skeleton lines={3} />
+    </div>
+  ),
+};
+
 /** What a Card looks like while its content loads. */
 export const LoadingCardExample: Story = {
   name: "Loading card (example)",
