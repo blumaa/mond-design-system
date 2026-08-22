@@ -2,6 +2,7 @@
    and the app's own brand file. Wrong here and every finding downstream is
    measured against the wrong values, so both failures are loud. */
 import { describe, expect, it } from "vitest";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { findBrandFiles, findStylesheets, resolveSystem, type Resolver } from "./sources.js";
 
@@ -59,6 +60,15 @@ describe("findBrandFiles", () => {
 
   it("ignores a stylesheet that only reads tokens", () => {
     expect(found.join()).not.toContain("component.module.css");
+  });
+
+  /* Every exclusion below passes by finding nothing if the fixture is missing
+     the files it is meant to exclude — which is exactly how these went green on
+     one machine and red in CI, with `node_modules/` and `dist/` gitignored. */
+  it("has on disk the files it claims to skip", () => {
+    for (const path of ["dist/bundle.css", "node_modules/x/vendor.css", "playwright/.cache/bundle.css"]) {
+      expect(existsSync(join(APP, path)), `${path} is not in the fixture`).toBe(true);
+    }
   });
 
   it("ignores dependencies and build output, which are not the app's to change", () => {

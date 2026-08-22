@@ -1,5 +1,14 @@
 node_modules/
 dist/
+
+# The fixtures dsbridge measures itself against imitate a real app, which means
+# a node_modules and a dist. Both directory names are the thing under test — the
+# scanner skips them by name — so they are committed, or the tests that prove
+# the skipping pass by finding nothing.
+!packages/ds-bridge/src/__fixtures__/**/node_modules/
+!packages/ds-bridge/src/__fixtures__/**/node_modules/**
+!packages/ds-bridge/src/__fixtures__/**/dist/
+!packages/ds-bridge/src/__fixtures__/**/dist/**
 storybook-static/
 .turbo/
 coverage/
