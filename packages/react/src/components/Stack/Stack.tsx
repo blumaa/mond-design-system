@@ -3,7 +3,7 @@ import { createElement } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Stack.module.css";
 
-export type StackGap = "hairline" | "tight" | "base" | "loose" | "section";
+export type StackGap = "hairline" | "tight" | "base" | "loose" | "group" | "section";
 export type StackAlign = "start" | "center" | "end" | "stretch";
 
 export interface StackProps extends HTMLAttributes<HTMLElement> {

@@ -59,8 +59,14 @@ export interface ListItemProps extends Omit<HTMLAttributes<HTMLElement>, "title"
   description?: ReactNode;
   /** Slot before the text — Avatar, Icon, … */
   leading?: ReactNode;
-  /** Slot after the text — Badge, chevron, … */
+  /** Slot after the text — Badge, chevron, … Inside the row's hit target, so
+      it is for things that are read, not pressed. */
   trailing?: ReactNode;
+  /** Controls of the row's own, beside it rather than in it. A roster row
+      navigates to the member and carries an add/remove button: put that in
+      `trailing` and it is a button inside the link. This slot sits outside
+      the hit target, where a second control can be reached. */
+  actions?: ReactNode;
   /** Makes the whole row a button. */
   onClick?: () => void;
   /** Marks an onClick row as a toggle — a picker row that selects rather than
@@ -92,6 +98,7 @@ export function ListItem({
   description,
   leading,
   trailing,
+  actions,
   onClick,
   pressed,
   href,
@@ -121,7 +128,12 @@ export function ListItem({
 
   return (
     <Root
-      className={cx(styles.item, resolved && styles[`surface-${resolved}`], className)}
+      className={cx(
+        styles.item,
+        actions != null && styles.withActions,
+        resolved && styles[`surface-${resolved}`],
+        className,
+      )}
       ref={ref as Ref<HTMLLIElement & HTMLDivElement>}
       {...rest}
     >
@@ -141,6 +153,7 @@ export function ListItem({
       ) : (
         <span className={styles.row}>{content}</span>
       )}
+      {actions != null && <span className={styles.actions}>{actions}</span>}
     </Root>
   );
 }

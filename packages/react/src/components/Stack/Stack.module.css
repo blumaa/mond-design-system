@@ -7,6 +7,7 @@
 .gap-tight { gap: var(--mds-gap-tight); }
 .gap-base { gap: var(--mds-gap); }
 .gap-loose { gap: var(--mds-gap-loose); }
+.gap-group { gap: var(--mds-stack-group); }
 .gap-section { gap: var(--mds-stack-section); }
 
 .align-start { align-items: flex-start; }

@@ -86,6 +86,26 @@
   background: var(--mds-surface-sunken);
 }
 
+/* Only when there are actions: without them the row is the whole item, and
+   a flex parent would be a wrapper around one child that already fills it. */
+.withActions {
+  display: flex;
+  align-items: center;
+}
+
+.withActions > .row {
+  min-width: 0;
+}
+
+/* Outside the hit target, so the row's own padding does not apply to it. */
+.actions {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--mds-gap-tight);
+  padding-inline-end: var(--mds-pad-card);
+}
+
 .leading,
 .trailing {
   display: inline-flex;

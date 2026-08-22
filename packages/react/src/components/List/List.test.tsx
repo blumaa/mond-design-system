@@ -148,6 +148,39 @@ describe("List", () => {
     expect(screen.getByRole("button")).not.toHaveAttribute("aria-pressed");
   });
 
+  /* A roster row goes to the member's profile and carries an add/remove
+     button of its own. Put that button in the row's own hit target and it is
+     a button inside a link: invalid, and unreachable by name. */
+  describe("actions", () => {
+    it("keeps the row's own controls outside its link", () => {
+      render(<ListItem title="Ada" href="/members/ada" actions={<button type="button">Remove</button>} />);
+      expect(screen.getByRole("link", { name: "Ada" })).not.toContainElement(
+        screen.getByRole("button", { name: "Remove" }),
+      );
+    });
+
+    it("keeps them outside the row's own button too", () => {
+      render(<ListItem title="Ada" onClick={() => {}} actions={<button type="button">Remove</button>} />);
+      expect(screen.getByRole("button", { name: "Ada" })).not.toContainElement(
+        screen.getByRole("button", { name: "Remove" }),
+      );
+    });
+
+    it("shows them beside a static row", () => {
+      render(<ListItem title="Ada" actions={<button type="button">Remove</button>} />);
+      expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();
+    });
+
+    it("has no axe violations with a control beside a link row", async () => {
+      const { container } = render(
+        <ListGroup>
+          <ListItem title="Ada" href="/members/ada" actions={<button type="button">Remove Ada</button>} />
+        </ListGroup>,
+      );
+      expect(await axe(container)).toHaveNoViolations();
+    });
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <ListGroup>

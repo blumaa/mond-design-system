@@ -30,6 +30,14 @@ describe("Stack", () => {
     expect(className).toContain("align-center");
   });
 
+  /* The rhythm between blocks has three steps, and a screen that stacks
+     whole sections needs the middle one. Without it the choice is a gap
+     meant for siblings inside a block or the widest step in the system. */
+  it("takes the group step of the block rhythm", () => {
+    render(<Stack gap="group" data-testid="s">x</Stack>);
+    expect(screen.getByTestId("s").className).toContain("gap-group");
+  });
+
   it("renders as a custom element", () => {
     render(<Stack as="section" data-testid="s">x</Stack>);
     expect(screen.getByTestId("s").tagName).toBe("SECTION");
