@@ -28,6 +28,16 @@
   color: var(--mds-text-primary);
 }
 
+/* The header's own type role governs; the heading element brings only the
+   outline. */
+.headerTitle {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
 .body {
   flex: 1;
   overflow-y: auto;

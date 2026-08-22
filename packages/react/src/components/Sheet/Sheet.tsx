@@ -52,7 +52,9 @@ export type SheetHeaderProps = { children: ReactNode } & (
 export function SheetHeader({ children, onClose, closeLabel }: SheetHeaderProps) {
   return (
     <div className={styles.header}>
-      <span className={styles.headerTitle}>{children}</span>
+      {/* The panel's title is its heading: the one landmark a reader jumping
+          by heading inside a tall sheet has to go by. */}
+      <h2 className={styles.headerTitle}>{children}</h2>
       {onClose !== undefined && (
         <button type="button" aria-label={closeLabel} className={styles.close} onClick={onClose}>
           <CloseGlyph className={styles.closeGlyph} />

@@ -70,6 +70,18 @@ describe("Sheet", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  /* The panel's title is its heading. A reader jumping by heading inside a
+     tall sheet — a list of everyone who reacted — otherwise finds nothing
+     that says what they are looking at. */
+  it("SheetHeader puts the title in the outline", () => {
+    render(
+      <Sheet open onClose={() => {}} label="Filters">
+        <SheetHeader>Filters</SheetHeader>
+      </Sheet>,
+    );
+    expect(screen.getByRole("heading", { name: "Filters", level: 2 })).toBeInTheDocument();
+  });
+
   it("SheetHeader without onClose renders no button", () => {
     render(
       <Sheet open onClose={() => {}} label="Filters">

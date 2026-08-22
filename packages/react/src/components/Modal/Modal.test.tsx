@@ -18,6 +18,15 @@ function Example({ open = true, onClose = () => {} }: { open?: boolean; onClose?
 }
 
 describe("Modal", () => {
+  it("ModalHeader puts the title in the outline", () => {
+    render(
+      <Modal open onClose={() => {}} label="Edit session">
+        <ModalHeader>Edit session</ModalHeader>
+      </Modal>,
+    );
+    expect(screen.getByRole("heading", { name: "Edit session", level: 2 })).toBeInTheDocument();
+  });
+
   it("closed renders nothing", () => {
     render(<Example open={false} />);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();

@@ -43,7 +43,12 @@ export function Modal({ open, onClose, label, closeOnScrimClick = true, role = "
 }
 
 export function ModalHeader({ children }: { children: ReactNode }) {
-  return <div className={styles.header}>{children}</div>;
+  return (
+    <div className={styles.header}>
+      {/* The panel's title is its heading, not a styled line of text. */}
+      <h2 className={styles.headerTitle}>{children}</h2>
+    </div>
+  );
 }
 
 export function ModalBody({ children }: { children: ReactNode }) {
