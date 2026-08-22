@@ -538,3 +538,63 @@ dying library has been the one with the more careful markup. That is worth
 saying plainly: a component library grown inside one app knows things the
 general system had no reason to learn, and a migration is the only moment
 those are legible.
+
+### 21. `as` compiles, and then the props do not
+
+Four of the admin forms wanted `<Card as="form" onSubmit noValidate>`. `Card`
+takes `as`, so the first half typechecks; the second half does not, because
+`CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick">` and
+`HTMLAttributes` has no `noValidate`. Every `as`-taking component in the system
+has the same shape — `as` changes the element that renders and nothing about
+the props that are allowed — so `as` is honest about semantics and silent
+about attributes.
+
+The fix in the app was to stop asking: the card is the surface, the form is
+the content, `<Card><CardBody><form>…`. That is arguably the better markup
+anyway. But nothing on either side said so — the app found it by failing to
+compile four times in a row.
+
+dsbridge could say it once. It already reads the system's exports; a
+`polymorphic` note on the components whose `as` does not widen their props
+would let `choosing` answer "can I make this a form?" with "no — put the form
+inside it", instead of leaving each app to discover the boundary through the
+type checker.
+
+### 22. A raw `<button>` that was the right call, and the gap under it
+
+`no-raw-element-over-component` fired once in the shell: `DesktopSidebar`'s nav
+row, which is an `<a>` where the destination has an href and a `<button>` where
+it does not. The rule's own text says what to do — "what the element does that
+no component does is a gap in the system worth reporting" — and this was one.
+
+MDS had `TabBar`: the app's primary navigation, anchored to the bottom, links
+or buttons, `aria-current` on each. It had no counterpart for the same list
+standing in a column, even though `--mds-sidebar-w` had been in the layout
+tokens since the first pass — a token no component ever spent. So the app
+hand-rolled the column, and with it the row's hit target, hover, selected
+surface, focus ring and count badge, none of which move when the system moves.
+
+Released as `SideNav`/`SideNavGroup`/`SideNavItem` in react 4.8.0, and named in
+`choosing` beside `TabBar` so the next app asking "primary navigation?" is
+asked back "bottom, or beside?".
+
+Two things this says about the tool. First, the rule worked exactly as
+designed: one finding, in the right file, pointing at a real hole. Second, the
+hole was findable earlier and by the tool itself — a token the design system
+declares and no component in it reads is a gap that can be computed, not
+waited for. `--mds-sidebar-w` sat unspent through nineteen field notes.
+
+### 23. What `Text` cannot say, said three times
+
+Three variants the app reached for and MDS does not have: `title` (a page
+heading — `Heading level={1}` is the answer, and the right one), `subtitle`
+(no answer; the report excerpt now uses body `Text`), and a mono run meant to
+be copied character by character — a one-time password — which had no role at
+all until `--mds-type-code` shipped in tokens 3.3.0.
+
+The first is a rename the tool could have printed. The second and third are
+gaps, and only one of them was worth filling: a password is a category of text
+with its own reading rules, a subtitle is a size. Recording both because the
+distinction is the interesting part — the question a `migrate --semantics`
+report should ask about every missing variant is not "does the system have
+this name?" but "is what it names a thing, or a step?".
