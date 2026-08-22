@@ -1,5 +1,13 @@
 # @mond-design-system/react
 
+## 4.7.0
+
+### Minor Changes
+
+- Add `DataTable`: a column-driven table that folds into a stack of cards below the wide breakpoint, with optional row selection, bulk actions, per-row controls and a muted row state. Every reader-visible string is the caller's, including the selection labels.
+
+  `Checkbox` gains `indeterminate` — the third state a box governing a set of others has to say, which no attribute carries — and `labelHidden`, for a box named only for screen readers.
+
 ## 4.6.1
 
 ### Patch Changes
