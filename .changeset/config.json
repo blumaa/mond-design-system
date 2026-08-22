@@ -5,5 +5,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@mond-design-system/storybook"]
+  "ignore": ["@mond-design-system/storybook", "ds-bridge"]
 }

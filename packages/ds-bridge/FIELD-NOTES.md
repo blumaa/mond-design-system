@@ -286,3 +286,32 @@ Two smaller notes from building Lightbox and VideoPlayer beside the tool:
 - `check --root <an app with no dsbridge.config.json>` names the six rules it
   skipped and why. That is the right behaviour and worth keeping: the rules that
   need a taxonomy said so rather than passing.
+
+### 10. The tool blocked its own design system's release
+
+`changeset publish` for react 4.0.0 and tokens 3.2.0 published tokens, then
+stopped on:
+
+```
+E403: 403 Forbidden - PUT https://registry.npmjs.org/ds-bridge
+Package name too similar to existing package dsbridge
+```
+
+React never went out. The cause is not the 403 — it is that ds-bridge was a
+candidate for publishing at all. It sits in the workspace at `0.0.0`, has never
+had a changeset written for it and has no changelog, and it was neither
+`private` nor in the changesets `ignore` list. `@mond-design-system/storybook`
+is both; ds-bridge was neither, so every release of the design system was
+already carrying an unversioned package along with it, and the first one to
+reach npm found out that way.
+
+Marked `private: true` and added to `ignore`, matching storybook.
+
+Two things to carry forward. The bare name `ds-bridge` is unavailable on npm
+whatever the version, so shipping this tool means a scoped name —
+`@mond-design-system/ds-bridge`, with the `dsbridge` bin unchanged, since the
+bin name is what a consumer types and it is not affected by the scope. And a
+partial publish is the failure mode worth designing against: the registry now
+holds tokens 3.2.0 against a react that is still 3.0.3, which is a version pair
+no app should install. Changesets publishes alphabetically and stops at the
+first failure; nothing about that ordering knows which packages are a set.
