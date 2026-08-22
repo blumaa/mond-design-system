@@ -315,3 +315,89 @@ partial publish is the failure mode worth designing against: the registry now
 holds tokens 3.2.0 against a react that is still 3.0.3, which is a version pair
 no app should install. Changesets publishes alphabetically and stops at the
 first failure; nothing about that ordering knows which packages are a set.
+
+### 11. `system` is a path, not a specifier — the app has to know where a package hides its stylesheet
+
+Repointing Kinbaku's config from its own design system to MDS, the obvious
+value for `system` was the one the app imports:
+
+```json
+"system": "apps/web/node_modules/@mond-design-system/tokens/styles.css"
+```
+
+`dsbridge tokens` failed with ENOENT. The file is at
+`.../tokens/src/styles.css`; `styles.css` is an `exports` key, not a path on
+disk, and the tokens package maps `"./styles.css"` to `"./src/styles.css"`.
+
+The value that works is the resolved one, which means the config records a
+detail of how a dependency happens to lay out its own repository. That breaks
+the first time the package moves the file — a change its `exports` map exists
+precisely to make invisible.
+
+`resolveSystem` already resolves specifiers when `system` is absent, using
+`createRequire`. What is missing is doing the same when it is present: if the
+value is not a path that exists, try resolving it as a specifier before giving
+up. `"@mond-design-system/tokens/styles.css"` is then a legal value, and it is
+the one an app can write from memory.
+
+### 12. `tokens --grep` takes a string, and it reads like a regex
+
+`tokens --grep "sidebar\|nav\|header"` returned `no tokens match that filter`,
+which is true — no token has that literal text in its name — and useless. The
+flag is called `grep` and it is spelled like an alternation, so the failure
+reads as "there is no sidebar token", the opposite of the truth.
+
+Two ways to close it and only one is right. Making the filter a real regex is
+the smaller change but the larger surprise: `--grep "pad-"` is fine either way,
+`--grep "text-2xl"` is not obviously so, and a token search is somewhere an
+agent should not have to think about escaping. Splitting the filter on `|` and
+matching any part keeps the substring semantics and makes the spelling that
+already looks right actually work. Either way, the empty result should name what
+it searched — 265 tokens under `--mds-` — so the reader can tell an empty search
+from an empty system.
+
+### 13. A render prop that is handed a number the CSS already owns
+
+MDS's `Icon` takes a `size` and passes the pixel value to the registry's render
+function alongside the name. Kinbaku's registry ignores it, and that is the
+right call: the span `Icon` draws is already sized from `--mds-icon-*`, so a
+glyph drawn at the number would stop matching the moment a brand moved the
+token. Sizing the glyph to 100% of its span keeps one source.
+
+But the number is in the API, so an app that uses it — the obvious reading of a
+prop named `size` — silently opts out of the token. This is
+`earn-the-semantic-token` in a shape the rule cannot see, because there is no
+literal anywhere: the app writes `width: {size}`, and the px arrives from the
+system.
+
+Two candidate rules, both worth having. `render-prop-size-is-the-css-token`
+would be a system-side rule: a component that publishes a token for a dimension
+should not also hand that dimension to a render prop as a number. And
+`icon-glyph-fills-its-span`, app-side: an icon registry's rendered glyph reads
+its size from the slot, not from an argument. The second is checkable today;
+the first needs the tool to pair a token with the prop that duplicates it,
+which is the same machinery note 8 wanted for `--mds-icon-slot`.
+
+### 14. Four gaps in one migration, and the tool found none of them
+
+The shell layer of the migration needed four things MDS did not have:
+`TabBarItem hideLabel`, `AppBar className` passthrough, `toast()` with an
+`action` and an `onDismiss`, and `SegmentedControl` at a small size without its
+frame. All four are now in react 4.1.0.
+
+Every one surfaced by reading the app's code against the system's API, and
+dsbridge said nothing about any of them. That is not a defect — `check` measures
+a file against the rules, and a missing prop is not in a file — but it marks the
+edge of what the tool covers. The command that would have found them is the one
+that does not exist: something that takes an app's component and the system's
+component and reports the props the app passes that the system does not accept.
+`migrate` already parses both sides to build its component map. A
+`migrate --props` that lists, per component pair, the unmatched props, would
+have produced this list on day one of the migration rather than file by file
+through it.
+
+The AppBar case is the sharpest, because the system's own rules caught it the
+moment the fix was written: adding `{...rest}` to the header made
+`forwards-its-ref` fire, and the ref went in with it. The rule knew what a
+spreading component owes its caller. Nothing knew that the component owed a
+`className` in the first place.
