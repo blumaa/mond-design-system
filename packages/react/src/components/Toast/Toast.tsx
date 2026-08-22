@@ -110,7 +110,14 @@ export function ToastProvider({
       {children}
       <div role="region" aria-label={regionLabel} className={styles.viewport}>
         {toasts.map((entry) => (
-          <div key={entry.id} role="status" className={cx(styles.toast, styles[`tone-${entry.tone}`])}>
+          <div
+            key={entry.id}
+            /* A refusal interrupts: what the reader asked for did not happen,
+               and they are about to carry on as though it did. Anything
+               calmer waits its turn. */
+            role={entry.tone === "danger" ? "alert" : "status"}
+            className={cx(styles.toast, styles[`tone-${entry.tone}`])}
+          >
             <span className={styles.body}>
               <span className={styles.title}>{entry.title}</span>
               {entry.description !== undefined && (

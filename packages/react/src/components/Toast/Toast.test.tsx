@@ -104,6 +104,52 @@ describe("Toast", () => {
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
+  /* A refusal is not news to be read at leisure: the thing the reader asked
+     for did not happen, and they are about to act as though it did. Assertive
+     is for that, and for nothing calmer. */
+  describe("tone", () => {
+    function Tell({ tone }: { tone: "neutral" | "success" | "danger" }) {
+      const { toast } = useToast();
+      return (
+        <button type="button" onClick={() => toast({ title: "Nothing saved", tone, duration: 0 })}>
+          fire
+        </button>
+      );
+    }
+
+    const fire = (tone: "neutral" | "success" | "danger") => {
+      render(
+        <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+          <Tell tone={tone} />
+        </ToastProvider>,
+      );
+      fireEvent.click(screen.getByRole("button", { name: "fire" }));
+    };
+
+    it("announces a danger toast assertively", () => {
+      fire("danger");
+      expect(screen.getByRole("alert")).toHaveTextContent("Nothing saved");
+    });
+
+    it("leaves a neutral toast polite", () => {
+      fire("neutral");
+      expect(screen.getByRole("status")).toHaveTextContent("Nothing saved");
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    });
+
+    it("leaves a success toast polite", () => {
+      fire("success");
+      expect(screen.getByRole("status")).toHaveTextContent("Nothing saved");
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    });
+
+    it("dismisses a danger toast like any other", () => {
+      fire("danger");
+      fireEvent.click(screen.getByRole("button", { name: "Dismiss: Nothing saved" }));
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    });
+  });
+
   /* A message that asks for something — "Update ready", "Install this" — needs
      the doing next to the saying. Anywhere else and the reader has to find it. */
   describe("action", () => {
