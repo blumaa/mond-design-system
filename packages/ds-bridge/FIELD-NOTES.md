@@ -401,3 +401,70 @@ moment the fix was written: adding `{...rest}` to the header made
 `forwards-its-ref` fire, and the ref went in with it. The rule knew what a
 spreading component owes its caller. Nothing knew that the component owed a
 `className` in the first place.
+
+### 15. A raw element that is not a hand-rolled anything
+
+`no-raw-element-over-component` fired on the `<button>` inside
+`DesktopSidebar`'s `NavRow`, and the finding was wrong. The rule reads a raw
+`<button>` as a Button somebody built by hand, which is the usual case and the
+one worth catching. This one is a side-nav row: an icon, a label, a count, and
+`aria-current` on the item that matches the route. MDS exports no component for
+it, so the only advice the rule could give is "use Button", and taking that
+advice would make the row worse.
+
+The signal the rule is missing is arity. A raw `<button>` whose children are
+text, or text and one icon, is a Button that was not imported. A raw `<button>`
+with three children in a row, one of them a live count and one of them carrying
+a route-aware ARIA state, is a composite the system has no name for. The second
+is a gap in the component library, not a violation, and the honest output for
+it is a different one: not "replace this" but "the system has nothing for
+this". A rule that cannot tell them apart teaches the reader to reach for the
+suppression comment, which is the one habit the tool exists to prevent.
+
+### 16. The app's test suite caught two semantic breaks the tool could not
+
+Swapping a component for its MDS counterpart changed two things no rule looked
+at, and both surfaced as red tests in kinbaku rather than as findings.
+
+The confirm prompt: kinbaku's was `role="dialog"`, MDS's `ConfirmDialog` is
+`role="alertdialog"`. Fifty-five assertions across thirteen files went looking
+for a dialog and found nothing. The fix was mechanical once the cause was
+known, and unfindable before then — `queryByRole('dialog')` on a screen with no
+dialog passes, so some of those assertions had quietly stopped asserting
+anything at all.
+
+The toast: kinbaku announced a refusal with `role="alert"`, MDS announced every
+toast with `role="status"`. Nineteen tests failed, and the right fix was in the
+system rather than the app — a refusal interrupts, and MDS already agreed with
+itself about that everywhere else (`ConfirmDialog`'s error line and
+`UploadProgress`'s failure are both alerts). Released as react 4.3.0.
+
+Both are the same shape as note 14's four gaps — a difference across the
+boundary that neither side's own tests could see, because each side was
+internally consistent. But these are not missing props; they are the same prop
+meaning something else. `migrate` already pairs the app's component with the
+system's, and it could diff what those two render: the role, the ARIA state,
+the accessible name pattern. A `migrate --semantics` that said
+
+    ConfirmDialog   role  dialog → alertdialog
+    Toast (danger)  role  alert  → status
+
+would have been the whole of both investigations, on day one, before a single
+test was written against the new component.
+
+### 17. `no-raw-scale-step` steering, and it worked
+
+The one rule that paid for itself unprompted in this layer. Every finding it
+raised in the shell stylesheets — `--mds-space-2` in a gap, `--mds-space-4` in
+a padding — had a role token waiting for it: `--mds-gap-tight`,
+`--mds-pad-page-x`. Fixing them was not a rename but a decision about what the
+value was for, and in each case the answer was already named.
+
+One finding had no role behind it: 4px of vertical padding on the sidebar's
+group heading. There was no `--mds-pad-heading-y`, and inventing one for a
+single call site would have been the app writing a token for itself. Reading
+the rule's question — what is this padding for? — the answer was that it was
+holding the heading off the rows beneath it, which the group's own
+`--mds-gap-hairline` already does. The declaration came out entirely. A rule
+that ends in deleted code rather than a substituted token is the rule working
+at its best.
