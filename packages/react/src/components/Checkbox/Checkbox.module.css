@@ -9,6 +9,12 @@
   cursor: not-allowed;
 }
 
+/* A name that is only for readers takes no room on screen, and neither should
+   the space that would have separated it from the box. */
+.bare {
+  gap: 0;
+}
+
 .box {
   composes: hitArea from "../../internal/hit-area.module.css";
   appearance: none;
@@ -31,6 +37,20 @@
 .box:checked {
   background: var(--mds-action-bg);
   border-color: var(--mds-action-bg);
+}
+
+/* Some, not none and not all — one bar rather than the tick. Drawn on the
+   same box so the third state reads as a state of it, not another control. */
+.box:indeterminate {
+  background: var(--mds-action-bg);
+  border-color: var(--mds-action-bg);
+}
+
+.box:indeterminate::after {
+  content: "";
+  width: 0.5em;
+  height: 0;
+  border-top: solid calc(var(--mds-border-width) * 2) var(--mds-action-fg);
 }
 
 .box:checked::after {

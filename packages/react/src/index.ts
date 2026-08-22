@@ -99,6 +99,13 @@ export type { SearchFieldProps } from "./components/SearchField/SearchField";
 export { ListGroup, ListItem } from "./components/List/List";
 export type { ListGroupProps, ListItemProps } from "./components/List/List";
 
+export { DataTable } from "./components/DataTable/DataTable";
+export type {
+  DataColumn,
+  DataTableProps,
+  DataTableSelectionLabels,
+} from "./components/DataTable/DataTable";
+
 export { EmptyState } from "./components/EmptyState/EmptyState";
 export type { EmptyStateProps } from "./components/EmptyState/EmptyState";
 

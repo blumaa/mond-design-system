@@ -1,0 +1,199 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-tight);
+}
+
+/* A block, not a table, until there is room to read across it: the rows below
+   are cards and the colgroup has nothing to size. */
+.table {
+  width: 100%;
+  display: block;
+}
+
+.table colgroup {
+  display: none;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-tight);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-hairline);
+  padding: var(--mds-pad-card);
+  background: var(--mds-surface-card);
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  border-radius: var(--mds-radius-card);
+}
+
+.cell,
+.select,
+.actions {
+  display: block;
+  padding: 0;
+  font: var(--mds-type-body);
+  text-align: start;
+}
+
+/* The column's header beside its value, which is the only thing saying what
+   the value is once the row has folded into a card. */
+.key {
+  display: block;
+  color: var(--mds-text-secondary);
+  font: var(--mds-type-label);
+}
+
+/* The row's own name leads the card. */
+.lead {
+  font: var(--mds-type-subtitle);
+}
+
+.select {
+  order: -1;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mds-gap-tight);
+  margin-block-start: var(--mds-gap-hairline);
+}
+
+.selected {
+  background: var(--mds-surface-selected);
+}
+
+.muted {
+  color: var(--mds-text-secondary);
+}
+
+.empty {
+  padding: var(--mds-pad-card);
+  text-align: center;
+}
+
+.bulk {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--mds-gap-tight);
+  padding: var(--mds-pad-tight) var(--mds-pad-control);
+  background: var(--mds-surface-sunken);
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  border-radius: var(--mds-radius-card);
+}
+
+.bulkActions {
+  display: flex;
+  gap: var(--mds-gap-tight);
+}
+
+.bulkActions > * {
+  flex: 1;
+}
+
+@media (min-width: 600px) {
+  .bulk {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bulkActions > * {
+    flex: initial;
+  }
+}
+
+/* Wide enough to read a row across: the cards become the table they always
+   were in the markup, and the header row comes back out of hiding. */
+@media (min-width: 1024px) {
+  .table {
+    display: table;
+    border-collapse: collapse;
+    background: var(--mds-surface-card);
+    border: var(--mds-border-width) solid var(--mds-border-subtle);
+    border-radius: var(--mds-radius-card);
+    overflow: hidden;
+  }
+
+  .table colgroup {
+    display: table-column-group;
+  }
+
+  .root .head {
+    display: table-header-group;
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+
+  .body {
+    display: table-row-group;
+  }
+
+  .row {
+    display: table-row;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: var(--mds-border-width) solid var(--mds-border-subtle);
+  }
+
+  .body .row:last-child {
+    border-bottom: none;
+  }
+
+  .body .row:hover {
+    background: var(--mds-surface-sunken);
+  }
+
+  .body .selected {
+    background: var(--mds-surface-selected);
+  }
+
+  .cell,
+  .select,
+  .actions {
+    display: table-cell;
+    padding: var(--mds-pad-tight) var(--mds-pad-control);
+    vertical-align: middle;
+  }
+
+  .key {
+    display: none;
+  }
+
+  .lead {
+    font: var(--mds-type-body);
+  }
+
+  th.cell,
+  th.select,
+  th.actions {
+    color: var(--mds-text-secondary);
+    font: var(--mds-type-label);
+    white-space: nowrap;
+  }
+
+  .select {
+    order: 0;
+    width: var(--mds-tap-min);
+  }
+
+  .actions {
+    width: 0;
+    margin-block-start: 0;
+    white-space: nowrap;
+    text-align: end;
+  }
+}

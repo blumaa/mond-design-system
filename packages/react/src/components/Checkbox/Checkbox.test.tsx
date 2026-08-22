@@ -44,4 +44,56 @@ describe("Checkbox", () => {
     const { container } = render(<Checkbox label="Accept terms" />);
     expect(await axe(container)).toHaveNoViolations();
   });
+
+  /* A box that governs a set of others has a third thing to say: some, not
+     none and not all. The DOM only reaches it through the property, so a
+     checkbox that cannot be set from props cannot say it at all. */
+  describe("indeterminate", () => {
+    it("sets the property, which no attribute can", () => {
+      render(<Checkbox label="Select all" indeterminate />);
+      expect(screen.getByRole("checkbox")).toBePartiallyChecked();
+    });
+
+    it("clears the property when the state resolves", () => {
+      const { rerender } = render(<Checkbox label="Select all" indeterminate />);
+      rerender(<Checkbox label="Select all" indeterminate={false} checked readOnly />);
+      const box = screen.getByRole("checkbox");
+      expect(box).not.toBePartiallyChecked();
+      expect(box).toBeChecked();
+    });
+
+    it("is off by default", () => {
+      render(<Checkbox label="x" />);
+      expect(screen.getByRole("checkbox")).not.toBePartiallyChecked();
+    });
+  });
+
+  /* In a table's select column there is no room for the word, and the column
+     header says it anyway. The name is still owed to a reader who cannot see
+     which row they are in. */
+  describe("labelHidden", () => {
+    it("names the box without showing the name", () => {
+      render(<Checkbox label="Select Ada Lovelace" labelHidden />);
+      expect(screen.getByRole("checkbox", { name: "Select Ada Lovelace" })).toBeInTheDocument();
+    });
+
+    /* Hidden by clipping, not by removal: display:none would take the name out
+       of the accessibility tree, which is the one thing it is here for. */
+    it("hides by clipping rather than by removing", () => {
+      render(<Checkbox label="Select Ada Lovelace" labelHidden />);
+      const style = getComputedStyle(screen.getByText("Select Ada Lovelace"));
+      expect(style.display).not.toBe("none");
+      expect(style.visibility).not.toBe("hidden");
+    });
+
+    it("still shows the name when it is not hidden", () => {
+      render(<Checkbox label="Accept terms" />);
+      expect(screen.getByText("Accept terms")).toBeVisible();
+    });
+
+    it("is clean to axe", async () => {
+      const { container } = render(<Checkbox label="Select Ada Lovelace" labelHidden />);
+      expect(await axe(container)).toHaveNoViolations();
+    });
+  });
 });

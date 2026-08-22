@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { HTMLAttributes, ReactElement, ReactNode, Ref, SyntheticEvent } from "react";
 import { cx } from "../../internal/cx";
+import { forkRef } from "../../internal/forkRef";
 import {
   CaptionsGlyph,
   FullscreenExitGlyph,
@@ -185,11 +186,7 @@ export function VideoPlayer({
     <section
       className={cx(styles.player, covered && styles.covered, className)}
       aria-label={labels.region}
-      ref={(node: HTMLElement | null) => {
-        root.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={forkRef(root, ref)}
       {...rest}
     >
       <div className={styles.frame}>
