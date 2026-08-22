@@ -83,6 +83,11 @@
   --mds-progress-h: var(--mds-space-2);
   --mds-skeleton-h: var(--mds-space-10);
   --mds-fade-w: var(--mds-space-6);
+  /* How far a reply steps in from the comment it answers. Its own role rather
+     than a gap read directly: the step says which comment a reply hangs off,
+     and a scale that tightens the gaps between siblings should not flatten
+     the thread along with them. */
+  --mds-indent-thread: var(--mds-space-5);
   /* Pitch of the hatch on an empty media surface. Its own role rather than a
      rung read directly: the stripe is not spacing, and a scale that gets
      tighter should not close the hatch up with it. */

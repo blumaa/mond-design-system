@@ -1,5 +1,11 @@
 # @mond-design-system/tokens
 
+## 3.5.0
+
+### Minor Changes
+
+- Add `--mds-indent-thread`, how far a reply steps in from the comment it answers, and the `indent` role that claims it. The system ships no comment thread, so the app draws one; without a token for the step it would have to invent the geometry itself, which is the one thing an app must not do.
+
 ## 3.4.0
 
 ### Minor Changes
