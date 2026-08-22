@@ -3,14 +3,16 @@ import { createElement } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Heading.module.css";
 
-export type HeadingVariant = "display" | "title" | "subtitle";
+export type HeadingVariant = "display" | "title" | "subtitle" | "label";
 export type HeadingLevel = 1 | 2 | 3 | 4;
 export type HeadingTone = "primary" | "secondary" | "inverse" | "accent" | "on-media";
 
 export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   /** Document outline level → h1–h4, with a matching default type role. Default 2. */
   level?: HeadingLevel;
-  /** Type role override — outline level and visual size are separate concerns. */
+  /** Type role override — outline level and visual size are separate concerns.
+      `label` is the small one: a rail beside the page, a group inside a form —
+      a title that names its section without competing with the page's own. */
   variant?: HeadingVariant;
   tone?: HeadingTone;
 }

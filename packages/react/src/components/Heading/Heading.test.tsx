@@ -22,6 +22,14 @@ describe("Heading", () => {
     expect(screen.getByRole("heading", { level: 1 }).className).toContain("variant-subtitle");
   });
 
+  /* A section title is not always a big one: a rail beside the page, a group
+     inside a form. The outline level is what makes it a heading; the type role
+     is free to be the small one. */
+  it("takes the label type role while staying a heading", () => {
+    render(<Heading level={2} variant="label">rail</Heading>);
+    expect(screen.getByRole("heading", { level: 2 }).className).toContain("variant-label");
+  });
+
   it("tone applies", () => {
     render(<Heading tone="inverse">i</Heading>);
     expect(screen.getByRole("heading").className).toContain("tone-inverse");

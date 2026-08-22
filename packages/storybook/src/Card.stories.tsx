@@ -6,6 +6,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Heading,
   Inline,
   Stack,
   Text,
@@ -67,5 +68,23 @@ export const Interactive: Story = {
         </CardBody>
       </Card>
     </Stack>
+  ),
+};
+
+/* The card is the section: `as` puts it in the outline, which no wrapper
+   around it can do. */
+export const AsSection: Story = {
+  args: { children: null },
+  render: () => (
+    <Card as="section" aria-labelledby="card-story-rail">
+      <CardHeader>
+        <Heading level={2} variant="label" id="card-story-rail">
+          Chapters
+        </Heading>
+      </CardHeader>
+      <CardBody>
+        <Text>A region a screen reader can jump to, named by its own title.</Text>
+      </CardBody>
+    </Card>
   ),
 };

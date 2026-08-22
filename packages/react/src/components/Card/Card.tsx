@@ -16,7 +16,10 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> 
   onClick?: () => void;
   /** Makes the whole card a link. Wins over onClick. */
   href?: string;
-  /** Element override for that link, e.g. a router's Link. */
+  /** Element override for the root. With href, the link element — a router's
+      Link. Without one, what the card is in the outline: a <section> that names
+      itself, an <article> holding a post. No wrapper can supply that from
+      outside, since the wrapper is not the card. Default div. */
   as?: ElementType;
   /** The root is an `<a>`, a `<button>` or a `<div>` depending on the props,
       so the ref is typed to what all three are. */
@@ -61,10 +64,11 @@ export function Card({ children, variant = "card", emphasis = false, onClick, hr
       </button>
     );
   }
+  const Element: ElementType = as ?? "div";
   return (
-    <div className={cardClass} ref={ref as Ref<HTMLDivElement>} {...rest}>
+    <Element className={cardClass} ref={ref as Ref<HTMLDivElement>} {...rest}>
       {children}
-    </div>
+    </Element>
   );
 }
 

@@ -122,6 +122,20 @@ describe("Card", () => {
     expect(screen.getByTestId("fake")).toHaveAttribute("href", "/x");
   });
 
+  /* A card is not always an anonymous box. One that names a section is a
+     <section>, one that holds a post is an <article> — the element is what puts
+     it in the outline, and no wrapper around the card can put it there. */
+  it("as renders a static card as the element the content is", () => {
+    render(
+      <Card as="section" aria-labelledby="rail-title">
+        <CardHeader>
+          <h2 id="rail-title">Chapters</h2>
+        </CardHeader>
+      </Card>,
+    );
+    expect(screen.getByRole("region", { name: "Chapters" }).tagName).toBe("SECTION");
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <div>
