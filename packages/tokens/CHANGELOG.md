@@ -1,5 +1,11 @@
 # @mond-design-system/tokens
 
+## 3.3.1
+
+### Patch Changes
+
+- Name `SideNav` in the choosing data, beside `TabBar`: dsbridge can now answer which of the two an app's primary navigation wants.
+
 ## 3.3.0
 
 ### Minor Changes

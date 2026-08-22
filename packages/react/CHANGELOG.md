@@ -1,5 +1,16 @@
 # @mond-design-system/react
 
+## 4.8.0
+
+### Minor Changes
+
+- Add `SideNav`, `SideNavGroup` and `SideNavItem`: the standing column of destinations, the desktop counterpart to `TabBar`. Rows are links where they have a destination and buttons where they do not, each carrying `aria-current`; a group names a run of them; an item takes a `count` and the words to read it as, drawing nothing at zero and capping at 99 so a fourth digit cannot push the destination's name out of a fixed-width column.
+
+### Patch Changes
+
+- Updated dependencies
+  - @mond-design-system/tokens@3.3.1
+
 ## 4.7.0
 
 ### Minor Changes
