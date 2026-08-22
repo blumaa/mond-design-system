@@ -1,5 +1,13 @@
 # @mond-design-system/react
 
+## 4.6.1
+
+### Patch Changes
+
+- SheetHeader and ModalHeader render their title as an `h2`, so a panel's
+  title is in the document outline. It looks the same: the header's own
+  type role still governs.
+
 ## 4.6.0
 
 ### Minor Changes
