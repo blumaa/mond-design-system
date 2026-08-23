@@ -197,6 +197,74 @@ export const screenEdgeClearsTheSafeArea: Rule = {
   },
 };
 
+/* `overflow: auto` on an axis that has no room to scroll never scrolls, so a
+   box is only a scroller on the axis it was asked to scroll on. */
+const SCROLLS = /^(?:auto|scroll)$/;
+
+/** The axes a block scrolls on, from whichever overflow properties it sets. */
+const scrollingAxes = (block: Block): string[] => {
+  const axes = new Set<string>();
+  for (const d of block.declarations) {
+    if (d.property === "overflow" && d.value.split(/\s+/).some((part) => SCROLLS.test(part))) {
+      const parts = d.value.trim().split(/\s+/);
+      /* `overflow: hidden auto` is x then y. One value is both. */
+      if (SCROLLS.test(parts[0] ?? "")) axes.add("x");
+      if (SCROLLS.test(parts[1] ?? parts[0] ?? "")) axes.add("y");
+    }
+    if (d.property === "overflow-x" && SCROLLS.test(d.value)) axes.add("x");
+    if (d.property === "overflow-y" && SCROLLS.test(d.value)) axes.add("y");
+  }
+  return [...axes];
+};
+
+/** The axes a block already answers for, `overscroll-behavior` counting for both. */
+const containedAxes = (block: Block): Set<string> => {
+  const axes = new Set<string>();
+  for (const d of block.declarations) {
+    if (d.property === "overscroll-behavior") {
+      axes.add("x");
+      axes.add("y");
+    }
+    if (d.property === "overscroll-behavior-x") axes.add("x");
+    if (d.property === "overscroll-behavior-y") axes.add("y");
+  }
+  return axes;
+};
+
+export const scrollerContainsItsOverscroll: Rule = {
+  id: "scroller-contains-its-overscroll",
+  title: "A box that scrolls says where the scroll stops.",
+  why:
+    "Scrolling past the end of a box hands the rest of the gesture to whatever " +
+    "contains it. The modal reaches its last line and the page behind it moves; " +
+    "the screen reaches its last card and the whole app rubber-bands in Safari. " +
+    "Nothing looks broken in a screenshot — it is only wrong under a thumb, which " +
+    "is where it is read as the app losing the user's place.",
+  instead:
+    "Add `overscroll-behavior` on the axis the box scrolls: `contain` keeps the " +
+    "gesture inside and leaves the box's own bounce alone, `none` drops the bounce " +
+    "too. Say it on the box that owns the scroll — a parent cannot know which of " +
+    "its children was being dragged.",
+  target: "both",
+  reads: "stylesheet",
+  check: (context) =>
+    componentBlocks(context)
+      .filter(({ sheet }) => !context.exempt("scroller-contains-its-overscroll", sheet.file))
+      .flatMap(({ sheet, block }) => {
+        const contained = containedAxes(block);
+        return scrollingAxes(block)
+          .filter((axis) => !contained.has(axis))
+          .map((axis) =>
+            finding(
+              "scroller-contains-its-overscroll",
+              sheet,
+              block.line,
+              `${block.selector} scrolls on overflow-${axis} and does not contain it — the gesture carries on into whatever holds it`,
+            ),
+          );
+      }),
+};
+
 /** `Button.module.css` styles `.button`: the class that is the component itself. */
 const rootClass = (file: string) => (file.split("/").pop() ?? "").split(".")[0]?.toLowerCase() ?? "";
 
@@ -491,6 +559,7 @@ export const layoutRules: Rule[] = [
   zIndexIsAToken,
   viewportHeightIsAToken,
   screenEdgeClearsTheSafeArea,
+  scrollerContainsItsOverscroll,
   noOuterMargin,
   reachForThePrimitive,
   flexFirstGridWhenEarned,

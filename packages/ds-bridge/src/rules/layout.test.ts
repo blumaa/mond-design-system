@@ -9,6 +9,7 @@ import {
   noOuterMargin,
   reachForThePrimitive,
   screenEdgeClearsTheSafeArea,
+  scrollerContainsItsOverscroll,
   touchTargets,
   viewportHeightIsAToken,
   zIndexIsAToken,
@@ -272,5 +273,36 @@ describe("reach-for-the-primitive", () => {
 
   it("says nothing in the system's own repo, which is where the primitives are written", () => {
     expect(reachForThePrimitive.target).toBe("app");
+  });
+});
+
+describe("scroller-contains-its-overscroll", () => {
+  it("flags a box that scrolls and says nothing about the chain", () => {
+    const [finding] = run(scrollerContainsItsOverscroll, ".content {\n  overflow-y: auto;\n}");
+    expect(finding).toMatchObject({ rule: "scroller-contains-its-overscroll", line: 1 });
+  });
+
+  it("passes a box that contains it on the axis it scrolls", () => {
+    expect(
+      run(scrollerContainsItsOverscroll, ".content {\n  overflow-y: auto;\n  overscroll-behavior-y: contain;\n}"),
+    ).toEqual([]);
+  });
+
+  it("takes the shorthand on either side", () => {
+    expect(run(scrollerContainsItsOverscroll, ".a {\n  overflow: auto;\n  overscroll-behavior: contain;\n}")).toEqual(
+      [],
+    );
+  });
+
+  it("says nothing about a box that only clips", () => {
+    expect(run(scrollerContainsItsOverscroll, ".a {\n  overflow: hidden;\n}")).toEqual([]);
+  });
+
+  it("reads the axis — a sideways scroller is not answered by the vertical one", () => {
+    const [finding] = run(
+      scrollerContainsItsOverscroll,
+      ".rail {\n  overflow-x: auto;\n  overscroll-behavior-y: contain;\n}",
+    );
+    expect(finding?.message).toContain("overflow-x");
   });
 });
