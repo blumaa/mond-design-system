@@ -1,16 +1,17 @@
-import type { ElementType, HTMLAttributes, ReactElement } from "react";
+import type { ElementType, ReactElement } from "react";
 import { createElement } from "react";
 import { cx } from "../../internal/cx";
+import type { AnyPolymorphic, Polymorphic } from "../../internal/polymorphic";
 import styles from "./Container.module.css";
 
 export type ContainerWidth = "content" | "wide";
 
-export interface ContainerProps extends HTMLAttributes<HTMLElement> {
+export interface ContainerOwnProps {
   /** content = reading column, wide = desktop shell. Default "content". */
   width?: ContainerWidth;
-  /** Element to render. Default div. */
-  as?: ElementType;
 }
+
+export type ContainerProps<T extends ElementType = "div"> = Polymorphic<T, ContainerOwnProps>;
 
 /**
  * Centered max-width column with page-edge padding.
@@ -21,12 +22,9 @@ export interface ContainerProps extends HTMLAttributes<HTMLElement> {
  * </Container>
  * ```
  */
-export function Container({
-  width = "content",
-  as = "div",
-  className,
-  ...rest
-}: ContainerProps): ReactElement {
+export function Container<T extends ElementType = "div">(props: ContainerProps<T>): ReactElement {
+  const { width = "content", as = "div", className, ...rest } = props as AnyPolymorphic<ContainerOwnProps>;
+
   return createElement(as, {
     className: cx(styles.container, styles[`width-${width}`], className),
     ...rest,

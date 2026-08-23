@@ -46,13 +46,24 @@ export const noDuplicateOfASystemComponent: Rule = {
   instead:
     "Use the system's, or name yours for what makes it different — `AvatarIcon`, " +
     "`SportIcon`. If the system's is genuinely wrong for the app, say so in the " +
-    "system: a second consumer will want the same thing.",
+    "system: a second consumer will want the same thing. A component that renders " +
+    "the system's export of that same name is not a second one: it is the system's " +
+    "with something supplied that only the app has — a glyph registry, a translated " +
+    "label — and it is left alone.",
   target,
   reads,
   needs: needsExports,
-  check: (context) =>
-    context.components
+  check: (context) => {
+    const source = new Map(context.sources.map((it) => [it.file, it.source]));
+    /* An import of the name it shares is the proof: `Icon` that imports the
+       system's `Icon` is that Icon with Kinbaku's drawings mounted on it, and
+       renaming it would rename the thing the app means by the word. */
+    const binds = (component: Component) =>
+      importedNames(source.get(component.file) ?? "", context.exportedFrom).has(component.name);
+
+    return context.components
       .filter((component) => context.exported.includes(component.name))
+      .filter((component) => !binds(component))
       .filter((component) => !context.exempt("no-duplicate-of-a-system-component", component.file))
       .map((component) =>
         finding(
@@ -60,7 +71,8 @@ export const noDuplicateOfASystemComponent: Rule = {
           component.file,
           `${component.name} is also exported by the design system — rename this one, or use theirs`,
         ),
-      ),
+      );
+  },
 };
 
 export const wrapsRatherThanReimplements: Rule = {
@@ -81,8 +93,22 @@ export const wrapsRatherThanReimplements: Rule = {
   needs: needsExports,
   check: (context) => {
     const source = new Map(context.sources.map((it) => [it.file, it.source]));
-    const wraps = (component: Component, base: string) =>
-      importedNames(source.get(component.file) ?? "", context.exportedFrom).has(base);
+    const owned = new Map(context.components.map((it) => [it.name, it]));
+
+    /* Through whatever the repo has put in between, not only directly. A
+       `GuidelinesCard` renders the app's `RailCard`, and a `RailCard` is a
+       `Card` — which is the family keeping its base once rather than each
+       member importing it, and the opposite of the outlier this rule is for.
+       Cycle-guarded: two components that render each other are neither. */
+    const wraps = (component: Component, base: string, seen = new Set<string>()): boolean => {
+      if (seen.has(component.name)) return false;
+      seen.add(component.name);
+      if (importedNames(source.get(component.file) ?? "", context.exportedFrom).has(base)) return true;
+      return component.imports.some((edge) => {
+        const next = owned.get(edge.name);
+        return next !== undefined && wraps(next, base, seen);
+      });
+    };
 
     /* Grouped before judged: the repo's own convention is the evidence. Where
        most of a family builds on its base, the rest are the outliers; where

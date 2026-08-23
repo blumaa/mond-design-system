@@ -1,19 +1,20 @@
-import type { ElementType, HTMLAttributes, ReactElement } from "react";
+import type { ElementType, ReactElement } from "react";
 import { createElement } from "react";
 import { cx } from "../../internal/cx";
+import type { AnyPolymorphic, Polymorphic } from "../../internal/polymorphic";
 import styles from "./Stack.module.css";
 
 export type StackGap = "hairline" | "tight" | "base" | "loose" | "group" | "section";
 export type StackAlign = "start" | "center" | "end" | "stretch";
 
-export interface StackProps extends HTMLAttributes<HTMLElement> {
+export interface StackOwnProps {
   /** Space between children, on the gap scale. Default "base". */
   gap?: StackGap;
   /** Cross-axis alignment. Default "stretch". */
   align?: StackAlign;
-  /** Element to render. Default div. */
-  as?: ElementType;
 }
+
+export type StackProps<T extends ElementType = "div"> = Polymorphic<T, StackOwnProps>;
 
 /**
  * Vertical flow. The parent owns spacing between siblings via gap —
@@ -27,13 +28,15 @@ export interface StackProps extends HTMLAttributes<HTMLElement> {
  * </Stack>
  * ```
  */
-export function Stack({
-  gap = "base",
-  align = "stretch",
-  as = "div",
-  className,
-  ...rest
-}: StackProps): ReactElement {
+export function Stack<T extends ElementType = "div">(props: StackProps<T>): ReactElement {
+  const {
+    gap = "base",
+    align = "stretch",
+    as = "div",
+    className,
+    ...rest
+  } = props as AnyPolymorphic<StackOwnProps>;
+
   return createElement(as, {
     className: cx(styles.stack, styles[`gap-${gap}`], styles[`align-${align}`], className),
     ...rest,

@@ -1,13 +1,14 @@
-import type { ElementType, HTMLAttributes, ReactElement } from "react";
+import type { ElementType, ReactElement } from "react";
 import { createElement } from "react";
 import { cx } from "../../internal/cx";
+import type { AnyPolymorphic, Polymorphic } from "../../internal/polymorphic";
 import styles from "./Inline.module.css";
 
 export type InlineGap = "hairline" | "tight" | "base" | "loose";
 export type InlineAlign = "start" | "center" | "end" | "baseline";
 export type InlineJustify = "start" | "center" | "end" | "between";
 
-export interface InlineProps extends HTMLAttributes<HTMLElement> {
+export interface InlineOwnProps {
   /** Space between children, on the gap scale. Default "base". */
   gap?: InlineGap;
   /** Cross-axis alignment. Default "center". */
@@ -16,9 +17,9 @@ export interface InlineProps extends HTMLAttributes<HTMLElement> {
   justify?: InlineJustify;
   /** Allow wrapping onto new lines. */
   wrap?: boolean;
-  /** Element to render. Default div. */
-  as?: ElementType;
 }
+
+export type InlineProps<T extends ElementType = "div"> = Polymorphic<T, InlineOwnProps>;
 
 /**
  * Horizontal flow — Stack's row twin. Same token-bounded contract.
@@ -30,15 +31,17 @@ export interface InlineProps extends HTMLAttributes<HTMLElement> {
  * </Inline>
  * ```
  */
-export function Inline({
-  gap = "base",
-  align = "center",
-  justify = "start",
-  wrap = false,
-  as = "div",
-  className,
-  ...rest
-}: InlineProps): ReactElement {
+export function Inline<T extends ElementType = "div">(props: InlineProps<T>): ReactElement {
+  const {
+    gap = "base",
+    align = "center",
+    justify = "start",
+    wrap = false,
+    as = "div",
+    className,
+    ...rest
+  } = props as AnyPolymorphic<InlineOwnProps>;
+
   return createElement(as, {
     className: cx(
       styles.inline,

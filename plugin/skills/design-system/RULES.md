@@ -151,7 +151,7 @@ This is the one file whose contents nothing else can check. A misspelt or rename
 
 Two components with one name is a question every reader of the app has to answer from the import line: whose Icon is this. One of them gets the accessibility work and the next release, and it is not the app's — so the app's copy drifts quietly, and the day someone deletes the local import to 'clean up' the page changes shape.
 
-**Instead.** Use the system's, or name yours for what makes it different — `AvatarIcon`, `SportIcon`. If the system's is genuinely wrong for the app, say so in the system: a second consumer will want the same thing.
+**Instead.** Use the system's, or name yours for what makes it different — `AvatarIcon`, `SportIcon`. If the system's is genuinely wrong for the app, say so in the system: a second consumer will want the same thing. A component that renders the system's export of that same name is not a second one: it is the system's with something supplied that only the app has — a glyph registry, a translated label — and it is left alone.
 
 ### wraps-rather-than-reimplements
 
