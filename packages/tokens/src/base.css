@@ -31,6 +31,14 @@ svg {
   max-width: 100%;
 }
 
+/* The HTML spec's suggested UA stylesheet gives a link the hand cursor and
+   WebKit does not, so an <a href> reads as text under the pointer in Safari
+   and as a link in Chrome. Scoped to [href] because an anchor without one is
+   a target, not a link. */
+a[href] {
+  cursor: pointer;
+}
+
 button,
 input,
 select,
