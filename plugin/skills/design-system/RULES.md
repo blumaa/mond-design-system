@@ -225,6 +225,14 @@ Raw z-indexes are a bidding war. Nobody can see the whole stack from one compone
 
 **Instead.** Add the safe inset to the edge, or pad the element by it: `bottom: calc(var(--…-toast-inset) + var(--…-safe-bottom))`. The tokens hold `env(safe-area-inset-*)`, which is 0 everywhere it is not needed.
 
+### scroller-contains-its-overscroll
+
+**A box that scrolls says where the scroll stops.** *(both)*
+
+Scrolling past the end of a box hands the rest of the gesture to whatever contains it. The modal reaches its last line and the page behind it moves; the screen reaches its last card and the whole app rubber-bands in Safari. Nothing looks broken in a screenshot — it is only wrong under a thumb, which is where it is read as the app losing the user's place.
+
+**Instead.** Add `overscroll-behavior` on the axis the box scrolls: `contain` keeps the gesture inside and leaves the box's own bounce alone, `none` drops the bounce too. Say it on the box that owns the scroll — a parent cannot know which of its children was being dragged.
+
 ### no-outer-margin
 
 **A component ships no margin on its own root.** *(both)*
