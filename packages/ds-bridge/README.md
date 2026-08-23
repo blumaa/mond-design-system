@@ -9,14 +9,15 @@ not care which framework rendered the class.
 ```sh
 pnpm add -D ds-bridge
 
-dsbridge tokens            # the graph: core scales, semantic contract, your brand
-dsbridge check             # the rules, as a work list
-dsbridge rules [id]        # what each rule is protecting
-dsbridge roles             # what the system says its tokens are for
-dsbridge choosing          # which of two that both compile this case wants
-dsbridge next              # the one piece of work to do now, and what closes it
-dsbridge migrate           # the distance between this app and the system
-dsbridge hook <event>      # answer a Claude Code hook, protocol JSON on stdin
+dsbridge tokens               # the graph: core scales, semantic contract, your brand
+dsbridge check                # the rules, as a work list
+dsbridge rules [id]           # what each rule is protecting
+dsbridge roles                # what the system says its tokens are for
+dsbridge choosing             # which of two that both compile this case wants
+dsbridge next                 # the one piece of work to do now, and what closes it
+dsbridge migrate              # the distance between this app and the system
+dsbridge migrate --semantics  # what a swap changes that nothing compiles
+dsbridge hook <event>         # answer a Claude Code hook, protocol JSON on stdin
 ```
 
 ## Why
@@ -381,6 +382,41 @@ Where two system tokens hold the same value, the app's own name breaks the tie:
 
 It writes nothing. Which token plays which role is a judgement, and the report
 is what somebody makes it with.
+
+### `--semantics`
+
+The other half of a swap is what the two components announce, which no
+type-check reads. Kinbaku's confirm prompt was a `dialog` and MDS's is an
+`alertdialog`; its toast announced a refusal as an `alert` and MDS announced
+every toast as a `status`. Both sides were internally consistent, both test
+suites passed on their own, and the difference surfaced as seventy-four red
+assertions after the swap.
+
+```sh
+dsbridge migrate --semantics
+```
+
+```
+what the swap announces  4 differences, 7 pairs agree
+  the app announces the left; the system announces the right
+    ConfirmDialog  role   dialog → alert alertdialog
+    Divider        role   — → separator
+    EmptyState     title  — → h3
+    Toast          role   alert status → alert region status
+```
+
+It reads the app's components off their own markup — the roles they state, the
+element their title renders as, and whatever the component each one opens with
+announces, because a prompt that wraps a sheet is a dialog only because the
+sheet is. The system's side is `dsbridge/semantics.json`, published beside its
+stylesheet; without one there is nothing to compare against and the command says
+so rather than reporting no differences.
+
+Where the two names differ, the config pairs them:
+
+```json
+{ "replaces": { "ModalSheet": "Sheet", "ConfirmPrompt": "ConfirmDialog" } }
+```
 
 ## The rules
 

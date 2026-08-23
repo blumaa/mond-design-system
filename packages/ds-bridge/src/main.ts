@@ -23,6 +23,7 @@ import { renderRoles, roleData } from "./commands/roles.js";
 import { renderChoosing, choosingData } from "./commands/choosing.js";
 import { nextItem, renderNext } from "./commands/next.js";
 import { planMigration, renderMigration } from "./commands/migrate.js";
+import { planSemantics, renderSemantics } from "./commands/semantics.js";
 import { isHookEvent, runHook, type HookInput } from "./commands/hook.js";
 import type { Kind, Layer } from "./graph.js";
 import type { Theme } from "./css/parse.js";
@@ -39,6 +40,7 @@ const USAGE = `dsbridge — design system conformance, for the system and the ap
   dsbridge choosing [name]      which of two that both compile this case wants
   dsbridge next                 the one piece of work to do now, and what closes it
   dsbridge migrate [path]       what an app would have to move to adopt the system
+  dsbridge migrate --semantics  what the swap changes that nothing compiles
   dsbridge hook <event>         answer a Claude Code hook, protocol JSON on stdin
 
 Options for tokens
@@ -81,6 +83,8 @@ Options for migrate
   --components <p>  as above — the pair names the system being migrated to,
                     which the app has not installed and its config cannot name
   --include-tests   as above
+  --semantics       the role and the title element each pair announces, app
+                    against system: the differences a type-check cannot see
 
 Events for hook
   session-start     the namespace, the taxonomy and what the repo already has
@@ -346,6 +350,7 @@ function migrateCommand(rest: string[]): number {
       system: { type: "string" },
       components: { type: "string" },
       "include-tests": { type: "boolean" },
+      semantics: { type: "boolean" },
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
     },
@@ -362,6 +367,17 @@ function migrateCommand(rest: string[]): number {
     ...(config ? { config } : {}),
     ...(values["include-tests"] === true ? { includeTests: true } : {}),
   });
+  const color = values.color !== false && process.stdout.isTTY === true;
+
+  /* A separate report rather than a section of the same one: the value plan is
+     read once before the swap, and this is read again after each pair moves. */
+  if (values.semantics === true) {
+    const semantics = planSemantics(context);
+    if (values.json === true) jsonOut(semantics);
+    else process.stdout.write(renderSemantics(semantics, context, { color }));
+    return 0;
+  }
+
   const keep = pathFilter(root, positionals);
   const whole = planMigration(context);
   const plan =
@@ -370,7 +386,7 @@ function migrateCommand(rest: string[]): number {
       : { ...whole, literals: whole.literals.filter((f) => keep(f.file)), files: whole.files.filter(keep) };
 
   if (values.json === true) jsonOut(plan);
-  else process.stdout.write(renderMigration(plan, context, { color: values.color !== false && process.stdout.isTTY === true }));
+  else process.stdout.write(renderMigration(plan, context, { color }));
   return 0;
 }
 

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "note": "What each component announces: the ARIA roles it puts on the page and the element its own title renders as, resolved through the component it opens with — ConfirmDialog is a Modal, so it carries Modal's title element. Read by `dsbridge migrate --semantics`, which diffs this against an app's components before a swap: the difference between a `dialog` and an `alertdialog`, or a title that is a heading and one that is not, is invisible to a type-check and turns up as a red test suite afterwards. A component that announces one role under a condition and another otherwise lists both — which of the two is on the page is a prop's decision, and a migration is read before either renders. Two entries here are not in the source: Modal takes its dialog role as a prop, and Sheet gets its own from the internal Overlay it wraps. semantics.published.test.ts holds every other value to the components.",
+  "components": {
+    "AppBar": { "heading": "h1" },
+    "Avatar": { "roles": ["img"] },
+    "ConfirmDialog": { "roles": ["alert", "alertdialog"], "heading": "h2" },
+    "DataTable": { "roles": ["status"] },
+    "DateTimePicker": { "roles": ["group"] },
+    "Divider": { "roles": ["separator"] },
+    "EmptyState": { "heading": "h3" },
+    "Field": { "roles": ["alert"] },
+    "ImageCarousel": { "roles": ["group"] },
+    "Modal": { "roles": ["alertdialog", "dialog"], "heading": "h2" },
+    "ProgressBar": { "roles": ["progressbar"] },
+    "Scroller": { "roles": ["group"] },
+    "SegmentedControl": { "roles": ["radiogroup"] },
+    "Sheet": { "roles": ["dialog"], "heading": "h2" },
+    "SideNav": { "roles": ["group", "status"] },
+    "Spinner": { "roles": ["status"] },
+    "Switch": { "roles": ["switch"] },
+    "Tabs": { "roles": ["tab", "tablist", "tabpanel"] },
+    "Toast": { "roles": ["alert", "region", "status"] },
+    "UploadProgress": { "roles": ["alert"] }
+  }
+}

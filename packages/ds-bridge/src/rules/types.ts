@@ -12,6 +12,7 @@ import type { Confidence } from "./suggest.js";
 import type { Graph } from "../graph.js";
 import type { Component } from "../structure.js";
 import type { Roles } from "../roles.js";
+import type { Semantics } from "../semantics.js";
 import type { Choosing } from "../choosing.js";
 import type { Surface } from "../surface.js";
 
@@ -128,6 +129,12 @@ export type Context = {
   /** What each token is for, when the system says. Empty otherwise, and an
       empty set answers no property — which is the honest answer. */
   roles: Roles;
+  /** What each component announces, when the system says. Empty otherwise: a
+      role read off one side alone is not a comparison. */
+  semantics: Semantics;
+  /** What the app's own components are called on the system's side, for the
+      pairs whose names differ. Empty when the app never said. */
+  replaces: Record<string, string>;
   /** Which of two components that both compile this case wants, when the system
       says. Empty otherwise — nothing in the code can answer it. */
   choosing: Choosing;

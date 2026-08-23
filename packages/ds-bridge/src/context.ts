@@ -7,6 +7,7 @@ import { expandImports, loadGraph, type Graph } from "./graph.js";
 import { findFonts, findSources, findStylesheets, resolveSystem, rootScoped } from "./sources.js";
 import { anyGlob } from "./glob.js";
 import { loadRoles, type Roles, type RolesFile } from "./roles.js";
+import { loadSemantics, type Semantics, type SemanticsFile } from "./semantics.js";
 import { loadChoosing, type Choosing, type ChoosingFile } from "./choosing.js";
 import { loadSurface, type Surface, type SurfaceFile } from "./surface.js";
 import { readSystemComponents, searchRoots } from "./system.js";
@@ -73,6 +74,11 @@ export type Config = {
       this one calls them. Named rather than guessed: a tool that assumed the
       names would be telling every design system what its own parts are. */
   primitives?: string[];
+  /** What the app's own component is called on the system's side, where the
+      two names differ. `migrate --semantics` has no other way to pair a
+      `ModalSheet` with a `Sheet`, and guessing at a rename would be this tool
+      deciding which of the app's components is being replaced. */
+  replaces?: Record<string, string>;
   /** Rules this repo knows cannot run here, recorded so that the run can still
       pass. A skip left unrecorded fails the check: a rule that could not run
       reads exactly like a rule with nothing to say, and the difference is the
@@ -136,6 +142,7 @@ export type BuildOptions = {
   config?: Config;
   contract?: Contract;
   roles?: Roles;
+  semantics?: Semantics;
   choosing?: Choosing;
   surface?: Surface;
   suppressed?: Suppressed;
@@ -158,6 +165,7 @@ export function buildContext({
   config = {},
   contract,
   roles,
+  semantics,
   choosing,
   surface,
   suppressed = { tests: 0, scope: 0, lines: 0 },
@@ -188,6 +196,8 @@ export function buildContext({
     ...(config.scales ? { scales: config.scales } : {}),
     ...(contract ? { contract } : {}),
     roles: roles ?? loadRoles(undefined, graph.names()),
+    semantics: semantics ?? loadSemantics(undefined),
+    replaces: config.replaces ?? {},
     choosing: choosing ?? loadChoosing(undefined),
     surface: surface ?? loadSurface(undefined),
     suppressed,
@@ -330,6 +340,7 @@ export function loadContext({
   };
   const contract = published<Contract>("contract.json");
   const roles = loadRoles(published<RolesFile>("roles.json"), graph.names());
+  const semantics = loadSemantics(published<SemanticsFile>("semantics.json"));
   const choosing = loadChoosing(published<ChoosingFile>("choosing.json"));
   const surface = loadSurface(published<SurfaceFile>("brand-surface.json"));
   return buildContext({
@@ -347,7 +358,8 @@ export function loadContext({
     ...(config ? { config } : {}),
     ...(contract ? { contract } : {}),
     roles,
-      choosing,
+    semantics,
+    choosing,
     surface,
     suppressed,
     ignores,
