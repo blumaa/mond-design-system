@@ -77,6 +77,19 @@ export function Button({
   children,
   ...rest
 }: ButtonProps): ReactElement {
+  /* An icon-only button's glyph arrives as `children`, so it gets the same slot the
+     named slots get — otherwise its size is the browser's default for an <svg> with
+     a viewBox and no width, and there is no agreement on what that is: Chrome invents
+     300x150 and shrinks it to fit, WebKit gives 0x0 and the control disappears. Both
+     spellings of an icon button are in use, `iconLeft` with nothing between the tags
+     and a glyph as the child, so this waits to be given one. */
+  const glyph =
+    iconOnly && children != null ? <span className={styles.slot}>{children}</span> : children;
+
+  /* The spinner is standing in for that glyph, not queuing behind it: two marks in a
+     32px circle is neither of them. */
+  const body = loading && iconOnly ? null : glyph;
+
   const Element: ElementType = as ?? (href !== undefined ? "a" : "button");
   const isButton = Element === "button";
   const own = isButton ? { type, disabled: disabled || loading } : { href };
@@ -104,7 +117,7 @@ export function Button({
       ) : (
         iconLeft ? <span className={styles.slot}>{iconLeft}</span> : null
       )}
-      {children}
+      {body}
       {!loading && iconRight ? <span className={styles.slot}>{iconRight}</span> : null}
     </Element>
   );

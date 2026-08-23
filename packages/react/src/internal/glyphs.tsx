@@ -17,7 +17,7 @@ interface GlyphProps {
 
 export function CloseGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
     </svg>
   );
@@ -25,7 +25,7 @@ export function CloseGlyph({ className }: GlyphProps): ReactElement {
 
 export function ChevronLeftGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <path
         d="M10 3l-5 5 5 5"
         fill="none"
@@ -40,7 +40,7 @@ export function ChevronLeftGlyph({ className }: GlyphProps): ReactElement {
 
 export function ChevronRightGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <path
         d="M6 3l5 5-5 5"
         fill="none"
@@ -55,7 +55,7 @@ export function ChevronRightGlyph({ className }: GlyphProps): ReactElement {
 
 function Magnifier({ className, children }: GlyphProps & { children: ReactElement }): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <g fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
         <circle cx="7" cy="7" r="4.25" />
         <path d="M10.2 10.2L14 14" />
@@ -83,7 +83,7 @@ export function ZoomOutGlyph({ className }: GlyphProps): ReactElement {
 
 export function PlayGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <path d="M5 3.2l7.5 4.8L5 12.8z" fill="currentColor" />
     </svg>
   );
@@ -91,7 +91,7 @@ export function PlayGlyph({ className }: GlyphProps): ReactElement {
 
 export function PauseGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <path d="M4.5 3h2.25v10H4.5zM9.25 3h2.25v10H9.25z" fill="currentColor" />
     </svg>
   );
@@ -104,7 +104,7 @@ function Speaker(): ReactElement {
 
 export function VolumeGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <g fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <Speaker />
         <path d="M10.5 5.75a3.25 3.25 0 010 4.5" />
@@ -116,7 +116,7 @@ export function VolumeGlyph({ className }: GlyphProps): ReactElement {
 
 export function VolumeOffGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <g fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <Speaker />
         <path d="M10.75 6.25l3.5 3.5M14.25 6.25l-3.5 3.5" />
@@ -127,7 +127,7 @@ export function VolumeOffGlyph({ className }: GlyphProps): ReactElement {
 
 export function CaptionsGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <g fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <rect x="1.75" y="3.25" width="12.5" height="9.5" rx="2" />
         <path d="M6.25 6.75a2 2 0 100 2.5M11.25 6.75a2 2 0 100 2.5" />
@@ -138,7 +138,7 @@ export function CaptionsGlyph({ className }: GlyphProps): ReactElement {
 
 export function FullscreenGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <path
         d="M6 2.5H2.5V6M10 2.5h3.5V6M6 13.5H2.5V10M10 13.5h3.5V10"
         fill="none"
@@ -153,7 +153,7 @@ export function FullscreenGlyph({ className }: GlyphProps): ReactElement {
 
 export function FullscreenExitGlyph({ className }: GlyphProps): ReactElement {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true" className={className}>
       <path
         d="M2.5 6H6V2.5M13.5 6H10V2.5M2.5 10H6v3.5M13.5 10H10v3.5"
         fill="none"

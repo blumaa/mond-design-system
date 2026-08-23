@@ -168,6 +168,39 @@ describe("Button iconOnly", () => {
     expect(button.className).toContain("variant-danger");
   });
 
+  it("puts its one glyph in the slot that sizes it", () => {
+    /* An `iconOnly` button's glyph arrives as `children`, and `children` used to
+       be handed to the element untouched — so the size of a control's glyph was
+       left to the browser's default for an <svg> with a viewBox and no width.
+       There is no agreement on that default: Chrome invents 300x150 and shrinks
+       it to whatever the button allows, WebKit gives 0x0. The video player's
+       controls and the lightbox's were invisible in Safari on exactly this. */
+    render(
+      <Button iconOnly aria-label="Close">
+        <svg data-testid="glyph" aria-hidden="true" />
+      </Button>,
+    );
+    expect(screen.getByTestId("glyph").parentElement?.className).toContain("slot");
+  });
+
+  it("leaves the other spelling of an icon button alone", () => {
+    /* `iconLeft` with nothing between the tags is the second way this is written,
+       and there a slot for the children would be an empty box beside the glyph. */
+    const { container } = render(
+      <Button iconOnly aria-label="Remove" iconLeft={<svg data-testid="glyph" aria-hidden="true" />} />,
+    );
+    expect(container.querySelectorAll("span").length).toBe(1);
+  });
+
+  it("shows the spinner in place of its glyph rather than beside it", () => {
+    render(
+      <Button iconOnly aria-label="Close" loading>
+        <svg data-testid="glyph" aria-hidden="true" />
+      </Button>,
+    );
+    expect(screen.queryByTestId("glyph")).not.toBeInTheDocument();
+  });
+
   it("warning variant applies", () => {
     render(<Button variant="warning">Proceed</Button>);
     expect(screen.getByRole("button", { name: "Proceed" }).className).toContain("variant-warning");
