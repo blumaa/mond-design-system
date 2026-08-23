@@ -1,0 +1,48 @@
+.scroller {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-gap-tight);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-gap-tight);
+}
+
+.trailing {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap-hairline);
+}
+
+/* The row scrolls with the finger; the focus ring of an item at the edge needs
+   room inside the scroll area, which the negative margin then takes back. */
+.track {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--mds-gap-tight);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding: var(--mds-focus-offset);
+  margin: calc(var(--mds-focus-offset) * -1);
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.track > * {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.arrows {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap-hairline);
+}

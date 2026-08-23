@@ -114,7 +114,9 @@
       ]
     },
 
-  { "default": "FileDrop", "use": "a place to hand over a file — pressed for the picker, or dropped on", "instead": [ { "when": "the file is already on its way and what is left to show is how far it has got", "prefer": "UploadProgress" } ] }
+  { "default": "FileDrop", "use": "a place to hand over a file — pressed for the picker, or dropped on", "instead": [ { "when": "the file is already on its way and what is left to show is how far it has got", "prefer": "UploadProgress" } ] },
+
+{ "default": "Scroller", "use": "a titled row of items that runs off the edge of the screen — featured posts, a shelf of covers", "instead": [ { "when": "the items are pictures the reader looks at one at a time", "prefer": "ImageCarousel" }, { "when": "everything should be in view at once rather than scrolled past", "prefer": "Stack" }, { "when": "the row is filters rather than content", "prefer": "ChipBar" } ] }
   ],
   "deprecated": []
 }

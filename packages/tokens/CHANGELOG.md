@@ -1,5 +1,13 @@
 # @mond-design-system/tokens
 
+## 3.6.0
+
+### Minor Changes
+
+- Add `Scroller`: a titled row that scrolls sideways — featured posts, a shelf of covers. The row scrolls with the finger; the arrows do the same for a pointer or a key and shut themselves at each end, and the title names the scrolling group so a screen reader arrives at a row that says what it holds. `action` hangs a link to the rest beside the title.
+
+  `dsbridge choosing Scroller` now answers, sending pictures looked at one at a time to `ImageCarousel`, a row that should be wholly in view to `Stack`, and a row of filters to `ChipBar`.
+
 ## 3.5.0
 
 ### Minor Changes

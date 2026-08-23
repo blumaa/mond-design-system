@@ -96,6 +96,9 @@ export type {
 export { SearchField } from "./components/SearchField/SearchField";
 export type { SearchFieldProps } from "./components/SearchField/SearchField";
 
+export { Scroller } from "./components/Scroller/Scroller";
+export type { ScrollerLabels, ScrollerProps } from "./components/Scroller/Scroller";
+
 export { ListGroup, ListItem } from "./components/List/List";
 export type { ListGroupProps, ListItemProps } from "./components/List/List";
 
