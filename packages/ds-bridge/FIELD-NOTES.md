@@ -421,7 +421,7 @@ it is a different one: not "replace this" but "the system has nothing for
 this". A rule that cannot tell them apart teaches the reader to reach for the
 suppression comment, which is the one habit the tool exists to prevent.
 
-### 16. The app's test suite caught two semantic breaks the tool could not
+### 16. The app's test suite caught two semantic breaks the tool could not — closed
 
 Swapping a component for its MDS counterpart changed two things no rule looked
 at, and both surfaced as red tests in kinbaku rather than as findings.
@@ -451,6 +451,24 @@ the accessible name pattern. A `migrate --semantics` that said
 
 would have been the whole of both investigations, on day one, before a single
 test was written against the new component.
+
+Built. `dsbridge migrate --semantics` reads the app's components off their own
+markup, reads `dsbridge/semantics.json` beside the system's stylesheet, and
+prints the differences. Run against this repo as it stood before the migration
+it prints both of them:
+
+    ConfirmDialog  role   dialog → alert alertdialog
+    Toast          role   alert status → alert region status
+
+Three things had to be read that the first cut of the extractor did not. The
+role often is not in the component's own file — kinbaku's `ConfirmDialog`
+announced `dialog` only because the `ModalSheet` it returned did, so the walk
+follows the tag a component opens with, and stops there: anything deeper is a
+part of the component rather than the thing it is. A role chosen by a condition
+is both of its branches, because which one is on the page is a prop's decision
+and a migration is read before either renders. And a heading is spelled three
+ways — `<h2>`, `<Heading level={2}>` and `<Text as="h2">`, the last being how a
+design system usually writes one.
 
 ### 17. `no-raw-scale-step` steering, and it worked
 
@@ -497,7 +515,7 @@ something the tool reports — `dsbridge check` counting down — rather than
 something a person tracks in a plan document. It also makes the end of a
 migration provable, which a grep in a CI script only approximates.
 
-### 19. A panel's title was not a heading, and only the app's tests knew
+### 19. A panel's title was not a heading, and only the app's tests knew — closed
 
 Four tests in `ReactorsSheet.test.tsx` failed on `getByRole('heading', { name:
 'Who reacted' })` after the sheet moved to MDS. Kinbaku's `ModalSheet` rendered
@@ -517,6 +535,14 @@ would have printed
     ModalSheet → Sheet   title  h2 → span
 
 before the swap. Released as react 4.6.1.
+
+Closed by the same command as note 16. The pair is named in the config —
+`"replaces": { "ModalSheet": "Sheet" }`, because a rename is a decision the app
+made and nothing in either repo records it — and the difference prints on both
+sides of the arrow. Against today's MDS the pair agrees, which is 4.6.1 having
+been the right fix rather than the check having nothing to say: the system's
+side of the comparison is `semantics.json`, and a test holds every value in it
+to the component it describes.
 
 ### 20. Two components that both compile, and the reason to prefer one
 
@@ -692,3 +718,117 @@ several products would spell the same way, and neither is product knowledge —
 the opposite of the four above. A migration is the only moment a system gets
 this list, because it is the only moment somebody enumerates every composite a
 whole product needs and asks the system for each one in turn.
+
+### 29. A rule that cannot run reads exactly like a rule that passed
+
+Nine sessions of this migration ended with `dsbridge check` reporting clean, and
+the report was true of twenty-one rules. There are twenty-seven that apply to an
+app. Six were skipping every time:
+
+    skipped declares-its-level               no levels declared
+    skipped level-is-in-the-taxonomy         no levels declared
+    skipped composes-downward                no levels declared
+    skipped no-duplicate-of-a-system-component   nothing says what the system exports
+    skipped wraps-rather-than-reimplements       nothing says what the system exports
+    skipped reach-for-the-primitive              nothing names the system's primitives
+
+The last three are the family that answers "is this app using the design system
+or working around it", which is the question a migration exists to close.
+
+Two causes, and neither is the config being wrong. Kinbaku's
+`dsbridge.config.json` names `"components": "@mond-design-system/react"`.
+`readSystemComponents` resolves that specifier with `createRequire` from the
+repo root (`system.ts:58`), and kinbaku is a pnpm workspace: the package is
+installed under `apps/web/node_modules`, and the root has no
+`node_modules/@mond-design-system` at all. Resolution fails, the reason reads
+"nothing says what the design system exports", and the message blames the config
+for something the config did right. Pointed at the installed file by hand —
+`--components apps/web/node_modules/@mond-design-system/react/dist/index.d.ts` —
+the three rules produce three findings that had been there the whole migration:
+`GuidelinesCard` is named after `Card` and does not use it, and `Icon` and
+`PasswordInput` are both names the system already exports.
+
+The second cause is the report itself. A skip is printed dim, below the
+findings, and does not touch the exit code. A rule that cannot run is
+indistinguishable at a glance from a rule with nothing to say, and over nine
+sessions the eye stops reading the dim lines. That is the more serious of the
+two, because it is what let the first one survive: a `check` that exits non-zero
+when an enforced rule cannot run — or at minimum prints the skips *above* the
+summary and counts them as `21 of 27 rules` rather than `21 rules` — would have
+raised this on day one.
+
+Resolution should walk: try the config's directory, then each source root, then
+the workspace packages, before reporting that nothing named a system. An app
+that names its design system correctly should not have to know where its package
+manager hid it.
+
+### 30. Six defects found by opening the app, none of them findable by reading it
+
+The migration finished green — 1898 tests, nine gates, a clean build, and
+`dsbridge check` reporting no findings. The owner then ran the app and found six
+things wrong in one session: a heading rendering where nothing should render,
+the page scrolling when the shell owns the scroll, a panel not scrolling when it
+should, the video controls invisible, the fullscreen image's controls invisible,
+and no pointer cursor on buttons.
+
+Sorting them by what would have had to exist to catch each one is the useful
+exercise, because only one of the six is a rule dsbridge is missing:
+
+- **The heading and the two scroll bugs are runtime facts.** A height chain
+  runs from `#root` through whatever each layer renders; an overflow is the
+  interaction of a declared height with content that exceeds it. Neither is
+  legible in any single file, and dsbridge reads files. No rule closes these.
+- **The two invisible control sets are contrast, but not the contrast
+  `keeps-contrast` models.** That rule checks the pairs the contract declares,
+  in both themes, with the brand applied. On-media controls resolve against a
+  photograph, which the contract cannot name and the tool cannot see. What
+  would catch them is a rule about a *class* of surface rather than a pair:
+  anything painted over media carries its own scrim or its own solid backing.
+  That is writable, and it is the one rule this list actually asks for.
+- **The cursor is the one an existing rule nearly covers.**
+  `interactive-has-focus-visible` already asks what a stylesheet owes an
+  interactive element after it takes the browser's default away. The pointer is
+  the same shape of debt, and `dist/index.css` declares `cursor: pointer`
+  twenty-eight times, so the system is not the one at fault — which means the
+  answer is somewhere in the app and a rule would have pointed at it.
+
+The rest is not a tooling gap. dsbridge's own plan gave the visual surface to
+Storybook and the enforceable surface to the tool, and this migration ran the
+second and never ran the first. Six defects is what one session of looking
+found; the number that a build of Storybook, opened once per layer, would have
+found is most of them. A conformance tool reporting clean is not a statement
+that the thing works, and this is the entry to point at when it is read as one.
+
+### 31. Two browsers disagreeing, and a rule for the third defect
+
+Note 30 sorted the owner's six defects by what would have to exist to catch
+each. Fixing them moved three of the six into a different category than the one
+they were filed under.
+
+**The cursor and the invisible glyphs are the same defect.** Both are a default
+two engines do not agree on. An `<svg viewBox>` with no width of its own has no
+agreed size — Chrome invents 300×150 and shrinks it to whatever the parent
+allows, WebKit gives it 0×0 and the mark disappears — and an `<a href>` has no
+agreed cursor, because the HTML spec's suggested UA stylesheet gives a link the
+hand and WebKit does not. The owner tests in Safari. Everything built and
+reviewed in Chrome was blind to both.
+
+Neither was findable by a rule, and both were one line in the system. The glyphs
+now carry `width="1em" height="1em"`, which a slot's `width: 100%` still beats
+wherever there is one; `base.css` gives `a[href]` the pointer, which reaches the
+app's skip link and its brand anchors as well as `Link` and `Breadcrumb` — none
+of which a per-component rule could have reached. Note 30 read the cursor as
+"somewhere in the app"; it was in the system, in the one place a component rule
+does not look.
+
+**The page scrolling is the rule.** Measured, no screen overflows the document
+at any viewport, so the mechanism was not a height chain: it was scroll chaining
+out of an inner scroller, which is Safari rubber-banding the whole app when a
+list reaches its end. Six MDS scroll regions declared `overflow: auto` and said
+nothing about where the gesture stops. `scroller-contains-its-overscroll` reads
+the axis a box scrolls on and asks for `overscroll-behavior` on that axis, which
+is the one thing a screenshot cannot show and a thumb finds immediately.
+
+The scrim rule note 30 asked for is still unwritten — the video and fullscreen
+controls were fixed as sizing, not contrast, and a rule about anything painted
+over media remains the thing this list asks for next.
