@@ -6,7 +6,7 @@
  * label — and the only person who finds out is the one using a screen reader.
  */
 import { closingBrace, openingTags, textNodes } from "../jsx.js";
-import type { Finding, Rule } from "./types.js";
+import { nothingToCheck, type Finding, type Rule } from "./types.js";
 
 /** Attributes a person reads or hears. Everything else is for the machine. */
 const SPEAKS = new Set([
@@ -62,7 +62,8 @@ export const userFacingTextIsAProp: Rule = {
     "`alt=\"\"` is not copy — it is the mark of a decorative picture, and it stays.",
   target: "system",
   reads: "component",
-  needs: (context) => (context.components.length === 0 ? "no components under this root" : undefined),
+  needs: (context) =>
+    context.components.length === 0 ? nothingToCheck("no components under this root") : undefined,
   check: (context) => {
     const source = new Map(context.sources.map((it) => [it.file, it.source]));
     const out: Finding[] = [];

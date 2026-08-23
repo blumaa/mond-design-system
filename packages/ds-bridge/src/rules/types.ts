@@ -138,6 +138,9 @@ export type Context = {
   /** Files found and not scanned. A check that quietly halved its own scope
       reads exactly like a clean one, so the count is printed either way. */
   suppressed: Suppressed;
+  /** Rules the repo has recorded as unable to run here. A skip outside this
+      list fails the check rather than printing below it. */
+  allowSkipped: string[];
   /**
    * Per-rule opt-outs from the config, each with a reason on record. A rule may
    * also ask about a narrower key of its own — `no-raw-scale-step/typography`
@@ -164,12 +167,32 @@ export type Rule = {
   reads: Reads;
   /** A reason this rule cannot run here, when there is one. Silence from a rule
       that never ran reads exactly like a pass, so it is reported instead. */
-  needs?(context: Context): string | undefined;
+  needs?(context: Context): Skip | undefined;
   /** Absent when the rule is advisory: some of what a design system asks for is
       judgement, and a rule that cannot prove itself says so rather than
       pretending. `dsbridge rules` prints it either way. */
   check?(context: Context): Finding[];
 };
+
+/**
+ * Why a rule could not run, and whether that is anybody's fault.
+ *
+ * A bare string is a gap the repo could close: something it has not told the
+ * tool, or a design system too old to publish what the rule reads. Those fail
+ * the check unless the repo records them, because a rule that could not run
+ * reads exactly like a rule with nothing to say.
+ *
+ * `nothingToCheck` is the other kind — the repo holds no file of the sort this
+ * rule reads. There is nothing to close and nothing to record.
+ */
+export type Skip = string | { reason: string; nothingToCheck: true };
+
+export const nothingToCheck = (reason: string): Skip => ({ reason, nothingToCheck: true });
+
+export const reasonOf = (skip: Skip): string => (typeof skip === "string" ? skip : skip.reason);
+
+/** Whether the repo could do something about it. */
+export const isCloseable = (skip: Skip): boolean => typeof skip === "string";
 
 /** A rule earns "enforced" by carrying its own proof, not by claiming it. */
 export const isEnforced = (rule: Rule): rule is Rule & { check: NonNullable<Rule["check"]> } =>

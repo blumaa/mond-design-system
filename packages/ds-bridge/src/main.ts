@@ -15,7 +15,7 @@ import { findBrandFiles, resolveSystem } from "./sources.js";
 import { loadContext, type Config } from "./context.js";
 import { renderTokens, selectTokens, type RenderOptions } from "./commands/tokens.js";
 import { renderTokensHtml } from "./commands/tokensHtml.js";
-import { renderCheck, runCheck } from "./commands/check.js";
+import { renderCheck, runCheck, unrecordedSkips } from "./commands/check.js";
 import { aboveBaseline, readBaseline, updateBaseline, NO_BASELINE } from "./commands/baseline.js";
 import { applyFixes } from "./commands/fix.js";
 import { renderRules, ruleData, rulesForFile, selectRules } from "./commands/rules.js";
@@ -27,6 +27,7 @@ import { isHookEvent, runHook, type HookInput } from "./commands/hook.js";
 import type { Kind, Layer } from "./graph.js";
 import type { Theme } from "./css/parse.js";
 import type { Target } from "./rules/types.js";
+import { RULES } from "./rules/index.js";
 
 const USAGE = `dsbridge — design system conformance, for the system and the apps that use it
 
@@ -65,6 +66,8 @@ Options for check
   --fix             rewrite the findings that name exactly one token
   --baseline        report only what is above .dsbridge/baseline.json
   --update-baseline record what is there now as the debt to hold
+  --allow-skipped   rule ids, or "all": pass a run whose rules could not run.
+                    A repo records this in its config; the flag is for one run
 
 Options for next
   --root <dir>      what to look at            (default: the cwd)
@@ -202,6 +205,7 @@ function checkCommand(rest: string[], stdin?: string): number {
       fix: { type: "boolean" },
       baseline: { type: "boolean" },
       "update-baseline": { type: "boolean" },
+      "allow-skipped": { type: "string" },
       json: { type: "boolean" },
       color: { type: "boolean", default: true },
     },
@@ -210,7 +214,11 @@ function checkCommand(rest: string[], stdin?: string): number {
   });
 
   const root = resolve(values.root ?? process.cwd());
-  const config = readConfig(root);
+  const read = readConfig(root);
+  /* A repo records what it cannot run in its config, where the choice is read
+     by everyone. The flag is for a single run — a migration in progress, or a
+     rule suite being tried out — and says so by having to be typed each time. */
+  const config = allowing(read, values["allow-skipped"]);
   /* The pending file is the only thing being asked about: everything else in
      the repo is either already known or not this edit's business. */
   const held = values.pending;
@@ -271,7 +279,16 @@ function checkCommand(rest: string[], stdin?: string): number {
 
   if (values.json === true) jsonOut(findings);
   else process.stdout.write(renderCheck(findings, context, { ...options, held: all.length - findings.length }));
-  return findings.length > 0 ? 1 : 0;
+  /* A rule that could not run fails the run. The alternative is a report that
+     says clean about a question it never asked. */
+  return findings.length > 0 || unrecordedSkips(context, options).size > 0 ? 1 : 0;
+}
+
+/** The config, plus whatever this one run was told to forgive. */
+function allowing(config: Config | undefined, flag: string | undefined): Config | undefined {
+  if (flag === undefined) return config;
+  const named = flag === "all" ? RULES.map((rule) => rule.id) : flag.split(",").map((id) => id.trim());
+  return { ...(config ?? {}), allowSkipped: [...(config?.allowSkipped ?? []), ...named] };
 }
 
 function nextCommand(rest: string[]): number {

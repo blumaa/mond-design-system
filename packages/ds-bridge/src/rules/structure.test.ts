@@ -3,7 +3,7 @@ import { structureRules } from "./structure.js";
 import { loadChoosing, type ChoosingFile } from "../choosing.js";
 import { runCheck, skippedRules } from "../commands/check.js";
 import type { Component } from "../structure.js";
-import type { Context } from "./types.js";
+import { isCloseable, reasonOf, type Context } from "./types.js";
 
 type Overrides = { [K in keyof Component]?: Component[K] | undefined };
 
@@ -107,9 +107,18 @@ describe("what a repo is made of", () => {
     ).toEqual(["every-component-has-a-story"]);
   });
 
+  /* And says it is the vacuous kind: a repo with no components is not hiding
+     anything by not checking them, where a repo that never named its taxonomy
+     has something it could tell the tool. */
   it("reports rather than passes silently when there are no components", () => {
     const context = contextWith([]);
-    for (const rule of structureRules) expect(rule.needs?.(context)).toBeTypeOf("string");
+    for (const rule of structureRules) {
+      const skip = rule.needs!(context);
+      expect(reasonOf(skip!)).toBeTypeOf("string");
+      /* An empty repo is the vacuous kind of skip; a missing taxonomy or an
+         unpublished choosing.json is the kind the repo could close. */
+      expect(isCloseable(skip!)).toBe(!/no component/.test(reasonOf(skip!)));
+    }
   });
 });
 

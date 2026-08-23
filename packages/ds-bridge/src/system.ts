@@ -9,7 +9,7 @@
  */
 import { createRequire } from "node:module";
 import { existsSync, readFileSync } from "node:fs";
-import { dirname, isAbsolute, join, resolve } from "node:path";
+import { dirname, isAbsolute, join, resolve, sep } from "node:path";
 
 /** Reads a file, or nothing where there is none. Taken as a parameter so a test
     can be sure it missed rather than picking up a real package. */
@@ -92,6 +92,7 @@ export function readSystemComponents(
   id: string,
   root: string,
   read: ReadFile = onDisk,
+  alsoFrom: readonly string[] = [],
 ): SystemComponents | undefined {
   const direct = isAbsolute(id) || id.startsWith(".") ? resolve(root, id) : undefined;
   if (direct !== undefined) {
@@ -100,7 +101,20 @@ export function readSystemComponents(
     const held = packageOf(direct, read);
     return { ...(held ? { id: held } : {}), names: componentsIn(source) };
   }
-  const manifest = resolvePackage(id, resolve(root)) ?? join(resolve(root), "node_modules", id, "package.json");
+  /* The root first, then wherever else the repo keeps packages. A workspace
+     installs a dependency beside the package that declared it, and a tool that
+     looks only at the root reports that nothing named a design system — which
+     reads as the config being wrong when the config was right. */
+  for (const from of [resolve(root), ...alsoFrom.map((dir) => resolve(root, dir))]) {
+    const found = installedAt(id, from, read);
+    if (found !== undefined) return found;
+  }
+  return undefined;
+}
+
+/** The package as one directory has it installed, or nothing. */
+function installedAt(id: string, from: string, read: ReadFile): SystemComponents | undefined {
+  const manifest = resolvePackage(id, from) ?? join(from, "node_modules", id, "package.json");
   const declared = read(manifest);
   if (declared === undefined) return undefined;
   const entry = typesEntry(declared);
@@ -108,3 +122,29 @@ export function readSystemComponents(
   const source = read(resolve(dirname(manifest), entry));
   return source === undefined ? undefined : { id, names: componentsIn(source) };
 }
+
+/**
+ * The directories worth looking in, read off what the config already says.
+ *
+ * Neither answer is a guess. An entry stylesheet under `node_modules` was
+ * installed by some package, and that package's directory is where its
+ * siblings are. A source glob is rooted at the part before its first wildcard,
+ * and a repo that scans `apps/web/**` keeps a package there.
+ */
+export function searchRoots(entry: string | undefined, sources: readonly string[]): string[] {
+  const out: string[] = [];
+  const marker = `${sep}node_modules${sep}`;
+  const at = entry?.indexOf(marker) ?? -1;
+  if (entry !== undefined && at !== -1) out.push(entry.slice(0, at));
+  for (const glob of sources) {
+    const fixed = glob.split("/").slice(0, indexOfWildcard(glob)).join("/");
+    if (fixed !== "") out.push(fixed);
+  }
+  return [...new Set(out)];
+}
+
+const indexOfWildcard = (glob: string): number => {
+  const parts = glob.split("/");
+  const found = parts.findIndex((part) => /[*?[{]/.test(part));
+  return found === -1 ? parts.length : found;
+};

@@ -6,7 +6,7 @@
  * stylesheet says whether the ring survives.
  */
 import { openingTags } from "../jsx.js";
-import { componentSheets, type Context, type Finding, type Rule } from "./types.js";
+import { componentSheets, nothingToCheck, type Context, type Finding, type Rule } from "./types.js";
 
 const finding = (rule: string, file: string, message: string, line?: number): Finding => ({
   rule,
@@ -47,7 +47,7 @@ export function spreadOntoAnElement(source: string): number | undefined {
 const ACCEPTS_REF = /\bref\s*\?\s*:|\bref\s*:\s*(React\.)?\w*Ref\b|\bforwardRef\b|\bComponentProps(WithRef)?\s*</;
 
 const needsComponents = (context: Context) =>
-  context.components.length === 0 ? "no components under this root" : undefined;
+  context.components.length === 0 ? nothingToCheck("no components under this root") : undefined;
 
 export const forwardsItsRef: Rule = {
   id: "forwards-its-ref",

@@ -5,8 +5,8 @@
  * print it. The output is a work list, not an essay.
  */
 import { rulesFor } from "../rules/index.js";
-import { isEnforced } from "../rules/types.js";
-import type { Context, Finding } from "../rules/types.js";
+import { isCloseable, isEnforced, reasonOf } from "../rules/types.js";
+import type { Context, Finding, Skip } from "../rules/types.js";
 import type { Confidence } from "../rules/suggest.js";
 import { bold, dim, green, plural, red } from "../text.js";
 
@@ -85,9 +85,28 @@ function causes(findings: Finding[], color: boolean): string[] {
 /** Rule id to the reason it could not run here. */
 export const skippedRules = (context: Context, options: CheckOptions = {}): Map<string, string> => {
   const out = new Map<string, string>();
+  for (const [rule, skip] of skipsIn(context, options)) out.set(rule, reasonOf(skip));
+  return out;
+};
+
+const skipsIn = (context: Context, options: CheckOptions): Map<string, Skip> => {
+  const out = new Map<string, Skip>();
   for (const rule of rulesFor(context, options.only).filter(isEnforced)) {
-    const reason = rule.needs?.(context);
-    if (reason !== undefined) out.set(rule.id, reason);
+    const skip = rule.needs?.(context);
+    if (skip !== undefined) out.set(rule.id, skip);
+  }
+  return out;
+};
+
+/**
+ * The skips the repo could close and has not recorded — the ones that make the
+ * report a lie. A rule with nothing to read is not one of them: a repo that
+ * holds no components is not hiding anything by not checking them.
+ */
+export const unrecordedSkips = (context: Context, options: CheckOptions = {}): Map<string, string> => {
+  const out = new Map<string, string>();
+  for (const [rule, skip] of skipsIn(context, options)) {
+    if (isCloseable(skip) && !context.allowSkipped.includes(rule)) out.set(rule, reasonOf(skip));
   }
   return out;
 };
@@ -115,20 +134,38 @@ export function lineList(findings: Finding[], color: boolean): string[] {
 export function renderCheck(findings: Finding[], context: Context, options: CheckOptions = {}): string {
   const color = options.color ?? true;
   const skipped = skippedRules(context, options);
-  const ran = rulesFor(context, options.only).filter(isEnforced).length - skipped.size;
-  const scope = `${context.sheets.length} stylesheets, ${context.graph.tokens().length} tokens, ${ran} rules`;
+  const applies = rulesFor(context, options.only).filter(isEnforced).length;
+  const ran = applies - skipped.size;
+  /* Both numbers, always. "21 rules" is read as the rules there are; "21 of 27"
+     is read as a question, which is what a skip is. */
+  const scope = `${context.sheets.length} stylesheets, ${context.graph.tokens().length} tokens, ${ran} of ${applies} rules`;
   const held = options.held ?? 0;
+  const unrecorded = unrecordedSkips(context, options);
+  /* Above the summary and in the same colour as a finding, because that is what
+     it is: the run could not answer the question this rule asks. */
+  const blocked =
+    unrecorded.size === 0
+      ? []
+      : [
+          `${red(plural(unrecorded.size, "rule"), color)} could not run — record them as allowSkipped, or give the config what they need`,
+          ...[...unrecorded].map(([rule, reason]) => `  ${rule}  ${dim(reason, color)}`),
+          "",
+        ];
   const notes = [
     ...(held > 0 ? [dim(`  ${plural(held, "finding")} held by the baseline`, color)] : []),
     ...exclusions(context, color),
-    ...[...skipped].map(([rule, reason]) => dim(`  skipped ${rule}: ${reason}`, color)),
+    ...[...skipped]
+      .filter(([rule]) => !unrecorded.has(rule))
+      .map(([rule, reason]) => dim(`  skipped ${rule}: ${reason}`, color)),
   ];
-  if (findings.length === 0) return [`${green("clean", color)} — ${scope}`, ...notes, ""].join("\n");
+  if (findings.length === 0 && unrecorded.size === 0)
+    return [`${green("clean", color)} — ${scope}`, ...notes, ""].join("\n");
+  if (findings.length === 0) return [...blocked, `${scope}`, ...notes, ""].join("\n");
 
   const files = new Map<string, Finding[]>();
   for (const finding of findings) files.set(finding.file, [...(files.get(finding.file) ?? []), finding]);
 
-  const lines: string[] = [];
+  const lines: string[] = [...blocked];
   for (const [file, found] of files) {
     lines.push(bold(file, color));
     lines.push(...lineList(found, color));

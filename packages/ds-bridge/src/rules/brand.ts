@@ -8,7 +8,7 @@
 import { dirname, relative, sep } from "node:path";
 import type { Declaration } from "../css/parse.js";
 import type { Context, Finding, Rule } from "./types.js";
-import { brandSheets } from "./types.js";
+import { brandSheets, nothingToCheck } from "./types.js";
 import { rungsIn } from "./tokenDiscipline.js";
 
 const at = (context: Context, declaration: Declaration) => ({
@@ -157,7 +157,9 @@ export const brandCoversContract: Rule = {
   reads: "stylesheet",
   needs: (context) =>
     shippedBrands(context).length === 0
-      ? "this repo ships no brand file beside its stylesheet, so there is nothing to compare the contract against"
+      ? nothingToCheck(
+          "this repo ships no brand file beside its stylesheet, so there is nothing to compare the contract against",
+        )
       : undefined,
   check: (context) => {
     const semantic = context.graph.tokens().filter((token) => token.layer === "semantic");

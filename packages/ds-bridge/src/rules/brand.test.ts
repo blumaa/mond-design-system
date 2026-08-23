@@ -13,7 +13,7 @@ import {
   noForeignNamespaceToken,
 } from "./brand.js";
 import { loadSurface, SURFACE_VERSION, type SurfaceFile } from "../surface.js";
-import type { Context, Rule } from "./types.js";
+import { reasonOf, type Context, type Rule } from "./types.js";
 
 const SYSTEM = fileURLToPath(new URL("../__fixtures__/system/styles.css", import.meta.url));
 
@@ -122,7 +122,7 @@ describe("brand-covers-contract", () => {
     const graph = loadGraph({ system: SYSTEM });
     const root = fileURLToPath(new URL("../__fixtures__", import.meta.url));
     const context = buildContext({ root, kind: "system", graph, sheets: [], system: SYSTEM });
-    expect(brandCoversContract.needs?.(context)).toContain("no brand");
+    expect(reasonOf(brandCoversContract.needs!(context)!)).toContain("no brand");
   });
 });
 

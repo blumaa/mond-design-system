@@ -9,7 +9,7 @@ import { anyGlob } from "./glob.js";
 import { loadRoles, type Roles, type RolesFile } from "./roles.js";
 import { loadChoosing, type Choosing, type ChoosingFile } from "./choosing.js";
 import { loadSurface, type Surface, type SurfaceFile } from "./surface.js";
-import { readSystemComponents } from "./system.js";
+import { readSystemComponents, searchRoots } from "./system.js";
 import { readComponents, type Component } from "./structure.js";
 import { blocksIn, declarationsIn, stripComments } from "./css/parse.js";
 import { withoutComments } from "./jsx.js";
@@ -73,6 +73,11 @@ export type Config = {
       this one calls them. Named rather than guessed: a tool that assumed the
       names would be telling every design system what its own parts are. */
   primitives?: string[];
+  /** Rules this repo knows cannot run here, recorded so that the run can still
+      pass. A skip left unrecorded fails the check: a rule that could not run
+      reads exactly like a rule with nothing to say, and the difference is the
+      whole value of the report. */
+  allowSkipped?: string[];
 };
 
 /** The taxonomy a design system gets when it declares none. An app gets none:
@@ -186,6 +191,7 @@ export function buildContext({
     choosing: choosing ?? loadChoosing(undefined),
     surface: surface ?? loadSurface(undefined),
     suppressed,
+    allowSkipped: config.allowSkipped ?? [],
     exempt: (rule, file) => anyGlob(exempt[rule] ?? [])(file),
     ignored: (file, line) => line !== undefined && (ignores.get(file)?.has(line) ?? false),
   };
@@ -304,7 +310,9 @@ export function loadContext({
      rather than passing silently when nothing named one. */
   const declaredComponents = named ?? config?.components;
   const exported =
-    declaredComponents === undefined ? undefined : readSystemComponents(declaredComponents, at);
+    declaredComponents === undefined
+      ? undefined
+      : readSystemComponents(declaredComponents, at, undefined, searchRoots(entry, bounds));
   const fonts = findFonts(at)
     .filter(scanned)
     .map((file) => relative(at, file));
@@ -339,7 +347,7 @@ export function loadContext({
     ...(config ? { config } : {}),
     ...(contract ? { contract } : {}),
     roles,
-    choosing,
+      choosing,
     surface,
     suppressed,
     ignores,

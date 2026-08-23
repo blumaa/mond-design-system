@@ -4,7 +4,7 @@ import { buildContext } from "../context.js";
 import { loadGraph } from "../graph.js";
 import { userFacingTextIsAProp } from "./text.js";
 import type { Component } from "../structure.js";
-import type { Context } from "./types.js";
+import { reasonOf, type Context } from "./types.js";
 
 const SYSTEM = fileURLToPath(new URL("../__fixtures__/system/styles.css", import.meta.url));
 const ROOT = "/app";
@@ -139,7 +139,7 @@ describe("a bag of strings the component keeps", () => {
 describe("what the rule needs", () => {
   it("says so when the repo has no components to read", () => {
     const empty = buildContext({ root: ROOT, kind: "system", graph, sheets: [] });
-    expect(userFacingTextIsAProp.needs!(empty)).toMatch(/no components/);
+    expect(reasonOf(userFacingTextIsAProp.needs!(empty)!)).toMatch(/no components/);
   });
 
   it("honours an exemption on the file", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { componentsIn, readSystemComponents } from "./system.js";
+import { componentsIn, readSystemComponents, searchRoots } from "./system.js";
 
 describe("what a design system package says it exports", () => {
   it("reads a bundled export list, types and all", () => {
@@ -76,9 +76,70 @@ describe("finding the package that holds them", () => {
     );
   });
 
+  /* A workspace installs its dependencies beside the package that declared
+     them, not at the repo root the tool is pointed at. Resolving from the root
+     alone reports that nothing named a system, which blames the config for
+     something the config did right. */
+  it("looks where a workspace put the package, not only at the root", () => {
+    const workspace: Record<string, string> = {
+      "/repo/apps/web/node_modules/ds/package.json": JSON.stringify({
+        name: "ds",
+        exports: { ".": { types: "./dist/index.d.ts" } },
+      }),
+      "/repo/apps/web/node_modules/ds/dist/index.d.ts": "export { Button };",
+    };
+    const inWorkspace = (file: string) => workspace[file];
+    expect(readSystemComponents("ds", "/repo", inWorkspace)).toBeUndefined();
+    expect(readSystemComponents("ds", "/repo", inWorkspace, ["/repo/apps/web"])?.names).toEqual([
+      "Button",
+    ]);
+  });
+
+  it("takes the root's copy over a workspace one when both are installed", () => {
+    const both: Record<string, string> = {
+      "/repo/node_modules/ds/package.json": JSON.stringify({ name: "ds", types: "./root.d.ts" }),
+      "/repo/node_modules/ds/root.d.ts": "export { Button };",
+      "/repo/apps/web/node_modules/ds/package.json": JSON.stringify({ name: "ds", types: "./web.d.ts" }),
+      "/repo/apps/web/node_modules/ds/web.d.ts": "export { Card };",
+    };
+    expect(readSystemComponents("ds", "/repo", (f) => both[f], ["/repo/apps/web"])?.names).toEqual([
+      "Button",
+    ]);
+  });
+
   it("leaves the package unnamed for a file that sits in none", () => {
     const loose = { "/app/types.d.ts": "export { Button };" };
     expect(readSystemComponents("/app/types.d.ts", "/app", (f) => loose[f as keyof typeof loose])?.id)
       .toBeUndefined();
+  });
+});
+
+/* Where a package might be installed, given what the config already says. A
+   workspace's dependencies sit beside the package that declared them, and the
+   config names both places without meaning to: the entry stylesheet is read out
+   of one, and the source globs are rooted in the other. */
+describe("where to look for the package", () => {
+  it("takes the package that holds the entry stylesheet", () => {
+    expect(
+      searchRoots("/repo/apps/web/node_modules/@ds/tokens/src/styles.css", []),
+    ).toEqual(["/repo/apps/web"]);
+  });
+
+  it("takes the fixed part of each source glob", () => {
+    expect(searchRoots(undefined, ["apps/web/**", "brand/**"])).toEqual(["apps/web", "brand"]);
+  });
+
+  it("says nothing about a glob that starts with one", () => {
+    expect(searchRoots(undefined, ["**/*.css", "*.tsx"])).toEqual([]);
+  });
+
+  it("says nothing about an entry that is not installed anywhere", () => {
+    expect(searchRoots("/repo/packages/tokens/src/styles.css", [])).toEqual([]);
+  });
+
+  it("says each place once", () => {
+    expect(
+      searchRoots("/repo/apps/web/node_modules/@ds/tokens/src/styles.css", ["/repo/apps/web/**"]),
+    ).toEqual(["/repo/apps/web"]);
   });
 });

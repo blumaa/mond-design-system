@@ -9,12 +9,14 @@
  */
 import { dirname, relative, resolve } from "node:path";
 import { asLevel, type Component } from "../structure.js";
-import type { Context, Finding, Rule } from "./types.js";
+import { nothingToCheck, type Context, type Finding, type Rule } from "./types.js";
 
 const target = "system" as const;
 
 const needsComponents = (context: Context) =>
-  context.components.length === 0 ? "no component directories under this root" : undefined;
+  context.components.length === 0
+    ? nothingToCheck("no component directories under this root")
+    : undefined;
 
 /* An app's levels are its own — Fair Play groups by feature, and holding it to
    atom/molecule/organism would be 156 findings about a vocabulary it never

@@ -47,7 +47,15 @@ function run(argv: string[], stdin?: string): { status: number; output: string }
   return { status, output };
 }
 
+/* The fixture system publishes no brand surface and no component package, so
+   the rules that read those cannot run against these trees. Recorded here once,
+   rather than in every tree, so that a test about one rule is not also a test
+   about the config. The three tests below turn it off deliberately. */
 const check = (dir: string, ...rest: string[]) =>
+  run(["check", "--root", dir, "--system", SYSTEM, "--no-color", "--allow-skipped", "all", ...rest]);
+
+/** The same run, with skipped rules failing it as they do in a real repo. */
+const strictly = (dir: string, ...rest: string[]) =>
   run(["check", "--root", dir, "--system", SYSTEM, "--no-color", ...rest]);
 
 const app = (component: string, extra: Record<string, string> = {}) =>
@@ -98,6 +106,52 @@ describe("dsbridge check", () => {
     expect(check(app(source)).output).toContain("clean");
   });
 
+  /* A rule that cannot run is not a rule that passed. Nine sessions of a
+     migration read "clean" off a report where six of twenty-seven rules were
+     skipping, and the three that answer "is this app using the design system"
+     were among them. */
+  describe("a rule that could not run", () => {
+    const unlevelled = () =>
+      app(".root { background: var(--mds-surface-card); }", {
+        "src/Button.tsx": "export const Button = () => null;",
+        "dsbridge.config.json": JSON.stringify({ levels: ["atom"] }),
+      });
+
+    it("counts the rules that ran against the rules that apply", () => {
+      const { output } = strictly(unlevelled());
+      expect(output).toMatch(/\d+ of \d+ rules/);
+    });
+
+    it("fails the run rather than reporting clean", () => {
+      const { status, output } = strictly(unlevelled());
+      expect(status).toBe(1);
+      expect(output).toContain("could not run");
+      expect(output).not.toContain("clean —");
+    });
+
+    it("passes once the repo records which rules it cannot run", () => {
+      const dir = app(".root { background: var(--mds-surface-card); }", {
+        "src/Button.tsx": "export const Button = () => null;",
+        "dsbridge.config.json": JSON.stringify({
+          levels: ["atom"],
+          allowSkipped: [
+            "declares-its-level",
+            "level-is-in-the-taxonomy",
+            "composes-downward",
+            "brand-role-takes-its-kind",
+            "brand-leaves-floors-alone",
+            "no-duplicate-of-a-system-component",
+            "wraps-rather-than-reimplements",
+            "reach-for-the-primitive",
+          ],
+        }),
+      });
+      const { status, output } = strictly(dir);
+      expect(status).toBe(0);
+      expect(output).toContain("clean");
+    });
+  });
+
   it("runs one rule when asked", () => {
     const { output } = check(app(".root { padding: 8px; color: #ff0000; }"), "--rule", "no-literal-color");
     expect(output).toContain("no-literal-color");
@@ -117,7 +171,7 @@ describe("dsbridge check", () => {
       "src/Card.module.css": ".root { background: var(--k-surface-page); }",
       "dsbridge.config.json": JSON.stringify({ prefix: "--k-", system: "design/tokens/styles.css" }),
     });
-    const { status, output } = run(["check", "--root", dir, "--no-color"]);
+    const { status, output } = run(["check", "--root", dir, "--no-color", "--allow-skipped", "all"]);
     expect(status).toBe(0);
     expect(output).toContain("clean");
   });
@@ -484,7 +538,7 @@ describe("dsbridge check --baseline", () => {
 
 describe("dsbridge check --fix", () => {
   const fix = (dir: string, ...rest: string[]) =>
-    run(["check", "--root", dir, "--system", SYSTEM, "--no-color", "--fix", ...rest]);
+    run(["check", "--root", dir, "--system", SYSTEM, "--no-color", "--allow-skipped", "all", "--fix", ...rest]);
 
   it("writes the one token that answers the property, and says what it did", () => {
     const dir = app(".a { gap: 8px; }");
@@ -527,7 +581,10 @@ describe("dsbridge check --fix", () => {
 
 describe("dsbridge check --pending", () => {
   const held = (dir: string, file: string, source: string, ...rest: string[]) =>
-    run(["check", "--root", dir, "--system", SYSTEM, "--no-color", "--pending", file, ...rest], source);
+    run(
+      ["check", "--root", dir, "--system", SYSTEM, "--no-color", "--allow-skipped", "all", "--pending", file, ...rest],
+      source,
+    );
 
   it("judges the text the editor is holding, not the file on disk", () => {
     const root = app(".a { padding: var(--mds-pad-control-md); }");
