@@ -41,6 +41,7 @@
 .body {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
   padding: var(--mds-pad-card);
 }
 

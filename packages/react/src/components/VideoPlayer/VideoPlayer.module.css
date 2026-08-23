@@ -133,4 +133,5 @@
 .player:fullscreen .chapters {
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
 }

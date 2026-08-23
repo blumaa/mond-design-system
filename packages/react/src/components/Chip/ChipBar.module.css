@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
   min-width: 0;
 }

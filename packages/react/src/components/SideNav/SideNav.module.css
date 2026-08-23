@@ -6,6 +6,7 @@
   flex: 0 0 var(--mds-sidebar-w);
   padding: var(--mds-pad-page-y) var(--mds-pad-tight);
   overflow-y: auto;
+  overscroll-behavior-y: contain;
 }
 
 .group {

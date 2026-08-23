@@ -16,6 +16,10 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  /* The screen is the only thing that scrolls, so the gesture stops here. Without
+     this, reaching the last card hands the rest of the drag to the page and the
+     whole app rubber-bands in Safari — a page that does not scroll, scrolling. */
+  overscroll-behavior-y: contain;
   padding: var(--mds-pad-page-y) var(--mds-pad-page-x);
 }
 
