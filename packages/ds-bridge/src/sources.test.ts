@@ -48,6 +48,35 @@ describe("resolveSystem", () => {
   it("says so when there is no package.json to read", () => {
     expect(() => resolveSystem(join(REPO, "no-such-dir"), missing)).toThrow(/dsbridge\.config\.json/);
   });
+
+  /* A workspace installs a dependency beside the package that declared it, so
+     the root has no node_modules and nothing in its manifest. Looking only there
+     reports that no design system is installed, in a repo that installed one. */
+  const WORKSPACE = join(__dirname, "__fixtures__", "workspace");
+  const installedUnder: Resolver = (id, from) => {
+    const path = join(from, "node_modules", id);
+    if (!existsSync(path)) throw new Error("MODULE_NOT_FOUND");
+    return path;
+  };
+
+  it("looks where the sources say the repo keeps its packages", () => {
+    expect(resolveSystem(WORKSPACE, installedUnder, ["apps/web/src/**"])).toBe(
+      join(WORKSPACE, "apps", "web", "node_modules", "@acme", "ds", "styles.css"),
+    );
+  });
+
+  it("still finds nothing when nothing says where to look", () => {
+    expect(() => resolveSystem(WORKSPACE, installedUnder)).toThrow(/dsbridge\.config\.json/);
+  });
+
+  /* Two workspace packages depending on the same design system is the normal
+     case, and each has its own copy installed beside it. That is one dependency
+     found twice, not two candidates to ask the repo about. */
+  it("counts one dependency once, however many packages install it", () => {
+    expect(
+      resolveSystem(WORKSPACE, installedUnder, ["apps/web/src/**", "packages/ui/src/**"]),
+    ).toBe(join(WORKSPACE, "apps", "web", "node_modules", "@acme", "ds", "styles.css"));
+  });
 });
 
 describe("findBrandFiles", () => {

@@ -254,7 +254,11 @@ export function loadContext({
      and the config's prefix is the one it is leaving: inferring from the entry
      is the only answer that can be right for both. */
   const told = prefix ?? (system ? undefined : config?.prefix);
-  const entry = system ? resolve(system) : declared ? resolve(at, declared) : resolveSystem(at);
+  const entry = system
+    ? resolve(system)
+    : declared
+      ? resolve(at, declared)
+      : resolveSystem(at, undefined, config?.sources ?? []);
   /* The system's own token files are the graph, never sheets to be judged:
      declaring the contract is what they are for. Checking the design system
      against itself is therefore checking its component stylesheets. */

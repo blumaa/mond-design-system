@@ -127,9 +127,15 @@ function installedAt(id: string, from: string, read: ReadFile): SystemComponents
  * The directories worth looking in, read off what the config already says.
  *
  * Neither answer is a guess. An entry stylesheet under `node_modules` was
- * installed by some package, and that package's directory is where its
- * siblings are. A source glob is rooted at the part before its first wildcard,
- * and a repo that scans `apps/web/**` keeps a package there.
+ * installed by some package, and that package's directory is where its siblings
+ * are — though under pnpm the file resolves into the store, whose first
+ * `node_modules` is the repo root, so this half answers only sometimes.
+ *
+ * A source glob is rooted at the part before its first wildcard, and that part
+ * is a directory *inside* a package rather than the package: a repo scanning
+ * `apps/web/src/**` installs at `apps/web`. Every ancestor comes back for that
+ * reason, nearest first. Which of them is a package is a question for the disk,
+ * and the callers are the ones already reading it.
  */
 export function searchRoots(entry: string | undefined, sources: readonly string[]): string[] {
   const out: string[] = [];
@@ -137,8 +143,11 @@ export function searchRoots(entry: string | undefined, sources: readonly string[
   const at = entry?.indexOf(marker) ?? -1;
   if (entry !== undefined && at !== -1) out.push(entry.slice(0, at));
   for (const glob of sources) {
-    const fixed = glob.split("/").slice(0, indexOfWildcard(glob)).join("/");
-    if (fixed !== "") out.push(fixed);
+    const parts = glob.split("/").slice(0, indexOfWildcard(glob));
+    for (let depth = parts.length; depth > 0; depth--) {
+      const dir = parts.slice(0, depth).join("/");
+      if (dir !== "") out.push(dir);
+    }
   }
   return [...new Set(out)];
 }

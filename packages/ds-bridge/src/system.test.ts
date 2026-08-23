@@ -126,7 +126,17 @@ describe("where to look for the package", () => {
   });
 
   it("takes the fixed part of each source glob", () => {
-    expect(searchRoots(undefined, ["apps/web/**", "brand/**"])).toEqual(["apps/web", "brand"]);
+    expect(searchRoots(undefined, ["apps/web/**", "brand/**"])).toEqual([
+      "apps/web",
+      "apps",
+      "brand",
+    ]);
+  });
+
+  /* A glob names the source, not the package holding it. `apps/web/src` has no
+     manifest and `apps/web` does, and only the disk knows which. */
+  it("offers every directory above the glob, nearest first", () => {
+    expect(searchRoots(undefined, ["apps/web/src/**"])).toEqual(["apps/web/src", "apps/web", "apps"]);
   });
 
   it("says nothing about a glob that starts with one", () => {
@@ -140,6 +150,6 @@ describe("where to look for the package", () => {
   it("says each place once", () => {
     expect(
       searchRoots("/repo/apps/web/node_modules/@ds/tokens/src/styles.css", ["/repo/apps/web/**"]),
-    ).toEqual(["/repo/apps/web"]);
+    ).toEqual(["/repo/apps/web", "/repo/apps", "/repo"]);
   });
 });

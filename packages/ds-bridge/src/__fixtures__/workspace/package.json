@@ -1,0 +1,7 @@
+{
+  "name": "a-workspace",
+  "private": true,
+  "devDependencies": {
+    "vitest": "4.0.0"
+  }
+}

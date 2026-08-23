@@ -832,3 +832,43 @@ is the one thing a screenshot cannot show and a thumb finds immediately.
 The scrim rule note 30 asked for is still unwritten — the video and fullscreen
 controls were fixed as sizing, not contrast, and a rule about anything painted
 over media remains the thing this list asks for next.
+
+### 32. The half-fixed shared function, found by asking whether the tool ships
+
+The question was whether dsbridge is ready to ship. It is not, and the second of
+the four reasons was a live bug of the exact shape note 29 warned about.
+
+Note 29 taught `readSystemComponents` to look past the repo root into the
+workspace packages named by `sources`, because a workspace installs a dependency
+beside the package that declared it. That was one of the two functions that need
+to know where a repo keeps its packages. `resolveSystem`, which finds the token
+stylesheet by shape, never got it — so every workspace app had to hand-write a
+path into `node_modules` as `system`, which is note 11's complaint, still open.
+Kinbaku's config carried exactly that line. That is patching one call site when
+the shared function is wrong, which is the thing the fix for note 29 was itself
+criticised for, done again in the same package.
+
+Both call sites already went through `searchRoots`, so the shared function was
+there and it was answering the wrong question. It returned the fixed part of
+each source glob: `apps/web/src/**` gave `apps/web/src`, which names the source
+and not the package that installed anything. It also read the entry stylesheet's
+first `node_modules` segment as the installing package, and under pnpm the entry
+resolves into the store — `<repo>/node_modules/.pnpm/@mond-design-system+tokens@3.6.1/node_modules/…` —
+whose first `node_modules` is the repo root. Both halves pointed away from
+`apps/web`, and `@mond-design-system/react` cannot be resolved from anywhere at
+all, because its `exports` map does not expose `./package.json`; the fallback
+that saves it only works from the directory that installed it.
+
+The fix is that `searchRoots` now returns each glob's fixed part *and every
+directory above it*, nearest first, and stays a pure function. Which of those
+directories is a package is a question for the disk, and both callers were
+already reading it: `readSystemComponents` tries each in turn, and
+`resolveSystem` asks each for its dependencies, which a directory with no
+manifest answers with none. One function, one behaviour, two call sites fixed
+together.
+
+What made it findable was not a test. Every test passed before and after, in
+both places. It was running the built CLI against a real repo with the
+hand-written `system` line deleted, which is the only thing that ever asked the
+tool the question the app asks it. The suite has a fixture workspace now, added
+with the fix, so the next person changing this can be told rather than shown.

@@ -10,6 +10,7 @@ import { createRequire } from "node:module";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { declarationsIn } from "./css/parse.js";
+import { searchRoots } from "./system.js";
 import { expandImports } from "./graph.js";
 
 /** Build output and dependencies are not the app's to change or to be judged on.
@@ -58,16 +59,39 @@ const NAME_IT =
  * answer. Two is a question only the repo can settle, and so is none — the
  * design system's own repo is the case where there is nothing installed to
  * find, and it is also the one repo that knows where its stylesheet is.
+ *
+ * `sources` is what the config already says the repo is made of, and it is read
+ * for the same reason `readSystemComponents` reads it: a workspace installs a
+ * dependency beside the package that declared it, so the root holds neither the
+ * manifest naming the system nor the directory containing it. Looking only at
+ * the root reports that nothing is installed, in a repo that installed it, and
+ * leaves the app writing a path into `node_modules` by hand.
  */
-export function resolveSystem(cwd: string, resolver: Resolver = nodeResolver): string {
-  const from = resolve(cwd);
-  const found = dependencyNames(from).flatMap((name) => {
-    try {
-      return [{ name, path: resolver(`${name}/styles.css`, from) }];
-    } catch {
-      return [];
+export function resolveSystem(
+  cwd: string,
+  resolver: Resolver = nodeResolver,
+  sources: readonly string[] = [],
+): string {
+  const at = resolve(cwd);
+  /* A directory in that list that holds no manifest names no dependencies, which
+     is how the ones that are not packages take themselves out. */
+  const roots = [at, ...searchRoots(undefined, sources).map((dir) => resolve(at, dir))];
+  /* By name, because one dependency installed beside three workspace packages is
+     found three times and is still one candidate. The first root that has it
+     wins: they are copies of the same package. */
+  const byName = new Map<string, string>();
+  for (const from of roots) {
+    for (const name of dependencyNames(from)) {
+      if (byName.has(name)) continue;
+      try {
+        byName.set(name, resolver(`${name}/styles.css`, from));
+      } catch {
+        /* Not this one: a dependency that publishes no stylesheet is not a
+           design system, and neither is one this root cannot see. */
+      }
     }
-  });
+  }
+  const found = [...byName].map(([name, path]) => ({ name, path }));
   if (found.length === 1) return found[0]!.path;
   if (found.length === 0) {
     throw new Error(`nothing installed here publishes a styles.css, so no design system was found — ${NAME_IT}`);
