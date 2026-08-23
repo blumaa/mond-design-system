@@ -61,7 +61,11 @@ export function Field({ label, children, hint, error, required = false, classNam
         {children}
       </FieldContext.Provider>
       {message && (
-        <span id={messageId} className={cx(styles.message, error !== undefined && styles.error)}>
+        <span
+          id={messageId}
+          role={error !== undefined ? "alert" : undefined}
+          className={cx(styles.message, error !== undefined && styles.error)}
+        >
           {message}
         </span>
       )}

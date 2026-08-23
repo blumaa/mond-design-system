@@ -35,6 +35,24 @@ describe("Field", () => {
     expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
+  /* A message that only arrives after a submit has to say itself: the reader
+     who pressed the button is not on the field it is about. */
+  it("says an error out loud, and leaves a hint quiet", () => {
+    const { rerender } = render(
+      <Field label="Email" hint="Work address preferred">
+        <Input />
+      </Field>,
+    );
+    expect(screen.queryByRole("alert")).toBeNull();
+
+    rerender(
+      <Field label="Email" error="Not an email">
+        <Input />
+      </Field>,
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent("Not an email");
+  });
+
   it("required marks the label", () => {
     render(
       <Field label="Email" required>

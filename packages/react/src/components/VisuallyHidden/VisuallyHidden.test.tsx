@@ -42,6 +42,20 @@ describe("VisuallyHidden", () => {
     expect(style.visibility).not.toBe("hidden");
   });
 
+  /* An accessible name is assembled from the markup, and two inline boxes have
+     their words run together: "UnreadMara replied". Absolute positioning already
+     blockifies the box in a browser, so this only states what is computed —
+     but it is what a test environment reads, and what a screen reader says. */
+  it("keeps its word apart from the text beside it", () => {
+    render(
+      <a href="/n1">
+        <VisuallyHidden>Unread</VisuallyHidden>
+        <span>Mara replied</span>
+      </a>,
+    );
+    expect(screen.getByRole("link")).toHaveAccessibleName("Unread Mara replied");
+  });
+
   it("keeps a caller's className", () => {
     render(<VisuallyHidden className="k-admin__head">Columns</VisuallyHidden>);
     expect(screen.getByText("Columns").className).toContain("k-admin__head");

@@ -5,6 +5,11 @@
    out by the margin, so the box takes no room in the layout; white-space:nowrap
    so a long string is not wrapped into it and read back one letter per line. */
 .hidden {
+  /* Blockified by the absolute position anyway; declared because the name a
+     screen reader assembles depends on it, and an implicit computation is not
+     what every reader of this box does. Inline, its word runs into the text
+     beside it: "UnreadMara replied". */
+  display: block;
   position: absolute;
   width: var(--mds-hidden-size);
   height: var(--mds-hidden-size);

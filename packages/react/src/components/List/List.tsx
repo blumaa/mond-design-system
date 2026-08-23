@@ -67,13 +67,15 @@ export interface ListItemProps extends Omit<HTMLAttributes<HTMLElement>, "title"
       `trailing` and it is a button inside the link. This slot sits outside
       the hit target, where a second control can be reached. */
   actions?: ReactNode;
-  /** Makes the whole row a button. */
+  /** Makes the whole row a button — or, with `href`, reports the press on the
+      way out: a notification marked read, a tap counted. */
   onClick?: () => void;
   /** Marks an onClick row as a toggle — a picker row that selects rather than
       navigates. Lands as aria-pressed on the row button itself, where the
       screen reader's focus is. Leave unset for rows that navigate. */
   pressed?: boolean;
-  /** Makes the whole row a link. Wins over onClick. */
+  /** Makes the whole row a link. The row navigates rather than acts, and any
+      onClick rides along with the navigation. */
   href?: string;
   /** Element override for that link, e.g. a router's Link. */
   as?: ElementType;
@@ -138,7 +140,7 @@ export function ListItem({
       {...rest}
     >
       {href !== undefined ? (
-        <LinkElement className={cx(styles.row, styles.interactive)} href={href}>
+        <LinkElement className={cx(styles.row, styles.interactive)} href={href} onClick={onClick}>
           {content}
         </LinkElement>
       ) : onClick !== undefined ? (

@@ -598,3 +598,97 @@ with its own reading rules, a subtitle is a size. Recording both because the
 distinction is the interesting part — the question a `migrate --semantics`
 report should ask about every missing variant is not "does the system have
 this name?" but "is what it names a thing, or a step?".
+
+### 24. The palette is the last thing to move, and it takes the artwork with it
+
+Screens migrate one file at a time and each one is revertible. The token layer
+does not: `check-tokens.mjs` resolved every declaration out of the dying
+system's tree, and hanging off that gate was a baked-hex contract — four SVG
+logo cuts, six icon PNGs, `index.html`'s pre-paint block, the PWA manifest —
+each literal held to a token by name. Nothing in that set can move until the
+palette does, and once the palette moves, all of it must move in the same
+commit or the gate fails on every file at once.
+
+Two consequences worth planning for. The gate that enforces the token rules is
+itself written against a tree that is about to be deleted, so it is the last
+thing retargeted and the thing most likely to be retargeted under a red suite.
+And the baked hex is where a migration leaks silently: a logo cut still filled
+from `--k-brand-red` renders exactly as before, and only a check that resolves
+the token the way a browser would — following `var()`, computing
+`color-mix(in oklab, …)` — can tell that the hex it matches is now nobody's.
+
+For the tool, this is note 18's `retiring` list with a second half. A
+`baked` map in `dsbridge.config.json` — file, literal, token — would let
+`dsbridge check` answer "is this hex still the value of the token it claims?"
+for artwork, HTML and manifests, which is the one class of file no CSS-aware
+rule ever looks at.
+
+### 25. An inline `<style>` under a CSP hash makes a comment a policy change
+
+The baked hex in `index.html` sits in a pre-paint `<style>`, and the comment
+naming its token sits directly above it. Re-pointing that comment from
+`--k-surface-page` to `--mds-surface-page` changed the block's bytes, which
+changed its sha256, which invalidated the `style-src` hash in `vercel.json`.
+The app's own `vercel.test.ts` caught it by rebuilding and recomputing, so the
+cost was a minute; without that test it would have been a blank page on
+deploy, from an edit that changed nothing rendered.
+
+Any migration that touches a hashed inline block is making a deploy-blocking
+change even when it edits only a comment. Worth saying once in a migration
+guide, because the instinct is that comments are free.
+
+### 26. Assertions against the old library's class names die with it
+
+Kinbaku's tests reached for `k-btn`, `.k-profile__meta`,
+`.k-notification--unread`, `k-visually-hidden` and `.k-badge` — the design
+system's own class names, used as a handle for "the thing rendered". They pass
+until the component underneath is swapped, and then they fail with nothing to
+say: the class is gone, the element is fine, and the test names a detail that
+was never the app's to know. Every one was rewritten as a role and an
+accessible name, which is what the assertion meant in the first place and what
+survives the next migration too.
+
+Two things follow. A selector matching the retiring namespace inside a test
+file is a finding dsbridge can raise off the same `retiring` list — cheaply,
+and before the swap rather than after. And the app's test environment loads no
+stylesheets at all, so anything asserted about computed style there was
+answering from the jsdom default rather than from the system; a rule that
+flags `getComputedStyle` in a suite with no CSS would have caught a second
+family of tests that were only pretending to check appearance.
+
+### 27. What the second consumer finds is what the first never asked for
+
+Three fixes came out of this migration, released together as react 4.10.1, and
+each is a component that knew something and did not say it:
+
+- `Field` rendered its error message as plain text. The text appeared and no
+  screen reader said anything, which is the whole case the message exists for.
+  Now `role="alert"` when the message is an error.
+- `ListItem` treated `href` and `onClick` as alternatives — "link wins over
+  onClick". A notification row navigates *and* reports the press that marks it
+  read, and there was no way to spell that. `onClick` now rides along with the
+  navigation.
+- `VisuallyHidden` did not declare `display`. Inline, its word ran into the
+  text beside it and the name assembled as "UnreadMara replied".
+
+None was findable from Fair Play, because Fair Play never composed those
+cases: no form with an announced error, no row that both navigates and
+reports, no hidden word immediately before visible text. The general lesson is
+the second-consumer rule read backwards — the first consumer's silence is not
+evidence, and a component's gaps are enumerated by use, not by review.
+
+### 28. The composition boundary held, and that is the finding
+
+Four things the app kept for itself — `NotificationList`, `GroupHeader`,
+`Logo`, `MemberList` — and each was checked against `dsbridge choosing` first.
+The answer every time was that MDS has the parts (`List`/`ListItem`, `Card`,
+`Avatar`, `Text`) and no opinion about the whole, which is correct: what makes
+a `GroupHeader` is knowing what a circle is.
+
+The interesting half is the two gaps the same exercise found. `Divider` takes
+no `spacing`, so the app spaces it from outside; `Badge` takes no count, max
+or label, so a "9+ unread" badge is assembled by the caller. Both are things
+several products would spell the same way, and neither is product knowledge —
+the opposite of the four above. A migration is the only moment a system gets
+this list, because it is the only moment somebody enumerates every composite a
+whole product needs and asks the system for each one in turn.

@@ -65,6 +65,19 @@ describe("List", () => {
     expect(screen.getByRole("link", { name: /Go/ })).toHaveAttribute("href", "/there");
   });
 
+  /* A row that navigates can still have something to record on the way out —
+     a notification marked read, a tap counted. */
+  it("a row that navigates still reports the press", async () => {
+    const onClick = vi.fn();
+    render(
+      <ListGroup>
+        <ListItem title="Go" href="/there" onClick={onClick} />
+      </ListGroup>,
+    );
+    await userEvent.click(screen.getByRole("link", { name: /Go/ }));
+    expect(onClick).toHaveBeenCalled();
+  });
+
   it("as renders the router's link in the row", () => {
     const Fake = (props: React.ComponentProps<"a">) => <a data-testid="fake" {...props} />;
     render(

@@ -1,5 +1,19 @@
 # @mond-design-system/react
 
+## 4.10.1
+
+### Patch Changes
+
+- Three fixes the Kinbaku migration surfaced, each one a component saying less than it knew:
+
+  - `Field` puts `role="alert"` on its message when that message is an error, so a validation
+    failure is announced. Without it the text appears and a screen reader says nothing, which is
+    the case the message exists for.
+  - `ListItem` passes `onClick` to the link it renders. A row could navigate or report a press,
+    never both, so a notification row could not be marked read on the way out.
+  - `VisuallyHidden` declares `display: block`. Inline, its word ran into the text beside it and
+    a reader assembled the name as "UnreadMara replied".
+
 ## 4.10.0
 
 ### Minor Changes
