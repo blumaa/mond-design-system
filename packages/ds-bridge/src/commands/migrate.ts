@@ -14,7 +14,7 @@ import { valueIndex } from "../rules/suggest.js";
 import { isRung } from "../rules/tokenDiscipline.js";
 import { importedNames } from "../structure.js";
 import { runCheck } from "./check.js";
-import { brandSheets, tokenSheets, type Context, type Finding } from "../rules/types.js";
+import { brandSheets, componentSheets, tokenSheets, type Context, type Finding } from "../rules/types.js";
 import { bold, dim, plural } from "../text.js";
 
 /** One of the app's own tokens, and the system token holding the same value. */
@@ -39,6 +39,9 @@ export type Migration = {
   /** How much of the semantic contract a brand file already re-points. */
   contract: { total: number; repointed: number };
   literals: Finding[];
+  /** Component stylesheets read for those literals. Zero of them is an app that
+      styles some other way, which is not the same as an app that is clean. */
+  scanned: number;
   /** The system's components, split by whether the app has ever imported one.
       Absent when nothing said what the system exports. */
   components?: { used: string[]; unused: string[] };
@@ -138,6 +141,7 @@ export function planMigration(context: Context): Migration {
       repointed: semantic.filter((token) => token.overriddenBy.length > 0).length,
     },
     literals: runCheck(context, { only: LITERAL_RULES }),
+    scanned: componentSheets(context).length,
     ...(components ? { components } : {}),
     ...(template !== undefined && existsSync(template) ? { template } : {}),
   };
@@ -203,9 +207,15 @@ export function renderMigration(plan: Migration, context: Context, options: { co
   }
 
   const files = new Set(plan.literals.map((finding) => finding.file));
+  /* Read nothing and find nothing, and the count alone says the app is clean.
+     Saying how much was read is what separates the two, and an app with no
+     component stylesheets at all — one that styles in class attributes — has
+     to be told that this part of the report did not look at it. */
   lines.push(
     "",
-    `${bold("literals in components", color)}  ${plan.literals.length} in ${plural(files.size, "file")}`,
+    plan.scanned === 0
+      ? `${bold("literals in components", color)}  no component stylesheets — nothing was read for this`
+      : `${bold("literals in components", color)}  ${plan.literals.length} in ${plural(files.size, "file")} of ${plan.scanned} read`,
     ...capped(plan.literals, (f) => `${f.file}:${f.line ?? ""}  ${f.message}`, color),
     "",
     dim("next: dsbridge rules --markdown   the reasoning, for an agent", color),

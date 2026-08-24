@@ -969,3 +969,55 @@ instead of `position` is not read, and neither is one whose colour comes from a
 child. That is the trade this repo keeps making. A rule that misses a case is a
 gap; a rule that reports a correct file is a rule that gets turned off, and then
 it misses every case.
+
+### 35. What `migrate` did on an app that has no stylesheets
+
+`dsbridge migrate` had been run against exactly one app — kinbaku, a CSS-modules
+app with a token file of its own — which is the shape it was designed against.
+The second exercise was deliberately the opposite shape: `berlin-demo-finder`,
+a Tailwind v4 app whose only stylesheet is `src/app/globals.css` and whose
+styling lives in class attributes. Two defects fell out of the first run, and
+both were in code written before there was any reason to think about either
+case.
+
+**A bare `@import` killed the whole command.** The first line of a Tailwind v4
+stylesheet is `@import "tailwindcss";`, and the import follower in `graph.ts`
+resolved every specifier as a path relative to the sheet that wrote it and read
+it with `readFileSync`. The result was
+
+```
+dsbridge migrate: ENOENT: no such file or directory, open '…/src/app/tailwindcss'
+```
+
+— not a bad report, no report. The root cause is the assumption that an
+`@import` names a file next to the sheet. It often does not: a package by name,
+a font from a CDN, a file a build step writes later. The policy already existed
+elsewhere — `composes` pointing outside what was scanned resolves to nothing —
+and now the follower follows it too: an import that is not a readable file is
+skipped, and the sheet that wrote it still loads with everything else it
+imports. The entry itself still throws when it is missing, because being pointed
+at a stylesheet that is not there is the caller's mistake, and a silent empty
+graph reports every app as using no tokens at all.
+
+**"0 literals in 0 files" was a lie.** With the crash fixed the report ran, and
+the literals section said `literals in components  0 in 0 files`, which is what
+a spotless app looks like. Nothing had been read: the app has no component
+stylesheets at all. The count reported findings without the size of what they
+were found in, so "none there" and "nothing looked at" printed the same line.
+The plan now carries `scanned`, the number of component stylesheets read, and
+the report says either `0 in 0 files of 12 read` or `no component stylesheets —
+nothing was read for this`.
+
+**The rest of the report was useful as it stood.** Four app tokens, none of them
+matching a system value, all of them brand values; sixty semantic tokens
+un-repointed with the template named; seventy-three components never imported.
+And `dsbridge check` on the same app — which reads TSX, not CSS — found fourteen
+things worth reading, including a local `Card` that shadows the system's and
+nine `style` props reaching for a runtime colour with no token behind it. The
+CSS-shaped half of the tool goes quiet on a Tailwind app; the JSX-shaped half
+does not.
+
+**What is still not read**: `text-[#171717]` in a class attribute is a literal
+colour by any definition this tool uses, and no rule sees it. That is a real
+gap, not an oversight to fix in passing — arbitrary-value classes are a separate
+grammar from CSS declarations, and a rule that reads them has to know Tailwind's.

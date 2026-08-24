@@ -2,7 +2,7 @@
    once the var() chains are followed. */
 import { describe, expect, it } from "vitest";
 import { join } from "node:path";
-import { loadGraph } from "./graph";
+import { expandImports, loadGraph } from "./graph";
 
 const DS = join(__dirname, "__fixtures__", "ds", "styles.css");
 const BRAND = join(__dirname, "__fixtures__", "app", "brand.css");
@@ -105,5 +105,34 @@ describe("loadGraph with a brand", () => {
 
   it("still reports the system default the brand replaced", () => {
     expect(graph.get("--mds-surface-page")?.raw.light).toBe("var(--mds-gray-050)");
+  });
+});
+
+/* An app's stylesheets are not the system's, and they import things the system
+   never would: a package by name, a font from a CDN, a file a build step makes.
+   None of them are readable from where the sheet sits, and the same policy
+   `composes` follows applies — an import pointing outside what was scanned
+   resolves to nothing, and the caller sees only what it can actually read. */
+describe("an @import that points outside what was scanned", () => {
+  const ENTRY = join(__dirname, "__fixtures__", "imports", "entry.css");
+
+  it("is skipped rather than read", () => {
+    expect(expandImports(ENTRY).map((f) => f.replace(/^.*[/\\]/, ""))).toEqual([
+      "entry.css",
+      "read.css",
+    ]);
+  });
+
+  it("leaves the sheet that wrote it, and its readable imports, loaded", () => {
+    const graph = loadGraph({ system: DS, brand: [ENTRY] });
+    expect(graph.get("--app-entry")?.layer).toBe("brand");
+    expect(graph.get("--mds-surface-page")?.overriddenBy?.[0]?.file).toContain("read.css");
+  });
+
+  /* Being pointed at a stylesheet that is not there is the caller's mistake,
+     not a sheet's, and it has to be heard: a silent empty graph reports every
+     app as using no tokens at all. */
+  it("is not the same as an entry that is not there", () => {
+    expect(() => expandImports(join(__dirname, "__fixtures__", "imports", "missing.css"))).toThrow();
   });
 });

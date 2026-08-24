@@ -99,3 +99,37 @@ describe("what of the system the app actually uses", () => {
     expect(out).toContain("Switch");
   });
 });
+
+/* An app that styles in class attributes has no component stylesheets at all,
+   and this command reads CSS. "0 literals in 0 files" is what a clean app looks
+   like, so an app nothing was read from must not print the same line. */
+describe("an app with no component stylesheets", () => {
+  const TAILWIND = fileURLToPath(new URL("../__fixtures__/tailwind", import.meta.url));
+  const context = () => loadContext({ root: TAILWIND, system: SYSTEM });
+
+  it("reads the sheet whose first import names a package", () => {
+    expect(planMigration(context()).own.map((token) => token.name)).toEqual([
+      "--background",
+      "--foreground",
+    ]);
+  });
+
+  it("counts the component stylesheets it read", () => {
+    expect(planMigration(context()).scanned).toBe(0);
+    expect(planMigration(loadContext({ root: APP, system: SYSTEM })).scanned).toBeGreaterThan(0);
+  });
+
+  it("says nothing was read rather than reporting a clean sweep", () => {
+    const at = context();
+    const out = renderMigration(planMigration(at), at, { color: false });
+    expect(out).toContain("no component stylesheets");
+    expect(out).not.toMatch(/literals in components\s+0 in 0/);
+  });
+
+  it("still says how much was read when there was something to read", () => {
+    const at = loadContext({ root: APP, system: SYSTEM });
+    expect(renderMigration(planMigration(at), at, { color: false })).toMatch(
+      /literals in components\s+1 in 1 file of \d+ read/,
+    );
+  });
+});

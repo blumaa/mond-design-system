@@ -6,7 +6,7 @@
  * it. Every other command reads this — the listing, the contrast gate, the
  * migration report — so the layering is stated here once and nowhere else.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { dirname, resolve as resolvePath } from "node:path";
 import { declarationsIn, flatten, type Declaration, type Theme } from "./css/parse.js";
 import { parseColor, resolveVars, type TokenMap } from "./css/color.js";
@@ -59,7 +59,27 @@ export type LoadOptions = {
 
 const IMPORT = /@import\s+(?:url\()?\s*["']([^"']+)["']\s*\)?/g;
 
-/** Every file reachable from an entry, entry first, each visited once. */
+/** A file that is there and is a file, so reading it is a read. */
+const readable = (file: string) => {
+  try {
+    return statSync(file).isFile();
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * Every file reachable from an entry, entry first, each visited once.
+ *
+ * An app imports things that are not files sitting next to the sheet that
+ * imports them: a package by name (`@import "tailwindcss"`), a font from a
+ * CDN, a file a build step writes later. None of them can be read from here,
+ * so none of them are followed — an import pointing outside what was scanned
+ * resolves to nothing, the same policy a `composes` follows. The entry is the
+ * caller's word for where to start and still has to be there: a missing one is
+ * a mistake to hear about, since a silent empty graph reports an app as using
+ * no tokens at all.
+ */
 export function expandImports(entry: string, seen = new Set<string>()): string[] {
   const file = resolvePath(entry);
   if (seen.has(file)) return [];
@@ -67,7 +87,8 @@ export function expandImports(entry: string, seen = new Set<string>()): string[]
   const source = readFileSync(file, "utf8");
   const out = [file];
   for (const m of source.matchAll(IMPORT)) {
-    out.push(...expandImports(resolvePath(dirname(file), m[1]!), seen));
+    const imported = resolvePath(dirname(file), m[1]!);
+    if (readable(imported)) out.push(...expandImports(imported, seen));
   }
   return out;
 }
