@@ -1,4 +1,4 @@
-# ds-bridge
+# @mond-design-system/ds-bridge
 
 ## 0.1.0
 

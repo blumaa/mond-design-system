@@ -1,4 +1,4 @@
-# ds-bridge
+# @mond-design-system/ds-bridge
 
 The `dsbridge` CLI: look at the token graph, check an app against the design
 system's rules, and measure what an app would have to move to adopt it.
@@ -7,7 +7,7 @@ Zero runtime dependencies. Reads CSS — it does not run your build, and it does
 not care which framework rendered the class.
 
 ```sh
-pnpm add -D ds-bridge
+pnpm add -D @mond-design-system/ds-bridge
 
 dsbridge tokens               # the graph: core scales, semantic contract, your brand
 dsbridge check                # the rules, as a work list
