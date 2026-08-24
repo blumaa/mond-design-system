@@ -31,7 +31,9 @@ const GLYPHS: Record<string, string> = {
 const withIcons: Decorator = (Story) => (
   <IconProvider
     render={(name, { size }) => (
-      <svg viewBox="0 0 16 16" width={size} height={size} fill="none">
+      /* No step asked for means "take the slot", and an svg that states no
+         size at all is 0x0 in WebKit. 1em reads the slot through font-size. */
+      <svg viewBox="0 0 16 16" width={size ?? "1em"} height={size ?? "1em"} fill="none">
         <path
           d={GLYPHS[name] ?? GLYPHS.close}
           stroke="currentColor"

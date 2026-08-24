@@ -872,3 +872,51 @@ both places. It was running the built CLI against a real repo with the
 hand-written `system` line deleted, which is the only thing that ever asked the
 tool the question the app asks it. The suite has a fixture workspace now, added
 with the fix, so the next person changing this can be told rather than shown.
+
+### 33. Two ways a box can be the wrong size, both invisible where they were written
+
+Kinbaku's owner reported two things on the same day: an icon that does not show
+inside a Button in Storybook, and a card whose long text runs on forever. They
+turned out to be the same shape of mistake — an element sized by something that
+is not looking at it.
+
+The icon first. `Icon` renders whatever glyph the app registered into a span it
+sizes correctly, and never sizes the glyph. Every control that holds one —
+Button, Chip, TabBar, seven of them — sizes its glyph with `.slot > svg`, a
+child combinator, which cannot reach through the span `Icon` puts in between. An
+`<svg>` carrying only a `viewBox` has no size of its own, so what it gets is
+whatever the engine invents: Chrome makes it 20×20 and WebKit makes it 0×0.
+Measured in both, before and after. Chrome hid the bug for as long as nobody
+opened Safari, which is the same reason note 24's WebKit-only defects survived a
+migration. The fix is one rule in `Icon.module.css` — `.icon > svg { width:
+100%; height: 100% }` — and it is the shared function, not the seven call sites.
+The Storybook glyph renderer had the second instance of the same error: it
+passed `width={size}` where `size` is `undefined` unless a caller asks for a
+step, which is exactly the case the `Icon` contract documents as "take the
+slot".
+
+The card is the more interesting one. The app clamped its tile title in its own
+stylesheet — `display: -webkit-box`, an orient, a count, an overflow, four
+declarations pointed at a class the app happens to control — and left the post
+body unclamped, so a long post produced a card several screens tall. My first
+answer was that a clip belongs to the text, since only the text knows where its
+lines are. The owner said twice that the card body is what should clip, whatever
+it holds. They were right and the argument I had against it was wrong on the
+facts: `-webkit-line-clamp` on a container counts lines across block children,
+not only inline ones, and puts the ellipsis on the last line it keeps. A
+two-paragraph body clips at the budget in Chromium and WebKit alike; a
+`max-height` cuts the last line in half and says nothing. So `CardBody` takes
+`lines`, and the app asks for a budget instead of writing a clamp.
+
+Two things fell out of building it. A clipped body is a line box rather than a
+flex column, so `gap` between its children stops applying — that is a caveat the
+component has to state, and it does. And a `CardBody` inside a `CardBody` paid
+the card's edge padding twice, because every slot padded itself unconditionally;
+a slot inside a slot is not against the card at all. That was a latent bug in
+`Card` that nothing had reached yet, found only because the feature made nesting
+worth doing.
+
+The new rule, `no-hand-rolled-line-clamp`, is for the app half: a clamp in app
+CSS is a budget the markup can walk away from silently, and the component that
+holds the text is the thing that should be asked. It is aimed at apps only, the
+same way the usage rules are — the system is where the clamp is allowed to live.

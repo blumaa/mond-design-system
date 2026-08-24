@@ -88,3 +88,23 @@
 .footer:last-child {
   padding-bottom: var(--mds-pad-card);
 }
+
+/* A slot inside a slot is not against the card at all: the outer one already
+   stands between them, so the inner one pays no edge. Same specificity as the
+   :first-child rules above, so it has to come after them. */
+:is(.header, .body, .footer) :is(.header, .body, .footer) {
+  padding: 0;
+}
+
+/* A line budget the body keeps whatever it holds. -webkit-box is the only
+   display that clamps by line count, and it counts lines across block children
+   as well as inline ones — a two-paragraph body clips at the budget, with the
+   ellipsis on the last line it kept. Measured in Chromium and WebKit, which
+   agree; a plain max-height cuts the last line in half and says nothing. */
+.clipped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--card-lines);
+  line-clamp: var(--card-lines);
+  overflow: hidden;
+}

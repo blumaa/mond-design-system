@@ -553,6 +553,44 @@ export const fixedToAnEdge: Rule = {
   reads: "stylesheet",
 };
 
+/** Both spellings of one budget. The prefixed property is what every engine
+    still understands; the unprefixed one is what they are moving to. */
+const CLAMP = new Set(["-webkit-line-clamp", "line-clamp"]);
+
+export const noHandRolledLineClamp: Rule = {
+  id: "no-hand-rolled-line-clamp",
+  title: "How much of a thing fits is the component's answer, not the app's.",
+  why:
+    "A clamp written by hand is four declarations that have to agree — a display, " +
+    "an orient, a count and an overflow — pointed at whichever element happens to " +
+    "hold the text today. Move the markup and the clamp lands somewhere else and " +
+    "the text runs on, with nothing to say it broke. The count is a number picked " +
+    "per stylesheet, so two cards side by side end up affording different amounts.",
+  instead:
+    "Ask the component that holds the text: a card body takes a line budget and " +
+    "clips whatever is inside it. Where the thing being clipped sits in no system " +
+    "component at all, that is a gap worth naming in the system — the next app " +
+    "wants the same budget.",
+  target: "app",
+  reads: "stylesheet",
+  check: (context) =>
+    componentBlocks(context)
+      .filter(({ sheet }) => !context.exempt("no-hand-rolled-line-clamp", sheet.file))
+      .flatMap(({ sheet, block }) => {
+        const [clamp] = block.declarations.filter((d) => CLAMP.has(d.property));
+        return clamp === undefined
+          ? []
+          : [
+              finding(
+                "no-hand-rolled-line-clamp",
+                sheet,
+                clamp.line,
+                `${clamp.property}: ${clamp.value} in app CSS — ask the component for the budget it affords, the way a card body takes lines`,
+              ),
+            ];
+      }),
+};
+
 export const layoutRules: Rule[] = [
   mobileFirstMedia,
   breakpointIsDeclared,
@@ -561,6 +599,7 @@ export const layoutRules: Rule[] = [
   screenEdgeClearsTheSafeArea,
   scrollerContainsItsOverscroll,
   noOuterMargin,
+  noHandRolledLineClamp,
   reachForThePrimitive,
   flexFirstGridWhenEarned,
   oneLayoutWidened,

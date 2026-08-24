@@ -6,6 +6,7 @@ import { loadGraph } from "../graph.js";
 import {
   breakpointIsDeclared,
   mobileFirstMedia,
+  noHandRolledLineClamp,
   noOuterMargin,
   reachForThePrimitive,
   screenEdgeClearsTheSafeArea,
@@ -304,5 +305,46 @@ describe("scroller-contains-its-overscroll", () => {
       ".rail {\n  overflow-x: auto;\n  overscroll-behavior-y: contain;\n}",
     );
     expect(finding?.message).toContain("overflow-x");
+  });
+});
+
+describe("no-hand-rolled-line-clamp", () => {
+  const app = (source: string, file = "src/components/PostCard/postCard.module.css") =>
+    noHandRolledLineClamp.check!(
+      buildContext({
+        root: ROOT,
+        kind: "app",
+        graph,
+        sheets: [makeSheet(join(ROOT, file), source, ROOT, "--mds-")],
+      }),
+    );
+
+  it("flags a clamp written by hand", () => {
+    const [finding] = app(
+      ".title {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 2;\n  overflow: hidden;\n}",
+    );
+    expect(finding).toMatchObject({ rule: "no-hand-rolled-line-clamp", line: 4 });
+    expect(finding?.message).toContain("lines");
+  });
+
+  /* Both spellings of one budget are one budget: the unprefixed property is
+     there for the engines that have stopped needing the other. */
+  it("says it once where both spellings are written", () => {
+    expect(
+      app(".title {\n  -webkit-line-clamp: 2;\n  line-clamp: 2;\n}"),
+    ).toHaveLength(1);
+  });
+
+  it("flags the standard property on its own", () => {
+    const [finding] = app(".title {\n  line-clamp: 3;\n}");
+    expect(finding).toMatchObject({ rule: "no-hand-rolled-line-clamp", line: 2 });
+  });
+
+  it("leaves a stylesheet that clamps nothing alone", () => {
+    expect(app(".title {\n  overflow: hidden;\n  text-overflow: ellipsis;\n}")).toEqual([]);
+  });
+
+  it("is the app's rule: the system is where the budget lives", () => {
+    expect(noHandRolledLineClamp.target).toBe("app");
   });
 });

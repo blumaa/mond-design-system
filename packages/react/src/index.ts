@@ -128,7 +128,7 @@ export { Container } from "./components/Container/Container";
 export type { ContainerProps, ContainerWidth } from "./components/Container/Container";
 
 export { Card, CardBody, CardFooter, CardHeader } from "./components/Card/Card";
-export type { CardProps, CardSectionProps, CardVariant } from "./components/Card/Card";
+export type { CardBodyProps, CardProps, CardSectionProps, CardVariant } from "./components/Card/Card";
 
 export { Modal, ModalBody, ModalFooter, ModalHeader } from "./components/Modal/Modal";
 export type { ModalProps } from "./components/Modal/Modal";

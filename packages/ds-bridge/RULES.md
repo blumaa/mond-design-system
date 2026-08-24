@@ -241,6 +241,14 @@ A margin is an opinion about a neighbour the component has never met. Two of the
 
 **Instead.** Let the parent space its children — `gap` on the Stack or Inline that holds them. `margin: 0` and `margin-inline: auto` are fine: one is a reset of the browser's opinion, the other is centring, which is about the element itself.
 
+### no-hand-rolled-line-clamp
+
+**How much of a thing fits is the component's answer, not the app's.** *(app)*
+
+A clamp written by hand is four declarations that have to agree — a display, an orient, a count and an overflow — pointed at whichever element happens to hold the text today. Move the markup and the clamp lands somewhere else and the text runs on, with nothing to say it broke. The count is a number picked per stylesheet, so two cards side by side end up affording different amounts.
+
+**Instead.** Ask the component that holds the text: a card body takes a line budget and clips whatever is inside it. Where the thing being clipped sits in no system component at all, that is a gap worth naming in the system — the next app wants the same budget.
+
 ### reach-for-the-primitive
 
 **Stack, Inline and Container before hand-written flex.** *(app)*

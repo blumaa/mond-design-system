@@ -27,6 +27,37 @@ describe("Card", () => {
     expect(sheet).toMatch(/\.header\s*>\s*:only-child\s*{[^}]*min-width:\s*0/);
   });
 
+  /* The card is the box, so the box is what says how much of a thing fits. A
+     line budget clips whatever the body holds — a paragraph, two, a bare
+     string — rather than asking each of them to clip itself. */
+  it("takes a line budget on the body", () => {
+    render(
+      <Card>
+        <CardBody lines={3} data-testid="clipped">
+          Long
+        </CardBody>
+      </Card>,
+    );
+    expect(screen.getByTestId("clipped").style.getPropertyValue("--card-lines")).toBe("3");
+  });
+
+  it("grows to what it holds when no budget is set", () => {
+    render(
+      <Card>
+        <CardBody data-testid="open">Long</CardBody>
+      </Card>,
+    );
+    expect(screen.getByTestId("open").style.getPropertyValue("--card-lines")).toBe("");
+  });
+
+  /* -webkit-box is the only display that clamps by line count, and it counts
+     lines across block children as well as inline ones. */
+  it("clamps the body by line count and hides the rest", () => {
+    expect(sheet).toMatch(/\.clipped\s*{[^}]*-webkit-line-clamp:\s*var\(--card-lines\)/);
+    expect(sheet).toMatch(/\.clipped\s*{[^}]*-webkit-box-orient:\s*vertical/);
+    expect(sheet).toMatch(/\.clipped\s*{[^}]*overflow:\s*hidden/);
+  });
+
   it("body alone works", () => {
     render(
       <Card data-testid="c">
@@ -54,6 +85,16 @@ describe("Card", () => {
       );
       expect(sheet).toMatch(rule);
     }
+  });
+
+  /* A slot that holds a slot pays the card edge once. The inner one is not
+     against the card at all — the outer one already stands between them — so
+     paying again indents its content past everything around it. A body with a
+     line budget inside a body doing layout is the case that turned this up. */
+  it("pays the card edge once where a slot holds a slot", () => {
+    expect(sheet).toMatch(
+      /:is\(\.header, \.body, \.footer\) :is\(\.header, \.body, \.footer\)\s*\{\s*padding:\s*0/,
+    );
   });
 
   /* The card clips its overflow, so a footer that cannot fit its controls on one

@@ -1,4 +1,4 @@
-import type { ElementType, HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
+import type { CSSProperties, ElementType, HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import styles from "./Card.module.css";
 
@@ -79,9 +79,33 @@ export function CardHeader({ className, ...rest }: CardSectionProps): ReactEleme
   return <div className={cx(styles.header, className)} {...rest} />;
 }
 
-/** Main content slot. */
-export function CardBody({ className, ...rest }: CardSectionProps): ReactElement {
-  return <div className={cx(styles.body, className)} {...rest} />;
+export interface CardBodyProps extends CardSectionProps {
+  /** How many lines of content the card affords. Past it the body clips, with
+      an ellipsis on the last line. Unset, the body grows to what it holds. */
+  lines?: number;
+}
+
+/**
+ * Main content slot.
+ *
+ * The card is the box, so the box is what says how much of a thing fits:
+ * `lines` clips whatever the body holds — a paragraph, two of them, a bare
+ * string — rather than asking each child to clip itself.
+ *
+ * A budgeted body counts lines, which is a thing only `-webkit-box` does, so it
+ * is no longer a flex column: `gap` between its children stops applying and a
+ * margin is what separates them. A body doing layout for a card keeps its own
+ * budget-free, and holds a budgeted one for the part that has to fit.
+ */
+export function CardBody({ lines, className, style, ...rest }: CardBodyProps): ReactElement {
+  const vars = lines === undefined ? undefined : ({ "--card-lines": lines } as CSSProperties);
+  return (
+    <div
+      className={cx(styles.body, lines !== undefined && styles.clipped, className)}
+      style={{ ...vars, ...style }}
+      {...rest}
+    />
+  );
 }
 
 /** Bottom slot — actions, meta. */

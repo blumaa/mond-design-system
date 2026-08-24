@@ -18,3 +18,14 @@
 .size-sm { width: var(--mds-icon-sm); height: var(--mds-icon-sm); font-size: var(--mds-icon-sm); }
 .size-md { width: var(--mds-icon-md); height: var(--mds-icon-md); font-size: var(--mds-icon-md); }
 .size-lg { width: var(--mds-icon-lg); height: var(--mds-icon-lg); font-size: var(--mds-icon-lg); }
+
+/* The glyph fills the slot this span already sizes. An icon set hands back an
+   `<svg>` with no width of its own, and an svg with only a viewBox has no
+   agreed size: Chrome invents one, WebKit gives it 0x0 and the mark vanishes.
+   The control slots size their glyph with a child combinator — `.slot > svg` —
+   which cannot reach through this span, so an Icon inside a Button, a Chip or a
+   TabBar was the one glyph nothing sized. */
+.icon > svg {
+  width: 100%;
+  height: 100%;
+}

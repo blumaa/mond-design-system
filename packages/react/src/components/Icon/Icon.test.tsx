@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import { axe } from "jest-axe";
 import type { IconRenderProps } from "./Icon";
 import { Icon, IconProvider } from "./Icon";
+import sheet from "./Icon.module.css?raw";
 
 const renderIcon = (name: string, { size }: IconRenderProps) => (
   <svg data-testid={`icon-${name}`} width={size} height={size} />
@@ -61,6 +62,15 @@ describe("Icon", () => {
     expect(screen.getByTestId("empty")).toBeEmptyDOMElement();
     expect(spy).toHaveBeenCalledOnce();
     spy.mockRestore();
+  });
+
+  /* An svg carrying only a viewBox has no agreed size: Chrome invents one and
+     WebKit gives it 0x0, so the mark is simply gone in Safari. The control
+     slots size their glyph with `.slot > svg`, which this span sits in the
+     middle of, so the span has to size what it holds. */
+  it("sizes the glyph it holds to the slot", () => {
+    expect(sheet).toMatch(/\.icon\s*>\s*svg\s*{[^}]*width:\s*100%/);
+    expect(sheet).toMatch(/\.icon\s*>\s*svg\s*{[^}]*height:\s*100%/);
   });
 
   it("has no axe violations", async () => {
