@@ -920,3 +920,52 @@ The new rule, `no-hand-rolled-line-clamp`, is for the app half: a clamp in app
 CSS is a budget the markup can walk away from silently, and the component that
 holds the text is the thing that should be asked. It is aimed at apps only, the
 same way the usage rules are — the system is where the clamp is allowed to live.
+
+### 34. The scrim rule, and the three versions of it that would have been turned off
+
+Note 30 sorted the owner's six defects and found exactly one that asked for a
+rule: anything painted over media carries its own scrim or its own solid
+backing. Note 31 said it was still unwritten. Writing it took three attempts,
+and the two discarded ones are the useful part of the note, because both would
+have passed their own tests and fired on code that was right.
+
+**The sheet-level version.** The first shape was "a stylesheet that paints
+on-media colours lays a scrim somewhere in it". It is easy to check and it fires
+on `Text.module.css`, where `.tone-on-media` is one declaration — the colour and
+nothing else. That is not a defect: `Text` paints the colour, and the scrim is
+owed by whoever puts the text over a picture. A rule that reports the system's
+own primitives for doing their job is a rule someone exempts on day one.
+
+**The component-level version.** The second shape followed composition: a
+component that renders media and puts controls over it lays a scrim. It fires on
+`Lightbox`, whose controls are `onMedia` buttons and whose caption is
+`tone="on-media"`, and which lays no scrim of its own because it renders inside a
+`Modal` whose backdrop is `--mds-scrim-strong` at 0.94 alpha. Following the
+composition far enough to see that means walking the render tree through a
+component boundary, which is the kind of analysis that is wrong often enough to
+be worse than nothing.
+
+**What is actually checkable** is one element, in one stylesheet, without
+following anything: a box that is out of flow — `position: absolute`, `fixed`,
+`sticky` — and paints a *foreground* on-media value is laid over whatever is
+behind it, and either it brings a surface or it does not. The surface may arrive
+from its own pseudo-element or through `composes`, which `sameElement` already
+resolves, so a scrim written as `.controls::before` counts. Two exclusions do
+the rest of the work: an on-media value written as a `background` is the box
+bringing its own surface rather than needing one, and a background that only
+arrives on `:hover` is not a surface the element has at rest — and at rest is
+when it has to be readable.
+
+Under that definition the system is clean: `VideoPlayer` and `ImageCarousel`
+both pair `background: var(--mds-scrim)` with `color: var(--mds-text-on-media)`
+on the same box, `MediaPlaceholder` lays one, and `Text` and `Heading` are never
+looked at because their tone classes are in the flow. Kinbaku is clean too — it
+reaches for `onMedia` and `tone="on-media"` on system components rather than
+painting over pictures itself, which is the outcome the rule wants and not
+evidence that the rule does nothing.
+
+The rule under-fires by construction: an overlay stacked with `grid-area`
+instead of `position` is not read, and neither is one whose colour comes from a
+child. That is the trade this repo keeps making. A rule that misses a case is a
+gap; a rule that reports a correct file is a rule that gets turned off, and then
+it misses every case.

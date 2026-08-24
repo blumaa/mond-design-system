@@ -97,6 +97,14 @@ The design system's own proof runs on the system's own colours. A brand re-point
 
 **Instead.** Move the brand value until it clears the ratio, or re-point the paired token with it: a colour and the surface it sits on are one decision. `dsbridge tokens --theme dark` shows what each side currently resolves to.
 
+### over-media-carries-its-own-backing
+
+**A box laid over media brings its own scrim or its own fill.** *(both)*
+
+Contrast is a ratio between two colours, and a photograph is not one. A caption over a bright frame and the same caption over a dark one are two different results from the same stylesheet, and neither is what the contract proved: `keeps-contrast` measures the pairs the system names, and this pair does not exist. What the reader gets is decided by the picture the app was handed that day — which is how a video's controls and a fullscreen image's controls both went invisible in a build every automated check called clean.
+
+**Instead.** Give the box a surface before the text lands on it: `background: var(--mds-scrim)` on the box or on a pseudo-element filling it, a `backdrop-filter`, or a solid fill. Where the system already ships the composition — a button with `onMedia`, a carousel's own caption — use it and the scrim comes with it.
+
 ### every-component-has-a-story
 
 **Every component has a story.** *(system)*
