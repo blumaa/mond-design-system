@@ -1,7 +1,6 @@
 {
   "name": "ds-bridge",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Design system conformance. Introspect the token graph, check an app against the system's rules, measure what it would take to adopt them.",
   "license": "MIT",
   "repository": {
@@ -16,7 +15,7 @@
   "exports": {
     ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
   },
-  "files": ["dist", "RULES.md", "README.md"],
+  "files": ["dist", "RULES.md", "README.md", "CHANGELOG.md"],
   "publishConfig": { "access": "public" },
   "scripts": {
     "build": "tsup",
