@@ -1,0 +1,68 @@
+diff --git a/dist/_browser-chunks/chunk-CS62LUFX.js b/dist/_browser-chunks/chunk-CS62LUFX.js
+index 137530f198d1fc725f9316d67865413dccc724e8..7922077eda81698f60b7b02041e1624323673037 100644
+--- a/dist/_browser-chunks/chunk-CS62LUFX.js
++++ b/dist/_browser-chunks/chunk-CS62LUFX.js
+@@ -24,17 +24,44 @@ import { logger } from "storybook/internal/client-logger";
+ import { SourceType, getDocgenSection } from "storybook/internal/docs-tools";
+ import { emitTransformCode, useEffect, useRef } from "storybook/preview-api";
+ var reactElementToJSXString = reactElementToJsxString, toPascalCase = (str) => str.charAt(0).toUpperCase() + str.slice(1), getReactSymbolName = (elementType) => (elementType.$$typeof || elementType).toString().replace(/^Symbol\((.*)\)$/, "$1").split(".").map((segment) => segment.split("_").map(toPascalCase).join("")).join(".");
+-function simplifyNodeForStringify(node) {
+-  if (isValidElement(node)) {
+-    let props = Object.keys(node.props).reduce((acc, cur) => (acc[cur] = simplifyNodeForStringify(node.props[cur]), acc), {});
+-    return {
+-      ...node,
+-      props,
+-      // @ts-expect-error (this is an internal or removed api)
+-      _owner: null
+-    };
++function simplifyNodeForStringify(node, seen = /* @__PURE__ */ new WeakMap()) {
++  if (node !== null && typeof node == "object") {
++    if (seen.has(node))
++      return seen.get(node);
++    if (isValidElement(node)) {
++      let simplified2 = {
++        ...node,
++        props: {},
++        // @ts-expect-error (this is an internal or removed api)
++        _owner: null
++      };
++      seen.set(node, simplified2);
++      for (let key of Object.keys(node.props))
++        simplified2.props[key] = simplifyNodeForStringify(node.props[key], seen);
++      return simplified2;
++    }
++    if (Array.isArray(node)) {
++      let simplified2 = [];
++      seen.set(node, simplified2);
++      for (let item of node)
++        simplified2.push(simplifyNodeForStringify(item, seen));
++      return simplified2;
++    }
++    // A prop can be a plain object holding elements — a list of slides, a map of
++    // panels. Left alone, every element under it keeps the `_owner` fiber React
++    // attaches in development, and stringifying the props walks the whole React
++    // tree from there. Descending strips those owners the same way it does for
++    // an element or an array. Anything that is not a plain object is left as it
++    // is: rebuilding it would lose what its class does.
++    if (Object.getPrototypeOf(node) === Object.prototype) {
++      let simplified2 = {};
++      seen.set(node, simplified2);
++      for (let key of Object.keys(node))
++        simplified2[key] = simplifyNodeForStringify(node[key], seen);
++      return simplified2;
++    }
+   }
+-  return Array.isArray(node) ? node.map(simplifyNodeForStringify) : node;
++  return node;
+ }
+ var renderJsx = (code, options) => {
+   if (typeof code > "u")
+diff --git a/template/components/index.js b/template/components/index.js
+deleted file mode 100644
+index 4617fecb4af6e3692c0b807b635dbdd1a3c7e27b..0000000000000000000000000000000000000000
+diff --git a/template/stories/docgen-components/imported.js b/template/stories/docgen-components/imported.js
+deleted file mode 100644
+index bd94145261b03fff811e93a3d8f350a03b7a5105..0000000000000000000000000000000000000000
+diff --git a/template/stories/docgen-components/js-proptypes/ext.js b/template/stories/docgen-components/js-proptypes/ext.js
+deleted file mode 100644
+index 11d0ad4810bb77980bc7be0b7697f3a85b15ffd2..0000000000000000000000000000000000000000

@@ -26,7 +26,10 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
-    ]
+    ],
+    "patchedDependencies": {
+      "@storybook/react@10.5.8": "patches/@storybook__react@10.5.8.patch"
+    }
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.0",
