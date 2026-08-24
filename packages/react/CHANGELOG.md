@@ -1,5 +1,24 @@
 # @mond-design-system/react
 
+## 4.12.0
+
+### Minor Changes
+
+- `CardBody` takes a `lines` budget, and an `Icon` sizes the glyph it holds.
+
+  The card is the box, so the box says how much of a thing fits: `lines` clips
+  whatever the body holds — a paragraph, two of them, a bare string — with an
+  ellipsis on the last line it keeps. A budgeted body counts lines, which is a
+  thing only `-webkit-box` does, so it is no longer a flex column and a margin
+  rather than `gap` separates its children. A slot inside a slot now pays the
+  card's edge padding once instead of twice.
+
+  An icon set hands back an `<svg>` with no width of its own, and an svg carrying
+  only a `viewBox` has no agreed size: Chrome invents one and WebKit gives it 0×0,
+  so the mark was simply missing in Safari. The controls size their glyph with
+  `.slot > svg`, which cannot reach through the span `Icon` renders, so the span
+  now sizes what it holds.
+
 ## 4.11.0
 
 ### Minor Changes
