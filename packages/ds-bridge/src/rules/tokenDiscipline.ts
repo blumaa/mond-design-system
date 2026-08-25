@@ -98,6 +98,7 @@ export const noLiteralColor: Rule = {
   instead:
     "Read the semantic alias for the role the color plays — surface, text, border. " +
     "If no alias fits, the role is missing from the contract: add it there.",
+  concern: "scale",
   target: "both",
   reads: "stylesheet",
   check: (context) => {
@@ -127,6 +128,7 @@ export const noLiteralLength: Rule = {
     "Use a spacing, radius or layout token. A `@media` prelude is the one place a " +
     "length has to be written out — the query is resolved before custom properties " +
     "exist — and `breakpoint-is-declared` holds those to the breakpoint list.",
+  concern: "scale",
   target: "both",
   reads: "stylesheet",
   check: (context) => {
@@ -175,6 +177,7 @@ export const noRawScaleStep: Rule = {
     "Name the role the value plays and alias the step once, in the system's core " +
     "layer. Components read the role. The exception is a component whose public " +
     "size prop *is* the step, where the consumer chose it rather than the component.",
+  concern: "scale",
   target: "both",
   reads: "stylesheet",
   check: (context) => {
@@ -201,6 +204,7 @@ export const noUndefinedToken: Rule = {
     "Check the name against `dsbridge tokens`. A token published at runtime by whichever " +
     "component owns it is declared nowhere on purpose; read it with a fallback, and " +
     "let the fallback say what the element is worth on its own.",
+  concern: "scale",
   target: "both",
   reads: "stylesheet",
   check: (context) =>

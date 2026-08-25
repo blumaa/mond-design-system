@@ -11,6 +11,7 @@ pnpm add -D @mond-design-system/ds-bridge
 
 dsbridge tokens               # the graph: core scales, semantic contract, your brand
 dsbridge check                # the rules, as a work list
+dsbridge report               # the same rules, as three questions a person asks
 dsbridge rules [id]           # what each rule is protecting
 dsbridge roles                # what the system says its tokens are for
 dsbridge choosing             # which of two that both compile this case wants
@@ -109,6 +110,14 @@ stylesheet does not invalidate it. The held count is printed on every run: debt
 that goes quiet is debt that grows. `--update-baseline` records the whole repo,
 so it refuses a path or a `--rule`, and says what moved in both directions.
 
+It also records which rules ran when it was written. Without that, a rule added
+later has no counts in the baseline, so everything it finds in untouched code
+comes back above the baseline — and the `stop` hook reads above-the-baseline as
+"added in this session". The recorded rule set is what tells a rule that ran and
+found nothing from a rule that did not exist yet. A baseline written before this
+was recorded still gates, but the hook says it cannot tell what the session
+added rather than claiming it.
+
 ### Suppressing one line
 
 ```css
@@ -119,6 +128,67 @@ border-color: #4a4a4a;
 The reason is required — without one the line is reported as usual. This is for
 the case where the rule is wrong about one line; when it is wrong about a whole
 file, `exempt` says so in config.
+
+## dsbridge report
+
+`check` prints one line per finding, which is what CI and an editor need and
+what a person cannot read: 464 lines answer "is anything wrong" and nothing
+else. `report` answers the questions people actually ask.
+
+```sh
+dsbridge report                   # where this repo stands
+dsbridge report --json            # the same, structured
+```
+
+```
+┌─ fairplay-app ──────────────────────────────────────────────────────────────┐
+│   measured against @mond-design-system/react                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ ALIGNMENT                                                           partial │
+│   components   48 of 60 imported somewhere                                  │
+│   contract     56 of 60 semantic tokens re-pointed                          │
+│   own tokens   169 declared, 69 the system already names, 6 in a brand      │
+│   styling      295 literal values in 42 files                               │
+│                                                                             │
+│   what goes around the system:                                              │
+│    115  Stack, Inline and Container before hand-written flex.               │
+│         reach-for-the-primitive — 115 in 41 files                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ ACCESSIBILITY                                                   16 failures │
+│      6  Every pair in the contract clears its ratio, in both themes, with … │
+│         keeps-contrast — 6 in 1 file  1.4.3 Contrast (Minimum)              │
+│      2  Anything you can tap is big enough to tap.  2.5.5 Target Size       │
+│         touch-targets — 2 in 2 files                                        │
+│   Read from source: no page was rendered. This is what the files show, and  │
+│   it is never a conformance claim.                                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ MISSING FROM THE SCALE                                            44 values │
+│   10px 10×   34px 4×   88px 4×   390px 3×   50px 3×   5px 3×   and 38 more  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ NOT CHECKED                                                         3 rules │
+│   declares-its-level, level-is-in-the-taxonomy, composes-downward           │
+│     no levels declared — name this repo's taxonomy in dsbridge.config.json  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│   the same findings as a work list: dsbridge check                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+The frame is as wide as the terminal allows, between 56 and 84 columns, and the
+prose inside it wraps to whatever that turns out to be. Piped or redirected
+there is no terminal to ask, so it falls back to the width a reader of the file
+gets. `--no-color` drops the colour and keeps the border: the border is
+structure, and without it nothing says where the answer starts.
+
+Every rule declares which of those questions it answers, so the two halves
+cannot drift: a rule cannot be added without saying where it is filed. The WCAG
+criterion beside a failure is one the rule names, never one inferred here — and
+the section says what it is: read from source, no page rendered, never a
+conformance claim. A criterion with no failures has not been tested; it has
+only not been violated in a way source can show.
+
+`MISSING FROM THE SCALE` is the app's side of the same question. Each value
+there is one written by hand that no token in the system holds, most-written
+first — a rung the scale does not have, rather than a mistake the app made.
 
 ## dsbridge roles
 

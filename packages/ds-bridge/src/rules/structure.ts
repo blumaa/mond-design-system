@@ -50,6 +50,7 @@ export const everyComponentHasAStory: Rule = {
   instead:
     "Write `<Name>.stories.tsx` with a title whose first segment is the level, and " +
     "one story per state worth arguing about — not one story per prop.",
+  concern: "structure",
   target,
   reads: "component",
   needs: needsComponents,
@@ -71,6 +72,7 @@ export const everyComponentHasATest: Rule = {
   instead:
     "Write `<Name>.test.tsx` beside the component. Test what a consumer can " +
     "observe — rendered text, roles, what a click does — not the internals.",
+  concern: "structure",
   target,
   reads: "component",
   needs: needsComponents,
@@ -93,6 +95,7 @@ export const declaresItsLevel: Rule = {
     "`title: \"Atoms/Button\"`. The story title is where the level lives, because " +
     "it is the one people already read; a separate manifest would be a second " +
     "answer to the same question, and the second answer goes stale.",
+  concern: "structure",
   target: "both",
   reads: "component",
   needs: needsTaxonomy,
@@ -117,6 +120,7 @@ export const levelIsInTheTaxonomy: Rule = {
     "Use a level from `levels` in the config, or add the tier there — deliberately, " +
     "in the order it belongs. Grouping in the sidebar is a job for the segments " +
     "after the first one.",
+  concern: "structure",
   target: "both",
   reads: "component",
   needs: needsTaxonomy,
@@ -152,6 +156,7 @@ export const composesDownward: Rule = {
     "built out of Modal's parts is `composition-over-configuration` working as " +
     "intended. Whether a peer wrapper has earned its own level is a judgement, and " +
     "a checker that fired on it would be wrong more often than right.",
+  concern: "structure",
   target: "both",
   reads: "component",
   needs: needsTaxonomy,
@@ -196,6 +201,7 @@ export const choosingNamesARealComponent: Rule = {
     "Fix the name, or delete the entry. A component that has been removed no " +
     "longer needs a rule for when to prefer it; one that has been renamed needs " +
     "the entry renamed with it.",
+  concern: "structure",
   target,
   reads: "repo",
   needs: (context) =>

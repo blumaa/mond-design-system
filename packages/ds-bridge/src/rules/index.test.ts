@@ -8,6 +8,7 @@ const advisory: Rule = {
   title: "Guidance the tool cannot prove.",
   why: "Some of what a design system asks for is judgement.",
   instead: "Read the reasoning and decide.",
+  concern: "structure",
   target: "both",
   reads: "component",
 };
@@ -28,6 +29,12 @@ describe("the rule model", () => {
 
   it("keeps advisory rules in the set a reader asks for", () => {
     expect(rulesFor(context).map((rule) => rule.id)).toContain("belongs-in-the-system");
+  });
+
+  it("has every rule say which of the report's questions it answers", () => {
+    const concerns = new Set(["alignment", "accessibility", "scale", "structure"]);
+    const silent = RULES.filter((rule) => !concerns.has(rule.concern));
+    expect(silent.map((rule) => rule.id)).toEqual([]);
   });
 
   it("does not try to run a rule that has no check", () => {

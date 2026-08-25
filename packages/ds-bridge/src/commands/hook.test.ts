@@ -10,7 +10,7 @@ import { buildContext, type BuildOptions } from "../context.js";
 import { loadGraph } from "../graph.js";
 import { fileURLToPath } from "node:url";
 import { baselineOf } from "./baseline.js";
-import { applyEdit, pendingWrite, regression, sessionBrief, warning } from "./hook.js";
+import { applyEdit, attributable, pendingWrite, regression, sessionBrief, warning } from "./hook.js";
 import { loadChoosing } from "../choosing.js";
 import type { Finding } from "../rules/types.js";
 
@@ -196,6 +196,27 @@ describe("what a write is warned about", () => {
   });
 });
 
+describe("what this session actually did", () => {
+  const older = finding({ rule: "scroller-contains-its-overscroll", file: "src/Feed.module.css" });
+  const recorded = baselineOf([], ["no-literal-length"]);
+
+  it("holds the session to a rule the baseline ran", () => {
+    expect(attributable([finding()], recorded).added.map((f) => f.rule)).toEqual(["no-literal-length"]);
+  });
+
+  it("does not blame the session for a rule that did not exist when the baseline was recorded", () => {
+    const { added, outside } = attributable([older], recorded);
+    expect(added).toEqual([]);
+    expect(outside.map((f) => f.rule)).toEqual(["scroller-contains-its-overscroll"]);
+  });
+
+  it("will not claim what a baseline that never recorded its rules cannot say", () => {
+    const old = baselineOf([]);
+    expect(attributable([finding()], old)).toMatchObject({ certain: false });
+    expect(attributable([finding()], recorded)).toMatchObject({ certain: true });
+  });
+});
+
 describe("what a turn is stopped for", () => {
   it("says how many are above the baseline and where", () => {
     const text = regression([finding(), finding({ file: "src/B.module.css", line: 2 })]);
@@ -206,6 +227,18 @@ describe("what a turn is stopped for", () => {
 
   it("offers recording them, so an intended change is not a trap", () => {
     expect(regression([finding()])).toContain("--update-baseline");
+  });
+
+  it("says nothing about this session when it cannot tell what this session did", () => {
+    const text = regression([finding()], { attributed: false });
+    expect(text).not.toContain("added in this session");
+    expect(text).toContain("--update-baseline");
+  });
+
+  it("names the ones a newer rule found, apart from what the session added", () => {
+    const text = regression([finding()], { outside: 3 });
+    expect(text).toContain("3 findings");
+    expect(text).toContain("since the baseline");
   });
 
   it("lists a handful and counts the rest", () => {

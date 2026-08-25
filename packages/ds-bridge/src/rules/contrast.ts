@@ -37,6 +37,8 @@ export const keepsContrast: Rule = {
     "Move the brand value until it clears the ratio, or re-point the paired token " +
     "with it: a colour and the surface it sits on are one decision. `dsbridge tokens " +
     "--theme dark` shows what each side currently resolves to.",
+  concern: "accessibility",
+  wcag: "1.4.3 Contrast (Minimum)",
   target: "both",
   reads: "repo",
   needs: (context) =>
@@ -127,6 +129,8 @@ export const overMediaCarriesItsOwnBacking: Rule = {
     "on the box or on a pseudo-element filling it, a `backdrop-filter`, or a solid " +
     "fill. Where the system already ships the composition — a button with `onMedia`, " +
     "a carousel's own caption — use it and the scrim comes with it.",
+  concern: "accessibility",
+  wcag: "1.4.3 Contrast (Minimum)",
   target: "both",
   reads: "stylesheet",
   check: (context) =>

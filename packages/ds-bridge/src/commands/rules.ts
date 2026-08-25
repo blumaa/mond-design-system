@@ -68,6 +68,8 @@ export const ruleData = (rules: Rule[]): RuleData[] =>
     title: rule.title,
     why: rule.why,
     instead: rule.instead,
+    concern: rule.concern,
+    ...(rule.wcag === undefined ? {} : { wcag: rule.wcag }),
     target: rule.target,
     reads: rule.reads,
     enforced: isEnforced(rule),

@@ -15,7 +15,7 @@ import { findBrandFiles, resolveSystem } from "./sources.js";
 import { loadContext, type Config } from "./context.js";
 import { renderTokens, selectTokens, type RenderOptions } from "./commands/tokens.js";
 import { renderTokensHtml } from "./commands/tokensHtml.js";
-import { renderCheck, runCheck, unrecordedSkips } from "./commands/check.js";
+import { ranRules, renderCheck, runCheck, unrecordedSkips } from "./commands/check.js";
 import { aboveBaseline, readBaseline, updateBaseline, NO_BASELINE } from "./commands/baseline.js";
 import { applyFixes } from "./commands/fix.js";
 import { renderRules, ruleData, rulesForFile, selectRules } from "./commands/rules.js";
@@ -23,6 +23,7 @@ import { renderRoles, roleData } from "./commands/roles.js";
 import { renderChoosing, choosingData } from "./commands/choosing.js";
 import { nextItem, renderNext } from "./commands/next.js";
 import { planMigration, renderMigration } from "./commands/migrate.js";
+import { buildReport, renderReport } from "./commands/report.js";
 import { planSemantics, renderSemantics } from "./commands/semantics.js";
 import { isHookEvent, runHook, type HookInput } from "./commands/hook.js";
 import type { Kind, Layer } from "./graph.js";
@@ -35,6 +36,8 @@ const USAGE = `dsbridge — design system conformance, for the system and the ap
   dsbridge tokens [options]     list the token graph: core scales, the semantic
                            contract, and what your brand re-points
   dsbridge check [path] [opts]  run the rules against this repo, or one path in it
+  dsbridge report [opts]        the same rules, answered as three questions: is this
+                           app on the system, can everyone use it, is the scale whole
   dsbridge rules [id]           what each rule is protecting, for a human or an agent
   dsbridge roles                what the system says its tokens are for
   dsbridge choosing [name]      which of two that both compile this case wants
@@ -70,6 +73,12 @@ Options for check
   --update-baseline record what is there now as the debt to hold
   --allow-skipped   rule ids, or "all": pass a run whose rules could not run.
                     A repo records this in its config; the flag is for one run
+
+Options for report
+  --root <dir>      the repo to answer for  (default: the cwd)
+  --system <file>   as above
+  --components <p>  as above
+  --include-tests   as above
 
 Options for next
   --root <dir>      what to look at            (default: the cwd)
@@ -273,7 +282,7 @@ function checkCommand(rest: string[], stdin?: string): number {
       process.stderr.write("--update-baseline records the whole repo; drop the path and --rule\n");
       return 1;
     }
-    process.stdout.write(updateBaseline(root, all));
+    process.stdout.write(updateBaseline(root, all, ranRules(context, options)));
     return 0;
   }
 
@@ -339,6 +348,48 @@ function nextCommand(rest: string[]): number {
       color: values.color !== false && process.stdout.isTTY === true,
     }),
   );
+  return 0;
+}
+
+/* The same rules as `check`, counted rather than listed. Deliberately without
+   --rule, --fix or --baseline: this answers how the repo stands as a whole, and
+   a report narrowed to one rule is a work list wearing a report's headings. */
+function reportCommand(rest: string[]): number {
+  const { values } = parseArgs({
+    args: rest,
+    options: {
+      root: { type: "string" },
+      system: { type: "string" },
+      components: { type: "string" },
+      "include-tests": { type: "boolean" },
+      json: { type: "boolean" },
+      color: { type: "boolean", default: true },
+    },
+    allowPositionals: false,
+    allowNegative: true,
+  });
+
+  const root = resolve(values.root ?? process.cwd());
+  const config = readConfig(root);
+  const context = loadContext({
+    root,
+    ...(values.system ? { system: resolve(values.system) } : {}),
+    ...(values.components ? { components: resolve(values.components) } : {}),
+    ...(config ? { config } : {}),
+    ...(values["include-tests"] === true ? { includeTests: true } : {}),
+  });
+  const report = buildReport(context);
+  if (values.json === true) jsonOut(report);
+  else
+    process.stdout.write(
+      renderReport(report, context, {
+        color: values.color !== false && process.stdout.isTTY === true,
+        /* The frame is as wide as the terminal will take, and a pipe has no
+           width — the default the renderer falls back to is the one a person
+           reading the piped file gets. */
+        ...(process.stdout.columns === undefined ? {} : { columns: process.stdout.columns }),
+      }),
+    );
   return 0;
 }
 
@@ -562,6 +613,7 @@ export function main(argv: string[], stdin?: string): number {
     if (command === "roles") return rolesCommand(rest);
     if (command === "choosing") return choosingCommand(rest);
     if (command === "next") return nextCommand(rest);
+    if (command === "report") return reportCommand(rest);
     if (command === "migrate") return migrateCommand(rest);
     if (command === "hook") return hookCommand(rest, stdin);
   } catch (error) {

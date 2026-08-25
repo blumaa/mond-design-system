@@ -20,6 +20,27 @@ import type { Surface } from "../surface.js";
 export type Target = "system" | "app" | "both";
 
 /**
+ * The question a rule answers, and so where `dsbridge report` files it.
+ *
+ * `check` prints one line per finding, which is the right shape for a work list
+ * and the wrong shape for "how are we doing". A person asking that is asking
+ * three separate questions — is this app on the system, can everyone use it,
+ * and is the scale complete — and a list of 464 lines answers none of them.
+ * Declaring it on the rule rather than in the report keeps the two from
+ * drifting: a rule cannot be added without saying which question it speaks to.
+ */
+export type Concern =
+  /** Is this app using the system, or working around it. */
+  | "alignment"
+  /** What somebody cannot see, read, tap or reach. */
+  | "accessibility"
+  /** Values written by hand rather than read from the scale, and the rungs the
+      scale turns out not to have. */
+  | "scale"
+  /** The repo's own shape: its taxonomy, its brand wiring, what it ships. */
+  | "structure";
+
+/**
  * What a rule reads, and so which file it has anything to say about.
  *
  * `dsbridge rules --for <file>` is the path an agent takes mid-edit, and it can
@@ -168,6 +189,18 @@ export type Rule = {
   why: string;
   /** What to do instead. */
   instead: string;
+  /** Which of the report's questions this rule speaks to. Required: a rule
+      that does not say is a rule the report silently drops. */
+  concern: Concern;
+  /**
+   * The WCAG success criterion this rule speaks to, where one covers it.
+   *
+   * Named so the report can say which criterion a failure sits under. It is
+   * never a conformance claim: this tool reads source, not a rendered page, so
+   * a criterion with no failures here has not been tested — only not violated
+   * in the ways source can show.
+   */
+  wcag?: string;
   target: Target;
   /** The kind of file this rule is about. Required: a rule that does not say
       is a rule `--for` silently never mentions. */

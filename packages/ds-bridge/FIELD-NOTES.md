@@ -1021,3 +1021,85 @@ does not.
 colour by any definition this tool uses, and no rule sees it. That is a real
 gap, not an oversight to fix in passing — arbitrary-value classes are a separate
 grammar from CSS declarations, and a rule that reads them has to know Tailwind's.
+
+### 36. The baseline could not tell a new rule from a new mistake
+
+Fair Play, checked on a branch nobody had touched in five days: the `stop` hook
+held the turn open with *3 findings above the baseline, added in this session*.
+Three `scroller-contains-its-overscroll` findings, in three files last committed
+on 2026-08-18 and 2026-08-19, working tree clean throughout.
+
+The root cause is in the baseline's shape. It records counts per file per rule,
+and `scroller-contains-its-overscroll` was written after the baseline was, so it
+has no counts in it. A count of zero and a rule that did not exist are the same
+absence in that file, and `aboveBaseline` answers the only question it can:
+this finding is not held. `stop` then printed that answer as a different claim —
+that the session added it.
+
+This is the mirror of note 29. There, a rule that could not run read exactly
+like a rule that passed; here, a rule that did not exist reads exactly like
+damage somebody just did. Both are the same failure: the tool stating a
+conclusion its data does not support.
+
+The fix is to record the scope. A baseline now carries `rules` — the enforced
+rules that ran when it was written — so `coverageOf` can answer `covered`,
+`outside`, or `unknown`. The hook holds a turn open only for what the baseline
+was in a position to have held; findings from rules added since are named
+separately as the repo's debt, and the turn is not blocked for them. A baseline
+written before this was recorded still gates, but says it cannot tell what the
+session added rather than claiming.
+
+What it cost to find: nothing was wrong with Fair Play. Every minute spent on
+those three findings would have been spent on code the session never touched,
+which is the specific way a gate stops being believed.
+
+### 37. 464 findings answered a question nobody asked
+
+The same Fair Play run, read by its owner: *this tool is not helpful to me right
+now. It should say things like: app is out of alignment, or not WCAG compatible,
+or here are places tokens are missing.*
+
+Every one of those three was already computed. Alignment is `planMigration` plus
+the rules about reaching around the system; the accessibility rules already knew
+which WCAG criterion they spoke to, in prose; and `confidence: "none"` has always
+meant *no token holds this value*, which is the missing rung stated exactly. The
+tool had the answers and printed a linter dump.
+
+`check` is not the thing to change — CI needs an exit code and the hook needs
+`file:line`. So `report` is a second reading of the same run. What makes it not
+a second source of truth is where the filing lives: every rule declares a
+`concern`, so a rule cannot be added without saying which question it answers,
+and the WCAG criterion beside a failure is one the rule names rather than one
+the report inferred.
+
+The honesty limit is stated in the output itself. The tool reads source, not a
+rendered page, so it reports the criteria it can measure and never claims
+conformance — a criterion with no failures has not been tested, only not been
+violated in a way source can show.
+
+### 38. The report was right and still unreadable
+
+The first `report` printed the right facts as five ragged blocks separated by
+blank lines. On a terminal that is not a document: the shell's scrollback runs
+straight into the top of it, and nothing says where the answer begins, where a
+section ends, or that the five belong together. Verdicts padded to a hardcoded
+column drifted out of line the moment a fact ran long.
+
+So the sections are drawn inside one frame, with a rule between them and the
+verdict pinned to the right edge — the verdicts now read straight down the
+page, which is the whole point of having them. Three things follow from
+drawing a border, and each was a bug before it was a decision:
+
+Colour has width in the string and none on the screen, so anything laid out in
+a column has to count what a reader sees. `visible`, `pad` and `clip` in
+`text.ts` do that, and they build their pattern out of the same `ESC` the
+colour functions write with, so what counts a sequence and what writes one
+cannot drift.
+
+Something has to give when a line does not fit. The verdict is what survives —
+a rule title cut short still leaves the count, the criterion and the rule id
+under it, and the id is what `dsbridge rules` takes.
+
+The prose inside is wrapped to the frame rather than to a width guessed when it
+was written, because the frame is as wide as the terminal allows. Wrapping the
+text by hand is how the two get out of step the first time somebody resizes.

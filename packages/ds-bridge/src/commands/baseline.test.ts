@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { aboveBaseline, baselineOf, changed } from "./baseline.js";
+import { aboveBaseline, baselineOf, changed, coverageOf } from "./baseline.js";
 import type { Finding } from "../rules/types.js";
 
 const finding = (file: string, rule: string, line: number): Finding => ({
@@ -33,6 +33,23 @@ describe("a baseline", () => {
     const above = aboveBaseline(worse, baselineOf(debt));
     expect(above).toHaveLength(1);
     expect(above[0]).toMatchObject({ line: 20, new: true });
+  });
+
+  it("records which rules it ran, so a rule added later is not read as new debt", () => {
+    expect(baselineOf(debt, ["no-literal-length", "no-literal-color"]).rules).toEqual([
+      "no-literal-color",
+      "no-literal-length",
+    ]);
+  });
+
+  it("tells a rule it ran and found nothing from one it never ran", () => {
+    const recorded = baselineOf(debt, ["no-literal-length", "no-literal-color", "touch-targets"]);
+    expect(coverageOf(recorded, "touch-targets")).toBe("covered");
+    expect(coverageOf(recorded, "scroller-contains-its-overscroll")).toBe("outside");
+  });
+
+  it("says it cannot tell when the baseline predates the record", () => {
+    expect(coverageOf(baselineOf(debt), "touch-targets")).toBe("unknown");
   });
 
   it("reports a rule that never fired in this file before", () => {

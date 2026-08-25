@@ -60,6 +60,7 @@ export const userFacingTextIsAProp: Rule = {
     "a default compiles everywhere, so the one call site nobody passed a label to " +
     "is the one nobody finds, while a required prop makes `tsc` the gate. An " +
     "`alt=\"\"` is not copy — it is the mark of a decorative picture, and it stays.",
+  concern: "structure",
   target: "system",
   reads: "component",
   needs: (context) =>

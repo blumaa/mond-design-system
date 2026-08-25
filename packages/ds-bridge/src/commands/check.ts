@@ -111,6 +111,16 @@ export const unrecordedSkips = (context: Context, options: CheckOptions = {}): M
   return out;
 };
 
+/** The rules that actually ran: what a baseline has to record to be able to
+    tell a rule that found nothing from one that did not exist yet. */
+export const ranRules = (context: Context, options: CheckOptions = {}): string[] => {
+  const skipped = skippedRules(context, options);
+  return rulesFor(context, options.only)
+    .filter(isEnforced)
+    .filter((rule) => !skipped.has(rule.id))
+    .map((rule) => rule.id);
+};
+
 export function runCheck(context: Context, options: CheckOptions = {}): Finding[] {
   const skipped = skippedRules(context, options);
   return rulesFor(context, options.only)

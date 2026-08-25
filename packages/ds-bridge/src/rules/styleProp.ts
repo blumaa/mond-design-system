@@ -59,6 +59,7 @@ export const stylePropNeedsAToken: Rule = {
     "Skeleton, Spinner and ProgressBar already do exactly this; they are the " +
     "reference, not the exception. For layout, the primitive is the answer: " +
     "Stack, Inline and Container take gaps that are already tokens.",
+  concern: "scale",
   target: "both",
   reads: "component",
   check: (context) => {
@@ -105,6 +106,7 @@ export const fontsLiveInTheApp: Rule = {
     "Declare the font stack as a token — `--mds-font-sans` — and let the brand " +
     "file re-point it. `@font-face`, the files themselves and the preloading all " +
     "belong to the app, next to the rest of its assets.",
+  concern: "structure",
   target: "system",
   reads: "repo",
   check: (context) => {
@@ -152,6 +154,7 @@ export const noRawElementOverComponent: Rule = {
     "gap in the system worth reporting — a prop it is missing, or a component it " +
     "does not have yet. The design system's own source is exempt: it is the one " +
     "place the raw element has to be written.",
+  concern: "alignment",
   target: "app",
   reads: "component",
   check: (context) =>

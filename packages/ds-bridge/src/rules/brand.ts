@@ -35,6 +35,7 @@ export const noForeignNamespaceToken: Rule = {
     "Declare app-owned values under the app's own prefix and point the system's " +
     "token at them: `--mds-accent: var(--fp-accent)`. If the value names a role the " +
     "system should own, the right fix is to add it to the contract instead.",
+  concern: "alignment",
   target: "both",
   reads: "stylesheet",
   check: (context) =>
@@ -71,6 +72,7 @@ export const brandShipsDark: Rule = {
   instead:
     "Give the brand a `[data-theme=\"dark\"]` block that re-points every token the " +
     "light block does.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
   check: (context) => {
@@ -100,6 +102,7 @@ export const brandOverridesBothThemes: Rule = {
   instead:
     "Re-point the token in both the light and the dark block of the brand file, even " +
     "when the two values are the same.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
   check: (context) => {
@@ -153,6 +156,7 @@ export const brandCoversContract: Rule = {
   instead:
     "Add the token to the template with the system's own default as its value. " +
     "The dark block only needs the tokens that flip.",
+  concern: "structure",
   target: "system",
   reads: "stylesheet",
   needs: (context) =>
@@ -201,6 +205,7 @@ export const brandRoleTakesItsKind: Rule = {
     "Point the role at the rung that holds the value — `--mds-radius-card: " +
     "var(--mds-radius-4)`. If no rung holds it, the honest fix is a rung, in the " +
     "system, where every role can see it.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
   needs: (context) =>
@@ -241,6 +246,7 @@ export const brandLeavesFloorsAlone: Rule = {
     "Leave the token to the system. If the floor is in the way of something the brand " +
     "genuinely needs, that is a conversation with the design system, not a line in a " +
     "brand file — and the answer is usually a new role beside the floor.",
+  concern: "accessibility",
   target: "both",
   reads: "stylesheet",
   needs: (context) =>

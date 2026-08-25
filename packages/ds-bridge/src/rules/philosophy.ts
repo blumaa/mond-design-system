@@ -21,6 +21,7 @@ export const belongsInTheSystem: Rule = {
     "same thing, that is the evidence: move it up then, with two real call sites " +
     "shaping the API instead of one imagined one. PostCard, GroupChatHeader and " +
     "ReportCard are app components, and stay app components.",
+  concern: "structure",
   target: "both",
   reads: "component",
 };
@@ -41,6 +42,7 @@ export const earnTheSemanticToken: Rule = {
     "components and a brand would plausibly want to re-point it on its own — if the " +
     "answer is 'only Card uses this', it is Card's local custom property, not the " +
     "contract's.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
 };
@@ -59,6 +61,7 @@ export const compositionOverConfiguration: Rule = {
     "`<Card><CardHeader/><CardBody/><CardFooter/></Card>`, matching Tabs/TabList/Tab/" +
     "TabPanel. The container owns the spacing between its slots. Atoms stay " +
     "prop-based — `Button iconLeft` is a shape, not a slot.",
+  concern: "structure",
   target: "system",
   reads: "component",
 };
@@ -76,6 +79,7 @@ export const boundedPrimitivesOnly: Rule = {
     "`--mds-gap-*`, width over `--mds-content-max*`. When a layout needs something " +
     "they cannot express, that is a missing enum value or a missing component, not a " +
     "missing escape hatch. Card plus the surface tokens covers styled containers.",
+  concern: "structure",
   target: "system",
   reads: "component",
 };
@@ -92,6 +96,7 @@ export const brandFlourishStaysInApp: Rule = {
     "The system ships `Spinner`. An app builds `BallLoader` from it, or from nothing, " +
     "and keeps it. Same for tone-carrying cards and any component whose reason for " +
     "existing is that it looks like this brand.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
 };
@@ -108,6 +113,7 @@ export const iconsAreBrand: Rule = {
     "`Icon` reads from a pluggable registry the brand provides. Kinbaku keeps lucide, " +
     "Fair Play keeps Material Symbols, and the system stays agnostic. A component asks " +
     "for a name and a size, never for a specific glyph.",
+  concern: "structure",
   target: "system",
   reads: "repo",
 };
@@ -125,6 +131,7 @@ export const deferUnbuiltComponents: Rule = {
     "design `useOverlay` anchor-capable now so Tooltip, Popover and Dropdown compose " +
     "one positioning engine when they arrive, and use `@floating-ui/dom` rather than " +
     "hand-rolling it.",
+  concern: "structure",
   target: "system",
   reads: "component",
 };

@@ -13,7 +13,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { relative, resolve } from "node:path";
 import { loadContext, type Config } from "../context.js";
-import { aboveBaseline, baselineOf, heldBy, readBaseline, type Baseline } from "./baseline.js";
+import { aboveBaseline, baselineOf, coverageOf, heldBy, readBaseline, type Baseline } from "./baseline.js";
 import { lineList, runCheck } from "./check.js";
 import { readsOf } from "./rules.js";
 import { plural } from "../text.js";
@@ -188,14 +188,51 @@ export function warning(file: string, findings: Finding[], color: boolean): stri
   ].join("\n");
 }
 
+/**
+ * What is above the baseline that this session could have put there.
+ *
+ * A rule that did not run when the baseline was recorded has no counts in it,
+ * so everything it finds in code nobody touched comes back above the baseline.
+ * Read as "added in this session" that is an accusation about untouched files,
+ * which is how a gate stops being believed. The baseline records the rules it
+ * ran; one that predates that record cannot say, and says so.
+ */
+export function attributable(
+  above: Finding[],
+  baseline: Baseline,
+): { added: Finding[]; outside: Finding[]; certain: boolean } {
+  const added: Finding[] = [];
+  const outside: Finding[] = [];
+  for (const finding of above) {
+    if (coverageOf(baseline, finding.rule) === "outside") outside.push(finding);
+    else added.push(finding);
+  }
+  return { added, outside, certain: baseline.rules !== undefined };
+}
+
 /** Why a turn is being held open: what it made worse, and the two ways out. */
-export function regression(findings: Finding[]): string {
+export function regression(
+  findings: Finding[],
+  since: { attributed?: boolean; outside?: number } = {},
+): string {
   const shown = findings.slice(0, LISTED);
+  const attributed = since.attributed !== false;
+  const outside = since.outside ?? 0;
   return [
-    `dsbridge — ${plural(findings.length, "finding")} above the baseline, added in this session.`,
+    `dsbridge — ${plural(findings.length, "finding")} above the baseline${attributed ? ", added in this session." : "."}`,
+    ...(attributed
+      ? []
+      : ["This baseline does not record which rules it ran, so it cannot say which of", "these the session added."]),
     "",
     ...shown.map((f) => `  ${f.file}:${f.line ?? 0}  ${f.message}  ${f.rule}`),
     ...(findings.length > shown.length ? [` ${andMore(shown.length, findings.length)}`] : []),
+    ...(outside > 0
+      ? [
+          "",
+          `${plural(outside, "finding")} left out: their rules were added since the baseline was`,
+          "recorded, so they are this repo's debt rather than this session's work.",
+        ]
+      : []),
     "",
     "Fix them, or record them as intended with dsbridge check --update-baseline.",
     "dsbridge rules <id> says what each one protects.",
@@ -244,9 +281,15 @@ function stop(input: HookInput, scope: HookScope): HookOutput | undefined {
   /* No baseline is no claim about what this repo owes, and a gate with nothing
      to measure against would fail every repo on its first session. */
   if (recorded === undefined) return undefined;
-  const above = aboveBaseline(runCheck(load(scope)), recorded);
-  if (above.length === 0) return undefined;
-  return { decision: "block", reason: regression(above) };
+  const { added, outside, certain } = attributable(aboveBaseline(runCheck(load(scope)), recorded), recorded);
+  /* Only what this session could have written. Debt a newer rule found is real
+     and `dsbridge check` has all of it; holding the turn open for it puts the
+     agent to work on code it never touched. */
+  if (added.length === 0) return undefined;
+  return {
+    decision: "block",
+    reason: regression(added, { attributed: certain, outside: outside.length }),
+  };
 }
 
 /**

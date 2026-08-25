@@ -47,6 +47,7 @@ export const mobileFirstMedia: Rule = {
   instead:
     "Write the phone layout as the plain rules, and add `min-width` queries for " +
     "the room a wider screen gives you. One layout widened, never two maintained.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
   check: (context) =>
@@ -73,6 +74,7 @@ export const breakpointIsDeclared: Rule = {
     "Break at a `*-bp-*` value. If the layout genuinely needs a width no breakpoint " +
     "names, that width is a new breakpoint: declare it, say what it means, and use " +
     "the name everywhere.",
+  concern: "scale",
   target: "both",
   reads: "stylesheet",
   needs: (context) =>
@@ -107,6 +109,7 @@ export const zIndexIsAToken: Rule = {
   instead:
     "Read a `*-z-*` token. The scale is the whole stack written down once, so a " +
     "new layer is a decision about where it sits, taken where the others are visible.",
+  concern: "scale",
   target: "both",
   reads: "stylesheet",
   check: (context) => {
@@ -146,6 +149,7 @@ export const viewportHeightIsAToken: Rule = {
     "Read the viewport-height token. It defaults to `100dvh` and a host that knows " +
     "better — one watching `visualViewport.height` — can re-point it to the height " +
     "the user can actually see.",
+  concern: "scale",
   target: "both",
   reads: "stylesheet",
   check: (context) => {
@@ -176,6 +180,7 @@ export const screenEdgeClearsTheSafeArea: Rule = {
     "Add the safe inset to the edge, or pad the element by it: " +
     "`bottom: calc(var(--…-toast-inset) + var(--…-safe-bottom))`. The tokens hold " +
     "`env(safe-area-inset-*)`, which is 0 everywhere it is not needed.",
+  concern: "accessibility",
   target: "both",
   reads: "stylesheet",
   check: (context) => {
@@ -245,6 +250,7 @@ export const scrollerContainsItsOverscroll: Rule = {
     "gesture inside and leaves the box's own bounce alone, `none` drops the bounce " +
     "too. Say it on the box that owns the scroll — a parent cannot know which of " +
     "its children was being dragged.",
+  concern: "accessibility",
   target: "both",
   reads: "stylesheet",
   check: (context) =>
@@ -288,6 +294,7 @@ export const noOuterMargin: Rule = {
     "Let the parent space its children — `gap` on the Stack or Inline that holds " +
     "them. `margin: 0` and `margin-inline: auto` are fine: one is a reset of the " +
     "browser's opinion, the other is centring, which is about the element itself.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
   check: (context) =>
@@ -327,6 +334,7 @@ export const reachForThePrimitive: Rule = {
     "is a centred column at the content measure. Their gaps are an enum over the " +
     "gap tokens — that restriction is the point, not a limitation to work around. " +
     "Write flex by hand when the layout is genuinely none of those three.",
+  concern: "alignment",
   target: "app",
   reads: "stylesheet",
   needs: (context) =>
@@ -377,6 +385,7 @@ export const flexFirstGridWhenEarned: Rule = {
     "Reach for the flex primitives first — they wrap by themselves, which is what a " +
     "narrow screen needs. Use grid when rows and columns both matter at once: a " +
     "calendar, a form where labels align across rows, a real tiled layout.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
 };
@@ -392,6 +401,7 @@ export const oneLayoutWidened: Rule = {
     "Design at 320px, where the decisions are forced, and let `min-width` queries " +
     "give the same structure more room. If a wide screen needs something the narrow " +
     "one cannot express at all, that is a different screen, not a breakpoint.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
 };
@@ -408,6 +418,7 @@ export const whatEachBreakpointMeans: Rule = {
     "rather than the whole window. `lg` (1024px): the bottom bar gives way to a " +
     "sidebar. `xl` (1280px): there is room for a second rail. Break where one of " +
     "those is true.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
 };
@@ -478,6 +489,8 @@ export const touchTargets: Rule = {
     "Reach the minimum tap size on interactive elements, and take control heights " +
     "from the control-height tokens rather than measuring one by hand. A small " +
     "visual control can still pad its hit area out to the minimum.",
+  concern: "accessibility",
+  wcag: "2.5.5 Target Size",
   target: "both",
   reads: "stylesheet",
   needs: (context) =>
@@ -549,6 +562,7 @@ export const fixedToAnEdge: Rule = {
     "viewport-height token for anything that has to fit the screen. Better still, " +
     "let the app shell own the pinned regions — a component that pins itself is one " +
     "that cannot be composed.",
+  concern: "structure",
   target: "both",
   reads: "stylesheet",
 };
@@ -571,6 +585,7 @@ export const noHandRolledLineClamp: Rule = {
     "clips whatever is inside it. Where the thing being clipped sits in no system " +
     "component at all, that is a gap worth naming in the system — the next app " +
     "wants the same budget.",
+  concern: "alignment",
   target: "app",
   reads: "stylesheet",
   check: (context) =>

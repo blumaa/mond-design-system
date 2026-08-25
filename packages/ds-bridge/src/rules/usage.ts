@@ -50,6 +50,7 @@ export const noDuplicateOfASystemComponent: Rule = {
     "the system's export of that same name is not a second one: it is the system's " +
     "with something supplied that only the app has — a glyph registry, a translated " +
     "label — and it is left alone.",
+  concern: "alignment",
   target,
   reads,
   needs: needsExports,
@@ -88,6 +89,7 @@ export const wrapsRatherThanReimplements: Rule = {
     "Render the system's component and pass your content into it. Where it cannot " +
     "do what you need, that is a gap in the system worth naming rather than a " +
     "reason to start again.",
+  concern: "alignment",
   target,
   reads,
   needs: needsExports,

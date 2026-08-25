@@ -64,6 +64,7 @@ export const forwardsItsRef: Rule = {
     "prop — and put it on the same element the rest is spread onto. A component " +
     "that genuinely has no single element to hand back should say so with an " +
     "exemption rather than leave the caller guessing.",
+  concern: "structure",
   target: "both",
   reads: "component",
   needs: needsComponents,
@@ -108,6 +109,8 @@ export const interactiveHasFocusVisible: Rule = {
     "outline alone and inherit it. If this component really needs its own " +
     "treatment, write `:focus-visible` in the same file. To hide the ring from a " +
     "mouse and keep it for a keyboard, the selector is `:focus:not(:focus-visible)`.",
+  concern: "accessibility",
+  wcag: "2.4.7 Focus Visible",
   target: "both",
   reads: "stylesheet",
   check: (context) =>
@@ -146,6 +149,7 @@ export const acceptsAClassName: Rule = {
     "caller's declaration wins. This is a judgement and not a check: a Modal, a " +
     "Sheet or a Toast positions itself, and letting a caller restyle that box is " +
     "how the overlay ends up half off-screen. Those refuse a className on purpose.",
+  concern: "structure",
   target: "system",
   reads: "component",
 };
