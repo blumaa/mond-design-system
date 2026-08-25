@@ -1,5 +1,78 @@
 # @mond-design-system/tokens
 
+## 4.0.0
+
+### Major Changes
+
+- d3a6fe9: Remove the `dsbridge/` manifests and publish the contrast contract under its own
+  name.
+
+  `dsbridge/semantics.json`, `roles.json` and `choosing.json` described the system
+  to a conformance CLI that no longer exists. They shipped in the package and were
+  never reachable through the `exports` map — the CLI read them off disk — so
+  nothing that imports this package by specifier can break. Anything resolving
+  them by path will.
+
+  `dsbridge/contract.json` was not the CLI's: it is the accessibility contract, 21
+  foreground/background pairs and the ratio each must clear, and the token tests
+  here are held to it. It moves to `src/contrast-contract.json` and is now a real
+  export:
+
+  ```js
+  import contract from "@mond-design-system/tokens/contrast-contract.json" with { type: "json" };
+  ```
+
+  A brand re-points every token in that matrix, so these defaults being accessible
+  says nothing about your app. Shipped, the pairs are yours to re-run.
+
+### Patch Changes
+
+- d3a6fe9: Fold SearchField into Input.
+
+  SearchField was an Input with a magnifying glass and a clear button. The glass
+  was already `Input`'s `iconLeft`, and the sizes it lacked were already `Input`'s
+  `size` — only the clear button was its own. So the button moves to `Input` and
+  the component goes.
+
+  `Input` gains `onClear` and `clearLabel`. They arrive together and they refuse
+  `iconRight`, because the clear button is the trailing slot and a glyph button
+  without a name is nothing to a screen reader. It works controlled or
+  uncontrolled, hides itself when there is no text to clear, and returns focus to
+  the input afterwards — the button deletes itself on the click that fires it, so
+  without that the focus ring lands on `document.body`.
+
+  Migration:
+
+  ```tsx
+  // before
+  <SearchField label="Search sessions" clearLabel="Clear search" value={q} onChange={setQ} />
+
+  // after
+  <Input
+    type="search"
+    aria-label="Search sessions"
+    iconLeft={<Icon name="search" />}
+    value={q}
+    onChange={(event) => setQ(event.target.value)}
+    clearLabel="Clear search"
+    onClear={() => setQ("")}
+  />
+  ```
+
+  Two differences worth naming: `onChange` is the native event rather than the
+  bare string, and the field takes `Input`'s control radius instead of
+  SearchField's pill. The glyph now comes from your `IconProvider` rather than
+  being hardcoded in the component.
+
+  Also fixes `Input`'s icon geometry, which named the `md` step from every size —
+  an `sm` input with an icon wore an `md` glyph and `md` padding. Slot and gutter
+  now step with the control, and so does the clear cross: it was pinned at the
+  `sm` icon step, which left an 8px mark in a 32px field.
+
+  With `type="search"`, `onClear` also hides the browser's own clear cross, so the
+  field shows one clear affordance rather than two. Used without `onClear`, the
+  native cross is left alone — there it is the only way to empty the field.
+
 ## 3.6.1
 
 ### Patch Changes
