@@ -28,7 +28,8 @@
     "./semantic.css": "./src/semantic.css",
     "./core/*.css": "./src/core/*.css",
     "./brand-template.css": "./src/brand-template.css",
-    "./brand-surface.json": "./src/brand-surface.json"
+    "./brand-surface.json": "./src/brand-surface.json",
+    "./contrast-contract.json": "./src/contrast-contract.json"
   },
   "sideEffects": [
     "*.css"

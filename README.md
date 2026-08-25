@@ -52,14 +52,13 @@ The template only exposes **semantic aliases** — `--mds-surface-card`,
 `--mds-pad-control-md`, `--mds-text-button-lg`. That is deliberate, and it is
 enforced: a component reading `--mds-space-3` or `--mds-text-sm` directly is
 unreachable from a brand file, because a raw scale step is a rung shared with
-every unrelated component that happens to want the same number. `pnpm check`
-fails the build on one.
+every unrelated component that happens to want the same number.
 
-The same gate rejects a literal hex, a literal `px` outside a declared
+The same discipline covers a literal hex, a literal `px` outside a declared
 breakpoint, an undefined `--mds-*`, and a brand file missing part of the
 semantic contract or its dark block — each of which fails silently in CSS
-otherwise. It is the `conformance` package, run against this repo; an app that
-installed the system runs the same rules against itself with `dsbridge check`.
+otherwise. The token tests in `packages/tokens` hold the contract and the
+contrast floors; the rest is convention.
 
 ## Layout
 
@@ -75,24 +74,10 @@ packages/
 ```sh
 pnpm install
 pnpm storybook       # the components, in isolation
-pnpm verify          # build, typecheck, lint, check, test
+pnpm verify          # build, typecheck, lint, test
 ```
 
 `pnpm verify` is what CI runs, in that order. Keep the two the same.
-
-## Rules
-
-`dsbridge check` holds this repo, and any app that installs the system, to the
-rules the system claims. Guidance and enforcement are the same object, so they
-cannot drift.
-
-```sh
-pnpm check           # what this repo violates today
-pnpm rules           # regenerate the agent-facing RULES.md (CI fails if stale)
-```
-
-The same rules ship as a Claude Code plugin in `plugin/` — four commands and a
-skill an agent reads before it writes CSS.
 
 ## Release
 

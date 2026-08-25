@@ -201,13 +201,13 @@ function contrast(map: TokenMap, fgToken: string, bgToken: string): number {
 
 /* ── The matrix ──────────────────────────────────────────────────────────── */
 
-/* The pair list is data the package ships. `dsbridge check` re-runs exactly these
-   against a consuming app's brand, which is where the proof has to hold and
-   where nothing else re-establishes it: a brand re-points every token in the
-   matrix, so the defaults being accessible says nothing about the app. Editing
-   contract.json changes both proofs at once. */
+/* The pair list is data the package ships rather than a literal in this file,
+   because the proof has to hold against a consuming app's brand and nothing
+   here can re-run it there: a brand re-points every token in the matrix, so
+   these defaults being accessible says nothing about the app. Shipped, an app
+   can hold its own brand to the same pairs. */
 type Contract = { contrast: Array<{ fg: string; bg: string[]; ratio: number }> };
-const contract = JSON.parse(readFileSync(join(SRC, "dsbridge", "contract.json"), "utf8")) as Contract;
+const contract = JSON.parse(readFileSync(join(SRC, "contrast-contract.json"), "utf8")) as Contract;
 const PAIRS = contract.contrast.flatMap(({ fg, bg, ratio }) => bg.map((b) => [fg, b, ratio] as const));
 
 const semantic = readFileSync(join(SRC, "semantic.css"), "utf8");
@@ -268,7 +268,7 @@ describe("controls on media", () => {
   /* Both of these are the only thing telling a person where the control is, so
      they are held to the UI ratio against the letterbox behind them — by the
      contract rather than by a number here, so a brand re-pointing them is held
-     to the same 3:1 by `dsbridge check`. */
+     to the same 3:1 wherever the contract is re-run. */
   it.each(["--mds-on-media-border", "--mds-on-media-focus-ring"])(
     "%s is gated against the media surface",
     (token) => {
