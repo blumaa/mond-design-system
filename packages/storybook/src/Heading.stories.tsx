@@ -22,8 +22,8 @@ export const VariantOverride: Story = {
   args: { level: 2, variant: "display", children: "h2 outline, display size" },
 };
 
-/* A rail's own title: still an h2 in the outline, sized so it does not
-   compete with the page heading beside it. */
+/** A rail's own title: still an h2 in the outline, sized so it does not
+ * compete with the page heading beside it. */
 export const LabelSized: Story = {
   args: { level: 2, variant: "label", children: "Chapters" },
 };
