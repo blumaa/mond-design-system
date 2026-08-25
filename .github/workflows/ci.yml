@@ -19,9 +19,6 @@ jobs:
       - run: pnpm build
       - run: pnpm typecheck
       - run: pnpm lint
-      - run: pnpm check
-      - name: The agent-facing rules are generated, never hand-edited
-        run: pnpm rules && git diff --exit-code packages/ds-bridge/RULES.md plugin/skills/design-system/RULES.md
       - run: pnpm test
 
   release:

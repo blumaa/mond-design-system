@@ -47,8 +47,8 @@ button.link {
 
 /* Link's `size` prop is documented as a step on the core text scale, so these
    read the step directly: the consumer chose it rather than the component
-   choosing on their behalf. Exempted from no-raw-scale-step/typography in
-   dsbridge.config.json, and only for the type scale. */
+   choosing on their behalf. The one place in the system that does, and only
+   for the type scale. */
 .size-xs { font-size: var(--mds-text-xs); }
 .size-sm { font-size: var(--mds-text-sm); }
 .size-base { font-size: var(--mds-text-base); }

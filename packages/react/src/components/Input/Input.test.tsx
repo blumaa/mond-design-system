@@ -63,4 +63,68 @@ describe("Input", () => {
     );
     expect(await axe(container)).toHaveNoViolations();
   });
+
+  /* The clear affordance, inherited from the SearchField this replaced. It is
+     the trailing slot's only other occupant, so the two cannot both be asked
+     for — the type says so, and these say what the type cannot. */
+  describe("onClear", () => {
+    it("stays away until there is something to clear", () => {
+      const onClear = vi.fn();
+      render(<Input aria-label="Search" clearLabel="Clear search" onClear={onClear} value="" onChange={() => {}} />);
+      expect(screen.queryByRole("button", { name: "Clear search" })).toBeNull();
+    });
+
+    it("appears once the controlled value has text", () => {
+      const onClear = vi.fn();
+      render(<Input aria-label="Search" clearLabel="Clear search" onClear={onClear} value="ho" onChange={() => {}} />);
+      expect(screen.getByRole("button", { name: "Clear search" })).toBeInTheDocument();
+    });
+
+    it("appears once an uncontrolled field has been typed into", async () => {
+      const onClear = vi.fn();
+      render(<Input aria-label="Search" clearLabel="Clear search" onClear={onClear} />);
+      expect(screen.queryByRole("button", { name: "Clear search" })).toBeNull();
+      await userEvent.type(screen.getByRole("textbox"), "ho");
+      expect(screen.getByRole("button", { name: "Clear search" })).toBeInTheDocument();
+    });
+
+    it("calls onClear and empties an uncontrolled field", async () => {
+      const onClear = vi.fn();
+      render(<Input aria-label="Search" clearLabel="Clear search" onClear={onClear} defaultValue="ho" />);
+      await userEvent.click(screen.getByRole("button", { name: "Clear search" }));
+      expect(onClear).toHaveBeenCalledOnce();
+      expect(screen.getByRole("textbox")).toHaveValue("");
+    });
+
+    /* The button erases itself on the click that fires it. Without this the
+       focus ring lands on document.body and the keyboard user is lost. */
+    it("hands focus back to the input", async () => {
+      const onClear = vi.fn();
+      render(<Input aria-label="Search" clearLabel="Clear search" onClear={onClear} defaultValue="ho" />);
+      await userEvent.click(screen.getByRole("button", { name: "Clear search" }));
+      expect(screen.getByRole("textbox")).toHaveFocus();
+    });
+
+    it("pads the trailing edge for the button", () => {
+      const onClear = vi.fn();
+      render(<Input aria-label="Search" clearLabel="Clear search" onClear={onClear} defaultValue="ho" />);
+      expect(screen.getByRole("textbox").className).toContain("with-icon-right");
+    });
+
+    it("still reaches the caller's ref", () => {
+      const onClear = vi.fn();
+      const ref = { current: null as HTMLInputElement | null };
+      render(<Input aria-label="Search" clearLabel="Clear" onClear={onClear} ref={ref} />);
+      expect(ref.current).toBe(screen.getByRole("textbox"));
+    });
+
+    it("has no axe violations with a clear button and a leading icon", async () => {
+      const onClear = vi.fn();
+      const { container } = render(
+        <Input aria-label="Search" clearLabel="Clear search" onClear={onClear} defaultValue="ho" iconLeft={<svg />} />,
+      );
+      expect(await axe(container)).toHaveNoViolations();
+    });
+  });
+
 });

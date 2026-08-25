@@ -8,8 +8,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* Nothing to look at is the point, so each story shows what is around it and
-   says what a screen reader hears. */
+/** Nothing to look at is the point, so each story shows what is around it and
+ * says what a screen reader hears. */
 export const Heading: Story = {
   render: () => (
     <Stack>

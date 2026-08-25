@@ -12,6 +12,14 @@
   color: var(--mds-text-muted);
 }
 
+/* type="search" brings a UA clear cross of its own, which would sit beside the
+   one onClear draws. Ours is the one with a name, so the native one goes —
+   but only where ours exists. A search input with no onClear keeps the
+   native cross, because there it is the only way to empty the field. */
+.own-clear::-webkit-search-cancel-button {
+  display: none;
+}
+
 .input:disabled {
   background: var(--mds-action-disabled-bg);
   color: var(--mds-action-disabled-fg);
@@ -36,8 +44,9 @@
   width: 100%;
 }
 
+/* The slot classes on the wrapper set both of these; an Input with no icon
+   never builds a wrapper and never needs them. */
 .icon {
-  --mds-icon-slot: var(--mds-icon-md);
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -56,8 +65,51 @@
   height: 100%;
 }
 
-.iconLeft { left: var(--mds-pad-control-md); }
-.iconRight { right: var(--mds-pad-control-md); }
+/* The size class rides the input, the icons are its siblings, so the geometry
+   is published from the one element that contains both. */
+.slot-sm { --mds-icon-slot: var(--mds-icon-sm); --mds-control-gutter: var(--mds-pad-control-sm); }
+.slot-md { --mds-icon-slot: var(--mds-icon-md); --mds-control-gutter: var(--mds-pad-control-md); }
+.slot-lg { --mds-icon-slot: var(--mds-icon-lg); --mds-control-gutter: var(--mds-pad-control-lg); }
 
-.with-icon-left { padding-left: calc(var(--mds-pad-control-md) + var(--mds-icon-md) + var(--mds-gap-tight)); }
-.with-icon-right { padding-right: calc(var(--mds-pad-control-md) + var(--mds-icon-md) + var(--mds-gap-tight)); }
+.iconLeft { left: var(--mds-control-gutter); }
+.iconRight { right: var(--mds-control-gutter); }
+
+.with-icon-left { padding-left: calc(var(--mds-control-gutter) + var(--mds-icon-slot) + var(--mds-gap-tight)); }
+.with-icon-right { padding-right: calc(var(--mds-control-gutter) + var(--mds-icon-slot) + var(--mds-gap-tight)); }
+
+/* The clear button takes the trailing slot — the type stops iconRight sharing
+   it. Unlike the icons it is a real target, so it takes the hit area rather
+   than the slot's decorative size.
+
+   It is also wider than the slot by one gap, because CloseGlyph paints half its
+   box: the cross runs 4 to 12 inside a 16 viewBox. Sized to the slot it read at
+   half the weight of the icon beside it, and worst at sm, where a 16px box in a
+   32px control left an 8px mark. The gap is the one --with-icon-right already
+   reserves, so the button fills the trailing padding exactly, and the glyph
+   fills the button — both step with the control instead of naming a step. */
+.clear {
+  composes: hitArea from "../../internal/hit-area.module.css";
+  position: absolute;
+  top: 50%;
+  right: var(--mds-control-gutter);
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--mds-icon-slot) + var(--mds-gap-tight));
+  height: calc(var(--mds-icon-slot) + var(--mds-gap-tight));
+  border: none;
+  border-radius: var(--mds-radius-pill);
+  background: transparent;
+  color: var(--mds-text-secondary);
+  cursor: pointer;
+}
+
+.clear:hover {
+  background: var(--mds-surface-sunken);
+}
+
+.clearGlyph {
+  width: 100%;
+  height: 100%;
+}

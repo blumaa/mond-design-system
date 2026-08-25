@@ -16,7 +16,6 @@ const EDITABLE = [
   "Input/Input.module.css",
   "Select/Select.module.css",
   "Textarea/Textarea.module.css",
-  "SearchField/SearchField.module.css",
 ];
 
 /* Sized controls read the per-size alias; the two that ship one size read the
@@ -110,7 +109,7 @@ it.each([
   ["Radio/Radio.module.css", "dot"],
   ["Tag/Tag.module.css", "remove"],
   ["Toast/Toast.module.css", "close"],
-  ["SearchField/SearchField.module.css", "clear"],
+  ["Input/Input.module.css", "clear"],
 ])("%s composes that target onto its %s", (path, element) => {
   const css = sheet(path);
   expect(css).not.toMatch(/\.root \{[^}]*min-height/s);
@@ -334,4 +333,60 @@ it("collapses a hidden element to the clip box role, never to a literal", () => 
   expect(css).toMatch(/height: var\(--mds-hidden-size\);/);
   expect(css).toMatch(/margin: calc\(-1 \* var\(--mds-hidden-size\)\);/);
   expect(css).not.toMatch(/\dpx/);
+});
+
+/* An icon inside a sized control has to be sized by that control. Reading the
+   md slot and the md gutter from every size puts an md glyph in a 32px sm box
+   and pads all three alike, so sm and lg sit wrong the moment an icon is
+   passed. The size class rides the input, the icons are its siblings, and a
+   custom property cannot reach sideways — so the wrapper carries the slot
+   classes and both sides read what it sets. */
+it("Input sizes its icon slot and gutter with the control, not at a fixed step", () => {
+  const css = sheet("Input/Input.module.css");
+
+  expect(css).toMatch(/\.icon \{[^}]*width: var\(--mds-icon-slot\)/s);
+
+  for (const size of ["sm", "md", "lg"] as const) {
+    expect(css).toMatch(
+      new RegExp(`\\.slot-${size} \\{[^}]*--mds-icon-slot: var\\(--mds-icon-${size}\\)`, "s"),
+    );
+    expect(css).toMatch(
+      new RegExp(`\\.slot-${size} \\{[^}]*--mds-control-gutter: var\\(--mds-pad-control-${size}\\)`, "s"),
+    );
+  }
+
+  /* The offsets and the padding read what the slot class set, so no rule may
+     name a step of its own. */
+  for (const rule of ["iconLeft", "iconRight", "with-icon-left", "with-icon-right"]) {
+    expect(css).not.toMatch(new RegExp(`\\.${rule} \\{[^}]*--mds-(icon|pad-control)-(sm|md|lg)\\)`, "s"));
+  }
+});
+
+/* WebKit draws its own clear cross inside type="search", and jsdom ships no UA
+   stylesheet — a render test sees one button where a browser shows two. Scoped,
+   not blanket: without onClear the native cross is the only way to empty a
+   search field, so it stays. */
+it("Input drops the native search cross only where its own clear replaces it", () => {
+  const css = sheet("Input/Input.module.css");
+  expect(css).toMatch(/\.own-clear::-webkit-search-cancel-button \{[^}]*display: none/s);
+  expect(css).not.toMatch(/\.input::-webkit-search-cancel-button/);
+});
+
+/* CloseGlyph paints half its box — the ✕ runs 4 to 12 inside a 16 viewBox — so
+   a cross sized to the icon slot reads at half the weight of the icon beside
+   it, and worst at sm, where a 16px box in a 32px control leaves an 8px mark.
+   The button takes the slot plus the gap the padding already reserves, and the
+   glyph fills the button, so both step with the control. */
+it("Input steps the clear button and its cross with the control", () => {
+  const css = sheet("Input/Input.module.css");
+
+  expect(css).toMatch(
+    /\.clear \{[^}]*width: calc\(var\(--mds-icon-slot\) \+ var\(--mds-gap-tight\)\)/s,
+  );
+  expect(css).toMatch(/\.clearGlyph \{[^}]*width: 100%/s);
+
+  /* Neither may name a step: the wrapper's slot class is the only thing that
+     knows which size this is. */
+  expect(css).not.toMatch(/\.clear \{[^}]*var\(--mds-icon-(sm|md|lg)\)/s);
+  expect(css).not.toMatch(/\.clearGlyph \{[^}]*var\(--mds-icon-(sm|md|lg)\)/s);
 });

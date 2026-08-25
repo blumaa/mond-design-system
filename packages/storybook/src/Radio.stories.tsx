@@ -10,9 +10,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* Controlled, with a per-render group name: the docs page renders a story
-   more than once, and duplicated uncontrolled name="…" groups would fight
-   each other across copies. */
+/** Controlled, with a per-render group name: the docs page renders a story
+ * more than once, and duplicated uncontrolled name="…" groups would fight
+ * each other across copies. */
 export const Group: Story = {
   args: { label: "Free" },
   render: function Render() {

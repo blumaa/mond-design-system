@@ -95,7 +95,7 @@
      surface scale, and an opaque one would cover the part of the photograph the
      control is standing on. The outline carries the whole separation between the
      control and whatever the picture is doing behind it, so it is gated at the UI
-     ratio against --mds-surface-media in dsbridge/contract.json.
+     ratio against --mds-surface-media in contrast-contract.json.
 
      The ring is the dark theme's, in both themes: a picture is not lighter in
      light mode, and the light ring measures 2.8:1 on the letterbox. Naming the

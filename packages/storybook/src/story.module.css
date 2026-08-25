@@ -90,3 +90,20 @@
 .railItem {
   width: 12rem;
 }
+
+/* Where a layout primitive's own edges are. What a Stack does with align, or
+   a Container with its margins, is invisible until the box doing it is drawn:
+   these stories are about the space around the children, not the children.
+   Border only — a child pressed against the edge is the point. */
+.bounds {
+  border: var(--mds-border-width) dashed var(--mds-border-strong);
+  border-radius: var(--mds-radius-card);
+}
+
+/* The ground a Container centres on. With fullscreen layout the story gets the
+   real canvas width, and the sunken fill either side of the column is the room
+   margin-inline: auto gave back. */
+.stage {
+  background: var(--mds-surface-sunken);
+  padding-block: var(--mds-pad-page-y);
+}

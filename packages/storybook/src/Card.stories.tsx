@@ -71,8 +71,8 @@ export const Interactive: Story = {
   ),
 };
 
-/* The card is the section: `as` puts it in the outline, which no wrapper
-   around it can do. */
+/** The card is the section: `as` puts it in the outline, which no wrapper
+ * around it can do. */
 export const AsSection: Story = {
   args: { children: null },
   render: () => (
