@@ -143,7 +143,7 @@ Old MDS built CSS from JSON via scripts. Neither new system needed it. CSS custo
 ### v1 core — shared by both apps today (~32)
 | Level | Components |
 |---|---|
-| Atom | Text, Heading, Icon, Button, CountButton, IconButton, Link, Avatar, Badge, Tag, Chip, Divider, Skeleton, Spinner, ProgressBar, Stack, Inline, Container, Input, PasswordInput, Textarea, Select, Checkbox, Radio, Switch, SegmentedControl, SearchField |
+| Atom | Text, Heading, Icon, Button, CountButton, IconButton, Link, Avatar, Badge, Tag, Chip, Divider, Skeleton, Spinner, ProgressBar, Stack, Inline, Container, Input, PasswordInput, Textarea, Select, Checkbox, Radio, Switch, SegmentedControl |
 | Molecule | Field, AvatarGroup, List, EmptyState, Tabs, Toast(+Provider), Tooltip? (old MDS only — defer) |
 | Organism | AppBar, TabBar/FooterNav, Card, Modal, Sheet, ConfirmDialog, DateTimePicker |
 | Template | Screen |

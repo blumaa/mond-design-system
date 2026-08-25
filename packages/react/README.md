@@ -51,7 +51,7 @@ Dark mode is `data-theme="dark"` on `<html>`. Nothing else changes.
 **Actions** — `Button`, `CountButton`
 
 **Forms** — `Field`, `Input`, `PasswordInput`, `Textarea`, `Select`, `Checkbox`,
-`Radio`, `Switch`, `SegmentedControl`, `SearchField`, `DateTimePicker`,
+`Radio`, `Switch`, `SegmentedControl`, `DateTimePicker`,
 `FileDrop`
 
 **Content** — `Card`, `Avatar`, `AvatarGroup`, `Badge`, `Tag`, `Chip`,

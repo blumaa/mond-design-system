@@ -5,7 +5,11 @@ import { Input } from "../Input/Input";
 import type { InputProps } from "../Input/Input";
 import styles from "./PasswordInput.module.css";
 
-export interface PasswordInputProps extends Omit<InputProps, "type"> {
+/* The reveal toggle is this field's trailing slot, so nothing else may claim
+   it — and Omit collapses Input's either/or branch anyway, which would leave
+   the clear button's two halves separable. Both reasons drop the same keys. */
+export interface PasswordInputProps
+  extends Omit<InputProps, "type" | "onClear" | "clearLabel" | "iconRight"> {
   /** Names the reveal button while the password is hidden, e.g. "Show password".
       Required: the button carries no visible text, so this is the only thing a
       screen reader has, and it is the app's language rather than the system's. */
