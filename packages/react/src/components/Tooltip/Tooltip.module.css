@@ -1,0 +1,22 @@
+/* Same placement contract as a popover: fixed, parked at the origin, sized to
+   its own content so it can be measured before Floating UI places it. */
+.surface {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--mds-z-tooltip);
+  width: max-content;
+  max-width: min(var(--mds-tooltip-w), calc(100vw - 2 * var(--mds-pad-page-x)));
+  padding: var(--mds-pad-tag-y) var(--mds-pad-tag-x);
+  /* It sits over whatever it describes, so it is the inverse surface rather
+     than a raised one: the contrast is against the page it covers, not against
+     a card it belongs to. */
+  background: var(--mds-surface-inverse);
+  color: var(--mds-text-inverse);
+  border-radius: var(--mds-radius-tag);
+  box-shadow: var(--mds-elevation-floating);
+  font: var(--mds-type-note);
+  /* Nothing here is reachable, and a tooltip that swallowed the pointer would
+     take the hover it was opened by away from the control underneath. */
+  pointer-events: none;
+}

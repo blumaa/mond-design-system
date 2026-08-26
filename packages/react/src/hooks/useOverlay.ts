@@ -5,6 +5,15 @@ import { OverlayHistoryContext } from "./overlayHistory";
 export interface UseOverlayOptions {
   open: boolean;
   onClose: () => void;
+  /**
+   * Freeze the page behind the surface. Default true.
+   *
+   * False for anchored surfaces: a popover is pinned to a trigger that scrolls
+   * with the page, so locking the page would strand it over content the reader
+   * can no longer reach, and locking it *and* letting the popover follow the
+   * anchor are the same gesture answered two ways.
+   */
+  lockScroll?: boolean;
 }
 
 const FOCUSABLE =
@@ -15,12 +24,12 @@ const FOCUSABLE =
  * close, Tab cycling inside the panel, body scroll lock. Attach the
  * returned ref to the dialog element (it needs tabIndex={-1}).
  *
- * Anchor-positioned overlays (Tooltip/Popover) will extend this hook with
- * a floating-ui middleware pass; the options object leaves room for that.
+ * Popover uses it too, with `lockScroll: false`; where it sits on the screen
+ * is a separate question, answered by useAnchoredPosition.
  */
 export function useOverlay<T extends HTMLElement>(options: UseOverlayOptions): RefObject<T | null> {
   const ref = useRef<T>(null);
-  const { open, onClose } = options;
+  const { open, onClose, lockScroll = true } = options;
   const close = useRef(onClose);
   useEffect(() => {
     close.current = onClose;
@@ -69,13 +78,13 @@ export function useOverlay<T extends HTMLElement>(options: UseOverlayOptions): R
 
     document.addEventListener("keydown", onKeyDown);
     const bodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (lockScroll) document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = bodyOverflow;
+      if (lockScroll) document.body.style.overflow = bodyOverflow;
       previous?.focus();
     };
-  }, [open]);
+  }, [open, lockScroll]);
 
   return ref;
 }

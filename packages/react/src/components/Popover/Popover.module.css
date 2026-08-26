@@ -1,0 +1,111 @@
+/* Floating UI writes left/top on the element every frame the anchor moves;
+   the offsets it computes are from the viewport, so the panel is fixed and
+   parked at the origin until the first pass lands. width: max-content lets it
+   size to its content and be measured before it is placed — a panel that
+   stretched to the body's width would be measured against the wrong box and
+   flip to the wrong side. */
+.panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--mds-z-popover);
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  max-width: min(var(--mds-popover-w), calc(100vw - 2 * var(--mds-pad-page-x)));
+  overflow: hidden;
+  background: var(--mds-surface-raised);
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  border-radius: var(--mds-radius-card);
+  box-shadow: var(--mds-elevation-floating);
+  opacity: 0;
+  transform: scale(0.96);
+  transition:
+    opacity var(--mds-dur-fast) var(--mds-ease-standard),
+    transform var(--mds-dur-fast) var(--mds-ease-standard);
+}
+
+/* It grows out of the edge it is attached to, so the movement reads as coming
+   from the trigger rather than from the middle of the screen. data-placement
+   is the side Floating UI settled on after flipping, not the one asked for. */
+.panel[data-placement^="bottom"] {
+  transform-origin: top center;
+}
+
+.panel[data-placement^="top"] {
+  transform-origin: bottom center;
+}
+
+.panel[data-placement^="left"] {
+  transform-origin: center right;
+}
+
+.panel[data-placement^="right"] {
+  transform-origin: center left;
+}
+
+.panel[data-open] {
+  opacity: 1;
+  transform: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap);
+  padding: var(--mds-pad-card) var(--mds-pad-card) 0;
+  font: var(--mds-type-panel-title);
+  color: var(--mds-text-primary);
+}
+
+/* The header's own type role governs; the heading element brings only the
+   outline. */
+.headerTitle {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--mds-tap-min);
+  height: var(--mds-tap-min);
+  margin: calc((var(--mds-tap-min) - var(--mds-icon-lg)) / -2);
+  margin-left: 0;
+  border: none;
+  border-radius: var(--mds-radius-pill);
+  background: transparent;
+  color: var(--mds-text-secondary);
+  cursor: pointer;
+}
+
+.closeGlyph {
+  width: var(--mds-icon-sm);
+  height: var(--mds-icon-sm);
+}
+
+/* The panel is capped by size() against the room the viewport has left, so the
+   overflow lands here rather than on the panel: a header and a footer stay put
+   while the middle scrolls. */
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding: var(--mds-pad-card);
+  font: var(--mds-type-body);
+  color: var(--mds-text-primary);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--mds-gap);
+  padding: 0 var(--mds-pad-card) var(--mds-pad-card);
+}

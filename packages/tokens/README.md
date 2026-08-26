@@ -41,6 +41,30 @@ hex, a literal `px` outside a declared breakpoint, an undefined `--mds-*` (which
 drops the declaration with no error anywhere), and a brand file missing part of
 the semantic contract or its dark block.
 
+## Old browsers
+
+The token layer is the part of this system that survives an old engine. All it
+needs is custom properties, in Chrome since 49 — so a screen that cannot run the
+components can still be dressed by the tokens: colours, spacing, radius, the type
+scale, z-indices, the breakpoint numbers.
+
+Four values are the exception. A custom property holds an unparsed token stream,
+so these are *stored* everywhere; they break the declaration that substitutes
+them.
+
+| token | needs | because |
+| --- | --- | --- |
+| `--mds-vvh` | Chrome 108 | `100dvh` |
+| `--mds-safe-top` / `-right` / `-bottom` / `-left` | Chrome 69 | `env(safe-area-inset-*)` |
+| `--mds-text-control`, `--mds-text-control-sm` | Chrome 79 | `max()` |
+
+`@mond-design-system/react` has no such story and is not going to get one. Its
+stylesheets use flexbox `gap` in 71 places (Chrome 84), plus `:has()` (105),
+logical properties (87), `:focus-visible` (86) and `aspect-ratio` (88). Flexbox
+`gap` has no PostCSS polyfill, so no build step buys the components an older
+floor. A view pinned to old hardware — a scoreboard on a smart TV, a display
+appliance — takes the tokens and writes its own CSS.
+
 ## Rebranding
 
 Copy `brand-template.css` into your app and edit the values. It starts as the

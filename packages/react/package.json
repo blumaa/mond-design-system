@@ -49,6 +49,7 @@
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.8.0",
     "@mond-design-system/tokens": "workspace:^"
   },
   "peerDependencies": {

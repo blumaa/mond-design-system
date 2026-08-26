@@ -134,6 +134,24 @@ export type { ModalProps } from "./components/Modal/Modal";
 export { Sheet, SheetBody, SheetFooter, SheetHeader } from "./components/Sheet/Sheet";
 export type { SheetProps } from "./components/Sheet/Sheet";
 
+export {
+  Popover,
+  PopoverBody,
+  PopoverFooter,
+  PopoverHeader,
+} from "./components/Popover/Popover";
+export type {
+  PopoverHeaderProps,
+  PopoverPlacement,
+  PopoverProps,
+} from "./components/Popover/Popover";
+
+export { Menu, MenuItem } from "./components/Menu/Menu";
+export type { MenuItemProps, MenuPlacement, MenuProps } from "./components/Menu/Menu";
+
+export { Tooltip } from "./components/Tooltip/Tooltip";
+export type { TooltipPlacement, TooltipProps } from "./components/Tooltip/Tooltip";
+
 export { ConfirmDialog } from "./components/ConfirmDialog/ConfirmDialog";
 export type { ConfirmDialogProps, ConfirmDialogTone } from "./components/ConfirmDialog/ConfirmDialog";
 

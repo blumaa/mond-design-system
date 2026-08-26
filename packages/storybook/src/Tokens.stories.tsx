@@ -122,6 +122,17 @@ export const Colors: Story = {
   ),
 };
 
+/* The roles above are what a brand sets. These are slots: each one passes
+   through a role today, so the default look is unchanged, and a brand can move
+   a screen title without moving a card heading with it. */
+const TYPE_ROLES = [
+  ["--mds-type-panel-title", "Panel title — a screen or overlay"],
+  ["--mds-type-card-title", "Card title — a heading inside one"],
+  ["--mds-type-item-title", "Item title — a list row"],
+  ["--mds-type-pill", "Pill — type inside a chip or tag"],
+  ["--mds-type-tab", "Tab — a tab or segment label"],
+] as const;
+
 export const Typography: Story = {
   render: () => (
     <Stack gap="loose">
@@ -135,6 +146,7 @@ export const Typography: Story = {
           ["--mds-type-note", "Note"],
           ["--mds-type-meta", "Meta"],
           ["--mds-type-eyebrow", "Eyebrow"],
+          ["--mds-type-code", "Code"],
         ] as const
       ).map(([token, label]) => (
         <Stack key={token} gap="hairline">
@@ -144,6 +156,15 @@ export const Typography: Story = {
           </span>
         </Stack>
       ))}
+      <Stack gap="tight">
+        <Heading level={3}>Slots</Heading>
+        {TYPE_ROLES.map(([token, label]) => (
+          <Stack key={token} gap="hairline">
+            <Text variant="meta" tone="muted" as="code">{token}</Text>
+            <span style={{ font: `var(${token})`, color: "var(--mds-text-primary)" }}>{label}</span>
+          </Stack>
+        ))}
+      </Stack>
     </Stack>
   ),
 };
@@ -251,6 +272,112 @@ export const RadiusAndElevation: Story = {
             />
           ),
         )}
+      </Stack>
+    </Stack>
+  ),
+};
+
+/* Drawn to scale against each other rather than at size: 1920px of scoreboard
+   does not fit in a docs page, and what the row is for is the comparison. */
+function Ruler({ name, divisor }: { name: string; divisor: number }) {
+  return (
+    <Row
+      name={name}
+      preview={
+        <span
+          className={story.bar}
+          style={{ "--specimen-length": `calc(var(${name}) / ${divisor})` } as CSSProperties}
+        />
+      }
+    />
+  );
+}
+
+export const Layout: Story = {
+  render: () => (
+    <Stack gap="section">
+      <Stack gap="tight">
+        <Heading level={3}>Breakpoints</Heading>
+        <Text variant="note" tone="secondary">
+          A media query is resolved before custom properties exist, so these are read, not used:
+          a component sheet carries the literal px. Every @media prelude in the system breaks at
+          one of these.
+        </Text>
+        {["--mds-bp-md", "--mds-bp-lg", "--mds-bp-xl", "--mds-bp-2xl"].map((n) => (
+          <Ruler key={n} name={n} divisor={8} />
+        ))}
+      </Stack>
+      <Stack gap="tight">
+        <Heading level={3}>Widths</Heading>
+        {[
+          "--mds-content-max",
+          "--mds-content-max-wide",
+          "--mds-sidebar-w",
+          "--mds-modal-w",
+          "--mds-toast-w",
+          "--mds-popover-w",
+          "--mds-tooltip-w",
+        ].map((n) => (
+          <Ruler key={n} name={n} divisor={4} />
+        ))}
+      </Stack>
+      <Stack gap="tight">
+        <Heading level={3}>Stacking</Heading>
+        <Text variant="note" tone="secondary">
+          The order things paint in. Anything portalled to the body reads one of these; nothing
+          in the system sets a bare z-index.
+        </Text>
+        {[
+          "--mds-z-base",
+          "--mds-z-raised",
+          "--mds-z-header",
+          "--mds-z-tabbar",
+          "--mds-z-sheet",
+          "--mds-z-modal",
+          "--mds-z-popover",
+          "--mds-z-toast",
+          "--mds-z-tooltip",
+        ].map((n) => (
+          <Row key={n} name={n} preview={null} />
+        ))}
+      </Stack>
+    </Stack>
+  ),
+};
+
+export const Motion: Story = {
+  render: () => (
+    <Stack gap="section">
+      <Stack gap="tight">
+        <Heading level={3}>Duration</Heading>
+        <Text variant="note" tone="secondary">
+          All four collapse to 1ms under prefers-reduced-motion — turn it on in the OS and the
+          values here change with it.
+        </Text>
+        {["--mds-dur-fast", "--mds-dur-base", "--mds-dur-slow", "--mds-dur-pulse"].map((n) => (
+          <Row key={n} name={n} preview={null} />
+        ))}
+      </Stack>
+      <Stack gap="tight">
+        <Heading level={3}>Easing</Heading>
+        {["--mds-ease-standard", "--mds-ease-exit"].map((n) => (
+          <Row key={n} name={n} preview={null} />
+        ))}
+      </Stack>
+      <Stack gap="tight">
+        <Heading level={3}>Transitions</Heading>
+        <Text variant="note" tone="secondary">
+          A duration and an easing already paired. A component reaches for one of these rather
+          than naming both.
+        </Text>
+        {[
+          "--mds-transition-control",
+          "--mds-transition-surface",
+          "--mds-transition-sheet",
+          "--mds-transition-reveal",
+        ].map((n) => (
+          <Row key={n} name={n} preview={null} />
+        ))}
       </Stack>
     </Stack>
   ),
