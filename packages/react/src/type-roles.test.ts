@@ -11,7 +11,12 @@ const sheet = (path: string) => readFileSync(join(__dirname, "components", path)
 
 /* A title that names the whole screen or overlay, as opposed to a heading
    inside one. */
-const PANELS = ["AppBar/AppBar.module.css", "Modal/Modal.module.css", "Sheet/Sheet.module.css"];
+const PANELS = [
+  "AppBar/AppBar.module.css",
+  "Modal/Modal.module.css",
+  "Sheet/Sheet.module.css",
+  "Popover/Popover.module.css",
+];
 
 /* Type set inside a small enclosed shape, where the line box is the height of
    the shape itself. */

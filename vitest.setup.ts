@@ -16,3 +16,15 @@ expect.extend(toHaveNoViolations as unknown as Parameters<typeof expect.extend>[
 afterEach(() => {
   cleanup();
 });
+
+// jsdom performs no layout, so it ships no ResizeObserver. Floating UI's
+// autoUpdate watches the anchor and the surface with one, and would throw on
+// import of any anchored component. The stub observes nothing, which is the
+// truthful answer in an environment where nothing has a size.
+if (typeof globalThis.ResizeObserver === "undefined") {
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+}

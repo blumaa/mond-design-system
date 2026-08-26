@@ -41,6 +41,14 @@
   --mds-content-max-wide: 1200px; /* desktop multi-column shells */
   --mds-modal-w: 420px;           /* centred dialog */
 
+  /* Anchored surfaces. A popover is capped rather than sized: it hangs off a
+     trigger that can sit anywhere, so the number is the widest it may grow
+     before shift() starts pushing it off its anchor. A tooltip is narrower
+     still — past a couple of lines the text belongs in the thing it describes,
+     not floating over it. */
+  --mds-popover-w: 320px;
+  --mds-tooltip-w: 240px;
+
   /* control sizing */
   --mds-control-h-sm: 32px;
   --mds-control-h-md: 38px;
@@ -140,6 +148,10 @@
   --mds-bp-md: 600px;  /* phone landscape and up: a sheet becomes a dialog */
   --mds-bp-lg: 1024px; /* bottom bar gives way to the sidebar */
   --mds-bp-xl: 1280px; /* room for a second rail */
+  /* A screen nobody sits in front of: a scoreboard on a wall, a projector, a
+     display in a room. The step exists because the layout question changes
+     there — not more columns, but bigger type read from across the room. */
+  --mds-bp-2xl: 1920px;
 
   /* Device safe areas. Zero on desktop; the real insets once the app opts
      into viewport-fit=cover. Anything fixed to a screen edge outside the app
@@ -157,7 +169,15 @@
   --mds-z-tabbar: 100;
   --mds-z-sheet: 200;
   --mds-z-modal: 300;
+  /* Above the modal, not beside it: a popover opened by a control inside a
+     dialog is portalled to the body like the dialog is, so anything at or
+     below the modal's step paints underneath it. */
+  --mds-z-popover: 350;
   --mds-z-toast: 400;
+  /* Last. A tooltip describes whatever is under the pointer, including a
+     control in a toast, and it is the one surface nothing else can be opened
+     on top of. */
+  --mds-z-tooltip: 500;
 }
 
 /* The framed measure. Literal 600px because a media query is resolved before

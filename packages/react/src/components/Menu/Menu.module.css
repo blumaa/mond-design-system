@@ -1,0 +1,88 @@
+/* Same placement contract as a popover: fixed, parked at the origin, sized to
+   its own content so it can be measured before Floating UI places it. */
+.panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--mds-z-popover);
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  min-width: var(--mds-control-h-lg);
+  max-width: min(var(--mds-popover-w), calc(100vw - 2 * var(--mds-pad-page-x)));
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding: var(--mds-pad-tight) 0;
+  background: var(--mds-surface-raised);
+  border: var(--mds-border-width) solid var(--mds-border-subtle);
+  border-radius: var(--mds-radius-card);
+  box-shadow: var(--mds-elevation-floating);
+  opacity: 0;
+  transform: scale(0.96);
+  transition:
+    opacity var(--mds-dur-fast) var(--mds-ease-standard),
+    transform var(--mds-dur-fast) var(--mds-ease-standard);
+}
+
+/* It grows out of the edge it is attached to. data-placement is the side
+   Floating UI settled on after flipping, not the one asked for. */
+.panel[data-placement^="bottom"] {
+  transform-origin: top center;
+}
+
+.panel[data-placement^="top"] {
+  transform-origin: bottom center;
+}
+
+.panel[data-placement^="left"] {
+  transform-origin: center right;
+}
+
+.panel[data-placement^="right"] {
+  transform-origin: center left;
+}
+
+.panel[data-open] {
+  opacity: 1;
+  transform: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-gap-tight);
+  min-height: var(--mds-tap-min);
+  padding: var(--mds-pad-item-y) var(--mds-pad-card);
+  border: none;
+  background: transparent;
+  font: var(--mds-type-item-title);
+  color: var(--mds-text-primary);
+  text-align: start;
+  cursor: pointer;
+}
+
+.item:hover:not(:disabled),
+.item:focus-visible {
+  background: var(--mds-surface-selected);
+}
+
+/* The ring is inset rather than outset: an item runs the full width of the
+   panel, and a ring outside it would be clipped by the panel's own overflow. */
+.item:focus-visible {
+  outline: var(--mds-focus-width) solid var(--mds-focus-ring-color);
+  outline-offset: calc(var(--mds-focus-offset) * -1);
+}
+
+.item:disabled {
+  color: var(--mds-text-muted);
+  cursor: default;
+}
+
+.tone-danger {
+  color: var(--mds-status-danger);
+}
+
+.tone-danger:hover:not(:disabled),
+.tone-danger:focus-visible {
+  background: var(--mds-status-danger-soft);
+}
