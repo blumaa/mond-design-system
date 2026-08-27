@@ -4,68 +4,73 @@
   gap: var(--mds-gap-tight);
 }
 
-/* A block, not a table, until there is room to read across it: the rows below
-   are cards and the colgroup has nothing to size. */
-.table {
-  width: 100%;
-  display: block;
-}
-
-.table colgroup {
-  display: none;
-}
-
-.body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mds-gap-tight);
-}
-
-.row {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mds-gap-hairline);
-  padding: var(--mds-pad-card);
+/* Where the columns want more room than the screen has, this box pans sideways
+   and the page stays put. It takes focus because a box that scrolls only under
+   a pointer is a box a keyboard cannot read. */
+.scroll {
+  overflow-x: auto;
   background: var(--mds-surface-card);
   border: var(--mds-border-width) solid var(--mds-border-subtle);
   border-radius: var(--mds-radius-card);
 }
 
+.scroll:focus-visible {
+  outline: var(--mds-focus-width) solid var(--mds-focus-ring-color);
+  outline-offset: var(--mds-focus-offset);
+}
+
+/* Fills the box where it fits. It will not shrink below the widest word in
+   each column, and that floor is what makes the box above scroll — the content
+   decides, so there is no breakpoint here to be wrong about. */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.row {
+  border-bottom: var(--mds-border-width) solid var(--mds-border-subtle);
+}
+
+.body .row:last-child {
+  border-bottom: none;
+}
+
+.body .row:hover {
+  background: var(--mds-surface-sunken);
+}
+
+.body .selected {
+  background: var(--mds-surface-selected);
+}
+
 .cell,
 .select,
 .actions {
-  display: block;
-  padding: 0;
+  padding: var(--mds-pad-tight) var(--mds-pad-control);
   font: var(--mds-type-body);
   text-align: start;
+  vertical-align: middle;
 }
 
-/* The column's header beside its value, which is the only thing saying what
-   the value is once the row has folded into a card. */
-.key {
-  display: block;
+th.cell,
+th.select,
+th.actions {
   color: var(--mds-text-secondary);
   font: var(--mds-type-label);
+  white-space: nowrap;
 }
 
-/* The row's own name leads the card. */
-.lead {
-  font: var(--mds-type-subtitle);
-}
-
+/* Wide enough for the box and nothing more. */
 .select {
-  order: -1;
+  width: var(--mds-tap-min);
 }
 
+/* Zero, which a table reads as "as narrow as the contents allow": the controls
+   sit at the end and the columns of data keep the rest. */
 .actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--mds-gap-tight);
-  margin-block-start: var(--mds-gap-hairline);
-}
-
-.selected {
-  background: var(--mds-surface-selected);
+  width: 0;
+  white-space: nowrap;
+  text-align: end;
 }
 
 .muted {
@@ -97,6 +102,8 @@
   flex: 1;
 }
 
+/* The bar under the table, not the table: a column of full-width controls on a
+   phone, and a row with the count at one end once there is space for it. */
 @media (min-width: 600px) {
   .bulk {
     flex-direction: row;
@@ -106,94 +113,5 @@
 
   .bulkActions > * {
     flex: initial;
-  }
-}
-
-/* Wide enough to read a row across: the cards become the table they always
-   were in the markup, and the header row comes back out of hiding. */
-@media (min-width: 1024px) {
-  .table {
-    display: table;
-    border-collapse: collapse;
-    background: var(--mds-surface-card);
-    border: var(--mds-border-width) solid var(--mds-border-subtle);
-    border-radius: var(--mds-radius-card);
-    overflow: hidden;
-  }
-
-  .table colgroup {
-    display: table-column-group;
-  }
-
-  .root .head {
-    display: table-header-group;
-    position: static;
-    width: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    clip-path: none;
-    white-space: normal;
-  }
-
-  .body {
-    display: table-row-group;
-  }
-
-  .row {
-    display: table-row;
-    padding: 0;
-    background: none;
-    border: none;
-    border-radius: 0;
-    border-bottom: var(--mds-border-width) solid var(--mds-border-subtle);
-  }
-
-  .body .row:last-child {
-    border-bottom: none;
-  }
-
-  .body .row:hover {
-    background: var(--mds-surface-sunken);
-  }
-
-  .body .selected {
-    background: var(--mds-surface-selected);
-  }
-
-  .cell,
-  .select,
-  .actions {
-    display: table-cell;
-    padding: var(--mds-pad-tight) var(--mds-pad-control);
-    vertical-align: middle;
-  }
-
-  .key {
-    display: none;
-  }
-
-  .lead {
-    font: var(--mds-type-body);
-  }
-
-  th.cell,
-  th.select,
-  th.actions {
-    color: var(--mds-text-secondary);
-    font: var(--mds-type-label);
-    white-space: nowrap;
-  }
-
-  .select {
-    order: 0;
-    width: var(--mds-tap-min);
-  }
-
-  .actions {
-    width: 0;
-    margin-block-start: 0;
-    white-space: nowrap;
-    text-align: end;
   }
 }

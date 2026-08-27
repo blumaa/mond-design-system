@@ -63,13 +63,23 @@ describe("DataTable", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
-  /* Below the wide breakpoint the table is a stack of cards, and a cell with
-     no column header beside it is a value with nothing saying what it is. */
-  it("repeats each column's header beside its cell, out of the reading order", () => {
+  /* The header row never goes away, so nothing inside a cell has to stand in
+     for it. A cell that repeats its column's header is a cell in a card, and
+     this component does not draw cards. */
+  it("does not repeat a column's header inside its cells", () => {
     render(<DataTable {...base()} />);
     const row = screen.getAllByRole("row")[1] as HTMLElement;
-    const echo = row.querySelector('[aria-hidden="true"]');
-    expect(echo).toHaveTextContent("Role");
+    expect(row.querySelector('[aria-hidden="true"]')).toBeNull();
+  });
+
+  /* Columns needing more room than the screen has pan sideways. A box that
+     scrolls only under a pointer is unreachable by keyboard, so the box takes
+     focus and carries the table's name for whoever lands on it. */
+  it("puts the table in a focusable region named after it", () => {
+    render(<DataTable {...base()} />);
+    const region = screen.getByRole("region", { name: "People" });
+    expect(region).toHaveAttribute("tabindex", "0");
+    expect(within(region).getByRole("table")).toBeInTheDocument();
   });
 
   describe("row actions", () => {
