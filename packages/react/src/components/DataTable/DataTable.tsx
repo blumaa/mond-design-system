@@ -2,13 +2,11 @@ import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import { Checkbox } from "../Checkbox/Checkbox";
 import { Text } from "../Text/Text";
-import { VisuallyHidden } from "../VisuallyHidden/VisuallyHidden";
 import styles from "./DataTable.module.css";
 
 export interface DataColumn<Row> {
   key: string;
-  /** Read in the header row, and echoed beside the cell once the table has
-      folded into cards. */
+  /** Read in the header row. */
   header: ReactNode;
   /** CSS width for the column, applied through the colgroup. */
   width?: string;
@@ -65,11 +63,13 @@ export type DataTableProps<Row> = Omit<HTMLAttributes<HTMLDivElement>, "children
 } & DataTableSelection;
 
 /**
- * Rows and columns, folded into cards on a narrow screen.
+ * Rows and columns, at every width.
  *
- * Below the wide breakpoint a table cannot be read across, so each row becomes
- * a card and every cell carries its column's header beside it. The markup is
- * one table either way: what changes is the layout, never the semantics.
+ * A table is for reading across a row and comparing down a column, and it stays
+ * one on a narrow screen rather than turning into something else: where the
+ * columns need more room than there is, the table pans sideways inside a box
+ * that takes focus. An app wanting cards on a phone builds cards — that is a
+ * different component, not this one wearing a second layout.
  *
  * ```tsx
  * <DataTable
@@ -125,90 +125,90 @@ export function DataTable<Row>({
 
   return (
     <div className={cx(styles.root, className)} ref={ref} {...rest}>
-      <table className={styles.table} aria-label={label}>
-        <colgroup>
-          {selectable && <col />}
-          {columns.map((column) => (
-            <col key={column.key} style={column.width !== undefined ? { width: column.width } : undefined} />
-          ))}
-          {rowActions && <col />}
-        </colgroup>
-
-        {/* Hidden where the table is a stack of cards — each cell carries its
-            own header there — and shown again once it is a table. */}
-        <VisuallyHidden as="thead" className={styles.head}>
-          <tr className={styles.row}>
-            {selectable && (
-              <th scope="col" className={styles.select}>
-                <Checkbox
-                  label={selectionLabels.all}
-                  labelHidden
-                  checked={all}
-                  indeterminate={some}
-                  onChange={(event) => onSelectedChange(event.target.checked ? keys : [])}
-                />
-              </th>
-            )}
+      {/* Named as well as the table it holds: whoever tabs into the box to
+          pan it is told what they have landed in. */}
+      <div className={styles.scroll} role="region" aria-label={label} tabIndex={0}>
+        <table className={styles.table} aria-label={label}>
+          <colgroup>
+            {selectable && <col />}
             {columns.map((column) => (
-              <th scope="col" key={column.key} className={styles.cell}>
-                {column.header}
-              </th>
+              <col
+                key={column.key}
+                style={column.width !== undefined ? { width: column.width } : undefined}
+              />
             ))}
-            {rowActions && (
-              <th scope="col" className={styles.actions}>
-                {actionsHeader}
-              </th>
-            )}
-          </tr>
-        </VisuallyHidden>
+            {rowActions && <col />}
+          </colgroup>
 
-        <tbody className={styles.body}>
-          {rows.length > 0
-            ? rows.map((row) => {
-                const key = rowKey(row);
-                const taken = selected?.includes(key) ?? false;
-                return (
-                  <tr
-                    key={key}
-                    className={cx(styles.row, taken && styles.selected, rowMuted?.(row) === true && styles.muted)}
-                  >
-                    {selectable && (
-                      <td className={styles.select}>
-                        <Checkbox
-                          label={selectionLabels.row(nameOf(row))}
-                          labelHidden
-                          checked={taken}
-                          onChange={(event) => toggle(key, event.target.checked)}
-                        />
-                      </td>
-                    )}
-                    {columns.map((column, index) => (
-                      <td key={column.key} className={cx(styles.cell, index === 0 && styles.lead)}>
-                        {/* The header again, for eyes only: a screen reader
-                            already has it from the column. Not for the first
-                            cell — it leads the card as the row's name, and a
-                            name labelled "Name" says nothing. */}
-                        {index > 0 && (
-                          <span className={styles.key} aria-hidden="true">
-                            {column.header}
-                          </span>
-                        )}
-                        {column.cell(row)}
-                      </td>
-                    ))}
-                    {rowActions && <td className={styles.actions}>{rowActions(row)}</td>}
-                  </tr>
-                );
-              })
-            : empty !== undefined && (
-                <tr className={styles.row}>
-                  <td className={styles.empty} colSpan={span}>
-                    <Text variant="note">{empty}</Text>
-                  </td>
-                </tr>
+          <thead>
+            <tr className={styles.row}>
+              {selectable && (
+                <th scope="col" className={styles.select}>
+                  <Checkbox
+                    label={selectionLabels.all}
+                    labelHidden
+                    checked={all}
+                    indeterminate={some}
+                    onChange={(event) => onSelectedChange(event.target.checked ? keys : [])}
+                  />
+                </th>
               )}
-        </tbody>
-      </table>
+              {columns.map((column) => (
+                <th scope="col" key={column.key} className={styles.cell}>
+                  {column.header}
+                </th>
+              ))}
+              {rowActions && (
+                <th scope="col" className={styles.actions}>
+                  {actionsHeader}
+                </th>
+              )}
+            </tr>
+          </thead>
+
+          <tbody className={styles.body}>
+            {rows.length > 0
+              ? rows.map((row) => {
+                  const key = rowKey(row);
+                  const taken = selected?.includes(key) ?? false;
+                  return (
+                    <tr
+                      key={key}
+                      className={cx(
+                        styles.row,
+                        taken && styles.selected,
+                        rowMuted?.(row) === true && styles.muted,
+                      )}
+                    >
+                      {selectable && (
+                        <td className={styles.select}>
+                          <Checkbox
+                            label={selectionLabels.row(nameOf(row))}
+                            labelHidden
+                            checked={taken}
+                            onChange={(event) => toggle(key, event.target.checked)}
+                          />
+                        </td>
+                      )}
+                      {columns.map((column) => (
+                        <td key={column.key} className={styles.cell}>
+                          {column.cell(row)}
+                        </td>
+                      ))}
+                      {rowActions && <td className={styles.actions}>{rowActions(row)}</td>}
+                    </tr>
+                  );
+                })
+              : empty !== undefined && (
+                  <tr className={styles.row}>
+                    <td className={styles.empty} colSpan={span}>
+                      <Text variant="note">{empty}</Text>
+                    </td>
+                  </tr>
+                )}
+          </tbody>
+        </table>
+      </div>
 
       {selectable && selected.length > 0 && bulkActions !== undefined && (
         <div className={styles.bulk} role="status">
