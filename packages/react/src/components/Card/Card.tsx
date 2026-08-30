@@ -1,5 +1,7 @@
 import type { CSSProperties, ElementType, HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
+import { useEffect, useRef } from "react";
 import { cx } from "../../internal/cx";
+import { forkRef } from "../../internal/forkRef";
 import styles from "./Card.module.css";
 
 export type CardVariant = "card" | "raised" | "sunken";
@@ -43,10 +45,30 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "onClick"> 
 export function Card({ children, variant = "card", emphasis = false, onClick, href, as, className, ref, ...rest }: CardProps): ReactElement {
   const cardClass = cx(styles.card, styles[`variant-${variant}`], emphasis && styles.emphasis, className);
 
+  /* An interactive card is itself the control, so a control inside it is
+     nested interactive: invalid inside a <button>, and unreachable or
+     confusing for assistive tech either way. The children are opaque nodes,
+     so the check is against the rendered DOM — a warning, since the tree is
+     the caller's to fix. */
+  const own = useRef<HTMLElement>(null);
+  const interactive = href !== undefined || onClick !== undefined;
+  useEffect(() => {
+    if (!interactive) return;
+    const nested = own.current?.querySelector(
+      "a[href], button, input, select, textarea, [tabindex]",
+    );
+    if (nested != null) {
+      console.warn(
+        "Card: this card is a link or button, and it contains another interactive element. Move the control outside the card, or drop onClick/href.",
+        nested,
+      );
+    }
+  });
+
   if (href !== undefined) {
     const Element: ElementType = as ?? "a";
     return (
-      <Element className={cx(cardClass, styles.interactive)} href={href} ref={ref as Ref<HTMLAnchorElement>} {...rest}>
+      <Element className={cx(cardClass, styles.interactive)} href={href} ref={forkRef(own, ref)} {...rest}>
         {children}
       </Element>
     );
@@ -57,7 +79,7 @@ export function Card({ children, variant = "card", emphasis = false, onClick, hr
         type="button"
         className={cx(cardClass, styles.interactive)}
         onClick={onClick}
-        ref={ref as Ref<HTMLButtonElement>}
+        ref={forkRef(own, ref) as Ref<HTMLButtonElement>}
         {...rest}
       >
         {children}

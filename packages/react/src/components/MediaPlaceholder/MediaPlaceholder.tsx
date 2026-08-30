@@ -73,8 +73,9 @@ export function MediaPlaceholder({
           onError={() => setFailed(src)}
         />
       ) : (
-        <div className={styles.fill} aria-hidden="true">
-          {glyph}
+        <div className={styles.fill}>
+          {/* The glyph is decoration; the caption is words, and words read out. */}
+          {glyph != null && <span aria-hidden="true">{glyph}</span>}
           {caption !== undefined && <Text variant="meta">{caption}</Text>}
         </div>
       )}

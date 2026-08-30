@@ -24,9 +24,12 @@ describe("MediaPlaceholder", () => {
     expect(container.firstElementChild?.className).toContain("blurred");
   });
 
-  it("hides the empty fill from assistive tech: it stands for nothing", () => {
-    const { container } = render(<MediaPlaceholder caption="11 images" />);
-    expect(container.querySelector("[aria-hidden]")).toBeInTheDocument();
+  /* The glyph stands for nothing; the caption is words, and words must
+     read out — hiding "11 images" hides the count from a reader. */
+  it("hides the glyph from assistive tech but not the caption", () => {
+    render(<MediaPlaceholder caption="11 images" glyph={<svg data-glyph="" />} />);
+    expect(document.querySelector("[data-glyph]")?.closest("[aria-hidden]")).toBeInTheDocument();
+    expect(screen.getByText("11 images").closest("[aria-hidden]")).toBeNull();
   });
 
   it("renders the caption and the glyph it is handed", () => {
@@ -76,7 +79,7 @@ describe("MediaPlaceholder with a picture", () => {
     const { container } = render(<MediaPlaceholder src="/gone.jpg" />);
     fireEvent.error(screen.getByRole("presentation"));
     expect(container.querySelector("img")).toBeNull();
-    expect(container.querySelector("[aria-hidden]")).toBeInTheDocument();
+    expect(container.querySelector('[class*="fill"]')).toBeInTheDocument();
   });
 
   it("tries again when the source changes, rather than staying broken", () => {
