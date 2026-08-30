@@ -1,4 +1,6 @@
 .button {
+  composes: hitArea from "../../internal/hit-area.module.css";
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--mds-gap-hairline);

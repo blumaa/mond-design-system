@@ -121,8 +121,12 @@
    as its own role, so a brand can keep a pressable circle in a header while its
    text controls get tighter. Both axes read it, or the circle is an ellipse. */
 .icon-only {
+  composes: hitArea from "../../internal/hit-area.module.css";
   padding: 0;
   border-radius: var(--mds-radius-pill);
+  /* The containing block for the 44px target: an icon-only button is the one
+     button small in both directions, so it is the one that grows one. */
+  position: relative;
 }
 
 .icon-only.size-sm { width: var(--mds-control-h-sm); }

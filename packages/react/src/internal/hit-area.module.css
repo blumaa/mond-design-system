@@ -6,9 +6,9 @@
  * and it grows to the minimum in both axes without moving anything.
  *
  * The composing class supplies the containing block — `position: relative` on
- * most, `absolute` on one. Setting it here instead would overwrite the one that
- * needs `absolute`, because a composed rule is emitted once per importer and the
- * last copy lands after the importer's own. */
+ * most, `absolute` on the ones that already sit inside a field. Setting it here
+ * instead would overwrite those, because a composed rule is emitted once per
+ * importer and the last copy lands after the importer's own. */
 .hitArea::before {
   content: "";
   position: absolute;

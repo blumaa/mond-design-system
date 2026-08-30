@@ -110,6 +110,13 @@ it.each([
   ["Tag/Tag.module.css", "remove"],
   ["Toast/Toast.module.css", "close"],
   ["Input/Input.module.css", "clear"],
+  /* Small in both directions, so the same floor applies: an icon-only button
+     paints at its control height (32px at sm), a count button at its own
+     glyph, and the password reveal at the md control step — all under the
+     44px the system names as the smallest target that ships. */
+  ["Button/Button.module.css", "icon-only"],
+  ["CountButton/CountButton.module.css", "button"],
+  ["PasswordInput/PasswordInput.module.css", "toggle"],
 ])("%s composes that target onto its %s", (path, element) => {
   const css = sheet(path);
   expect(css).not.toMatch(/\.root \{[^}]*min-height/s);
