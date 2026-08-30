@@ -95,6 +95,11 @@
   align-items: stretch;
 }
 
+/* Semantic row only — the cells stay direct grid items of .grid. */
+.week {
+  display: contents;
+}
+
 .day {
   border: none;
   background: transparent;

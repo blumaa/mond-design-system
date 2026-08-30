@@ -344,9 +344,13 @@ export function DateTimePicker({
               }
             : undefined
         }
+        /* gridcell on the button itself: the cell is the interactive thing,
+           and a wrapper would add a layer the grid pattern does not need. */
+        role="gridcell"
         aria-hidden={inMonth ? undefined : true}
         aria-label={intl.dayLabel.format(cell)}
-        aria-pressed={isSelected}
+        aria-selected={isSelected}
+        aria-current={isToday ? "date" : undefined}
         onClick={inMonth ? () => pickDay(cell.getDate()) : undefined}
         onKeyDown={inMonth && !isDisabled ? (e) => onDayKeyDown(e, cell) : undefined}
         className={cx(styles.day, isToday && styles.today, isSelected && styles.selected, !inMonth && styles.outside)}
@@ -449,14 +453,25 @@ export function DateTimePicker({
                 <ChevronRightGlyph className={styles.glyph} />
               </Button>
             </div>
-            <div className={styles.weekdays}>
-              {intl.weekdays.map((w, i) => (
-                <span key={`wd-${i}`} aria-hidden="true" className={styles.weekday}>
-                  {w}
-                </span>
-              ))}
+            {/* APG grid: rows and columnheaders give a reader the week
+                structure the eyes get from the layout. The row wrappers are
+                display: contents so the CSS grid still lays out flat cells. */}
+            <div role="grid" aria-label={intl.monthTitle.format(first)}>
+              <div role="row" className={styles.weekdays}>
+                {intl.weekdays.map((w, i) => (
+                  <span key={`wd-${i}`} role="columnheader" className={styles.weekday}>
+                    {w}
+                  </span>
+                ))}
+              </div>
+              <div role="rowgroup" className={styles.grid}>
+                {Array.from({ length: spanCells / 7 }, (_, w) => (
+                  <div key={`w-${w}`} role="row" className={styles.week}>
+                    {dayCells.slice(w * 7, w * 7 + 7)}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className={styles.grid}>{dayCells}</div>
           </div>
         </SheetBody>
         <SheetFooter>
