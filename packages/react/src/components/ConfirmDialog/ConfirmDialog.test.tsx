@@ -30,6 +30,14 @@ describe("ConfirmDialog", () => {
     expect(screen.getByText("This cannot be undone.")).toBeInTheDocument();
   });
 
+  /* The consequence is the reason the dialog interrupts; wired as the
+     accessible description it is read out with the question instead of
+     waiting to be found. */
+  it("the consequence is the dialog's accessible description", () => {
+    setup();
+    expect(screen.getByRole("alertdialog")).toHaveAccessibleDescription("This cannot be undone.");
+  });
+
   it("confirm fires onConfirm, then closes once it resolves", async () => {
     const { onConfirm, onClose } = setup();
     await userEvent.click(screen.getByRole("button", { name: "Delete" }));

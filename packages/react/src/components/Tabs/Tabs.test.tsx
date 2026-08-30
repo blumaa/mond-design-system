@@ -55,6 +55,14 @@ describe("Tabs", () => {
     expect(screen.getByRole("tab", { name: "Beta" })).toHaveAttribute("tabindex", "-1");
   });
 
+  /* APG: the panel takes tabindex="0" so a panel of plain text is still the
+     next stop after the strip — otherwise Tab skips past everything the
+     selected tab just promised. */
+  it("the shown panel itself is a tab stop", () => {
+    render(<Example />);
+    expect(screen.getByRole("tabpanel")).toHaveAttribute("tabindex", "0");
+  });
+
   // The strip is also a filter over one shared region (reaction lists, feeds) —
   // there is no panel per tab. A tab must not claim a panel that does not exist.
   it("omits aria-controls when no panel carries the tab's value", () => {

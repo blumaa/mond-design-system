@@ -149,6 +149,9 @@ export function TabPanel({ value, className, children, ...rest }: TabPanelProps)
       role="tabpanel"
       id={`${tabs.baseId}-panel-${value}`}
       aria-labelledby={`${tabs.baseId}-tab-${value}`}
+      /* APG: the panel is itself a tab stop, so a panel of plain text is
+         still the next thing Tab reaches after the strip. */
+      tabIndex={0}
       hidden={!selected}
       className={cx(styles.panel, className)}
       {...rest}
