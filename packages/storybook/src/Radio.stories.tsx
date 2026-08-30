@@ -38,6 +38,20 @@ export const Group: Story = {
   },
 };
 
+export const Sizes: Story = {
+  args: { label: "Medium" },
+  render: function Render() {
+    const name = useId();
+    return (
+      <Stack gap="tight">
+        <Radio name={`${name}-sm`} size="sm" label="Small" checked onChange={() => {}} />
+        <Radio name={`${name}-md`} label="Medium" checked onChange={() => {}} />
+        <Radio name={`${name}-lg`} size="lg" label="Large" checked onChange={() => {}} />
+      </Stack>
+    );
+  },
+};
+
 export const States: Story = {
   args: { label: "Selected" },
   render: function Render() {

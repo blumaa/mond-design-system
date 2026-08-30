@@ -124,6 +124,39 @@ it.each([
   expect(css).toMatch(new RegExp(`\\.${element} \\{[^}]*position: (relative|absolute);`, "s"));
 });
 
+/* The chosen dot is a grid item, and its grid area is an auto track sized from
+ * the empty pseudo-element — zero. A percentage size resolves against that
+ * area, so `width: 50%` painted a 0×0 dot: the radio took the click, checked,
+ * and showed nothing. Em-based geometry scales with the box, as the Checkbox
+ * glyph already does. */
+it("paints the radio's chosen dot in em of the box, not a percentage of a zero track", () => {
+  const css = sheet("Radio/Radio.module.css");
+  expect(css).toMatch(/\.dot \{[^}]*font-size: var\(--mds-check-size\);/s);
+  expect(css).toMatch(/\.dot:checked::after \{[^}]*width: 0\.5em;[^}]*height: 0\.5em;/s);
+  expect(css).not.toMatch(/\.dot:checked::after \{[^}]*%/s);
+});
+
+/* A size class re-points the one role the dot already reads, so every rule
+ * that draws from --mds-check-size — box, em geometry, the checked dot —
+ * steps together and nothing names a step twice. Only the default size is a
+ * brand role, like the icon button: the other two are core steps until a
+ * brand measures a difference. */
+it("Radio steps its box by re-pointing --mds-check-size, not by re-sizing rules", () => {
+  const css = sheet("Radio/Radio.module.css");
+  for (const size of ["sm", "lg"] as const) {
+    expect(css).toMatch(
+      new RegExp(`\\.size-${size} \\{[^}]*--mds-check-size: var\\(--mds-check-size-${size}\\)`, "s"),
+    );
+  }
+  /* md is the role itself — a class naming it would be a second source. */
+  expect(css).not.toMatch(/\.size-md \{[^}]*--mds-check-size/s);
+  /* One drawing rule: no size class may set width, height or font-size. */
+  expect(css).not.toMatch(/\.size-(sm|md|lg) \{[^}]*(width|height|font-size):/s);
+  const layout = token("core/layout.css");
+  expect(layout).toMatch(/--mds-check-size-sm:\s*\d+px/);
+  expect(layout).toMatch(/--mds-check-size-lg:\s*\d+px/);
+});
+
 /* A list row is the target, so it keeps the minimum as real height. */
 it("keeps the tap minimum on a List row, which is the target itself", () => {
   expect(sheet("List/List.module.css")).toMatch(/\.row \{[^}]*min-height: var\(--mds-tap-min\)/s);

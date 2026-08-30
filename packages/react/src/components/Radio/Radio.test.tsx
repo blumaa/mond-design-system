@@ -19,6 +19,20 @@ describe("Radio", () => {
     expect(screen.getByRole("radio", { name: "Beta" })).toBeChecked();
   });
 
+  it("carries no step class at the default: md is the role the dot reads", () => {
+    render(<Radio name="g" label="Alpha" />);
+    expect(screen.getByRole("radio", { name: "Alpha" }).closest("label")?.className).not.toContain(
+      "size-",
+    );
+  });
+
+  it.each(["sm", "lg"] as const)("takes the %s step", (size) => {
+    render(<Radio name="g" label="Alpha" size={size} />);
+    expect(screen.getByRole("radio", { name: "Alpha" }).closest("label")?.className).toContain(
+      `size-${size}`,
+    );
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <fieldset>

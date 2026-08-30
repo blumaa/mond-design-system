@@ -79,6 +79,11 @@
   --mds-icon-btn-size: 38px;
 
   --mds-check-size: 22px; /* checkbox box and radio circle */
+  /* The other two steps of that mark. Core steps rather than brand roles, like
+     the non-default icon button sizes: a brand tunes the default and the steps
+     keep their distance from it until an app measures a difference. */
+  --mds-check-size-sm: 18px;
+  --mds-check-size-lg: 26px;
   --mds-switch-w: 44px;
   --mds-switch-h: 26px;
   --mds-switch-knob: 20px; /* leaves --mds-switch-inset of track on every side */

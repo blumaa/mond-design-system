@@ -5,6 +5,16 @@
   cursor: pointer;
 }
 
+/* A step re-points the role the dot already reads, so the box, its em
+   geometry and the checked dot move together. md is the role itself. */
+.size-sm {
+  --mds-check-size: var(--mds-check-size-sm);
+}
+
+.size-lg {
+  --mds-check-size: var(--mds-check-size-lg);
+}
+
 .root:has(.dot:disabled) {
   cursor: not-allowed;
 }
@@ -16,6 +26,8 @@
   margin: 0;
   width: var(--mds-check-size);
   height: var(--mds-check-size);
+  /* em-based dot geometry scales with the box. */
+  font-size: var(--mds-check-size);
   border: var(--mds-border-width) solid var(--mds-control-border);
   border-radius: var(--mds-radius-pill);
   background: var(--mds-surface-card);
@@ -30,10 +42,12 @@
   border-color: var(--mds-action-bg);
 }
 
+/* Sized in em, not %: the pseudo's grid area is an auto track sized from its
+   own empty content, and a percentage of that zero area paints no dot. */
 .dot:checked::after {
   content: "";
-  width: 50%;
-  height: 50%;
+  width: 0.5em;
+  height: 0.5em;
   border-radius: var(--mds-radius-pill);
   background: var(--mds-action-bg);
 }
