@@ -9,6 +9,9 @@ export interface FieldContextValue {
   /** Space-joined ids of hint/error, for aria-describedby. */
   describedBy: string | undefined;
   invalid: boolean;
+  /** The label's asterisk is aria-hidden decoration; controls carry the
+   *  requirement as aria-required so assistive tech hears it too. */
+  required: boolean;
 }
 
 const FieldContext = createContext<FieldContextValue | null>(null);
@@ -56,7 +59,7 @@ export function Field({ label, children, hint, error, required = false, classNam
         )}
       </label>
       <FieldContext.Provider
-        value={{ id, describedBy: message ? messageId : undefined, invalid: error !== undefined }}
+        value={{ id, describedBy: message ? messageId : undefined, invalid: error !== undefined, required }}
       >
         {children}
       </FieldContext.Provider>

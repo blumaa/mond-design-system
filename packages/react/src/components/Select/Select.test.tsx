@@ -30,6 +30,17 @@ describe("Select", () => {
     expect(screen.getByLabelText("Fruit")).toBeInTheDocument();
   });
 
+  it("a required Field marks the select required", () => {
+    render(
+      <Field label="Fruit" required>
+        <Select>
+          <option>Apple</option>
+        </Select>
+      </Field>,
+    );
+    expect(screen.getByRole("combobox")).toBeRequired();
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <Select aria-label="Fruit">

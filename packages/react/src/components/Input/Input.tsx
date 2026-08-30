@@ -126,6 +126,7 @@ export function Input({
       id={rest.id ?? field?.id}
       aria-describedby={rest["aria-describedby"] ?? field?.describedBy}
       aria-invalid={rest["aria-invalid"] ?? ((invalid ?? field?.invalid) || undefined)}
+      aria-required={rest["aria-required"] ?? (field?.required || undefined)}
       className={cx(
         styles.input,
         styles[`size-${size}`],
