@@ -4,7 +4,10 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import { usePresence } from "./usePresence";
 
 describe("usePresence", () => {
-  afterEach(() => vi.useRealTimers());
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
 
   it("closed from the start: not mounted", () => {
     const { result } = renderHook(() => usePresence(false, 200));
@@ -37,5 +40,22 @@ describe("usePresence", () => {
       vi.advanceTimersByTime(250);
     });
     expect(result.current.mounted).toBe(false);
+  });
+
+  // The CSS exit collapses to nothing under reduced motion, so waiting out the
+  // full duration would hold a visually-gone dialog in the tree.
+  it("reduced motion: closing unmounts without waiting out the exit clock", () => {
+    vi.useFakeTimers();
+    const matchMedia = vi.fn().mockReturnValue({ matches: true });
+    vi.stubGlobal("matchMedia", matchMedia);
+    const { result, rerender } = renderHook(({ open }) => usePresence(open, 200), {
+      initialProps: { open: true },
+    });
+    rerender({ open: false });
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+    expect(result.current.mounted).toBe(false);
+    expect(matchMedia).toHaveBeenCalledWith("(prefers-reduced-motion: reduce)");
   });
 });
