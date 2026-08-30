@@ -80,3 +80,39 @@
 .box:disabled ~ .label {
   color: var(--mds-action-disabled-fg);
 }
+
+/* Forced colors strips the filled box down to its border; the tick survives
+   as a border but loses its ground. Restated in system colors. */
+@media (forced-colors: active) {
+  .box:checked,
+  .box:indeterminate {
+    background: SelectedItem;
+    border-color: SelectedItem;
+  }
+
+  .box:checked::after {
+    border-color: SelectedItemText;
+  }
+
+  .box:indeterminate::after {
+    border-top-color: SelectedItemText;
+  }
+
+  .box:disabled {
+    border-color: GrayText;
+  }
+
+  .box:disabled:checked,
+  .box:disabled:indeterminate {
+    background: GrayText;
+    border-color: GrayText;
+  }
+
+  .box:disabled:checked::after {
+    border-color: Canvas;
+  }
+
+  .box:disabled:indeterminate::after {
+    border-top-color: Canvas;
+  }
+}

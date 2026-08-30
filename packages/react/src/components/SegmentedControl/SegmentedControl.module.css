@@ -95,3 +95,17 @@
   outline: var(--mds-focus-width) solid var(--mds-focus-ring-color);
   outline-offset: var(--mds-focus-offset);
 }
+
+/* Forced colors strips the chosen segment's surface and shadow, leaving every
+   face identical. Restated in the system's selection pair. */
+@media (forced-colors: active) {
+  .input:checked + .face {
+    background: SelectedItem;
+    color: SelectedItemText;
+  }
+
+  .input:disabled:checked + .face {
+    background: GrayText;
+    color: Canvas;
+  }
+}

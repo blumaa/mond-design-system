@@ -127,3 +127,11 @@
 .action:hover {
   background: var(--mds-accent-hover);
 }
+
+/* Forced colors strips author backgrounds — including a currentColor one — so
+   the active indicator is restated in the system's selection color. */
+@media (forced-colors: active) {
+  .active::before {
+    background: SelectedItem;
+  }
+}

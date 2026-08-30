@@ -84,3 +84,35 @@
 .root:has(.track[aria-disabled="true"]) .label {
   color: var(--mds-action-disabled-fg);
 }
+
+/* Forced colors strips author backgrounds, and the switch is nothing but two
+   of them — track and knob both vanish. Redrawn in system colors: an outlined
+   track, a knob in the outline's color, the pair inverted when on. */
+@media (forced-colors: active) {
+  .track {
+    border: var(--mds-border-width) solid ButtonText;
+  }
+
+  .track::after {
+    background: ButtonText;
+  }
+
+  .track:checked {
+    background: SelectedItem;
+    border-color: SelectedItem;
+  }
+
+  .track:checked::after {
+    background: SelectedItemText;
+  }
+
+  .track:disabled,
+  .track[aria-disabled="true"] {
+    border-color: GrayText;
+  }
+
+  .track:disabled::after,
+  .track[aria-disabled="true"]::after {
+    background: GrayText;
+  }
+}
