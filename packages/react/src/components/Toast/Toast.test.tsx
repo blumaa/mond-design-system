@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { axe } from "jest-axe";
 import { ToastProvider, useToast } from "./Toast";
 
 function Trigger({ duration }: { duration?: number }) {
@@ -24,6 +25,16 @@ describe("Toast", () => {
     fireEvent.click(screen.getByRole("button", { name: "fire" }));
     expect(screen.getByRole("region", { name: "Notifications" })).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("Saved");
+  });
+
+  it("has no axe violations with a toast showing", async () => {
+    render(
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+        <Trigger duration={0} />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "fire" }));
+    expect(await axe(document.body)).toHaveNoViolations();
   });
 
   it("dismiss button removes the toast", () => {

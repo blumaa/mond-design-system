@@ -70,6 +70,26 @@ describe("Modal", () => {
     expect(screen.getByRole("dialog")).toHaveFocus();
   });
 
+  /* The trap's focusable selector must know every natively focusable thing:
+     a summary it misses is a summary Tab escapes the dialog through. */
+  it("the Tab trap counts a summary as focusable", async () => {
+    render(
+      <Modal open onClose={() => {}} label="Details">
+        <ModalBody>
+          <details>
+            <summary>More</summary>
+            fine print
+          </details>
+        </ModalBody>
+      </Modal>,
+    );
+    const summary = screen.getByText("More");
+    summary.focus();
+    await userEvent.tab();
+    // Sole focusable: the trap wraps Tab back onto it instead of escaping.
+    expect(summary).toHaveFocus();
+  });
+
   it("has no axe violations", async () => {
     const { baseElement } = render(<Example />);
     expect(await axe(baseElement)).toHaveNoViolations();

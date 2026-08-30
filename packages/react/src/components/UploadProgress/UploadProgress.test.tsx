@@ -109,6 +109,8 @@ describe("UploadProgress", () => {
     );
     expect(document.querySelector("[data-mark]")).toBeInTheDocument();
     expect(document.querySelector("img")).toHaveAttribute("src", "/knot.jpg");
+    // The status reads out in words; the mark is decoration for the eyes.
+    expect(document.querySelector("[data-mark]")?.closest("[aria-hidden]")).toBeInTheDocument();
   });
 
   it("carries the status in a class, so the mark can be tinted by it", () => {

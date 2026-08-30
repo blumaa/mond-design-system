@@ -169,6 +169,13 @@ it("keeps the tap minimum on a List row, which is the target itself", () => {
   expect(sheet("List/List.module.css")).toMatch(/\.row \{[^}]*min-height: var\(--mds-tap-min\)/s);
 });
 
+/* Same reasoning for a card that is itself the button or link. */
+it("keeps the tap minimum on an interactive Card", () => {
+  expect(sheet("Card/Card.module.css")).toMatch(
+    /\.interactive \{[^}]*min-height: var\(--mds-tap-min\)/s,
+  );
+});
+
 /* Initials are display type. A brand whose display face is a serif wants to
  * see it in an avatar; MDS read the body face and there was no way to say so. */
 it("sets avatar initials in the display face", () => {

@@ -28,6 +28,8 @@
 
 /* Whole-card button/link resets + affordance. */
 .interactive {
+  /* The whole card is the target, so the card is what meets the minimum. */
+  min-height: var(--mds-tap-min);
   padding: 0;
   margin: 0;
   font: inherit;

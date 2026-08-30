@@ -15,6 +15,8 @@ describe("List", () => {
     );
     expect(screen.getByRole("list")).toBeInTheDocument();
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    // Explicit role: Safari/VoiceOver drops list semantics under list-style: none.
+    expect(screen.getByRole("list")).toHaveAttribute("role", "list");
   });
 
   it("label heads the group and names the list", () => {

@@ -82,7 +82,12 @@ export function FileDrop({
         disabled={disabled}
         onClick={() => picker.current?.click()}
       >
-        {icon !== undefined && <span className={styles.icon}>{icon}</span>}
+        {/* Decoration for the words beside it — readers get the words. */}
+        {icon !== undefined && (
+          <span className={styles.icon} aria-hidden="true">
+            {icon}
+          </span>
+        )}
         <Text variant="label">{label}</Text>
         {hint !== undefined && <Text variant="meta">{hint}</Text>}
       </button>

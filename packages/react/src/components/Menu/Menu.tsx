@@ -150,6 +150,23 @@ export function Menu({ label, trigger, placement = "bottom-end", className, chil
                 close();
                 return;
               }
+              /* APG type-ahead: a printable key jumps to the next enabled
+                 item whose label starts with it, wrapping past the end. */
+              if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+                const items = [
+                  ...(panelRef.current?.querySelectorAll<HTMLElement>(
+                    `${ITEM_SELECTOR}:not([disabled])`,
+                  ) ?? []),
+                ];
+                const current = items.indexOf(event.target as HTMLElement);
+                const fromNext = [...items.slice(current + 1), ...items.slice(0, current + 1)];
+                fromNext
+                  .find((item) =>
+                    item.textContent?.trim().toLowerCase().startsWith(event.key.toLowerCase()),
+                  )
+                  ?.focus();
+                return;
+              }
               onArrowKeys(event);
             }}
           >

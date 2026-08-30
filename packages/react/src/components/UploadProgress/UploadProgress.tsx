@@ -78,7 +78,12 @@ export function UploadProgress({
     <div className={cx(styles.upload, styles[`status-${status}`], className)} {...rest}>
       <div className={styles.head}>
         {preview !== undefined && <div className={styles.preview}>{preview}</div>}
-        {mark !== undefined && <span className={styles.mark}>{mark}</span>}
+        {/* The status is announced in words; the mark is its decoration. */}
+        {mark !== undefined && (
+          <span className={styles.mark} aria-hidden="true">
+            {mark}
+          </span>
+        )}
         <Text variant="label" truncate className={styles.name}>
           {name}
         </Text>

@@ -101,6 +101,22 @@ describe("Menu", () => {
     expect(screen.getByRole("menuitem", { name: "Edit" })).toHaveFocus();
   });
 
+  /* APG type-ahead: a printable key jumps to the next item starting with it,
+     searching past the focused item and wrapping, skipping disabled ones. */
+  it("a letter jumps focus to the next item starting with it", async () => {
+    render(<Example />);
+    await userEvent.click(trigger());
+    await waitFor(() => expect(screen.getByRole("menuitem", { name: "Edit" })).toHaveFocus());
+    await userEvent.keyboard("d");
+    expect(screen.getByRole("menuitem", { name: "Delete" })).toHaveFocus();
+    // "a" only matches disabled Archive — focus stays put.
+    await userEvent.keyboard("a");
+    expect(screen.getByRole("menuitem", { name: "Delete" })).toHaveFocus();
+    // Wraps: "e" from Delete comes back around to Edit.
+    await userEvent.keyboard("e");
+    expect(screen.getByRole("menuitem", { name: "Edit" })).toHaveFocus();
+  });
+
   it("choosing an item runs it, closes the menu and returns focus to the trigger", async () => {
     const onEdit = vi.fn();
     render(<Example onEdit={onEdit} />);
