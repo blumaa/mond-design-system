@@ -16,7 +16,8 @@
   border-radius: var(--mds-radius-tag);
   box-shadow: var(--mds-elevation-floating);
   font: var(--mds-type-note);
-  /* Nothing here is reachable, and a tooltip that swallowed the pointer would
-     take the hover it was opened by away from the control underneath. */
-  pointer-events: none;
+  /* No pointer-events: none here, deliberately: the pointer must be able to
+     rest on the surface — to select the text, say — without it vanishing
+     (WCAG 1.4.13). It sits beside the trigger with a gap, so it does not
+     shadow the control it describes. */
 }

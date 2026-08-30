@@ -13,6 +13,11 @@ const GAP = 8;
     the way somewhere else does not flash a label. */
 const DEFAULT_DELAY_MS = 400;
 
+/** Grace after the pointer leaves, long enough to cross the gap onto the
+    surface (WCAG 1.4.13: hover content must itself be hoverable). Reaching
+    either side stops the clock; blur and Escape still hide at once. */
+const HOVER_GRACE_MS = 150;
+
 export type TooltipPlacement = Placement;
 
 /** What Tooltip needs to be able to put on its trigger. */
@@ -71,6 +76,10 @@ export function Tooltip({
     clearTimeout(timer.current);
     setOpen(false);
   };
+  const hideAfterGrace = () => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(hide, HOVER_GRACE_MS);
+  };
 
   useEffect(() => clearTimeout(timer.current), []);
 
@@ -112,7 +121,7 @@ export function Tooltip({
         }}
         onPointerLeave={(event: PointerEvent<HTMLElement>) => {
           triggerProps.onPointerLeave?.(event);
-          hide();
+          hideAfterGrace();
         }}
         // No dwell on focus: the reader has already committed to the control,
         // and a delay on a keyboard path reads as the tooltip being broken.
@@ -127,7 +136,14 @@ export function Tooltip({
       />
       {open &&
         createPortal(
-          <div ref={surfaceRef} id={id} role="tooltip" className={styles.surface}>
+          <div
+            ref={surfaceRef}
+            id={id}
+            role="tooltip"
+            className={styles.surface}
+            onPointerEnter={show}
+            onPointerLeave={hideAfterGrace}
+          >
             {content}
           </div>,
           document.body,
