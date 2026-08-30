@@ -33,6 +33,18 @@ const DOUBLE = 2.5;
 /** Trackpad pinches arrive as wheel deltas; this turns one into a factor. */
 const WHEEL = 0.01;
 
+/** One arrow press of pan. */
+const KEY_PAN_PX = 48;
+
+/* An arrow looks that way: ArrowRight brings the right-hand part of the
+   picture into the frame, so the picture itself goes left. */
+const ARROWS: Record<string, { x: number; y: number }> = {
+  ArrowLeft: { x: 1, y: 0 },
+  ArrowRight: { x: -1, y: 0 },
+  ArrowUp: { x: 0, y: 1 },
+  ArrowDown: { x: 0, y: -1 },
+};
+
 const ORIGIN = { x: 0, y: 0 };
 
 const clamp = (value: number, low: number, high: number) => Math.min(Math.max(value, low), high);
@@ -120,6 +132,25 @@ export function Lightbox({ open, onClose, src, alt = "", caption, labels }: Ligh
     surface.addEventListener("wheel", onWheel, { passive: false });
     return () => surface.removeEventListener("wheel", onWheel);
   }, [surface, zoom]);
+
+  /* WCAG 2.1.1: the drag needs a keyboard equal. Zoom has its buttons; the
+     pan gets the arrows. On the document because the overlay panel holds
+     focus, and nothing else in a lightbox answers to an arrow. */
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      const step = ARROWS[event.key];
+      if (step === undefined || at.current <= MIN_SCALE) return;
+      event.preventDefault();
+      setOffset((current) =>
+        hold({ x: current.x + step.x * KEY_PAN_PX, y: current.y + step.y * KEY_PAN_PX }, at.current),
+      );
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open, hold]);
 
   function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     points.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
