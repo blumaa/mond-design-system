@@ -219,6 +219,27 @@ describe("VideoPlayer captions", () => {
     render(<VideoPlayer src={src} labels={labels} />);
     expect(screen.queryByRole("button", { name: /captions/i })).toBeNull();
   });
+
+  it("keeps aria-pressed in step with the track as it is toggled", async () => {
+    const track = { mode: "disabled" };
+    Object.defineProperty(HTMLMediaElement.prototype, "textTracks", {
+      configurable: true,
+      get: () => [track],
+    });
+    try {
+      render(<VideoPlayer src={src} labels={labels} captions={captions} captionsLabel="Captions" />);
+      const button = screen.getByRole("button", { name: "Captions" });
+      expect(button).toHaveAttribute("aria-pressed", "false");
+      await userEvent.click(button);
+      expect(track.mode).toBe("showing");
+      expect(button).toHaveAttribute("aria-pressed", "true");
+      await userEvent.click(button);
+      expect(track.mode).toBe("disabled");
+      expect(button).toHaveAttribute("aria-pressed", "false");
+    } finally {
+      delete (HTMLMediaElement.prototype as { textTracks?: unknown }).textTracks;
+    }
+  });
 });
 
 describe("VideoPlayer scrubber", () => {
