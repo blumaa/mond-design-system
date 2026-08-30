@@ -82,8 +82,33 @@ export function ToastProvider({
      callback a second time when its timeout comes round: the way out that
      got there first takes the callback with it. */
   const leaving = useRef(new Map<number, () => void>());
+  /* WCAG 2.2.1: the clocks stop while the reader is engaging with the region
+     — pointer over it or focus inside it — and run on with the time they had
+     left. Each open clock remembers when it started so pausing can bank the
+     remainder. */
+  const clocks = useRef(
+    new Map<number, { handle: ReturnType<typeof setTimeout>; startedAt: number; remaining: number }>(),
+  );
+  const held = useRef(0);
+  /* The toast elements by id, so a dismissal can tell whether it is taking
+     the focused element with it. */
+  const surfaces = useRef(new Map<number, HTMLDivElement>());
 
   const dismiss = useCallback((id: number) => {
+    const clock = clocks.current.get(id);
+    if (clock !== undefined) {
+      clearTimeout(clock.handle);
+      clocks.current.delete(id);
+    }
+    /* Taking the focused toast away would drop focus on <body> and send the
+       next Tab back to the top of the page; its neighbour inherits it. The
+       last toast has no neighbour, and nothing here knows where the reader
+       was before, so that one is left to the browser. */
+    const surface = surfaces.current.get(id);
+    if (surface?.contains(document.activeElement)) {
+      const neighbour = surface.nextElementSibling ?? surface.previousElementSibling;
+      neighbour?.querySelector<HTMLButtonElement>("button:last-child")?.focus();
+    }
     setToasts((current) => current.filter((entry) => entry.id !== id));
     const said = leaving.current.get(id);
     if (said !== undefined) {
@@ -92,15 +117,49 @@ export function ToastProvider({
     }
   }, []);
 
+  const start = useCallback(
+    (id: number, remaining: number) => {
+      clocks.current.set(id, {
+        handle: setTimeout(() => dismiss(id), remaining),
+        startedAt: Date.now(),
+        remaining,
+      });
+    },
+    [dismiss],
+  );
+
+  /* Hold/release rather than a boolean: focus moving between two buttons in
+     the region fires a release and a hold back to back, and the pointer can
+     be over the region while focus is inside it. */
+  const hold = useCallback(() => {
+    if (held.current++ > 0) return;
+    for (const clock of clocks.current.values()) {
+      clearTimeout(clock.handle);
+      clock.remaining -= Date.now() - clock.startedAt;
+    }
+  }, []);
+
+  const release = useCallback(() => {
+    if (--held.current > 0) return;
+    held.current = 0;
+    for (const [id, clock] of clocks.current) {
+      start(id, Math.max(clock.remaining, 0));
+    }
+  }, [start]);
+
   const toast = useCallback(
     ({ title, description, tone = "neutral", duration = 5000, action, onDismiss }: ToastOptions) => {
       const id = nextId.current++;
       if (onDismiss !== undefined) leaving.current.set(id, onDismiss);
       setToasts((current) => [...current, { id, title, description, tone, action }]);
-      if (duration > 0) setTimeout(() => dismiss(id), duration);
+      if (duration > 0) {
+        start(id, duration);
+        // Born into a held region: its clock waits for the release too.
+        if (held.current > 0) clearTimeout(clocks.current.get(id)?.handle);
+      }
       return id;
     },
-    [dismiss],
+    [start],
   );
 
   const value = useMemo(() => ({ toast, dismiss }), [toast, dismiss]);
@@ -108,10 +167,22 @@ export function ToastProvider({
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div role="region" aria-label={regionLabel} className={styles.viewport}>
+      <div
+        role="region"
+        aria-label={regionLabel}
+        className={styles.viewport}
+        onPointerEnter={hold}
+        onPointerLeave={release}
+        onFocus={hold}
+        onBlur={release}
+      >
         {toasts.map((entry) => (
           <div
             key={entry.id}
+            ref={(node) => {
+              if (node !== null) surfaces.current.set(entry.id, node);
+              else surfaces.current.delete(entry.id);
+            }}
             /* A refusal interrupts: what the reader asked for did not happen,
                and they are about to carry on as though it did. Anything
                calmer waits its turn. */
