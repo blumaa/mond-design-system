@@ -26,7 +26,9 @@
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
-  scroll-behavior: smooth;
+  /* The token, not the literal keyword: it collapses to auto under
+     prefers-reduced-motion. */
+  scroll-behavior: var(--mds-scroll);
   scrollbar-width: none;
   padding: var(--mds-focus-offset);
   margin: calc(var(--mds-focus-offset) * -1);

@@ -368,6 +368,7 @@ export function DateTimePicker({
         type="button"
         disabled={disabled}
         aria-describedby={field?.describedBy}
+        aria-invalid={field?.invalid || undefined}
         aria-haspopup="dialog"
         aria-expanded={open}
         /* Announce the field name (when given) alongside the current value. */

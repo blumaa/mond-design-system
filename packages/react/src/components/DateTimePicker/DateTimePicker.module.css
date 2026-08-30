@@ -21,6 +21,11 @@
   opacity: 0.5;
 }
 
+/* Reads like an Input, so it flags like one too. */
+.trigger[aria-invalid="true"] {
+  border-color: var(--mds-status-danger);
+}
+
 .hasValue {
   color: var(--mds-text-primary);
 }

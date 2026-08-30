@@ -38,6 +38,10 @@ export interface TabBarItemProps {
   /** Attention dot on the icon — unread, pending. Boolean only: the count
       lives on the destination screen, the bar just says "something's there". */
   badge?: boolean | undefined;
+  /** What the dot means, e.g. "New messages" — the dot itself sits inside the
+      aria-hidden icon, so without these words the badge is invisible to a
+      reader. The words are the app's, like every label here. */
+  badgeLabel?: string | undefined;
   /** Element override for the link, e.g. a router's Link. A bottom bar is
       where a full page reload costs the most — it restarts the whole shell. */
   as?: ElementType;
@@ -55,6 +59,7 @@ export function TabBarItem({
   onClick,
   active = false,
   badge = false,
+  badgeLabel,
   as,
   hideLabel = false,
 }: TabBarItemProps) {
@@ -70,6 +75,9 @@ export function TabBarItem({
       ) : (
         <span className={styles.label}>{label}</span>
       )}
+      {/* After the caption, so the name reads "Messages New messages" — the
+          dot itself sits inside the aria-hidden icon and says nothing. */}
+      {badge && badgeLabel !== undefined && <VisuallyHidden>{badgeLabel}</VisuallyHidden>}
     </>
   );
   if (href !== undefined) {

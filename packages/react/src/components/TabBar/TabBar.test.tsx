@@ -39,6 +39,15 @@ describe("TabBar", () => {
     expect(screen.getAllByTestId("mds-tabbar-badge")).toHaveLength(1);
   });
 
+  it("speaks the badge through its label — the dot sits inside an aria-hidden span", () => {
+    render(
+      <TabBar label="Navigation">
+        <TabBarItem label="Messages" icon={<svg />} href="/m" badge badgeLabel="New messages" />
+      </TabBar>,
+    );
+    expect(screen.getByRole("link", { name: "Messages New messages" })).toBeInTheDocument();
+  });
+
   /* A tab bar in a client-routed app is the one place a full page reload is
      most expensive: the shell restarts on every tap. The router's Link is the
      element that stops it, and only the app knows which router it has. */

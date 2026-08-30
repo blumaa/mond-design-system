@@ -55,6 +55,15 @@ describe("DateTimePicker", () => {
     );
   });
 
+  it("carries the Field's invalid flag, like every other control", () => {
+    render(
+      <Field label="Starts" error="Pick a time">
+        <DateTimePicker onChange={vi.fn()} labels={LABELS} locale="en-US" />
+      </Field>,
+    );
+    expect(screen.getByRole("button")).toHaveAttribute("aria-invalid", "true");
+  });
+
   it("an explicit id wins over the Field's", () => {
     render(
       <Field label="Starts">

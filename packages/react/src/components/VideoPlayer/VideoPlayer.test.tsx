@@ -254,6 +254,14 @@ describe("VideoPlayer scrubber", () => {
     expect(screen.getByRole("slider", { name: "Seek" })).toHaveAttribute("max", "754");
   });
 
+  it("speaks the position as clock time, not a count of seconds", () => {
+    render(<VideoPlayer src={src} labels={labels} />);
+    fireEvent.loadedMetadata(video());
+    const slider = screen.getByRole("slider", { name: "Seek" });
+    fireEvent.change(slider, { target: { value: "90" } });
+    expect(slider).toHaveAttribute("aria-valuetext", "1:30 / 12:34");
+  });
+
   it("seeks the element", () => {
     render(<VideoPlayer src={src} labels={labels} />);
     fireEvent.loadedMetadata(video());

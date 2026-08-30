@@ -248,6 +248,9 @@ export function VideoPlayer({
           type="range"
           className={styles.scrub}
           aria-label={labels.seek}
+          /* Spoken as clock time — a raw count of seconds is a sum the
+             listener has to do in their head. */
+          aria-valuetext={`${clock(Math.min(at, length || 0))} / ${clock(length)}`}
           min={0}
           max={length || 0}
           step={1}

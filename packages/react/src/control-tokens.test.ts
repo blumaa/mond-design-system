@@ -284,7 +284,9 @@ it("raises the action out of a bar that is one plain box", () => {
   expect(css).toMatch(/\.action\s*\{[^}]*margin-top: calc\(-1 \* var\(--mds-tabbar-action-lift\)\)/);
   expect(css).toMatch(/\.bar\s*\{[^}]*position: relative/);
   expect(css).not.toContain("position: sticky");
-  expect(css).not.toContain("::before");
+  /* The bar itself, not the whole sheet: an item is free to draw its own
+     marks (the active indicator does), it is the bar's box that stays plain. */
+  expect(css).not.toMatch(/\.bar::(before|after)/);
 });
 
 /* Chrome is not the page. The bar sits over the scrolling body, so it paints the
@@ -429,4 +431,12 @@ it("Input steps the clear button and its cross with the control", () => {
      knows which size this is. */
   expect(css).not.toMatch(/\.clear \{[^}]*var\(--mds-icon-(sm|md|lg)\)/s);
   expect(css).not.toMatch(/\.clearGlyph \{[^}]*var\(--mds-icon-(sm|md|lg)\)/s);
+});
+
+it("Scroller takes its glide from the motion token, so reduced motion stops it", () => {
+  /* A literal `smooth` keeps animating for users who asked for none; the token
+     collapses to `auto` under prefers-reduced-motion. */
+  const css = sheet("Scroller/Scroller.module.css");
+  expect(css).toContain("scroll-behavior: var(--mds-scroll)");
+  expect(css).not.toContain("scroll-behavior: smooth");
 });
