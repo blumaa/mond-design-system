@@ -15,6 +15,16 @@ describe("Checkbox", () => {
     expect(box).toBeChecked();
   });
 
+  it("is reached by Tab and toggled by Space", async () => {
+    const user = userEvent.setup();
+    render(<Checkbox label="Terms" />);
+    await user.tab();
+    const box = screen.getByRole("checkbox", { name: "Terms" });
+    expect(box).toHaveFocus();
+    await user.keyboard(" ");
+    expect(box).toBeChecked();
+  });
+
   it("supports defaultChecked", () => {
     render(<Checkbox label="x" defaultChecked />);
     expect(screen.getByRole("checkbox")).toBeChecked();

@@ -19,6 +19,16 @@ describe("Radio", () => {
     expect(screen.getByRole("radio", { name: "Beta" })).toBeChecked();
   });
 
+  it("is reached by Tab and selected by Space", async () => {
+    const user = userEvent.setup();
+    render(<Radio name="g" value="a" label="Alpha" />);
+    await user.tab();
+    const radio = screen.getByRole("radio", { name: "Alpha" });
+    expect(radio).toHaveFocus();
+    await user.keyboard(" ");
+    expect(radio).toBeChecked();
+  });
+
   it("carries no step class at the default: md is the role the dot reads", () => {
     render(<Radio name="g" label="Alpha" />);
     expect(screen.getByRole("radio", { name: "Alpha" }).closest("label")?.className).not.toContain(
