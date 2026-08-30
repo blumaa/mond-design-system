@@ -115,7 +115,12 @@ export function UploadProgress({
           </Text>
         ) : (
           <>
-            {status !== "uploading" && <Text variant="meta">{labels[status]}</Text>}
+            {/* Mounted empty from the start: a live region only reads out changes
+                that happen inside it, so it must be there before the news is.
+                The detail stays outside — it ticks with every progress event. */}
+            <Text variant="meta" role="status">
+              {status === "uploading" ? null : labels[status]}
+            </Text>
             {detail !== undefined && <Text variant="meta">{detail}</Text>}
           </>
         )}

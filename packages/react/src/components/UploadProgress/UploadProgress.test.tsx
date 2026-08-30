@@ -84,6 +84,14 @@ describe("UploadProgress", () => {
     expect(onRetry).toHaveBeenCalledOnce();
   });
 
+  it("announces arrival the way it announces failure", () => {
+    const { rerender } = render(<UploadProgress name="knot.jpg" labels={labels} value={90} />);
+    // The region must exist before the news lands, or nothing reads it out.
+    expect(screen.getByRole("status")).toBeEmptyDOMElement();
+    rerender(<UploadProgress name="knot.jpg" labels={labels} status="done" />);
+    expect(screen.getByRole("status")).toHaveTextContent("Uploaded");
+  });
+
   it("falls back to the general failure when the cause is not known", () => {
     render(<UploadProgress name="knot.jpg" labels={labels} status="error" />);
     expect(screen.getByRole("alert")).toHaveTextContent("Upload failed");

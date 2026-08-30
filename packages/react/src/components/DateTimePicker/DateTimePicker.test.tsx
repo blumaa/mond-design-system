@@ -85,6 +85,16 @@ describe("DateTimePicker", () => {
     );
   });
 
+  it("says the new month out loud when the arrows move it", async () => {
+    setup();
+    await userEvent.click(screen.getByRole("button", { name: /Starts/ }));
+    const label = screen.getByText("June 2030");
+    expect(label).toHaveAttribute("aria-live", "polite");
+    await userEvent.click(screen.getByRole("button", { name: "Next month" }));
+    // The same element, so the live region existed before the month changed.
+    expect(screen.getByText("July 2030")).toBe(label);
+  });
+
   it("disables days before min", async () => {
     setup();
     await userEvent.click(screen.getByRole("button", { name: /Starts/ }));

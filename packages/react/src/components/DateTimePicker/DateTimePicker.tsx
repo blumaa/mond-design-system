@@ -439,7 +439,11 @@ export function DateTimePicker({
               >
                 <ChevronLeftGlyph className={styles.glyph} />
               </Button>
-              <span className={styles.monthLabel}>{intl.monthTitle.format(first)}</span>
+              {/* Live, because the arrows change the calendar without moving focus:
+                  without an announcement the month flip is silent to a reader. */}
+              <span className={styles.monthLabel} aria-live="polite">
+                {intl.monthTitle.format(first)}
+              </span>
               <Button iconOnly aria-label={text.nextMonth} variant="ghost" size="sm" onClick={() => shiftMonth(1)}>
                 <ChevronRightGlyph className={styles.glyph} />
               </Button>
