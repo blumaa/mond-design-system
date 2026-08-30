@@ -34,9 +34,17 @@ describe("Switch", () => {
     const onChange = vi.fn();
     render(<Switch label="Email" loading onChange={onChange} />);
     const input = screen.getByRole("switch", { name: "Email" });
-    expect(input).toBeDisabled();
+    // Locked, not disabled: a disabled attribute would drop keyboard focus to
+    // the body the instant a toggle starts its write.
+    expect(input).not.toBeDisabled();
+    expect(input).toHaveAttribute("aria-disabled", "true");
     expect(input).toHaveAttribute("aria-busy", "true");
+    await userEvent.tab();
+    expect(input).toHaveFocus();
     await userEvent.click(input);
+    expect(onChange).not.toHaveBeenCalled();
+    expect(input).not.toBeChecked();
+    await userEvent.keyboard(" ");
     expect(onChange).not.toHaveBeenCalled();
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });

@@ -63,6 +63,7 @@ export function CountButton({
   loading = false,
   className,
   children,
+  onClick,
   ...rest
 }: CountButtonProps): ReactElement {
   const isToggle = active !== undefined;
@@ -70,9 +71,13 @@ export function CountButton({
   return (
     <button
       type="button"
-      disabled={disabled || loading}
+      /* Loading locks but does not disable: a disabled attribute would drop
+         keyboard focus to the body the instant the press starts the write. */
+      disabled={disabled}
+      onClick={loading ? (event) => event.preventDefault() : onClick}
       aria-label={label}
       aria-pressed={isToggle ? active : undefined}
+      aria-disabled={loading || undefined}
       aria-busy={loading || undefined}
       className={cx(styles.button, active && styles[`tone-${tone}`], className)}
       {...rest}

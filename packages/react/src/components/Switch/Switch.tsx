@@ -36,6 +36,8 @@ export function Switch({
   loading = false,
   disabled = false,
   className,
+  onClick,
+  onChange,
   ...rest
 }: SwitchProps): ReactElement {
   return (
@@ -45,7 +47,15 @@ export function Switch({
           type="checkbox"
           role="switch"
           className={styles.track}
-          disabled={disabled || loading}
+          /* Loading locks but does not disable: a disabled attribute would
+             drop keyboard focus to the body the instant the toggle starts its
+             write. preventDefault on click cancels the checkbox's activation,
+             which covers Space and label clicks in the same stroke — but React
+             raises onChange from the click regardless, so both are guarded. */
+          disabled={disabled}
+          onClick={loading ? (event) => event.preventDefault() : onClick}
+          onChange={loading ? undefined : onChange}
+          aria-disabled={loading || undefined}
           aria-busy={loading || undefined}
           {...rest}
         />

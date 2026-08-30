@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ElementType, ReactElement, ReactNode, Ref } from "react";
+import type { ButtonHTMLAttributes, ElementType, MouseEvent, ReactElement, ReactNode, Ref } from "react";
 import { cx } from "../../internal/cx";
 import { Spinner } from "../Spinner/Spinner";
 import styles from "./Button.module.css";
@@ -75,6 +75,7 @@ export function Button({
   as,
   className,
   children,
+  onClick,
   ...rest
 }: ButtonProps): ReactElement {
   /* An icon-only button's glyph arrives as `children`, so it gets the same slot the
@@ -92,7 +93,10 @@ export function Button({
 
   const Element: ElementType = as ?? (href !== undefined ? "a" : "button");
   const isButton = Element === "button";
-  const own = isButton ? { type, disabled: disabled || loading } : { href };
+  /* Loading locks the button but does not disable it: a disabled attribute
+     throws keyboard focus back to the body the instant a press starts a save.
+     The swallowed click also cancels a submit button's native submission. */
+  const own = isButton ? { type, disabled } : { href };
 
   return (
     <Element
@@ -107,6 +111,8 @@ export function Button({
         className,
       )}
       aria-busy={loading || undefined}
+      aria-disabled={loading || undefined}
+      onClick={loading ? (event: MouseEvent<HTMLButtonElement>) => event.preventDefault() : onClick}
       {...own}
       {...rest}
     >

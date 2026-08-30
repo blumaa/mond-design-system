@@ -35,16 +35,24 @@ describe("CountButton", () => {
     expect(screen.getByTestId("cb").className).toContain("tone-danger");
   });
 
-  it("loading swaps the glyph for a spinner and locks the control", () => {
+  it("loading swaps the glyph for a spinner and locks the control", async () => {
+    const onClick = vi.fn();
     render(
-      <CountButton icon={glyph} label="Like" loading>
+      <CountButton icon={glyph} label="Like" loading onClick={onClick}>
         12
       </CountButton>,
     );
     const button = screen.getByRole("button", { name: "Like" });
-    expect(button).toBeDisabled();
+    // Locked, not disabled: a disabled attribute would drop keyboard focus to
+    // the body the instant the press starts the write.
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveAttribute("aria-disabled", "true");
     expect(button).toHaveAttribute("aria-busy", "true");
     expect(screen.queryByTestId("glyph")).not.toBeInTheDocument();
+    await userEvent.tab();
+    expect(button).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    expect(onClick).not.toHaveBeenCalled();
   });
 
   it("has no axe violations", async () => {

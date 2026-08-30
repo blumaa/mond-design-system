@@ -104,12 +104,21 @@
 }
 .variant-warning:hover:not(:disabled) { filter: brightness(0.94); }
 
-/* Unavailable is a color, not a fade — opacity composites unpredictably. */
-.button:disabled {
+/* Unavailable is a color, not a fade — opacity composites unpredictably.
+   The attribute selector is the loading lock: the element stays enabled so
+   keyboard focus survives, and this rule keeps it looking unavailable. */
+.button:disabled,
+.button[aria-disabled="true"] {
   background: var(--mds-action-disabled-bg);
   color: var(--mds-action-disabled-fg);
   border-color: transparent;
   cursor: not-allowed;
+}
+
+/* One rule instead of touching every hover guard: no pointer feedback while
+   the lock is on. Keyboard focus is unaffected. */
+.button[aria-disabled="true"] {
+  pointer-events: none;
 }
 
 .fullWidth {

@@ -5,7 +5,8 @@
   cursor: pointer;
 }
 
-.root:has(.track:disabled) {
+.root:has(.track:disabled),
+.root:has(.track[aria-disabled="true"]) {
   cursor: not-allowed;
 }
 
@@ -45,11 +46,15 @@
     translateX(calc(var(--mds-switch-w) - var(--mds-switch-knob) - 2 * var(--mds-switch-inset)));
 }
 
-.track:disabled {
+/* The attribute selector is the loading lock: the input stays enabled so
+   keyboard focus survives, and these rules keep it looking unavailable. */
+.track:disabled,
+.track[aria-disabled="true"] {
   background: var(--mds-action-disabled-bg);
 }
 
-.track:disabled::after {
+.track:disabled::after,
+.track[aria-disabled="true"]::after {
   background: var(--mds-action-disabled-fg);
 }
 
@@ -75,6 +80,7 @@
 }
 
 /* The label sits beside the wrapper, not the input — climb via :has. */
-.root:has(.track:disabled) .label {
+.root:has(.track:disabled) .label,
+.root:has(.track[aria-disabled="true"]) .label {
   color: var(--mds-action-disabled-fg);
 }

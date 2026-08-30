@@ -23,9 +23,16 @@
   background: var(--mds-surface-selected);
 }
 
-.button:disabled {
+/* The attribute selector is the loading lock: the element stays enabled so
+   keyboard focus survives, and pointer-events covers the hover guards. */
+.button:disabled,
+.button[aria-disabled="true"] {
   cursor: default;
   opacity: 0.6;
+}
+
+.button[aria-disabled="true"] {
+  pointer-events: none;
 }
 
 /* Active tint — the glyph inherits it via currentColor. */
