@@ -21,6 +21,7 @@
 }
 
 .item {
+  position: relative; /* anchors the active indicator */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -45,6 +46,21 @@
 .active,
 .active:hover {
   color: var(--mds-text-accent);
+}
+
+/* A drawn mark beside the color swap — the tint alone is invisible to anyone
+   who cannot separate accent from muted (WCAG 1.4.1). currentColor keeps the
+   two cues from drifting apart. */
+.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50%;
+  width: var(--mds-tabbar-icon);
+  height: var(--mds-border-emphasis);
+  border-radius: var(--mds-radius-pill);
+  background: currentColor;
 }
 
 /* A tab's glyph is a step of its own, above the icon scale — see

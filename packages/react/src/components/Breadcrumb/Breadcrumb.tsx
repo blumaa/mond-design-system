@@ -56,7 +56,10 @@ export function Breadcrumb({
                   {item.label}
                 </Text>
               ) : (
-                <Link variant="plain" size="xs" as={linkAs} href={item.href} className={styles.link}>
+                /* inline, not plain: the underline is what separates a step
+                   you can go back to from the one you are standing on, for a
+                   reader who cannot tell the two text colors apart. */
+                <Link variant="inline" size="xs" as={linkAs} href={item.href} className={styles.link}>
                   {item.label}
                 </Link>
               )}
