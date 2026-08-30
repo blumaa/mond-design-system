@@ -101,6 +101,11 @@ describe("Popover", () => {
 
   /* Non-modal means the page is still there to Tab to. Trapping Tab inside
      the panel would contradict the very thing the role communicates. */
+  it("leaves the page behind it live — no inert", () => {
+    const { container } = render(<Example />);
+    expect(container).not.toHaveAttribute("inert");
+  });
+
   it("does not trap Tab inside the panel", async () => {
     render(<Example />);
     screen.getByRole("button", { name: "Add" }).focus();

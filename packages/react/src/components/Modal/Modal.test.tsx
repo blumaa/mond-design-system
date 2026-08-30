@@ -55,6 +55,16 @@ describe("Modal", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  /* aria-modal promises assistive tech the rest of the page is gone, but the
+     promise needs enforcing: inert takes the background out of the Tab order
+     and the virtual cursor alike for the readers aria-modal alone misses. */
+  it("makes the page behind it inert while open, and lets it back on close", () => {
+    const { container, rerender } = render(<Example />);
+    expect(container).toHaveAttribute("inert");
+    rerender(<Example open={false} />);
+    expect(container).not.toHaveAttribute("inert");
+  });
+
   it("moves focus into the dialog on open", () => {
     render(<Example />);
     expect(screen.getByRole("dialog")).toHaveFocus();

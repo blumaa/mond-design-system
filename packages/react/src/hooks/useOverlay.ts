@@ -61,6 +61,23 @@ export function useOverlay<T extends HTMLElement>(options: UseOverlayOptions): R
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     panel?.focus();
 
+    /* aria-modal promises assistive tech the rest of the page is gone; inert
+       enforces it for the readers that promise alone misses, and takes the
+       background out of the Tab order for everyone. Only siblings not already
+       inert are marked, so a modal over a modal restores exactly what it
+       inerted and no more. */
+    let marked: Element[] = [];
+    if (modal && panel) {
+      let portal: Element = panel;
+      while (portal.parentElement && portal.parentElement !== document.body) {
+        portal = portal.parentElement;
+      }
+      marked = [...document.body.children].filter(
+        (sibling) => sibling !== portal && !sibling.hasAttribute("inert"),
+      );
+      for (const sibling of marked) sibling.setAttribute("inert", "");
+    }
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.stopPropagation();
@@ -92,6 +109,8 @@ export function useOverlay<T extends HTMLElement>(options: UseOverlayOptions): R
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       if (lockScroll) document.body.style.overflow = bodyOverflow;
+      // Before the focus restore: focus will not land on an inert element.
+      for (const sibling of marked) sibling.removeAttribute("inert");
       const active = document.activeElement;
       if (modal || (panel && active instanceof HTMLElement && panel.contains(active))) {
         previous?.focus();
