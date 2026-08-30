@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "jest-axe";
 import { Menu, MenuItem } from "./Menu";
@@ -56,6 +56,38 @@ describe("Menu", () => {
     trigger().focus();
     await userEvent.keyboard("{ArrowDown}");
     expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  /* APG menu button: ArrowUp opens with focus on the last item — the reader
+     asked to come in from the bottom. */
+  it("ArrowUp on the trigger opens it with the last enabled item focused", async () => {
+    render(<Example />);
+    trigger().focus();
+    await userEvent.keyboard("{ArrowUp}");
+    await waitFor(() => expect(screen.getByRole("menuitem", { name: "Delete" })).toHaveFocus());
+  });
+
+  /* APG menu button: Tab closes the menu and moves on. The menu hands focus
+     to the trigger and leaves the key to the browser, whose own default then
+     carries it to the stop after the trigger — not wherever the portal sits
+     in the DOM. (userEvent.tab picks its destination before handlers run, so
+     the browser half is asserted as "the key was not swallowed".) */
+  it("Tab closes the menu and leaves the key for the browser to move on with", async () => {
+    render(<Example />);
+    await userEvent.click(trigger());
+    const item = screen.getByRole("menuitem", { name: "Edit" });
+    await waitFor(() => expect(item).toHaveFocus());
+    const letThrough = fireEvent.keyDown(item, { key: "Tab" });
+    expect(letThrough).toBe(true);
+    expect(trigger()).toHaveFocus();
+    await waitFor(() => expect(screen.queryByRole("menu")).not.toBeInTheDocument());
+  });
+
+  it("the trigger says which menu it controls while it is open", async () => {
+    render(<Example />);
+    expect(trigger()).not.toHaveAttribute("aria-controls");
+    await userEvent.click(trigger());
+    expect(trigger()).toHaveAttribute("aria-controls", screen.getByRole("menu").id);
   });
 
   it("arrow keys move between items and wrap", async () => {

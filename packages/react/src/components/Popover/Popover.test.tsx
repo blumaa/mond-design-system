@@ -101,6 +101,24 @@ describe("Popover", () => {
 
   /* Non-modal means the page is still there to Tab to. Trapping Tab inside
      the panel would contradict the very thing the role communicates. */
+  it("takes an id so the caller's trigger can claim aria-controls", () => {
+    function Wired() {
+      const anchor = useRef<HTMLButtonElement>(null);
+      return (
+        <>
+          <button type="button" ref={anchor} aria-controls="equipment-panel" aria-expanded>
+            Equipment
+          </button>
+          <Popover open onClose={() => {}} anchorRef={anchor} label="Equipment list" id="equipment-panel">
+            content
+          </Popover>
+        </>
+      );
+    }
+    render(<Wired />);
+    expect(screen.getByRole("dialog")).toHaveAttribute("id", "equipment-panel");
+  });
+
   it("leaves the page behind it live — no inert", () => {
     const { container } = render(<Example />);
     expect(container).not.toHaveAttribute("inert");
