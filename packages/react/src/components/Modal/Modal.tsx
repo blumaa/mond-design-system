@@ -11,6 +11,8 @@ export interface ModalProps {
   closeOnScrimClick?: boolean;
   /** alertdialog interrupts — ConfirmDialog sets it. Default "dialog". */
   role?: "dialog" | "alertdialog";
+  /** id of the element that explains the dialog, read out with its name. */
+  describedBy?: string | undefined;
   children: ReactNode;
 }
 
@@ -26,7 +28,7 @@ export interface ModalProps {
  * </Modal>
  * ```
  */
-export function Modal({ open, onClose, label, closeOnScrimClick = true, role = "dialog", children }: ModalProps) {
+export function Modal({ open, onClose, label, closeOnScrimClick = true, role = "dialog", describedBy, children }: ModalProps) {
   return (
     <Overlay
       open={open}
@@ -34,6 +36,7 @@ export function Modal({ open, onClose, label, closeOnScrimClick = true, role = "
       label={label}
       variant="modal"
       role={role}
+      describedBy={describedBy}
       closeOnScrimClick={closeOnScrimClick}
       panelClassName={styles.panel}
     >

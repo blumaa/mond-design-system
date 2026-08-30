@@ -219,6 +219,27 @@ describe("VideoPlayer captions", () => {
     render(<VideoPlayer src={src} labels={labels} />);
     expect(screen.queryByRole("button", { name: /captions/i })).toBeNull();
   });
+
+  it("keeps aria-pressed in step with the track as it is toggled", async () => {
+    const track = { mode: "disabled" };
+    Object.defineProperty(HTMLMediaElement.prototype, "textTracks", {
+      configurable: true,
+      get: () => [track],
+    });
+    try {
+      render(<VideoPlayer src={src} labels={labels} captions={captions} captionsLabel="Captions" />);
+      const button = screen.getByRole("button", { name: "Captions" });
+      expect(button).toHaveAttribute("aria-pressed", "false");
+      await userEvent.click(button);
+      expect(track.mode).toBe("showing");
+      expect(button).toHaveAttribute("aria-pressed", "true");
+      await userEvent.click(button);
+      expect(track.mode).toBe("disabled");
+      expect(button).toHaveAttribute("aria-pressed", "false");
+    } finally {
+      delete (HTMLMediaElement.prototype as { textTracks?: unknown }).textTracks;
+    }
+  });
 });
 
 describe("VideoPlayer scrubber", () => {
@@ -231,6 +252,14 @@ describe("VideoPlayer scrubber", () => {
     render(<VideoPlayer src={src} labels={labels} />);
     fireEvent.loadedMetadata(video());
     expect(screen.getByRole("slider", { name: "Seek" })).toHaveAttribute("max", "754");
+  });
+
+  it("speaks the position as clock time, not a count of seconds", () => {
+    render(<VideoPlayer src={src} labels={labels} />);
+    fireEvent.loadedMetadata(video());
+    const slider = screen.getByRole("slider", { name: "Seek" });
+    fireEvent.change(slider, { target: { value: "90" } });
+    expect(slider).toHaveAttribute("aria-valuetext", "1:30 / 12:34");
   });
 
   it("seeks the element", () => {

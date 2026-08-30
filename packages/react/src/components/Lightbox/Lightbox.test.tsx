@@ -195,6 +195,34 @@ describe("Lightbox pan", () => {
     expect(panOf(picture())).toBe("0px, 0px");
   });
 
+  /* WCAG 2.1.1: the drag needs a keyboard equal. Zoom has its buttons; the
+     pan gets the arrows. An arrow looks that way — ArrowRight brings the
+     right-hand part of the picture into the frame, so the picture goes left. */
+  it("pans on the arrow keys once zoomed", () => {
+    render(<Lightbox open onClose={() => {}} src="/keiko.jpg" alt="A chest harness" labels={labels} />);
+    measure(surface(), 400, 400);
+
+    fireEvent.click(screen.getByRole("button", { name: "Zoom in" }));
+
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "ArrowRight" });
+    expect(panOf(picture())).toBe("-48px, 0px");
+
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "ArrowDown" });
+    expect(panOf(picture())).toBe("-48px, -48px");
+
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "ArrowLeft" });
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "ArrowUp" });
+    expect(panOf(picture())).toBe("0px, 0px");
+  });
+
+  it("leaves the arrows alone while the picture is not zoomed", () => {
+    render(<Lightbox open onClose={() => {}} src="/keiko.jpg" alt="A chest harness" labels={labels} />);
+    measure(surface(), 400, 400);
+
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "ArrowRight" });
+    expect(panOf(picture())).toBe("0px, 0px");
+  });
+
   it("holds the picture inside its own edges", () => {
     render(<Lightbox open onClose={() => {}} src="/keiko.jpg" alt="A chest harness" labels={labels} />);
     measure(surface(), 400, 400);

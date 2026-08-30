@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button } from "../Button/Button";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "../Modal/Modal";
 import styles from "./ConfirmDialog.module.css";
@@ -92,6 +92,7 @@ export function ConfirmDialog<T = void>({
   tone = "default",
   errorMessage,
 }: ConfirmDialogProps<T>) {
+  const descriptionId = useId();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -150,11 +151,18 @@ export function ConfirmDialog<T = void>({
       onClose={close}
       label={view.title}
       role="alertdialog"
+      /* The consequence is why the dialog interrupts: as the accessible
+         description it is read out with the question. */
+      describedBy={view.description != null ? descriptionId : undefined}
       closeOnScrimClick={false}
     >
       <ModalHeader>{view.title}</ModalHeader>
       <ModalBody>
-        {view.description != null ? <p className={styles.description}>{view.description}</p> : null}
+        {view.description != null ? (
+          <p id={descriptionId} className={styles.description}>
+            {view.description}
+          </p>
+        ) : null}
         {error != null ? (
           <p role="alert" className={styles.error}>
             {error}

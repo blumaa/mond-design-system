@@ -120,6 +120,9 @@ export function VideoPlayer({
   const [at, setAt] = useState(0);
   const [length, setLength] = useState(0);
   const [isFullscreen, setFullscreen] = useState(false);
+  /* The toggle's pressed state — reading defaultOn at render told the truth
+     only until the first press. */
+  const [captionsOn, setCaptionsOn] = useState(captions?.defaultOn ?? false);
 
   function toggle() {
     const el = media.current;
@@ -152,7 +155,10 @@ export function VideoPlayer({
 
   function toggleCaptions() {
     const track = media.current?.textTracks?.[0];
-    if (track) track.mode = track.mode === "showing" ? "disabled" : "showing";
+    if (!track) return;
+    const next = track.mode !== "showing";
+    track.mode = next ? "showing" : "disabled";
+    setCaptionsOn(next);
   }
 
   function selectChapter(chapter: VideoChapter) {
@@ -242,6 +248,9 @@ export function VideoPlayer({
           type="range"
           className={styles.scrub}
           aria-label={labels.seek}
+          /* Spoken as clock time — a raw count of seconds is a sum the
+             listener has to do in their head. */
+          aria-valuetext={`${clock(Math.min(at, length || 0))} / ${clock(length)}`}
           min={0}
           max={length || 0}
           step={1}
@@ -269,7 +278,7 @@ export function VideoPlayer({
             aria-label={captionsLabel}
             variant="ghost"
             size="sm"
-            aria-pressed={captions.defaultOn ?? false}
+            aria-pressed={captionsOn}
             onClick={toggleCaptions}
           >
             <CaptionsGlyph />

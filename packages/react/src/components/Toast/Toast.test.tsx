@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { axe } from "jest-axe";
 import { ToastProvider, useToast } from "./Toast";
 
 function Trigger({ duration }: { duration?: number }) {
@@ -24,6 +25,16 @@ describe("Toast", () => {
     fireEvent.click(screen.getByRole("button", { name: "fire" }));
     expect(screen.getByRole("region", { name: "Notifications" })).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("Saved");
+  });
+
+  it("has no axe violations with a toast showing", async () => {
+    render(
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+        <Trigger duration={0} />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "fire" }));
+    expect(await axe(document.body)).toHaveNoViolations();
   });
 
   it("dismiss button removes the toast", () => {
@@ -66,6 +77,70 @@ describe("Toast", () => {
     expect(screen.getByRole("status")).toBeInTheDocument();
   });
 
+
+  /* WCAG 2.2.1 (Timing Adjustable): a message that leaves on its own clock
+     must wait while the reader is engaging with it. Pointer over the region
+     or focus inside it holds every clock; leaving lets them run on with the
+     time they had left. */
+  it("pauses auto-dismiss while the pointer is over the region", () => {
+    vi.useFakeTimers();
+    render(
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+        <Trigger duration={3000} />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "fire" }));
+    const region = screen.getByRole("region", { name: "Notifications" });
+    fireEvent.pointerEnter(region);
+    act(() => void vi.advanceTimersByTime(60000));
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    fireEvent.pointerLeave(region);
+    act(() => void vi.advanceTimersByTime(3100));
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
+  it("pauses auto-dismiss while focus is inside the region", () => {
+    vi.useFakeTimers();
+    render(
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+        <Trigger duration={3000} />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "fire" }));
+    screen.getByRole("button", { name: "Dismiss: Saved" }).focus();
+    act(() => void vi.advanceTimersByTime(60000));
+    expect(screen.getByRole("status")).toBeInTheDocument();
+  });
+
+  /* Dismissing from the keyboard must not drop focus on <body> — the next
+     Tab would start over from the top of the page. The neighbouring toast
+     inherits it; the last toast has no neighbour to give it to. */
+  it("moves focus to the next toast when the focused one is dismissed", () => {
+    function TwoToasts() {
+      const { toast } = useToast();
+      return (
+        <button
+          type="button"
+          onClick={() => {
+            toast({ title: "Saved", duration: 0 });
+            toast({ title: "Deleted", duration: 0 });
+          }}
+        >
+          fire
+        </button>
+      );
+    }
+    render(
+      <ToastProvider regionLabel="Notifications" dismissLabel="Dismiss">
+        <TwoToasts />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "fire" }));
+    const first = screen.getByRole("button", { name: "Dismiss: Saved" });
+    first.focus();
+    fireEvent.click(first);
+    expect(screen.getByRole("button", { name: "Dismiss: Deleted" })).toHaveFocus();
+  });
 
   it("names each dismiss button after its toast, so two toasts are distinguishable", () => {
     function TwoToasts() {

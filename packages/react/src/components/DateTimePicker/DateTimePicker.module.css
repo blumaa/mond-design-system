@@ -21,6 +21,11 @@
   opacity: 0.5;
 }
 
+/* Reads like an Input, so it flags like one too. */
+.trigger[aria-invalid="true"] {
+  border-color: var(--mds-status-danger);
+}
+
 .hasValue {
   color: var(--mds-text-primary);
 }
@@ -88,6 +93,11 @@
   grid-auto-rows: var(--mds-tap-min);
   min-height: calc(6 * var(--mds-tap-min));
   align-items: stretch;
+}
+
+/* Semantic row only — the cells stay direct grid items of .grid. */
+.week {
+  display: contents;
 }
 
 .day {

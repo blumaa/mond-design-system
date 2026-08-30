@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { KeyboardEvent, MouseEvent, ReactElement, ReactNode, Ref } from "react";
 import { usePresence } from "../../hooks/usePresence";
@@ -59,7 +59,10 @@ export interface MenuProps {
  * ```
  */
 export function Menu({ label, trigger, placement = "bottom-end", className, children }: MenuProps) {
+  const id = useId();
   const [open, setOpen] = useState(false);
+  /* APG: ArrowUp comes in from the bottom, everything else from the top. */
+  const enterAt = useRef<"first" | "last">("first");
   const { mounted, visible } = usePresence(open, MENU_EXIT_MS);
   const triggerRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -81,19 +84,22 @@ export function Menu({ label, trigger, placement = "bottom-end", className, chil
     orientation: "vertical",
   });
 
-  /* Opening lands on the first action, so the next arrow key moves through the
-     list instead of opening something. */
+  /* Opening lands on an action, so the next arrow key moves through the
+     list instead of opening something. First unless ArrowUp opened it —
+     that reader asked to come in from the bottom. */
   useEffect(() => {
     if (!open) return;
-    const first = panelRef.current?.querySelector<HTMLElement>(
+    const items = panelRef.current?.querySelectorAll<HTMLElement>(
       `${ITEM_SELECTOR}:not([disabled])`,
     );
-    first?.focus();
+    if (items === undefined || items.length === 0) return;
+    items[enterAt.current === "last" ? items.length - 1 : 0]?.focus();
   }, [open]);
 
   const openWithKeyboard = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
     event.preventDefault();
+    enterAt.current = event.key === "ArrowUp" ? "last" : "first";
     setOpen(true);
   };
 
@@ -110,8 +116,10 @@ export function Menu({ label, trigger, placement = "bottom-end", className, chil
         ref={forkRef(triggerRef, triggerProps.ref)}
         aria-haspopup="menu"
         aria-expanded={open}
+        aria-controls={open ? id : undefined}
         onClick={(event: MouseEvent<HTMLElement>) => {
           triggerProps.onClick?.(event);
+          enterAt.current = "first";
           setOpen((v) => !v);
         }}
         onKeyDown={(event: KeyboardEvent<HTMLElement>) => {
@@ -123,6 +131,7 @@ export function Menu({ label, trigger, placement = "bottom-end", className, chil
         createPortal(
           <div
             ref={panelRef}
+            id={id}
             role="menu"
             aria-label={label}
             className={cx(styles.panel, className)}
@@ -133,13 +142,29 @@ export function Menu({ label, trigger, placement = "bottom-end", className, chil
                 close();
                 return;
               }
-              /* Tab out of a menu closes it (APG). Focus goes back to the
-                 trigger rather than onward: the panel is portalled to the end
-                 of <body>, so "onward" from inside it is nowhere near where
-                 the reader thinks they are. */
+              /* Tab out of a menu closes it and moves on (APG). Putting focus
+                 back on the trigger first — without eating the key — is what
+                 makes "on" mean the stop after the trigger, not wherever the
+                 panel's portal sits at the end of <body>. */
               if (event.key === "Tab") {
-                event.preventDefault();
                 close();
+                return;
+              }
+              /* APG type-ahead: a printable key jumps to the next enabled
+                 item whose label starts with it, wrapping past the end. */
+              if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+                const items = [
+                  ...(panelRef.current?.querySelectorAll<HTMLElement>(
+                    `${ITEM_SELECTOR}:not([disabled])`,
+                  ) ?? []),
+                ];
+                const current = items.indexOf(event.target as HTMLElement);
+                const fromNext = [...items.slice(current + 1), ...items.slice(0, current + 1)];
+                fromNext
+                  .find((item) =>
+                    item.textContent?.trim().toLowerCase().startsWith(event.key.toLowerCase()),
+                  )
+                  ?.focus();
                 return;
               }
               onArrowKeys(event);

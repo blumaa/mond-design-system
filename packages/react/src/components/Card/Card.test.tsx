@@ -153,6 +153,36 @@ describe("Card", () => {
     expect(screen.getByRole("link", { name: "Go" })).toHaveAttribute("href", "/x");
   });
 
+  /* An interactive card is one control; a control inside it is nested
+     interactive — invalid HTML for a button and unreachable for assistive
+     tech. The tree is the caller's, so the guard is a warning, not a throw. */
+  it("warns when an interactive card wraps another control", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(
+      <Card onClick={() => {}}>
+        <CardFooter>
+          <button type="button">Inner</button>
+        </CardFooter>
+      </Card>,
+    );
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0]?.[0]).toContain("Card");
+    warn.mockRestore();
+  });
+
+  it("stays quiet about controls inside a static card", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(
+      <Card>
+        <CardFooter>
+          <button type="button">Inner</button>
+        </CardFooter>
+      </Card>,
+    );
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
   it("as renders the router's link as the card", () => {
     const Fake = (props: React.ComponentProps<"a">) => <a data-testid="fake" {...props} />;
     render(

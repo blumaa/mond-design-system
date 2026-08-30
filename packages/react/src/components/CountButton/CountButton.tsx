@@ -63,16 +63,26 @@ export function CountButton({
   loading = false,
   className,
   children,
+  onClick,
   ...rest
 }: CountButtonProps): ReactElement {
   const isToggle = active !== undefined;
 
+  /* The visible count belongs in the name (WCAG 2.5.3): a voice user says
+     what they see, and "Like 12" must land on the button showing "12". */
+  const spoken =
+    typeof children === "string" || typeof children === "number" ? `${label} ${children}` : label;
+
   return (
     <button
       type="button"
-      disabled={disabled || loading}
-      aria-label={label}
+      /* Loading locks but does not disable: a disabled attribute would drop
+         keyboard focus to the body the instant the press starts the write. */
+      disabled={disabled}
+      onClick={loading ? (event) => event.preventDefault() : onClick}
+      aria-label={spoken}
       aria-pressed={isToggle ? active : undefined}
+      aria-disabled={loading || undefined}
       aria-busy={loading || undefined}
       className={cx(styles.button, active && styles[`tone-${tone}`], className)}
       {...rest}

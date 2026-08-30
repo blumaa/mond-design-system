@@ -110,6 +110,13 @@ it.each([
   ["Tag/Tag.module.css", "remove"],
   ["Toast/Toast.module.css", "close"],
   ["Input/Input.module.css", "clear"],
+  /* Small in both directions, so the same floor applies: an icon-only button
+     paints at its control height (32px at sm), a count button at its own
+     glyph, and the password reveal at the md control step — all under the
+     44px the system names as the smallest target that ships. */
+  ["Button/Button.module.css", "icon-only"],
+  ["CountButton/CountButton.module.css", "button"],
+  ["PasswordInput/PasswordInput.module.css", "toggle"],
 ])("%s composes that target onto its %s", (path, element) => {
   const css = sheet(path);
   expect(css).not.toMatch(/\.root \{[^}]*min-height/s);
@@ -160,6 +167,13 @@ it("Radio steps its box by re-pointing --mds-check-size, not by re-sizing rules"
 /* A list row is the target, so it keeps the minimum as real height. */
 it("keeps the tap minimum on a List row, which is the target itself", () => {
   expect(sheet("List/List.module.css")).toMatch(/\.row \{[^}]*min-height: var\(--mds-tap-min\)/s);
+});
+
+/* Same reasoning for a card that is itself the button or link. */
+it("keeps the tap minimum on an interactive Card", () => {
+  expect(sheet("Card/Card.module.css")).toMatch(
+    /\.interactive \{[^}]*min-height: var\(--mds-tap-min\)/s,
+  );
 });
 
 /* Initials are display type. A brand whose display face is a serif wants to
@@ -277,7 +291,9 @@ it("raises the action out of a bar that is one plain box", () => {
   expect(css).toMatch(/\.action\s*\{[^}]*margin-top: calc\(-1 \* var\(--mds-tabbar-action-lift\)\)/);
   expect(css).toMatch(/\.bar\s*\{[^}]*position: relative/);
   expect(css).not.toContain("position: sticky");
-  expect(css).not.toContain("::before");
+  /* The bar itself, not the whole sheet: an item is free to draw its own
+     marks (the active indicator does), it is the bar's box that stays plain. */
+  expect(css).not.toMatch(/\.bar::(before|after)/);
 });
 
 /* Chrome is not the page. The bar sits over the scrolling body, so it paints the
@@ -422,4 +438,12 @@ it("Input steps the clear button and its cross with the control", () => {
      knows which size this is. */
   expect(css).not.toMatch(/\.clear \{[^}]*var\(--mds-icon-(sm|md|lg)\)/s);
   expect(css).not.toMatch(/\.clearGlyph \{[^}]*var\(--mds-icon-(sm|md|lg)\)/s);
+});
+
+it("Scroller takes its glide from the motion token, so reduced motion stops it", () => {
+  /* A literal `smooth` keeps animating for users who asked for none; the token
+     collapses to `auto` under prefers-reduced-motion. */
+  const css = sheet("Scroller/Scroller.module.css");
+  expect(css).toContain("scroll-behavior: var(--mds-scroll)");
+  expect(css).not.toContain("scroll-behavior: smooth");
 });

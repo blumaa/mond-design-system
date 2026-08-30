@@ -55,6 +55,15 @@ describe("DateTimePicker", () => {
     );
   });
 
+  it("carries the Field's invalid flag, like every other control", () => {
+    render(
+      <Field label="Starts" error="Pick a time">
+        <DateTimePicker onChange={vi.fn()} labels={LABELS} locale="en-US" />
+      </Field>,
+    );
+    expect(screen.getByRole("button")).toHaveAttribute("aria-invalid", "true");
+  });
+
   it("an explicit id wins over the Field's", () => {
     render(
       <Field label="Starts">
@@ -79,23 +88,33 @@ describe("DateTimePicker", () => {
     await userEvent.click(screen.getByRole("button", { name: /Starts/ }));
     const dialog = screen.getByRole("dialog", { name: "Starts" });
     expect(within(dialog).getByRole("group", { name: "June 2030" })).toBeInTheDocument();
-    expect(within(dialog).getByRole("button", { name: "June 20, 2030" })).toHaveAttribute(
-      "aria-pressed",
+    expect(within(dialog).getByRole("gridcell", { name: "June 20, 2030" })).toHaveAttribute(
+      "aria-selected",
       "true",
     );
+  });
+
+  it("says the new month out loud when the arrows move it", async () => {
+    setup();
+    await userEvent.click(screen.getByRole("button", { name: /Starts/ }));
+    const label = screen.getByText("June 2030");
+    expect(label).toHaveAttribute("aria-live", "polite");
+    await userEvent.click(screen.getByRole("button", { name: "Next month" }));
+    // The same element, so the live region existed before the month changed.
+    expect(screen.getByText("July 2030")).toBe(label);
   });
 
   it("disables days before min", async () => {
     setup();
     await userEvent.click(screen.getByRole("button", { name: /Starts/ }));
-    expect(screen.getByRole("button", { name: "June 14, 2030" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "June 15, 2030" })).toBeEnabled();
+    expect(screen.getByRole("gridcell", { name: "June 14, 2030" })).toBeDisabled();
+    expect(screen.getByRole("gridcell", { name: "June 15, 2030" })).toBeEnabled();
   });
 
   it("picking a day and confirming emits the combined ISO string", async () => {
     const { onChange } = setup();
     await userEvent.click(screen.getByRole("button", { name: /Starts/ }));
-    await userEvent.click(screen.getByRole("button", { name: "June 25, 2030" }));
+    await userEvent.click(screen.getByRole("gridcell", { name: "June 25, 2030" }));
     await userEvent.click(screen.getByRole("button", { name: "Done" }));
     expect(onChange).toHaveBeenCalledTimes(1);
     const result = new Date(onChange.mock.calls[0]![0] as string);
@@ -120,14 +139,38 @@ describe("DateTimePicker", () => {
   it("arrow keys move the roving focus between days", async () => {
     setup();
     await userEvent.click(screen.getByRole("button", { name: /Starts/ }));
-    const day20 = screen.getByRole("button", { name: "June 20, 2030" });
+    const day20 = screen.getByRole("gridcell", { name: "June 20, 2030" });
     expect(day20).toHaveAttribute("tabindex", "0");
     day20.focus();
     await userEvent.keyboard("{ArrowRight}");
-    const day21 = screen.getByRole("button", { name: "June 21, 2030" });
+    const day21 = screen.getByRole("gridcell", { name: "June 21, 2030" });
     expect(day21).toHaveFocus();
     expect(day21).toHaveAttribute("tabindex", "0");
     expect(day20).toHaveAttribute("tabindex", "-1");
+  });
+
+  /* APG date grid: rows/columnheaders give a reader the week structure the
+     eyes get from the layout, and aria-current says which cell is today. */
+  it("exposes the calendar as a grid with weekday column headers", async () => {
+    setup();
+    await userEvent.click(screen.getByRole("button", { name: /Starts/ }));
+    const grid = screen.getByRole("grid", { name: "June 2030" });
+    expect(within(grid).getAllByRole("columnheader")).toHaveLength(7);
+    expect(within(grid).getByRole("gridcell", { name: "June 20, 2030" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  });
+
+  it("marks today with aria-current", async () => {
+    render(<DateTimePicker onChange={() => {}} labels={LABELS} aria-label="Starts" locale="en-US" />);
+    await userEvent.click(screen.getByRole("button", { name: /Starts/ }));
+    const today = new Intl.DateTimeFormat("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }).format(new Date());
+    expect(screen.getByRole("gridcell", { name: today })).toHaveAttribute("aria-current", "date");
   });
 
   it("a 24-hour locale gets no day-period select", async () => {

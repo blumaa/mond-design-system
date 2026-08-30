@@ -38,7 +38,13 @@ export function usePresence(open: boolean, durationMs: number): Presence {
 
   useEffect(() => {
     if (open) return;
-    const timer = setTimeout(() => setMounted(false), durationMs);
+    // Under reduced motion the CSS exit collapses to nothing (the motion
+    // tokens zero out), so waiting the full duration would hold a
+    // visually-gone element in the tree.
+    const reduced =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const timer = setTimeout(() => setMounted(false), reduced ? 0 : durationMs);
     return () => clearTimeout(timer);
   }, [open, durationMs]);
 

@@ -33,6 +33,11 @@ describe("Breadcrumb", () => {
     expect(screen.getByRole("link", { name: "Omote Ura" })).toBeInTheDocument();
   });
 
+  it("underlines the links, so color is not the only thing separating them from the last step", () => {
+    render(<Breadcrumb items={trail} label="Breadcrumb" />);
+    expect(screen.getByRole("link", { name: "Library" }).className).toContain("variant-inline");
+  });
+
   it("leaves the last step as text, since it is where you already are", () => {
     render(<Breadcrumb items={trail} label="Breadcrumb" />);
     expect(screen.queryByRole("link", { name: "Kihon" })).not.toBeInTheDocument();

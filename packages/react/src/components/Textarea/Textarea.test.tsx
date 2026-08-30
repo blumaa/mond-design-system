@@ -21,6 +21,15 @@ describe("Textarea", () => {
     expect(screen.getByLabelText("Notes")).toHaveAttribute("aria-invalid", "true");
   });
 
+  it("a required Field marks the textarea required", () => {
+    render(
+      <Field label="Notes" required>
+        <Textarea />
+      </Field>,
+    );
+    expect(screen.getByRole("textbox")).toBeRequired();
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(<Textarea aria-label="Notes" />);
     expect(await axe(container)).toHaveNoViolations();
@@ -50,5 +59,22 @@ describe("Textarea showCount", () => {
   it("counts without a limit", () => {
     render(<Textarea aria-label="Bio" defaultValue="abcd" showCount />);
     expect(screen.getByText("4")).toBeInTheDocument();
+  });
+
+  /* The count is feedback about the control, so it belongs in the control's
+     accessible description — hidden from assistive tech it only helps
+     sighted users toward the limit. */
+  it("the count is part of the textarea's description", () => {
+    render(<Textarea aria-label="Bio" maxLength={10} showCount />);
+    expect(screen.getByRole("textbox")).toHaveAccessibleDescription("0/10");
+  });
+
+  it("the count joins a Field hint in the description, not replaces it", () => {
+    render(
+      <Field label="Bio" hint="Keep it short">
+        <Textarea maxLength={10} showCount />
+      </Field>,
+    );
+    expect(screen.getByRole("textbox")).toHaveAccessibleDescription("Keep it short 0/10");
   });
 });

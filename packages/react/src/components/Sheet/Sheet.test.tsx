@@ -2,6 +2,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { axe } from "jest-axe";
 import { Sheet, SheetBody, SheetHeader } from "./Sheet";
 import sheet from "./Sheet.module.css?raw";
 
@@ -16,6 +17,18 @@ describe("Sheet", () => {
     const dialog = screen.getByRole("dialog", { name: "Filters" });
     expect(dialog).toHaveAttribute("aria-modal", "true");
     expect(dialog).toHaveTextContent("Options");
+  });
+
+  it("has no axe violations while open", async () => {
+    const { baseElement } = render(
+      <Sheet open onClose={() => {}} label="Filters">
+        <SheetHeader onClose={() => {}} closeLabel="Close">
+          Filters
+        </SheetHeader>
+        <SheetBody>Options</SheetBody>
+      </Sheet>,
+    );
+    expect(await axe(baseElement)).toHaveNoViolations();
   });
 
   it("Escape closes", async () => {

@@ -34,6 +34,9 @@ export function ListGroup({ label, className, ...rest }: ListGroupProps): ReactE
   const list = (
     <ListGroupContext.Provider value={true}>
       <ul
+        /* Explicit, though redundant on a <ul>: Safari/VoiceOver drops list
+           semantics from a list-style: none list unless the role says so. */
+        role="list"
         className={cx(styles.group, className)}
         aria-labelledby={label != null ? headingId : undefined}
         {...rest}

@@ -69,3 +69,23 @@
 .dot:disabled ~ .label {
   color: var(--mds-action-disabled-fg);
 }
+
+/* Forced colors strips author backgrounds, and the checked dot is nothing but
+   one — restated in system colors, which the mode honors. */
+@media (forced-colors: active) {
+  .dot:checked {
+    border-color: SelectedItem;
+  }
+
+  .dot:checked::after {
+    background: SelectedItem;
+  }
+
+  .dot:disabled {
+    border-color: GrayText;
+  }
+
+  .dot:disabled:checked::after {
+    background: GrayText;
+  }
+}

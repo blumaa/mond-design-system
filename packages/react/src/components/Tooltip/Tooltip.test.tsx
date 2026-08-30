@@ -40,6 +40,25 @@ describe("Tooltip", () => {
     await waitFor(() => expect(screen.queryByRole("tooltip")).not.toBeInTheDocument());
   });
 
+  /* WCAG 1.4.13 (hoverable): the pointer must be able to travel from the
+     trigger onto the surface — to select the text, say — without the surface
+     vanishing under it. Leaving the trigger starts a short grace instead of
+     hiding at once, and reaching the surface cancels it. */
+  it("stays while the pointer moves onto the surface, hides on leaving it", async () => {
+    render(<Example />);
+    const trigger = screen.getByRole("button", { name: "Remove" });
+    await userEvent.hover(trigger);
+    const tip = await screen.findByRole("tooltip");
+    await userEvent.unhover(trigger);
+    await userEvent.hover(tip);
+    // Longer than the grace: if leaving the trigger had started the clock
+    // anyway, the surface would be gone by now.
+    await new Promise((settle) => setTimeout(settle, 300));
+    expect(screen.getByRole("tooltip")).toBeInTheDocument();
+    await userEvent.unhover(tip);
+    await waitFor(() => expect(screen.queryByRole("tooltip")).not.toBeInTheDocument());
+  });
+
   /* A tooltip nobody can reach from the keyboard is decoration. Focus shows it
      with no dwell — the reader has already committed to the control. */
   it("keyboard focus shows it at once, even behind a hover delay", async () => {

@@ -15,6 +15,11 @@ describe("FileDrop", () => {
     expect(screen.getByText("JPG or PNG, up to 20 MB")).toBeInTheDocument();
   });
 
+  it("keeps the icon out of the accessible name — the label carries the words", () => {
+    render(<FileDrop label="Drop photos here" icon={<svg data-glyph="" />} onFiles={() => {}} />);
+    expect(document.querySelector("[data-glyph]")?.closest("[aria-hidden]")).toBeInTheDocument();
+  });
+
   it("opens the picker when pressed: the file input never shows itself", async () => {
     const click = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(() => {});
     render(<FileDrop label="Drop photos here" onFiles={() => {}} />);

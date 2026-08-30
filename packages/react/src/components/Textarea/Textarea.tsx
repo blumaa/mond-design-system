@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import type { ChangeEvent, ReactElement, Ref, TextareaHTMLAttributes } from "react";
 import { cx } from "../../internal/cx";
 import { useFieldContext } from "../Field/Field";
@@ -21,6 +21,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
  */
 export function Textarea({ rows = 3, showCount = false, className, ...rest }: TextareaProps): ReactElement {
   const field = useFieldContext();
+  const countId = useId();
   const [tracked, setTracked] = useState(() => String(rest.defaultValue ?? ""));
   const current = rest.value !== undefined ? String(rest.value) : tracked;
 
@@ -29,14 +30,23 @@ export function Textarea({ rows = 3, showCount = false, className, ...rest }: Te
     rest.onChange?.(event);
   };
 
+  /* The count joins the hint/error in the description rather than replacing
+     it — and it must land after the rest spread, or a caller's
+     aria-describedby would knock the count back out. */
+  const describedBy =
+    [rest["aria-describedby"] ?? field?.describedBy, showCount ? countId : undefined]
+      .filter(Boolean)
+      .join(" ") || undefined;
+
   const textarea = (
     <textarea
       id={rest.id ?? field?.id}
-      aria-describedby={rest["aria-describedby"] ?? field?.describedBy}
       aria-invalid={rest["aria-invalid"] ?? (field?.invalid || undefined)}
+      aria-required={rest["aria-required"] ?? (field?.required || undefined)}
       rows={rows}
       className={cx(styles.textarea, className)}
       {...rest}
+      aria-describedby={describedBy}
       {...(showCount ? { onChange } : {})}
     />
   );
@@ -45,7 +55,7 @@ export function Textarea({ rows = 3, showCount = false, className, ...rest }: Te
   return (
     <span className={styles.wrap}>
       {textarea}
-      <span className={styles.count} aria-hidden="true">
+      <span id={countId} className={styles.count}>
         {rest.maxLength !== undefined ? `${current.length}/${rest.maxLength}` : current.length}
       </span>
     </span>

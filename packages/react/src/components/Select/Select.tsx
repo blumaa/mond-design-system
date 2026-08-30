@@ -32,6 +32,7 @@ export function Select({ size = "md", className, children, ...rest }: SelectProp
         id={rest.id ?? field?.id}
         aria-describedby={rest["aria-describedby"] ?? field?.describedBy}
         aria-invalid={rest["aria-invalid"] ?? (field?.invalid || undefined)}
+        aria-required={rest["aria-required"] ?? (field?.required || undefined)}
         className={cx(styles.select, styles[`size-${size}`], className)}
         {...rest}
       >

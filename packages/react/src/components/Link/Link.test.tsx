@@ -25,6 +25,20 @@ describe("Link", () => {
     expect(a).toHaveAttribute("rel", "noopener noreferrer");
   });
 
+  /* A new tab is a context change the reader cannot see coming; the warning
+     joins the accessible name without appearing on screen. The words are the
+     app's, so they arrive as a prop. */
+  it("externalLabel joins the link's name without showing", () => {
+    render(
+      <Link href="https://x.test" external externalLabel="opens in new tab">
+        Docs
+      </Link>,
+    );
+    // \s? — the polyfill computing the name drops the space real readers pause on.
+    expect(screen.getByRole("link", { name: /Docs\s?opens in new tab/ })).toBeInTheDocument();
+    expect(screen.getByText("opens in new tab").className).toContain("hiddenNote");
+  });
+
   it("as renders a router link component", () => {
     const Fake = (props: React.ComponentProps<"a">) => <a data-testid="fake" {...props} />;
     render(<Link as={Fake} href="/r">r</Link>);

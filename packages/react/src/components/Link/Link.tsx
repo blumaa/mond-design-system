@@ -15,6 +15,10 @@ type LinkOwnProps<E extends ElementType> = {
   size?: LinkSize;
   /** Opens in a new tab with rel protection. */
   external?: boolean;
+  /** Announced after the link text, unseen — a new tab is a context change a
+      reader cannot see coming, e.g. "opens in new tab". The words are the
+      app's, so they arrive here rather than being baked in English. */
+  externalLabel?: string;
   /** Element override — `'button'` for a link-styled action, or a router's
       Link component, whose own props (`to`, `href`, …) then type-check. */
   as?: E;
@@ -40,7 +44,9 @@ export function Link<E extends ElementType = "a">({
   variant = "inline",
   size,
   external = false,
+  externalLabel,
   as,
+  children,
   ...rest
 }: LinkProps<E>): ReactElement {
   const Element: ElementType = as ?? "a";
@@ -65,6 +71,13 @@ export function Link<E extends ElementType = "a">({
       {...externalProps}
       {...others}
       {...typeProps}
-    />
+    >
+      {children}
+      {external && externalLabel !== undefined && (
+        /* The leading space keeps the name "Docs opens in new tab", not
+           "Docsopens…" — inline text concatenates without one. */
+        <span className={styles.hiddenNote}>{` ${externalLabel}`}</span>
+      )}
+    </Element>
   );
 }

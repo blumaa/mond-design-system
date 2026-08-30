@@ -24,6 +24,9 @@ export interface PopoverProps {
   anchorRef: RefObject<HTMLElement | null>;
   /** Accessible name of the panel. */
   label: string;
+  /** Lands on the panel element, so the trigger's aria-controls has something
+      to point at. The trigger is the caller's, so the wiring is too. */
+  id?: string | undefined;
   /** Side it prefers. It flips and slides to stay on screen. Default "bottom-start". */
   placement?: PopoverPlacement;
   className?: string;
@@ -55,14 +58,16 @@ export function Popover({
   onClose,
   anchorRef,
   label,
+  id,
   placement = "bottom-start",
   className,
   children,
 }: PopoverProps) {
   const { mounted, visible } = usePresence(open, POPOVER_EXIT_MS);
-  // Focus capture, Escape, Tab cycling and focus restore are the modal
-  // surface's behaviour and are the same here; only the page lock differs.
-  const panelRef = useOverlay<HTMLDivElement>({ open, onClose, lockScroll: false });
+  // Focus capture and Escape are shared with the modal surfaces; the page
+  // lock, the Tab trap and the unconditional focus restore are not — the
+  // page behind this panel stays live.
+  const panelRef = useOverlay<HTMLDivElement>({ open, onClose, lockScroll: false, modal: false });
   useAnchoredPosition({ open: mounted, anchorRef, floatingRef: panelRef, placement, gap: GAP });
   useDismissOnOutside(open, onClose, [panelRef, anchorRef]);
 
@@ -71,6 +76,7 @@ export function Popover({
   return createPortal(
     <div
       ref={panelRef}
+      id={id}
       role="dialog"
       aria-label={label}
       tabIndex={-1}

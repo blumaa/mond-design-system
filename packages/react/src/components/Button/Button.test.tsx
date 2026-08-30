@@ -33,14 +33,23 @@ describe("Button", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
-  it("loading disables, sets aria-busy, and keeps the accessible name", () => {
-    render(<Button loading>Save</Button>);
+  it("loading locks the button without dropping it from the tab order", async () => {
+    // A disabled attribute would throw keyboard focus back to the body the
+    // moment a press starts a save — so the lock is aria-disabled plus a
+    // swallowed click, and the button stays where the focus is.
+    const onClick = vi.fn();
+    render(<Button loading onClick={onClick}>Save</Button>);
     // aria-busy already announces the state; the spinner is decorative. A live
     // spinner would prepend "Loading" to the button's accessible name.
     const btn = screen.getByRole("button", { name: "Save" });
-    expect(btn).toBeDisabled();
+    expect(btn).not.toBeDisabled();
+    expect(btn).toHaveAttribute("aria-disabled", "true");
     expect(btn).toHaveAttribute("aria-busy", "true");
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    await userEvent.tab();
+    expect(btn).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    expect(onClick).not.toHaveBeenCalled();
   });
 
   it("renders icon slots", () => {

@@ -1,1 +1,1 @@
-{"extends":"../../tsconfig.base.json","compilerOptions":{"noEmit":true,"types":[]},"include":["src","../../vitest.setup.ts","../../vitest.d.ts"],"exclude":["src/dist-css.test.ts","src/control-tokens.test.ts","src/type-roles.test.ts"]}
+{"extends":"../../tsconfig.base.json","compilerOptions":{"noEmit":true,"types":[]},"include":["src","../../vitest.setup.ts","../../vitest.d.ts"],"exclude":["src/dist-css.test.ts","src/control-tokens.test.ts","src/type-roles.test.ts","src/state-cues.test.ts","src/forced-colors.test.ts"]}

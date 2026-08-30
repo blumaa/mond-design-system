@@ -62,6 +62,17 @@ describe("Field", () => {
     expect(screen.getByText("*")).toBeInTheDocument();
   });
 
+  /* The asterisk is aria-hidden decoration; without this the requirement
+     never reaches assistive tech at all. */
+  it("required reaches the control as aria-required", () => {
+    render(
+      <Field label="Email" required>
+        <Input />
+      </Field>,
+    );
+    expect(screen.getByRole("textbox")).toBeRequired();
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(
       <div>

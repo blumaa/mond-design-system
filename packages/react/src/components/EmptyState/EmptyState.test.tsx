@@ -12,6 +12,19 @@ describe("EmptyState", () => {
     expect(screen.getByText("Add your first item.")).toBeInTheDocument();
   });
 
+  /* The empty state can sit anywhere in a page's outline; a hardcoded h3
+     under an h1 skips a level. The caller knows the outline, so the caller
+     picks the level. */
+  it("takes a heading level for the page's outline", () => {
+    render(<EmptyState title="Nothing yet" level={2} />);
+    expect(screen.getByRole("heading", { level: 2, name: "Nothing yet" })).toBeInTheDocument();
+  });
+
+  it("defaults the heading to level 3", () => {
+    render(<EmptyState title="Nothing yet" />);
+    expect(screen.getByRole("heading", { level: 3 })).toBeInTheDocument();
+  });
+
   it("renders the action slot", () => {
     render(<EmptyState title="Nothing" action={<Button>Add item</Button>} />);
     expect(screen.getByRole("button", { name: "Add item" })).toBeInTheDocument();

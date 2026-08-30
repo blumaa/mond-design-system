@@ -15,7 +15,9 @@ describe("CountButton", () => {
         12
       </CountButton>,
     );
-    const button = screen.getByRole("button", { name: "Like" });
+    // The visible count is part of the name (WCAG 2.5.3): a voice user who
+    // says what they see must land on this button.
+    const button = screen.getByRole("button", { name: "Like 12" });
     expect(button).toHaveTextContent("12");
     await userEvent.click(button);
     expect(onClick).toHaveBeenCalledTimes(1);
@@ -35,16 +37,24 @@ describe("CountButton", () => {
     expect(screen.getByTestId("cb").className).toContain("tone-danger");
   });
 
-  it("loading swaps the glyph for a spinner and locks the control", () => {
+  it("loading swaps the glyph for a spinner and locks the control", async () => {
+    const onClick = vi.fn();
     render(
-      <CountButton icon={glyph} label="Like" loading>
+      <CountButton icon={glyph} label="Like" loading onClick={onClick}>
         12
       </CountButton>,
     );
-    const button = screen.getByRole("button", { name: "Like" });
-    expect(button).toBeDisabled();
+    const button = screen.getByRole("button", { name: "Like 12" });
+    // Locked, not disabled: a disabled attribute would drop keyboard focus to
+    // the body the instant the press starts the write.
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveAttribute("aria-disabled", "true");
     expect(button).toHaveAttribute("aria-busy", "true");
     expect(screen.queryByTestId("glyph")).not.toBeInTheDocument();
+    await userEvent.tab();
+    expect(button).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    expect(onClick).not.toHaveBeenCalled();
   });
 
   it("has no axe violations", async () => {
