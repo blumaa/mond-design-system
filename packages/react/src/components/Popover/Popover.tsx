@@ -60,9 +60,10 @@ export function Popover({
   children,
 }: PopoverProps) {
   const { mounted, visible } = usePresence(open, POPOVER_EXIT_MS);
-  // Focus capture, Escape, Tab cycling and focus restore are the modal
-  // surface's behaviour and are the same here; only the page lock differs.
-  const panelRef = useOverlay<HTMLDivElement>({ open, onClose, lockScroll: false });
+  // Focus capture and Escape are shared with the modal surfaces; the page
+  // lock, the Tab trap and the unconditional focus restore are not — the
+  // page behind this panel stays live.
+  const panelRef = useOverlay<HTMLDivElement>({ open, onClose, lockScroll: false, modal: false });
   useAnchoredPosition({ open: mounted, anchorRef, floatingRef: panelRef, placement, gap: GAP });
   useDismissOnOutside(open, onClose, [panelRef, anchorRef]);
 

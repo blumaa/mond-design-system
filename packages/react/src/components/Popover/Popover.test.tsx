@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { useRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "jest-axe";
 import { Popover } from "./Popover";
@@ -33,6 +33,7 @@ function Toggling() {
       <Popover open={open} onClose={() => setOpen(false)} anchorRef={anchor} label="Equipment list">
         <button type="button">Add</button>
       </Popover>
+      <button type="button">Elsewhere</button>
     </>
   );
 }
@@ -96,6 +97,33 @@ describe("Popover", () => {
     // pointerdown, which would put a second panel back before this resolves.
     await waitForElementToBeRemoved(panel);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  /* Non-modal means the page is still there to Tab to. Trapping Tab inside
+     the panel would contradict the very thing the role communicates. */
+  it("does not trap Tab inside the panel", async () => {
+    render(<Example />);
+    screen.getByRole("button", { name: "Add" }).focus();
+    await userEvent.tab();
+    const panel = screen.getByRole("dialog");
+    expect(panel.contains(document.activeElement)).toBe(false);
+  });
+
+  /* A press elsewhere on the page already put focus where the reader wanted
+     it; pulling it back to the trigger on dismissal would undo their move. */
+  it("an outside dismissal leaves focus where the reader put it", async () => {
+    render(<Toggling />);
+    const trigger = screen.getByRole("button", { name: "Equipment" });
+    await userEvent.click(trigger);
+    expect(screen.getByRole("dialog")).toHaveFocus();
+    // The reader tabbed out to the page, then pressed a blank spot. Just the
+    // pointerdown: the browser's own follow-up (blur towards the press) is
+    // not the popover's doing and would mask a focus yank back to the trigger.
+    const elsewhere = screen.getByRole("button", { name: "Elsewhere" });
+    elsewhere.focus();
+    fireEvent.pointerDown(document.body);
+    await waitForElementToBeRemoved(() => screen.queryByRole("dialog"));
+    expect(elsewhere).toHaveFocus();
   });
 
   it("pins itself to the anchor above the page", () => {

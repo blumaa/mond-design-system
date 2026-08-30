@@ -77,10 +77,12 @@ describe("ConfirmDialog lifecycle", () => {
     );
     const confirm = screen.getByRole("button", { name: "Delete" });
     await userEvent.click(confirm);
-    expect(confirm).toBeDisabled();
+    // aria-disabled, not disabled: the lock must not drop keyboard focus.
+    expect(confirm).toHaveAttribute("aria-disabled", "true");
     expect(confirm).toHaveAttribute("aria-busy", "true");
     expect(screen.getByRole("button", { name: "Cancel" })).toBeEnabled();
     expect(onClose).not.toHaveBeenCalled();
+    expect(onConfirm).toHaveBeenCalledTimes(1);
     resolve();
     await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
   });
