@@ -1,5 +1,27 @@
 # @mond-design-system/react
 
+## 6.1.0
+
+### Minor Changes
+
+- 30ed3e4: Radio takes a `size` step: `sm`, `md` (default) or `lg`.
+
+  A step re-points `--mds-check-size`, the one role every rule in the control
+  already reads, so the box, its border and the checked dot move together. The
+  default stays the brand role; `--mds-check-size-sm` and `--mds-check-size-lg`
+  are core steps, like the non-default icon button sizes. The 44px target holds
+  at every step.
+
+### Patch Changes
+
+- 30ed3e4: Radio's chosen dot paints again.
+
+  The dot was sized `50%` of its grid area, and that area is an auto track sized
+  from the pseudo-element's own empty content — zero. A checked radio took the
+  click, checked, and showed nothing. The dot is now `0.5em` of the box, the same
+  em-based geometry the Checkbox glyph already uses, so it scales with
+  `--mds-check-size` like everything else in the control.
+
 ## 6.0.0
 
 ### Major Changes
