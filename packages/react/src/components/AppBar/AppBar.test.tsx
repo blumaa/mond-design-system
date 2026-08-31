@@ -59,6 +59,18 @@ describe("AppBar", () => {
     expect(bar.className).toMatch(/bar/);
   });
 
+  /* Flush is for bars whose content should reach the screen edge — the bar
+     drops the page padding instead of the screen overriding it. */
+  it("flush drops the page padding", () => {
+    render(<AppBar title="Sessions" flush />);
+    expect(screen.getByRole("banner").className).toMatch(/flush/);
+  });
+
+  it("keeps the page padding by default", () => {
+    render(<AppBar title="Sessions" />);
+    expect(screen.getByRole("banner").className).not.toMatch(/flush/);
+  });
+
   it("passes the rest of its attributes to the header element", () => {
     render(<AppBar title="Sessions" id="top" data-testid="app-bar" />);
     expect(screen.getByTestId("app-bar")).toHaveAttribute("id", "top");
