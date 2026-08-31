@@ -1,5 +1,13 @@
 # @mond-design-system/react
 
+## 6.2.0
+
+### Minor Changes
+
+- cea637f: AppBar `flush` prop: drops the page padding so bar content reaches the
+  screen edge. Off by default — the padding is what lines the bar up with
+  Container's page column.
+
 ## 6.1.1
 
 ### Patch Changes
