@@ -11,6 +11,12 @@
   border-bottom: var(--mds-border-width) solid var(--mds-border-subtle);
 }
 
+/* Content to the screen edge — for bars whose slots handle their own
+   alignment. The default padding is what matches Container's page column. */
+.flush {
+  padding-inline: 0;
+}
+
 .title {
   flex: 1;
   min-width: 0;

@@ -13,6 +13,10 @@ export interface AppBarProps extends Omit<HTMLAttributes<HTMLElement>, "title"> 
   leading?: ReactNode;
   /** Right slot — actions. */
   trailing?: ReactNode;
+  /** Drop the page padding so the bar's content reaches the screen edge.
+      Off by default: the padding is what lines the bar up with the page
+      column (Container shares the same token). */
+  flush?: boolean;
   ref?: Ref<HTMLElement>;
 }
 
@@ -30,10 +34,10 @@ export interface AppBarProps extends Omit<HTMLAttributes<HTMLElement>, "title"> 
  * />
  * ```
  */
-export function AppBar({ title, subtitle, leading, trailing, className, ref, ...rest }: AppBarProps) {
+export function AppBar({ title, subtitle, leading, trailing, flush = false, className, ref, ...rest }: AppBarProps) {
   const heading = title ? <h1 className={styles.title}>{title}</h1> : null;
   return (
-    <header ref={ref} className={cx(styles.bar, className)} {...rest}>
+    <header ref={ref} className={cx(styles.bar, flush && styles.flush, className)} {...rest}>
       {leading ? <div className={styles.slot}>{leading}</div> : null}
       {subtitle != null ? (
         <div className={styles.text}>
