@@ -67,8 +67,11 @@
   gap: var(--mds-gap-hairline);
 }
 
+/* Capped, not shared: `flex: 1 1 0` made each thumbnail the column divided by
+   however many there were, so a wide screen drew them the size of pictures.
+   Shrink is left on so a narrow phone still fits the strip on one row. */
 .thumb {
-  flex: 1 1 0;
+  flex: 0 1 var(--mds-carousel-thumb);
   min-width: 0;
   overflow: hidden;
   padding: 0;

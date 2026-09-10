@@ -110,6 +110,11 @@
      is about — and big enough to tell two photographs of the same thing apart,
      which is the whole reason the list stopped being file names. */
   --mds-upload-thumb: 48px;
+  /* One frame's picture in a carousel's pager strip, square. A cap rather than a
+     share of the row: thumbnails sized `1fr` grow with the column, so the same
+     gallery that reads as a strip of pagers on a phone becomes a row of 174px
+     tiles under a 887px picture — a second gallery below the first. */
+  --mds-carousel-thumb: 72px;
   /* How far a control sitting on a picture stands off its edge. Not padding —
      nothing is inside it — and not a motion shift, which collapses when motion
      is turned down and would drop the control onto the corner. */
