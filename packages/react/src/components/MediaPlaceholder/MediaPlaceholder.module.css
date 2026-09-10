@@ -1,8 +1,15 @@
+/* Capped, and narrowed to keep the cap: height alone would leave a portrait
+   picture in a wide box between two bands of the sunken surface, so the box
+   takes the width its aspect asks for at that height instead. A picture
+   shorter than the cap is untouched. */
 .media {
   position: relative;
   display: block;
   overflow: hidden;
   aspect-ratio: var(--media-aspect, 16 / 9);
+  max-block-size: var(--mds-media-max-block);
+  inline-size: min(100%, calc(var(--mds-media-max-block) * (var(--media-aspect, 16 / 9))));
+  margin-inline: auto;
   border-radius: var(--mds-radius-media);
   background: var(--mds-surface-sunken);
 }

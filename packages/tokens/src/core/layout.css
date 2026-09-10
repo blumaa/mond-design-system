@@ -115,6 +115,13 @@
      gallery that reads as a strip of pagers on a phone becomes a row of 174px
      tiles under a 887px picture — a second gallery below the first. */
   --mds-carousel-thumb: 72px;
+  /* How tall one picture may draw. A frame sized by aspect-ratio alone takes
+     its height from the column: a 3:4 photograph in an 887px reading column
+     drew 1183px, a 9:16 phone photo 1577px — twice the screen. Held against
+     the viewport so a short laptop and a phone both keep the picture and what
+     is written under it in one view, and against a ceiling so a tall desktop
+     window does not draw a poster. */
+  --mds-media-max-block: min(70svh, 640px);
   /* How far a control sitting on a picture stands off its edge. Not padding —
      nothing is inside it — and not a motion shift, which collapses when motion
      is turned down and would drop the control onto the corner. */
