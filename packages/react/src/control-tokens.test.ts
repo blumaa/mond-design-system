@@ -93,6 +93,16 @@ it("sizes the password reveal glyph from the icon scale", () => {
   expect(css).not.toContain("--mds-text-lg");
 });
 
+/* A pager is not a gallery. Sized `flex: 1 1 0` a carousel thumbnail took the
+ * strip's width divided by however many frames there were, so five under an
+ * 887px picture drew 174px tiles under the picture they page. The token caps
+ * them; shrink stays on so a narrow phone keeps the strip on one row.
+ */
+it("caps an ImageCarousel thumbnail with --mds-carousel-thumb", () => {
+  const css = sheet("ImageCarousel/ImageCarousel.module.css");
+  expect(css).toMatch(/\.thumb \{[^}]*flex: 0 1 var\(--mds-carousel-thumb\);/s);
+});
+
 /* WCAG 2.5.8 measures the target, not the painted box. These used to meet it
  * with min-height on their root, which is layout the host row pays for: a
  * switch in a settings row made that row 68px tall against the 52px the design
