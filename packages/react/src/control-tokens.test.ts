@@ -103,6 +103,19 @@ it("caps an ImageCarousel thumbnail with --mds-carousel-thumb", () => {
   expect(css).toMatch(/\.thumb \{[^}]*flex: 0 1 var\(--mds-carousel-thumb\);/s);
 });
 
+/* A picture is not a page. Sized only by aspect-ratio against the column, a
+ * 3:4 photograph in an 887px reading column drew 1183px tall and a 9:16 phone
+ * photo 1577px — twice the screen. The frame is capped, and the box narrows
+ * with it so the whole picture still shows rather than being letterboxed.
+ */
+it("caps a MediaPlaceholder frame with --mds-media-max-block", () => {
+  const css = sheet("MediaPlaceholder/MediaPlaceholder.module.css");
+  expect(css).toMatch(/\.media \{[^}]*max-block-size: var\(--mds-media-max-block\);/s);
+  expect(css).toMatch(
+    /\.media \{[^}]*inline-size: min\(100%, calc\(var\(--mds-media-max-block\) \* \(var\(--media-aspect, 16 \/ 9\)\)\)\);/s,
+  );
+});
+
 /* WCAG 2.5.8 measures the target, not the painted box. These used to meet it
  * with min-height on their root, which is layout the host row pays for: a
  * switch in a settings row made that row 68px tall against the 52px the design
