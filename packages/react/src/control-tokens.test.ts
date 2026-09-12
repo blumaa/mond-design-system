@@ -110,10 +110,19 @@ it("caps an ImageCarousel thumbnail with --mds-carousel-thumb", () => {
  */
 it("caps a MediaPlaceholder frame with --mds-media-max-block", () => {
   const css = sheet("MediaPlaceholder/MediaPlaceholder.module.css");
-  expect(css).toMatch(/\.media \{[^}]*max-block-size: var\(--mds-media-max-block\);/s);
+  expect(css).toMatch(/\.frame \{[^}]*max-block-size: var\(--mds-media-max-block\);/s);
   expect(css).toMatch(
-    /\.media \{[^}]*inline-size: min\(100%, calc\(var\(--mds-media-max-block\) \* \(var\(--media-aspect, 16 \/ 9\)\)\)\);/s,
+    /\.frame \{[^}]*inline-size: min\(100%, calc\(var\(--mds-media-max-block\) \* \(var\(--media-aspect, 16 \/ 9\)\)\)\);/s,
   );
+});
+
+/* On the box those margins are a flex item's, and a flex item's auto margins
+ * take the row's free space: a fixed-width thumbnail slid to the middle of the
+ * card. The frame inside the box is not a flex item; the box is the caller's. */
+it("centres the frame, never the box a caller places", () => {
+  const css = sheet("MediaPlaceholder/MediaPlaceholder.module.css");
+  expect(css).toMatch(/\.frame \{[^}]*margin-inline: auto;/s);
+  expect(css).not.toMatch(/\.media \{[^}]*(margin|inline-size|max-block-size)/s);
 });
 
 /* WCAG 2.5.8 measures the target, not the painted box. These used to meet it
