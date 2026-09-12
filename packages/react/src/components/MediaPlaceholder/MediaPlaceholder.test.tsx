@@ -57,6 +57,21 @@ describe("MediaPlaceholder", () => {
   });
 });
 
+  /* Cap and centring sit on a frame inside the box, not on the box: the
+     caller sizes the box, and auto margins on a flex item eat the row. */
+  it("keeps the capped frame inside the box the caller sizes", () => {
+    const { container } = render(
+      <MediaPlaceholder className="mine" src="/keiko.jpg" cover={<button type="button">Reveal</button>} />,
+    );
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.className).toContain("mine");
+    expect(root.className).toContain("media");
+    const frame = root.firstElementChild as HTMLElement;
+    expect(frame.className).toContain("frame");
+    expect(frame.contains(screen.getByRole("presentation"))).toBe(true);
+    expect(frame.contains(screen.getByRole("button", { name: "Reveal" }))).toBe(true);
+  });
+
 describe("MediaPlaceholder with a picture", () => {
   it("draws the image instead of the fill", () => {
     const { container } = render(<MediaPlaceholder src="/keiko.jpg" alt="A chest harness" />);

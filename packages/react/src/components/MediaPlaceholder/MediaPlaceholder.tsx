@@ -63,28 +63,30 @@ export function MediaPlaceholder({
       style={{ ...vars, ...style }}
       {...rest}
     >
-      {picture ? (
-        <img
-          className={styles.image}
-          src={src}
-          alt={alt}
-          loading="lazy"
-          decoding="async"
-          onError={() => setFailed(src)}
-        />
-      ) : (
-        <div className={styles.fill}>
-          {/* The glyph is decoration; the caption is words, and words read out. */}
-          {glyph != null && <span aria-hidden="true">{glyph}</span>}
-          {caption !== undefined && <Text variant="meta">{caption}</Text>}
-        </div>
-      )}
-      {picture && caption !== undefined && (
-        <Text variant="meta" tone="on-media" className={styles.caption}>
-          {caption}
-        </Text>
-      )}
-      {cover !== undefined && <div className={styles.cover}>{cover}</div>}
+      <div className={styles.frame}>
+        {picture ? (
+          <img
+            className={styles.image}
+            src={src}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            onError={() => setFailed(src)}
+          />
+        ) : (
+          <div className={styles.fill}>
+            {/* The glyph is decoration; the caption is words, and words read out. */}
+            {glyph != null && <span aria-hidden="true">{glyph}</span>}
+            {caption !== undefined && <Text variant="meta">{caption}</Text>}
+          </div>
+        )}
+        {picture && caption !== undefined && (
+          <Text variant="meta" tone="on-media" className={styles.caption}>
+            {caption}
+          </Text>
+        )}
+        {cover !== undefined && <div className={styles.cover}>{cover}</div>}
+      </div>
     </div>
   );
 }
