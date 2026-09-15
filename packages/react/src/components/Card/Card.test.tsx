@@ -58,6 +58,44 @@ describe("Card", () => {
     expect(sheet).toMatch(/\.clipped\s*{[^}]*overflow:\s*hidden/);
   });
 
+  /* The ellipsis is drawn by -webkit-box, and such a box is its own formatting
+     context: it stands beside a float instead of wrapping under it. A card that
+     floats its thumbnail asks for the other cut. */
+  it("clips a flowing body by height rather than by clamp", () => {
+    render(
+      <Card>
+        <CardBody lines={4} clip="flow" data-testid="flowed">
+          Long
+        </CardBody>
+      </Card>,
+    );
+    const body = screen.getByTestId("flowed");
+    expect(body.className).toMatch(/flowed/);
+    expect(body.className).not.toMatch(/clipped/);
+    expect(body.style.getPropertyValue("--card-lines")).toBe("4");
+  });
+
+  it("marks the cut with an ellipsis unless asked otherwise", () => {
+    render(
+      <Card>
+        <CardBody lines={4} data-testid="marked">
+          Long
+        </CardBody>
+      </Card>,
+    );
+    expect(screen.getByTestId("marked").className).toMatch(/clipped/);
+    expect(screen.getByTestId("marked").className).not.toMatch(/flowed/);
+  });
+
+  /* overflow: clip is the one clip that is not a formatting context, so text
+     still wraps around a float, and 1lh cuts on a line rather than through one.
+     Measured in Chromium and WebKit. */
+  it("cuts a flowing body on the line and keeps out of a float's way", () => {
+    expect(sheet).toMatch(/\.flowed\s*{[^}]*max-height:\s*calc\(var\(--card-lines\) \* 1lh\)/);
+    expect(sheet).toMatch(/\.flowed\s*{[^}]*overflow:\s*clip/);
+    expect(sheet).not.toMatch(/\.flowed\s*{[^}]*display:\s*-webkit-box/);
+  });
+
   it("body alone works", () => {
     render(
       <Card data-testid="c">

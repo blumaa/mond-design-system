@@ -101,10 +101,17 @@ export function CardHeader({ className, ...rest }: CardSectionProps): ReactEleme
   return <div className={cx(styles.header, className)} {...rest} />;
 }
 
+/** How a budgeted body ends. */
+export type CardBodyClip = "ellipsis" | "flow";
+
 export interface CardBodyProps extends CardSectionProps {
-  /** How many lines of content the card affords. Past it the body clips, with
-      an ellipsis on the last line. Unset, the body grows to what it holds. */
+  /** How many lines of content the card affords. Past it the body clips.
+      Unset, the body grows to what it holds. */
   lines?: number;
+  /** ellipsis marks the cut and is a box of its own, so text beside floated
+      media stands next to it rather than wrapping under it; flow cuts on the
+      line and leaves the wrap alone. Default "ellipsis". */
+  clip?: CardBodyClip;
 }
 
 /**
@@ -118,12 +125,17 @@ export interface CardBodyProps extends CardSectionProps {
  * is no longer a flex column: `gap` between its children stops applying and a
  * margin is what separates them. A body doing layout for a card keeps its own
  * budget-free, and holds a budgeted one for the part that has to fit.
+ *
+ * `clip="flow"` buys the budget back for a card that floats its media: the body
+ * stays a block and cuts on the line, so the text wraps around the float. The
+ * cut is unmarked — the ellipsis is drawn by the clamp that blocks the wrap.
  */
-export function CardBody({ lines, className, style, ...rest }: CardBodyProps): ReactElement {
-  const vars = lines === undefined ? undefined : ({ "--card-lines": lines } as CSSProperties);
+export function CardBody({ lines, clip = "ellipsis", className, style, ...rest }: CardBodyProps): ReactElement {
+  const budgeted = lines !== undefined;
+  const vars = budgeted ? ({ "--card-lines": lines } as CSSProperties) : undefined;
   return (
     <div
-      className={cx(styles.body, lines !== undefined && styles.clipped, className)}
+      className={cx(styles.body, budgeted && (clip === "flow" ? styles.flowed : styles.clipped), className)}
       style={{ ...vars, ...style }}
       {...rest}
     />

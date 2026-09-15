@@ -110,3 +110,14 @@
   line-clamp: var(--card-lines);
   overflow: hidden;
 }
+
+/* The same budget for a body that has to flow around floated media. The clamp
+   above cannot: -webkit-box is its own formatting context and stands beside a
+   float rather than wrapping under it. overflow: clip is the one clip that is
+   not a formatting context, and 1lh cuts on a line rather than through one.
+   No ellipsis — line-clamp draws it and needs the box that stops the flow.
+   Measured in Chromium and WebKit, which agree. */
+.flowed {
+  max-height: calc(var(--card-lines) * 1lh);
+  overflow: clip;
+}
