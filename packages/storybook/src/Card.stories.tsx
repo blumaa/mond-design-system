@@ -132,3 +132,41 @@ export const ClippedBody: Story = {
     </Inline>
   ),
 };
+
+/** A budget for a card that floats its media. The clamp above draws its ellipsis
+ *  with `-webkit-box`, which is a formatting context — it stands beside a float
+ *  instead of wrapping under it, leaving dead space below the thumbnail.
+ *  `clip="flow"` cuts on the line instead, unmarked, and the text wraps. */
+export const FlowedBody: Story = {
+  args: { children: null },
+  render: () => (
+    <Inline gap="base" align="start">
+      {(["ellipsis", "flow"] as const).map((clip) => (
+        <div key={clip} style={{ width: 320 }}>
+          <Card>
+            <CardBody>
+              <div
+                style={{
+                  float: "left",
+                  width: 88,
+                  height: 88,
+                  marginRight: "var(--mds-gap)",
+                  borderRadius: "var(--mds-radius-media)",
+                  background: "var(--mds-surface-sunken)",
+                }}
+              />
+              <Heading level={3}>{clip}</Heading>
+              <CardBody lines={4} clip={clip}>
+                <Text>
+                  A gallery of frames, one on show. Rope over a beam and a knot half tied, coils on
+                  a table, a length of jute against a dark wall. The budget is four lines either
+                  way; only one of them wraps under the picture.
+                </Text>
+              </CardBody>
+            </CardBody>
+          </Card>
+        </div>
+      ))}
+    </Inline>
+  ),
+};
