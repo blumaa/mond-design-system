@@ -1,5 +1,11 @@
 # @mond-design-system/react
 
+## 6.4.0
+
+### Minor Changes
+
+- 001b0a5: `DataTable` takes `rowTone`, which tints a whole row `danger`, `warning` or `success`. For a row that needs attention, where a badge in one cell is easy to miss. The tint is colour only, so say why in a cell too.
+
 ## 6.3.0
 
 ### Minor Changes
