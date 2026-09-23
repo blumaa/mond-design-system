@@ -9,11 +9,12 @@ interface Person {
   role: string;
   joined: string;
   suspended?: boolean;
+  flagged?: boolean;
 }
 
 const people: Person[] = [
   { id: "a", name: "Ada Lovelace", role: "Teacher", joined: "Mar 2024" },
-  { id: "b", name: "Grace Hopper", role: "Member", joined: "Jul 2024" },
+  { id: "b", name: "Grace Hopper", role: "Member", joined: "Jul 2024", flagged: true },
   { id: "c", name: "Alan Turing", role: "Member", joined: "Jan 2025", suspended: true },
 ];
 
@@ -46,6 +47,7 @@ export const Basic: Story = {
         rows={people}
         rowKey={(person) => person.id}
         rowMuted={(person) => person.suspended === true}
+        rowTone={(person) => (person.flagged === true ? "danger" : undefined)}
         actionsHeader="Actions"
         rowActions={(person) => (
           <Button variant="secondary" size="sm" aria-label={`Edit ${person.name}`}>

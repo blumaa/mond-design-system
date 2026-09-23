@@ -43,6 +43,20 @@
   background: var(--mds-surface-selected);
 }
 
+/* After hover and selection, and as specific, so a toned row keeps its tone
+   under the pointer. */
+.body .row.danger {
+  background: var(--mds-status-danger-soft);
+}
+
+.body .row.warning {
+  background: var(--mds-status-warning-soft);
+}
+
+.body .row.success {
+  background: var(--mds-status-success-soft);
+}
+
 .cell,
 .select,
 .actions {
