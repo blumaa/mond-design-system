@@ -113,6 +113,15 @@ describe("DataTable", () => {
     expect((rows[1] as HTMLElement).className).not.toContain("muted");
   });
 
+  /* A row that needs a hand on it — two heats that overlap, a payment that
+     bounced — carries its tone across every cell, not one badge in one cell. */
+  it("tints a whole row in the tone it is given", () => {
+    render(<DataTable {...base()} rowTone={(person) => (person.id === "b" ? "danger" : undefined)} />);
+    const rows = screen.getAllByRole("row");
+    expect((rows[2] as HTMLElement).className).toContain("danger");
+    expect((rows[1] as HTMLElement).className).not.toContain("danger");
+  });
+
   describe("selection", () => {
     function selectable(selected: string[], onSelectedChange = vi.fn()) {
       render(

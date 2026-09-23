@@ -104,6 +104,7 @@ export { DataTable } from "./components/DataTable/DataTable";
 export type {
   DataColumn,
   DataTableProps,
+  DataTableRowTone,
   DataTableSelectionLabels,
 } from "./components/DataTable/DataTable";
 

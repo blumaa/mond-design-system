@@ -13,6 +13,9 @@ export interface DataColumn<Row> {
   cell: (row: Row) => ReactNode;
 }
 
+/** A row's standing, read across the whole row. */
+export type DataTableRowTone = "danger" | "warning" | "success";
+
 export interface DataTableSelectionLabels {
   /** Names one row's box — "Select Ada Lovelace". The row's own label is
       handed in, so the sentence is the app's to build. */
@@ -57,6 +60,9 @@ export type DataTableProps<Row> = Omit<HTMLAttributes<HTMLDivElement>, "children
   actionsHeader?: ReactNode;
   /** A row the table still lists but no longer counts — suspended, hidden. */
   rowMuted?: (row: Row) => boolean;
+  /** A row that needs a hand on it — tinted across every cell. The tint is
+      colour only, so say why in a cell as well. */
+  rowTone?: (row: Row) => DataTableRowTone | undefined;
   /** Shown in place of the rows when there are none. */
   empty?: ReactNode;
   ref?: Ref<HTMLDivElement>;
@@ -93,6 +99,7 @@ export function DataTable<Row>({
   rowActions,
   actionsHeader,
   rowMuted,
+  rowTone,
   empty,
   ref,
   selected,
@@ -171,6 +178,7 @@ export function DataTable<Row>({
               ? rows.map((row) => {
                   const key = rowKey(row);
                   const taken = selected?.includes(key) ?? false;
+                  const tone = rowTone?.(row);
                   return (
                     <tr
                       key={key}
@@ -178,6 +186,7 @@ export function DataTable<Row>({
                         styles.row,
                         taken && styles.selected,
                         rowMuted?.(row) === true && styles.muted,
+                        tone !== undefined && styles[tone],
                       )}
                     >
                       {selectable && (
