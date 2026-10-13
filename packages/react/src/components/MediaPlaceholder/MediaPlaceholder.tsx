@@ -2,6 +2,7 @@ import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
 import { useState } from "react";
 import { cx } from "../../internal/cx";
 import type { CSSVars } from "../../internal/cx";
+import { Spinner } from "../Spinner/Spinner";
 import { Text } from "../Text/Text";
 import styles from "./MediaPlaceholder.module.css";
 
@@ -66,7 +67,7 @@ export function MediaPlaceholder({
       style={{ ...vars, ...style }}
       {...rest}
     >
-      <div className={cx(styles.frame, loading && styles.loading)}>
+      <div className={styles.frame} aria-busy={loading || undefined}>
         {picture ? (
           <img
             className={cx(styles.image, !loading && styles.loaded)}
@@ -83,6 +84,12 @@ export function MediaPlaceholder({
             {glyph != null && <span aria-hidden="true">{glyph}</span>}
             {caption !== undefined && <Text variant="meta">{caption}</Text>}
           </div>
+        )}
+        {/* Decoration: the busy frame and the image's alt carry the meaning. */}
+        {loading && (
+          <span className={styles.spinner} aria-hidden="true">
+            <Spinner label="" />
+          </span>
         )}
         {picture && caption !== undefined && (
           <Text variant="meta" tone="on-media" className={styles.caption}>

@@ -59,15 +59,19 @@
   opacity: 1;
 }
 
-/* The surface breathes while the bytes arrive, the way a Skeleton does, so a
-   slow network reads as loading rather than as a dark square. */
-.loading {
-  animation: media-pulse var(--mds-dur-pulse) var(--mds-ease-standard) infinite alternate;
+/* Held back a beat, so a picture already in the cache does not flash one. */
+.spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mds-text-muted);
+  animation: media-spinner-appear var(--mds-dur-base) var(--mds-ease-standard) var(--mds-dur-base) both;
 }
 
-@keyframes media-pulse {
-  from { background-color: var(--mds-surface-sunken); }
-  to { background-color: var(--mds-border-strong); }
+@keyframes media-spinner-appear {
+  from { opacity: 0; }
 }
 
 .caption {
