@@ -1,5 +1,11 @@
 # @mond-design-system/react
 
+## 6.4.1
+
+### Patch Changes
+
+- aac01fe: MediaPlaceholder shows a loading state: the frame pulses until the picture has loaded, then the picture fades in. A new `src` starts over.
+
 ## 6.4.0
 
 ### Minor Changes
