@@ -1,5 +1,11 @@
 # @mond-design-system/react
 
+## 6.5.0
+
+### Minor Changes
+
+- c547d9e: MediaPlaceholder shows a spinner while its picture loads, then fades the picture in. The frame no longer pulses. The spinner waits a beat before it appears, so a cached picture does not flash one, and it stays out of the accessibility tree; the frame is `aria-busy` instead.
+
 ## 6.4.2
 
 ### Patch Changes
