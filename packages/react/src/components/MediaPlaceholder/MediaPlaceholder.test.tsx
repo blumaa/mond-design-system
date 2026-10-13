@@ -76,7 +76,7 @@ describe("MediaPlaceholder with a picture", () => {
   it("draws the image instead of the fill", () => {
     const { container } = render(<MediaPlaceholder src="/keiko.jpg" alt="A chest harness" />);
     expect(screen.getByRole("img", { name: "A chest harness" })).toHaveAttribute("src", "/keiko.jpg");
-    expect(container.querySelector("[aria-hidden]")).toBeNull();
+    expect(container.querySelector('[class*="fill"]')).toBeNull();
   });
 
   it("is decorative without an alt, rather than named after the file", () => {
@@ -97,29 +97,36 @@ describe("MediaPlaceholder with a picture", () => {
     expect(container.querySelector('[class*="fill"]')).toBeInTheDocument();
   });
 
-  /* Until the bytes arrive the frame pulses and the picture waits unseen,
-     so a slow network reads as loading rather than as a dark square. */
-  it("shows a loading state until the picture has loaded", () => {
+  /* Until the bytes arrive a spinner turns over the frame and the picture
+     waits unseen, then fades in. */
+  it("spins until the picture has loaded", () => {
     const { container } = render(<MediaPlaceholder src="/keiko.jpg" />);
     const frame = container.querySelector('[class*="frame"]') as HTMLElement;
-    expect(frame.className).toContain("loading");
+    expect(frame).toHaveAttribute("aria-busy", "true");
+    expect(container.querySelector('[class*="spinner"]')).toBeInTheDocument();
     fireEvent.load(screen.getByRole("presentation"));
-    expect(frame.className).not.toContain("loading");
+    expect(frame).not.toHaveAttribute("aria-busy");
+    expect(container.querySelector('[class*="spinner"]')).toBeNull();
     expect(screen.getByRole("presentation").className).toContain("loaded");
+  });
+
+  /* The image's own alt says what it is; a status per thumbnail would read a
+     feed out as a list of "loading". */
+  it("keeps the spinner out of the accessibility tree", () => {
+    render(<MediaPlaceholder src="/keiko.jpg" />);
+    expect(screen.queryByRole("status")).toBeNull();
   });
 
   it("loads afresh when the source changes", () => {
     const { container, rerender } = render(<MediaPlaceholder src="/keiko.jpg" />);
     fireEvent.load(screen.getByRole("presentation"));
     rerender(<MediaPlaceholder src="/aiko.jpg" />);
-    const frame = container.querySelector('[class*="frame"]') as HTMLElement;
-    expect(frame.className).toContain("loading");
+    expect(container.querySelector('[class*="spinner"]')).toBeInTheDocument();
   });
 
-  it("does not pulse an empty box", () => {
+  it("does not spin in an empty box", () => {
     const { container } = render(<MediaPlaceholder />);
-    const frame = container.querySelector('[class*="frame"]') as HTMLElement;
-    expect(frame.className).not.toContain("loading");
+    expect(container.querySelector('[class*="spinner"]')).toBeNull();
   });
 
   it("tries again when the source changes, rather than staying broken", () => {
