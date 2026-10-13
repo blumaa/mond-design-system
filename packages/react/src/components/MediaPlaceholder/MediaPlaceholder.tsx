@@ -54,7 +54,10 @@ export function MediaPlaceholder({
   /* The source that failed, not a flag: a flag stays true after the caller
      hands over a different picture, and the second one never gets drawn. */
   const [failed, setFailed] = useState<string>();
+  /* Same reasoning: the source that loaded, so a new one starts over. */
+  const [loaded, setLoaded] = useState<string>();
   const picture = src !== undefined && failed !== src;
+  const loading = picture && loaded !== src;
   const vars = (aspect === undefined ? {} : { "--media-aspect": aspect }) as CSSVars;
 
   return (
@@ -63,14 +66,15 @@ export function MediaPlaceholder({
       style={{ ...vars, ...style }}
       {...rest}
     >
-      <div className={styles.frame}>
+      <div className={cx(styles.frame, loading && styles.loading)}>
         {picture ? (
           <img
-            className={styles.image}
+            className={cx(styles.image, !loading && styles.loaded)}
             src={src}
             alt={alt}
             loading="lazy"
             decoding="async"
+            onLoad={() => setLoaded(src)}
             onError={() => setFailed(src)}
           />
         ) : (

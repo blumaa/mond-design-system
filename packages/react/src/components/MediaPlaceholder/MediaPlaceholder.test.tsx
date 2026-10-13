@@ -97,6 +97,31 @@ describe("MediaPlaceholder with a picture", () => {
     expect(container.querySelector('[class*="fill"]')).toBeInTheDocument();
   });
 
+  /* Until the bytes arrive the frame pulses and the picture waits unseen,
+     so a slow network reads as loading rather than as a dark square. */
+  it("shows a loading state until the picture has loaded", () => {
+    const { container } = render(<MediaPlaceholder src="/keiko.jpg" />);
+    const frame = container.querySelector('[class*="frame"]') as HTMLElement;
+    expect(frame.className).toContain("loading");
+    fireEvent.load(screen.getByRole("presentation"));
+    expect(frame.className).not.toContain("loading");
+    expect(screen.getByRole("presentation").className).toContain("loaded");
+  });
+
+  it("loads afresh when the source changes", () => {
+    const { container, rerender } = render(<MediaPlaceholder src="/keiko.jpg" />);
+    fireEvent.load(screen.getByRole("presentation"));
+    rerender(<MediaPlaceholder src="/aiko.jpg" />);
+    const frame = container.querySelector('[class*="frame"]') as HTMLElement;
+    expect(frame.className).toContain("loading");
+  });
+
+  it("does not pulse an empty box", () => {
+    const { container } = render(<MediaPlaceholder />);
+    const frame = container.querySelector('[class*="frame"]') as HTMLElement;
+    expect(frame.className).not.toContain("loading");
+  });
+
   it("tries again when the source changes, rather than staying broken", () => {
     const { rerender } = render(<MediaPlaceholder src="/gone.jpg" />);
     fireEvent.error(screen.getByRole("presentation"));
