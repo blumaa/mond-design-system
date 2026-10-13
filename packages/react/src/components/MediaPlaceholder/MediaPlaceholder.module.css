@@ -67,7 +67,7 @@
 
 @keyframes media-pulse {
   from { background-color: var(--mds-surface-sunken); }
-  to { background-color: var(--mds-surface-raised); }
+  to { background-color: var(--mds-border-strong); }
 }
 
 .caption {

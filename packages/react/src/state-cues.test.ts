@@ -14,3 +14,17 @@ it("TabBar marks the active item with a drawn indicator, not color alone", () =>
      cannot drift apart. */
   expect(css).toMatch(/\.active::before\s*\{[^}]*background:\s*currentColor/);
 });
+
+/* A loading pulse between two near-identical surfaces reads as a dark square
+   in a dark theme. Its ends are a contract pair, so every brand is held to a
+   visible step between them. */
+it("MediaPlaceholder pulses between two colours the contrast contract keeps apart", () => {
+  const css = sheet("MediaPlaceholder/MediaPlaceholder.module.css");
+  const contract = JSON.parse(
+    readFileSync(join(__dirname, "../../tokens/src/contrast-contract.json"), "utf8"),
+  ) as { contrast: Array<{ fg: string; bg: string[] }> };
+  const [, from, to] =
+    /@keyframes media-pulse\s*\{\s*from\s*\{[^}]*var\((--[\w-]+)\)[^}]*\}\s*to\s*\{[^}]*var\((--[\w-]+)\)/.exec(css) ?? [];
+
+  expect(contract.contrast.some(({ fg, bg }) => fg === to && from !== undefined && bg.includes(from))).toBe(true);
+});
