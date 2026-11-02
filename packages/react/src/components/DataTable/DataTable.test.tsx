@@ -252,4 +252,110 @@ describe("DataTable", () => {
     const root = screen.getByTestId("table");
     expect(root.className).toContain("roster");
   });
+
+  describe("sorting", () => {
+    interface Score {
+      id: string;
+      name: string;
+      points: number | null;
+    }
+
+    const scores: Score[] = [
+      { id: "b", name: "Bea", points: 3 },
+      { id: "n", name: "Nil", points: null },
+      { id: "a", name: "Ada", points: 7 },
+      { id: "c", name: "Cy", points: 5 },
+    ];
+
+    const sortable: DataColumn<Score>[] = [
+      { key: "name", header: "Name", cell: (s) => s.name, sortValue: (s) => s.name },
+      { key: "points", header: "Points", cell: (s) => s.points ?? "–", sortValue: (s) => s.points },
+      { key: "plain", header: "Note", cell: () => "x" },
+    ];
+
+    const names = () =>
+      screen.getAllByRole("row").slice(1).map((row) => within(row).getAllByRole("cell")[0]?.textContent);
+
+    const table = () => (
+      <DataTable label="Scores" columns={sortable} rows={scores} rowKey={(s) => s.id} />
+    );
+
+    it("keeps the caller's order until a header is pressed", () => {
+      render(table());
+      expect(names()).toEqual(["Bea", "Nil", "Ada", "Cy"]);
+    });
+
+    it("makes only a column with a sortValue a button", () => {
+      render(table());
+      expect(screen.getByRole("button", { name: "Name" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Points" })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Note" })).not.toBeInTheDocument();
+    });
+
+    it("starts words at A", async () => {
+      render(table());
+      await userEvent.click(screen.getByRole("button", { name: "Name" }));
+      expect(names()).toEqual(["Ada", "Bea", "Cy", "Nil"]);
+      expect(screen.getByRole("columnheader", { name: "Name" })).toHaveAttribute("aria-sort", "ascending");
+    });
+
+    it("starts numbers at the highest, with no value last", async () => {
+      render(table());
+      await userEvent.click(screen.getByRole("button", { name: "Points" }));
+      expect(names()).toEqual(["Ada", "Cy", "Bea", "Nil"]);
+      expect(screen.getByRole("columnheader", { name: "Points" })).toHaveAttribute("aria-sort", "descending");
+    });
+
+    it("turns round on the second press, keeping no value last", async () => {
+      render(table());
+      const points = screen.getByRole("button", { name: "Points" });
+      await userEvent.click(points);
+      await userEvent.click(points);
+      expect(names()).toEqual(["Bea", "Cy", "Ada", "Nil"]);
+      expect(screen.getByRole("columnheader", { name: "Points" })).toHaveAttribute("aria-sort", "ascending");
+    });
+
+    it("goes back to the caller's order on the third press", async () => {
+      render(table());
+      const points = screen.getByRole("button", { name: "Points" });
+      await userEvent.click(points);
+      await userEvent.click(points);
+      await userEvent.click(points);
+      expect(names()).toEqual(["Bea", "Nil", "Ada", "Cy"]);
+      expect(screen.getByRole("columnheader", { name: "Points" })).not.toHaveAttribute("aria-sort");
+    });
+
+    it("sorts by one column at a time", async () => {
+      render(table());
+      await userEvent.click(screen.getByRole("button", { name: "Points" }));
+      await userEvent.click(screen.getByRole("button", { name: "Name" }));
+      expect(screen.getByRole("columnheader", { name: "Points" })).not.toHaveAttribute("aria-sort");
+      expect(names()).toEqual(["Ada", "Bea", "Cy", "Nil"]);
+    });
+
+    it("reports a selection in the order the reader sees", async () => {
+      const onSelectedChange = vi.fn();
+      render(
+        <DataTable
+          label="Scores"
+          columns={sortable}
+          rows={scores}
+          rowKey={(s) => s.id}
+          rowLabel={(s) => s.name}
+          selected={["n"]}
+          onSelectedChange={onSelectedChange}
+          selectionLabels={selectionLabels}
+        />,
+      );
+      await userEvent.click(screen.getByRole("button", { name: "Name" }));
+      await userEvent.click(screen.getByRole("checkbox", { name: "Select Ada" }));
+      expect(onSelectedChange).toHaveBeenLastCalledWith(["a", "n"]);
+    });
+
+    it("has no axe violations once sorted", async () => {
+      const { container } = render(table());
+      await userEvent.click(screen.getByRole("button", { name: "Points" }));
+      expect(await axe(container)).toHaveNoViolations();
+    });
+  });
 });

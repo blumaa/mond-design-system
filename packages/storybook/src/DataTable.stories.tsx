@@ -81,6 +81,42 @@ export const Selectable: Story = {
   },
 };
 
+interface Score {
+  id: string;
+  name: string;
+  posts: number;
+  lastActive: string | null;
+}
+
+const scores: Score[] = [
+  { id: "a", name: "Ada Lovelace", posts: 12, lastActive: "2026-10-30" },
+  { id: "b", name: "Grace Hopper", posts: 31, lastActive: null },
+  { id: "c", name: "Alan Turing", posts: 4, lastActive: "2026-11-01" },
+];
+
+export const Sortable: Story = {
+  args: { label: "Activity", columns: [], rows: [], rowKey: () => "" },
+  render: () => (
+    <div className={story.frame}>
+      <DataTable
+        label="Activity"
+        columns={[
+          { key: "name", header: "Name", cell: (s: Score) => s.name, sortValue: (s: Score) => s.name },
+          { key: "posts", header: "Posts", cell: (s: Score) => s.posts, sortValue: (s: Score) => s.posts },
+          {
+            key: "lastActive",
+            header: "Last active",
+            cell: (s: Score) => s.lastActive ?? "Never",
+            sortValue: (s: Score) => (s.lastActive === null ? null : Date.parse(s.lastActive)),
+          },
+        ]}
+        rows={scores}
+        rowKey={(s) => s.id}
+      />
+    </div>
+  ),
+};
+
 export const Empty: Story = {
   args: { label: "People", columns: [], rows: [], rowKey: () => "" },
   render: () => (
