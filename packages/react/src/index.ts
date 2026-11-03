@@ -106,6 +106,7 @@ export type {
   DataTableProps,
   DataTableRowTone,
   DataTableSelectionLabels,
+  SortValue,
 } from "./components/DataTable/DataTable";
 
 export { EmptyState } from "./components/EmptyState/EmptyState";

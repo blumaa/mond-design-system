@@ -129,3 +129,39 @@ th.actions {
     flex: initial;
   }
 }
+
+/* The header's own words, pressable: it keeps the header's look and adds an
+   arrow, so a sortable column reads as a header first. */
+.sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-gap-hairline);
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.sort:hover {
+  color: var(--mds-text-primary);
+}
+
+.sort:focus-visible {
+  outline: var(--mds-focus-width) solid var(--mds-focus-ring-color);
+  outline-offset: var(--mds-focus-offset);
+  border-radius: var(--mds-radius-focus);
+}
+
+.arrow {
+  flex: none;
+  width: var(--mds-icon-sm);
+  height: var(--mds-icon-sm);
+}
+
+/* Not sorted yet: there, so the column says it can be, but quieter. */
+.idle {
+  color: var(--mds-text-muted);
+}

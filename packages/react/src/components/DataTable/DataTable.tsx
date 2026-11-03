@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode, Ref } from "react";
+import { useState, type HTMLAttributes, type ReactElement, type ReactNode, type Ref } from "react";
 import { cx } from "../../internal/cx";
 import { Checkbox } from "../Checkbox/Checkbox";
 import { Text } from "../Text/Text";
@@ -11,6 +11,41 @@ export interface DataColumn<Row> {
   /** CSS width for the column, applied through the colgroup. */
   width?: string;
   cell: (row: Row) => ReactNode;
+  /** Makes the header a button that sorts by this value. Words start at A,
+      numbers at the highest; a missing value sits last either way. */
+  sortValue?: (row: Row) => SortValue;
+}
+
+export type SortValue = string | number | null | undefined;
+
+type SortDirection = "ascending" | "descending";
+
+interface Sort {
+  key: string;
+  direction: SortDirection;
+}
+
+const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
+
+function compare(a: SortValue, b: SortValue): number {
+  if (typeof a === "number" && typeof b === "number") return a - b;
+  return collator.compare(String(a), String(b));
+}
+
+/** Stable; a row with no value stays at the bottom whichever way the rest run. */
+function sortRows<Row>(rows: Row[], value: (row: Row) => SortValue, direction: SortDirection): Row[] {
+  const sign = direction === "ascending" ? 1 : -1;
+  return [...rows].sort((x, y) => {
+    const a = value(x);
+    const b = value(y);
+    if (a == null || b == null) return a == null ? (b == null ? 0 : 1) : -1;
+    return sign * compare(a, b);
+  });
+}
+
+function firstDirection<Row>(rows: Row[], value: (row: Row) => SortValue): SortDirection {
+  const sample = rows.map(value).find((each) => each != null);
+  return typeof sample === "string" ? "ascending" : "descending";
 }
 
 /** A row's standing, read across the whole row. */
@@ -109,8 +144,22 @@ export function DataTable<Row>({
   className,
   ...rest
 }: DataTableProps<Row>): ReactElement {
+  const [sort, setSort] = useState<Sort | null>(null);
+  const sortedBy = columns.find((column) => column.key === sort?.key)?.sortValue;
+  const shown = sort !== null && sortedBy !== undefined ? sortRows(rows, sortedBy, sort.direction) : rows;
+
+  /* First press sorts, second turns it round, third hands back the caller's order. */
+  const press = (key: string, value: (row: Row) => SortValue) => {
+    const first = firstDirection(rows, value);
+    setSort((current) => {
+      if (current?.key !== key) return { key, direction: first };
+      if (current.direction !== first) return null;
+      return { key, direction: first === "ascending" ? "descending" : "ascending" };
+    });
+  };
+
   const selectable = selected !== undefined;
-  const keys = rows.map(rowKey);
+  const keys = shown.map(rowKey);
   const all = selectable && keys.length > 0 && keys.every((key) => selected.includes(key));
   const some = selectable && !all && keys.some((key) => selected.includes(key));
   const span = columns.length + (selectable ? 1 : 0) + (rowActions ? 1 : 0);
@@ -160,11 +209,26 @@ export function DataTable<Row>({
                   />
                 </th>
               )}
-              {columns.map((column) => (
-                <th scope="col" key={column.key} className={styles.cell}>
-                  {column.header}
-                </th>
-              ))}
+              {columns.map((column) => {
+                const { sortValue } = column;
+                const direction = sort?.key === column.key ? sort.direction : undefined;
+                return (
+                  <th scope="col" key={column.key} className={styles.cell} aria-sort={direction}>
+                    {sortValue === undefined ? (
+                      column.header
+                    ) : (
+                      <button
+                        type="button"
+                        className={styles.sort}
+                        onClick={() => press(column.key, sortValue)}
+                      >
+                        {column.header}
+                        <SortArrow direction={direction} />
+                      </button>
+                    )}
+                  </th>
+                );
+              })}
               {rowActions && (
                 <th scope="col" className={styles.actions}>
                   {actionsHeader}
@@ -174,8 +238,8 @@ export function DataTable<Row>({
           </thead>
 
           <tbody className={styles.body}>
-            {rows.length > 0
-              ? rows.map((row) => {
+            {shown.length > 0
+              ? shown.map((row) => {
                   const key = rowKey(row);
                   const taken = selected?.includes(key) ?? false;
                   const tone = rowTone?.(row);
@@ -226,5 +290,20 @@ export function DataTable<Row>({
         </div>
       )}
     </div>
+  );
+}
+
+/** Drawn, not tinted: which way a column runs is told by shape, not colour. */
+function SortArrow({ direction }: { direction: SortDirection | undefined }): ReactElement {
+  const path =
+    direction === "ascending"
+      ? "M8 13V3M4 7l4-4 4 4"
+      : direction === "descending"
+        ? "M8 3v10M4 9l4 4 4-4"
+        : "M5 6l3-3 3 3M5 10l3 3 3-3";
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className={cx(styles.arrow, direction === undefined && styles.idle)}>
+      <path d={path} fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
